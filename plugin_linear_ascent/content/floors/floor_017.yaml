@@ -1,0 +1,38 @@
+floor: 17
+tier: 2
+biome: Ironvale
+zone: The Smelterworks
+gate_town: Crucible Gate
+banner: ironvale
+arrival: >-
+  The great smelters have not been fired in years, but the slag-runs
+  never cooled all the way. Heat shimmers over black glass channels,
+  and the ladles hang overhead like church bells nobody dares ring.
+encounters:
+  - id: slag_rat
+    name: Slag rat
+    weight: 3
+    prose: >-
+      A rat the size of a hound noses out of a cooled ladle, coat
+      shingled with flakes of black glass. Generations in the warm dark
+      have not made it timid.
+  - id: ladle_crew
+    name: Kobold ladle-crew
+    weight: 3
+    prose: >-
+      Three kobolds work a hand-crank to swing a full ladle over the
+      walkway you are on. They wave down at you, helpfully, so you know
+      whose fault it is about to be.
+  - id: smelter_boss
+    name: Red Orc smelter-boss
+    weight: 2
+    prose: >-
+      The orc who claims this floor's metal wears a warframe caked in
+      spatter and carries a tapping-rod like a spear. Quota is short.
+      You are made of salvage, technically.
+warden:
+  name: Warden Smeltjaw
+  prose: >-
+    Smeltjaw drags itself out of the main channel, a beast of half-set
+    slag with a seam of live melt for a throat. Where it walks the
+    floor smokes, and the stair stands just past it.

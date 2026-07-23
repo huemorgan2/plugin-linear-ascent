@@ -1,0 +1,43 @@
+floor: 88
+tier: 9
+biome: Hellmarch
+zone: The Iron Chantries
+gate_town: Chantside
+banner: hellmarch
+arrival: >-
+  The March keeps its faith in chapels of riveted iron, and the faith
+  is the King. Bells of engine-block, choirs of exhaust, litanies in
+  a script that moves when read. The furnace-priests preach the
+  Ascent in reverse: everything descends, eventually.
+encounters:
+  - id: furnace_priest
+    name: Furnace-priest
+    weight: 3
+    prose: >-
+      A priest of the down-going faith turns from its altar, censer
+      streaming coal-smoke, firebox heart glowing through the
+      cassock of chain. It has preached your arrival for years. It
+      would hate to waste the congregation.
+  - id: choir_imp
+    name: Choir imp
+    weight: 3
+    prose: >-
+      The choir loft empties as one — a dozen imps in singed
+      surplices, still holding the note. Heresy duty is the only
+      part of the liturgy they enjoy, and you are unmistakably not
+      in the hymnal.
+  - id: penitent_knight
+    name: Penitent hellknight
+    weight: 2
+    prose: >-
+      A hellknight kneels in the nave doing penance for some sin no
+      one will name, chained to the pew by its own request. It looks
+      up at you with terrible hope. Absolution, in the March, is
+      worked off in single combat.
+warden:
+  name: Warden Vespergrim
+  prose: >-
+    The chantry's great bell rings itself, and what climbs down the
+    bell-rope after the last stroke is Vespergrim — the floor's
+    high priest, a tower of vestments over a body of organ-pipe and
+    grate. It opens its arms in welcome. The arms keep opening.

@@ -1,0 +1,43 @@
+floor: 90
+tier: 9
+biome: Hellmarch
+zone: The Herald's Gate
+gate_town: Lastmuster
+banner: malgrim
+arrival: >-
+  The March ends at a gate of black iron scaled for a god, and before
+  it, a parade ground where the King's herald holds court over the
+  Marshals of the March. The banners are silent. Malgrim has
+  dismissed the guard — a courtesy, to you and to the guard.
+encounters:
+  - id: marshal_knight
+    name: Marshal of the March
+    weight: 3
+    prose: >-
+      A Marshal in campaign plate leaves the reviewing line without
+      leave — an ambitious breach. Presenting the Herald with your
+      head might be worth the flogging. It has done the arithmetic,
+      visibly, and closed the ledger.
+  - id: herald_imp
+    name: The Herald's secretary
+    weight: 3
+    prose: >-
+      Malgrim's personal secretary is an imp grown fat and precise
+      on state secrets. It meets you with a writ of execution,
+      pre-signed, requiring only a date. It carries the pen like a
+      dagger, and the dagger like a pen.
+  - id: gate_hulk
+    name: Gate-tender hulk
+    weight: 2
+    prose: >-
+      The hulk that tends the great gate has one duty and no
+      discretion — nothing passes while the Herald holds court. It
+      plants itself with the finality of architecture and waits for
+      you to test the point.
+warden:
+  name: Malgrim, Herald of the King
+  prose: >-
+    Malgrim descends the gate-stair unarmored, which is the whole
+    message — a tall grace of scar and engine, the King's voice in a
+    throat of brass. He announces you to the tower, floor by floor,
+    and by the time he reaches your name he has drawn his sword.

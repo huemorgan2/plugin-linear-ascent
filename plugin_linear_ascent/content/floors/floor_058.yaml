@@ -1,0 +1,40 @@
+floor: 58
+tier: 6
+biome: Frosthold
+zone: The Wind Walls
+gate_town: Shuttergate
+banner: frosthold
+arrival: >-
+  The glacier funnels the floor's whole weather through one pass, and
+  the wind through it has been sharpened for centuries. The Wind
+  Walls break it — ramparts of ice block, slotted and singing.
+  Crossings are done at a sprint, by bell signal, or not at all.
+encounters:
+  - id: wall_giant
+    name: Wall-warden giant
+    weight: 3
+    prose: >-
+      A frost giant leans into the gale at the third wall, holding a
+      shield the size of a barn door for travelers to shelter behind
+      — for a fee. You are past due before you reach it.
+  - id: wind_wolf
+    name: Gale-running wolf
+    weight: 3
+    prose: >-
+      The wolves here have learned to run with the gale at their
+      backs, arriving at twice a wolf's honest speed. The bell rings
+      once. That is all the warning the system has.
+  - id: shutter_troll
+    name: Shutter troll
+    weight: 2
+    prose: >-
+      An ice troll operates the storm shutters at the crossing, paid
+      in fish heads and deference. Today it has decided the shutters
+      stay down, and it puts its back against them to make the point.
+warden:
+  name: Warden Galebone
+  prose: >-
+    Past the last wall the wind has had time to become someone.
+    Galebone is the pass's oldest gale wearing a skeleton of hoarded
+    ice, and it holds the stair door shut the way it holds everything
+    shut — from every direction at once.

@@ -1,0 +1,40 @@
+floor: 30
+tier: 3
+biome: The Barrows
+zone: The Kingsbarrow
+gate_town: Wakesend
+banner: barrowking
+arrival: >-
+  One barrow the size of a hill, ringed by a moat of black water and a
+  century of tribute — swords, crowns, exo-rigs, all sinking slow. Every
+  dead thing on this floor answers to what sleeps here, and the ground
+  over it rises and falls like something breathing.
+encounters:
+  - id: kings_herald
+    name: Herald of the barrow
+    weight: 3
+    prose: >-
+      A wight in the wreck of royal livery bars the tribute-road,
+      horn raised. It winds a note you feel in your fillings, and
+      announces you, which is worse than an ambush.
+  - id: tribute_ghoul
+    name: Tribute-bearer
+    weight: 3
+    prose: >-
+      A ghoul struggles toward the moat under a dead soldier in full
+      rig, tribute for the King. Dropping the offering would shame it.
+      It sets the body down carefully, first.
+  - id: barrow_guard
+    name: Kingsbarrow guard
+    weight: 2
+    prose: >-
+      The King's own guard wear the mail they were buried in and the
+      exo-rigs they were buried with, rust and bone moving as one
+      thing. Two of them peel off the barrow's flank toward you.
+warden:
+  name: The Barrow King
+  prose: >-
+    The barrow opens like an eye and the King comes out crowned, robed
+    in grave-mist, tall as the stones that failed to hold him. Every
+    name in this marsh was once sworn to him. He has come to collect
+    yours.

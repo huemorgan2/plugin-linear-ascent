@@ -1,0 +1,42 @@
+floor: 65
+tier: 7
+biome: Stormreach
+zone: The Updrafts
+gate_town: Kitegate
+banner: stormreach
+arrival: >-
+  Between two ranges the whole floor's air goes up. The locals ride
+  barn-sized kites between the towns, and the wildlife has organized
+  around the free lift. Nothing here fights on the ground if it can
+  help it. You are the only thing that cannot help it.
+encounters:
+  - id: updraft_harpy
+    name: Updraft duelist
+    weight: 3
+    prose: >-
+      A harpy rises past you going straight up, flips at the top of
+      the column, and stoops. This is the local dueling form — three
+      passes, honor satisfied. Nobody has explained what satisfies
+      it.
+  - id: kite_pirate
+    name: Kite-line cutter
+    weight: 3
+    prose: >-
+      Something with shears for a beak works the kite-lines above
+      the pass, dropping travelers into the valley for the things
+      below. It has noticed that you are not even attached to a
+      line. Free lunch.
+  - id: column_drake
+    name: Column drake
+    weight: 2
+    prose: >-
+      A storm drake hangs in the updraft's core, wings barely
+      moving, asleep on the wind. Your scent goes up the column
+      ahead of you. Its eyes open at your altitude exactly.
+warden:
+  name: Warden Galecrest
+  prose: >-
+    Galecrest owns the top of the lift — a vast kite-shaped raptor
+    that has not landed in living memory, ribs of ship-spar grown
+    into wing. It stalls the whole updraft with one beat, and the
+    floor's traffic falls out of the sky to watch.

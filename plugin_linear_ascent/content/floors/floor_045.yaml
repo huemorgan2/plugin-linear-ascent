@@ -1,0 +1,40 @@
+floor: 45
+tier: 5
+biome: The Scorch
+zone: The Ogre Steps
+gate_town: Kilnrest
+banner: scorch
+arrival: >-
+  The ogres terraced this slope generations ago, hauling slag blocks
+  into steps a giant could climb, and they farm heat here — kilns on
+  every terrace, each clan's fire banked and never let die. Strangers
+  on the Steps are fuel until proven otherwise.
+encounters:
+  - id: step_warden_ogre
+    name: Terrace ogre
+    weight: 3
+    prose: >-
+      The ogre who keeps this terrace comes to the edge of its kiln
+      light, a rake of welded rebar over one shoulder. It points at
+      you, then at the fire, and lets you do the arithmetic.
+  - id: kiln_salamander
+    name: Kiln salamander
+    weight: 3
+    prose: >-
+      The ogres keep salamanders the way farmers keep barn cats, and
+      this one is somebody's prize mouser — collared in copper, sleek
+      with heat, and off its rope.
+  - id: firebreak_vulture
+    name: Kiln vulture
+    weight: 2
+    prose: >-
+      A cinder vulture squats on a cold kiln, working out why the fire
+      died and whether the answer is edible. It turns its scorched
+      head all the way around to keep you in view.
+warden:
+  name: Warden Kilnfist
+  prose: >-
+    At the top step burns the mother-kiln, and Kilnfist tends it — an
+    ogre-shaped thing of firebrick and mortar, hands worn round from
+    centuries of stoking. It picks up a glowing brand like a fork at
+    dinner.

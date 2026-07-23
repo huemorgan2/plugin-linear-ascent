@@ -1,0 +1,42 @@
+floor: 69
+tier: 7
+biome: Stormreach
+zone: The Eye Wall
+gate_town: Lullside
+banner: stormreach
+arrival: >-
+  The Queen's storm stands over the last peak like a crown, and this
+  floor is its wall — a ring of black weather you can lean on.
+  Inside, the air is still and bright and wrong. The locals call the
+  calm the Lull, and they whisper, because the wall listens.
+encounters:
+  - id: wall_sentinel
+    name: Eye-wall sentinel
+    weight: 3
+    prose: >-
+      A shape peels off the inside of the storm wall — a drake of
+      cloud and charge, half weather itself, one of the Queen's own
+      watch. It does not roar. Thunder does that for it, on cue.
+  - id: lull_harpy
+    name: Lull courtier
+    weight: 3
+    prose: >-
+      A harpy in the Queen's white lands ahead of you, formal as an
+      invitation. Her Majesty knows you are here, she says. What
+      remains to be decided is the manner of your arrival — walking,
+      or delivered.
+  - id: pressure_ghast
+    name: Pressure-ghost
+    weight: 2
+    prose: >-
+      In the Lull your ears keep popping, and one of the pops is a
+      figure arriving beside you — a climber the storm took, worn
+      down to a pressure change with a grudge. Your lungs notice it
+      before your eyes do.
+warden:
+  name: Warden Stillmark
+  prose: >-
+    Between you and the stair the calm thickens into Stillmark, the
+    Queen's doorkeeper — a giant of dense, motionless air wearing
+    rain like chainmail. It does not block the path. It simply
+    declines, entirely, to move.

@@ -1,0 +1,39 @@
+floor: 34
+tier: 4
+biome: Webdeep
+zone: The Troll Delvings
+gate_town: Delvers' Rest
+banner: webdeep
+arrival: >-
+  Before the spiders, trolls dug here — crude, enormous galleries
+  shouldered out of raw stone, ceilings lost to your lamp. The trolls
+  are still digging. Nobody knows toward what, and the one time a
+  climber asked, the answer took a week to bury.
+encounters:
+  - id: delving_troll
+    name: Delving troll
+    weight: 3
+    prose: >-
+      A deep troll comes up the gallery dragging a hand-sledge of
+      rubble, knuckles first. You are standing on its spoil-heap.
+      This is, by troll law, the whole of the case against you.
+  - id: troll_whelp
+    name: Troll whelp
+    weight: 3
+    prose: >-
+      A young troll the size of an ox practices its digging against
+      the gallery wall. It has just learned that soft things dig
+      easier, and you are the softest thing it has seen all week.
+  - id: gallery_spider
+    name: Gallery stalker
+    weight: 2
+    prose: >-
+      The spiders follow the troll digs the way gulls follow a plow.
+      This one keeps to the ceiling seam above you, matching your
+      pace, patient as arithmetic.
+warden:
+  name: Warden Mossmaul
+  prose: >-
+    Mossmaul is the oldest digger, grown into the stone until you
+    cannot say where troll ends and gallery begins. It pulls its arm
+    out of the wall it was becoming, and the whole delving shakes.

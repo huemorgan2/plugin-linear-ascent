@@ -1,0 +1,42 @@
+floor: 80
+tier: 8
+biome: The Gloom
+zone: The Pale Court
+gate_town: Hornsend
+banner: huntsman
+arrival: >-
+  The forest ends at a hall with no walls — pale columns of birch
+  bone, a floor of grey turf, a sky the color of a held breath.
+  Hounds in their hundreds sit the perimeter in silence. The hunt is
+  assembled, and at its head, horn in hand, waits the master.
+encounters:
+  - id: first_whip
+    name: The first whip
+    weight: 3
+    prose: >-
+      The Huntsman's first whip rides out to meet you at a walk,
+      grey coat immaculate, face a smudge. It uncoils its lash with
+      the boredom of long practice. Precedence must be observed —
+      nobody reaches the master unbloodied.
+  - id: pale_hound_brace
+    name: Brace of pale hounds
+    weight: 3
+    prose: >-
+      Two hounds from the master's own couple rise from the
+      perimeter, white as the columns, moving in mirrored arcs. They
+      have opened every hunt for a century. They open yours.
+  - id: honored_mare
+    name: The master's remount
+    weight: 2
+    prose: >-
+      The Huntsman's spare nightmare stands at the rail, saddle
+      empty. It has carried him through every season and considers
+      the vacancy an insult. It comes at you to fill the time.
+warden:
+  name: The Pale Huntsman
+  prose: >-
+    The Huntsman raises the horn and does not blow it — that
+    courtesy is the whole of his mercy. Pale from hat to boot,
+    patient as winter, he draws a knife that has ended every hunt
+    since the forest was stolen. The pack holds its breath. So does
+    the sky.

@@ -1,0 +1,34 @@
+floor: 8
+tier: 1
+biome: Greenreach
+zone: The Burnt Common
+gate_town: Ashfold
+banner: greenreach
+arrival: >-
+  The common burned when the land was taken, and the grass never came
+  back right — silver-grey, brittle, whispering. Goblin scavenger crews
+  rake the ash for anything the fire left. Their rakes have stopped.
+encounters:
+  - id: ash_goblin
+    name: Ash-crew goblin
+    weight: 3
+    prose: >-
+      A goblin in a mask of soot and bottle glass straightens from its
+      rake. It taps the rake twice on the ground — a signal, or a threat.
+  - id: cinder_wolf
+    name: Cinder wolf
+    weight: 3
+    prose: >-
+      A wolf the color of the burnt field rises from where it was
+      invisible, ash sliding from its back like grey snow.
+  - id: charred_boar
+    name: Char-tusk boar
+    weight: 2
+    prose: >-
+      A boar blackened from rooting in the burn charges through its own
+      dust cloud, tusks scorched to points.
+warden:
+  name: Warden Greycinder
+  prose: >-
+    Greycinder stands in the field's dead center, a stag-tall frame of
+    charcoal and grate-iron, embers still alive somewhere in its chest.

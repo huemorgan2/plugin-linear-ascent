@@ -1,0 +1,42 @@
+floor: 95
+tier: 10
+biome: The Crown
+zone: The Trophy Vaults
+gate_town: Relicgate
+banner: crown
+arrival: >-
+  The King keeps what he takes, curated: the crown jewels of drowned
+  realms, a carousel from somewhere that surrendered too late. Every
+  exhibit is labeled, honestly, in the court script. Near the stair
+  stands an empty plinth, pre-labeled.
+encounters:
+  - id: vault_curator
+    name: The curator
+    weight: 3
+    prose: >-
+      A demon in archivist's grey moves down the gallery straightening
+      labels. It knows the provenance of everything in the vaults,
+      including, it mentions without turning around, the piece the
+      empty plinth is waiting for.
+  - id: exhibit_awake
+    name: Exhibit, awake
+    weight: 3
+    prose: >-
+      One of the exhibits — a realm's champion, taken whole, armor
+      and all — has been on its plinth long enough to work one foot
+      loose. It steps down stiffly and looks at you with a terrible
+      question: which side of a plinth are you on?
+  - id: appraiser_imp
+    name: Court appraiser
+    weight: 2
+    prose: >-
+      An imp with a jeweler's glass screwed into each eye circles
+      you twice, muttering valuations. Your gear disappoints it.
+      Your defiance, it says, brightening, will mount beautifully.
+warden:
+  name: Warden Plinthguard
+  prose: >-
+    The vaults' keeper was itself the first exhibit — a conquered
+    realm's guardian colossus, re-labeled into staff. Plinthguard
+    steps off its pedestal, leaving its outline in the dust, and
+    takes up a halberd from a realm that also thought it would win.

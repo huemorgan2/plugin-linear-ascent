@@ -1,0 +1,40 @@
+floor: 40
+tier: 4
+biome: Webdeep
+zone: The Broodthrone
+gate_town: Threadneedle
+banner: vyx
+arrival: >-
+  The heart of the Webdeep is one vast chamber, and the chamber is a
+  web, and the web is a throne room. Every thread in the Deep ends
+  here. The dark overhead is not empty — it is occupied, and it has
+  been reading your footsteps since floor thirty-one.
+encounters:
+  - id: throne_guard
+    name: Throne-web guard
+    weight: 3
+    prose: >-
+      The Matriarch's guard are bred big and patient, and they hold
+      the anchor-lines of the throne itself. This one lets you see it
+      coming. The lesson is the point.
+  - id: silk_knight
+    name: Wrapped knight
+    weight: 3
+    prose: >-
+      A climber in good plate got this far once, and Vyx kept him —
+      webbed upright, armed, walking the perimeter on her threads like
+      a puppet on patrol. The armor still works fine.
+  - id: consort_spider
+    name: Pale consort
+    weight: 2
+    prose: >-
+      A slender white spider descends with courtly slowness, one of
+      the Matriarch's consorts. It has outlived all its rivals by
+      being exactly this careful.
+warden:
+  name: Matriarch Vyx
+  prose: >-
+    The dark comes down. Vyx fills the chamber the way a hand fills a
+    glove — the throne, the web, the ceiling, all one animal, eyes
+    opening in constellations. She thanks you, in a dry whisper, for
+    walking the whole way into her mouth.

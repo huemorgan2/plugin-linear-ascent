@@ -1,0 +1,39 @@
+floor: 20
+tier: 2
+biome: Ironvale
+zone: The Red Warcamp
+gate_town: Shieldwall
+banner: skarn
+arrival: >-
+  The last hall before the lift is a warcamp now — cookfires in ore
+  carts, warframes racked like cordwood, the Red Orcs' banner hung
+  from the dwarves' own crane. Drums somewhere deeper keep a slow
+  time. They are not for you. They are for him.
+encounters:
+  - id: honor_guard
+    name: Red Orc honor guard
+    weight: 3
+    prose: >-
+      Two orcs of Skarn's own guard, warframes polished to a dull red
+      shine, cross their glaives without a word. Getting this posting
+      cost them both something. It shows.
+  - id: warframe_champion
+    name: Warframe champion
+    weight: 3
+    prose: >-
+      A pit champion in a full salvaged warframe rolls its shoulders,
+      plates ringing. It fought its way up from the gear galleries for
+      the honor of being the one you meet.
+  - id: camp_hound
+    name: Warcamp hound
+    weight: 2
+    prose: >-
+      The Red Orcs kennel their rust hounds on short chain and shorter
+      rations. This one has slipped both, and the camp watches with
+      professional interest to see how you do.
+warden:
+  name: Warlord Skarn
+  prose: >-
+    Skarn of the Red Orcs takes the field in a warframe built from the
+    best of three dead clans, dwarf-steel over orc muscle. He gives you
+    a nod, one professional to another, and picks up his axe.

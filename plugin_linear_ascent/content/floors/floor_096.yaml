@@ -1,0 +1,42 @@
+floor: 96
+tier: 10
+biome: The Crown
+zone: The Night Gardens
+gate_town: Bloomshade
+banner: crown
+arrival: >-
+  The court takes its air in gardens grown from every realm the King
+  broke — elven lamp-trees grafted onto dwarven iron-roses, meadow
+  turf from floor one. Nothing here grows the way it did at home.
+  Everything grows.
+encounters:
+  - id: graft_horror
+    name: Grafted horror
+    weight: 3
+    prose: >-
+      A lamp-tree crossed with something that once had opinions pulls
+      its roots and comes at you glowing, half bio-light and half
+      bramble. Somewhere inside it is a cutting of the forest you
+      walked on floor twenty-three, and it remembers you passing.
+  - id: garden_keeper
+    name: Keeper of the beds
+    weight: 3
+    prose: >-
+      A demon gardener straightens up among the iron-roses, shears
+      in hand, apron full of clippings that will not hold still. You
+      are standing on the floor-one turf. It is very rare, it says,
+      advancing. It is very rare because of people like you.
+  - id: pollen_shade
+    name: Night-pollen drift
+    weight: 2
+    prose: >-
+      The gardens pollinate after dark, and the drift finds you — a
+      golden cloud with a slow, deliberate shape to its drifting. What
+      it pollinates, the gardeners harvest. Do not inhale the future.
+warden:
+  name: Warden Thornglass
+  prose: >-
+    The gardens' oldest rootstock has grown a warden — Thornglass, a
+    trellis-shape of obsidian bramble, flowering in small hot lights.
+    Every realm in the beds contributed a thorn. It knows which one
+    is yours, and saves it for last.

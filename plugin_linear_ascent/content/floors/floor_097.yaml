@@ -1,0 +1,44 @@
+floor: 97
+tier: 10
+biome: The Crown
+zone: The Kingsway
+gate_town: Waygate
+banner: crown
+arrival: >-
+  The processional road to the throne begins here — an avenue of
+  black glass lined with the banners of every realm, hung upside
+  down. Court law says the Kingsway may be walked only in procession.
+  It has waited ninety-six floors for you to break it.
+encounters:
+  - id: way_herald
+    name: Herald of precedence
+    weight: 3
+    prose: >-
+      A court herald plants its staff in your path with a crack like
+      ice. Processions require rank, and rank requires patents, and
+      you have neither — only, it allows, a certain momentum. It
+      calls the challenge in High Court speech, then translates.
+  - id: banner_wraith
+    name: Banner-wraith
+    weight: 3
+    prose: >-
+      One of the inverted banners unhooks itself and comes down the
+      avenue — the flag of a dead realm flying itself, looking for
+      hands to carry it right side up. Yours are occupied. It
+      intends to free them.
+  - id: procession_guard
+    name: Kingsway guard
+    weight: 2
+    prose: >-
+      Two archdemons of the road-watch descend from their alcoves in
+      step, glaives crossing with ceremonial precision. They have
+      drilled the arrest of an unauthorized walker every day for a
+      thousand years. You can tell.
+warden:
+  name: Warden Waymarshal
+  prose: >-
+    The Kingsway's marshal has organized every procession the Crown
+    ever held, and it receives your one-person parade with
+    professional interest. Waymarshal draws a baton of black glass,
+    taps the road twice for order, and the whole avenue falls in
+    behind it.

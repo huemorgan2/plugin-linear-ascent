@@ -1,0 +1,45 @@
+floor: 98
+tier: 10
+biome: The Crown
+zone: The Dueling Floor
+gate_town: Measure
+banner: crown
+arrival: >-
+  The court settles everything here, on a floor of black glass
+  scored with a thousand years of measured paces. The galleries are
+  full — word of you has climbed faster than you have. Tonight's
+  card was cleared by royal order. The court has bet heavily anyway.
+encounters:
+  - id: court_champion
+    name: Champion of the lower court
+    weight: 3
+    prose: >-
+      The lower court's champion steps onto the glass and salutes
+      the royal box first, you second — protocol, and also a tell.
+      It fights for an audience of one, and it has never once been
+      allowed to lose.
+  - id: blood_arbiter
+    name: The arbiter
+    weight: 3
+    prose: >-
+      The dueling floor's arbiter descends in robes of chainmail
+      silk to review your standing. It finds no patents, no second,
+      no grave-plot reserved — irregular. The penalty for
+      irregularity is assessed in the traditional currency, on the
+      spot.
+  - id: gallery_wager
+    name: A settled wager
+    weight: 2
+    prose: >-
+      Two archdemons in the gallery have bet on how far you get,
+      and one of them has just realized it stands to lose a
+      province. It comes over the rail mid-argument, resolving to
+      adjust the outcome personally.
+warden:
+  name: Warden Fairpoint
+  prose: >-
+    The floor's own warden fights every challenger whose paperwork
+    survives — Fairpoint, a fencer of black glass with a blade
+    grown from its arm,     correct to the last inch of the measure.
+    It offers you the salute it has offered a thousand dead
+    duelists.

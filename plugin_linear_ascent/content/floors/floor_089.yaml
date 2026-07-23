@@ -1,0 +1,44 @@
+floor: 89
+tier: 9
+biome: Hellmarch
+zone: The Herald's Road
+gate_town: Clarionfall
+banner: hellmarch
+arrival: >-
+  The last road is a triumphal way built for one commuter: Malgrim,
+  the King's voice, whose processions descend when a realm is to be
+  told it has fallen. The road is lined with the honor guard, at
+  their posts tonight. You are the procession now.
+encounters:
+  - id: honor_knight
+    name: Honor guard knight
+    weight: 3
+    prose: >-
+      A hellknight of the Herald's own guard steps into the road,
+      armor chased in speech-runes that mutter as it moves. It has
+      held this post through nine climbers. It recites their names
+      at you, as introduction and as warning.
+  - id: banner_imp
+    name: Banner-bearer imp
+    weight: 3
+    prose: >-
+      An imp staggers under a procession banner three times its
+      height and refuses, absolutely, to set it down — the banner
+      is the post. It comes at you swinging the whole assembly like
+      a sail in a gale.
+  - id: voice_hulk
+    name: Proclamation hulk
+    weight: 2
+    prose: >-
+      A welded hulk built as a walking loudspeaker wheels onto the
+      road and opens every horn on its chassis. The proclamation is
+      your death notice, read in advance, at a volume that loosens
+      rivets.
+warden:
+  name: Warden Trumpetsteel
+  prose: >-
+    The Herald's gatekeeper is Trumpetsteel, a knight-shape built
+    around a single great horn where the head should be. It sounds
+    your arrival up the stair to its master — one long note,
+    correct to protocol — then lowers itself like the last word of
+    a sentence.

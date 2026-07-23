@@ -1,0 +1,34 @@
+floor: 5
+tier: 1
+biome: Greenreach
+zone: The Shearing Downs
+gate_town: Woolgate
+banner: greenreach
+arrival: >-
+  Sheep country once — the downs still carry their paths, worn deep by
+  generations of flocks that are all eaten now. Goblin banners fly from a
+  shearing shed, and the grass between is churned by boar and worse.
+encounters:
+  - id: downs_boar
+    name: Downs boar
+    weight: 3
+    prose: >-
+      A boar with a broken spear-shaft healed into its shoulder crests
+      the down and comes straight on, remembering the spear.
+  - id: goblin_drover
+    name: Goblin drover
+    weight: 3
+    prose: >-
+      A goblin drover cracks a wire whip, driving two leashed wolves
+      ahead of it like dogs. It looses the leashes when it sees you.
+  - id: shed_raider
+    name: Shed raider
+    weight: 2
+    prose: >-
+      From the shearing shed a goblin emerges wearing an entire fleece,
+      scrap-rifle poking out of the wool. It bleats, then fires.
+warden:
+  name: Warden Ramsteel
+  prose: >-
+    Ramsteel stands at the stair — a great horned frame of shearing
+    blades and ram's skull, pawing sparks from the flint of the downs.

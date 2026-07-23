@@ -1,0 +1,44 @@
+floor: 87
+tier: 9
+biome: Hellmarch
+zone: The Siege Gardens
+gate_town: Ramside
+banner: hellmarch
+arrival: >-
+  The King grows his siege engines. Rows of them stand planted in
+  beds of bone-meal and engine oil — rams budding off trellises,
+  trebuchets ripening on the stem. Imp gardeners work the rows. The
+  harvest is scheduled for the war after this one.
+encounters:
+  - id: gardener_imp
+    name: Pruning-torch imp
+    weight: 3
+    prose: >-
+      A gardener imp is grafting a fresh arm onto a young ram when
+      you interrupt. Contamination of the beds is the one sin the
+      head gardener flogs for, and you are tracking in pollen from
+      ninety floors of elsewhere.
+  - id: unripe_engine
+    name: Unripe engine
+    weight: 3
+    prose: >-
+      A ram not due for another season tears loose of its trellis at
+      your scent, dragging root-cables. It is green, unbalanced, and
+      eager — a colt with a battering head, ruining the rows to
+      reach you.
+  - id: scarecrow_knight
+    name: Garden scarecrow
+    weight: 2
+    prose: >-
+      What keeps the carrion birds off the beds is a hellknight
+      crucified on a trellis, still running. The gardeners forgot
+      to tell it the war it fell in is over. It comes off the frame
+      with the nails still in.
+warden:
+  name: Warden Rootram
+  prose: >-
+    The oldest thing in the gardens is the mother-stock, and it did
+    not care to be pruned. Rootram heaves out of the central bed —
+    the trunk every engine was cut from, walking on a root-ball of
+    soil and cabling — and the gardeners drop their torches and
+    run.

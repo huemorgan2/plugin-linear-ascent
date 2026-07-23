@@ -1,0 +1,43 @@
+floor: 100
+tier: 10
+biome: The Crown
+zone: The Reactor Throne
+gate_town: Vigil
+banner: vharuk
+arrival: >-
+  The throne room is the reactor, and the reactor is the throne —
+  one chamber where the stolen world's weight hangs in chains of
+  light from a single black seat. The court is assembled. The realms
+  watch through every mirror. The King rises to meet you himself.
+encounters:
+  - id: court_assembled
+    name: The assembled court
+    weight: 3
+    prose: >-
+      The court closes ranks before the dais — archdemons of every
+      rank, silk and plate and grievance, none willing to be seen
+      letting you pass unopposed. They fight the way courts do:
+      all at once, and each hoping the others die doing it.
+  - id: kings_shadow
+    name: The King's shadow
+    weight: 3
+    prose: >-
+      Vharuk's shadow leaves him and comes down the throne-steps
+      alone, wearing the shape he wore the day he tore the first
+      realm out of the earth. It is a younger King, and hungrier,
+      and it does not answer to the one on the throne.
+  - id: crown_regalia
+    name: The living regalia
+    weight: 2
+    prose: >-
+      The King's regalia defend themselves — scepter, orb, and
+      chain of office rising off their cushions in a slow orbit.
+      They have outlasted four bearers. They are auditioning the
+      fifth, and the audition is armed.
+warden:
+  name: Vharuk, the Demon King
+  prose: >-
+    Vharuk steps down from the throne and the chamber dims — the
+    tower's heart-light gathering into him like breath drawn before
+    a word. He stole a world and stacked it into a ladder, and you
+    have climbed it to his floor. He is not angry. He is interested.

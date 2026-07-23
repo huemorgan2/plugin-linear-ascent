@@ -1,0 +1,39 @@
+floor: 54
+tier: 6
+biome: Frosthold
+zone: The Troll Bridges
+gate_town: Bridgeward
+banner: frosthold
+arrival: >-
+  A gorge country of blue crevasses, crossed by bridges of living ice
+  that the trolls grow, own, and lease.   Every span has its
+  bridge-troll and every bridge-troll has its price. The rates are
+  fair. The exceptions are memorable.
+encounters:
+  - id: bridge_troll
+    name: Bridge-troll
+    weight: 3
+    prose: >-
+      The troll under the third span has doubled its rates for the
+      season and glued the detour shut with new ice. It comes up over
+      the rail with the deed in one fist, in case you argue.
+  - id: toll_wolf
+    name: Toll-runner wolf
+    weight: 3
+    prose: >-
+      The wolves cross without paying, which the trolls tolerate
+      because catching them is undignified. This one has learned to
+      shake bridges until paying customers fall off.
+  - id: crevasse_wight
+    name: Crevasse climber
+    weight: 2
+    prose: >-
+      Not everyone who fell short on the toll hit the bottom.
+      Something climbs out of the blue depth on fingers of ice,
+      carrying its grudge in both hands.
+warden:
+  name: Warden Spanbreak
+  prose: >-
+    The last gorge has no bridge, because Spanbreak ate it. A troll
+    grown to the width of the crossing itself, it lies across the gap
+    and lets you choose which end to argue with.

@@ -1,0 +1,39 @@
+floor: 37
+tier: 4
+biome: Webdeep
+zone: The Trapdoor Fields
+gate_town: Latchlight
+banner: webdeep
+arrival: >-
+  A cavern floor flat as a threshing yard, which should have been the
+  first warning. Every few paces a hinge of silk, dusted to match the
+  stone. The locals walk this floor like it is checkered, and only
+  step on white.
+encounters:
+  - id: trapdoor_spider
+    name: Trapdoor spider
+    weight: 3
+    prose: >-
+      The stone in front of you is a lid, and the lid is already open.
+      What comes out is mostly forelegs, faster than an apology,
+      dragging you toward a hole exactly your size.
+  - id: sprung_husk
+    name: Sprung trap
+    weight: 3
+    prose: >-
+      A husk lies beside an open trapdoor, one boot still down the
+      hole — a trap that fired and lost. As you edge past, the husk
+      gets up, still fighting the fight it remembers.
+  - id: field_troll
+    name: Field-wise troll
+    weight: 2
+    prose: >-
+      A deep troll crosses the fields by memory, stepping sure as a
+      dancer, and it has noticed that you are watching its feet. It
+      does not like sharing the route map.
+warden:
+  name: Warden Latchjaw
+  prose: >-
+    The stair sits in plain sight on open ground, which tells you
+    everything. Latchjaw's door is the size of a threshing floor, and
+    Latchjaw is the size of what needs a door that size.

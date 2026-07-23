@@ -1,0 +1,39 @@
+floor: 44
+tier: 5
+biome: The Scorch
+zone: The Vent Country
+gate_town: Steamgate
+banner: scorch
+arrival: >-
+  The buried reactor breathes through this desert — vents tall as
+  chimneys, exhaling steam and ash on a schedule the locals set their
+  clocks by. Between eruptions the country is almost peaceful. Check
+  the schedule.
+encounters:
+  - id: vent_salamander
+    name: Vent salamander
+    weight: 3
+    prose: >-
+      Salamanders ride the vent-blasts for sport, and one lands ahead
+      of you, steaming, in the loose easy way of an animal that has
+      never once been cold.
+  - id: steam_ogre
+    name: Scalded ogre
+    weight: 3
+    prose: >-
+      An ogre stands where a vent caught it, bright pink down one
+      side and in a mood about it. It has decided somebody is to
+      blame, and you have the misfortune of being available.
+  - id: ash_wyrmling
+    name: Ash wyrmling
+    weight: 2
+    prose: >-
+      A wyrmling noses out of a dormant vent, no longer than a skiff,
+      wings still wet. It is a long way from the Cindermouth nest, and
+      it is exactly as dangerous as a lost child with a furnace in it.
+warden:
+  name: Warden Ventmaw
+  prose: >-
+    The largest vent on the floor is not a vent. Ventmaw rises out of
+    its own crater, throat glowing down past sight, and the eruption
+    schedule turns out to have been a feeding schedule all along.

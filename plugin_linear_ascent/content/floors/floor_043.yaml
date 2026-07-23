@@ -1,0 +1,39 @@
+floor: 43
+tier: 5
+biome: The Scorch
+zone: The Slag Barrens
+gate_town: Clinker Row
+banner: scorch
+arrival: >-
+  The reactor's spoil was dumped here in ridges, and the ridges never
+  quite cooled. Slag country: black hills that tick as they settle,
+  seams of dull red glowing in the cuts, air that tastes of struck
+  matches. Things den in the warm hills. Big things.
+encounters:
+  - id: slag_salamander
+    name: Slag salamander
+    weight: 3
+    prose: >-
+      A salamander has denned in a red seam and grown fat on the heat,
+      scales gone the color of cooling iron. It comes out annoyed,
+      which for a salamander is most of the way to violence.
+  - id: ridge_ogre
+    name: Ridge ogre
+    weight: 3
+    prose: >-
+      An ogre clan works the barrens for half-smelted metal, and this
+      one has struck a good seam. It stands up on the ridgeline,
+      backlit red, and claims the whole hill with one bellow.
+  - id: clinker_hound
+    name: Clinker hound
+    weight: 2
+    prose: >-
+      A hound-shaped clot of slag and cinder trots the ridge road,
+      cooling as it comes. By the time it reaches you it will be hard
+      as a bell. It knows this. It is not hurrying.
+warden:
+  name: Warden Slagbone
+  prose: >-
+    Slagbone hauls itself off the hottest ridge, a skeleton of rebar
+    and half-melt with slag for muscle. It leaves the shape of itself
+    burned into the hill behind it, and comes down at a run.

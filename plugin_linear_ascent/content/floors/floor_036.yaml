@@ -1,0 +1,39 @@
+floor: 36
+tier: 4
+biome: Webdeep
+zone: The Hanging City
+gate_town: Skeinside
+banner: webdeep
+arrival: >-
+  A city hangs over the chasm, built entirely of silk — streets,
+  towers, bridges, swaying in air that does not move. Something lived
+  in it before the spiders; the shape of the doorways says so. The
+  doorways are the wrong shape for spiders too.
+encounters:
+  - id: bridge_weaver
+    name: Bridge-weaver
+    weight: 3
+    prose: >-
+      A spider re-strings a sagging silk bridge ahead of you, working
+      backward, watching you the whole time. You realize it is not
+      repairing the bridge. It is adjusting the load rating.
+  - id: city_husk
+    name: Citizen husk
+    weight: 3
+    prose: >-
+      A husk sits at a silk window in a silk chair, arranged with
+      care, one arm raised in something like a wave. As you pass, the
+      arm finishes the gesture.
+  - id: chasm_troll
+    name: Chasm troll
+    weight: 2
+    prose: >-
+      A deep troll climbs the city's underside, too heavy for any
+      street, tearing handholds in other people's architecture. It
+      surfaces through the floor ahead of you, apologizing to no one.
+warden:
+  name: Warden Skeinback
+  prose: >-
+    The city's heart is a plaza of taut silk, and Skeinback walks it
+    like a landlord — a spider carrying the whole city's tension in
+    its web-lines. When it plucks one, somewhere a street goes slack.

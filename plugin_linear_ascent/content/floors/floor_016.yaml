@@ -1,0 +1,39 @@
+floor: 16
+tier: 2
+biome: Ironvale
+zone: The Anvil Commons
+gate_town: Hammerhome
+banner: ironvale
+arrival: >-
+  A hundred family forges around one great communal anvil, the way
+  dwarves have always worked: alone, together. The plasma feeds still
+  run hot. The Red Orcs use the Commons now, and what they make is
+  cruder and works fine.
+encounters:
+  - id: orc_armorer
+    name: Red Orc armorer
+    weight: 3
+    prose: >-
+      An orc at a stolen forge beats a dent out of a warframe pauldron,
+      sees you, and considers the time saved by taking yours off you
+      instead.
+  - id: hammer_kobold
+    name: Kobold hammer-carrier
+    weight: 3
+    prose: >-
+      A kobold staggers past under a smith's hammer twice its height,
+      apprenticed to the orcs by force of habit. It decides you are the
+      day's first lesson.
+  - id: half_forged
+    name: Half-forged thing
+    weight: 2
+    prose: >-
+      Something left on the great anvil mid-making has finished itself.
+      It walks on tong-legs, still cherry-hot down one side, looking
+      for its maker or a substitute.
+warden:
+  name: Warden Anvilback
+  prose: >-
+    Anvilback carries the old communal anvil fused into its spine, and
+    a lifetime of hammer-blows has gone into its temper. It sets its
+    feet at the stair like a work-piece being clamped.

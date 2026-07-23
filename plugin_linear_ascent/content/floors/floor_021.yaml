@@ -1,0 +1,39 @@
+floor: 21
+tier: 3
+biome: The Barrows
+zone: The Mirefields
+gate_town: Cairnside
+banner: barrows
+arrival: >-
+  The mine air gives way to marsh air, which is not an improvement.
+  Drowned fields run to a grey horizon under a lid of fog, studded with
+  burial cairns older than any war you have heard of. The mud holds
+  footprints going in. Fewer coming out.
+encounters:
+  - id: mire_ghoul
+    name: Mire ghoul
+    weight: 3
+    prose: >-
+      A ghoul rises out of the standing water without hurry, grave-mud
+      sliding off its shoulders. It has eaten well since the tower came,
+      and it looks at you like more of the same.
+  - id: bog_hound
+    name: Bog hound
+    weight: 3
+    prose: >-
+      Something that used to be a hound follows the old towpath, coat
+      slicked black, too many joints working. It died loyal to somebody.
+      It is not loyal now.
+  - id: cairn_wisp
+    name: Cairn-light
+    weight: 2
+    prose: >-
+      A soft light drifts off a cairn and comes across the water toward
+      you, warm as a lodge window. The locals had one rule about the
+      lights, and this is exactly the wrong direction.
+warden:
+  name: Warden Mirebone
+  prose: >-
+    The causeway to the stair runs through one great cairn, and the
+    cairn stands up. Mirebone wears the stones of a dozen graves like a
+    shell, and under them, something drowned keeps walking.

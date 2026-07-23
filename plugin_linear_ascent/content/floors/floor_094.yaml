@@ -1,0 +1,45 @@
+floor: 94
+tier: 10
+biome: The Crown
+zone: The Antechambers
+gate_town: Doorward
+banner: crown
+arrival: >-
+  A floor of waiting rooms, because even a demon court runs on
+  waiting. Petitioners from a hundred conquered realms sit the
+  benches — some for decades, some past being alive, all holding
+  numbered tokens of black glass. A token is issued. The token is
+  warm.
+encounters:
+  - id: queue_veteran
+    name: Queue veteran
+    weight: 3
+    prose: >-
+      The thing on the bench beside the door has waited so long it
+      has become part of the protocol — robes fused to the stone,
+      token worn smooth. It has decided, watching you walk in, that
+      you intend to jump the line.
+  - id: chamberlain
+    name: Under-chamberlain
+    weight: 3
+    prose: >-
+      An under-chamberlain sweeps toward you, a demon of ledgers
+      and closed doors, robes hissing on the glass floor. Your
+      paperwork, it regrets, is fatally out of order. The regret is
+      genuine. The fatality is procedural.
+  - id: token_swarm
+    name: Recalled tokens
+    weight: 2
+    prose: >-
+      Somewhere a clerk voids a century of the queue, and the
+      recalled tokens come looking for their holders — a drift of
+      black glass chips moving with intent. Yours, in your pocket,
+      is getting warmer.
+warden:
+  name: Warden Anteroom
+  prose: >-
+    The last waiting room is the Warden. Anteroom closes its doors
+    around you — benches, ceiling, and patience all one creature
+    that has digested ten thousand petitioners at their most
+    docile. The far door is its heart. It has agreed to see you
+    now.

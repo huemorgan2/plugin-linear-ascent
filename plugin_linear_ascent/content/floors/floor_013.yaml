@@ -1,0 +1,39 @@
+floor: 13
+tier: 2
+biome: Ironvale
+zone: The Counting Halls
+gate_town: Ledgerstone
+banner: ironvale
+arrival: >-
+  Every ounce that left the mines was weighed here, in halls of brass and
+  slate. The tally-engines still run on habit, counting shipments that
+  stopped coming years ago. Kobolds have learned to read just enough to
+  argue with them.
+encounters:
+  - id: coin_sifter
+    name: Kobold coin-sifter
+    weight: 3
+    prose: >-
+      A kobold sits in a drift of worthless scrip, sorting it by color.
+      It takes your arrival as a bid on its hoard and reaches for the
+      weighing-hammer.
+  - id: tally_engine
+    name: Haywire tally-engine
+    weight: 3
+    prose: >-
+      A brass engine unbolts itself from the counting bench, arms still
+      flicking beads on a broken frame. It has found an error in the
+      ledger, and the error is you.
+  - id: debt_collector
+    name: Red Orc debt-collector
+    weight: 2
+    prose: >-
+      An orc in a warframe painted with tally-marks blocks the aisle.
+      The warband taxes this floor, it explains, and you have walked in
+      carrying assets.
+warden:
+  name: Warden Brassbone
+  prose: >-
+    Brassbone hangs above the grand scales, a skeleton of counting-rods
+    and weight-plates. It drops onto the pans, balances perfectly, and
+    waits to weigh you out.

@@ -1,0 +1,40 @@
+floor: 55
+tier: 6
+biome: Frosthold
+zone: The Giant Steadings
+gate_town: Thanesrest
+banner: frosthold
+arrival: >-
+  Farms, if farms were built by things four men tall — fences of
+  whole pines, cattle the size of barns. The frost giants hold these
+  steadings as the Jarl's freeholders, and they do not care for
+  trespass across land it takes a day to walk.
+encounters:
+  - id: steading_giant
+    name: Freeholder giant
+    weight: 3
+    prose: >-
+      A frost giant straightens up from mending a fence of whole
+      trees, hammer dangling. You are on the near field. The near
+      field is posted. The post is the hammer.
+  - id: giant_hound
+    name: Steading hound
+    weight: 3
+    prose: >-
+      The giants breed their hounds to giant scale, and this one
+      clears the pine fence without touching it. It is not angry.
+      It is doing its job, at the size it was bred to do it.
+  - id: hayrick_troll
+    name: Rick-thief troll
+    weight: 2
+    prose: >-
+      An ice troll is stealing hay by the armload, pursued by nobody
+      yet. Your arrival gives it a better idea than hay, and it drops
+      the armload where it stands.
+warden:
+  name: Warden Fencewright
+  prose: >-
+    The Jarl's reeve for the steadings is Fencewright, a giant of
+    fence-posts and frozen wire who walks the property lines by
+    night. You are the property line's problem now, and it unhooks
+    its mallet without hurry.

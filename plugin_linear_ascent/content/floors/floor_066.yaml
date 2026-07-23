@@ -1,0 +1,42 @@
+floor: 66
+tier: 7
+biome: Stormreach
+zone: The Mast Forest
+gate_town: Sparside
+banner: stormreach
+arrival: >-
+  A summit plateau where the fleet's masts were driven in like
+  fence-posts — hundreds of them, full-rigged, sails long gone to
+  harpy nests, shrouds still singing. Walking here means walking
+  under a century of standing rigging. Look up more than you look
+  down.
+encounters:
+  - id: shroud_harpy
+    name: Shroud-runner harpy
+    weight: 3
+    prose: >-
+      A harpy runs the rigging between masts without touching wing
+      to air, herding you gently off the path. Somewhere ahead is
+      the net stretch, and her whole clan is waiting at it.
+  - id: mast_drake
+    name: Crowsnest drake
+    weight: 3
+    prose: >-
+      A storm drake has taken the tallest crow's nest as a roost and
+      grown into it — spars through the wing membrane, at home. It
+      unwinds down the mast in a spiral, ringing every stay on the
+      way.
+  - id: rigging_ghast
+    name: Tangled topman
+    weight: 2
+    prose: >-
+      A topman hangs in the shrouds where his line caught him,
+      swinging all these years. As you pass beneath, the swinging
+      stops — against the wind — and the line starts paying out.
+warden:
+  name: Warden Mastwrack
+  prose: >-
+    The forest's heart is a mast thicker than the rest, and
+    Mastwrack is rigged to it — a figurehead grown a body of spar
+    and shroud, sailing a fixed point in a permanent gale. It comes
+    about to face you, canvas thundering where its voice should be.

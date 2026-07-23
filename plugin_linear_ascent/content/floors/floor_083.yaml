@@ -1,0 +1,42 @@
+floor: 83
+tier: 9
+biome: Hellmarch
+zone: The Furnace Roads
+gate_town: Stokegate
+banner: hellmarch
+arrival: >-
+  Roads of grated iron run between the outworks, laid over open
+  furnace channels — the March's blood-heat, piped floor to floor.
+  Walking them means walking on light. The furnaces below are fed by
+  chute, and it is bad luck to ask what the chutes are fed.
+encounters:
+  - id: stoker_imp
+    name: Stoker imp
+    weight: 3
+    prose: >-
+      A stoker imp rides its coal-chute up onto the road, shovel
+      first. The furnace below is running lean, the schedule says
+      feed it, and you are standing on the hatch — which the imp
+      counts as volunteering.
+  - id: road_knight
+    name: Road-warden knight
+    weight: 3
+    prose: >-
+      A hellknight patrols the grate-road barefoot, plate soles
+      glowing dull red. Heat discipline is a point of pride in the
+      March. It means to teach you the standard.
+  - id: grate_thing
+    name: Under-grate thing
+    weight: 2
+    prose: >-
+      Fingers come up through the grate ahead of you — too many,
+      too long, comfortable in the light of the channel. Something
+      lives between the furnaces, eating what the chutes deliver,
+      and it has learned the sound of footsteps stopping.
+warden:
+  name: Warden Cindergrate
+  prose: >-
+    Where the roads converge the grating rises into a figure —
+    Cindergrate, the junction itself gone upright, furnace-light
+    pouring through its lattice. Every road on the floor is part of
+    its body, and you have been walking on it since the gate.

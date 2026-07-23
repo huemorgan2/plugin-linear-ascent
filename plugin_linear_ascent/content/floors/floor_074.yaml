@@ -1,0 +1,42 @@
+floor: 74
+tier: 8
+biome: The Gloom
+zone: The Echo Glades
+gate_town: Fainthollow
+banner: gloom
+arrival: >-
+  Clearings open in the forest, and each one holds a moment that will
+  not finish — a wedding dance, a skirmish, played over in grey light
+  with the sound worn off. The realm's last transmissions pooled in
+  these glades when the signal died. Walk around them.
+encounters:
+  - id: glade_dancers
+    name: The dancers
+    weight: 3
+    prose: >-
+      The wedding glade needs a partner tonight — a gap in the round
+      where someone used to be. The dancers stop. Every grey face
+      turns to you with the same polite, starving expectation.
+  - id: skirmish_shade
+    name: Skirmish remnant
+    weight: 3
+    prose: >-
+      In the battle glade one soldier has noticed, after all these
+      years, that the enemy stopped coming. It walks out of the
+      replay toward you, sword grey with disuse, relieved beyond
+      words to have somebody real.
+  - id: glade_hound
+    name: Glade-shy hound
+    weight: 2
+    prose: >-
+      The gloom hounds will not enter the glades, which tells you
+      something. This one has learned to drive travelers into them
+      instead, and it works you toward the wedding light with the
+      patience of a sheepdog.
+warden:
+  name: Warden Encore
+  prose: >-
+    The largest glade holds the realm's last broadcast — a farewell,
+    looped. Encore is its keeper, a conductor-shape in frayed grey
+    formalwear, and it will not let the performance end short of an
+    audience. You have arrived. The overture starts over.

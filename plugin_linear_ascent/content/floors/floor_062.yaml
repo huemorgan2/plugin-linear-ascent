@@ -1,0 +1,41 @@
+floor: 62
+tier: 7
+biome: Stormreach
+zone: The Wreckfields
+gate_town: Hullside
+banner: stormreach
+arrival: >-
+  Sky-ships died here in numbers — a whole trade fleet, caught
+  between the tower's theft and the storm it made. The hulls lie
+  broken across three peaks, keels to the sky. Salvage is the floor's
+  whole economy, and the previous owners have opinions.
+encounters:
+  - id: wreck_harpy
+    name: Salvage harpy
+    weight: 3
+    prose: >-
+      A harpy clan has stripped this hull to the ribs, and the clan
+      matriarch lands on the keel above you wearing three captains'
+      coats at once. Everything on this peak is claimed, including,
+      as of now, your gear.
+  - id: hold_drake
+    name: Hold-nesting drake
+    weight: 3
+    prose: >-
+      A storm drake has nested in a cargo hold, brooding a clutch on
+      a bed of trade silver. The hull groans under it as it comes
+      out — possessive, charged, and recently a parent.
+  - id: dead_crew
+    name: Crew of the wreck
+    weight: 2
+    prose: >-
+      Below decks, the crew never left their stations. They rise from
+      the ribs of the hull in harness and oilskin, moving with the
+      roll of a deck that stopped rolling years ago.
+warden:
+  name: Warden Keelhaul
+  prose: >-
+    The biggest wreck's anchor still hangs from its chain down the
+    cliff, and Keelhaul climbs it to meet you — a drowned-air giant
+    of hull timber and chain, the fleet's grievance walking. It
+    swings the anchor like a censer.

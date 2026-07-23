@@ -1,0 +1,43 @@
+floor: 70
+tier: 7
+biome: Stormreach
+zone: The Tempest Court
+gate_town: Galesend
+banner: zephyra
+arrival: >-
+  Inside the eye the Queen keeps court on a floating ring of wrecked
+  flagships, rigging strung with captured lightning. Harpies in
+  livery, drakes on perches, weather bowing in and out. On the throne
+  of masthead and storm-glass, someone is expecting you.
+encounters:
+  - id: court_champion
+    name: Queen's champion drake
+    weight: 3
+    prose: >-
+      The Queen's champion descends from the high perch without
+      hurry, storm-glass gorget flashing. It fights before the
+      throne, which means it fights beautifully, which does not
+      mean it fights fair.
+  - id: livery_harpy
+    name: Court guard harpy
+    weight: 3
+    prose: >-
+      Two of the court guard cross pikes of ship-spar in front of
+      you. Protocol, one explains, requires all challengers to
+      arrive bleeding. The court dislikes ambiguity.
+  - id: bottled_gale
+    name: Unbottled gale
+    weight: 2
+    prose: >-
+      A courtier drops a lantern-globe as you pass, accidentally,
+      the way courts do accidents. What gets out has been bottled
+      since the fleet fell, and it holds you personally
+      responsible.
+warden:
+  name: Zephyra, the Storm Queen
+  prose: >-
+    Zephyra rises from the throne and the whole eye tightens by a
+    mile. Wings of front-line weather, a crown of continuous
+    lightning, and under it a face that has outlasted every storm
+    it ever started. She bids you welcome. The pressure drops like
+    a curtsy.

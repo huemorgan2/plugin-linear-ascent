@@ -1,0 +1,39 @@
+floor: 51
+tier: 6
+biome: Frosthold
+zone: The Moraine Gates
+gate_town: Coldquay
+banner: frosthold
+arrival: >-
+  The heat of the Scorch dies in a single doorway. Frosthold opens
+  onto a valley of blue ice under a sunless glare, boulder-fields
+  raked into walls by a glacier with somewhere to be. The cold is not
+  weather. It is policy — the Jarl's, and it is enforced.
+encounters:
+  - id: rime_wolf
+    name: Rime wolf
+    weight: 3
+    prose: >-
+      A wolf comes over the moraine wall furred in frost, breath
+      hanging behind it in a long unbroken banner. It has run down
+      warmer things than you and eaten them mid-stride.
+  - id: gate_troll
+    name: Moraine troll
+    weight: 3
+    prose: >-
+      An ice troll sits in the boulder-field being one of the
+      boulders, a toll practice older than the tower. It stands up
+      with the patience of a thing that has never lost this game.
+  - id: frozen_scout
+    name: Frozen scout
+    weight: 2
+    prose: >-
+      A climber stands off the path, mid-stride, ice to the bone —
+      one of last winter's. As you pass, the frost on it cracks along
+      the shoulders, and it finishes the stride.
+warden:
+  name: Warden Coldjaw
+  prose: >-
+    Coldjaw holds the valley's neck, a wolf-shape of blue ice around
+    something older that drowned in the glacier and kept its temper.
+    Its breath reaches you a full minute before it does.

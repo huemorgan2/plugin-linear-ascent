@@ -1,0 +1,40 @@
+floor: 56
+tier: 6
+biome: Frosthold
+zone: The Ice Quarries
+gate_town: Hewnstone
+banner: frosthold
+arrival: >-
+  The Jarl builds in ice the way kings below built in granite, and
+  the blocks come from here — quarries cut in terraces into the
+  glacier's blue heart. The deeper terraces are older than the Jarl,
+  and their blocks were not left unfinished by accident.
+encounters:
+  - id: quarry_troll
+    name: Quarry-gang troll
+    weight: 3
+    prose: >-
+      An ice troll works a two-troll saw alone, which is against the
+      gang rules, which it ate. It leaves the saw singing in the cut
+      and picks up the breaking-bar instead.
+  - id: block_wight
+    name: Quarried thing
+    weight: 3
+    prose: >-
+      One of the deep blocks has a shape inside it, and the shape has
+      been sawing from its side. Your lamp is the first light it has
+      had to work by in an age, and it is grateful, and nearly out.
+  - id: gantry_wolf
+    name: Gantry wolf
+    weight: 2
+    prose: >-
+      A wolf patrols the top gantry like a foreman, looking down the
+      terraces at you. It starts down the ramps at a trot, unhurried,
+      collecting the pack as it comes.
+warden:
+  name: Warden Hewnheart
+  prose: >-
+    The quarry's last terrace is a single block the old cutters
+    refused to finish, and Hewnheart is why. It shears itself free
+    along their abandoned cut-lines, a giant of building-grade ice,
+    edges still true.

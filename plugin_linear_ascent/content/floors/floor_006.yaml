@@ -1,0 +1,34 @@
+floor: 6
+tier: 1
+biome: Greenreach
+zone: The Hollow Lanes
+gate_town: Hedgeharbor
+banner: greenreach
+arrival: >-
+  Sunken lanes run between banked hedges taller than a rider — old roads
+  worn below the fields by a thousand years of feet. Down here the
+  floodlights never reach. You hear everything, and see nothing.
+encounters:
+  - id: lane_wolf
+    name: Lane wolf
+    weight: 3
+    prose: >-
+      Claws on packed earth, behind you, closing. In the hollow lane
+      there is no room to circle — the wolf knows it too.
+  - id: hedge_goblin
+    name: Hedge-blind goblin
+    weight: 3
+    prose: >-
+      A goblin bursts through the hedge wall in a shower of thorn,
+      scrap-rifle first, as surprised as you are and quicker to shoot.
+  - id: lane_boar
+    name: Lane bull-boar
+    weight: 2
+    prose: >-
+      Filling the lane wall to wall, a bull-boar lowers its head. There
+      is exactly one direction it intends to travel, and you are in it.
+warden:
+  name: Warden Thornhide
+  prose: >-
+    Where the lanes cross stands Thornhide — a bear-broad thing grown
+    into a coat of living hedge, wire and briar braided through its hide.

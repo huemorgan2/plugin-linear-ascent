@@ -1,0 +1,39 @@
+floor: 32
+tier: 4
+biome: Webdeep
+zone: The Cable Roots
+gate_town: Wiregate
+banner: webdeep
+arrival: >-
+  The tower's veins run through this cavern — cables thick as oaks,
+  branching down into the dark, carrying power to the floors above.
+  Everything here lives off the leakage. The spiders' webs are woven
+  copper-and-silk, and they carry a charge.
+encounters:
+  - id: wire_weaver
+    name: Wire-weaver
+    weight: 3
+    prose: >-
+      A spider picks its way down a live cable, abdomen glowing faint
+      with stolen charge. Its web is half metal, and the flies it
+      catches die before they finish landing.
+  - id: cable_troll
+    name: Cable troll
+    weight: 3
+    prose: >-
+      A deep troll has chewed into a trunk cable and sits wearing it
+      over its shoulders like a stole, jaw sparking. The leakage has
+      done things to its temper.
+  - id: sparked_husk
+    name: Jittering husk
+    weight: 2
+    prose: >-
+      A cocooned husk hangs tangled in the copper web, twitching in
+      time with the current. When your shadow crosses it, it twitches
+      toward you instead.
+warden:
+  name: Warden Wirefang
+  prose: >-
+    Where the cables converge, Wirefang has made itself the junction —
+    a spider re-strung with copper sinew, fangs like stripped leads. It
+    tests them once against the dark, and the whole web lights up.

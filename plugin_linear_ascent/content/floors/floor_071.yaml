@@ -1,0 +1,41 @@
+floor: 71
+tier: 8
+biome: The Gloom
+zone: The Eaves
+gate_town: Lastlamp
+banner: gloom
+arrival: >-
+  Above the storm the tower goes quiet. A forest floor with no sky —
+  black boughs closing overhead, and under them a dusk that never
+  ripens into night. The gate town keeps one lamp lit facing the
+  trees, and the trees keep their distance. Mostly.
+encounters:
+  - id: eaves_shade
+    name: Eaves shade
+    weight: 3
+    prose: >-
+      Your shadow arrives before you do — thrown ahead on the path by
+      no light at all. It waits for you to catch up, and when you
+      stop, it keeps walking.
+  - id: gloom_hound
+    name: Gloom hound
+    weight: 3
+    prose: >-
+      A hound the color of the space between trees crosses the path,
+      soundless. The Huntsman's stock run loose out here between
+      hunts, keeping themselves fed. It circles downwind, from habit
+      it does not need.
+  - id: dead_signal
+    name: Dead signal
+    weight: 2
+    prose: >-
+      A voice you almost know calls your name from off the path — the
+      exact tone of someone in Roothollow, worn thin by distance. The
+      old realm's transmissions never died here. They just kept
+      walking.
+warden:
+  name: Warden Duskhide
+  prose: >-
+    Duskhide holds the treeline where the last lamplight fails — a
+    stag-shadow with no stag in it, antlers of pure absence. Arrows
+    go through. The dark between the trees does not.

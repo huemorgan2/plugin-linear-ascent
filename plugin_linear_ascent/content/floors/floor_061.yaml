@@ -1,0 +1,41 @@
+floor: 61
+tier: 7
+biome: Stormreach
+zone: The Cloudline
+gate_town: Skyfoot
+banner: stormreach
+arrival: >-
+  The stair opens onto open sky. Peaks rise out of a cloud deck that
+  goes to every horizon, and the wind arrives with no memory of ever
+  being stopped. The locals rope themselves to their own houses, and
+  will lend you a line for a fair price.
+encounters:
+  - id: cloudline_harpy
+    name: Cloudline harpy
+    weight: 3
+    prose: >-
+      A harpy rides the updraft along the cliff face, keeping pace
+      with you at arm's length, insulting your footwork in fluent
+      trade-tongue. The insults are a range-finding exercise.
+  - id: young_drake
+    name: Squall drake
+    weight: 3
+    prose: >-
+      A young storm drake breaks out of the cloud deck below you,
+      static crawling on its wing edges. It has not learned to aim
+      its lightning yet. It does not especially need to.
+  - id: rigger_ghast
+    name: Fallen rigger
+    weight: 2
+    prose: >-
+      A sky-ship crewman in a rotted harness climbs over the trail's
+      edge, dragging a length of frayed safety line. It clips the
+      line to your belt with terrible courtesy. Its ship is down
+      there somewhere.
+warden:
+  name: Warden Thermal
+  prose: >-
+    The updraft at the stair peak is permanent, and Warden Thermal is
+    why — a broad-winged thing that has ridden one column of air for
+    a hundred years, circling. It folds its wings, once, and the
+    whole sky comes down with it.

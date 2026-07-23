@@ -1,0 +1,43 @@
+floor: 92
+tier: 10
+biome: The Crown
+zone: The Mirror Galleries
+gate_town: Sheenrest
+banner: crown
+arrival: >-
+  The citadel's outer halls are walled in polished obsidian, and the
+  court uses them the way courts use mirrors — for vanity, and for
+  watching behind themselves. Every surface holds a crowd of
+  reflections, and not all of them have owners present.
+encounters:
+  - id: gallery_duelist
+    name: Gallery duelist
+    weight: 3
+    prose: >-
+      A demon of the lesser court has been practicing against its
+      own reflection for a century, and the reflection finally let
+      it win. It needs a fresh opponent and you have no standing to
+      refuse — dueling here is how the court says hello.
+  - id: orphan_reflection
+    name: Orphaned reflection
+    weight: 3
+    prose: >-
+      A reflection whose owner died at some forgotten intrigue still
+      walks the black glass, hall to hall, looking out. It has found
+      a body it likes. It presses against the inside of the mirror
+      nearest you, testing.
+  - id: whisper_courtier
+    name: Whispering courtier
+    weight: 2
+    prose: >-
+      A courtier falls into step beside you, all silk and sympathy,
+      trading rumors you did not ask for. Somewhere in the third
+      sentence the sympathy runs out, and the silk turns out to be
+      wire.
+warden:
+  name: Warden Backglass
+  prose: >-
+    At the galleries' heart the reflections pool, and Backglass is
+    what they pooled into — everything the court's mirrors kept, in
+    one tall body of layered images. It fights you seven duels at
+    once, one for every angle you have ever been seen from.

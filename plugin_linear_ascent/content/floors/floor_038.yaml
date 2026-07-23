@@ -1,0 +1,39 @@
+floor: 38
+tier: 4
+biome: Webdeep
+zone: The Silk Vaults
+gate_town: Spoolgate
+banner: webdeep
+arrival: >-
+  The spiders store their wealth here: vault after vault of wrapped
+  shapes, hung in rows by size, catalogued by scent. Some bundles are
+  provisions. Some are prisoners. The economy of the Webdeep does not
+  distinguish, and the vault-keepers resent an audit.
+encounters:
+  - id: vault_keeper
+    name: Vault-keeper
+    weight: 3
+    prose: >-
+      A gaunt spider moves down the rows, touching each bundle once,
+      counting. It reaches you — unlabeled, unwrapped, unaccounted for
+      — and begins to correct the inventory.
+  - id: fresh_bundle
+    name: Fresh bundle
+    weight: 3
+    prose: >-
+      One of the hanging shapes is still warm and very determined. It
+      has worked one arm free, and what the arm is holding is a knife,
+      and what the knife wants is anything that moves.
+  - id: vault_troll
+    name: Vault-breaker troll
+    weight: 2
+    prose: >-
+      A deep troll has broken into the vaults the honest way, through
+      the wall, and is eating its way down a row like a man at a
+      market stall. It regards you as queue-jumping.
+warden:
+  name: Warden Spoolhide
+  prose: >-
+    Spoolhide guards the vault door wound in its own product, layer on
+    layer of silk over something you never quite see. Every cut you
+    land unwinds a little more. You may not want to reach the middle.

@@ -1,0 +1,40 @@
+floor: 50
+tier: 5
+biome: The Scorch
+zone: The Cindermouth
+gate_town: Lastwater
+banner: cindermaw
+arrival: >-
+  The center of the Scorch is a caldera of fused ash, and the caldera
+  is a nest. Half-melted tribute rings the rim — armor, wagons, a
+  gate town that stood too close. The heat rises in slow beats, like
+  a pulse. Halfway up the tower, and the tower keeps a dragon.
+encounters:
+  - id: nest_wyrmling
+    name: Nest wyrmling
+    weight: 3
+    prose: >-
+      A wyrmling the size of a river barge suns itself on the caldera
+      rim. It is the runt. It has a runt's temper about visitors, and
+      a keel of muscle that says the word runt is doing heavy work.
+  - id: rim_ogre
+    name: Tribute ogre
+    weight: 3
+    prose: >-
+      An ogre clan hauls a wagon of scrap-steel up the rim road,
+      tribute to keep the wyrm off their terraces. The wagon sheds a
+      wheel. The clan decides you are lighter than the wagon.
+  - id: caldera_salamander
+    name: Caldera salamander
+    weight: 2
+    prose: >-
+      In the nest's shadow the salamanders grow to the size of oxen
+      and fear nothing that walks. This one does not stalk you. It
+      simply turns, and the turning is the whole announcement.
+warden:
+  name: Cindermaw the Wyrm
+  prose: >-
+    The caldera floor unwinds. Cindermaw rises in coils that redraw
+    the horizon, wings shaking ash-fall over the whole floor, throat
+    lit like the reactor the tower buried. She looks down at you the
+    way a bonfire looks at a moth.

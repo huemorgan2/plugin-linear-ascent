@@ -1,0 +1,41 @@
+floor: 75
+tier: 8
+biome: The Gloom
+zone: The Black Meadows
+gate_town: Wickstead
+banner: gloom
+arrival: >-
+  The forest opens onto meadows of black grass under a paper-grey
+  sky, and the meadows are pasture. The Huntsman's nightmares graze
+  between hunts — a herd, coal-dark, cropping grass that whispers.
+  The herd-boys of Wickstead never, under anything, run.
+encounters:
+  - id: pasture_mare
+    name: Grazing nightmare
+    weight: 3
+    prose: >-
+      A nightmare lifts its head from the black grass and considers
+      you with eyes like banked coals. Whatever it dreams while it
+      grazes, you have just walked into it, and it objects.
+  - id: herd_stallion
+    name: Herd stallion
+    weight: 3
+    prose: >-
+      The stallion comes over at a walk, which the herd-boys will
+      tell you is the bad sign — a tower of black muscle and slow
+      smoke, putting itself between you and the herd, hoping you
+      will insist.
+  - id: meadow_hound
+    name: Pasture hound
+    weight: 2
+    prose: >-
+      The hounds that mind the herd are chosen for patience, and
+      this one has been watching you cross the meadow for half a
+      mile without once moving. Now it moves.
+warden:
+  name: Warden Nightbridle
+  prose: >-
+    The first nightmare ever broken to harness was never quite
+    broken. Nightbridle grazes apart, bridled in cold iron it has
+    chewed thin, waiting out the terms of an old bargain. It sees
+    you, and decides the bargain is paid.

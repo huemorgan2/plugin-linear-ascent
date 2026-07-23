@@ -1,0 +1,41 @@
+floor: 76
+tier: 8
+biome: The Gloom
+zone: The Shade Walks
+gate_town: Candlerow
+banner: gloom
+arrival: >-
+  An avenue of statues runs through the forest — the realm's heroes
+  in bronze, every one missing its shadow. The shadows walk the
+  avenue on their own now, trading plinths. The gate town sells
+  candles by the dozen: a lit candle owns its shadow. Yours.
+encounters:
+  - id: statue_shade
+    name: Unfixed shadow
+    weight: 3
+    prose: >-
+      The shadow of a swordsman detaches from an empty plinth and
+      takes its stance — flawless, drilled into the bronze for a
+      century. It fights like the statue's better memory of itself.
+  - id: candle_thief
+    name: Candle-thief shade
+    weight: 3
+    prose: >-
+      Something slim and quick moves down the avenue pinching out
+      flames, and your circle of light is next on the round. Fight
+      in the dark, or fight it at the candle — the etiquette guides
+      disagree.
+  - id: walks_hound
+    name: Avenue hound
+    weight: 2
+    prose: >-
+      A gloom hound pads the avenue with a shadow that does not
+      match — too big, walking on the walls. When the hound stops,
+      the shadow keeps coming.
+warden:
+  name: Warden Palewick
+  prose: >-
+    At the avenue's end burns one candle taller than you, and its
+    keeper is Palewick — a shade grown solid on a hundred years of
+    stolen light, holding the flame that owns every shadow on this
+    floor. Including, as of the treeline, yours.

@@ -118,6 +118,115 @@ SCENES: dict[str, tuple[str, str]] = {
         "torches whose glow rises in narrow gradient ramps behind the "
         "throne — the background stays mostly dark, no large bright "
         "areas, deep gradient shadows at the edges.", VIOLET),
+    "ironvale": (
+        "a dead dwarven mine hall — massive squared pillars receding into "
+        "gradient darkness, one huge cog half-buried in rubble as the focal "
+        "subject, a single hanging lamp throwing a wide radial gradient of "
+        "light across rail tracks that run toward the viewer, dust in the "
+        "beam as sparse dither.", DIM),
+    "skarn": (
+        "an orc warlord's warcamp inside a forge hall, CENTERED: a hulking "
+        "silhouette in a salvaged power-armor frame standing on an anvil "
+        "dais, one great axe, ragged war banners either side, a quench-fire "
+        "behind him rising in a narrow gradient glow ramp, edges of the "
+        "frame in deep gradient shadow.", VIOLET),
+    "barrows": (
+        "a drowned marsh at dusk — still water mirroring a gradient sky, "
+        "one great burial cairn with a leaning standing stone as the focal "
+        "subject, a rusted exo-rig skeleton knee-deep in the water, thin "
+        "grave-lights drifting with soft gradient halos, ground mist as "
+        "dithered bands.", DIM),
+    "barrowking": (
+        "a barrow king rising from an opened grave mound, CENTERED: a tall "
+        "crowned wight silhouette half-out of a hillside barrow door, "
+        "grave-mist pouring down the slope in smooth gradients, two rows "
+        "of standing stones leading in, a pale gradient moon halo behind "
+        "the crown, edges in deep shadow.", VIOLET),
+    "webdeep": (
+        "a giant orb spiderweb CENTERED and filling the frame inside a "
+        "black cavern, one large wrapped cocoon hanging at its center as "
+        "the single bold focal subject, backlit by a lantern behind the "
+        "web that throws a strong radial gradient glow, web strands thick "
+        "and clearly drawn against the darkness, cave edges vignetting to "
+        "pure black.", DIM),
+    "vyx": (
+        "a monstrous spider matriarch descending on a thread, CENTERED: a "
+        "vast long-legged spider silhouette dropping into a lamplit "
+        "chamber, egg sacs glowing faintly along the walls with soft "
+        "gradient halos, her eyes catching light in rows, the ceiling "
+        "dissolving into dense black above.", VIOLET),
+    "scorch": (
+        "an ash desert over reactor slag — low dunes in smooth dithered "
+        "gradient bands, one dead tree charred to a spike as the focal "
+        "subject, a cracked reactor dome on the horizon leaking a thin "
+        "vertical glow ramp, a huge gradient sky from dense dither at the "
+        "horizon to black above, heat shimmer.", DIM),
+    "cindermaw": (
+        "a colossal fire wyrm rearing from a caldera, CENTERED: a dragon "
+        "silhouette with spread wings rising out of a crater, throat and "
+        "belly seams glowing in bright gradient ramps, ash-fall drifting "
+        "as sparse dither, the caldera rim ringed with half-melted tribute "
+        "shapes, dark gradient sky.", VIOLET),
+    "frosthold": (
+        "a glacier fortress over a frozen sea — a wall of hewn ice blocks "
+        "with one massive gate as the focal subject, frozen waves standing "
+        "mid-swell in the foreground, aurora bands rendered as smooth "
+        "dithered gradients across a starry sky, one watch-fire glowing "
+        "with a warm gradient halo on the rampart.", DIM),
+    "hrimgar": (
+        "a frost giant jarl in his mead-hall, CENTERED: a huge horned "
+        "silhouette seated on an ice throne, great axe across his knees, "
+        "twin fire-trenches running toward the viewer in bright gradient "
+        "ramps, ice rafters dissolving into gradient darkness overhead, "
+        "banners of frozen silk either side.", VIOLET),
+    "stormreach": (
+        "open-sky mountain peaks above a cloud deck — one wrecked sky-ship "
+        "impaled on a summit as the focal subject, its masts and rigging "
+        "against a huge gradient storm sky, a single lightning bolt with a "
+        "soft glow halo, cloud sea below in smooth dithered bands, birds "
+        "as sparse specks.", DIM),
+    "zephyra": (
+        "a storm queen enthroned in the eye of a hurricane, CENTERED: a "
+        "regal winged silhouette on a throne of masthead and glass atop a "
+        "wrecked flagship deck, a crown of lightning with a bright radial "
+        "gradient halo, the eye-wall curving up both sides of the frame in "
+        "smooth dithered cloud gradients.", VIOLET),
+    "gloom": (
+        "a shadow forest under a paper-grey sky — black boughs closing "
+        "overhead, one pale stag silhouette standing on a long ride "
+        "between the trees as the focal subject, a single distant lantern "
+        "with a soft gradient halo, ground fog in smooth dithered bands, "
+        "the treeline dissolving into darkness.", DIM),
+    "huntsman": (
+        "a pale huntsman with his hounds, CENTERED: a tall figure in a "
+        "wide-brimmed hat holding a hunting horn, dismounted before a "
+        "hall of bare birch columns, a crescent of sitting hound "
+        "silhouettes around him, pale mist pooling in gradient bands, a "
+        "cold gradient sky the color of a held breath.", VIOLET),
+    "hellmarch": (
+        "demon siege outworks — a rampart wall of welded black iron "
+        "crossing the frame, one huge horned gate as the focal subject, "
+        "furnace light leaking through gun-slits in thin bright gradient "
+        "ramps, chimney stacks against a smoke sky rendered in smooth "
+        "dithered gradients, sparks drifting upward.", DIM),
+    "malgrim": (
+        "a demon herald announcing before a colossal gate, CENTERED: a "
+        "tall armored silhouette with a raised sword, long banner-cloak, "
+        "brass throat glowing in a narrow gradient ramp, the god-scaled "
+        "black gate rising behind him out of frame, parade ground lit by "
+        "two braziers with radial gradient pools.", VIOLET),
+    "crown": (
+        "an obsidian citadel at the tower's crown — black glass spires in "
+        "silhouette, one central spire holding a caged column of light as "
+        "the focal subject, the reactor beam rising in a bright vertical "
+        "gradient ramp into a starless sky, polished ground reflecting it "
+        "in a mirrored gradient pool.", DIM),
+    "vharuk": (
+        "the demon king rising from a reactor throne, CENTERED: a vast "
+        "crowned silhouette standing before a black seat, chains of light "
+        "radiating up and out from behind him in bright gradient rays, "
+        "the throne room's obsidian floor reflecting the glow in a smooth "
+        "gradient pool, the court as tiny dark shapes at the frame edges.", VIOLET),
     "death": (
         "a cracked skull half-buried in an ash field, a broken crystal "
         "shard floating above it radiating faint gradient rays, ash haze "

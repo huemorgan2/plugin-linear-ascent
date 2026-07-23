@@ -1,0 +1,43 @@
+floor: 99
+tier: 10
+biome: The Crown
+zone: The Last Door
+gate_town: Thresholme
+banner: crown
+arrival: >-
+  One floor remains, and it is mostly door — the King's own, tall
+  enough that clouds form against it. Before it camps the court's
+  conscience — all the demons who came this far meaning to knock,
+  and did not. They watch you cross their camp in silence.
+encounters:
+  - id: doubting_knight
+    name: Knight of the threshold camp
+    weight: 3
+    prose: >-
+      An archdemon knight who camped here a century ago rather than
+      knock stands up from its fire. If you knock, its hundred years
+      of not-knocking become cowardice. It cannot allow the
+      redefinition. It is almost apologetic about the logic.
+  - id: last_tempter
+    name: The last tempter
+    weight: 3
+    prose: >-
+      A silk-voiced demon falls in beside you with the Crown's final
+      offer: everything below floor ninety-nine, governorship,
+      history rewritten in your favor. The offer is genuine. That is
+      the trap — there is nothing dishonest to push against.
+  - id: door_acolyte
+    name: Acolyte of the door
+    weight: 2
+    prose: >-
+      Some of the campers have been here so long they worship the
+      door itself. An acolyte in door-black robes bars your way: the
+      door must not be touched by the unworthy, and its test of
+      worth is administered by hand, immediately.
+warden:
+  name: Warden Knocker
+  prose: >-
+    The great door's knocker is a demon bound into the iron —
+    Knocker, a ring of black metal held in a fist the size of a
+    house. Whoever would knock must first take the ring from it. No
+    one ever has. It tells you this with something like hope.

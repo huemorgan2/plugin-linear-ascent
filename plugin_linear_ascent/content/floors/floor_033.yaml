@@ -1,0 +1,39 @@
+floor: 33
+tier: 4
+biome: Webdeep
+zone: The Broodwarrens
+gate_town: Silkstead
+banner: webdeep
+arrival: >-
+  Warrens dug tight as honeycomb, every wall padded white with brood
+  silk. The air is warm here, the only warm air in the Webdeep, and it
+  smells of milk and vinegar. Things hatch in the walls as you pass.
+  Try not to take it personally.
+encounters:
+  - id: brood_swarm
+    name: Broodling swarm
+    weight: 3
+    prose: >-
+      A patch of wall-silk sloughs off and becomes forty small spiders
+      with one opinion. Individually they are nothing. They have never
+      once been individually.
+  - id: warren_troll
+    name: Warren troll
+    weight: 3
+    prose: >-
+      A deep troll has been silk-blinded and kept as a nursery guard,
+      fed just enough. It fills the tunnel wall to wall, and it hears
+      your heartbeat change.
+  - id: midwife_spider
+    name: Brood-midwife
+    weight: 2
+    prose: >-
+      A long-legged spider tends a row of egg-sacs, turning each with
+      terrible gentleness. It puts itself between you and the clutch
+      before you have decided anything.
+warden:
+  name: Warden Cradlesilk
+  prose: >-
+    The deepest warren belongs to Cradlesilk, swollen pale and near
+    blind, the mother of every small horror you have met today. She
+    does not leave the clutch. You will have to come to her.

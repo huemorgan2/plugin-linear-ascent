@@ -1,0 +1,39 @@
+floor: 35
+tier: 4
+biome: Webdeep
+zone: The Signal Deeps
+gate_town: Faintlight
+banner: webdeep
+arrival: >-
+  The caverns here are stacked with the tower's thinking-engines, racks
+  of them running down into the dark, warm to the touch and muttering.
+  The spiders web the aisles for the heat. Whatever the engines are
+  computing, they have been at it since the theft.
+encounters:
+  - id: rack_spider
+    name: Rack-weaver
+    weight: 3
+    prose: >-
+      A spider has webbed an entire engine-rack into its nest and grown
+      strange on the warmth. Its eyes reflect your lamp in rows, like
+      little status lights.
+  - id: signal_husk
+    name: Signal husk
+    weight: 3
+    prose: >-
+      A husk hangs wired into the racks, and the engines have been
+      using it — it walks toward you with a purpose nothing dead should
+      have, trailing neat bundles of cable.
+  - id: heat_troll
+    name: Heat-drunk troll
+    weight: 2
+    prose: >-
+      A deep troll sleeps pressed against the warmest rack like a cat
+      against a stove. Your footstep lands wrong. It is not asleep
+      anymore.
+warden:
+  name: Warden Echobone
+  prose: >-
+    Echobone keeps the deepest aisle, a thing of rack-iron and troll
+    bone that speaks in playback — your own voice, your own footsteps,
+    everything the engines have heard you do since the threshold.

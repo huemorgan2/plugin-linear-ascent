@@ -1,0 +1,41 @@
+floor: 60
+tier: 6
+biome: Frosthold
+zone: The Frosthall
+gate_town: Hearthold
+banner: hrimgar
+arrival: >-
+  The Jarl's citadel is a glacier carved into a mead-hall, rafters of
+  blue ice, a fire-trench down the middle burning cold white. The
+  tables are set for a thousand, and the thousand are here. The horn
+  by the door is for challengers. It is not decorative.
+encounters:
+  - id: hall_thane
+    name: Hall-thane
+    weight: 3
+    prose: >-
+      A thane of the Jarl's table stands from the bench, formally,
+      and asks the room's leave to answer the horn. The room grants
+      it with a sound like an avalanche starting.
+  - id: mead_troll
+    name: Mead-bearer troll
+    weight: 3
+    prose: >-
+      The troll that carries the hall's mead barrels has been given
+      leave to warm up before the main event. It sets down the
+      barrel it was carrying. The barrel was for you. It is not,
+      now.
+  - id: hearth_wolf
+    name: Hearth-wolf
+    weight: 2
+    prose: >-
+      The Jarl's own wolf uncurls from beside the cold fire, white
+      as the hall and nearly as large. It has first claim on
+      challengers by right of seniority, and no thane disputes it.
+warden:
+  name: Jarl Hrimgar
+  prose: >-
+    Hrimgar comes down the hall with a step that rings the rafters,
+    crowned in hoarfrost, bearing an axe of core-ice older than his
+    line. He salutes you with it, once, correctly. The hall wants a
+    good fight. The Jarl intends to provide one.

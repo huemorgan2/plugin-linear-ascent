@@ -1,0 +1,39 @@
+floor: 25
+tier: 3
+biome: The Barrows
+zone: The Processional Way
+gate_town: Mourngate
+banner: barrows
+arrival: >-
+  A raised stone road runs arrow-straight through the marsh, built for
+  funerals and nothing else. Every slab is a name. The processions
+  stopped when the tower came, but the road remembers its purpose, and
+  things line the verges waiting for the next one.
+encounters:
+  - id: procession_wight
+    name: Procession-wight
+    weight: 3
+    prose: >-
+      A wight in mourning-grey walks the center of the road, bell in
+      hand, leading a procession of nobody. It stops. It has been short
+      one mourner for a very long time.
+  - id: verge_ghoul
+    name: Verge ghoul
+    weight: 3
+    prose: >-
+      Ghouls learned generations ago that funerals mean fresh graves,
+      and this one still works the road out of habit. It paces you in
+      the reeds, keeping polite funeral distance.
+  - id: bell_wisp
+    name: Passing-bell light
+    weight: 2
+    prose: >-
+      A light drifts ahead of you tolling like a small bell, keeping
+      just at the edge of sight. It is ringing a passing-bell, you
+      realize. It is ringing it for you.
+warden:
+  name: Warden Mournhide
+  prose: >-
+    Where the road meets the stair stands the hearse-beast Mournhide,
+    still in its rotted funeral harness, plumes and all. It has carried
+    every name on this road, and it stamps once, ready to carry yours.

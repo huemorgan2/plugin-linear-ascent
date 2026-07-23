@@ -1,0 +1,40 @@
+floor: 57
+tier: 6
+biome: Frosthold
+zone: The Coolant Falls
+gate_town: Milkwater
+banner: frosthold
+arrival: >-
+  A cataract of coolant, milk-white and dead cold, falling from a
+  cracked main above the clouds and freezing as it lands — a
+  waterfall growing its own mountain. The spray coats everything in
+  white glass, and the locals chip their doors open every morning.
+encounters:
+  - id: spray_wolf
+    name: Glass-coat wolf
+    weight: 3
+    prose: >-
+      A wolf that hunts the spray-line wears a coat of frozen
+      coolant like white armor. It shatters its own casing to charge,
+      and arrives in a burst of glass.
+  - id: falls_troll
+    name: Falls troll
+    weight: 3
+    prose: >-
+      An ice troll stands under the cataract for pleasure, growing a
+      second hide. It steps out of the white curtain at you, steaming
+      cold, twice the size the silhouette promised.
+  - id: frozen_pilgrim
+    name: White pilgrim
+    weight: 2
+    prose: >-
+      People come to see the Falls, and some stand too long in the
+      spray. One of the white statues along the viewing path turns
+      its head as you pass, patient under a finger of glass.
+warden:
+  name: Warden Whitefall
+  prose: >-
+    Whitefall lives inside the cataract, a long serpent-shape visible
+    only when the falling white bends around it. It comes out with
+    the current still on its back, and the cold arrives like a
+    verdict.

@@ -1,0 +1,38 @@
+floor: 26
+tier: 3
+biome: The Barrows
+zone: The Peat Cuts
+gate_town: Turfside
+banner: barrows
+arrival: >-
+  Generations of marsh folk cut fuel here, and the cuts run like black
+  canals to the fog line. Peat keeps what it takes — the diggers used
+  to find old kings in the banks, leather-brown and sleeping. The
+  tower's theft shook the banks loose. The kings are up.
+encounters:
+  - id: peat_king
+    name: Peat-cured king
+    weight: 3
+    prose: >-
+      A bog king climbs from the cut-bank, tanned black by a thousand
+      years of peat, torc still bright. He was somebody once, and being
+      dead has not talked him out of it.
+  - id: cutter_ghoul
+    name: Cutter ghoul
+    weight: 3
+    prose: >-
+      A ghoul works a peat-cutter's blade along the bank with terrible
+      patience, harvesting things the diggers missed. It marks where
+      you stand as its next cut.
+  - id: turf_hound
+    name: Turf hound
+    weight: 2
+    prose: >-
+      A hound of packed peat and root shakes itself apart and back
+      together, coming up the cut. Thrown stones just improve it.
+warden:
+  name: Warden Peatlock
+  prose: >-
+    Peatlock holds the stair-cut, a giant of black turf with an old
+    king's torc sunk in its chest like a keel-mark. Every wound you
+    open closes with a wet brown sound.

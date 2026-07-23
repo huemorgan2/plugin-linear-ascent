@@ -1,0 +1,41 @@
+floor: 73
+tier: 8
+biome: The Gloom
+zone: The Grey Rides
+gate_town: Bridlerest
+banner: gloom
+arrival: >-
+  Long straight avenues cut through the black forest, grassed in
+  grey. These are the Huntsman's rides, and everything in the Gloom
+  knows their calendar. On hunt nights the towns bar their doors.
+  Between hunts, the rides are the fastest road north.
+encounters:
+  - id: ride_hound
+    name: Ride-warden hound
+    weight: 3
+    prose: >-
+      A gloom hound stands at the ride's edge, marking the verge the
+      way a gamekeeper marks a covert. You are game, walking the
+      master's ride. It sounds one note, low, to log the flush.
+  - id: grey_rider
+    name: Grey outrider
+    weight: 3
+    prose: >-
+      A rider comes up the ride at a canter that makes no hoofbeats
+      — one of the Huntsman's whips, grey from hat to boot, face
+      lost in it. It leans down as it passes. It is measuring you
+      for the next hunt's card.
+  - id: verge_shade
+    name: Verge-runner shade
+    weight: 2
+    prose: >-
+      Something that was once quarry still runs the verge on hunt
+      nights, unable to stop. It bursts past you in rags of shadow,
+      and behind it the ride goes cold, remembering.
+warden:
+  name: Warden Tallyhorn
+  prose: >-
+    Where the rides cross stands Tallyhorn, the Huntsman's counter —
+    a figure of grey livery and antler, keeping the game-book of the
+    whole forest. It looks at you, licks its thumb, and turns a
+    page. The stair is behind it, past the counting.

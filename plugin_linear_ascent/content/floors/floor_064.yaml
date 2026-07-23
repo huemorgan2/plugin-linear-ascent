@@ -1,0 +1,43 @@
+floor: 64
+tier: 7
+biome: Stormreach
+zone: The Anchor Chains
+gate_town: Chainrest
+banner: stormreach
+arrival: >-
+  The chains that hold this realm into the tower run overhead — links
+  the size of houses, climbing into cloud, humming with load. Whole
+  communities live on the links, farming moss, netting birds. Twice a
+  day the chains move a few feet. Everyone holds on.
+encounters:
+  - id: chain_harpy
+    name: Chain-walker harpy
+    weight: 3
+    prose: >-
+      A harpy patrols the great link you are crossing, wings folded,
+      walking like a landlord. Flying here is for amateurs, she
+      explains, kicking your handhold loose to illustrate the
+      point.
+  - id: link_drake
+    name: Link-coiled drake
+    weight: 3
+    prose: >-
+      A storm drake has coiled through three links overhead to
+      sleep, and your footsteps carry up the chain like a knock. It
+      pours down through the links with the grace of something that
+      has never needed a floor.
+  - id: moss_ghast
+    name: Moss-farmer's remnant
+    weight: 2
+    prose: >-
+      A chain-farmer who missed a handhold years ago still works a
+      link ledge, grey and weightless-thin, harvesting moss nobody
+      collects. It gestures you over to help with the netting. The
+      net is for you.
+warden:
+  name: Warden Shacklewise
+  prose: >-
+    Where the master chain meets the peak, Shacklewise keeps the
+    coupling — a thing assembled from failed links and climbers'
+    carabiners, jointed everywhere. It takes hold of the stair door,
+    the cliff, and you, all with different hands.

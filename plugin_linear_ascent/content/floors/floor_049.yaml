@@ -1,0 +1,40 @@
+floor: 49
+tier: 5
+biome: The Scorch
+zone: The Wyrmroad
+gate_town: Moltgate
+banner: scorch
+arrival: >-
+  The last stretch before the Cindermouth is a highway melted by use —
+  a channel of glassed ash, polished by the belly of something that
+  commutes.   Shed scales the size of doors lean against the banks,
+  still warm. The locals harvest them on the quiet days.
+encounters:
+  - id: road_wyrmling
+    name: Road wyrmling
+    weight: 3
+    prose: >-
+      A wyrmling practices its glide down the melted channel, wings
+      hissing on the glass. It bowls into you more than it attacks
+      you, but it weighs what a boat weighs, and it is teething.
+  - id: scale_picker
+    name: Scale-picker ogre
+    weight: 3
+    prose: >-
+      An ogre pries a shed scale off the bank with a whole tree for a
+      lever. The scale trade has made it rich by ogre standards, and
+      rich things hire fewer witnesses.
+  - id: molt_salamander
+    name: Molt-fat salamander
+    weight: 2
+    prose: >-
+      The salamanders follow the Wyrmroad eating shed skin, and this
+      one is glutted, gleaming, slow — right up until it is none of
+      those things.
+warden:
+  name: Warden Moltcrown
+  prose: >-
+    Moltcrown was made from the wyrm's castoffs — a rearing shape
+    armored in shed scales, crested with old fang. It holds the last
+    gate before the nest, and it fights like something auditioning
+    for its maker.

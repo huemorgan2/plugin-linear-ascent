@@ -1,0 +1,41 @@
+floor: 63
+tier: 7
+biome: Stormreach
+zone: The Rookeries
+gate_town: Rookwall
+banner: stormreach
+arrival: >-
+  Every ledge of these crags is built up with harpy nests —
+  driftwood, rigging, one entire church roof — stacked into a city
+  without streets. The harpies are not hostile so much as governed by
+  an etiquette you cannot see, and the fines are paid in blood.
+encounters:
+  - id: rookery_warden_harpy
+    name: Rookery matron
+    weight: 3
+    prose: >-
+      A matron harpy drops onto the path with the weight of office —
+      wing-feathers banded in salvaged brass. You have walked under
+      somebody's nest, which is either a toll or a proposal, and she
+      is here to settle which.
+  - id: fledgling_mob
+    name: Fledgling mob
+    weight: 3
+    prose: >-
+      A crowd of half-grown harpies has been dared to touch you.
+      Individually they would not. There are eleven of them, and the
+      arithmetic of being twelve is the whole of harpy education.
+  - id: nest_drake
+    name: Rookery drake
+    weight: 2
+    prose: >-
+      The harpies keep a storm drake the way a town keeps a bull —
+      penned, resented, and prayed to. The pen is rigging. The
+      rigging is old. It steps through it like mist.
+warden:
+  name: Warden Shrikewind
+  prose: >-
+    The rookery's law is Shrikewind, an ancient harpy gone white at
+    the pinions, who impales the convicted on the summit spar for
+    the wind to read. She lands between you and the stair holding
+    the writ. Your name is on it, phonetically.

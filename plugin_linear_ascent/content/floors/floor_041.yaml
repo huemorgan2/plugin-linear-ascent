@@ -1,0 +1,39 @@
+floor: 41
+tier: 5
+biome: The Scorch
+zone: The Ashline
+gate_town: Greywell
+banner: scorch
+arrival: >-
+  You come up out of the dark into heat like a hand on your face. Ash
+  desert runs flat to a shimmering horizon, grey over the buried slag
+  of some reactor the tower broke in the taking. The locals paint
+  their roofs white, and their deep wells still come up warm.
+encounters:
+  - id: ash_salamander
+    name: Ash salamander
+    weight: 3
+    prose: >-
+      A salamander surfaces through the ash like a swimmer, black-
+      scaled, trailing heat-shimmer. Where it rests its chin, the
+      ground glazes over.
+  - id: dune_ogre
+    name: Dune ogre
+    weight: 3
+    prose: >-
+      An ogre plods the ashline with a wagon axle for a walking stick,
+      skin baked to crockery. It is crossing to somewhere cooler and
+      has decided your water skin is community property.
+  - id: ash_vulture
+    name: Cinder vulture
+    weight: 2
+    prose: >-
+      Vultures out here roost on the warm vents and have gone strange
+      with it, feathers singed to wire. One lands ahead of you at a
+      polite distance, which out here is a diagnosis.
+warden:
+  name: Warden Cinderhide
+  prose: >-
+    Cinderhide waits at the stair buried to the shoulders in warm ash,
+    patient as a stone in a hearth. When it rises, the grey slides off
+    a hide of banked coals, and the day gets hotter.

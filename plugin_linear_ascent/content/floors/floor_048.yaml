@@ -1,0 +1,40 @@
+floor: 48
+tier: 5
+biome: The Scorch
+zone: The Char Forest
+gate_town: Stumpwell
+banner: scorch
+arrival: >-
+  A forest stood here when the realm was taken, and it burned standing.
+  The trunks remain — miles of black pillars, branchless, holding up
+  nothing.   When the wind moves through, they sound a low note like a
+  pipe organ with one key held down.
+encounters:
+  - id: char_salamander
+    name: Charcoal salamander
+    weight: 3
+    prose: >-
+      A salamander has gone black to match the forest, invisible until
+      it opens its mouth. It hunts by holding still against the trunks
+      and being, briefly, the wrong tree.
+  - id: rooter_ogre
+    name: Rooter ogre
+    weight: 3
+    prose: >-
+      An ogre works the forest floor, ripping stumps for the charcoal
+      trade. It uses no rope and no wedge, only opinion. It transfers
+      the opinion to you.
+  - id: standing_dead
+    name: Hollow trunk
+    weight: 2
+    prose: >-
+      One of the burned trunks is not a trunk. It has stood in the row
+      long enough to fool the birds, waiting with the patience of
+      wood, and it steps out of line behind you.
+warden:
+  name: Warden Charspine
+  prose: >-
+    Charspine drags itself up from the root-cellar dark, a stag-shape
+    of burned timber with heartwood coals for eyes. Where its antlers
+    rake the dead trunks, the forest catches its breath and burns
+    again, briefly, in memory.

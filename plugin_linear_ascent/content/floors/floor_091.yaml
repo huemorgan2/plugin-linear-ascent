@@ -1,0 +1,42 @@
+floor: 91
+tier: 10
+biome: The Crown
+zone: The Obsidian Stair
+gate_town: Firststep
+banner: crown
+arrival: >-
+  Above the March there is no more pretense of country. The Crown is
+  one building — black glass grown around the tower's reactor-heart —
+  and this floor is its doorstep: a stair of obsidian, polished
+  mirror-deep. Your reflection arrives first. It reports.
+encounters:
+  - id: stair_sentinel
+    name: Obsidian sentinel
+    weight: 3
+    prose: >-
+      A figure detaches from the balustrade — black glass in the
+      shape of a swordsman, faceless, flawless. The Crown does not
+      garrison its doorstep with soldiers. It casts them.
+  - id: reflection_wrong
+    name: Your reflection
+    weight: 3
+    prose: >-
+      The climber in the polished riser ahead has stopped matching
+      you. It steps out of the glass wearing your stance and your
+      gear and a much better night's sleep, and it has clearly been
+      studying.
+  - id: court_page
+    name: Court page
+    weight: 2
+    prose: >-
+      An imp in Crown livery — silk, not soot — descends the stair
+      with a silver tray and a summons. Refusing a royal summons is
+      death. Accepting is death with better lighting. The page waits,
+      professionally, while you choose.
+warden:
+  name: Warden Firstriser
+  prose: >-
+    The top step is occupied and has been for a thousand years.
+    Firstriser unfolds from its seat — the stair's own mass in the
+    shape of a kneeling knight, rising joint by black glass joint.
+    It has let no one past without a fight worth watching.

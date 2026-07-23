@@ -1,0 +1,40 @@
+floor: 29
+tier: 3
+biome: The Barrows
+zone: The Doorstone Moor
+gate_town: Stonewake
+banner: barrows
+arrival: >-
+  The moor before the Kingsbarrow is set with standing stones, each one
+  a sealed door in the old tongue. The marsh folk raised them to keep
+  something in, and maintained them for a thousand years. Maintenance
+  has lapsed. Some of the doors stand ajar.
+encounters:
+  - id: door_wight
+    name: Doorstone warder
+    weight: 3
+    prose: >-
+      A wight in rusted mail leans against its stone the way it has for
+      centuries, spear planted. It was set here to challenge whatever
+      comes off the moor. That is you.
+  - id: moor_ghoul
+    name: Moor ghoul
+    weight: 3
+    prose: >-
+      This far in, the ghouls are old and careful and fat on what leaks
+      through the doors. One shadows you between the stones, waiting to
+      see whether the moor kills you first.
+  - id: unsealed_thing
+    name: Something unsealed
+    weight: 2
+    prose: >-
+      From a stone standing ajar comes something the old folk went to
+      real trouble over — half shadow, half smell of deep earth. It
+      pours itself upright and takes a shape roughly yours.
+warden:
+  name: Warden Doorstone
+  prose: >-
+    The largest stone on the moor is the Warden — Doorstone, a slab of
+    grey granite that walks when it must, graven with every seal the
+    marsh folk knew. The stair lies behind it. It is a door, and it
+    is shut.

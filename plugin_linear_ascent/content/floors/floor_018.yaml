@@ -1,0 +1,39 @@
+floor: 18
+tier: 2
+biome: Ironvale
+zone: The Deep Drifts
+gate_town: Ropewalk
+banner: ironvale
+arrival: >-
+  Below the halls, below the vaults, the drifts where the dwarves dug
+  last and quietest. The winch-ropes still hang down the shafts, taut
+  under loads nobody signed for. Lamps are scarce here, and the dark
+  has had years to settle in.
+encounters:
+  - id: blind_digger
+    name: Blind kobold digger
+    weight: 3
+    prose: >-
+      A kobold pale as candle-wax feels its way along the drift, pick
+      swinging in easy time. It stops. It heard you breathe, and down
+      here that is all the introduction it needs.
+  - id: winch_crawler
+    name: Winch-crawler
+    weight: 3
+    prose: >-
+      A winch head has pulled itself off its mounts and climbs the
+      drift on its own cable, hand over iron hand. It pays out a loop
+      toward your ankles, patient as machinery.
+  - id: pit_hound
+    name: Pit hound
+    weight: 2
+    prose: >-
+      The rust hounds that went down the shafts bred stranger — longer,
+      quieter, eyes gone milky and ears gone huge. This one has been
+      pacing you for three turnings.
+warden:
+  name: Warden Deepwinch
+  prose: >-
+    At the last shaft the ropes all run to one drum, and the drum has
+    grown a body. Deepwinch reels itself upright, cables singing, and
+    the lift behind it moves only when it says so.

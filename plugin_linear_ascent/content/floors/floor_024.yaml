@@ -1,0 +1,39 @@
+floor: 24
+tier: 3
+biome: The Barrows
+zone: The Rig Graves
+gate_town: Rustwake
+banner: barrows
+arrival: >-
+  A war was fought over this marsh once, by soldiers in exo-rigs built
+  to keep them dry. The rigs are still here, rusted to the hips in bog
+  water, and the marsh has been patiently finishing what the war
+  started. Some of the rigs still stand watch.
+encounters:
+  - id: rig_wight
+    name: Rig-wight
+    weight: 3
+    prose: >-
+      An exo-rig hauls itself out of the bog with its soldier still
+      strapped in, dead these many years and still on duty. The rig
+      whines. The soldier salutes. Then it charges.
+  - id: marsh_ghoul_crew
+    name: Rig-stripper ghoul
+    weight: 3
+    prose: >-
+      A ghoul has spent years learning to open exo-rigs like oysters,
+      and its knuckles are capped with salvaged plate. It looks at your
+      armor the way it looks at rigs.
+  - id: drowned_light
+    name: Drowned beacon
+    weight: 2
+    prose: >-
+      A rig's distress beacon still blinks under a foot of bog water,
+      and something has learned to sit beside it and wait. The light
+      draws rescuers. The waiting thing eats them.
+warden:
+  name: Warden Rigrot
+  prose: >-
+    Rigrot is what the marsh made of a command rig and its whole crew —
+    four rigs rusted into one shape, walking on borrowed legs. Somewhere
+    in it a speaking-horn still crackles orders no one gives.

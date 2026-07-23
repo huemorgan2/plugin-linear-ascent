@@ -1,0 +1,42 @@
+floor: 86
+tier: 9
+biome: Hellmarch
+zone: The Bastion Line
+gate_town: Wallrest
+banner: hellmarch
+arrival: >-
+  Nine bastions in echelon, each one a fortress that would anchor a
+  kingdom's border below, here just a rung. The garrisons drill day
+  and night against an enemy the officers will not name. It is you.
+  The drill instructors use your description.
+encounters:
+  - id: drill_knight
+    name: Drill-square knight
+    weight: 3
+    prose: >-
+      A hellknight steps off the drill square mid-exercise, given
+      leave at last to work the live version of the problem. It has
+      rehearsed this fight so long it starts with your counter.
+  - id: bastion_imp_crew
+    name: Ballista crew
+    weight: 3
+    prose: >-
+      An imp crew swings a wall-ballista around with drilled speed,
+      bickering about windage the whole way. Their record on moving
+      targets is chalked on the bastion wall. It is embarrassing,
+      and they know you can read it.
+  - id: parade_hulk
+    name: Parade hulk
+    weight: 2
+    prose: >-
+      The garrison keeps one welded hulk polished for parades, and
+      it has been standing at attention for a decade waiting for an
+      order worth having. Your arrival is an order. It falls out
+      with a sound like a drawbridge.
+warden:
+  name: Warden Bastionheart
+  prose: >-
+    The ninth bastion's keep is not garrisoned; it is inhabited.
+    Bastionheart pulls its limbs out of the four corner towers and
+    stands, the whole keep re-arranging into shoulders. The
+    garrison salutes. You are the graduation exercise.

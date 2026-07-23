@@ -1,0 +1,39 @@
+floor: 23
+tier: 3
+biome: The Barrows
+zone: The Lightless Glade
+gate_town: Lanternroot
+banner: barrows
+arrival: >-
+  The elves' stolen forest, sunk hip-deep in the marsh it was welded to.
+  The bio-lights that once lit the deep woods hang dark on every bough,
+  like a city with the power cut. Older elves in Roothollow will not say
+  what walks here. You are about to find out.
+encounters:
+  - id: pale_stag
+    name: Pale stag
+    weight: 3
+    prose: >-
+      A stag comes through the dead lights, white as root-flesh, antlers
+      hung with dark lamp-vines. The elves bred them to carry the forest
+      light. It remembers the weight of it, and hates you fresh.
+  - id: glade_wight
+    name: Glade-wight
+    weight: 3
+    prose: >-
+      An elf did not leave when the lights died. What is left of her
+      tends a dark lamp-tree, and turns at your step with pruning-hook
+      raised — the garden does not take visitors now.
+  - id: lamp_ghoul
+    name: Lamp-eater
+    weight: 2
+    prose: >-
+      A ghoul has learned to crack the dead bio-lamps for the marrow of
+      light left in them, and its belly glows faint through the skin. It
+      drops the husk it was working on.
+warden:
+  name: Warden Palegleam
+  prose: >-
+    At the heart of the glade one tree still burns with the old forest
+    light, and Palegleam is coiled around it — root and grave-cloth and
+    a crown of stolen lamps. It will not share the last of the light.

@@ -1,0 +1,40 @@
+floor: 52
+tier: 6
+biome: Frosthold
+zone: The Frozen Sea
+gate_town: Floeside
+banner: frosthold
+arrival: >-
+  The tower's coolant was pumped through this realm once, a sea of it,
+  and when the pumps died the sea froze mid-swell. Waves stand
+  overhead in green-white glass.   The locals cut roads through the
+  crests and post the ice depth at every bend, in fresh paint.
+encounters:
+  - id: floe_wolf
+    name: Floe wolf pack-leader
+    weight: 3
+    prose: >-
+      The wolves out on the sea hunt by ear, listening for footsteps
+      through the ice. Somewhere under you, one has matched your
+      pace. The pack is above, politely driving you along.
+  - id: swell_troll
+    name: Swell troll
+    weight: 3
+    prose: >-
+      An ice troll has hollowed a standing wave into a den and hangs
+      in the green glass like a fly in amber, watching the road. The
+      wave's face is cracked. Recently.
+  - id: coolant_wight
+    name: Coolant wight
+    weight: 2
+    prose: >-
+      Something that drowned in the sea before it froze walks under
+      the ice, upside down, matching your route. At the next thin
+      patch it stops. So should you not.
+warden:
+  name: Warden Floeback
+  prose: >-
+    The road ends at a breach where the sea never froze, and Floeback
+    owns the open water — a whale-bulk of pack ice and pale meat that
+    surfaces without a ripple. The stair is on the far shore. It
+    knows.

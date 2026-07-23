@@ -1,0 +1,43 @@
+floor: 85
+tier: 9
+biome: Hellmarch
+zone: The Imp Warrens
+gate_town: Sootside
+banner: hellmarch
+arrival: >-
+  Between the great works, the March's labor force lives in a city of
+  its own making — a slum of flue-pipes and stolen plate, stacked
+  twelve deep, riddled with markets and feuds. A million imps, more
+  or less. Everything is for sale, including the etiquette.
+encounters:
+  - id: warren_tough
+    name: Warren tough
+    weight: 3
+    prose: >-
+      An imp twice imp-size — a glandular marvel, the locals say —
+      collects protection along this flue-street. You are new
+      custom, walking unprotected. It cracks knuckles like a string
+      of firecrackers.
+  - id: press_gang
+    name: Warren press-gang
+    weight: 3
+    prose: >-
+      Three imps with a length of net and one with a clipboard
+      block the alley. The Welding Halls pay a bounty per body,
+      the clipboard explains, and yours is worth a month of quota.
+      It is nothing personal. It is documented.
+  - id: slumlord_knight
+    name: Off-duty hellknight
+    weight: 2
+    prose: >-
+      A hellknight has retired into the warrens as a slumlord, rent
+      collected in teeth. It fills the whole street when it steps
+      out, engine-heart knocking, sure beyond argument that you owe
+      it something.
+warden:
+  name: Warden Fluegrim
+  prose: >-
+    The warrens' true landlord lives in the master chimney —
+    Fluegrim, an old fire that has worn the flue so long it has the
+    shape of one, soot-black and slow. When it leans out over the
+    rooftops, a million imps find somewhere else to be.

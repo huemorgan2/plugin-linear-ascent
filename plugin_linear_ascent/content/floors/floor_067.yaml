@@ -1,0 +1,42 @@
+floor: 67
+tier: 7
+biome: Stormreach
+zone: The Lightning Fields
+gate_town: Copperpole
+banner: stormreach
+arrival: >-
+  A high moor where the storm grounds itself, all day, every day. The
+  old folk farmed the lightning with copper poles, and the poles
+  still stand, singing before every strike. The safe lanes are marked
+  in white stone. The stones get moved. Not by the wind.
+encounters:
+  - id: charge_harpy
+    name: Charge-thief harpy
+    weight: 3
+    prose: >-
+      A harpy lands on a live pole, takes the strike across her
+      banded feathers like applause, and comes down at you glowing
+      at the wingtips. The locals call them spark-drunk. She is
+      several strikes in.
+  - id: field_drake
+    name: Fieldborn drake
+    weight: 3
+    prose: >-
+      A storm drake hatched on this moor and never left — why would
+      it. It walks the pole rows like an heir touring the estate,
+      and every pole it passes fires in salute.
+  - id: stone_mover
+    name: Lane-stone mover
+    weight: 2
+    prose: >-
+      You find the thing that moves the white stones: a bent figure
+      in a farmer's storm coat, rearranging the safe lane with slow
+      care. It turns, and under the hood is old lightning, coiled
+      and patient. It has been farming climbers.
+warden:
+  name: Warden Groundstrike
+  prose: >-
+    At the field's center the storm has struck one spot so long it
+    has made something. Groundstrike stands up out of the fused
+    moor-glass, a giant of branching burn-scar and live charge, and
+    every pole on the floor bends toward it.

@@ -1,0 +1,39 @@
+floor: 15
+tier: 2
+biome: Ironvale
+zone: The Fusion Vaults
+gate_town: Half-Light
+banner: ironvale
+arrival: >-
+  The heart of dwarf-country: vaults where they split atoms the way their
+  grandfathers split stone. The great cores still glow behind yard-thick
+  doors, and the light through the seams is the only dawn this floor
+  gets.
+encounters:
+  - id: glow_sick_kobold
+    name: Glow-sick kobold
+    weight: 3
+    prose: >-
+      A kobold that has slept too close to the vault doors comes at you
+      shedding faint light, fur out in patches, eyes wrong. It is past
+      fear, which is worse.
+  - id: fuel_thief
+    name: Red Orc fuel-thief
+    weight: 3
+    prose: >-
+      An orc hauls a lead-lined pannier of stolen core-rods, warframe
+      straining. Dropping the load would mean doing this run twice, so
+      it means to go through you.
+  - id: forge_remnant
+    name: Forge remnant
+    weight: 2
+    prose: >-
+      A dwarven vault-tender, headless since the fall, still walks its
+      rounds on magnetic feet. It cannot find its checklist, so it has
+      simplified the job: nothing passes.
+warden:
+  name: Warden Coreburn
+  prose: >-
+    Coreburn stands where the vault light is brightest, a furnace-beast
+    with a cracked core for a heart, seams glowing brighter as it moves.
+    The dwarves built the doors thick for a reason.

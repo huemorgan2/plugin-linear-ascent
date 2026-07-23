@@ -1,0 +1,34 @@
+floor: 7
+tier: 1
+biome: Greenreach
+zone: The Millrace
+gate_town: Wheelhouse
+banner: greenreach
+arrival: >-
+  A river runs the wrong way here, pumped uphill through a captured
+  millrace to feed the tower's coolant veins. The old watermill still
+  turns, grinding nothing. Goblins fish the race with nets of fence wire.
+encounters:
+  - id: race_goblin
+    name: Millrace goblin
+    weight: 3
+    prose: >-
+      A goblin hauls its wire net from the race, finds it empty again,
+      and decides you will make a better catch.
+  - id: sluice_wolf
+    name: Sluice wolf
+    weight: 3
+    prose: >-
+      A wolf drinks at the sluice gate, unbothered — until its head
+      comes up dripping and its ears go flat.
+  - id: wheel_boar
+    name: Wheelhouse boar
+    weight: 2
+    prose: >-
+      A boar has made its wallow in the wheelhouse shade. It rises out
+      of the mud like a landslide changing its mind.
+warden:
+  name: Warden Milldrown
+  prose: >-
+    Milldrown waits under the wheel — a sodden mass of wolf and weed and
+    pump-iron, water running from it in ropes as it stands to full height.

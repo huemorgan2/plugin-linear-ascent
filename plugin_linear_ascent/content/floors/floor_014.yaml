@@ -1,0 +1,39 @@
+floor: 14
+tier: 2
+biome: Ironvale
+zone: The Gear Galleries
+gate_town: Sprocket Row
+banner: ironvale
+arrival: >-
+  Whole halls of gearing, floor to unseen ceiling, that once turned the
+  mines' lifts and hammers. Half of it still creeps, tooth by tooth, fed
+  by some deep spring nobody has found and shut off. The sound gets into
+  your back teeth.
+encounters:
+  - id: gear_kobold
+    name: Kobold gear-thief
+    weight: 3
+    prose: >-
+      A kobold rides a slow-turning wheel down from the dark, wrench in
+      its belt, prying off cogs as it goes. It hops off at your level
+      and sizes up your kneecaps.
+  - id: loose_flywheel
+    name: Runaway flywheel
+    weight: 3
+    prose: >-
+      A flywheel the size of a millstone has shaken off its axle and
+      rolls the gallery lengthwise, hunting by echo. It has worn its own
+      road into the floor.
+  - id: pit_fighter
+    name: Red Orc pit-fighter
+    weight: 2
+    prose: >-
+      Between two meshing wheels an orc has chalked out a fighting
+      ring. It steps over the line, cracks its warframe's knuckles, and
+      waits for you to be polite about it.
+warden:
+  name: Warden Gearhide
+  prose: >-
+    Gearhide walks on four legs of stacked cogs, plates of clutch-iron
+    for a hide. Every step re-meshes; every step is louder. The stair
+    turns behind it like one more wheel.

@@ -1,0 +1,41 @@
+floor: 72
+tier: 8
+biome: The Gloom
+zone: The Whisperwood
+gate_town: Hushfall
+banner: gloom
+arrival: >-
+  The trees here carry sound the way wires carry charge. Every word
+  spoken here keeps traveling, trunk to trunk, for years — the wood
+  is full of conversations that outlived both parties. The locals
+  trade in whispers and go armed against being quoted.
+encounters:
+  - id: whisper_shade
+    name: Quoted shade
+    weight: 3
+    prose: >-
+      A shade steps out of a trunk mid-sentence, finishing something
+      said here long ago, in your voice. It knows things you said
+      three floors down. It has had time to take them personally.
+  - id: echo_hound
+    name: Echo hound
+    weight: 3
+    prose: >-
+      A gloom hound hunts these woods by throwing its own footfalls
+      ahead of itself. You hear it pass on the left. That is where
+      it is not.
+  - id: night_mare
+    name: Stray nightmare
+    weight: 2
+    prose: >-
+      A black mare stands riderless in the trees, saddled in cobweb,
+      patient. Everyone in the gate town knows somebody who got on.
+      It waits with the confidence of a thing that has never needed
+      to chase.
+warden:
+  name: Warden Hearsay
+  prose: >-
+    The wood's oldest rumor has been repeated so long it has a body
+    now. Hearsay comes through the trunks sideways, made of everything
+    the forest heard and kept — and it knows exactly which whisper
+    will make you turn around.

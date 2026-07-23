@@ -1,0 +1,40 @@
+floor: 39
+tier: 4
+biome: Webdeep
+zone: The Egg Galleries
+gate_town: Palewatch
+banner: webdeep
+arrival: >-
+  The approach to the Broodthrone runs through galleries of eggs, each
+  sac tall as a door and lit faintly from inside. The light moves. The
+  locals call this floor the nursery and will not say it above a
+  whisper — everything here is Vyx's, and Vyx counts.
+encounters:
+  - id: gallery_sentinel
+    name: Gallery sentinel
+    weight: 3
+    prose: >-
+      The spiders here do not hunt; they garrison. A sentinel drops
+      into the aisle with drilled precision, mouthparts moving in what
+      is unmistakably a challenge phrase.
+  - id: hatching_sac
+    name: Hatching sac
+    weight: 3
+    prose: >-
+      An egg-sac beside you splits with a sound like wet canvas. What
+      spills out is newborn and knee-high and already knows the two
+      facts of its life: it is hungry, and you are near.
+  - id: broodfed_troll
+    name: Brood-fed troll
+    weight: 2
+    prose: >-
+      A deep troll has been given the run of the galleries in exchange
+      for guard duty, paid in whatever fails inspection. It takes its
+      work seriously. Its work is you.
+warden:
+  name: Warden Husklight
+  prose: >-
+    Husklight paces the last gallery wearing the drained shells of old
+    challengers laced into armor. Inside it something glows the way
+    the eggs glow, and it stands between you and the throne like an
+    elder sibling.

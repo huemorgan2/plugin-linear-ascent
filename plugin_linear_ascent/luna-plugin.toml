@@ -1,0 +1,27 @@
+name = "plugin-linear-ascent"
+version = "0.1.0"
+entry = "plugin_linear_ascent"
+sdk_version = "0"
+license = "MIT"
+description = "A LORD-style multiplayer text RPG: climb the 100-floor Ascent with your Luna agent as your shardmind sidekick."
+
+[requires]
+tools = 3
+
+[[tools]]
+name = "ascent_scene"
+description = "Show the current Linear Ascent game scene (read-only, safe anytime)."
+policy = "auto_approve"
+risk_level = "low"
+
+[[tools]]
+name = "ascent_choose"
+description = "Submit the player's choice for the current scene."
+policy = "auto_approve"
+risk_level = "low"
+
+[[tools]]
+name = "ascent_character"
+description = "The player's character sheet (read-only)."
+policy = "auto_approve"
+risk_level = "low"

@@ -1,0 +1,39 @@
+floor: 31
+tier: 4
+biome: Webdeep
+zone: The Threshold Dark
+gate_town: Lastlight
+banner: webdeep
+arrival: >-
+  The marsh fog ends at a cave mouth, and the cave mouth ends the light.
+  Beyond the gate town's lamps the dark is total, older than the tower,
+  and strung corner to corner with silk. The first rule of the Webdeep
+  is written over the gate: touch nothing that hums.
+encounters:
+  - id: cave_broodling
+    name: Cave broodling
+    weight: 3
+    prose: >-
+      A spider the size of a dog drops from nowhere on a thread you
+      never saw, legs finding your shoulders like an old friend. Its
+      thousand siblings are audible, faintly, above.
+  - id: silk_husk
+    name: Silk-wrapped husk
+    weight: 3
+    prose: >-
+      A cocooned shape hangs at eye level across the path, and as your
+      lamp touches it, it starts to struggle. That is the trap. The
+      floor under it is not floor.
+  - id: blind_moth
+    name: Grave-moth
+    weight: 2
+    prose: >-
+      A moth with a wingspan like a cloak blunders into your lamplight,
+      eyeless and frantic. It is not dangerous. What follows it,
+      hunting by the dust it sheds, is.
+warden:
+  name: Warden Duskspin
+  prose: >-
+    The last lit yard of the threshold belongs to Duskspin, a spider
+    old enough to have named the dark. It hangs over the stair in a
+    web strung with lamps of other climbers, and dims them one by one.

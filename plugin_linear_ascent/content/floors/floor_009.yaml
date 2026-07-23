@@ -1,0 +1,34 @@
+floor: 9
+tier: 1
+biome: Greenreach
+zone: The Gallows Fair
+gate_town: Fairstead
+banner: greenreach
+arrival: >-
+  A fairground seized mid-festival: stalls still bunted, a carousel of
+  painted horses frozen mid-turn. The goblins hold their own fair here
+  now, and the prizes on the hook are things climbers used to own.
+encounters:
+  - id: fair_barker
+    name: Goblin barker
+    weight: 3
+    prose: >-
+      A goblin barker spreads its arms in welcome from a stall of
+      stolen boots. The two behind it with scrap-rifles aren't smiling.
+  - id: carousel_wolf
+    name: Carousel wolf
+    weight: 3
+    prose: >-
+      Among the painted horses one shape isn't painted. The wolf steps
+      down off the carousel deck with terrible patience.
+  - id: prize_boar
+    name: Prize boar
+    weight: 2
+    prose: >-
+      The pen says GRAND CHAMPION in old letters. The bar is bent. The
+      champion has opinions about being looked at.
+warden:
+  name: Warden Hookmaster
+  prose: >-
+    Above the fair's gate hangs the Hookmaster — a lanky engine of crane
+    chain and carnival brass that unfolds down to meet you, hook first.

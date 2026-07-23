@@ -1,0 +1,39 @@
+floor: 42
+tier: 5
+biome: The Scorch
+zone: The Glass Flats
+gate_town: Shardside
+banner: scorch
+arrival: >-
+  Something burned hot enough here to turn a mile of desert to glass.
+  The flats are black and smooth and sing underfoot, crazed with
+  cracks that catch the light wrong. The locals cross at dawn, when
+  the glass is quiet. It is not dawn.
+encounters:
+  - id: glass_salamander
+    name: Glass salamander
+    weight: 3
+    prose: >-
+      A salamander suns itself under the surface of the flats, visible
+      through a yard of black glass like a fish under ice. The cracks
+      around it are fresh. It has seen you.
+  - id: shard_ogre
+    name: Shard-picker ogre
+    weight: 3
+    prose: >-
+      An ogre works the flats with a hammer, prying up sheets of glass
+      to sell at the gate towns. Its hands are past scarring. It sets
+      the hammer down, which is not an improvement.
+  - id: mirage_wisp
+    name: Heat-ghost
+    weight: 2
+    prose: >-
+      Out on the flats the heat makes shapes, and one of the shapes
+      has stopped obeying the wind. It walks toward you across the
+      glass, and it does not shimmer.
+warden:
+  name: Warden Glassjaw
+  prose: >-
+    Glassjaw came out of the melt the day the flats were made — a
+    beast of smoked glass, seams glowing like a kiln left open. Every
+    step it takes rings the whole floor like a struck bowl.

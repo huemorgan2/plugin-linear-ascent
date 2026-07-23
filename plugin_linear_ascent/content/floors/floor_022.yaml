@@ -1,0 +1,39 @@
+floor: 22
+tier: 3
+biome: The Barrows
+zone: The Tithe Barrows
+gate_town: Wakewater
+banner: barrows
+arrival: >-
+  Rows of low barrows with toppled offering-posts, where the marsh folk
+  once paid their dead in bread and tin. The tower tore the land up with
+  the graves still in it, and the dead noticed. The offering-bowls have
+  been licked clean.
+encounters:
+  - id: tithe_wight
+    name: Tithe-wight
+    weight: 3
+    prose: >-
+      A wight in the rags of a tithe-priest stands at a barrow door,
+      holding out a bowl of green-scaled tin. The custom is older than
+      it is. Pay, or be paid.
+  - id: barrow_ghoul
+    name: Barrow ghoul
+    weight: 3
+    prose: >-
+      This ghoul has dug clean through a barrow and out the other side,
+      and wears somebody's torc pushed up its forearm. It is proud of
+      the torc. It comes on all fours.
+  - id: grave_beetle
+    name: Grave beetle
+    weight: 2
+    prose: >-
+      A beetle the size of a shield surfaces through the turf of a
+      barrow roof, mandibles working wetly. The old dead fed a whole
+      economy down there, and you count as a delivery.
+warden:
+  name: Warden Tithegrim
+  prose: >-
+    Tithegrim keeps the stair the way its order kept the barrows — a
+    wight in a verdigris mask, ledger-chains wound to the elbow. It
+    counts you among the arrears and moves to collect.

@@ -1,0 +1,40 @@
+floor: 78
+tier: 8
+biome: The Gloom
+zone: The Snare Woods
+gate_town: Brambleside
+banner: gloom
+arrival: >-
+  The forest here has been dressed — every path a lane, every lane a
+  funnel, every funnel ending somewhere prepared. Snares of shadow
+  and wire, a tree that is a trigger. The Huntsman does not always
+  ride his quarry down. Sometimes he prefers it delivered.
+encounters:
+  - id: snare_shade
+    name: Snare-setter
+    weight: 3
+    prose: >-
+      A shade works a new snare into the path ahead, weaving shadow
+      through wire with a craftsman's absorption. It does not stop
+      when it sees you. You are the test of the workmanship.
+  - id: caught_thing
+    name: The caught thing
+    weight: 3
+    prose: >-
+      Something big hangs in a canopy snare, wrapped and furious,
+      swinging in short arcs. Cutting it down is mercy. Mercy, out
+      here, has a survival rate.
+  - id: funnel_hound
+    name: Funnel hound
+    weight: 2
+    prose: >-
+      A gloom hound appears behind you on the lane, then another on
+      the left, then the right — never closing, only steering. Ahead
+      the trees narrow. You are being delivered, on schedule.
+warden:
+  name: Warden Springtrap
+  prose: >-
+    The floor's last funnel closes on a clearing, and the clearing
+    is Springtrap — soil, trees, and all, one patient mechanism
+    wearing a forest for camouflage. You are inside it when it
+    introduces itself.

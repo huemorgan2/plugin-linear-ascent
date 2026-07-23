@@ -1,0 +1,41 @@
+floor: 79
+tier: 8
+biome: The Gloom
+zone: The Quarry Runs
+gate_town: Bayhollow
+banner: gloom
+arrival: >-
+  The last stretch before the Pale Court is where the Huntsman runs
+  his best game, and the forest has been worn into racecourse —
+  banked turns of black turf, hides for an audience. Tonight's card
+  has one name on it. Bayhollow has already placed its bets.
+encounters:
+  - id: pacer_hound
+    name: Pacing hound
+    weight: 3
+    prose: >-
+      A gloom hound falls in beside you at an easy lope, matching
+      you stride for stride. It is not hunting. It is pacing you,
+      for the handicap, and it keeps glancing at your knees.
+  - id: rival_quarry
+    name: Rival quarry
+    weight: 3
+    prose: >-
+      Something else is on tonight's card — a grey elk with three
+      hunts' worth of broken snares hanging off it. It has decided
+      the field is not big enough for two, and thinning the
+      competition counts as strategy.
+  - id: course_steward
+    name: Course steward
+    weight: 2
+    prose: >-
+      A shade in a steward's sash steps onto the turf and raises a
+      grey flag. You are, it indicates, off the marked course.
+      Rejoining is compulsory. The flag is not a request.
+warden:
+  name: Warden Foxglove
+  prose: >-
+    The course ends at the master of hounds' stand, where Foxglove
+    waits — the only quarry that ever finished the run, retired
+    into staff. It wears its old snare-scars like service ribbons,
+    and it knows every line you might take, having taken them all.

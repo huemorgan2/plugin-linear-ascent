@@ -1,0 +1,35 @@
+floor: 10
+tier: 1
+biome: Greenreach
+zone: The Kingsfield
+gate_town: Bannerline
+banner: greenreach
+arrival: >-
+  The last meadow before the lift is a parade ground now. Goblin banners
+  in their hundreds, rifle crates stacked into walls, and every path
+  raked clean for the King's inspection. They know you're coming.
+encounters:
+  - id: kings_guard
+    name: Goblin king's guard
+    weight: 3
+    prose: >-
+      Two crossed scrap-rifles bar the path — a king's guard in salvaged
+      breastplate, better fed than any goblin below, and prouder.
+  - id: banner_wolf
+    name: Banner-broken wolf
+    weight: 2
+    prose: >-
+      A wolf on a chain guards the crate-wall, banner-cloth knotted at
+      its collar. It has stopped fighting the chain. It waits for you.
+  - id: drill_sergeant
+    name: Goblin drill sergeant
+    weight: 3
+    prose: >-
+      A goblin sergeant halts its squad's drill, hands you one long
+      look, and sends the recruits to lunch. This one it keeps.
+warden:
+  name: Gnarl, the Goblin King
+  prose: >-
+    On a throne of stacked rifle crates slouches Gnarl, crowned in salvage
+    and fat with tribute. He raises one hand, and the parade ground goes
+    quiet enough to hear the lift humming behind the throne.

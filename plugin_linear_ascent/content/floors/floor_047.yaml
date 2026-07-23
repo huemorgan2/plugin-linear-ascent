@@ -1,0 +1,40 @@
+floor: 47
+tier: 5
+biome: The Scorch
+zone: The Reactor Scar
+gate_town: Scarwatch
+banner: scorch
+arrival: >-
+  Here the reactor comes up for air: a canyon torn open in the
+  taking, walls of fused ash, and at the bottom the machine itself —
+  cracked, half-alive, shedding a light with no color you can name.
+  The locals will sell you lead-lined cloaks. Buy one.
+encounters:
+  - id: scar_salamander
+    name: Scar-born salamander
+    weight: 3
+    prose: >-
+      The salamanders that nest in the canyon come out changed —
+      translucent, bright inside, wrong in the joints. This one moves
+      like its shadow is a half-second behind it.
+  - id: canyon_ogre
+    name: Canyon hermit
+    weight: 3
+    prose: >-
+      An ogre lives alone in the scar wall, cloaked head to foot in
+      hammered lead sheeting. It has stayed alive down here by
+      tolerating no visitors, and its record is unbroken.
+  - id: pale_fire
+    name: Colorless flame
+    weight: 2
+    prose: >-
+      A flame the color of nothing walks up the canyon path, burning
+      without fuel, casting shadows in the wrong directions. The heat
+      of it arrives before it does, and after it should have gone.
+warden:
+  name: Warden Palescorch
+  prose: >-
+    Palescorch climbs out of the reactor breach itself, a beast lit
+    from inside like a lamp of skin and bone, too bright to look at in
+    the middle. The stair is behind it, and your cloak is not that
+    good.

@@ -1,0 +1,43 @@
+floor: 93
+tier: 10
+biome: The Crown
+zone: The Reactor Galleries
+gate_town: Coreside
+banner: crown
+arrival: >-
+  The citadel's walls go translucent here, and you see what the
+  Crown is built around: the reactor-heart, a column of caged light
+  climbing the floors like a spine. Its hum is in your teeth. The
+  keepers wear crowns of lead and do not take questions.
+encounters:
+  - id: lead_crowned
+    name: Lead-crowned engineer
+    weight: 3
+    prose: >-
+      One of the reactor's keepers turns from its console of levers,
+      lead crown low over a face gone bright behind smoked glass.
+      Interruptions to the great work are bled off like excess
+      pressure. It reaches for the valve that is you.
+  - id: light_leak
+    name: Light-leak
+    weight: 3
+    prose: >-
+      A hairline crack in the gallery wall lets a thread of the
+      heart's light through, and the thread has learned to move
+      against the draft. It comes across the floor like a slow
+      lightning, feeling for something to be inside.
+  - id: coil_demon
+    name: Coil-fed demon
+    weight: 2
+    prose: >-
+      A demon of the middle court has tapped the reactor's coils to
+      feed on, jaw wired straight into the shielding, radiant with
+      theft. It should not be here either, which makes you a
+      witness.
+warden:
+  name: Warden Halflight
+  prose: >-
+    Halflight guards the gallery sluice, a warden cast half of
+    obsidian and half of the heart's own glow, split down the
+    middle like an eclipse. The dark half blocks. The bright half
+    burns. They take turns.

@@ -1,0 +1,40 @@
+floor: 68
+tier: 7
+biome: Stormreach
+zone: The Drake Aeries
+gate_town: Scalewatch
+banner: stormreach
+arrival: >-
+  The high crags belong to the storm drakes outright — aeries on
+  every summit, each one a hoard of wreck-metal and old charge. The
+  drakes keep the Queen's law as aristocrats keep any law. Climbers
+  rank somewhere between trespass and sport.
+encounters:
+  - id: aerie_drake
+    name: Aerie heir
+    weight: 3
+    prose: >-
+      A drake in its first adult molt drops from the home crag to
+      look you over. It is young enough to want a story worth
+      telling and old enough to make one out of you.
+  - id: drake_harrier
+    name: Harpy drake-groom
+    weight: 3
+    prose: >-
+      The harpies that serve the aeries wear drake-scale livery and
+      airs to match. Two of them decide removing you before the
+      master wakes is the kind of initiative that gets noticed.
+  - id: old_tyrant
+    name: Deposed tyrant
+    weight: 2
+    prose: >-
+      An old drake beaten off its crag by a younger rival haunts the
+      lower ledges, wings scarred, charge gone grey. It has nothing
+      left but seniority, and it means to spend it on you.
+warden:
+  name: Warden Stoopfall
+  prose: >-
+    The stair crag belongs to Stoopfall, the aeries' duelmaster — a
+    lean drake with a wingspan like weather, who has killed on this
+    ledge for three dynasties. It gives you the first move. It
+    always gives the first move.

@@ -1,0 +1,38 @@
+floor: 19
+tier: 2
+biome: Ironvale
+zone: The Broken Doors
+gate_town: Last Lantern
+banner: ironvale
+arrival: >-
+  This is where the dwarves made their stand: vault doors a yard thick,
+  blown off their hinges and lying where they fell. The scorch-marks
+  climb three stories. Nobody has moved the doors. Nobody could.
+encounters:
+  - id: door_breaker
+    name: Red Orc door-breaker
+    weight: 3
+    prose: >-
+      A veteran of the breach, warframe scarred by dwarf-fire, patrols
+      the fallen doors it helped fell. It remembers this floor costing
+      blood, and means to be repaid.
+  - id: powder_kobold
+    name: Kobold powder-boy
+    weight: 3
+    prose: >-
+      A kobold in a scorched apron trots past with a keg under each
+      arm, fuse-cord looped around its neck like a scarf. It grins and
+      sets one keg down between you.
+  - id: doorward_remnant
+    name: Doorward remnant
+    weight: 2
+    prose: >-
+      One dwarven door-engine survived the breach, and it has not
+      accepted the news. It holds a doorway with no door, halberd-arms
+      crossed, and will not be reasoned past.
+warden:
+  name: Warden Gatebone
+  prose: >-
+    Gatebone was built from the breach's wreckage — hinge-plates for
+    shoulders, a slab of blown door for a shield. It fights like the
+    last argument of a people who built things to hold.

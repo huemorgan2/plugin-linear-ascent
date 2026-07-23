@@ -1,0 +1,39 @@
+floor: 28
+tier: 3
+biome: The Barrows
+zone: The Sunken Chantry
+gate_town: Bellmarsh
+banner: barrows
+arrival: >-
+  A chantry to the old river gods, taken with the marsh and settling
+  ever since — nave flooded to the pews, tower leaning like a man
+  asleep on his feet. The bells still ring the hours. Nobody winds
+  them. The hours they ring are wrong.
+encounters:
+  - id: chantry_wight
+    name: Chantry cantor
+    weight: 3
+    prose: >-
+      A wight stands waist-deep at the altar, keeping the offices in a
+      voice like water in a crypt. You have interrupted. The
+      congregation, surfacing behind you, agrees.
+  - id: font_ghoul
+    name: Font ghoul
+    weight: 3
+    prose: >-
+      A ghoul crouches in the great stone font like a bird bath gone
+      wrong, cracking something against the rim. It has claimed
+      sanctuary here for years. It does not extend it.
+  - id: vigil_light
+    name: Vigil light
+    weight: 2
+    prose: >-
+      A votive flame floats up the flooded nave toward you, its little
+      brass boat long since sunk. Each pew it passes, something under
+      the water sits up.
+warden:
+  name: Warden Bellrot
+  prose: >-
+    Bellrot hangs in the drowned belfry, grown into the great bell like
+    a hermit crab into its shell. When it rings itself, the water in
+    the nave jumps — and so does everything sleeping in it.

@@ -1,0 +1,35 @@
+floor: 4
+tier: 1
+biome: Greenreach
+zone: The Beacon Field
+gate_town: Pylon Rest
+banner: greenreach
+arrival: >-
+  A floodlight pylon has toppled here, and its beam still burns along the
+  ground, a river of white across black grass. Goblins have built a camp
+  in the light. They think nothing hunts what stands in it. Wrong.
+encounters:
+  - id: beacon_goblin
+    name: Beacon-camp goblin
+    weight: 3
+    prose: >-
+      A goblin sentry steps into the beam's edge, scrap-rifle raised,
+      squinting past the glare at your silhouette.
+  - id: shadow_wolf
+    name: Shadow-line wolf
+    weight: 3
+    prose: >-
+      Along the dark edge of the beam a wolf keeps pace with you,
+      appearing and vanishing at the light's border like a blade drawn
+      and sheathed.
+  - id: goblin_lampwright
+    name: Goblin lampwright
+    weight: 2
+    prose: >-
+      A goblin in a harness of stolen lenses is prying glass from the
+      fallen pylon. It draws a shard like a knife, unwilling to share.
+warden:
+  name: Warden Glarefang
+  prose: >-
+    At the pylon's broken head crouches Glarefang, a wolf remade in
+    chrome, one eye a burning floodlamp. Its shadow is thrown a mile long.

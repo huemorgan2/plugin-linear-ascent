@@ -1,0 +1,41 @@
+floor: 77
+tier: 8
+biome: The Gloom
+zone: The Kennel Courts
+gate_town: Stillhorn
+banner: gloom
+arrival: >-
+  The Huntsman kennels his pack in a ruined manor court, and the
+  court has grown to fit the pack — gates of black bone, a mews where
+  winged things shift in the dark. The kennel-shades keep the feeding
+  book fastidiously. Do not read the entries.
+encounters:
+  - id: kennel_master
+    name: Kennel-master shade
+    weight: 3
+    prose: >-
+      The kennel-master comes out wiping its hands on a leather
+      apron that has seen use. It looks you over as stock, checks
+      something in the feeding book, and unclips the first lead.
+  - id: pack_matron
+    name: Pack matron
+    weight: 3
+    prose: >-
+      The oldest hound in the kennels does not run with the hunts
+      anymore; she trains what does. She comes off her stone bench
+      joint by joint, and every run in the court goes quiet to
+      watch the lesson.
+  - id: mews_mare
+    name: Mews-kept nightmare
+    weight: 2
+    prose: >-
+      A nightmare is stabled here for re-breaking, and it has
+      gotten the door open again. It comes across the court trailing
+      a snapped rope, wearing its freedom like a dare.
+warden:
+  name: Warden Leashbone
+  prose: >-
+    Leashbone holds the kennels' inner gate, a tall shade wound in
+    every lead the pack has ever slipped. It does not fight so much
+    as handle you — and it has handled things with far more legs
+    and far worse manners.

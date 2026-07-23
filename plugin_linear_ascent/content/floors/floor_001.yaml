@@ -1,0 +1,34 @@
+floor: 1
+tier: 1
+biome: Greenreach
+zone: The Fencerows
+gate_town: Lamplit Steading
+banner: greenreach
+arrival: >-
+  Stolen meadowland rolls out under the tower's floodlights. Hedgerows
+  still stand in their old lines, fencing fields no farmer will cut again.
+  Somewhere out in the grass, something is moving.
+encounters:
+  - id: grey_wolf
+    name: Grey wolf
+    weight: 3
+    prose: >-
+      A grey wolf slides out of the hedgerow, ribs showing under a dull
+      coat. It has learned that climbers carry meat.
+  - id: feral_boar
+    name: Feral boar
+    weight: 3
+    prose: >-
+      A boar the size of a cart tears up the turf between you and the
+      path, tusks yellowed and one ear ragged from old fights.
+  - id: goblin_straggler
+    name: Goblin straggler
+    weight: 2
+    prose: >-
+      A lone goblin drags a scrap-rifle twice its size through the grass.
+      It sees you, drops the barrel across a fence rail, and grins.
+warden:
+  name: Warden Brackjaw
+  prose: >-
+    The stair-lift hums behind a beast of wolf and welded plate. Brackjaw
+    circles once, servos ticking, and lowers its head to charge.

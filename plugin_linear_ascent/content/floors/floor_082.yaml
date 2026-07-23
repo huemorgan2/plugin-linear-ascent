@@ -1,0 +1,41 @@
+floor: 82
+tier: 9
+biome: Hellmarch
+zone: The Chain Yards
+gate_town: Linkside
+banner: hellmarch
+arrival: >-
+  The chains that bind every stolen realm were forged here, and the
+  yards never stopped — acre after acre of anvils, quench-pits of
+  black oil, chain running overhead. The hammer rhythm is constant.
+  The locals set their hearts by it, having no choice.
+encounters:
+  - id: chain_imp_gang
+    name: Chain-gang imp
+    weight: 3
+    prose: >-
+      A gang of imps hauls a new-forged link toward the lift-heads,
+      and the foreman imp has spotted a way to lighten the load —
+      you look sturdy, and the harness is adjustable.
+  - id: quench_knight
+    name: Quench-tempered knight
+    weight: 3
+    prose: >-
+      A hellknight climbs out of the quench-pit trailing black oil,
+      armor still ticking with heat. It is fresh from tempering and
+      has been issued nothing yet but the need to test itself.
+  - id: loose_chain
+    name: Living chain
+    weight: 2
+    prose: >-
+      A length of chain slides off its overhead run and pools on the
+      yard floor, then rears like something with a spine. The forge
+      puts a little of the fire into everything it makes, and this
+      one got a temper.
+warden:
+  name: Warden Anchorwrath
+  prose: >-
+    At the master forge hangs the first link ever made for the
+    tower, and Anchorwrath wears it as a collar — a smith-shape of
+    scar tissue and forge plate, hammer grown into fist. It has
+    chained up ninety-nine realms. It sizes you for a link.

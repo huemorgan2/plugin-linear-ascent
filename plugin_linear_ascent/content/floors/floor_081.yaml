@@ -1,0 +1,42 @@
+floor: 81
+tier: 9
+biome: Hellmarch
+zone: The First Outwork
+gate_town: Sappersrest
+banner: hellmarch
+arrival: >-
+  The Gloom's last trees stand against a wall of black iron, and the
+  wall goes up out of sight. The King's first outwork: ramparts of
+  welded plate, gun-slits that breathe, a gate scaled for siege
+  engines. Some of this wall was not built. It grew.
+encounters:
+  - id: outwork_imp
+    name: Outwork imp
+    weight: 3
+    prose: >-
+      An imp scuttles along the rampart top with a rivet gun and a
+      quota. Maintenance doubles as sentry duty out here, and it has
+      just found something worth reporting. It reports you with the
+      rivet gun.
+  - id: gate_knight
+    name: Hellknight of the gate
+    weight: 3
+    prose: >-
+      A hellknight steps out of a wall-niche where it has stood
+      since the outwork was raised — armor welded shut a lifetime
+      ago, engine-heart idling up through the plate. It lowers a
+      halberd that is part of its arm.
+  - id: wall_growth
+    name: Wall-flesh
+    weight: 2
+    prose: >-
+      A patch of rampart peels itself off the wall and comes at you
+      — plate and sinew in equal parts, the outwork's living mortar.
+      The wall behind it heals over before it has crossed half the
+      distance.
+warden:
+  name: Warden Rivetgrim
+  prose: >-
+    The gatehouse is Rivetgrim's body — portcullis teeth, murder-hole
+    eyes, and a foreman's temper spot-welded through the whole
+    assembly. The gate does not open. The gate stands up.

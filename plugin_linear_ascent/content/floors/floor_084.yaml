@@ -1,0 +1,42 @@
+floor: 84
+tier: 9
+biome: Hellmarch
+zone: The Welding Halls
+gate_town: Seamside
+banner: hellmarch
+arrival: >-
+  This is where the King's army is made, and it is not recruited.
+  Halls of surgical gantries run to the horizon, arc-light flickering
+  off hanging plate. Flesh goes in at one door. What comes out the
+  other door marches. The halls are always working.
+encounters:
+  - id: seam_imp
+    name: Seam-checker imp
+    weight: 3
+    prose: >-
+      A quality-imp moves down the line tapping welds with a little
+      hammer, listening. It taps you twice, frowns at the sound of
+      unmodified meat, and flags you for the gantries.
+  - id: fresh_welded
+    name: Fresh-welded soldier
+    weight: 3
+    prose: >-
+      Something newly finished sits up on the line, seams still
+      smoking, and swings its legs down. It does not know its own
+      name yet. It knows its function, and its function is walking
+      toward you.
+  - id: rejected_lot
+    name: The rejected lot
+    weight: 2
+    prose: >-
+      Behind the halls is the scrap-yard of what failed inspection,
+      and the failures have organized. A committee of them comes
+      over the fence — wrong joints, extra arms, grievances in
+      writing.
+warden:
+  name: Warden Seamwright
+  prose: >-
+    The halls' master artisan never stopped improving itself —
+    Seamwright is a cathedral of its own best work, four gantry
+    arms, a torso of perfect welds. It looks at you the way a
+    sculptor looks at quarry stone, and lights the torch.

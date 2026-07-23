@@ -1,0 +1,39 @@
+floor: 12
+tier: 2
+biome: Ironvale
+zone: The Flooded Mine
+gate_town: Pumpstead
+banner: ironvale
+arrival: >-
+  The dwarves drowned this mine on purpose, to stop what was digging up at
+  them. When the tower took it, the pumps came back on halfway. Now the
+  galleries stand waist-deep and black, and the water is never quite
+  still.
+encounters:
+  - id: bilge_kobold
+    name: Bilge kobold
+    weight: 3
+    prose: >-
+      A kobold poles past on a raft of crate-lids, spear in hand. It has
+      fished these galleries long enough to know that climbers float
+      face down, eventually.
+  - id: drowned_hauler
+    name: Drowned hauler
+    weight: 3
+    prose: >-
+      An ore-hauler wades out of the flood on six seized legs, lamps
+      shorting under a skin of silt. Its bed is empty. It has decided
+      you are ore.
+  - id: orc_diver
+    name: Red Orc salvage-diver
+    weight: 2
+    prose: >-
+      An orc surfaces in a sealed warframe, water sheeting off the
+      plate. It was down there stripping dwarf-steel, but a climber
+      pays better than salvage.
+warden:
+  name: Warden Sumplock
+  prose: >-
+    At the drowned stair the water climbs a shape that should not stand —
+    Sumplock, pump-iron and pale weed knotted over old bone, holding the
+    lift gate shut with the patience of the flood.

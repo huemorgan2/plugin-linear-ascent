@@ -1,0 +1,40 @@
+floor: 53
+tier: 6
+biome: Frosthold
+zone: The Rime Forest
+gate_town: Firwatch
+banner: frosthold
+arrival: >-
+  A pine forest sealed in clear ice, every needle cased in glass. When
+  the wind comes down off the glacier the whole forest rings, a
+  million small bells with no church. The Jarl's folk log it with
+  hammers. What lives in it prefers the quiet, and enforces it.
+encounters:
+  - id: rime_stag
+    name: Glass-antlered stag
+    weight: 3
+    prose: >-
+      A stag steps through the ringing trees with antlers of solid
+      ice, grown that way, points refreshed nightly by the cold. It
+      has stopped running from things. The antlers are why.
+  - id: forest_troll
+    name: Hammer-logger troll
+    weight: 3
+    prose: >-
+      An ice troll works a stand of frozen pines with a maul, filling
+      a sledge with shattered timber. Your footsteps ring the forest
+      like an alarm, and the maul comes up.
+  - id: bell_wolf
+    name: Bell-wise wolf
+    weight: 2
+    prose: >-
+      The wolves here have learned to walk without ringing the trees,
+      and it has made them soft-footed beyond nature. The first you
+      hear of this one is its weight arriving.
+warden:
+  name: Warden Rimehide
+  prose: >-
+    Rimehide is the forest's oldest bear, sealed alive in the great
+    freeze and improved by it — a hide of ringing icicles over meat
+    that no longer feels the maul. It rises on two legs, and the
+    forest goes silent out of respect.

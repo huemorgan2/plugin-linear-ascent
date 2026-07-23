@@ -1,0 +1,34 @@
+floor: 3
+tier: 1
+biome: Greenreach
+zone: The Orchard Rows
+gate_town: Cider Cross
+banner: greenreach
+arrival: >-
+  An orchard in perfect rows, gone wild at the crowns. Windfall apples rot
+  sweet in the grass. Between the trunks, wire has been strung at ankle
+  height — someone hunts here, and not with teeth.
+encounters:
+  - id: orchard_wolfpack
+    name: Orchard wolf
+    weight: 3
+    prose: >-
+      A wolf steps out between the rows ahead — and you hear a second one
+      behind you stop moving. The pack has done this before.
+  - id: snare_goblin
+    name: Snare-line goblin
+    weight: 3
+    prose: >-
+      A goblin drops from a bough, trailing the snare-wire it was laying.
+      It levels a scrap-pistol with both hands and shrieks for its due.
+  - id: rabid_boar
+    name: Cider-mad boar
+    weight: 2
+    prose: >-
+      A boar reels out of the windfalls, drunk on rot and mean with it,
+      foam at the tusks and no interest in going around you.
+warden:
+  name: Warden Applewrath
+  prose: >-
+    In the press-house, the Warden waits among the vats: a great ape-frame
+    of orchard timber and engine parts, cider steaming from its joints.

@@ -1,0 +1,40 @@
+floor: 59
+tier: 6
+biome: Frosthold
+zone: The Jarl's Road
+gate_town: Horncall
+banner: frosthold
+arrival: >-
+  A processional road of fitted ice blocks, wide enough for six
+  giants abreast, lit by whale-oil lamps that never gutter. The
+  Jarl's own approach, swept daily, patrolled hourly. You are
+  expected. That is not a comfort.
+encounters:
+  - id: road_thane
+    name: Thane of the road
+    weight: 3
+    prose: >-
+      A frost giant in the Jarl's colors bars the road with a
+      halberd of ice and iron. Custom entitles you to give your name
+      and have it spoken at your defeat. The custom is observed.
+  - id: herald_wolf
+    name: Jarl's herald-wolf
+    weight: 3
+    prose: >-
+      A white wolf in a silver road-collar has been sent down to
+      look at you. Whatever it reports back will decide how much of
+      the garrison you meet. It circles once, taking notes.
+  - id: lamp_troll
+    name: Lamplighter troll
+    weight: 2
+    prose: >-
+      The troll that tends the road-lamps has held the post for nine
+      generations of trolls, all of them it. It sets down the oil
+      pail with ceremony. Brawling on the road is its second duty.
+warden:
+  name: Warden Hallmarch
+  prose: >-
+    The Jarl's gatekeeper Hallmarch stands where the road meets the
+    stair, a giant in parade armor of blue ice, unmoved for years at
+    a stretch. It steps down off its plinth, and the road reports
+    the weight of every step.

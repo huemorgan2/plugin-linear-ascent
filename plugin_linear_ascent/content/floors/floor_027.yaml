@@ -1,0 +1,39 @@
+floor: 27
+tier: 3
+biome: The Barrows
+zone: The Bone Garths
+gate_town: Garthend
+banner: barrows
+arrival: >-
+  Walled yards where the marsh folk laid out their dead for the birds,
+  as their custom asked. The walls still stand, the gates still latch,
+  and the yards are still in use — but nothing has flown over this
+  floor in years, and the dead are not being taken up.
+encounters:
+  - id: garth_wight
+    name: Garth-keeper
+    weight: 3
+    prose: >-
+      The keeper of the yards still makes its rounds, keys at its belt,
+      little more than vestments and wind. It finds a gate you left
+      unlatched. There is no arguing about the fine.
+  - id: yard_ghoul
+    name: Yard ghoul
+    weight: 3
+    prose: >-
+      With the birds gone, the ghouls have taken over the work, and
+      they resent the workload. This one comes over the garth wall
+      lean, quick, and behind on quota.
+  - id: bone_heap
+    name: Restless heap
+    weight: 2
+    prose: >-
+      One of the laid-out dead has grown tired of waiting for the sky
+      and gathered its neighbors for company. The heap moves like a
+      crowd that has just found its voice.
+warden:
+  name: Warden Garthbone
+  prose: >-
+    Garthbone is the yards' answer to the missing birds — a rook of
+    bone and grave-iron the size of a hay barn, wings creaking wide.
+    It will take the dead up itself, and you qualify.

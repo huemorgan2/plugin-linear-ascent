@@ -1,0 +1,34 @@
+floor: 2
+tier: 1
+biome: Greenreach
+zone: The Drowned Pasture
+gate_town: Weirsend
+banner: greenreach
+arrival: >-
+  The meadow dips into flooded pasture, the old drainage cut when the land
+  was torn skyward. Floodlight beams lie across the water in long white
+  bars. Things wade out there, unhurried.
+encounters:
+  - id: marsh_wolf
+    name: Marsh wolf
+    weight: 3
+    prose: >-
+      A wolf lopes through the shallows without a sound, coat slicked
+      dark, eyes catching the floodlight like two coins.
+  - id: mire_boar
+    name: Mire boar
+    weight: 2
+    prose: >-
+      A mud-caked boar heaves itself off a drowned hay rick, shaking
+      water in sheets, and squares up in the reeds.
+  - id: goblin_wader
+    name: Goblin wader
+    weight: 3
+    prose: >-
+      Two lamps on a pole — no, a goblin on stilts, scrap-rifle slung
+      high, picking through the flood for anything worth stealing.
+warden:
+  name: Warden Sedgeback
+  prose: >-
+    The keep is a drowned barn, and Sedgeback rises out of it — a boar
+    grown wrong, plated in rusted field-tin, water pouring off its back.

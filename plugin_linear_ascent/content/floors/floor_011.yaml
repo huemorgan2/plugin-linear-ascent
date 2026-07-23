@@ -1,0 +1,39 @@
+floor: 11
+tier: 2
+biome: Ironvale
+zone: The Rustwater Adit
+gate_town: Lampfall
+banner: ironvale
+arrival: >-
+  The meadows end against mountain-root bolted to the tower's ribs. A mine
+  mouth breathes cold air and rust-red water, and the dwarf lamps over the
+  adit still burn, tended by nobody. Small clawed tracks stitch every path
+  going in.
+encounters:
+  - id: kobold_scavenger
+    name: Kobold scavenger
+    weight: 3
+    prose: >-
+      A kobold backs out of a side-shaft dragging a sack of stripped
+      copper. It weighs the sack against its life, sets it down gently,
+      and picks up a pry-bar.
+  - id: rust_hound
+    name: Rust hound
+    weight: 3
+    prose: >-
+      Something bred to guard this mine still guards it — a hound of
+      wire and hide, joints weeping orange, nose down to the rust-water
+      as it comes.
+  - id: orc_outrider
+    name: Red Orc outrider
+    weight: 2
+    prose: >-
+      An orc in half a warframe rounds the tailings heap, one arm bare
+      and one arm hydraulic. It marks you down for the warband's ledger
+      and doesn't wait for an answer.
+warden:
+  name: Warden Rustmaw
+  prose: >-
+    The stair is walled behind a rockfall, and the rockfall moves.
+    Rustmaw unfolds — a tunneling engine grown teeth, ore-crusher jaws
+    dripping red water while it takes your measure.
