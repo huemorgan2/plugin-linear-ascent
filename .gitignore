@@ -1,0 +1,7 @@
+# raw model outputs — regenerable via tools/generate_banners.py, ~2MB each
+content/art/banners/raw/
+
+__pycache__/
+*.pyc
+.venv/
+.DS_Store
