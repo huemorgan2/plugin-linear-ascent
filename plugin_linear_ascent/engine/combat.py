@@ -69,6 +69,7 @@ def start_encounter(p: dict, floor, enc, kind: str = "wilds") -> Scene:
         name, prose = enc.name, enc.prose
     p["encounter"] = {
         "kind": kind, "name": name, "prose": prose,
+        "id": (enc.id if enc is not None else ""),
         "atk": atk, "def": dfs, "hp": hp, "hp_max": hp,
         "floor": floor.floor, "shot_used": False,
     }

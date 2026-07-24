@@ -245,3 +245,14 @@ def test_scene_is_idempotent():
     b = core.current_scene(p).to_dict()
     assert a["options"] == b["options"]
     assert p["encounter"] is None
+
+
+def test_encounter_carries_id_for_creature_art():
+    # regression: _opener_banner keys creature art off encounter id
+    p = create_character(fresh())
+    choose(p, "gate")
+    choose(p, "floor_1")
+    s = choose(p, "hunt")
+    assert p["encounter"]["id"] in {"grey_wolf", "feral_boar",
+                                    "goblin_straggler"}
+    assert s.banner == p["encounter"]["id"]      # floor-1 art is shipped
