@@ -260,8 +260,9 @@ def _creation_set_name(p: dict, text: str) -> Scene:
     s.headline = f"Welcome to Roothollow, {name}"
     s.support = ("Tarps over titanium, a plasma forge next to a horse "
                  "trough. Home.")
-    s.shard_note = ("We carry ◈ 50 — the Forge's cheapest blade wants ◈ 250. "
-                    "The tower gate first, then: teeth before steel.")
+    s.shard_note = ("We carry ◈ 50 and a rusted shiv — the Forge's cheapest "
+                    "real blade wants ◈ 250. The tower gate first: hunt "
+                    "floor 1 until steel is affordable.")
     return s
 
 
@@ -391,9 +392,11 @@ def _forge_buy(p: dict, oid: str) -> Scene:
     p["gold"] -= g.price
     p["gear"][g.slot] = g.slug
     note = f"+ {g.name} equipped ({g.slot} +{g.bonus})"
-    if old:
+    if old and economy.FORGE[old].price > 0:
         p["inventory"][old] = p["inventory"].get(old, 0) + 1
         note += f" — your {economy.FORGE[old].name} goes to your pack"
+    elif old:
+        note += f" — the {economy.FORGE[old].name} goes in the scrap bin"
     combat._ledger(p, "buy", gold=-g.price, note=g.slug)
     s = _forge_scene(p)
     s.body_lines.insert(0, note)

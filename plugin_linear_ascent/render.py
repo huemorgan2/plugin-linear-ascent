@@ -65,20 +65,34 @@ def _blocks(cur: int, cap: int, cells: int = 10) -> str:
             f'<span class="off">{"░" * (cells - filled)}</span>')
 
 
+# Hover tooltips — the rail is the HUD, so each meter explains itself.
+_TIP_HP = ("HP — health. At 0 you die: all carried gold is lost and armor "
+           "and shield break. Heal at the healer's tent or the Apothecary.")
+_TIP_EN = ("⚡ Energy — actions spend it: wilds hunt 1, Warden attempt 3, "
+           "milestone boss 5, PvP attack 3. Regenerates 1 every 45 minutes.")
+_TIP_AE = ("✦ Aether (mana) — fuels class abilities and shard scans. "
+           "Regenerates 1 every 90 minutes.")
+_TIP_GOLD = ("◈ Carried gold — spendable anywhere but lost when you die. "
+             "The Vault banks it safely at 5%/day interest.")
+
+
 def _meters_html(m: Meters) -> str:
     low = " low" if m.hp * 10 <= m.hp_max * 3 else ""
     return (
         f'<div class="rail later">'
-        f'<span class="meter hp{low}"><span>HP {m.hp}/{m.hp_max}</span>'
+        f'<span class="meter hp{low}" title="{_e(_TIP_HP)}">'
+        f"<span>HP {m.hp}/{m.hp_max}</span>"
         f'<span class="blocks" aria-hidden="true">'
         f"{_blocks(m.hp, m.hp_max)}</span></span>"
-        f'<span class="meter en"><span>⚡ {m.energy}/{m.energy_max}</span>'
+        f'<span class="meter en" title="{_e(_TIP_EN)}">'
+        f"<span>⚡ {m.energy}/{m.energy_max}</span>"
         f'<span class="blocks" aria-hidden="true">'
         f"{_blocks(m.energy, m.energy_max)}</span></span>"
-        f'<span class="meter ae"><span>✦ {m.mana}/{m.mana_max}</span>'
+        f'<span class="meter ae" title="{_e(_TIP_AE)}">'
+        f"<span>✦ {m.mana}/{m.mana_max}</span>"
         f'<span class="blocks" aria-hidden="true">'
         f"{_blocks(m.mana, m.mana_max)}</span></span>"
-        f'<span class="gold">◈ {m.gold:,}</span>'
+        f'<span class="gold" title="{_e(_TIP_GOLD)}">◈ {m.gold:,}</span>'
         f"</div>")
 
 
@@ -222,9 +236,10 @@ def render_scene(scene: Scene) -> str:
     stripe_css = (f"border-left:3px solid {stripe};" if stripe else "")
 
     return f"""<!doctype html><html><head><meta charset="utf-8"><style>
-html,body{{margin:0;padding:0;background:{INK};}}
+html,body{{margin:0;padding:0;background:{INK};overflow:hidden;}}
+body{{padding:8px;}}
 .card{{background:{PANEL};border:1px solid {BORDER};{stripe_css}
- border-radius:0;margin:8px;padding:12px 2ch 10px;color:{TEXT};
+ border-radius:0;margin:0;padding:12px 2ch 10px;color:{TEXT};
  font:14px/1.6 ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
  font-variant-numeric:tabular-nums;overflow:hidden;}}
 .banner{{display:block;width:calc(100% + 4ch);margin:-12px -2ch 10px;
@@ -262,9 +277,8 @@ html,body{{margin:0;padding:0;background:{INK};}}
 .rail{{display:flex;flex-wrap:wrap;align-items:center;gap:2ch;
  margin-top:10px;padding-top:8px;border-top:1px dashed {BORDER};
  color:{DIM};}}
-.meter{{display:flex;align-items:center;gap:1ch;}}
+.meter{{display:flex;align-items:center;gap:1ch;cursor:help;}}
 .meter .blocks{{letter-spacing:.5px;}}
-.meter .blocks .off{{color:{BORDER};}}
 .meter.hp .blocks{{color:{OK};}}
 .meter.hp.low .blocks{{color:{RED};}}
 .meter.en .blocks{{color:{AETHER};}}

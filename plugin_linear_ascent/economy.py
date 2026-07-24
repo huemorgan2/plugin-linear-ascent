@@ -188,6 +188,17 @@ def _build_forge() -> dict[str, GearItem]:
 
 
 FORGE: dict[str, GearItem] = _build_forge()
+
+# Tier-0 gate issue, free at creation. Bare-handed ATK at level 1 is 3 vs
+# floor-1 monsters at DEF 3 / HP 37 — ~1 damage a round, unwinnable. The
+# shiv makes floor 1 hard-but-fair while keeping the ◈250 Pigsticker a
+# real first goal. Never sold (forge_tier lists tiers ≥ 1).
+STARTER_WEAPON = GearItem(
+    "rusted_shiv", "Rusted Shiv",
+    "gate-issue salvage steel — barely better than teeth",
+    "weapon", 0, 5, 0)
+FORGE[STARTER_WEAPON.slug] = STARTER_WEAPON
+
 PAWN_BUYBACK = 0.40
 
 
