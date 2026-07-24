@@ -1,7 +1,7 @@
 # Phase 9 — execution summary (FINAL: everything in production)
 
 Status: **shipped end to end.** Luna core 056 landed and was verified live;
-plugin 0.3.1 published; worldd redeployed with vendor sync.
+plugin 0.4.0 published; worldd redeployed with vendor sync.
 
 ## Luna core (056, implemented by Luna, verified here)
 
@@ -35,7 +35,11 @@ Pushed to `huemorgan/luna` for Luna to merge. (Note: within a streaming
 turn Luna renders the text bubble above its tool receipts by design —
 that's her turn-block convention, not a bug; reload shows true order.)
 
-## Plugin 0.3.1 (published, sha256 verified against the index)
+## Plugin 0.4.0 (published, sha256 verified against the index)
+
+Shipped as 0.4.0: 0.3.1 (resize fix only) was published briefly, then the
+parallel session's 057 card-action work landed and the full tree went out
+as 0.4.0 — the marketplace artifact matches git.
 
 - **Resize re-report fix** (this session): the card height script now also
   listens to `window` resize and observes `body` — documentElement's
@@ -65,6 +69,6 @@ that's her turn-block convention, not a bug; reload shows true order.)
 
 - worldd: `https://ascent-worldd.onrender.com` — healthy, world day
   rolling.
-- Marketplace: `official/plugin-linear-ascent` **0.3.1**, sha256 matches
+- Marketplace: `official/plugin-linear-ascent` **0.4.0**, sha256 matches
   local artifact.
 - Luna fork: 0.47.004 + `056-followup-card-ordering` (PR-able).
