@@ -25,6 +25,11 @@ def _stub_luna_sdk() -> None:
     class PluginContext:
         pass
 
+    class SettingsTab:
+        def __init__(self, **kw):
+            for k, v in kw.items():
+                setattr(self, k, v)
+
     def declarative_base():
         try:
             from sqlalchemy.orm import declarative_base as real
@@ -40,6 +45,7 @@ def _stub_luna_sdk() -> None:
         JSONB = object
 
     m.LunaPlugin = LunaPlugin
+    m.SettingsTab = SettingsTab
     m.PluginManifest = PluginManifest
     m.ToolDef = ToolDef
     m.PluginContext = PluginContext

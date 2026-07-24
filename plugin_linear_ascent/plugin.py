@@ -1,7 +1,10 @@
 """The Luna plugin — tools, backend selection, card delivery.
 
-Backend: worldd (shared world) when LUNA_ASCENT_WORLDD_URL is configured,
-else the local single-tenant engine. Same scenes either way.
+Backend resolution (highest wins), applied at every tool call via runtime:
+  1. env override (LUNA_ASCENT_WORLDD_URL + LUNA_ASCENT_SHARED_SECRET) — dev
+  2. vault credentials written by the settings page ("Join the shared world")
+  3. local single-tenant engine (solo play, zero config)
+Same scenes either way.
 """
 
 from __future__ import annotations
@@ -9,8 +12,10 @@ from __future__ import annotations
 import json
 import os
 
-from luna_sdk import LunaPlugin, PluginContext, PluginManifest, ToolDef
+from luna_sdk import (LunaPlugin, PluginContext, PluginManifest, SettingsTab,
+                      ToolDef)
 
+from . import runtime
 from .engine import core
 from .engine.scene import Scene
 from .sheet import character_sheet
@@ -39,10 +44,26 @@ class LinearAscentPlugin(LunaPlugin):
             "bank your gold, sleep in the lodge, and cast down the Demon "
             "King — with your Luna agent as your in-world shardmind sidekick."
         ),
+        routes_module="routes",
+        settings_tabs=[
+            SettingsTab(
+                id="linear-ascent",
+                label="Linear Ascent",
+                icon="tower-control",
+                sort_order=70,
+                iframe_src="/api/p/plugin-linear-ascent/ui/settings/",
+            ),
+        ],
     )
 
     async def on_load(self, ctx: PluginContext) -> None:
         from .backend.local import Base, LocalBackend
+
+        # Local tables always exist: solo mode + fallback after disconnect.
+        async with ctx.engine.begin() as conn:
+            for table in Base.metadata.sorted_tables:
+                await conn.run_sync(table.create, checkfirst=True)
+        runtime.state["local"] = LocalBackend(ctx.db_session_factory)
 
         def _env(name: str) -> str:
             # ctx.get_env only resolves vars declared in Luna's own config
@@ -53,19 +74,27 @@ class LinearAscentPlugin(LunaPlugin):
                 val = None
             return (val or os.environ.get(name) or "").strip()
 
-        worldd_url = _env("LUNA_ASCENT_WORLDD_URL")
-        secret = _env("LUNA_ASCENT_SHARED_SECRET")
-
-        remote = None
-        if worldd_url and secret:
-            from .backend.remote import WorldClient
-            remote = WorldClient(
-                worldd_url, _env("LUNA_ASCENT_TENANT") or "default", secret)
+        env_url = _env("LUNA_ASCENT_WORLDD_URL")
+        env_secret = _env("LUNA_ASCENT_SHARED_SECRET")
+        if env_url and env_secret:
+            runtime.configure_remote(
+                env_url, _env("LUNA_ASCENT_TENANT") or "default",
+                env_secret, source="env")
         else:
-            async with ctx.engine.begin() as conn:
-                for table in Base.metadata.sorted_tables:
-                    await conn.run_sync(table.create, checkfirst=True)
-        local = None if remote else LocalBackend(ctx.db_session_factory)
+            vault = getattr(ctx, "vault", None)
+            if vault is not None:
+                try:
+                    url = (await vault.get_credential(
+                        runtime.VAULT_URL)).value
+                    tenant = (await vault.get_credential(
+                        runtime.VAULT_TENANT)).value
+                    secret = (await vault.get_credential(
+                        runtime.VAULT_SECRET)).value
+                    if url and tenant and secret:
+                        runtime.configure_remote(
+                            url, tenant, secret, source="vault")
+                except KeyError:
+                    pass  # never joined — solo mode
 
         def _user() -> str:
             try:
@@ -87,6 +116,7 @@ class LinearAscentPlugin(LunaPlugin):
             })
 
         async def _local_run(fn, *args) -> Scene:
+            local = runtime.state["local"]
             luna_user = _user()
             doc = await local.load(luna_user)
             scene: Scene = fn(doc, *args)
@@ -96,6 +126,7 @@ class LinearAscentPlugin(LunaPlugin):
             return scene
 
         async def ascent_scene() -> str:
+            remote = runtime.state["remote"]
             if remote:
                 scene = Scene.from_dict(await remote.scene(_user()))
             else:
@@ -104,6 +135,7 @@ class LinearAscentPlugin(LunaPlugin):
 
         async def ascent_choose(option: str = "", text: str = "") -> str:
             option, text = option.strip(), text.strip()
+            remote = runtime.state["remote"]
             if remote:
                 scene = Scene.from_dict(
                     await remote.act(_user(), option, text))
@@ -113,10 +145,11 @@ class LinearAscentPlugin(LunaPlugin):
             return _payload(scene)
 
         async def ascent_character() -> str:
+            remote = runtime.state["remote"]
             if remote:
                 sheet = await remote.character(_user())
             else:
-                p = await local.load(_user())
+                p = await runtime.state["local"].load(_user())
                 if p["stage"] != "playing":
                     return json.dumps({
                         "status": "no character yet",

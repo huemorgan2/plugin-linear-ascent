@@ -13,6 +13,12 @@ from .version import VERSION  # noqa: F401
 
 try:
     from .plugin import LinearAscentPlugin  # noqa: F401
+
+    # Luna's loader resolves manifest.routes_module relative to the plugin
+    # CLASS's __module__ (it appends ".routes"). The class lives in plugin.py,
+    # so point __module__ at the package or routes would resolve to
+    # "<pkg>.plugin.routes".
+    LinearAscentPlugin.__module__ = __name__
 except ImportError:
     # Running outside Luna (worldd or bare tests): engine-only import path.
     pass

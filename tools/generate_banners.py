@@ -102,6 +102,18 @@ SCENES: dict[str, tuple[str, str]] = {
         "a tall standing monolith engraved with glowing name-lines that "
         "halo outward in a soft gradient, a small crowd of silhouetted "
         "figures at its base, gradient dusk sky behind.", DIM),
+    "ascent": (
+        "the whole Ascent seen from far away on a bright hopeful morning — "
+        "one colossal megastructure tower of a hundred stacked stolen "
+        "realms, a BOLD DARK silhouette against a luminous sky, rising "
+        "through a sunlit cloud deck and out of frame at the top, its "
+        "layers reading as a few thick clearly-separated bands of land "
+        "with strong black separation lines, two great chains anchoring "
+        "it to the ground, the sky a huge BRIGHT gradient of dense white "
+        "dither with soft cumulus banks kept low, sun with a wide radial "
+        "halo placed at one-third from the left and vertically centered, "
+        "birds as sparse specks — luminous, optimistic, mostly light, all "
+        "key elements inside the central horizontal band of the frame.", DIM),
     "gate": (
         "a colossal tower gate — massive doorframe filling the frame, a "
         "lift cage hanging inside, chains and one thick cable running out "
