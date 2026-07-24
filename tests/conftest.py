@@ -44,6 +44,13 @@ def _stub_luna_sdk() -> None:
     except ImportError:
         JSONB = object
 
+    async def get_current_user(request):
+        # Stand-in for luna.auth's FastAPI dependency. `request` is
+        # required, exactly like the real one: a bare call must raise so
+        # runtime.player_key() falls back to "owner". Route tests override
+        # this per-app.
+        return None
+
     m.LunaPlugin = LunaPlugin
     m.SettingsTab = SettingsTab
     m.PluginManifest = PluginManifest
@@ -51,6 +58,7 @@ def _stub_luna_sdk() -> None:
     m.PluginContext = PluginContext
     m.declarative_base = declarative_base
     m.JSONB = JSONB
+    m.get_current_user = get_current_user
     sys.modules["luna_sdk"] = m
 
 

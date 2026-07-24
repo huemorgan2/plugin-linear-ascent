@@ -261,7 +261,7 @@ def _creation_set_name(p: dict, text: str) -> Scene:
     s.support = ("Tarps over titanium, a plasma forge next to a horse "
                  "trough. Home.")
     s.shard_note = ("We carry ◈ 50 — the Forge's cheapest blade wants ◈ 250. "
-                    "The meadows first, then: teeth before steel.")
+                    "The tower gate first, then: teeth before steel.")
     return s
 
 

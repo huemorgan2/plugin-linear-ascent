@@ -16,7 +16,6 @@ from luna_sdk import (LunaPlugin, PluginContext, PluginManifest, SettingsTab,
                       ToolDef)
 
 from . import runtime
-from .engine import core
 from .engine.scene import Scene
 from .sheet import character_sheet
 from .version import VERSION
@@ -25,7 +24,10 @@ _SHARED_RULES = (
     "You are the player's shardmind sidekick INSIDE the game world of "
     "Linear Ascent. Never invent game outcomes, numbers, or state — the "
     "engine decides everything. The player picks options by number or "
-    "plain words; map their words to the closest option id."
+    "plain words; map their words to the closest option id. The player "
+    "can ALSO click options directly on the card — the game advances "
+    "without you seeing it, so if their words reference something not in "
+    "your last scene, call ascent_scene to re-sync before choosing."
 )
 
 _VOICE_RULES = (
@@ -134,16 +136,7 @@ class LinearAscentPlugin(LunaPlugin):
                 except KeyError:
                     pass  # never joined — solo mode
 
-        def _user() -> str:
-            try:
-                from luna_sdk import get_current_user
-                u = get_current_user()
-                if u:
-                    return str(getattr(u, "id", None) or
-                               getattr(u, "username", None) or u)
-            except Exception:
-                pass
-            return "owner"
+        _user = runtime.player_key
 
         # 056 host capability: post the scene as its OWN chat message
         # (standalone card, no agent bubble). Feature-detected so stock
@@ -161,33 +154,13 @@ class LinearAscentPlugin(LunaPlugin):
                     return build_payload(scene, card_posted=True)
             return build_payload(scene, card_posted=False)
 
-        async def _local_run(fn, *args) -> Scene:
-            local = runtime.state["local"]
-            luna_user = _user()
-            doc = await local.load(luna_user)
-            scene: Scene = fn(doc, *args)
-            ledger = doc.pop("_ledger", [])
-            doc["scene"] = scene.to_dict()
-            await local.save(luna_user, doc, ledger)
-            return scene
-
         async def ascent_scene() -> str:
-            remote = runtime.state["remote"]
-            if remote:
-                scene = Scene.from_dict(await remote.scene(_user()))
-            else:
-                scene = await _local_run(core.current_scene)
+            scene = await runtime.scene_for(_user())
             return await _deliver(scene)
 
         async def ascent_choose(option: str = "", text: str = "") -> str:
-            option, text = option.strip(), text.strip()
-            remote = runtime.state["remote"]
-            if remote:
-                scene = Scene.from_dict(
-                    await remote.act(_user(), option, text))
-            else:
-                scene = await _local_run(
-                    lambda d: core.apply_choice(d, option, text))
+            scene = await runtime.act_for(
+                _user(), option.strip(), text.strip())
             return await _deliver(scene)
 
         async def ascent_character() -> str:

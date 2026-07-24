@@ -20,7 +20,7 @@ def test_town_card_has_banner_and_options():
     assert "data:image/png;base64" in html          # roothollow banner inlined
     assert "ROOTHOLLOW" in html
     assert 'class="opt"' in html
-    assert 'class="rail"' in html                   # status meters
+    assert 'class="rail' in html                    # status meters
 
 
 def test_fight_card_and_escaping():

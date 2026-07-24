@@ -1,12 +1,20 @@
-"""Settings-tab backend: one-click world enrollment, status, disconnect.
+"""Plugin HTTP surface.
 
-The settings iframe (served below) calls these routes with the host's
-bearer token. Credentials live in Luna's vault; runtime.state switches
-the game backend live — no restart needed.
+Settings tab: one-click world enrollment, status, disconnect — the
+settings iframe calls these with the host's bearer token. Credentials
+live in Luna's vault; runtime.state switches the game backend live.
+
+Card actions (057): POST /act is the direct game loop for interactive
+cards. The chat shell's card-action bridge calls it when the player
+clicks an option button — pure engine, no model in the path. The route
+posts the next scene as its own card and, on big beats only, nudges the
+agent to react in character (a "moment"), so the sidekick responds to
+the game like the player does instead of driving it.
 """
 
 from __future__ import annotations
 
+import asyncio
 import uuid
 
 import httpx
@@ -20,6 +28,14 @@ from . import runtime
 
 _ctx: PluginContext | None = None
 
+# Which event kinds warrant which agent nudge. A "moment" runs a genuine
+# reaction turn (the sidekick speaks on its own); "awareness" just lands in
+# history for the agent's next natural turn. Ordinary scenes get neither —
+# fast clicking stays silent, exactly like a human watching over your
+# shoulder who only speaks when something happens.
+_MOMENT_KINDS = {"death", "boss"}
+_AWARENESS_KINDS = {"present", "letter", "loot"}
+
 
 class JoinIn(BaseModel):
     # module level, not inside register_routes: with postponed annotations
@@ -27,6 +43,44 @@ class JoinIn(BaseModel):
     # a query parameter.
     world_url: str = Field(default="", max_length=200)
     name_hint: str = Field(default="", max_length=32)
+
+
+class ActIn(BaseModel):
+    option: str = Field(default="", max_length=64)
+    text: str = Field(default="", max_length=200)
+    # Injected by the chat shell's bridge, not by the card itself.
+    conversation_id: str | None = Field(default=None, max_length=64)
+    message_id: str | None = Field(default=None, max_length=64)
+
+
+def _notify_agent(scene, conversation_id: str | None) -> None:
+    """Fire-and-forget sidekick reaction on notable beats. Never blocks the
+    click response — the card must feel like code, not like a model."""
+    kind = scene.event_kind
+    channel = ("moment" if kind in _MOMENT_KINDS
+               else "awareness" if kind in _AWARENESS_KINDS
+               else None)
+    if channel is None:
+        return
+    send = getattr(_ctx, "send_muted_message", None) if _ctx else None
+    if send is None:
+        return
+    from .plugin import _VOICE_RULES
+    content = (
+        "The player just advanced Linear Ascent by clicking the scene "
+        "card — the scene below is ALREADY on their screen as a card. "
+        "You are their shardmind sidekick, reacting to what just "
+        "happened.\n\n" + scene.to_text() + "\n\n" + _VOICE_RULES)
+    title = f"Linear Ascent — {kind or 'the world moved'}"
+
+    async def _fire():
+        try:
+            await send(title, content, channel=channel,
+                       conversation_id=conversation_id)
+        except Exception:
+            pass  # a lost whisper must never break the game loop
+
+    asyncio.get_running_loop().create_task(_fire())
 
 
 def _vault():
@@ -105,6 +159,41 @@ def register_routes(app, ctx: PluginContext) -> None:
                                  source="vault")
         return {"joined": True, "tenant": d["tenant"],
                 "existing": d.get("existing", False)}
+
+    @router.post("/act")
+    async def act(body: ActIn, user=Depends(get_current_user)) -> dict:
+        """The interactive-card game loop: apply the clicked option, post
+        the next scene as a standalone card, nudge the agent on big beats.
+        Stale/unknown options are handled by the engine itself (it returns
+        the current scene with a steering hint), so a click on an old card
+        still lands somewhere sensible."""
+        from .render import render_scene
+
+        key = runtime.player_key()
+        scene = await runtime.act_for(key, body.option.strip(),
+                                      body.text.strip())
+        posted = None
+        post_card = getattr(_ctx, "post_chat_card", None) if _ctx else None
+        if post_card is not None:
+            try:
+                posted = await post_card(
+                    render_scene(scene),
+                    conversation_id=body.conversation_id)
+            except Exception:
+                posted = None
+        if not posted:
+            # No card capability / no resolvable conversation: the click
+            # cannot show its result. Tell the bridge so the card can fall
+            # back to "reply with a number".
+            raise HTTPException(503, "host cannot post scene cards")
+        _notify_agent(scene, body.conversation_id)
+        return {
+            "ok": True,
+            "message_id": posted,
+            "scene_id": scene.scene_id,
+            "event_kind": scene.event_kind,
+            "headline": scene.headline,
+        }
 
     @router.post("/disconnect")
     async def disconnect(user=Depends(get_current_user)) -> dict:
