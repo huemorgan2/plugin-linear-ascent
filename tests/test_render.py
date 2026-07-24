@@ -7,6 +7,7 @@ from plugin_linear_ascent.render import render_scene, _banner_data_url
 def make_player():
     p = state.new_player("render-test")
     core.current_scene(p)
+    core.apply_choice(p, "begin")
     core.apply_choice(p, "halfling")
     core.apply_choice(p, "archer")
     core.apply_choice(p, "", "Renda")
@@ -50,5 +51,13 @@ def test_death_card_has_stripe():
 
 def test_all_referenced_banners_exist():
     for slug in ("roothollow", "forge", "medlab", "lodge", "vault", "stone",
-                 "gate", "greenreach", "death", "present", "gnarl"):
+                 "gate", "greenreach", "death", "present", "gnarl", "title"):
         assert _banner_data_url(slug), f"missing banner: {slug}"
+
+
+def test_intro_card_shows_title_art_at_own_size():
+    p = state.new_player("intro-render")
+    html = render_scene(core.current_scene(p))
+    assert "LINEAR ASCENT" in html
+    assert "aspect-ratio:320/200" in html               # title art, not 320x112
+    assert "data:image/png;base64" in html

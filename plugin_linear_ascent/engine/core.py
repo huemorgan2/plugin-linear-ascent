@@ -123,6 +123,8 @@ def _maybe_present(p: dict) -> Scene | None:
 # ── Scene builder (by stage/location) ────────────────────────────────────
 
 def _build_scene(p: dict) -> Scene:
+    if p["stage"] == "intro":
+        return _intro_scene(p)
     if p["stage"] == "creation_race":
         return _creation_race_scene(p)
     if p["stage"] == "creation_class":
@@ -153,6 +155,9 @@ def _boss_keep_scene(p: dict) -> Scene:
 
 
 def _dispatch(p: dict, oid: str) -> Scene:
+    if p["stage"] == "intro":
+        p["stage"] = "creation_race"
+        return _creation_race_scene(p)
     if p["stage"] == "creation_race":
         return _creation_pick_race(p, oid)
     if p["stage"] == "creation_class":
@@ -166,6 +171,33 @@ def _dispatch(p: dict, oid: str) -> Scene:
 
 
 # ── Creation ─────────────────────────────────────────────────────────────
+
+def _intro_scene(p: dict) -> Scene:
+    return Scene(
+        eyebrow="LINEAR ASCENT · THE STORY SO FAR",
+        headline="Climb the Ascent. Cast down the Demon King.",
+        support="One hundred floors between Roothollow and the throne.",
+        body_lines=[
+            "Aldervale was whole once — human river-ports, elven deep "
+            "woods, dwarven fusion-forges. Magic and machine were one "
+            "craft there. They called it aether.",
+            "Then Vharuk, the Demon King, rose from below. He did not "
+            "burn the world — he stole it: realm by realm, torn from the "
+            "ground and stacked into a tower of a hundred floors, welded "
+            "with black iron and chains of aether.",
+            "Every floor is a captured realm. On every floor a Warden "
+            "holds the lift. On the hundredth, in a citadel half throne "
+            "room, half reactor core, sits Vharuk himself.",
+            "At the tower's foot stands Roothollow, the last free "
+            "settlement — where every climber starts, and every dead "
+            "climber wakes. When a Warden falls, the lift opens for "
+            "everyone, and the names that did it are cut into the Stone "
+            "of the Climb.",
+        ],
+        options=[Option("begin", "Walk to the tower gate")],
+        banner="title",
+    )
+
 
 def _creation_race_scene(p: dict) -> Scene:
     return Scene(

@@ -28,10 +28,48 @@ _SHARED_RULES = (
     "plain words; map their words to the closest option id."
 )
 
+_VOICE_RULES = (
+    "VOICE: never repeat, summarize, or re-list anything visible on the "
+    "card, and never explain the options — the player can read. Say AT "
+    "MOST one short in-character sentence (two only for boss or death "
+    "moments). A short line is welcome when it adds something: a tactical "
+    "read when there is real signal, or a flavor beat in your own voice "
+    "when there is not. During repetitive beats — mid-fight grind, a "
+    "third routine encounter in a row, ordinary shopping — reply with an "
+    "EMPTY message; silence is correct there. Always have a line for big "
+    "beats: a new floor, a boss, near-death, a level-up, rare loot. "
+    "Examples — "
+    "GOOD tactical: 'Wounded and slow — one strike ends it.' "
+    "GOOD flavor: 'That smell again. Wardens.' "
+    "GOOD silence: [empty reply after an ordinary fight round]. "
+    "BAD: 'A dragon appeared! You can attack, defend, or run — what do "
+    "you want to do?' (never do this — it re-reads the card)."
+)
+
 _EMBED_RULES = (
     "The scene is ALREADY rendered as a card in the chat — do NOT repeat "
-    "the scene text. Add at most one short in-character shardmind line. "
-    "The player answers with a number or plain words. " + _SHARED_RULES)
+    "the scene text. " + _VOICE_RULES + " " + _SHARED_RULES)
+
+_CARD_RULES = (
+    "The scene card was ALREADY posted to the chat as its own message — "
+    "the player sees it without you. " + _VOICE_RULES + " " + _SHARED_RULES)
+
+
+def build_payload(scene: Scene, card_posted: bool) -> str:
+    """Tool-result JSON. When the host rendered the scene as a standalone
+    card (post_chat_card), the model gets only text + voice rules; else the
+    embed rides along in the result (stock-Luna fallback)."""
+    if card_posted:
+        return json.dumps({
+            "scene_text": scene.to_text(),
+            "instructions": _CARD_RULES,
+        })
+    from .render import render_scene
+    return json.dumps({
+        "scene_text": scene.to_text(),
+        "embed_iframe": render_scene(scene),
+        "instructions": _EMBED_RULES,
+    })
 
 
 class LinearAscentPlugin(LunaPlugin):
@@ -107,13 +145,21 @@ class LinearAscentPlugin(LunaPlugin):
                 pass
             return "owner"
 
-        def _payload(scene: Scene) -> str:
-            from .render import render_scene
-            return json.dumps({
-                "scene_text": scene.to_text(),
-                "embed_iframe": render_scene(scene),
-                "instructions": _EMBED_RULES,
-            })
+        # 056 host capability: post the scene as its OWN chat message
+        # (standalone card, no agent bubble). Feature-detected so stock
+        # Luna keeps the 0.2.x inline-embed behavior.
+        post_card = getattr(ctx, "post_chat_card", None)
+
+        async def _deliver(scene: Scene) -> str:
+            if post_card is not None:
+                try:
+                    from .render import render_scene
+                    posted = await post_card(render_scene(scene))
+                except Exception:
+                    posted = None
+                if posted:
+                    return build_payload(scene, card_posted=True)
+            return build_payload(scene, card_posted=False)
 
         async def _local_run(fn, *args) -> Scene:
             local = runtime.state["local"]
@@ -131,7 +177,7 @@ class LinearAscentPlugin(LunaPlugin):
                 scene = Scene.from_dict(await remote.scene(_user()))
             else:
                 scene = await _local_run(core.current_scene)
-            return _payload(scene)
+            return await _deliver(scene)
 
         async def ascent_choose(option: str = "", text: str = "") -> str:
             option, text = option.strip(), text.strip()
@@ -142,7 +188,7 @@ class LinearAscentPlugin(LunaPlugin):
             else:
                 scene = await _local_run(
                     lambda d: core.apply_choice(d, option, text))
-            return _payload(scene)
+            return await _deliver(scene)
 
         async def ascent_character() -> str:
             remote = runtime.state["remote"]
@@ -166,7 +212,10 @@ class LinearAscentPlugin(LunaPlugin):
                     "Linear Ascent: show the player's CURRENT game scene. "
                     "Safe to call anytime — it never changes game state. "
                     "Call this when the player wants to play, asks where "
-                    "they are, or after any confusion. " + _SHARED_RULES),
+                    "they are, or after any confusion. After the scene "
+                    "shows, reply with at most one short in-character "
+                    "line — or nothing at all; never restate the card. "
+                    + _SHARED_RULES),
                 parameters={"type": "object", "properties": {},
                             "required": []},
                 policy="auto_approve", risk_level="low"),
@@ -182,7 +231,10 @@ class LinearAscentPlugin(LunaPlugin):
                     "number the player typed (e.g. '2'). During character "
                     "naming pass `text` with the chosen name instead. The "
                     "engine refuses stale or unknown options with a "
-                    "steering hint — relay it. " + _SHARED_RULES),
+                    "steering hint — relay it. After the scene shows, "
+                    "reply with at most one short in-character line — or "
+                    "nothing at all; never restate the card. "
+                    + _SHARED_RULES),
                 parameters={
                     "type": "object",
                     "properties": {

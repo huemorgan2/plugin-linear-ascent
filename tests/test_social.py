@@ -7,6 +7,7 @@ from plugin_linear_ascent.engine import core, state
 def playing(name="Sosa", world=None):
     p = state.new_player(f"t:{name}")
     core.current_scene(p)
+    core.apply_choice(p, "begin")
     core.apply_choice(p, "human")
     core.apply_choice(p, "warrior")
     core.apply_choice(p, "", name)

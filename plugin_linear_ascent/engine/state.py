@@ -31,7 +31,7 @@ def new_player(luna_user: str) -> dict:
     return {
         "version": 1,
         "luna_user": luna_user,
-        "stage": "creation_race",      # creation_race → creation_class → creation_name → playing
+        "stage": "intro",              # intro → creation_race → creation_class → creation_name → playing
         "name": None, "race": None, "clazz": None,
         "level": 1, "xp": 0, "hp": economy.player_max_hp(1),
         "gold": 50, "bank": 0, "bank_day": world_day(),

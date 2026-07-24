@@ -36,12 +36,14 @@ _ART = os.path.join(os.path.dirname(os.path.abspath(__file__)),
 
 
 @lru_cache(maxsize=None)
-def _banner_data_url(slug: str) -> str | None:
-    for fname in (f"{slug}_320x112.png", f"{slug}_160x56.png"):
-        path = os.path.join(_ART, fname)
+def _banner_data_url(slug: str) -> tuple[str, int, int] | None:
+    """(data_url, width, height) for the slug's art, or None."""
+    for size in ("320x112", "160x56", "320x200"):
+        path = os.path.join(_ART, f"{slug}_{size}.png")
         if os.path.exists(path):
             b64 = base64.b64encode(open(path, "rb").read()).decode()
-            return f"data:image/png;base64,{b64}"
+            w, h = (int(n) for n in size.split("x"))
+            return f"data:image/png;base64,{b64}", w, h
     return None
 
 
@@ -72,11 +74,13 @@ def render_scene(scene: Scene) -> str:
 
     banner = _banner_data_url(scene.banner) if scene.banner else None
     if banner:
+        url, w, h = banner
         tint = _BANNER_TINT.get(scene.banner, DIM)
         parts.append(
             f'<div class="banner" style="background-color:{tint};'
-            f"-webkit-mask-image:url('{banner}');"
-            f"mask-image:url('{banner}');\"></div>")
+            f"aspect-ratio:{w}/{h};width:{w}px;"
+            f"-webkit-mask-image:url('{url}');"
+            f"mask-image:url('{url}');\"></div>")
 
     parts.append(f'<div class="eyebrow">{_e(scene.eyebrow)}</div>')
     parts.append(f'<div class="headline">{_e(scene.headline)}</div>')
@@ -122,7 +126,7 @@ html,body{{margin:0;padding:0;background:{INK};}}
  margin:8px;padding:12px 14px;color:{TEXT};
  font:14px/1.45 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
  max-width:62ch;}}
-.banner{{width:320px;max-width:100%;aspect-ratio:320/112;
+.banner{{max-width:100%;
  mask-size:contain;-webkit-mask-size:contain;mask-repeat:no-repeat;
  -webkit-mask-repeat:no-repeat;image-rendering:pixelated;
  margin-bottom:10px;}}
@@ -140,4 +144,20 @@ html,body{{margin:0;padding:0;background:{INK};}}
 .reply{{color:{DIM};font-size:11px;margin-top:6px;letter-spacing:.08em;}}
 .rail{{display:flex;gap:2ch;flex-wrap:wrap;border-top:1px solid {BORDER};
  margin-top:10px;padding-top:8px;color:{DIM};font-size:12px;}}
-</style></head><body><div class="card">{''.join(parts)}</div></body></html>"""
+</style></head><body><div class="card">{''.join(parts)}</div>
+<script>
+/* luna:embed:height — hosts that support it auto-size the iframe so the
+   card never scrolls internally; harmless where nobody listens. */
+(function () {{
+  function post() {{
+    try {{
+      parent.postMessage({{type: "luna:embed:height",
+        height: document.documentElement.scrollHeight}}, "*");
+    }} catch (e) {{}}
+  }}
+  if (window.ResizeObserver)
+    new ResizeObserver(post).observe(document.documentElement);
+  window.addEventListener("load", post);
+  post();
+}})();
+</script></body></html>"""

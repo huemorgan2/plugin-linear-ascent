@@ -16,14 +16,29 @@ def choose(p, option="", text=""):
 
 def create_character(p, race="human", clazz="warrior", name="Testa"):
     core.current_scene(p)
+    choose(p, "begin")
     choose(p, race)
     choose(p, clazz)
     choose(p, text=name)
     return p
 
 
+def test_intro_precedes_creation():
+    p = fresh()
+    s = core.current_scene(p)
+    assert p["stage"] == "intro"
+    assert s.banner == "title"
+    assert "Demon King" in s.headline
+    assert any("Roothollow" in line for line in s.body_lines)
+    # the only way forward is the gate
+    s = choose(p, "begin")
+    assert p["stage"] == "creation_race"
+
+
 def test_creation_flow_and_gates():
     p = fresh()
+    core.current_scene(p)
+    choose(p, "begin")
     s = core.current_scene(p)
     assert "shard" in s.headline.lower() or s.options
     # skipping ahead is refused with a steering hint
@@ -44,6 +59,7 @@ def test_creation_flow_and_gates():
 def test_numbered_fallback_resolves_positionally():
     p = fresh()
     core.current_scene(p)
+    choose(p, "1")                           # intro: begin
     s = choose(p, "1")                       # first race option
     assert p["stage"] == "creation_class"
 
