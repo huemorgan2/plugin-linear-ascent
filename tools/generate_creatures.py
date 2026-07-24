@@ -99,6 +99,12 @@ TIER_LIGHT = {
          "shadow at the edges."),
 }
 
+# Appended after the YAML prose — prose sometimes quotes signage
+# ("GRAND CHAMPION"), and the model will happily letter it.
+NO_TEXT = (" IMPORTANT: render any signs, banners, or lettering mentioned "
+           "above as illegible weathered marks — absolutely no readable "
+           "letters or words anywhere in the image.")
+
 DIM, VIOLET = "#8b93a7", "#8b5cf6"
 PANEL = (0x11, 0x15, 0x1F)
 
@@ -123,7 +129,7 @@ def load_jobs() -> list[dict]:
                 "slug": e["id"], "floor": floor, "size": BANNER,
                 "tint": DIM,
                 "prompt": (f"{STYLE}Creature: {e['name']}. {prose} "
-                           f"{light}"),
+                           f"{light}{NO_TEXT}"),
             })
         milestone = floor % 10 == 0
         prose = " ".join(d["warden"]["prose"].split())
@@ -132,7 +138,7 @@ def load_jobs() -> list[dict]:
             "floor": floor, "size": TALL if milestone else BANNER,
             "tint": VIOLET,
             "prompt": (f"{STYLE}Creature: {d['warden']['name']}, the floor "
-                       f"boss guarding the stair-gate. {prose} {light}"),
+                       f"boss guarding the stair-gate. {prose} {light}{NO_TEXT}"),
         })
     # keep first occurrence when an id repeats across floors
     seen, uniq = set(), []
