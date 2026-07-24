@@ -134,25 +134,30 @@ tool result), and the tool result returned to the model carries only
 
 ### C1. Rewrite the behavior contract (`_SHARED_RULES` / `_EMBED_RULES`)
 
-New rules, roughly:
+Revised 2026-07-24 — the sin is *redundancy*, not speech. The shardmind is
+a character; muting it would flatten the game. New rules, roughly:
 
 > The scene card is already visible to the player — never repeat, summarize,
-> or re-list anything on it. You are the player's shardmind sidekick, not a
-> narrator. After a scene, respond with AT MOST ONE short in-character
-> sentence, and ONLY if you add information the card cannot show: a tactical
-> read ("Wounded and slow — one strike ends it"), a warning ("We can't
-> survive two hits at 4 HP — the lodge first"), or a build synergy. If you
-> have nothing beyond what the card shows, reply with an empty message —
-> silence is correct and expected most of the time. Never explain the
-> options; the player can read.
+> or re-list anything on it, and never explain the options; the player can
+> read. You are the player's shardmind sidekick, not a narrator. After a
+> scene, say AT MOST one short in-character sentence (two only for
+> boss/death moments). A short line is usually welcome — either a tactical
+> read when there is real signal ("Wounded and slow — one strike ends it";
+> "We can't survive two hits at 4 HP — the lodge first") or a flavor beat
+> in your own voice when there isn't ("That smell again. Wardens."). Go
+> silent (empty reply) during repetitive beats — mid-fight grind, the third
+> encounter in a row, routine shopping — where any comment is noise. Always
+> have something for the big beats: a new floor, a boss, near-death, a
+> level-up, rare loot.
 
 - Also in `ascent_choose`'s description so the behavior binds at tool level.
 - Keep the "engine decides everything / map words to options" clauses.
 
 ### C2. Calibration examples in the instructions
 
-Include 3 miniature examples (good silence / good one-liner / bad
-narration) — models follow contrastive examples far better than adjectives.
+Include ~4 miniature examples (good tactical line / good flavor line / good
+silence / bad narration) — models follow contrastive examples far better
+than adjectives.
 
 ## Execution order & verification
 
@@ -165,8 +170,10 @@ narration) — models follow contrastive examples far better than adjectives.
 3. **C1 + C2**, then a dojo-style multi-turn playtest (real browser, real
    conversation — per `.cursor/skills/agent-live-walkthrough`):
    - creation → town → 3 fights → dragon-class encounter;
-   - assert: every agent chat bubble ≤ 1 sentence; at least one scene gets
-     pure silence (no bubble at all); no bubble re-lists card options;
+   - assert: every agent bubble ≤ 1 short sentence (≤ 2 on boss/death
+     beats); at least one repetitive scene gets pure silence (no bubble at
+     all); big beats always get a line; no bubble re-lists card options or
+     re-describes the scene;
    - assert cards survive a page reload (persisted rows, not stream-only).
 4. Unit tests: plugin suite for the payload fork (card-post vs fallback);
    Luna-side test for `post_chat_card` persistence + `kind` promotion.
