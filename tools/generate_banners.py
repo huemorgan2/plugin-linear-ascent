@@ -63,45 +63,63 @@ STYLE = (
 DIM, VIOLET, GOLD, RED = "#8b93a7", "#8b5cf6", "#f5a524", "#f4645f"
 SCENES: dict[str, tuple[str, str]] = {
     "roothollow": (
-        "a frontier village at night — shack rooflines on the horizon, one "
-        "colossal metal tower leg cutting the starry sky diagonally, big "
-        "moon with a gradient halo, thin radio antenna with a beacon, a dirt "
-        "path leading in through gradient ground haze.", DIM),
+        "a LIVELY frontier village at warm evening — shack rooflines with "
+        "many glowing gradient windows, one colossal metal tower leg "
+        "cutting the starry sky diagonally, big moon with a gradient halo, "
+        "and SMALL SILHOUETTED VILLAGERS everywhere: a group around a "
+        "cook-fire with a radial glow, neighbors talking on porches, kids "
+        "chasing each other up the dirt path, someone hauling a cart in, "
+        "chimney smoke drifting as soft dithered gradients.", DIM),
     "forge": (
-        "inside a blacksmith forge — an anvil silhouetted against a blazing "
-        "plasma arc whose glow falls off in a wide radial gradient, hanging "
-        "chains catching the light, a wall of tools fading into darkness, "
-        "gradient glow pooling on the floor.", DIM),
+        "inside a busy blacksmith forge — a broad-backed SMITH silhouette "
+        "mid-swing over the anvil against a blazing plasma arc whose glow "
+        "falls off in a wide radial gradient, an apprentice hauling the "
+        "bellows, two climber customers waiting by the tool wall with "
+        "weapons to mend, hanging chains catching the light, gradient "
+        "glow pooling on the floor around them.", DIM),
     "vault": (
-        "a massive round wheel-lock vault door set in a heavy stone face, "
-        "small keypad glowing with a soft gradient halo, coins scattered "
-        "across a counter in the foreground, top-left light raking the "
-        "stone in a smooth gradient.", DIM),
+        "a busy bank counter before a massive round wheel-lock vault door "
+        "set in a heavy stone face — a TELLER silhouette behind the "
+        "counter lamp counting coins into gradient lamplight, a short "
+        "QUEUE of climber silhouettes waiting with sacks and packs, "
+        "keypad glowing with a soft halo, top-left light raking the stone "
+        "in a smooth gradient.", DIM),
     "lodge": (
-        "a timber longhouse at night behind a palisade line, exactly one "
-        "window lit with warm gradient glow spilling onto the snow, chimney "
-        "smoke drifting as a soft dithered gradient into a starry sky.", DIM),
+        "a timber longhouse at night behind a palisade line, windows lit "
+        "with warm gradient glow spilling onto the snow, a band of "
+        "RETURNING HUNTERS trudging to the door dragging a sled, someone "
+        "holding the door open with lamplight flooding out in a wide "
+        "gradient wedge, chimney smoke drifting as a soft dithered "
+        "gradient into a starry sky.", DIM),
     "medlab": (
-        "an apothecary med-lab interior — shelves of flasks and bottles, an "
-        "IV stand, a cross sign on the wall, one hanging lamp casting a "
-        "wide gradient pool of light that dissolves into darkness at the "
-        "edges.", DIM),
+        "a busy apothecary med-lab interior — the APOTHECARY silhouette "
+        "bent over a bandaged climber on a cot, an assistant reaching "
+        "into shelves of flasks and bottles, a patient waiting on a "
+        "bench, an IV stand, a cross sign on the wall, one hanging lamp "
+        "casting a wide gradient pool of light over them that dissolves "
+        "into darkness at the edges.", DIM),
     "relay": (
-        "a radio relay station — tall lattice mast against a sky of "
-        "gradient cloud banks, a pair of dish antennas, a wall of "
-        "pigeonhole letter slots below, one blinking beacon with a glow "
+        "a radio relay station in use — tall lattice mast against a sky "
+        "of gradient cloud banks, a pair of dish antennas, the OPERATOR "
+        "silhouette at a lit desk window wearing headphones, a short "
+        "line of people below waiting at the wall of pigeonhole letter "
+        "slots, one handing a letter up, one blinking beacon with a glow "
         "halo.", DIM),
     "guildhall": (
-        "a medieval guildhall interior seen straight-on from the entrance: "
-        "a big round wooden table in the center foreground, cloth banners "
-        "hanging from timber crossbeams overhead, a hearth fire glowing on "
-        "the back wall with a radial gradient of light spreading across the "
+        "a CROWDED medieval guildhall interior seen straight-on from the "
+        "entrance: a big round wooden table in the center foreground "
+        "RINGED WITH ADVENTURERS leaning over a map arguing, one standing "
+        "and pointing, mugs raised near the hearth, cloth banners hanging "
+        "from timber crossbeams overhead, the hearth fire glowing on the "
+        "back wall with a radial gradient of light spreading across the "
         "floor toward the viewer, rafters dissolving into gradient shadow "
         "above.", DIM),
     "stone": (
         "a tall standing monolith engraved with glowing name-lines that "
-        "halo outward in a soft gradient, a small crowd of silhouetted "
-        "figures at its base, gradient dusk sky behind.", DIM),
+        "halo outward in a soft gradient, a GATHERED CROWD of silhouetted "
+        "figures at its base — one up on a ladder carving a new name, "
+        "others holding lanterns with small radial halos, a child on "
+        "shoulders pointing — gradient dusk sky behind.", DIM),
     "ascent": (
         "the whole Ascent seen from far away on a bright hopeful morning — "
         "one colossal megastructure tower of a hundred stacked stolen "
@@ -115,14 +133,28 @@ SCENES: dict[str, tuple[str, str]] = {
         "birds as sparse specks — luminous, optimistic, mostly light, all "
         "key elements inside the central horizontal band of the frame.", DIM),
     "gate": (
-        "a colossal tower gate — massive doorframe filling the frame, a "
-        "lift cage hanging inside, chains and one thick cable running out "
-        "of frame, gradient light streaming down from above through dust.", DIM),
+        "a colossal tower gate on a busy morning — massive doorframe "
+        "filling the frame, a lift cage hanging inside, chains and one "
+        "thick cable running out of frame, gradient light streaming down "
+        "from above through dust onto a CROWD of small climber "
+        "silhouettes: a queue boarding the lift with packs and spears, "
+        "porters hauling crates, a gate-keeper with a lantern waving the "
+        "next group through.", DIM),
     "greenreach": (
-        "a rolling night meadow — gradient sky from dense starlit dither "
-        "down to black, one dead tree, a distant floodlight tower sweeping "
-        "a wide gradient beam across the grass, a lone wolf silhouette on "
-        "the crest inside the beam.", DIM),
+        "a VAST rolling meadow at luminous dusk, mostly LIGHT — a huge "
+        "bright gradient sky filling the top half, sun low behind soft "
+        "cloud banks, hedgerow lines receding to a far horizon, a distant "
+        "floodlight tower sweeping a gradient beam across the grass, a "
+        "lone wolf silhouette on a crest, birds as sparse specks — open, "
+        "hopeful, the world feels enormous.", DIM),
+    "town_lamplit_steading": (
+        "a lively frontier gate-town street at warm lamplit dusk — timber "
+        "houses with glowing gradient windows either side, strings of "
+        "lanterns with soft radial halos crossing overhead, and SMALL "
+        "SILHOUETTED PEOPLE going about their evening: stall keepers under "
+        "awnings, two children chasing a dog, a traveler leading a mule, "
+        "chimney smoke drifting as dithered gradients into a bright dusk "
+        "sky, the tower gate looming far at the street's end.", DIM),
     "gnarl": (
         "a goblin warlord's throne room, throne CENTERED in frame: a "
         "throne built from stacked rifle crates, a fat crowned goblin "

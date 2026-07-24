@@ -7,9 +7,32 @@ never reach these functions (core.py dispatches).
 
 from __future__ import annotations
 
+import os
+
 from .. import economy
 from . import state
 from .scene import Meters, Option, Scene
+
+_CREATURES = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                          "..", "content", "art", "creatures")
+
+
+def _creature_art(slug: str) -> bool:
+    return any(os.path.exists(os.path.join(_CREATURES, f"{slug}_{s}.png"))
+               for s in ("320x112", "320x200"))
+
+
+def _opener_banner(e: dict, floor) -> str:
+    """Creature's own art if shipped (plan 005), else the old behavior."""
+    if e["kind"] == "warden":
+        if floor.floor % 10 == 0:  # milestone boss banners ship in banners/
+            return "gnarl" if floor.floor == 10 else floor.banner
+        slug = f"warden_{floor.floor:03d}"
+        return slug if _creature_art(slug) else ""
+    slug = e.get("id", "")
+    if slug and _creature_art(slug):
+        return slug
+    return floor.banner if e["kind"] == "wilds" else ""
 
 
 def meters(p: dict) -> Meters:
@@ -101,9 +124,7 @@ def fight_scene(p: dict, floor, opener: bool = False, note: str = "") -> Scene:
         body_lines=body,
         options=opts,
         meters=meters(p),
-        banner=(floor.banner if opener and e["kind"] == "wilds" else
-                ("gnarl" if e["kind"] == "warden" and floor.floor == 10 and opener
-                 else "")),
+        banner=_opener_banner(e, floor) if opener else "",
         event_kind="boss" if e["kind"] == "warden" else "",
     )
 

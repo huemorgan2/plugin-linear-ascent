@@ -36,21 +36,39 @@ OK = "#3ad29f"
 _STRIPE = {"loot": GOLD, "present": GOLD, "death": RED,
            "letter": AETHER, "boss": VIOLET}
 _HEADLINE = {"death": RED, "loot": GOLD, "present": GOLD}
-_BANNER_TINT = {"death": RED, "present": GOLD, "gnarl": VIOLET}
+_BOSS_SLUGS = {"gnarl", "skarn", "barrowking", "vyx", "cindermaw", "hrimgar",
+               "zephyra", "huntsman", "malgrim", "vharuk"}
+_BANNER_TINT = {"death": RED, "present": GOLD}
 
-_ART = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                    "content", "art", "banners")
+_ART_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                         "content", "art")
+_ART = os.path.join(_ART_ROOT, "banners")
+_CREATURES = os.path.join(_ART_ROOT, "creatures")
+
+
+def _banner_tint(slug: str) -> str:
+    if slug in _BANNER_TINT:
+        return _BANNER_TINT[slug]
+    if slug in _BOSS_SLUGS or slug.startswith("warden_"):
+        return VIOLET
+    return DIM
 
 
 @lru_cache(maxsize=None)
 def _banner_data_url(slug: str) -> tuple[str, int, int] | None:
-    """(data_url, width, height) for the slug's art, or None."""
-    for size in ("320x112", "160x56", "320x200"):
-        path = os.path.join(_ART, f"{slug}_{size}.png")
-        if os.path.exists(path):
-            b64 = base64.b64encode(open(path, "rb").read()).decode()
-            w, h = (int(n) for n in size.split("x"))
-            return f"data:image/png;base64,{b64}", w, h
+    """(data_url, width, height) for the slug's art, or None.
+
+    Creature art (encounters/wardens, plan 005) wins over the banner dir
+    so milestone bosses pick up their taller 320x200 art when it exists.
+    """
+    for art_dir, sizes in ((_CREATURES, ("320x200", "320x112")),
+                           (_ART, ("320x112", "160x56", "320x200"))):
+        for size in sizes:
+            path = os.path.join(art_dir, f"{slug}_{size}.png")
+            if os.path.exists(path):
+                b64 = base64.b64encode(open(path, "rb").read()).decode()
+                w, h = (int(n) for n in size.split("x"))
+                return f"data:image/png;base64,{b64}", w, h
     return None
 
 
@@ -189,7 +207,7 @@ def render_scene(scene: Scene) -> str:
     banner = _banner_data_url(scene.banner) if scene.banner else None
     if banner:
         url, w, h = banner
-        tint = _BANNER_TINT.get(scene.banner, DIM)
+        tint = _banner_tint(scene.banner)
         parts.append(
             f'<div class="banner" style="background-color:{tint};'
             f"aspect-ratio:{w}/{h};"
