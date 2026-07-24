@@ -53,16 +53,51 @@ def test_pvp_daily_cap():
                    for e in p.get("_effects", []))
 
 
-def test_letter_compose_flow():
+def test_letter_compose_flow_is_free():
     p = playing(world={"social": True, "letters": [], "names": ["Rilo"]})
     core.apply_choice(p, "relay")
+    s = core.current_scene(p)
+    write = [o for o in s.options if o.id == "write_Rilo"]
+    assert write and write[0].hint == "free"     # 004 §C.1: talking is free
     core.apply_choice(p, "write_Rilo")
     assert p["compose_to"] == "Rilo"
     gold = p["gold"]
     core.apply_choice(p, "", "Meet me on floor three at dusk.")
-    assert p["gold"] == gold - economy.LETTER_PRICE
+    assert p["gold"] == gold                     # LETTER_PRICE == 0
     fx = [e for e in p["_effects"] if e["kind"] == "send_letter"]
     assert fx and fx[0]["to_name"] == "Rilo"
+
+
+def test_muster_roll_lists_climbers():
+    p = playing(world={
+        "social": True, "frontier": 12, "roster_count": 31,
+        "roster": [
+            {"name": "Mara", "race": "elf", "clazz": "archer", "level": 21,
+             "power": 180, "floor": 21, "bank_rank": 1, "last_seen_days": 0},
+            {"name": "Rilo", "race": "dwarf", "clazz": "warrior", "level": 9,
+             "power": 70, "floor": 8, "bank_rank": 4, "last_seen_days": 3},
+        ]})
+    s = core.current_scene(p)
+    assert any(o.id == "muster" for o in s.options)
+    s = core.apply_choice(p, "muster")
+    assert "31 climbers" in s.headline
+    assert any("Mara" in l and "floor 21" in l for l in s.body_lines)
+    assert any("Rilo" in l and "3d ago" in l for l in s.body_lines)
+    s = core.apply_choice(p, "town")
+    assert p["location"] == "town"
+
+
+def test_death_and_first_clear_emit_happenings_in_world_mode():
+    p = playing(world={"social": True})
+    p["daily"]["death_save"] = True
+    core.apply_choice(p, "gate")
+    core.apply_choice(p, "floor_1")
+    core.apply_choice(p, "hunt")
+    p["hp"] = 1
+    p["encounter"]["atk"] = 999
+    core.apply_choice(p, "stand")
+    fx = [e for e in p["_effects"] if e["kind"] == "happening"]
+    assert fx and "fell to" in fx[0]["line"]
 
 
 def test_grant_burn_and_cap():

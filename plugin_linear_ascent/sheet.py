@@ -7,8 +7,13 @@ from .engine import state as pstate
 
 
 def character_sheet(p: dict) -> dict:
-    gear = {slot: (economy.FORGE[slug].name if slug else "—")
-            for slot, slug in p["gear"].items()}
+    def _piece(slot: str, slug: str | None) -> str:
+        if not slug:
+            return "—"
+        hone = pstate.hone_level(p, slot)
+        return economy.FORGE[slug].name + (f" (honed +{hone})" if hone else "")
+
+    gear = {slot: _piece(slot, slug) for slot, slug in p["gear"].items()}
     race = p.get("race") or ""
     return {
         "name": p["name"], "race": p["race"], "class": p["clazz"],

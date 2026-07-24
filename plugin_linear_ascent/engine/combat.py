@@ -161,7 +161,7 @@ def _level_ups(p: dict) -> list[str]:
 
 def _victory(p: dict, floor) -> Scene:
     e = p["encounter"]
-    fade = economy.fade_multiplier(p["level"], floor.floor)
+    fade = economy.fade_multiplier(p["unlocked_floor"], floor.floor)
     if e["kind"] == "warden":
         xp = round(economy.warden_xp(floor.floor) * fade)
         gold = round(economy.warden_gold(floor.floor) * fade)
@@ -188,6 +188,11 @@ def _victory(p: dict, floor) -> Scene:
             p["unlocked_floor"] = nxt
             first_clear = True
             lines.append(f"The lift grinds open. FLOOR {nxt} is yours to enter.")
+            if p.get("_world") is not None:
+                p.setdefault("_effects", []).append({
+                    "kind": "happening",
+                    "line": (f"{p.get('name') or 'A climber'} cast down "
+                             f"{e['name']} — floor {nxt} opens for them")})
         # guaranteed rare-loot roll
         loot = state.rng_pick(p, [(60, "trollblood_tonic"), (40, "luck_charm")])
         p["inventory"][loot] = p["inventory"].get(loot, 0) + 1
@@ -238,12 +243,25 @@ def _death(p: dict, floor) -> Scene:
             meters=meters(p),
             event_kind="death",
         )
-    lost_gold = p["gold"]
-    p["gold"] = 0
-    broken = [s for s in ("armor", "shield") if p["gear"].get(s)]
-    for slot in broken:
-        p["gear"][slot] = None
+    mercy = p["level"] <= economy.BEGINNER_MERCY_MAX_LEVEL
+    if mercy:
+        # 004 §A.2: a bad first hour can't spiral — keep armor and
+        # shield, lose only half the carried gold.
+        lost_gold = p["gold"] - p["gold"] // 2
+        p["gold"] //= 2
+        broken: list[str] = []
+    else:
+        lost_gold = p["gold"]
+        p["gold"] = 0
+        broken = [s for s in ("armor", "shield") if p["gear"].get(s)]
+        for slot in broken:
+            p["gear"][slot] = None
     _ledger(p, "death", gold=-lost_gold, note=e["name"])
+    if p.get("_world") is not None:
+        p.setdefault("_effects", []).append({
+            "kind": "happening",
+            "line": (f"{p.get('name') or 'A climber'} fell to a "
+                     f"{e['name']} on floor {floor.floor}")})
     p["encounter"] = None
     p["location"] = "town"
     p["floor"] = 0
@@ -253,6 +271,9 @@ def _death(p: dict, floor) -> Scene:
         lines.append(f"− ◈ {lost_gold} carried gold, gone")
     if broken:
         lines.append("▪ " + " and ".join(broken) + " destroyed")
+    if mercy:
+        lines.append("▪ your gear survives — the tower is gentler with "
+                     "the newly arrived")
     lines.append("Banked gold untouched. The Vault keeps its word.")
     return Scene(
         eyebrow="ROOTHOLLOW · THE SQUARE",
@@ -326,7 +347,7 @@ def resolve_fight_action(p: dict, floor, option_id: str) -> Scene:
     if option_id == "sleep_spell" and p.get("clazz") == "sorcerer":
         if not state.spend_mana(p, 2):
             return fight_scene(p, floor, note="Not enough aether — ✦ 2 needed.")
-        fade = economy.fade_multiplier(p["level"], floor.floor)
+        fade = economy.fade_multiplier(p["unlocked_floor"], floor.floor)
         xp = round(economy.xp_per_kill(floor.floor) * fade / 2)
         p["xp"] += xp
         _ledger(p, "sleep", xp=xp, note=e["name"])

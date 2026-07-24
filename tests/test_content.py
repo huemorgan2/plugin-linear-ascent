@@ -17,8 +17,10 @@ def test_every_floor_file_lints_clean():
 
 def test_numbers_are_computed_from_formulas():
     f5 = schema.get_floor(5)
-    assert (f5.monster_atk, f5.monster_def, f5.monster_hp) == (22, 15, 85)
-    assert (f5.warden_atk, f5.warden_def, f5.warden_hp) == (25, 20, 300)
+    assert (f5.monster_atk, f5.monster_def, f5.monster_hp) == \
+        economy.monster_stats(5)
+    assert (f5.warden_atk, f5.warden_def, f5.warden_hp) == \
+        economy.warden_stats(5)
 
 
 def test_floor10_is_milestone_gnarl():

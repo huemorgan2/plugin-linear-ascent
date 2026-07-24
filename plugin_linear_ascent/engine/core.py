@@ -18,6 +18,7 @@ from .scene import Meters, Option, Scene
 # ── Entry points ─────────────────────────────────────────────────────────
 
 def current_scene(p: dict) -> Scene:
+    state.ensure_current(p)
     state.touch_daily(p)
     ev = _pop_pending_event(p)
     if ev is not None:
@@ -27,6 +28,7 @@ def current_scene(p: dict) -> Scene:
 
 def apply_choice(p: dict, option_id: str, text: str = "") -> Scene:
     from . import social
+    state.ensure_current(p)
     state.touch_daily(p)
     p["last_seen"] = state.now().isoformat()
 
@@ -143,6 +145,7 @@ def _build_scene(p: dict) -> Scene:
         "gate_town": _gate_town_scene,
         "relay": social.relay_scene, "fields": social.fields_scene,
         "guildhall": social.guildhall_scene, "grants": social.grant_scene,
+        "muster": social.muster_scene,
         "boss_keep": _boss_keep_scene,
     }
     return builders.get(loc, _town_scene)(p)
@@ -291,6 +294,11 @@ def _town_scene(p: dict) -> Scene:
         opts.insert(6, Option("fields", "The fields", "pvp"))
         opts.insert(7, Option("guildhall", "The Guildhall",
                               p.get("guild") or "banners"))
+        climbers = w.get("roster_count", 0)
+        opts.insert(8, Option(
+            "muster", "The Muster Roll",
+            f"{climbers} climber{'s' if climbers != 1 else ''}"
+            if climbers else "climbers"))
     return Scene(
         eyebrow="ROOTHOLLOW · THE SQUARE",
         headline=f"Roothollow — floor {max(1, p['unlocked_floor'])} is the "
@@ -313,7 +321,7 @@ def _dispatch_location(p: dict, oid: str) -> Scene:
         p["floor"] = 0
         return _town_scene(p)
     town_menus = ("forge", "medlab", "lodge", "vault", "pawn", "stone",
-                  "gate", "relay", "fields", "guildhall")
+                  "gate", "relay", "fields", "guildhall", "muster")
     if loc == "town" and oid in town_menus:
         p["location"] = oid
         return _build_scene(p)
@@ -366,6 +374,21 @@ def _forge_scene(p: dict) -> Scene:
         flavor = f", {g.flavor}" if g.flavor else ""
         lines.append(
             f"{g.name}{flavor} — {g.slot} +{g.bonus}{owned}")
+    cap = economy.max_hone(p["unlocked_floor"])
+    price = economy.hone_price(p["unlocked_floor"])
+    for slot in economy.HONE_SLOTS:
+        slug = p["gear"].get(slot)
+        lvl = state.hone_level(p, slot)
+        if slug and lvl < cap:
+            name = economy.FORGE[slug].name
+            opts.append(Option(f"hone_{slot}", f"Hone {name} +{lvl + 1}",
+                               f"◈ {price:,}"))
+    if cap > 0:
+        honed = ", ".join(
+            f"{slot} +{state.hone_level(p, slot)}"
+            for slot in economy.HONE_SLOTS if state.hone_level(p, slot))
+        lines.append(f"Honing bench: up to +{cap} per piece this band"
+                     + (f" — yours: {honed}" if honed else ""))
     opts.append(Option("back", "Back to the square"))
     return Scene(
         eyebrow="ROOTHOLLOW · THE FORGE",
@@ -378,7 +401,31 @@ def _forge_scene(p: dict) -> Scene:
     )
 
 
+def _forge_hone(p: dict, slot: str) -> Scene:
+    slug = p["gear"].get(slot)
+    cap = economy.max_hone(p["unlocked_floor"])
+    lvl = state.hone_level(p, slot)
+    if not slug or lvl >= cap:
+        return _forge_scene(p)
+    price = economy.hone_price(p["unlocked_floor"])
+    if p["gold"] < price:
+        s = _forge_scene(p)
+        s.shard_note = (f"A honing pass costs ◈ {price:,}; you carry "
+                        f"◈ {p['gold']:,}.")
+        return s
+    p["gold"] -= price
+    p["hone"][slot] = lvl + 1
+    combat._ledger(p, "hone", gold=-price, note=f"{slot} +{lvl + 1}")
+    s = _forge_scene(p)
+    s.body_lines.insert(0, (f"+ {economy.FORGE[slug].name} honed to "
+                            f"+{lvl + 1} — the edge sings on the stone"))
+    return s
+
+
 def _forge_buy(p: dict, oid: str) -> Scene:
+    if oid.startswith("hone_") and oid.removeprefix("hone_") in \
+            economy.HONE_SLOTS:
+        return _forge_hone(p, oid.removeprefix("hone_"))
     slug = oid.removeprefix("buy_")
     g = economy.FORGE.get(slug)
     if not g:
@@ -391,6 +438,7 @@ def _forge_buy(p: dict, oid: str) -> Scene:
     old = p["gear"].get(g.slot)
     p["gold"] -= g.price
     p["gear"][g.slot] = g.slug
+    p["hone"][g.slot] = 0            # honing lives on the item it honed
     note = f"+ {g.name} equipped ({g.slot} +{g.bonus})"
     if old and economy.FORGE[old].price > 0:
         p["inventory"][old] = p["inventory"].get(old, 0) + 1

@@ -55,10 +55,16 @@ def player_max_hp(level: int) -> int:
 
 
 # ── §3 Monsters, XP, gold ────────────────────────────────────────────────
+# 004 retune: monster ATK slope 4.0 → 3.3 keeps at-level wilds fights under
+# 40% of the HP pool on every floor once gear honing (below) is in play.
+
+MONSTER_ATK_SLOPE = 3.3
+BAND_INCOME_JUMP = 1.2         # gold/kill ×1.2 per gear band (004 §4.5)
+
 
 def monster_stats(floor: int) -> tuple[int, int, int]:
     """(ATK, DEF, HP) for a regular monster on `floor`."""
-    return 4 * floor + 2, 3 * floor, 12 * floor + 25
+    return round(MONSTER_ATK_SLOPE * floor) + 2, 3 * floor, 12 * floor + 25
 
 
 def xp_per_kill(floor: int) -> int:
@@ -66,7 +72,16 @@ def xp_per_kill(floor: int) -> int:
 
 
 def gold_per_kill(floor: int) -> int:
-    return 8 * floor           # ±50% applied by the roller
+    """Base gold per kill; the same work pays visibly better each band."""
+    tier = gear_tier_for_floor(floor)
+    return round(8 * floor * BAND_INCOME_JUMP ** (tier - 1))
+
+
+def daily_income(floor: int) -> int:
+    """Design estimate of net gold per day of at-level hunting on `floor`
+    (≈30 fights, healer's tent after most of them). Anchors hone prices
+    and the tier price ladder — not paid to anyone directly."""
+    return round((gold_per_kill(floor) - 2 * floor * 0.8) * 30)
 
 
 def xp_need(level: int) -> int:
@@ -74,19 +89,67 @@ def xp_need(level: int) -> int:
     return round(60 * level ** 1.5)
 
 
-def fade_multiplier(level: int, floor: int) -> float:
-    """Fighting >5 floors below level fades rewards, floor 0.25."""
-    gap = level - floor - 5
+def fade_multiplier(unlocked_floor: int, floor: int) -> float:
+    """Farming >5 floors below your own frontier fades rewards (floor
+    0.25). 004 §4.2: keyed to floor progress, never to level — being
+    over-leveled on your frontier floor always pays in full."""
+    gap = unlocked_floor - floor - 5
     if gap <= 0:
         return 1.0
     return max(0.25, 1.0 - 0.1 * gap)
 
 
 # ── §5 Wardens ───────────────────────────────────────────────────────────
+# 004 §4.1: wardens are derived from the at-level player model (current
+# tier set + full hone) so "soloable at-level" holds by construction:
+# win 65–85% through floor 30, then HP/ATK ramps fade solo odds smoothly
+# toward "bring friends" (<10% well before floor 50).
+
+WARDEN_HP_MULT = 1.9           # × monster HP → a real boss fight (~12 rounds)
+WARDEN_DMG_BUDGET = 1.07       # expected damage dealt ÷ player pool
+WARDEN_SOFT_FLOOR = 30         # last floor tuned for solo play
+WARDEN_HP_RAMP = 40            # HP ×(1+(F−30)/40) past the soft floor
+WARDEN_ATK_RAMP = 100          # ATK ×(1+(F−30)/100) past the soft floor
+
+
+REFERENCE_HONE_LAG = 2         # honing trails the climb by ~2 floors
+
+
+def reference_hone(floor: int) -> int:
+    """Hone level of the design's at-level player: honing trails the
+    climb slightly (income funds it with a lag, and fresh climbers in
+    band 1 are still finding the bench)."""
+    return max(0, floor - band_start(gear_tier_for_floor(floor))
+               - REFERENCE_HONE_LAG)
+
+
+def _at_level_loadout(floor: int) -> tuple[int, int]:
+    """(ATK, DEF) of the design's at-level player: level = floor, current
+    tier set, honing 2 floors behind. The reference all tuning points at."""
+    tier = gear_tier_for_floor(floor)
+    hone = reference_hone(floor)
+    return (3 * floor + 8 * tier + hone,
+            2 * floor + 5 * tier + 7 * tier + 2 * hone)
+
 
 def warden_stats(floor: int) -> tuple[int, int, int]:
-    """Regular Warden (floors ending 1–9), soloable at-level."""
-    return 5 * floor, 4 * floor, 60 * floor
+    """Regular Warden (floors not ending in 0), soloable at-level."""
+    p_atk, p_def = _at_level_loadout(floor)
+    _, m_def, m_hp = monster_stats(floor)
+    hp = round(m_hp * WARDEN_HP_MULT)
+    if floor > WARDEN_SOFT_FLOOR:
+        hp = round(hp * (1 + (floor - WARDEN_SOFT_FLOOR) / WARDEN_HP_RAMP))
+    p_dmg = max(1, round(0.75 * p_atk) - m_def // 2)
+    rounds = max(3, hp // p_dmg)
+    # floors 1–5 ramp in gently: fresh climbers reach these gates with
+    # partial kits (the first with the bare shiv), and the first hour
+    # must never be a coin flip.
+    budget = WARDEN_DMG_BUDGET * min(1.0, 0.5 + 0.1 * floor)
+    per_round = budget * player_max_hp(floor) / rounds
+    atk = round((per_round + p_def // 2) / 0.75)
+    if floor > WARDEN_SOFT_FLOOR:
+        atk = round(atk * (1 + (floor - WARDEN_SOFT_FLOOR) / WARDEN_ATK_RAMP))
+    return atk, m_def, hp
 
 
 def warden_xp(floor: int) -> int:
@@ -140,6 +203,9 @@ class GearItem:
     price: int
 
 
+# 004 §4.4 reprice: tiers 3–10 follow the quadratic ladder
+# set(T) ≈ 2·(T−1) days of mid-band tier-(T−1) income, so days-in-tier
+# (set + honing) lands on the 6→24 line without requiring the bank meta.
 _FORGE_ROWS = [
     # tier, weapon(name, flavor, +ATK), shield, armor, prices (w, s, a)
     (1, ("Pigsticker", "scrap-steel shiv", 8),
@@ -150,28 +216,28 @@ _FORGE_ROWS = [
         (800, 320, 640)),
     (3, ("Emberfang", "dwarf-forged plasma axe", 24),
         ("Dwarven Wall", "powered tower shield", 15), ("Chain Hauberk", "", 21),
-        (2_500, 1_000, 2_000)),
+        (6_500, 2_600, 5_200)),
     (4, ("Thornsong", "elven mono-edge blade", 32),
         ("Elfmirror", "light-bending", 20), ("Silverthread Mail", "", 28),
-        (7_500, 3_000, 6_000)),
+        (20_000, 8_000, 16_500)),
     (5, ("Oathkeeper", "knight's arc-blade", 40),
         ("Drakescale Barrier", "", 25), ("Wyrmhide Coat", "", 35),
-        (22_000, 9_000, 18_000)),
+        (47_000, 18_500, 37_500)),
     (6, ("Grimcleaver", "giant-slaying thunder maul", 48),
         ("Frostguard", "cold-field emitter", 30), ("Dwarven Powerplate", "", 42),
-        (60_000, 24_000, 48_000)),
+        (92_000, 36_500, 74_000)),
     (7, ("Starfall", "storm-cell saber", 56),
         ("Stormwarden's Aegis", "deflector", 35), ("Stormforged Plate", "", 49),
-        (160_000, 64_000, 130_000)),
+        (165_000, 65_000, 132_000)),
     (8, ("Duskrender", "phase-etched glaive", 64),
         ("Gloomturner", "cloak-field", 40), ("Nightweave Harness", "", 56),
-        (420_000, 170_000, 340_000)),
+        (277_000, 110_000, 222_000)),
     (9, ("Kingsbane", "demon-steel railblade", 72),
         ("Hellgate Bulwark", "", 45), ("Demonbone Panoply", "", 63),
-        (1_100_000, 440_000, 880_000)),
+        (443_000, 175_000, 356_000)),
     (10, ("Dawnbreaker", "fusion-core blade — the last light of Aldervale", 80),
          ("The Unbroken", "", 50), ("Aegis of the Vale", "", 70),
-         (2_800_000, 1_100_000, 2_200_000)),
+         (685_000, 271_000, 550_000)),
 ]
 
 
@@ -210,6 +276,30 @@ def gear_tier_for_floor(floor: int) -> int:
     return min(10, (floor - 1) // 10 + 1)
 
 
+def band_start(tier: int) -> int:
+    """First floor of a gear band: tier 1 → 1, tier 2 → 11, …"""
+    return (tier - 1) * 10 + 1
+
+
+# ── §6b Gear honing (004 §4.3) ───────────────────────────────────────────
+# The Forge hones each equipped piece +1 per unlocked floor past the band
+# start — turning the +8 tier step into small per-floor steps and adding a
+# linear gold sink. Hone levels live on the equipped item (reset on buy).
+
+HONE_SLOTS = ("weapon", "shield", "armor")
+HONE_PRICE_PCT = 0.15          # of a frontier day's income, per hone
+
+
+def max_hone(unlocked_floor: int) -> int:
+    """Hone cap: +1 per unlocked floor past the current band's start."""
+    return max(0, unlocked_floor - band_start(
+        gear_tier_for_floor(unlocked_floor)))
+
+
+def hone_price(unlocked_floor: int) -> int:
+    return max(5, round(HONE_PRICE_PCT * daily_income(unlocked_floor)))
+
+
 # ── §6 Apothecary & Medlab ───────────────────────────────────────────────
 
 @dataclass(frozen=True)
@@ -241,6 +331,8 @@ LODGE_PRICE_PER_LEVEL = 10          # gold per night
 PVP_ATTACKS_PER_DAY = 2
 PVP_XP_BOUNTY_PCT = 0.05            # of victim's level XP need
 BEGINNER_PROTECTION_MAX_LEVEL = 5
+BEGINNER_MERCY_MAX_LEVEL = 3        # 004 §A.2: PvE death keeps armor,
+VAULT_APOLOGY_GOLD = 100            #   takes half gold at levels 1–3
 PRESENT_AWAY_HOURS = 20
 
 # present table: (weight, kind)
@@ -258,8 +350,8 @@ PRESENT_TABLE = [
 GRANT_BURN_PCT = 0.10
 GRANT_DAILY_CAP_PER_LEVEL = 150
 GRANT_MIN_RECEIVER_LEVEL = 5
-LETTER_PRICE = 5
-BOARD_PRICE = 25
+LETTER_PRICE = 0        # 004 §C.1: talking is free if collaboration is the game
+BOARD_PRICE = 10
 
 
 # ── Races & classes ──────────────────────────────────────────────────────

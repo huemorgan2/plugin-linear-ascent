@@ -38,6 +38,7 @@ def new_player(luna_user: str) -> dict:
         "floor": 0, "location": "town",
         "gear": {"weapon": economy.STARTER_WEAPON.slug,
                  "shield": None, "armor": None},
+        "hone": {s: 0 for s in economy.HONE_SLOTS},
         "inventory": {},
         "energy_ts": ts, "energy_val": float(economy.ENERGY_BASE_CAP),
         "mana_ts": ts, "mana_val": float(economy.MANA_BASE_CAP),
@@ -120,14 +121,49 @@ def gain_mana(p: dict, amount: int, at: dt.datetime | None = None) -> None:
     p["mana_ts"] = at.isoformat()
 
 
+# ── Doc upgrades (lazy migration on load — 004 §A.1) ─────────────────────
+
+def ensure_current(p: dict) -> None:
+    """Upgrade an older player document in place. Runs at every engine
+    entry point, so docs created before a fix are healed on any backend
+    (local plugin DB and worldd alike) the next time they're touched."""
+    p.setdefault("hone", {s: 0 for s in economy.HONE_SLOTS})
+    if p["gear"].get("weapon") is None:
+        # pre-c4ab270 doc: never received the free starter weapon.
+        p["gear"]["weapon"] = economy.STARTER_WEAPON.slug
+        if p.get("stage") == "playing":
+            from .scene import Option, Scene
+            p["gold"] += economy.VAULT_APOLOGY_GOLD
+            p.setdefault("pending_events", []).insert(0, Scene(
+                eyebrow="ROOTHOLLOW · A LETTER FROM THE VAULT",
+                headline="The Vault owes you an apology",
+                support="Sealed in gray wax: the gate armory shorted your "
+                        "kit on arrival.",
+                shard_note="Take it. Institutions apologize so rarely.",
+                body_lines=[
+                    "▪ a Rusted Shiv, gate-issue — yours all along",
+                    f"+ ◈ {economy.VAULT_APOLOGY_GOLD} for the trouble",
+                ],
+                options=[Option("town", "Pocket it and move on")],
+                event_kind="present",
+            ).to_dict())
+
+
 # ── Derived stats ────────────────────────────────────────────────────────
+
+def hone_level(p: dict, slot: str) -> int:
+    return int((p.get("hone") or {}).get(slot, 0))
+
 
 def gear_bonus(p: dict, slot: str) -> int:
     slug = p["gear"].get(slot)
     if not slug:
-        return 0
+        # a doc can never be bare-handed again: an empty weapon slot
+        # fights with the gate-issue shiv (004 §A.1 defensive floor).
+        return economy.STARTER_WEAPON.bonus if slot == "weapon" else 0
     item = economy.FORGE.get(slug)
-    return item.bonus if item else 0
+    base = item.bonus if item else 0
+    return base + hone_level(p, slot)
 
 
 def atk(p: dict) -> int:

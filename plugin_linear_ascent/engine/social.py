@@ -43,11 +43,12 @@ def relay_scene(p: dict, note: str = "") -> Scene:
     opts = []
     if any(l.get("gold") for l in letters):
         opts.append(Option("collect", "Collect the enclosed gold"))
+    price_note = (f"◈ {economy.LETTER_PRICE}" if economy.LETTER_PRICE
+                  else "free")
     targets = w.get("names", [])[:6]
     for t in targets:
         if t != p.get("name"):
-            opts.append(Option(f"write_{t}", f"Write to {t}",
-                               f"◈ {economy.LETTER_PRICE}"))
+            opts.append(Option(f"write_{t}", f"Write to {t}", price_note))
     opts.append(Option("town", "Back to the square"))
     return Scene(
         eyebrow="ROOTHOLLOW · THE RELAY OFFICE",
@@ -94,6 +95,38 @@ def relay_compose(p: dict, text: str) -> Scene:
     _ledger(p, "letter", gold=-economy.LETTER_PRICE, note=f"to {target}")
     _effect(p, "send_letter", to_name=target, body=body)
     return relay_scene(p, note=f"+ sealed and slotted for {target}")
+
+
+# ── The Muster Roll (004 §C.2 — every climber, on one board) ────────────
+
+def muster_scene(p: dict, note: str = "") -> Scene:
+    w = world(p) or {}
+    roster = w.get("roster", [])
+    count = w.get("roster_count", len(roster))
+    frontier = w.get("frontier", p["unlocked_floor"])
+    lines = [note] if note else []
+    for r in roster[:12]:
+        me = " ← you" if r.get("name") == p.get("name") else ""
+        seen = r.get("last_seen_days", 0)
+        seen_txt = ("today" if seen <= 0 else
+                    f"{seen}d ago" if seen < 30 else "long gone")
+        lines.append(
+            f"{r.get('name', '?')} — {r.get('race', '?')} "
+            f"{r.get('clazz', '?')}, L{r.get('level', 1)} · "
+            f"power {r.get('power', 0)} · floor {r.get('floor', 1)} · "
+            f"wealth #{r.get('bank_rank', '?')} · {seen_txt}{me}")
+    if not roster:
+        lines.append("The board is freshly sanded. Yours could be the "
+                     "first name on it.")
+    return Scene(
+        eyebrow="ROOTHOLLOW · THE MUSTER ROLL",
+        headline=f"{count} climber{'s' if count != 1 else ''} on the Ascent",
+        support=f"Every name on this board is climbing the same tower. "
+                f"The frontier stands at floor {frontier}.",
+        body_lines=lines,
+        options=[Option("town", "Back to the square")],
+        meters=meters(p),
+    )
 
 
 # ── The fields (PvP) ─────────────────────────────────────────────────────

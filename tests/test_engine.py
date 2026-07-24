@@ -83,6 +83,7 @@ def test_wilds_fight_costs_energy_and_resolves():
 def test_death_consequences_and_death_save():
     p = create_character(fresh())
     p["daily"]["death_save"] = True          # spend the save first
+    p["level"] = 4                           # past beginner mercy
     p["gold"] = 500
     p["gear"]["armor"] = "padded_jerkin"
     p["gear"]["shield"] = "scrapwood_buckler"
@@ -99,6 +100,77 @@ def test_death_consequences_and_death_save():
     assert p["gear"]["weapon"] == "pigsticker"   # weapon survives
     assert p["location"] == "town"
     assert s.event_kind == "death"
+
+
+def test_beginner_death_mercy_keeps_gear_and_half_gold():
+    # 004 §A.2: levels 1–3 keep armor/shield and lose only half gold
+    p = create_character(fresh())
+    p["daily"]["death_save"] = True
+    p["gold"] = 500
+    p["gear"]["armor"] = "padded_jerkin"
+    p["gear"]["shield"] = "scrapwood_buckler"
+    choose(p, "gate")
+    choose(p, "floor_1")
+    choose(p, "hunt")
+    p["hp"] = 1
+    p["encounter"]["atk"] = 999
+    s = choose(p, "stand")
+    assert p["gold"] == 250                  # half kept
+    assert p["gear"]["armor"] == "padded_jerkin"      # gear survives
+    assert p["gear"]["shield"] == "scrapwood_buckler"
+    assert s.event_kind == "death"
+
+
+def test_backfill_heals_bare_handed_doc_with_apology():
+    # 004 §A.1: docs from before the starter shiv are healed on load
+    p = create_character(fresh())
+    p["gear"]["weapon"] = None
+    del p["hone"]
+    gold = p["gold"]
+    s = core.current_scene(p)
+    assert p["gear"]["weapon"] == economy.STARTER_WEAPON.slug
+    assert p["gold"] == gold + economy.VAULT_APOLOGY_GOLD
+    assert p["hone"] == {slot: 0 for slot in economy.HONE_SLOTS}
+    assert "Vault" in s.eyebrow or "Vault" in s.headline   # apology letter
+
+
+def test_bare_hands_impossible_via_gear_bonus_floor():
+    p = create_character(fresh())
+    p["gear"]["weapon"] = None               # even if a doc slips through
+    assert state.gear_bonus(p, "weapon") == economy.STARTER_WEAPON.bonus
+
+
+def test_honing_buy_flow_and_reset_on_purchase():
+    p = create_character(fresh())
+    p["gold"] = 10_000
+    p["unlocked_floor"] = 3                  # cap = 2 this band
+    choose(p, "forge")
+    choose(p, "buy_pigsticker")
+    s = choose(p, "hone_weapon")
+    assert p["hone"]["weapon"] == 1
+    assert state.gear_bonus(p, "weapon") == 8 + 1
+    choose(p, "hone_weapon")
+    assert p["hone"]["weapon"] == 2
+    s = choose(p, "hone_weapon")             # at cap — refused
+    assert p["hone"]["weapon"] == 2
+    choose(p, "buy_pigsticker")              # re-buy resets the hone
+    assert p["hone"]["weapon"] == 0
+
+
+def test_fade_no_longer_punishes_overleveling_on_frontier():
+    p = create_character(fresh())
+    p["level"] = 30                          # wildly over-leveled
+    p["unlocked_floor"] = 1
+    choose(p, "gate")
+    choose(p, "floor_1")
+    choose(p, "hunt")
+    p["encounter"]["hp"] = 1                 # next hit kills
+    xp_before = p["xp"]
+    gold_before = p["gold"]
+    choose(p, "attack")
+    # full rewards at the frontier despite the level gap
+    assert p["xp"] - xp_before >= round(economy.xp_per_kill(1) * 0.75)
+    assert p["gold"] > gold_before
 
 
 def test_death_save_fires_once_per_day():
