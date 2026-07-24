@@ -143,11 +143,14 @@ def test_bare_hands_impossible_via_gear_bonus_floor():
 def test_honing_buy_flow_and_reset_on_purchase():
     p = create_character(fresh())
     p["gold"] = 10_000
+    p["xp"] = 50                             # 006: honing burns ✦ too
     p["unlocked_floor"] = 3                  # cap = 2 this band
+    hone_xp = economy.hone_xp(3)
     choose(p, "forge")
     choose(p, "buy_pigsticker")
     s = choose(p, "hone_weapon")
     assert p["hone"]["weapon"] == 1
+    assert p["xp"] == 50 - hone_xp           # ✦ charged alongside gold
     assert state.gear_bonus(p, "weapon") == 8 + 1
     choose(p, "hone_weapon")
     assert p["hone"]["weapon"] == 2
@@ -155,6 +158,19 @@ def test_honing_buy_flow_and_reset_on_purchase():
     assert p["hone"]["weapon"] == 2
     choose(p, "buy_pigsticker")              # re-buy resets the hone
     assert p["hone"]["weapon"] == 0
+
+
+def test_honing_refused_without_xp():
+    p = create_character(fresh())
+    p["gold"] = 10_000
+    p["xp"] = 0
+    p["unlocked_floor"] = 3
+    choose(p, "forge")
+    gold_before = p["gold"]
+    s = choose(p, "hone_weapon")
+    assert p["hone"]["weapon"] == 0          # atomic refusal:
+    assert p["gold"] == gold_before          # neither currency charged
+    assert "✦" in s.shard_note
 
 
 def test_fade_no_longer_punishes_overleveling_on_frontier():
@@ -256,3 +272,106 @@ def test_encounter_carries_id_for_creature_art():
     assert p["encounter"]["id"] in {"grey_wolf", "feral_boar",
                                     "goblin_straggler"}
     assert s.banner == p["encounter"]["id"]      # floor-1 art is shipped
+
+
+# ── 006: the XP pool replaces mana ───────────────────────────────────────
+
+def test_spend_xp_floors_at_zero_and_never_touches_level():
+    p = create_character(fresh())
+    p["level"], p["xp"] = 5, 10
+    assert state.spend_xp(p, 11) is False
+    assert (p["level"], p["xp"]) == (5, 10)      # refusal changes nothing
+    assert state.spend_xp(p, 10) is True
+    assert (p["level"], p["xp"]) == (5, 0)
+
+
+def test_sleep_spell_burns_kill_xp_and_awards_nothing():
+    p = create_character(fresh(), clazz="sorcerer")
+    cost = economy.sleep_xp_cost(1)
+    p["xp"] = cost + 5
+    choose(p, "gate")
+    choose(p, "floor_1")
+    choose(p, "hunt")
+    s = choose(p, "sleep_spell")
+    assert p["encounter"] is None                # fight skipped
+    assert p["xp"] == 5                          # cost burned, nothing awarded
+    assert p["level"] == 1
+    # broke sorcerer: refusal keeps the fight alive and the pool intact
+    p["xp"] = cost - 1
+    choose(p, "hunt")
+    s = choose(p, "sleep_spell")
+    assert p["encounter"] is not None
+    assert p["xp"] == cost - 1
+    assert "✦" in "\n".join(s.body_lines)
+
+
+def test_scan_prefers_charges_then_falls_back_to_xp():
+    p = create_character(fresh())
+    choose(p, "gate")
+    choose(p, "floor_1")
+    choose(p, "hunt")
+    scan_cost = economy.scan_xp_cost(1)
+    p["sidekick"]["scout_charges"] = 1
+    p["xp"] = scan_cost
+    s = choose(p, "scout")
+    assert p["sidekick"]["scout_charges"] == 0
+    assert p["xp"] == scan_cost                  # charge used, ✦ untouched
+    s = choose(p, "scout")                       # falls back to the pool
+    assert p["xp"] == 0
+    assert "scan" in "\n".join(s.body_lines)
+    s = choose(p, "scout")                       # broke: refused, fight lives
+    assert p["encounter"] is not None
+    assert "✦" in "\n".join(s.body_lines)
+
+
+def test_forge_tier_gated_by_level():
+    p = create_character(fresh())
+    p["gold"] = 100_000
+    p["unlocked_floor"] = 11                     # tier-2 stock, level 11 req
+    choose(p, "forge")
+    s = choose(p, "buy_wolfbite")
+    assert p["gear"]["weapon"] != "wolfbite"     # refused at level 1
+    assert p["gold"] == 100_000                  # not charged
+    assert "level 11" in s.shard_note
+    p["level"] = 11
+    choose(p, "buy_wolfbite")
+    assert p["gear"]["weapon"] == "wolfbite"
+
+
+def test_floor_gated_by_level():
+    p = create_character(fresh())
+    p["unlocked_floor"] = 40                     # world lift far ahead
+    choose(p, "gate")
+    s = choose(p, "floor_12")                    # needs level 2, we are 1
+    assert p["floor"] == 0
+    assert "level" in s.shard_note
+    s = choose(p, "floor_11")                    # F−10 = 1: allowed
+    assert p["floor"] == 11
+
+
+def test_elf_learns_faster():
+    p = create_character(fresh(), race="elf")
+    choose(p, "gate")
+    choose(p, "floor_1")
+    choose(p, "hunt")
+    p["encounter"]["hp"] = 1
+    choose(p, "attack")
+    # base 12 ±25% then ×1.05: minimum possible is round(round(12·0.75)·1.05)
+    assert p["xp"] >= round(round(12 * 0.75) * 1.05)
+
+
+def test_legacy_doc_with_mana_keys_still_loads():
+    p = create_character(fresh())
+    # a pre-006 doc carries mana keys and a stored scene with mana meters —
+    # preserved (never deleted), never read
+    p["mana_ts"], p["mana_val"] = state.now().isoformat(), 7.0
+    p.setdefault("pending_events", []).append({
+        "eyebrow": "X", "headline": "old present",
+        "options": [{"id": "town", "label": "ok", "hint": "", "aether": False}],
+        "meters": {"hp": 52, "hp_max": 52, "energy": 24, "energy_max": 24,
+                   "mana": 7, "mana_max": 10, "gold": 50},
+    })
+    s = core.current_scene(p)                    # must not raise
+    assert s.headline == "old present"
+    assert s.meters.xp == 7                      # legacy keys mapped
+    assert p["mana_val"] == 7.0                  # data preserved

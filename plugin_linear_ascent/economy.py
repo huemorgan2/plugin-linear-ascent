@@ -11,15 +11,12 @@ from dataclasses import dataclass
 # ── §1 Meters ────────────────────────────────────────────────────────────
 
 ENERGY_REGEN_MIN = 45          # 1 energy per 45 minutes
-MANA_REGEN_MIN = 90            # 1 mana per 90 minutes
 ENERGY_BASE_CAP = 24
-MANA_BASE_CAP = 10
 
 COST_WILDS_FIGHT = 1
 COST_WARDEN_ATTEMPT = 3
 COST_BOSS_COMMIT = 5
 COST_PVP_ATTACK = 3
-COST_SIDEKICK_SCOUT_MANA = 2
 
 
 def energy_cap(level: int, race: str = "") -> int:
@@ -29,11 +26,39 @@ def energy_cap(level: int, race: str = "") -> int:
     return cap
 
 
-def mana_cap(level: int, race: str = "") -> int:
-    cap = MANA_BASE_CAP + level // 20
-    if race == "elf":
-        cap += 1
-    return cap
+# ── §1b The XP pool (006: aether = crystallized experience) ──────────────
+# The mana meter is gone. The ✦ bar is the XP inside the current level:
+# earned by fighting, spent on honing / spells / scans. Spending delays the
+# next level, never lowers one. All costs are priced in frontier kills so
+# they stay a real decision at every level.
+
+ELF_XP_BONUS = 0.05            # elves learn faster (replaces +1 aether cap)
+
+
+def hone_xp(unlocked_floor: int) -> int:
+    """✦ per honing pass: half a frontier kill."""
+    return round(0.5 * xp_per_kill(unlocked_floor))
+
+
+def sleep_xp_cost(floor: int) -> int:
+    """✦ to Sleep past a fight: exactly the kill being skipped."""
+    return xp_per_kill(floor)
+
+
+def scan_xp_cost(floor: int) -> int:
+    """✦ for a shard scan when no optics charges remain."""
+    return round(0.5 * xp_per_kill(floor))
+
+
+def gear_level_req(tier: int) -> int:
+    """Level required to buy tier-T gear: the band's first floor."""
+    return band_start(tier)
+
+
+def floor_level_req(floor: int) -> int:
+    """Level required to enter a floor — loose (design level ≈ floor),
+    exists so a fresh climber can't ride the world lift to floor 40."""
+    return max(1, floor - 10)
 
 
 # ── §2 Player baseline ───────────────────────────────────────────────────
@@ -317,7 +342,6 @@ APOTHECARY: dict[str, ShopItem] = {i.slug: i for i in [
     ShopItem("trollblood_tonic", "Trollblood tonic", 600, "heal_full",
              "usable mid-fight"),
     ShopItem("energy_cell", "Energy cell", 200, "energy_5", "max 1/day"),
-    ShopItem("aether_philtre", "Aether philtre", 150, "mana_3", "max 1/day"),
     ShopItem("luck_charm", "Luck charm", 300, "luck_today",
              "better loot & present rolls until tomorrow"),
     ShopItem("scout_optics", "Scout optics", 100, "scout_3",
@@ -358,13 +382,14 @@ BOARD_PRICE = 10
 
 RACES = {
     "human": "Adaptable: +1 energy cap. Port-town survivors.",
-    "elf": "Keen: +1 aether cap. Their bio-lit forest is floor 23.",
+    "elf": "Keen: +5% experience from kills. Their bio-lit forest is floor 23.",
     "dwarf": "Stubborn: +5% armor value. The fusion-halls are floors 11-20.",
     "halfling": "Lucky: better present and loot rolls.",
 }
 
 CLASSES = {
     "warrior": "Extra combat option: Shield Wall (soak a round).",
-    "sorcerer": "Extra combat option: Sleep Spell (2 aether, skip a fight).",
+    "sorcerer": "Extra combat option: Sleep Spell (skip a fight for its "
+                "experience price).",
     "archer": "Extra combat option: Treeline Shot (first strike).",
 }

@@ -22,7 +22,6 @@ def character_sheet(p: dict) -> dict:
         "hp": f"{p['hp']}/{pstate.max_hp(p)}",
         "atk": pstate.atk(p), "def": pstate.dfs(p),
         "energy": f"{pstate.energy_now(p)}/{economy.energy_cap(p['level'], race)}",
-        "aether": f"{pstate.mana_now(p)}/{economy.mana_cap(p['level'], race)}",
         "carried_gold": p["gold"], "banked_gold": p["bank"],
         "floor_frontier": p["unlocked_floor"], "gear": gear,
         "inventory": p["inventory"],

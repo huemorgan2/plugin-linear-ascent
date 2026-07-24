@@ -88,8 +88,10 @@ _TIP_HP = ("HP — health. At 0 you die: all carried gold is lost and armor "
            "and shield break. Heal at the healer's tent or the Apothecary.")
 _TIP_EN = ("⚡ Energy — actions spend it: wilds hunt 1, Warden attempt 3, "
            "milestone boss 5, PvP attack 3. Regenerates 1 every 45 minutes.")
-_TIP_AE = ("✦ Aether (mana) — fuels class abilities and shard scans. "
-           "Regenerates 1 every 90 minutes.")
+_TIP_AE = ("✦ Aether — crystallized experience. Fills as you fight; a full "
+           "bar is the next level, and levels are forever. Honing, spells, "
+           "and shard scans burn it — spending slows your level, never "
+           "lowers it.")
 _TIP_GOLD = ("◈ Carried gold — spendable anywhere but lost when you die. "
              "The Vault banks it safely at 5%/day interest.")
 
@@ -107,9 +109,9 @@ def _meters_html(m: Meters) -> str:
         f'<span class="blocks" aria-hidden="true">'
         f"{_blocks(m.energy, m.energy_max)}</span></span>"
         f'<span class="meter ae" title="{_e(_TIP_AE)}">'
-        f"<span>✦ {m.mana}/{m.mana_max}</span>"
+        f"<span>✦ {m.xp:,}/{m.xp_need:,}</span>"
         f'<span class="blocks" aria-hidden="true">'
-        f"{_blocks(m.mana, m.mana_max)}</span></span>"
+        f"{_blocks(m.xp, m.xp_need)}</span></span>"
         f'<span class="gold" title="{_e(_TIP_GOLD)}">◈ {m.gold:,}</span>'
         f"</div>")
 
