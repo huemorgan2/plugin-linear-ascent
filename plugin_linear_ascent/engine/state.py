@@ -41,7 +41,6 @@ def new_player(luna_user: str) -> dict:
         "hone": {s: 0 for s in economy.HONE_SLOTS},
         "inventory": {},
         "energy_ts": ts, "energy_val": float(economy.ENERGY_BASE_CAP),
-        "mana_ts": ts, "mana_val": float(economy.MANA_BASE_CAP),
         "lodged_until_day": -1,
         "last_seen": ts,
         "rng_counter": 0,
@@ -50,7 +49,7 @@ def new_player(luna_user: str) -> dict:
         "unlocked_floor": 1,
         "flags": {},
         "daily": {"day": world_day(), "pvp_used": 0, "energy_cell": False,
-                  "aether_philtre": False, "death_save": False},
+                  "death_save": False},
         "sidekick": {"insight": 1, "carried": None, "scout_charges": 0},
         "telemetry_day": world_day(),
     }
@@ -70,13 +69,6 @@ def energy_now(p: dict, at: dt.datetime | None = None) -> int:
     cap = economy.energy_cap(p["level"], p.get("race") or "")
     return int(_regen(p["energy_val"], p["energy_ts"], cap,
                       economy.ENERGY_REGEN_MIN, at))
-
-
-def mana_now(p: dict, at: dt.datetime | None = None) -> int:
-    at = at or now()
-    cap = economy.mana_cap(p["level"], p.get("race") or "")
-    return int(_regen(p["mana_val"], p["mana_ts"], cap,
-                      economy.MANA_REGEN_MIN, at))
 
 
 def spend_energy(p: dict, amount: int, at: dt.datetime | None = None) -> bool:
@@ -100,25 +92,13 @@ def gain_energy(p: dict, amount: int, at: dt.datetime | None = None) -> None:
     p["energy_ts"] = at.isoformat()
 
 
-def spend_mana(p: dict, amount: int, at: dt.datetime | None = None) -> bool:
-    at = at or now()
-    cap = economy.mana_cap(p["level"], p.get("race") or "")
-    cur = _regen(p["mana_val"], p["mana_ts"], cap,
-                 economy.MANA_REGEN_MIN, at)
-    if cur < amount:
+def spend_xp(p: dict, amount: int) -> bool:
+    """Burn aether — XP from the current level's pool (006). Never goes
+    below 0 and never touches level; the caller shows the refusal."""
+    if p["xp"] < amount:
         return False
-    p["mana_val"] = cur - amount
-    p["mana_ts"] = at.isoformat()
+    p["xp"] -= amount
     return True
-
-
-def gain_mana(p: dict, amount: int, at: dt.datetime | None = None) -> None:
-    at = at or now()
-    cap = economy.mana_cap(p["level"], p.get("race") or "")
-    cur = _regen(p["mana_val"], p["mana_ts"], cap,
-                 economy.MANA_REGEN_MIN, at)
-    p["mana_val"] = min(float(cap), cur + amount)
-    p["mana_ts"] = at.isoformat()
 
 
 # ── Doc upgrades (lazy migration on load — 004 §A.1) ─────────────────────
@@ -216,7 +196,7 @@ def touch_daily(p: dict) -> None:
     day = world_day()
     if p["daily"].get("day") != day:
         p["daily"] = {"day": day, "pvp_used": 0, "energy_cell": False,
-                      "aether_philtre": False, "death_save": False}
+                      "death_save": False}
 
 
 def bank_interest_due(p: dict) -> int:

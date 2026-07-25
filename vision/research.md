@@ -146,3 +146,17 @@ Patterns observed ([Catchword on noun+verb game naming](https://catchwordbrandin
 8. **Shared floor progression gives the server one legible goal** — Aincrad's "what floor are we on" + Travian's WW race. Let a frontline group clear floors for everyone, engrave their names, and let the milestone floors (every 10th/25th) be community events requiring group-built structures (siege towers, forts) that others can sabotage.
 9. **Group tier: shared structure with shared risk** — a clan hall/tower that needs multiple players' daily resources to build, confers benefits (respect trickle, storage), and can be raided (MajorMUD, Torn territory). Group content should consume the same daily energy so it competes with solo grinding.
 10. **Name the goal in the title** — use the *Slay the Spire* / *Legend of the Red Dragon* grammar: imperative verb + the tower/summit/boss, so the linear ambition is legible before the first turn is played.
+
+## 6. XP Models in RPGs (006 addendum)
+
+How the genre uses experience points, surveyed when mana was replaced by the XP pool:
+
+| Model | Games | Mechanic | Verdict for us |
+|---|---|---|---|
+| **Pure progression meter** | WoW, LORD, D&D, RuneScape | XP only fills the level bar; never spent | Legible, zero regret — but XP is meaningless whenever you're not about to level |
+| **XP as dropped currency** | Dark Souls (souls), Path of Exile (partial) | XP *is* money: buy levels **or** goods; dropped on death | Maximum tension, but death-drop contradicts our "death never takes XP" kindness. Rejected the drop, kept the dual use |
+| **Spend-from-pool** | Minecraft (enchanting/anvil), EverQuest AA points | Levels are kept; the *pool* is spent on upgrades, delaying the next level | **Adopted** — spending sets back leveling but buys the tools that make leveling easier |
+| **Level as gate** | Diablo, Torn, virtually everywhere | Permanent level badge; gear/area requirements separate beginners from veterans | **Adopted** — tier and floor level-requirements; gold alone can't make a veteran |
+| **Prestige/reset** | LORD dragon kill, KoL ascension | XP resets wholesale at the top | Already planned for Vharuk; unchanged |
+
+Conclusion (shipped in 006): combine spend-from-pool with level-as-gate; levels are permanent and gate content; the XP pool inside the current level is spendable fuel ("aether is crystallized experience"). No gold→XP faucet — that would let wallets shortcut the veteran gate.

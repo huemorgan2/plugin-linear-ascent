@@ -2,12 +2,23 @@
 
 The 100-floor plan: difficulty, bosses, grind, gold, XP, gear, and the social economy. Formulas are the design; the tables are sample points. All numbers are v1 targets — tune in play, but keep the *shapes*.
 
-## 1. The two meters (pacing)
+## 1. Energy and the XP pool (pacing) — 006
 
-| Meter | Cap | Regen | Spent on |
+| Meter | Cap | Refills | Spent on |
 |---|---|---|---|
 | **Energy ⚡** | 24 (+1 per 10 levels) | 1 per 45 min (~32/day) | wilds fight 1 · Warden attempt 3 · milestone boss commit 5 · PvP attack 3 |
-| **Mana ✦** | 10 (+1 per 20 levels) | 1 per 90 min (~16/day) | class spells 2–4 · sidekick scout 2 · sidekick night job 3 |
+| **Aether ✦ = the XP pool** | `xp_need(level)` — the bar to the next level | earned by fighting, never by time | honing (½ frontier kill) · Sleep Spell (1 kill, no award) · shard scan fallback (½ kill) |
+
+006 deleted the mana meter. *Aether is crystallized experience*: the ✦ bar
+is your progress inside the current level, and abilities burn what you've
+learned. One rule sentence: **levels are forever and open doors; the XP
+inside your current level is aether — spend it and you level slower, hoard
+it and you level sooner.** Spending never reduces the pool below 0 and
+never touches level. Level-up subtracts the level's cost (overflow carries).
+
+Levels gate content: tier-T gear requires level ≥ 10·(T−1)+1, and entering
+floor F requires level ≥ F − 10 (on top of Warden unlocks) — gold alone
+can't make a veteran. Levels can never be taken away by any mechanic.
 
 A session drains in 10–20 minutes; two or three sessions a day is optimal, binging is impossible. Energy flask (1/day) is the only refill. No paid refills.
 
@@ -100,7 +111,6 @@ One named item per slot per tier; owning the tier's set is the visible badge of 
 | Trauma kit | 120 | +80 HP |
 | Trollblood tonic | 600 | full heal, usable mid-fight |
 | Energy cell | 200 | +5 ⚡ (max 1/day) |
-| Aether philtre | 150 | +3 ✦ (max 1/day) |
 | Luck charm | 300 | better loot & present rolls until tomorrow |
 | Scout optics | 100 | sidekick reveals enemy stats, 3 charges |
 

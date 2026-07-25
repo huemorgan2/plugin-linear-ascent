@@ -367,22 +367,29 @@ def _dispatch_location(p: dict, oid: str) -> Scene:
 
 def _forge_scene(p: dict) -> Scene:
     tier = economy.gear_tier_for_floor(p["unlocked_floor"])
+    level_req = economy.gear_level_req(tier)
+    locked = p["level"] < level_req
     opts, lines = [], []
     for g in economy.forge_tier(tier):
         owned = " — equipped" if p["gear"].get(g.slot) == g.slug else ""
-        opts.append(Option(f"buy_{g.slug}", g.name, f"◈ {g.price:,}"))
+        hint = f"◈ {g.price:,}" + (f" · level {level_req}" if locked else "")
+        opts.append(Option(f"buy_{g.slug}", g.name, hint))
         flavor = f", {g.flavor}" if g.flavor else ""
         lines.append(
             f"{g.name}{flavor} — {g.slot} +{g.bonus}{owned}")
+    if locked:
+        lines.append(f"The smith sizes you up: tier {tier} steel answers "
+                     f"to level {level_req} hands.")
     cap = economy.max_hone(p["unlocked_floor"])
     price = economy.hone_price(p["unlocked_floor"])
+    hone_xp = economy.hone_xp(p["unlocked_floor"])
     for slot in economy.HONE_SLOTS:
         slug = p["gear"].get(slot)
         lvl = state.hone_level(p, slot)
         if slug and lvl < cap:
             name = economy.FORGE[slug].name
             opts.append(Option(f"hone_{slot}", f"Hone {name} +{lvl + 1}",
-                               f"◈ {price:,}"))
+                               f"◈ {price:,} + ✦ {hone_xp}"))
     if cap > 0:
         honed = ", ".join(
             f"{slot} +{state.hone_level(p, slot)}"
@@ -408,17 +415,27 @@ def _forge_hone(p: dict, slot: str) -> Scene:
     if not slug or lvl >= cap:
         return _forge_scene(p)
     price = economy.hone_price(p["unlocked_floor"])
+    xp_cost = economy.hone_xp(p["unlocked_floor"])
     if p["gold"] < price:
         s = _forge_scene(p)
-        s.shard_note = (f"A honing pass costs ◈ {price:,}; you carry "
-                        f"◈ {p['gold']:,}.")
+        s.shard_note = (f"A honing pass costs ◈ {price:,} + ✦ {xp_cost}; "
+                        f"you carry ◈ {p['gold']:,}.")
+        return s
+    if p["xp"] < xp_cost:
+        s = _forge_scene(p)
+        s.shard_note = (f"The bench takes ✦ {xp_cost} of what you've "
+                        f"learned along with the coin — you carry "
+                        f"✦ {p['xp']}. Hunt first.")
         return s
     p["gold"] -= price
+    state.spend_xp(p, xp_cost)
     p["hone"][slot] = lvl + 1
-    combat._ledger(p, "hone", gold=-price, note=f"{slot} +{lvl + 1}")
+    combat._ledger(p, "hone", gold=-price, xp=-xp_cost,
+                   note=f"{slot} +{lvl + 1}")
     s = _forge_scene(p)
     s.body_lines.insert(0, (f"+ {economy.FORGE[slug].name} honed to "
-                            f"+{lvl + 1} — the edge sings on the stone"))
+                            f"+{lvl + 1} — the edge sings on the stone "
+                            f"(− ✦ {xp_cost})"))
     return s
 
 
@@ -430,6 +447,12 @@ def _forge_buy(p: dict, oid: str) -> Scene:
     g = economy.FORGE.get(slug)
     if not g:
         return _forge_scene(p)
+    req = economy.gear_level_req(g.tier)
+    if p["level"] < req:
+        s = _forge_scene(p)
+        s.shard_note = (f"{g.name} answers to level {req} hands — you are "
+                        f"level {p['level']}. Levels are earned, never bought.")
+        return s
     if p["gold"] < g.price:
         s = _forge_scene(p)
         s.shard_note = f"{g.name} wants ◈ {g.price:,}; you carry ◈ {p['gold']:,}. " \
@@ -481,10 +504,6 @@ def _medlab_buy(p: dict, oid: str) -> Scene:
         s = _medlab_scene(p)
         s.shard_note = "One cell a day. Your heart is not a reactor."
         return s
-    if slug == "aether_philtre" and daily.get("aether_philtre"):
-        s = _medlab_scene(p)
-        s.shard_note = "One philtre a day — aether scars if you gulp it."
-        return s
     if p["gold"] < item.price:
         s = _medlab_scene(p)
         s.shard_note = f"That's ◈ {item.price} and you carry ◈ {p['gold']}."
@@ -496,10 +515,6 @@ def _medlab_buy(p: dict, oid: str) -> Scene:
         daily["energy_cell"] = True
         state.gain_energy(p, 5)
         note += " — ⚡ +5"
-    elif slug == "aether_philtre":
-        daily["aether_philtre"] = True
-        state.gain_mana(p, 3)
-        note += " — ✦ +3"
     elif slug == "luck_charm":
         p["flags"]["luck_day"] = state.world_day()
         note += " — fortune leans your way until tomorrow"
@@ -694,6 +709,13 @@ def _gate_pick(p: dict, oid: str) -> Scene:
     if n > p["unlocked_floor"] or n > schema.max_content_floor():
         s = _gate_scene(p)
         s.shard_note = f"Floor {n} is still sealed. A Warden holds every lift."
+        return s
+    req = economy.floor_level_req(n)
+    if p["level"] < req:
+        s = _gate_scene(p)
+        s.shard_note = (f"The lift is open, but floor {n} wants level {req} "
+                        f"legs — you are level {p['level']}. Climb closer "
+                        "to your weight first.")
         return s
     p["floor"] = n
     p["location"] = "gate_town"

@@ -78,4 +78,24 @@ def test_caps_and_race_nudges():
     assert economy.energy_cap(1) == 24
     assert economy.energy_cap(30) == 27
     assert economy.energy_cap(1, "human") == 25
-    assert economy.mana_cap(1, "elf") == 11
+    # 006: the mana meter is gone — elves learn faster instead
+    assert not hasattr(economy, "mana_cap")
+    assert economy.ELF_XP_BONUS == 0.05
+
+
+def test_xp_pool_costs_scale_with_floor():
+    # 006: ✦ costs are priced in frontier kills
+    assert economy.hone_xp(1) == 6            # half of 12
+    assert economy.hone_xp(17) == 102         # half of 204
+    assert economy.sleep_xp_cost(5) == 60     # exactly the kill skipped
+    assert economy.scan_xp_cost(5) == 30      # half a kill
+
+
+def test_level_gates():
+    # tier T answers to the band's first floor; floors want level F−10
+    assert economy.gear_level_req(1) == 1
+    assert economy.gear_level_req(2) == 11
+    assert economy.gear_level_req(10) == 91
+    assert economy.floor_level_req(1) == 1
+    assert economy.floor_level_req(11) == 1
+    assert economy.floor_level_req(40) == 30

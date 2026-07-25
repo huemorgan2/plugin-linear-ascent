@@ -24,8 +24,8 @@ class Meters:
     hp_max: int
     energy: int
     energy_max: int
-    mana: int
-    mana_max: int
+    xp: int             # 006: the ✦ bar is the XP pool inside the level
+    xp_need: int        # xp_need(level) — full bar = next level
     gold: int
 
 
@@ -59,7 +59,7 @@ class Scene:
             m = self.meters
             lines.append(
                 f"HP {m.hp}/{m.hp_max}   ⚡ {m.energy}/{m.energy_max}   "
-                f"✦ {m.mana}/{m.mana_max}   gold {m.gold}")
+                f"✦ {m.xp}/{m.xp_need}   gold {m.gold}")
         return "\n".join(lines)
 
     def to_dict(self) -> dict:
@@ -80,7 +80,13 @@ class Scene:
 
     @staticmethod
     def from_dict(d: dict) -> "Scene":
-        meters = Meters(**d["meters"]) if d.get("meters") else None
+        md = dict(d["meters"]) if d.get("meters") else None
+        if md and "mana" in md:
+            # pre-006 stored scene (pending event): the ✦ meter was mana.
+            # Map the keys so old docs still load; values are stale anyway.
+            md["xp"] = md.pop("mana")
+            md["xp_need"] = md.pop("mana_max")
+        meters = Meters(**md) if md else None
         return Scene(
             eyebrow=d.get("eyebrow", ""),
             headline=d.get("headline", ""),
