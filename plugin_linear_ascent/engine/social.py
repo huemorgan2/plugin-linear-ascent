@@ -243,14 +243,43 @@ def grant_action(p: dict, oid: str) -> Scene:
 
 
 # ── Guildhall ────────────────────────────────────────────────────────────
+# 010: faction LIFE happens here — join/found a banner, the store, dues,
+# the week's world challenge, donations, kicks. The COMMUNITY pane tab is
+# a read-only news board. worldd injects w["faction"] (member panel) or
+# w["factions"] (the hall list); local dev mode keeps the legacy
+# doc-string guilds with none of the purse mechanics.
 
 GUILD_FOUND_FEE = 500
+JOIN_FEE_MAX = 500
+DUES_MIN, DUES_MAX = 1, 50
+
+
+def _take_gold(p: dict, amount: int) -> bool:
+    """Charge carried gold first, then the bank."""
+    gold, bank = int(p.get("gold", 0)), int(p.get("bank", 0))
+    if gold + bank < amount:
+        return False
+    take = min(gold, amount)
+    p["gold"] = gold - take
+    p["bank"] = bank - (amount - take)
+    return True
+
+
+def _pips(days: int, required: int) -> str:
+    d = max(0, min(7, int(days)))
+    return "▪" * d + "▫" * (7 - d) + f" {d}/{required}"
 
 
 def guildhall_scene(p: dict, note: str = "") -> Scene:
+    st = p.get("founding_guild")
+    if isinstance(st, dict):
+        return _founding_scene(p, st, note)
+    if p.get("faction_donating"):
+        return _donate_prompt(p, note)
+    if p.get("faction_kicking"):
+        return _kick_prompt(p, note)
     w = world(p) or {}
-    guilds = w.get("guilds", [])
-    mine = p.get("guild")
+    fac = w.get("faction")
     lines = [note] if note else []
     opts = []
     # 012: training — levels are bought here, never granted in the field.
@@ -262,29 +291,87 @@ def guildhall_scene(p: dict, note: str = "") -> Scene:
         lines.append(f"The drillmaster sizes you up: XP {p['xp']:,}/{need:,}."
                      " Come back with a full bar — the fee is "
                      f"◈ {fee:,}.")
-    if mine:
-        roster = w.get("guild_roster", [])
-        lines.append(f"Your banner: {mine} — "
-                     + (", ".join(roster[:8]) if roster else "just you"))
-        opts.append(Option("guild_leave", "Leave the guild"))
+    if fac:
+        _member_panel(p, fac, lines, opts)
+        headline = f"The {fac['name']} table"
+    elif w.get("factions") is not None:
+        _hall_list(p, w["factions"], lines, opts)
+        headline = "Banners for hire"
     else:
-        for g in guilds[:6]:
-            opts.append(Option(f"join_{g}", f"Join {g}"))
-        if p["gold"] >= GUILD_FOUND_FEE:
-            opts.append(Option("found_guild", "Found a guild",
-                               f"◈ {GUILD_FOUND_FEE}"))
-        elif not guilds:
-            lines.append(f"Founding a banner costs ◈ {GUILD_FOUND_FEE}.")
+        # local dev mode — legacy doc-string guilds, no purse
+        mine = p.get("guild")
+        headline = f"The {mine} table" if mine else "Banners for hire"
+        if mine:
+            roster = w.get("guild_roster", [])
+            lines.append(f"Your banner: {mine} — "
+                         + (", ".join(roster[:8]) if roster else "just you"))
+            opts.append(Option("guild_leave", "Leave the guild"))
+        else:
+            for g in w.get("guilds", [])[:6]:
+                opts.append(Option(f"join_{g}", f"Join {g}"))
+            if p["gold"] >= GUILD_FOUND_FEE:
+                opts.append(Option("found_guild", "Found a guild",
+                                   f"◈ {GUILD_FOUND_FEE}"))
     opts.append(Option("town", "Back to the square"))
     return Scene(
         eyebrow="ROOTHOLLOW · THE GUILDHALL",
-        headline=(f"The {mine} table" if mine else "Banners for hire"),
+        headline=headline,
         support="Milestone Wardens fall to war parties, not heroes.",
         body_lines=lines,
         options=opts,
         meters=meters(p),
         banner="guildhall",
     )
+
+
+def _member_panel(p: dict, fac: dict, lines: list, opts: list) -> None:
+    wk = fac.get("week") or {}
+    kind = str(wk.get("kind", "hoard")).upper()
+    lines.append(f"STORE ◈ {fac.get('store', 0):,} · dues "
+                 f"◈ {fac.get('dues', 0)}/week · join ◈ "
+                 f"{fac.get('join_fee', 0)}")
+    if wk.get("entered"):
+        lines.append(f"this week's {kind}: {wk.get('progress', 0):,}"
+                     f"/{wk.get('target', 0):,} — entered, on pace for "
+                     f"×{wk.get('multiplier', 0):.2f} of the prize")
+    else:
+        lines.append(f"this week the Ascent demands a {kind} — target "
+                     f"{wk.get('target', 0):,} · entry "
+                     f"◈ {wk.get('entry_cost', 0)} from the store")
+    for m in fac.get("members", [])[:8]:
+        tag = " · steward" if m.get("role") == "steward" else ""
+        arr = " ▲ arrears" if m.get("arrears") else ""
+        lines.append(f"{m.get('name', '?')}{tag} — "
+                     f"{_pips(m.get('days', 0), m.get('required', 4))}"
+                     f"{arr}")
+    if fac.get("last_week"):
+        lines.append(f"last week: {fac['last_week']}")
+    opts.append(Option("donate", "Donate to the store", "carried ◈"))
+    if fac.get("role") == "steward":
+        if not wk.get("entered"):
+            opts.append(Option("enter_week",
+                               f"Enter the week's {kind}",
+                               f"◈ {wk.get('entry_cost', 0)} from the "
+                               "store"))
+        if len(fac.get("members", [])) > 1:
+            opts.append(Option("kick", "Remove a member"))
+    opts.append(Option("guild_leave", "Leave the banner"))
+
+
+def _hall_list(p: dict, factions: list, lines: list, opts: list) -> None:
+    if not factions:
+        lines.append("No banners fly yet. Yours could be the first.")
+    for f in factions[:5]:
+        n = f.get("members", 0)
+        lines.append(f"{f['name']} — {n} at the table")
+        opts.append(Option(f"join_{f['name']}", f"Join {f['name']}",
+                           f"join ◈ {f.get('join_fee', 0)} · dues "
+                           f"◈ {f.get('weekly_dues', 0)}/wk"))
+    if p["gold"] + p.get("bank", 0) >= GUILD_FOUND_FEE:
+        opts.append(Option("found_guild", "Raise a new banner",
+                           f"◈ {GUILD_FOUND_FEE}"))
+    else:
+        lines.append(f"Raising a new banner costs ◈ {GUILD_FOUND_FEE}.")
 
 
 def guild_train(p: dict) -> Scene:
@@ -311,20 +398,178 @@ def guild_train(p: dict) -> Scene:
                 "frame. Wounds close.")
 
 
+def _founding_scene(p: dict, st: dict, note: str = "") -> Scene:
+    """The creation flow, one scene per step: name → banner → join fee →
+    weekly dues. Typed steps take a chat reply; the banner step is an
+    option pick."""
+    step = st.get("step", "name")
+    opts = [Option("cancel_found", "Never mind")]
+    if step == "name":
+        head, sup = "Name your banner", "Say it in chat — 3 to 24 letters."
+        lines = []
+    elif step == "banner":
+        head, sup = f"A sigil for {st['name']}", \
+            "Pick the mark your banner flies."
+        lines = []
+        for slug in _sigil_picks(st.get("name", ""), st.get("slugs") or []):
+            opts.insert(-1, Option(f"sig_{slug}",
+                                   slug.replace("_", " ").title()))
+    elif step == "fee":
+        head = "Set the join fee"
+        sup = (f"Say a number in chat — ◈ 0 to {JOIN_FEE_MAX}. Every "
+               "climber who joins pays it once, into the store.")
+        lines = ["Immutable after founding — pick numbers people can "
+                 "read before they join."]
+    else:  # dues
+        head = "Set the weekly dues"
+        sup = (f"Say a number in chat — ◈ {DUES_MIN} to {DUES_MAX}, "
+               "collected from every member each week, into the store.")
+        lines = [f"Join fee set at ◈ {st.get('fee', 0)}. You pay dues "
+                 "too — the ◈ 500 founding price was your buy-in."]
+    if note:
+        lines.insert(0, note)
+    return Scene(
+        eyebrow="ROOTHOLLOW · THE GUILDHALL",
+        headline=head,
+        support=sup,
+        body_lines=lines,
+        options=opts,
+        meters=meters(p),
+    )
+
+
+def _sigil_picks(name: str, slugs: list) -> list:
+    """8 sigils from the full set, rotated by the banner's name so every
+    founder sees a different spread."""
+    if not slugs:
+        return []
+    start = sum(name.encode()) % len(slugs)
+    return [slugs[(start + i) % len(slugs)] for i in range(min(8,
+                                                               len(slugs)))]
+
+
+def _donate_prompt(p: dict, note: str = "") -> Scene:
+    return Scene(
+        eyebrow="ROOTHOLLOW · THE GUILDHALL",
+        headline="How much goes in the box?",
+        support=f"Say a number in chat — you carry ◈ {p['gold']:,}. "
+                "Carried gold only; the bank stays yours.",
+        body_lines=[note] if note else [],
+        options=[Option("cancel_donate", "Never mind")],
+        meters=meters(p),
+    )
+
+
+def _kick_prompt(p: dict, note: str = "") -> Scene:
+    w = world(p) or {}
+    fac = w.get("faction") or {}
+    opts = []
+    for m in fac.get("members", [])[:8]:
+        nm = m.get("name", "?")
+        if nm != p.get("name"):
+            arr = " · arrears" if m.get("arrears") else ""
+            pips = _pips(m.get("days", 0), m.get("required", 4))
+            opts.append(Option(f"kick_{nm}", f"Remove {nm}",
+                               f"{pips}{arr}"))
+    opts.append(Option("cancel_kick", "Never mind"))
+    return Scene(
+        eyebrow="ROOTHOLLOW · THE GUILDHALL",
+        headline="Who leaves the table?",
+        support="Kicking a no-show lifts their dead weight off the "
+                "attendance ratio.",
+        body_lines=[note] if note else [],
+        options=opts,
+        meters=meters(p),
+    )
+
+
 def guildhall_action(p: dict, oid: str, text: str = "") -> Scene:
+    w = world(p) or {}
+    fac = w.get("faction")
+    st = p.get("founding_guild")
+    if isinstance(st, dict):
+        if oid == "cancel_found":
+            p.pop("founding_guild", None)
+            return guildhall_scene(p, note="The charter stays blank.")
+        if oid.startswith("sig_") and st.get("step") == "banner":
+            st["banner"] = oid.removeprefix("sig_")
+            st["step"] = "fee"
+            return _founding_scene(p, st)
+        return _founding_scene(p, st)
+    if p.get("faction_donating"):
+        p.pop("faction_donating", None)
+        return guildhall_scene(p, note="The box stays shut.")
+    if p.get("faction_kicking"):
+        p.pop("faction_kicking", None)
+        if oid.startswith("kick_") and fac:
+            target = oid.removeprefix("kick_")
+            _effect(p, "faction_kick", name=target)
+            fac["members"] = [m for m in fac.get("members", [])
+                              if m.get("name") != target]
+            return guildhall_scene(
+                p, note=f"+ {target}'s chair scrapes back. The table "
+                        "moves on.")
+        return guildhall_scene(p)
     if oid == "guild_train":
         return guild_train(p)
     if oid == "found_guild":
-        p["founding_guild"] = True
-        return Scene(
-            eyebrow="ROOTHOLLOW · THE GUILDHALL",
-            headline="Name your banner",
-            support="Say it in chat — 3 to 24 letters.",
-            options=[],
-            meters=meters(p),
-        )
+        if w.get("factions") is None:
+            # local dev mode — legacy one-shot naming, no purse
+            p["founding_guild"] = True
+            return Scene(
+                eyebrow="ROOTHOLLOW · THE GUILDHALL",
+                headline="Name your banner",
+                support="Say it in chat — 3 to 24 letters.",
+                options=[],
+                meters=meters(p),
+            )
+        p["founding_guild"] = {"step": "name",
+                               "slugs": w.get("faction_banners") or []}
+        return _founding_scene(p, p["founding_guild"])
+    if oid == "donate" and fac:
+        p["faction_donating"] = True
+        return _donate_prompt(p)
+    if oid == "enter_week" and fac and fac.get("role") == "steward":
+        wk = fac.get("week") or {}
+        cost = int(wk.get("entry_cost", 0))
+        store = int(fac.get("store", 0))
+        if wk.get("entered"):
+            return guildhall_scene(p, note="Your banner is already in "
+                                           "this week's lists.")
+        if store < cost:
+            return guildhall_scene(
+                p, note=f"The entry is ◈ {cost} and the store holds "
+                        f"◈ {store} — ◈ {cost - store} short. Dues land "
+                        "at week's turn, or pass the hat.")
+        _effect(p, "faction_enter")
+        wk["entered"] = True
+        fac["store"] = store - cost
+        return guildhall_scene(
+            p, note=f"+ ◈ {cost} from the store — the "
+                    f"{str(wk.get('kind', '')).upper()} is on. "
+                    "Everything the table earns this week counts.")
+    if oid == "kick" and fac and fac.get("role") == "steward":
+        p["faction_kicking"] = True
+        return _kick_prompt(p)
     if oid.startswith("join_"):
         g = oid.removeprefix("join_")
+        if w.get("factions") is not None:
+            f = next((x for x in w["factions"] if x["name"] == g), None)
+            if f is None:
+                return guildhall_scene(p, note="That banner came down "
+                                               "while you read the wall.")
+            fee = int(f.get("join_fee", 0))
+            if fee and not _take_gold(p, fee):
+                return guildhall_scene(
+                    p, note=f"The join fee is ◈ {fee} — you can't cover "
+                            "it, even with the bank.")
+            if fee:
+                _ledger(p, "faction_join", gold=-fee, note=g)
+            p["guild"] = g
+            _effect(p, "guild_join", guild=g)
+            return guildhall_scene(
+                p, note=f"+ you sit under the {g} banner now"
+                        + (f" — ◈ {fee} to the store" if fee else ""))
         p["guild"] = g
         _effect(p, "guild_join", guild=g)
         return guildhall_scene(p, note=f"+ you drink under the {g} banner now")
@@ -337,8 +582,55 @@ def guildhall_action(p: dict, oid: str, text: str = "") -> Scene:
 
 
 def guildhall_found(p: dict, text: str) -> Scene:
-    p.pop("founding_guild", None)
-    name = text.strip()[:24]
+    """Typed replies during the founding flow (and the donate amount —
+    core routes both here via the doc flags)."""
+    st = p.get("founding_guild")
+    if not isinstance(st, dict):
+        # legacy one-shot flow (local dev mode)
+        p.pop("founding_guild", None)
+        return _found_finish(p, text.strip()[:24], "", 0, 5)
+    step = st.get("step", "name")
+    if step == "name":
+        name = text.strip()[:24]
+        if len(name) < 3:
+            return _founding_scene(p, st, note="Three letters at least. "
+                                               "Banners need room for "
+                                               "glory.")
+        st["name"] = name
+        if st.get("slugs"):
+            st["step"] = "banner"
+        else:
+            st["step"] = "fee"
+        return _founding_scene(p, st)
+    if step == "fee":
+        try:
+            fee = int(text.strip().lstrip("◈").replace(",", ""))
+        except ValueError:
+            return _founding_scene(p, st, note="A number, ◈ 0 to "
+                                               f"{JOIN_FEE_MAX}.")
+        if not 0 <= fee <= JOIN_FEE_MAX:
+            return _founding_scene(p, st, note="A number, ◈ 0 to "
+                                               f"{JOIN_FEE_MAX}.")
+        st["fee"] = fee
+        st["step"] = "dues"
+        return _founding_scene(p, st)
+    if step == "dues":
+        try:
+            dues = int(text.strip().lstrip("◈").replace(",", ""))
+        except ValueError:
+            return _founding_scene(p, st, note=f"A number, ◈ {DUES_MIN} "
+                                               f"to {DUES_MAX}.")
+        if not DUES_MIN <= dues <= DUES_MAX:
+            return _founding_scene(p, st, note=f"A number, ◈ {DUES_MIN} "
+                                               f"to {DUES_MAX}.")
+        p.pop("founding_guild", None)
+        return _found_finish(p, st["name"], st.get("banner", ""),
+                             st.get("fee", 0), dues)
+    return _founding_scene(p, st)
+
+
+def _found_finish(p: dict, name: str, banner: str, join_fee: int,
+                  dues: int) -> Scene:
     if len(name) < 3:
         return guildhall_scene(p, note="Three letters at least. Banners "
                                        "need room for glory.")
@@ -348,9 +640,35 @@ def guildhall_found(p: dict, text: str) -> Scene:
     p["gold"] -= GUILD_FOUND_FEE
     p["guild"] = name
     _ledger(p, "guild_found", gold=-GUILD_FOUND_FEE, note=name)
-    _effect(p, "guild_found", guild=name)
+    _effect(p, "guild_found", guild=name, banner=banner,
+            join_fee=join_fee, weekly_dues=dues)
     return guildhall_scene(p, note=f"+ the {name} banner goes up over "
-                                   "your table")
+                                   f"your table — join ◈ {join_fee}, "
+                                   f"dues ◈ {dues}/week")
+
+
+def guildhall_donate(p: dict, text: str) -> Scene:
+    """The typed donation amount (carried gold only)."""
+    p.pop("faction_donating", None)
+    w = world(p) or {}
+    fac = w.get("faction") or {}
+    try:
+        amt = int(text.strip().lstrip("◈").replace(",", ""))
+    except ValueError:
+        return guildhall_scene(p, note="The box takes numbers, not "
+                                       "speeches.")
+    if amt <= 0:
+        return guildhall_scene(p, note="The box takes numbers, not "
+                                       "speeches.")
+    if p["gold"] < amt:
+        return guildhall_scene(p, note=f"You carry ◈ {p['gold']:,} — "
+                                       f"not ◈ {amt:,}.")
+    p["gold"] -= amt
+    _ledger(p, "faction_donation", gold=-amt, note=fac.get("name", ""))
+    _effect(p, "faction_donate", amount=amt)
+    fac["store"] = int(fac.get("store", 0)) + amt
+    return guildhall_scene(p, note=f"+ ◈ {amt:,} into the store — "
+                                   f"◈ {fac['store']:,} now")
 
 
 # ── The shared frontier Warden (007 §3) ──────────────────────────────────

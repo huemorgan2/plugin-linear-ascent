@@ -1,33 +1,49 @@
-# 010 · Scenario 2 — found a faction, name it, pick a sigil
+# 010 · Scenario 2 — faction life at the Guildhall (fourth directive)
 
-Goal: the COMMUNITY tab supports the full faction lifecycle: create
-(name + banner from the 30 sigils, ◈500 fee), join, steward goal
-setting, kick, leave.
+Goal: joining, founding and managing a faction happens IN-GAME at the
+Guildhall in Roothollow — game scenes, not pane forms. Founding sets the
+purse numbers (join fee + weekly dues); both land in the faction store.
 
 ## Steps
 
-1. With a character holding ≥ ◈500, open COMMUNITY.
-2. **Expect:** "banners flying" list (possibly empty) + the founding
-   panel: name input, a grid of 30 one-bit sigils, a disabled "Raise
-   the banner" button that enables only when name + sigil are set.
-3. Type a name, click a sigil (it highlights), click create.
-   **Expect:** the view swaps to "your banner": chosen sigil rendered
-   large, member table with you as steward, goal panel with the
-   steward's kind/target form and fair-target suggestions.
-4. Verify the fee: GAME tab meters show ◈ down by 500; worldd ledger
-   has a `faction_found` row.
-5. As steward, set a goal (e.g. CULL 10). **Expect:** goal line with
-   progress bar appears; `ascent_factions.goal_target` updated.
-6. Second tenant joins the faction (via API or second Luna).
-   **Expect:** member table shows 2 rows; base prize flips to 15%→15%
-   (still <4 members) — the label must show 15%, not 20%.
-7. Steward kicks the second member. **Expect:** row gone; the kicked
-   tenant's doc loses its guild on next scene load.
-8. Leave the faction. **Expect:** back to the hall view; the faction
-   dissolves if empty (gone from the list).
+1. With a character holding ≥ ◈500, walk to Roothollow → The Guildhall.
+2. **Expect:** the hall card lists existing banners as options with the
+   purse shown up front (`join ◈ 25 · dues ◈ 5/wk`), plus "Raise a new
+   banner · ◈ 500" and the training option.
+3. Click "Raise a new banner". **Expect:** "Name your banner" — typed in
+   chat, like character naming. Type a name.
+4. **Expect:** a sigil pick — 8 one-bit sigil options + "Never mind".
+   Pick one.
+5. **Expect:** "Set the join fee" (typed, ◈ 0–500). Type `25`.
+6. **Expect:** "Set the weekly dues" (typed, ◈ 1–50). Type `5`.
+7. **Expect:** back at the hall as steward: the member panel shows
+   `STORE ◈ 0 · dues ◈ 5/week · join ◈ 25`, your attendance pips, this
+   week's world challenge with its entry cost, options Donate / Enter
+   the week's challenge / Leave the banner. GAME meters show ◈ down by
+   exactly 500; worldd has the faction row with join_fee=25,
+   weekly_dues=5.
+8. Second player (other tenant, scripted client) walks to the Guildhall.
+   **Expect:** the hall lists the new banner with `join ◈ 25 · dues
+   ◈ 5/wk`; joining charges ◈25 (gold first, then bank) and the
+   steward's panel now shows `STORE ◈ 25` and a `join_fee` row in
+   `ascent_faction_ledger`.
+9. Member clicks Donate, types `30`. **Expect:** carried gold −30,
+   store +30, ledger `donation` row, card note names the new balance.
+10. Steward clicks "Enter the week's challenge" (◈5 × members).
+    **Expect:** if the store covers it, the entry lands: store drops by
+    the entry, the panel shows the challenge as "entered" with progress;
+    `ascent_faction_weeks` has the entered row with kind = week % 3.
+    If short, the card refuses and SHOWS the shortfall.
+11. Steward clicks "Remove a member" → picks the member. **Expect:** the
+    kicked player's doc loses its colors on next scene load.
+12. Leave the banner. **Expect:** back to the hall list; an empty
+    faction dissolves (the store burns — the Ascent keeps it).
 
 ## Pass criteria
 
-- Full lifecycle works from the pane with no raw errors.
-- Fee charged exactly once; DB rows match every step.
-- 15%/20% and steward-only controls render correctly.
+- The full lifecycle works from GAME CARDS in chat (or the pane GAME
+  tab) — the COMMUNITY tab has NO join/create/manage controls.
+- Founding fee charged exactly once; join fee lands in the store;
+  every store movement has a ledger row.
+- Steward-only options (enter, kick) never render for plain members.
+- The refusal messages carry numbers (shortfall, carried gold).

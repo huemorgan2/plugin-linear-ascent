@@ -102,7 +102,13 @@ class WorldClient:
             "player": luna_user, "target_tenant": target_tenant,
             "target_player": target_player})
 
-    async def faction_goal(self, luna_user: str, kind: str,
-                           target: int) -> dict:
-        return await self._post("/v1/faction/goal", {
-            "player": luna_user, "kind": kind, "target": target})
+    async def faction_donate(self, luna_user: str, amount: int) -> dict:
+        return await self._post("/v1/faction/donate", {
+            "player": luna_user, "amount": amount})
+
+    async def faction_enter(self, luna_user: str) -> dict:
+        return await self._post("/v1/faction/enter", {"player": luna_user})
+
+    async def faction_board(self, luna_user: str) -> dict:
+        """The COMMUNITY news board — read-only faction rankings + news."""
+        return await self._post("/v1/faction/board", {"player": luna_user})

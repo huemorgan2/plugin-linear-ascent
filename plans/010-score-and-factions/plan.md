@@ -29,6 +29,17 @@ Third directive (same day): factions run on a shared purse.
   entering it costs gold, **paid from the store**.
 - Any member can **donate** carried gold to the store at any time.
 
+Fourth directive (same day): faction LIFE happens in the game, not
+the pane.
+
+- **Join / found a faction at the Guildhall building** in Roothollow
+  — game scenes, like every other building. Manage it there too
+  (donate, enter the week's challenge, kick, leave).
+- The **COMMUNITY tab becomes the faction news board** — read-only:
+  who won this week, who is ranked #1, the biggest factions by
+  members, the richest by store gold, and the highest-levelled
+  rosters. No join/create/manage UI in the pane.
+
 ## 0. Attendance math (the whole trick, pinned down)
 
 World weeks: `week = world_day // 7` (world_day already rolls at
@@ -82,7 +93,7 @@ buy-in) but pays dues like everyone else.
 transaction (§3): each member is charged carried gold first, then
 bank. A member who can't cover it goes **in arrears**: they stay in
 the faction but are excluded from that week's prize split, and the
-faction panel marks them (▲) — the steward's kick lever does the
+Guildhall roster marks them (▲) — the steward's kick lever does the
 rest. Arrears clear automatically the first week they can pay again.
 
 **Donations** — any member, any time, from carried gold only (the
@@ -90,7 +101,7 @@ bank is the safe place; donating should be a deliberate act). No cap.
 
 **Audit** — every store movement (join fee, dues, donation, challenge
 entry, prize payout) writes a row in `ascent_faction_ledger`, shown
-as the store history in the pane.
+as the store history at the Guildhall.
 
 ## 1. worldd schema — migration `006_factions.sql`
 
@@ -126,8 +137,8 @@ kind the same week (rivalry for free, and the Crier has one headline).
 Targets are still per-faction — scaled by member count × average
 level so a 3-climber faction isn't chasing a 20-climber number.
 
-**Entering costs store gold.** The steward joins the week's challenge
-from the faction panel; the entry fee is
+**Entering costs store gold.** The steward enters the week's
+challenge at the Guildhall; the entry fee is
 
     entry = ◈ 5 × member count        (small — dues-sized, not rent)
 
@@ -202,6 +213,12 @@ one transaction:
                               entry cost), goal progress, live
                               projected ratio/multiplier, store
                               ledger (last 20)
+    POST /v1/faction/board    the news board (read-only, any tenant):
+                              last week's winners (faction, goal,
+                              prize note), all-time wins ranking
+                              (#1 called out), top factions by member
+                              count, by store gold, and by average
+                              member level; recent faction happenings
 
 `_roster` (Muster) stays as the in-game flavor location; the
 leaderboard is the complete, gold-visible table. Cross-tenant
@@ -211,10 +228,12 @@ one deliberate scope-widening to call out at review.
 ## 5. Plugin proxy routes
 
 The pane iframe can't sign HMAC, so `routes.py` adds thin
-authenticated proxies: `GET /score`, `GET/POST /community/*` →
-`WorldClient` gains `leaderboard()` and `faction_*()` methods.
-Offline/local-dev fallback: SCORE shows the solo player, COMMUNITY
-shows "the world lift is down" (same message the game already uses).
+authenticated proxies — both read-only now: `GET /score` and
+`GET /community/board` → `WorldClient` gains `leaderboard()`,
+`faction_board()`, and the `faction_*()` methods the Guildhall
+scenes use. Offline/local-dev fallback: SCORE shows the solo player,
+COMMUNITY shows "the world lift is down" (same message the game
+already uses).
 
 ## 6. Pane UI (fills the 009 placeholders)
 
@@ -226,26 +245,45 @@ Same monospace/dark-panel language as the game tab.
     01  Vex the Red       14   ◈212   ◈4.1k   Ember Pact
     02  Mudge              12   ◈890   ◈1.2k   —
 
-**COMMUNITY** —
+**COMMUNITY — the faction news board** (read-only; joining and
+managing happens at the Guildhall, §6b):
 
-- No faction: list of factions (banner + member count + **join fee +
-  weekly dues shown up front** + join button) + "Found a faction"
-  flow (◈500): the founder types the faction's name (server-side
-  validation, unique), picks a banner from the 30-design gallery —
-  same 320×112 1-bit white-ink banners the game already uses, tinted
-  per role like scene banners — and sets the two purse numbers
-  (join fee, weekly dues) with the plan's caps enforced inline.
-- Member: faction panel — the faction banner across the top, the
-  **store** line (`STORE ◈ 342 · dues ◈ 5/week · join ◈ 25`), members
-  with attendance pips for the week (`▪▪▪▫▫▫▫ 3/4`, ▲ marks arrears),
-  **this week's challenge card** (kind, target, progress in `█░`,
-  "entered" stamp or the entry button with its store cost), live
-  projected multiplier ("on pace for 110% of the prize"), a
-  **donate** field (◈ from carried gold), the store ledger (last 20
-  movements), leave button.
-- Steward extras: kick button per member, the **enter-challenge**
-  button (◈5 × members, from the store — disabled with the shortfall
-  shown when the store can't cover it).
+    THIS WEEK          The Ember Pact won the CULL (paid ◈214)
+                       Iron Root fell short — 84/120 heads
+    HALL OF BANNERS    #1 Ember Pact — 4 wins        ← all-time wins
+    MOST CLIMBERS      Ember Pact 9 · Iron Root 7 · …
+    RICHEST STORE      Iron Root ◈ 1,240 · Ember Pact ◈ 342 · …
+    HIGHEST BLADES     Night Ledger avg lvl 14 · …   ← avg member level
+
+  Each row shows the faction's banner chip; recent faction happenings
+  (founded/won/paid out) run beneath as a ticker. Data is one
+  `/v1/faction/board` call; empty world renders "no banners raised
+  yet — the Guildhall in Roothollow takes founders."
+
+## 6b. The Guildhall — where faction life happens
+
+Faction membership is IN-GAME, at the existing Guildhall building in
+Roothollow (game scenes, same option grammar as every building):
+
+- **No faction**: the hall lists factions (banner, members, join fee
+  + weekly dues up front) as options → picking one is `/join` (fee
+  charged gold → bank, into the store). "Raise a new banner" (◈500)
+  runs a short creation flow: name (typed in chat, same pattern as
+  character naming) → banner pick → set join fee (◈0–500) → set
+  weekly dues (◈1–50), caps enforced by the scene.
+- **Member**: the hall shows the store line
+  (`STORE ◈ 342 · dues ◈ 5/week`), members with attendance pips
+  (`▪▪▪▫▫▫▫ 3/4`, ▲ marks arrears), this week's challenge (kind,
+  target, progress, "entered" stamp or the entry option with its
+  store cost), projected multiplier, and options: **Donate ◈ N**
+  (typed amount, carried gold), **Leave the banner**.
+- **Steward extras**: **Enter the week's challenge** (◈5 × members
+  from the store — refused with the shortfall shown), **Kick** (pick
+  from a member list scene).
+
+All of it speaks the existing worldd faction API (§4) through
+`WorldClient`; the scenes emit the same `_effects` pattern as every
+other social action, so worldd stays the single writer.
 
 **Faction banner assets** — 30 sigil designs, sci-fi-fantasy, in the
 game's 1-bit style: one bold centered emblem per banner (wolf sigil,
@@ -274,10 +312,11 @@ happenings → Crier path.
    from the store.
 5. Ledger `kind='kill'` tagging.
 6. worldd endpoints + tests.
-7. `WorldClient` methods + plugin proxy routes.
-8. Pane SCORE tab, then COMMUNITY tab (store line, donate, challenge
-   card).
-9. Blessing application in engine (HP/XP).
+7. `WorldClient` methods + plugin proxy routes (score + board).
+8. Guildhall scenes: list/join/found flow, member panel, donate,
+   enter-challenge, kick, leave.
+9. Pane SCORE tab, then COMMUNITY news board.
+10. Blessing application in engine (HP/XP).
 
 ## Acceptance
 
@@ -298,11 +337,16 @@ happenings → Crier path.
 - Multiplier tiers: 3-member faction pays on the 15% base, adding a
   4th member bumps the same goal to 20%.
 - Dojo, real browser: SCORE lists every seeded player with level and
-  gold; found a faction — name it, pick a banner, set join fee ◈25 /
-  dues ◈5, both visible on the faction list; second player joins and
-  the store shows ◈25 with a ledger row; donate ◈30; steward enters
-  the week's challenge and the store drops by the entry; attendance
-  pips update after acts on two consecutive world-days (time-warped
-  via test hooks); week turn collects dues from both members.
+  gold. At the **Guildhall** (in-game): found a faction — name it in
+  chat, pick a banner, set join fee ◈25 / dues ◈5; a second player
+  sees fee+dues in the hall list and joins — the store shows ◈25
+  with a ledger row; donate ◈30 by typed amount; steward enters the
+  week's challenge and the store drops by the entry; attendance pips
+  update after acts on two consecutive world-days (time-warped via
+  test hooks); week turn collects dues from both members.
+- **COMMUNITY tab** shows the news board only (no join/manage
+  controls): last week's winner with prize note, #1 by wins, top
+  factions by members, by store gold, by average level, happenings
+  ticker; renders sanely with zero factions.
 - Agent stays silent through all of it unless asked; Crier announces
   the new week's challenge and mentions the payout the next morning.

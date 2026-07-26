@@ -45,25 +45,6 @@ class JoinIn(BaseModel):
     name_hint: str = Field(default="", max_length=32)
 
 
-class FactionCreateIn(BaseModel):
-    name: str = Field(min_length=3, max_length=24)
-    banner: str = Field(default="wolf_howl", max_length=32)
-
-
-class FactionJoinIn(BaseModel):
-    faction: str = Field(min_length=3, max_length=24)
-
-
-class FactionKickIn(BaseModel):
-    tenant: str = Field(min_length=1, max_length=64)
-    player: str = Field(min_length=1, max_length=128)
-
-
-class FactionGoalIn(BaseModel):
-    kind: str = Field(min_length=3, max_length=16)
-    target: int = Field(gt=0, le=10_000_000_000)
-
-
 class ActIn(BaseModel):
     option: str = Field(default="", max_length=64)
     text: str = Field(default="", max_length=200)
@@ -273,39 +254,9 @@ def register_routes(app, ctx: PluginContext) -> None:
 
     @router.get("/pane/community")
     async def pane_community(user=Depends(get_current_user)) -> dict:
-        w = _world()
-        key = runtime.player_key()
-        status = await _proxy(w.faction_status(key))
-        listing = await _proxy(w.faction_list(key))
-        return {"status": status, "list": listing}
-
-    @router.post("/pane/community/create")
-    async def pane_faction_create(body: FactionCreateIn,
-                                  user=Depends(get_current_user)) -> dict:
-        return await _proxy(_world().faction_create(
-            runtime.player_key(), body.name.strip(), body.banner.strip()))
-
-    @router.post("/pane/community/join")
-    async def pane_faction_join(body: FactionJoinIn,
-                                user=Depends(get_current_user)) -> dict:
-        return await _proxy(_world().faction_join(
-            runtime.player_key(), body.faction.strip()))
-
-    @router.post("/pane/community/leave")
-    async def pane_faction_leave(user=Depends(get_current_user)) -> dict:
-        return await _proxy(_world().faction_leave(runtime.player_key()))
-
-    @router.post("/pane/community/kick")
-    async def pane_faction_kick(body: FactionKickIn,
-                                user=Depends(get_current_user)) -> dict:
-        return await _proxy(_world().faction_kick(
-            runtime.player_key(), body.tenant, body.player))
-
-    @router.post("/pane/community/goal")
-    async def pane_faction_goal(body: FactionGoalIn,
-                                user=Depends(get_current_user)) -> dict:
-        return await _proxy(_world().faction_goal(
-            runtime.player_key(), body.kind, body.target))
+        """The faction news board — read-only. Joining and managing a
+        faction happens in-game, at the Guildhall."""
+        return await _proxy(_world().faction_board(runtime.player_key()))
 
     @router.get("/art/factions/{slug}.png")
     async def faction_banner(slug: str):

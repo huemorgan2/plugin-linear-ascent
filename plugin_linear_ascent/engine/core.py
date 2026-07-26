@@ -38,6 +38,8 @@ def apply_choice(p: dict, option_id: str, text: str = "") -> Scene:
         return social.relay_compose(p, text)
     if p.get("founding_guild") and text and not option_id:
         return social.guildhall_found(p, text)
+    if p.get("faction_donating") and text and not option_id:
+        return social.guildhall_donate(p, text)
 
     scene = _build_scene(p)
     valid = {o.id for o in scene.options}
