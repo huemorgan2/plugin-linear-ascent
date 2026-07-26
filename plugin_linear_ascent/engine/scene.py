@@ -44,12 +44,19 @@ class Scene:
     banner_variant: str = ""        # 008 specimen: "" | runt | tough | alpha — retints the art
     fx: str = ""                    # 011 event animation slug (kill GIFs, gate open, title)
     scene_id: str = ""              # nonce — ascent_choose must echo the ids of THIS scene
+    awaits_text: str = ""           # 010: "" | what the scene wants typed in
+                                    # chat, e.g. "the banner's name" — the
+                                    # sidekick forwards the player's next
+                                    # message as ascent_choose text
 
     def to_text(self) -> str:
         """Plain-text fallback — always works, cards are enhancement."""
         lines = [self.eyebrow, self.headline]
         if self.support:
             lines.append(self.support)
+        if self.awaits_text:
+            lines.append(f"⌨ waiting for a typed chat reply: "
+                         f"{self.awaits_text}")
         if self.shard_note:
             lines.append(f"◆ {self.shard_note}")
         lines += self.body_lines
@@ -81,6 +88,7 @@ class Scene:
             "banner_variant": self.banner_variant,
             "fx": self.fx,
             "scene_id": self.scene_id,
+            "awaits_text": self.awaits_text,
         }
 
     @staticmethod
@@ -105,4 +113,5 @@ class Scene:
             banner_variant=d.get("banner_variant", ""),
             fx=d.get("fx", ""),
             scene_id=d.get("scene_id", ""),
+            awaits_text=d.get("awaits_text", ""),
         )

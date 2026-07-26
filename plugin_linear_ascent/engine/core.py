@@ -17,13 +17,21 @@ from .scene import Meters, Option, Scene
 
 # ── Entry points ─────────────────────────────────────────────────────────
 
+def _stamp(p: dict, scene: Scene) -> Scene:
+    """scene_id = the act counter. Every choice bumps it, reads reuse it —
+    /pane/peek compares ids, so a chat-driven act refreshes the pane
+    while idempotent reads never do."""
+    scene.scene_id = f"s{p.get('act_seq', 0)}"
+    return scene
+
+
 def current_scene(p: dict) -> Scene:
     state.ensure_current(p)
     state.touch_daily(p)
     ev = _pop_pending_event(p)
     if ev is not None:
-        return ev
-    return _build_scene(p)
+        return _stamp(p, ev)
+    return _stamp(p, _build_scene(p))
 
 
 def apply_choice(p: dict, option_id: str, text: str = "") -> Scene:
@@ -31,13 +39,16 @@ def apply_choice(p: dict, option_id: str, text: str = "") -> Scene:
     state.ensure_current(p)
     state.touch_daily(p)
     p["last_seen"] = state.now().isoformat()
+    p["act_seq"] = p.get("act_seq", 0) + 1
 
     if p["stage"] == "creation_name" and text and not option_id:
-        return _creation_set_name(p, text)
+        return _stamp(p, _creation_set_name(p, text))
     if p.get("compose_to") and text and not option_id:
-        return social.relay_compose(p, text)
+        return _stamp(p, social.relay_compose(p, text))
     if p.get("founding_guild") and text and not option_id:
-        return social.guildhall_found(p, text)
+        return _stamp(p, social.guildhall_found(p, text))
+    if p.get("faction_donating") and text and not option_id:
+        return _stamp(p, social.guildhall_donate(p, text))
 
     scene = _build_scene(p)
     valid = {o.id for o in scene.options}
@@ -49,8 +60,8 @@ def apply_choice(p: dict, option_id: str, text: str = "") -> Scene:
             scene.shard_note = (
                 f"That isn't one of the paths in front of us. "
                 f"Pick one of: {', '.join(sorted(valid))}.")
-            return scene
-    return _dispatch(p, option_id)
+            return _stamp(p, scene)
+    return _stamp(p, _dispatch(p, option_id))
 
 
 # ── Pending events (presents, death reports — delivered next session) ───
@@ -343,6 +354,7 @@ def _creation_name_scene(p: dict) -> Scene:
                 "can hold.",
         shard_note="Choose one you'd want carved where everyone reads it.",
         options=[],
+        awaits_text="the character's name",
     )
 
 

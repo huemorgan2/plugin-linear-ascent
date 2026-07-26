@@ -251,8 +251,12 @@ class LinearAscentPlugin(LunaPlugin):
                 description=(
                     "Linear Ascent: submit the player's choice for the "
                     "current scene. Pass `option` as the option id OR the "
-                    "number the player typed (e.g. '2'). During character "
-                    "naming pass `text` with the chosen name instead. The "
+                    "number the player typed (e.g. '2'). Some scenes wait "
+                    "for a TYPED chat reply instead (marked '⌨ waiting for "
+                    "a typed chat reply' — character names, banner names, "
+                    "fees, dues, donation amounts, letters): for those "
+                    "pass the player's message as `text` and leave "
+                    "`option` empty. The "
                     "engine refuses stale or unknown options with a "
                     "steering hint — relay it. After the scene shows, "
                     "reply with at most one short in-character line — or "
@@ -266,7 +270,9 @@ class LinearAscentPlugin(LunaPlugin):
                             "description": "Option id or typed number."},
                         "text": {
                             "type": "string",
-                            "description": "Free text — only for naming."},
+                            "description": "Free text — for scenes that "
+                                           "await a typed reply (names, "
+                                           "amounts, letters)."},
                     },
                     "required": []},
                 policy="auto_approve", risk_level="low"),

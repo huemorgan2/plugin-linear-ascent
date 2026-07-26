@@ -5,8 +5,10 @@ rendered by Luna's shell as a sidebar-section iframe. GAME reuses the exact
 card grammar (render.SCENE_CSS + render_scene_fragment served by
 /pane/scene and /act) so the pane is pixel-identical to the old chat cards;
 clicks call /act directly with the host token — no card bridge, no model in
-the path. SCORE is the full-world leaderboard; COMMUNITY is factions:
-join/create (name + sigil pick), weekly goals, attendance, steward tools.
+the path. SCORE is the full-world leaderboard; COMMUNITY is the faction
+NEWS BOARD (read-only): weekly winners, the wins ranking, the biggest /
+richest / highest-levelled banners. Joining, founding and managing a
+faction happens IN-GAME at the Guildhall in Roothollow.
 
 Auth: the shell posts {type:'luna-auth', token} into the iframe on load and
 whenever the session changes; the pane also answers 401s by asking again
@@ -278,176 +280,92 @@ async function loadScore() {
   }
 }
 
-/* ── COMMUNITY: factions ────────────────────────────────────────────── */
+/* ── COMMUNITY: the faction news board (read-only) ──────────────────── */
 const community = document.getElementById('community');
-let pickedBanner = '';
 async function loadCommunity() {
   try {
     const d = await call('/pane/community');
-    community.innerHTML = d.status && d.status.faction
-      ? renderMine(d.status) : renderHall(d.list);
-    wireCommunity(d);
+    community.innerHTML = renderBoard(d);
   } catch (err) {
     if (err.message !== 'auth')
-      paneFail(community, 'the guildhall', err.message);
+      paneFail(community, 'the faction board', err.message);
   }
 }
 
-const GOAL_LABEL = {hoard: 'HOARD — gold earned',
+const KIND_LABEL = {hoard: 'HOARD — gold earned',
                     cull: 'CULL — kills made',
                     climb: 'CLIMB — experience won'};
-const GOAL_PRIZE = {hoard: 'prize: bonus gold, split by days shown',
-                    cull: 'prize: +HP blessing all next week',
-                    climb: 'prize: +XP blessing all next week'};
 
-function renderMine(s) {
-  const pct = Math.round(s.base_pct * 100);
-  const att = s.attendance;
-  const goalSet = s.goal && s.goal.target > 0;
-  let h = '<div class="panel"><div class="eyebrow">your banner</div>'
-    + '<div class="frow" style="border-bottom:0">' + sig(s.banner, 'big')
-    + '<div class="meta"><div style="font-weight:700">' + esc(s.faction)
-    + '</div><div class="faint">' + s.members.length + ' at the table · '
-    + 'you are ' + esc(s.role) + ' · base prize ' + pct + '%</div>'
-    + '</div></div></div>';
-
-  h += '<div class="panel"><div class="eyebrow">weekly goal</div>';
-  if (goalSet) {
-    h += '<div class="kv"><span class="k">'
-      + esc(GOAL_LABEL[s.goal.kind] || s.goal.kind) + '</span><span>'
-      + num(s.goal.progress) + ' / ' + num(s.goal.target) + '</span></div>'
-      + '<div>' + bar(s.goal.progress, s.goal.target, 28) + '</div>'
-      + '<div class="faint" style="margin-top:4px">'
-      + esc(GOAL_PRIZE[s.goal.kind] || '') + '</div>';
-  } else {
-    h += '<div class="faint">no goal set — the steward picks one below'
-      + '</div>';
-  }
-  if (s.role === 'steward') {
-    h += '<div style="display:flex;gap:1ch;margin-top:10px;flex-wrap:wrap">'
-      + '<select id="goal-kind" class="ti">'
-      + ['hoard', 'cull', 'climb'].map(k =>
-          '<option value="' + k + '"'
-          + (goalSet && s.goal.kind === k ? ' selected' : '') + '>'
-          + k.toUpperCase() + '</option>').join('')
-      + '</select>'
-      + '<input id="goal-target" class="ti" style="max-width:16ch" '
-      + 'type="number" min="1" placeholder="target" value="'
-      + (goalSet ? s.goal.target : '') + '">'
-      + '<button class="btn" id="goal-set">Set goal</button></div>'
-      + '<div class="faint" style="margin-top:6px">fair for this crew: '
-      + Object.entries(s.suggested).map(([k, v]) =>
-          k + ' ' + num(v)).join(' · ') + '</div>';
-  }
-  h += '</div>';
-
-  h += '<div class="panel"><div class="eyebrow">attendance — '
-    + att.attended + '/' + att.required + ' member-days · prize ×'
-    + att.multiplier.toFixed(2) + '</div>'
-    + '<div class="faint" style="margin-bottom:6px">4 days each = full '
-    + 'prize · under half = nothing · all 7 = ×1.75 (cap)</div>';
-  s.members.forEach(m => {
-    h += '<div class="mrow"><span>' + esc(m.name)
-      + (m.role === 'steward' ? ' <span class="faint">· steward</span>' : '')
-      + '</span><span class="r">lv ' + m.level + '</span>'
-      + '<span class="r">' + m.days + '/' + m.required + ' days</span>'
-      + '<span style="text-align:right">'
-      + (s.role === 'steward' && !(m.role === 'steward')
-         ? '<button class="btn danger" data-kick-t="' + esc(m.tenant)
-           + '" data-kick-p="' + esc(m.player) + '">remove</button>' : '')
-      + '</span></div>';
-  });
-  if (s.last_week) {
-    h += '<div class="faint" style="margin-top:8px">last week: '
-      + esc(s.last_week.prize_note || '—') + '</div>';
-  }
-  h += '<div style="margin-top:10px"><button class="btn danger" id="leave">'
-    + 'Leave the faction</button></div></div>';
-  return h;
+function chipRow(name, banners, right) {
+  const slug = banners[name] || '';
+  return '<div class="frow">'
+    + (slug ? sig(slug) : '<div class="fbanner"></div>')
+    + '<div class="meta"><div>' + esc(name) + '</div></div>'
+    + '<span class="dim">' + right + '</span></div>';
 }
 
-function renderHall(l) {
-  let h = '<div class="panel"><div class="eyebrow">banners flying</div>';
-  if (!l.factions.length) {
-    h += '<div class="faint">no factions yet — raise the first banner'
-      + '</div>';
+function renderBoard(d) {
+  const banners = d.banners || {};
+  const empty = !Object.keys(banners).length;
+  let h = '<div class="panel"><div class="eyebrow">this week — '
+    + esc(KIND_LABEL[d.challenge.kind] || d.challenge.kind) + '</div>';
+  if (empty) {
+    h += '<div class="faint">no banners raised yet — the Guildhall in '
+      + 'Roothollow takes founders</div></div>';
+    return h;
   }
-  l.factions.forEach(f => {
-    h += '<div class="frow">' + sig(f.banner)
-      + '<div class="meta"><div>' + esc(f.name) + '</div>'
-      + '<div class="faint">' + f.members + ' member'
-      + (f.members === 1 ? '' : 's')
-      + (f.goal_target > 0 ? ' · ' + esc(f.goal_kind) + ' '
-         + num(f.goal_target) : ' · no goal yet') + '</div></div>'
-      + '<button class="btn" data-join="' + esc(f.name) + '">Join</button>'
-      + '</div>';
-  });
-  h += '</div>';
-
-  h += '<div class="panel"><div class="eyebrow">found a new banner · ◈ '
-    + num(l.found_fee) + '</div>'
-    + '<input id="new-name" class="ti" maxlength="24" '
-    + 'placeholder="name your faction (3–24 letters)">'
-    + '<div class="faint" style="margin:8px 0 0">pick your sigil</div>'
-    + '<div class="bgrid">'
-    + l.banners.map(b => '<div class="cell" data-banner="' + esc(b) + '">'
-        + sig(b) + '<div class="cap">' + esc(b.replace(/_/g, ' '))
-        + '</div></div>').join('')
-    + '</div>'
-    + '<button class="btn" id="create" disabled>Raise the banner · ◈ '
-    + num(l.found_fee) + '</button>'
-    + '<span class="faint" id="create-hint" style="margin-left:1ch">'
-    + 'name + sigil first</span></div>';
-  return h;
-}
-
-function wireCommunity(d) {
-  const el = community;
-  const act = async (fn) => {
-    try { await fn(); await loadCommunity(); }
-    catch (err) {
-      if (err.message !== 'auth') {
-        const e = document.createElement('div');
-        e.className = 'err'; e.textContent = err.message;
-        el.prepend(e); setTimeout(() => e.remove(), 6000);
-      }
-    }
-  };
-  el.querySelectorAll('[data-join]').forEach(b => b.onclick = () =>
-    act(() => call('/pane/community/join', {faction: b.dataset.join})));
-  el.querySelectorAll('[data-kick-t]').forEach(b => b.onclick = () =>
-    act(() => call('/pane/community/kick',
-      {tenant: b.dataset.kickT, player: b.dataset.kickP})));
-  const leave = el.querySelector('#leave');
-  if (leave) leave.onclick = () =>
-    act(() => call('/pane/community/leave', {}));
-  const goalSet = el.querySelector('#goal-set');
-  if (goalSet) goalSet.onclick = () => {
-    const kind = el.querySelector('#goal-kind').value;
-    const target = parseInt(el.querySelector('#goal-target').value, 10);
-    if (!target || target <= 0) return;
-    act(() => call('/pane/community/goal', {kind, target}));
-  };
-  const create = el.querySelector('#create');
-  const name = el.querySelector('#new-name');
-  const hint = el.querySelector('#create-hint');
-  if (create && name) {
-    pickedBanner = '';
-    const ready = () => {
-      const ok = name.value.trim().length >= 3 && pickedBanner;
-      create.disabled = !ok;
-      if (hint) hint.textContent = ok ? '' : 'name + sigil first';
-    };
-    name.addEventListener('input', ready);
-    el.querySelectorAll('[data-banner]').forEach(c => c.onclick = () => {
-      el.querySelectorAll('[data-banner]').forEach(x =>
-        x.classList.toggle('sel', x === c));
-      pickedBanner = c.dataset.banner;
-      ready();
+  h += '<div class="faint">entry ◈ ' + d.challenge.entry_per_member
+    + ' a head, paid from the faction store — the steward signs up at '
+    + 'the Guildhall</div>';
+  if (d.last_week.length) {
+    h += '<div style="margin-top:8px">';
+    d.last_week.forEach(wk => {
+      h += '<div class="kv"><span' + (wk.won ? '' : ' class="k"') + '>'
+        + (wk.won ? '★ ' : '') + esc(wk.faction) + ' — '
+        + esc(wk.goal_kind).toUpperCase() + '</span><span class="dim">'
+        + esc(wk.prize_note || (num(wk.progress) + '/'
+        + num(wk.goal_target))) + '</span></div>';
     });
-    create.onclick = () => act(() => call('/pane/community/create',
-      {name: name.value.trim(), banner: pickedBanner}));
+    h += '</div>';
+  } else {
+    h += '<div class="faint" style="margin-top:8px">no banner entered '
+      + 'last week</div>';
   }
+  h += '</div>';
+
+  h += '<div class="panel"><div class="eyebrow">hall of banners — '
+    + 'wins all-time</div>';
+  if (d.wins.length) {
+    d.wins.forEach((w, i) => {
+      h += '<div class="kv"><span' + (i ? ' class="k"' : '') + '>'
+        + (i === 0 ? '#1 ' : (i + 1) + '  ') + esc(w.faction)
+        + '</span><span>' + w.wins + ' win' + (w.wins === 1 ? '' : 's')
+        + '</span></div>';
+    });
+  } else {
+    h += '<div class="faint">no challenge has been won yet</div>';
+  }
+  h += '</div>';
+
+  h += '<div class="panel"><div class="eyebrow">most climbers</div>'
+    + d.most_members.map(f => chipRow(f.name, banners,
+        f.members + ' member' + (f.members === 1 ? '' : 's'))).join('')
+    + '</div>';
+  h += '<div class="panel"><div class="eyebrow">richest store</div>'
+    + d.richest.map(f => chipRow(f.name, banners,
+        '◈ ' + num(f.treasury))).join('')
+    + '</div>';
+  h += '<div class="panel"><div class="eyebrow">highest blades</div>'
+    + d.highest.map(f => chipRow(f.name, banners,
+        'avg lvl ' + f.avg_level)).join('')
+    + '</div>';
+
+  if (d.ticker.length) {
+    h += '<div class="panel"><div class="eyebrow">the wire</div>'
+      + d.ticker.map(t => '<div class="faint">· ' + esc(t)
+        + '</div>').join('') + '</div>';
+  }
+  return h;
 }
 
 if (token) loadScene();
