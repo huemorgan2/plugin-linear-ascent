@@ -34,7 +34,7 @@ RED = "#f4645f"
 OK = "#3ad29f"
 
 _STRIPE = {"loot": GOLD, "present": GOLD, "death": RED,
-           "letter": AETHER, "boss": VIOLET}
+           "letter": AETHER, "boss": VIOLET, "news": AETHER}
 _HEADLINE = {"death": RED, "loot": GOLD, "present": GOLD}
 _BOSS_SLUGS = {"gnarl", "skarn", "barrowking", "vyx", "cindermaw", "hrimgar",
                "zephyra", "huntsman", "malgrim", "vharuk"}

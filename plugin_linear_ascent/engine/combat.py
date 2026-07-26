@@ -67,9 +67,21 @@ def start_encounter(p: dict, floor, enc, kind: str = "wilds") -> Scene:
     else:
         atk, dfs, hp = floor.monster_atk, floor.monster_def, floor.monster_hp
         name, prose = enc.name, enc.prose
+    specimen = "common"
+    if kind == "wilds":
+        # 008: specimen roll — same averages, real variance. Visible on
+        # the opener so fighting an alpha is an informed choice.
+        specimen = state.rng_pick(
+            p, [(s["weight"], k) for k, s in economy.SPECIMENS.items()])
+        spec = economy.SPECIMENS[specimen]
+        atk = round(atk * spec["atk"])
+        hp = round(hp * spec["hp"])
+        if spec["tag"]:
+            prose = f"{prose} This one is {spec['tag']}."
     p["encounter"] = {
         "kind": kind, "name": name, "prose": prose,
         "id": (enc.id if enc is not None else ""),
+        "specimen": specimen,
         "atk": atk, "def": dfs, "hp": hp, "hp_max": hp,
         "floor": floor.floor, "shot_used": False,
     }
@@ -81,6 +93,9 @@ def _shard_advice(p: dict, floor) -> str:
     e = p["encounter"]
     insight = p["sidekick"]["insight"]
     correct = state.roll_ok(p, 0.5 + 0.05 * insight)
+    if e.get("specimen") == "alpha":
+        return ("It leads whatever pack is left down here. It hits harder "
+                "and pays better. Your call — I carry you either way.")
     stronger = e["atk"] > state.atk(p)
     if not correct:
         stronger = not stronger
@@ -180,6 +195,9 @@ def _victory(p: dict, floor) -> Scene:
                  p["flags"].get("luck_day") == state.world_day())
         gold = round(state.rng_jitter(p, economy.gold_per_kill(floor.floor),
                                       0.50 if not lucky else 0.25) * fade)
+        # 008: hard specimens pay more, runts pay less
+        gold = round(
+            gold * economy.SPECIMENS[e.get("specimen", "common")]["gold"])
     if p.get("race") == "elf":
         xp = round(xp * (1 + economy.ELF_XP_BONUS))
     p["xp"] += xp
@@ -187,6 +205,10 @@ def _victory(p: dict, floor) -> Scene:
     _ledger(p, "kill", gold=gold, xp=xp, note=e["name"])
     lines = [f"The {e['name']} goes down.",
              f"+ {xp} experience", f"+ ◈ {gold} carried gold"]
+    if e.get("specimen") == "alpha":
+        loot = state.rng_pick(p, [(70, "medgel"), (30, "luck_charm")])
+        p["inventory"][loot] = p["inventory"].get(loot, 0) + 1
+        lines.append(f"▪ alpha spoils: {economy.APOTHECARY[loot].name}")
     lines += _level_ups(p)
 
     first_clear = False
@@ -198,7 +220,7 @@ def _victory(p: dict, floor) -> Scene:
             lines.append(f"The lift grinds open. FLOOR {nxt} is yours to enter.")
             if p.get("_world") is not None:
                 p.setdefault("_effects", []).append({
-                    "kind": "happening",
+                    "kind": "happening", "floor": floor.floor,
                     "line": (f"{p.get('name') or 'A climber'} cast down "
                              f"{e['name']} — floor {nxt} opens for them")})
         # guaranteed rare-loot roll
@@ -267,7 +289,7 @@ def _death(p: dict, floor) -> Scene:
     _ledger(p, "death", gold=-lost_gold, note=e["name"])
     if p.get("_world") is not None:
         p.setdefault("_effects", []).append({
-            "kind": "happening",
+            "kind": "happening", "floor": floor.floor,
             "line": (f"{p.get('name') or 'A climber'} fell to a "
                      f"{e['name']} on floor {floor.floor}")})
     p["encounter"] = None

@@ -1,10 +1,20 @@
-"""Shared mutable backend state — lets the settings page switch the plugin
-between local and shared-world mode at runtime, without a server restart.
+"""Shared mutable backend state — the plugin plays in ONE shared world.
+
+007: world connection is mandatory. On load (and lazily at every tool
+call) the plugin auto-enrolls against the default world with a
+persistent install_id. The local backend still exists but is only
+consulted when ASCENT_DEV_LOCAL=1 (tests, dojo runs) — a real install
+that cannot reach the world gets an honest "lift is down" scene, never a
+silent private world.
 
 Tools and routes both import this module and read `state` at call time.
 """
 
 from __future__ import annotations
+
+import os
+import time
+import uuid
 
 DEFAULT_WORLD_URL = "https://ascent-worldd.onrender.com"
 
@@ -14,13 +24,22 @@ VAULT_TENANT = "plugin_linear_ascent.tenant"
 VAULT_SECRET = "plugin_linear_ascent.secret"
 VAULT_INSTALL = "plugin_linear_ascent.install_id"
 
+ENROLL_RETRY_S = 30            # min seconds between auto-enroll attempts
+
 state: dict = {
     "remote": None,       # WorldClient when joined to a shared world
-    "local": None,        # LocalBackend, always available as fallback
+    "local": None,        # LocalBackend — dev flag / migration source only
     "world_url": "",      # for the settings page status display
     "tenant": "",
-    "source": "local",    # "env" | "vault" | "local"
+    "source": "local",    # "env" | "vault" | "auto" | "local"
+    "ctx": None,          # PluginContext (vault access for auto-enroll)
+    "enroll_ts": 0.0,     # last auto-enroll attempt (throttle)
 }
+
+
+def dev_local() -> bool:
+    """Local single-player is a developer flag, never a player mode."""
+    return os.environ.get("ASCENT_DEV_LOCAL", "").strip() not in ("", "0")
 
 
 def player_key() -> str:
@@ -50,25 +69,118 @@ async def _local_run(user: str, fn):
     return scene
 
 
+def _offline_scene():
+    """The honest failure scene — the world is REQUIRED, so an outage is a
+    scene the sidekick can empathize with, not a silent mode switch."""
+    from .engine.scene import Option, Scene
+    return Scene(
+        eyebrow="THE TOWER GATE · THE LIFT IS DOWN",
+        headline="The Ascent waits",
+        support="The great chains are still. The gate crew shrugs at the sky.",
+        shard_note="The world signal is gone — not your fault and not "
+                   "forever. Pull the lever again in a moment.",
+        body_lines=[
+            "Roothollow, the tower, every other climber — all of it is "
+            "out there, unreachable for now.",
+            "Nothing is lost. The world keeps your climb even when we "
+            "can't see it.",
+        ],
+        options=[Option("retry", "Pull the gate lever again")],
+        event_kind="",
+    )
+
+
 async def scene_for(user: str):
-    """Current scene via whichever backend is live (idempotent)."""
+    """Current scene via the world (idempotent). Dev flag → local engine."""
     from .engine import core
     from .engine.scene import Scene
-    remote = state["remote"]
-    if remote:
-        return Scene.from_dict(await remote.scene(user))
-    return await _local_run(user, core.current_scene)
+    if state["remote"] is None and dev_local():
+        return await _local_run(user, core.current_scene)
+    if state["remote"] is None and not await ensure_world(user):
+        return _offline_scene()
+    try:
+        return Scene.from_dict(await state["remote"].scene(user))
+    except Exception:
+        return _offline_scene()
 
 
 async def act_for(user: str, option: str, text: str = ""):
-    """Apply a choice via whichever backend is live. The single game-action
-    entry point shared by the ascent_choose tool and the card /act route."""
+    """Apply a choice via the world. The single game-action entry point
+    shared by the ascent_choose tool and the card /act route."""
     from .engine import core
     from .engine.scene import Scene
-    remote = state["remote"]
-    if remote:
-        return Scene.from_dict(await remote.act(user, option, text))
-    return await _local_run(user, lambda d: core.apply_choice(d, option, text))
+    if option == "retry":
+        # the offline scene's lever: never a game option, always a re-sync
+        return await scene_for(user)
+    if state["remote"] is None and dev_local():
+        return await _local_run(
+            user, lambda d: core.apply_choice(d, option, text))
+    if state["remote"] is None and not await ensure_world(user):
+        return _offline_scene()
+    try:
+        return Scene.from_dict(await state["remote"].act(user, option, text))
+    except Exception:
+        return _offline_scene()
+
+
+async def ensure_world(user: str) -> bool:
+    """Auto-enroll against the default world (007 Phase 1). Idempotent per
+    install (vault install_id), throttled, safe to call on every turn."""
+    if state["remote"] is not None:
+        return True
+    now = time.monotonic()
+    if now - state["enroll_ts"] < ENROLL_RETRY_S:
+        return False
+    state["enroll_ts"] = now
+    vault = getattr(state["ctx"], "vault", None) if state["ctx"] else None
+    if vault is None:
+        return False
+    try:
+        try:
+            install_id = (await vault.get_credential(VAULT_INSTALL)).value
+        except KeyError:
+            install_id = uuid.uuid4().hex
+            await vault.store_credential(VAULT_INSTALL, install_id,
+                                         kind="api_key")
+        import httpx
+        async with httpx.AsyncClient(timeout=15) as c:
+            r = await c.post(DEFAULT_WORLD_URL + "/v1/enroll",
+                             json={"install_id": install_id})
+        if r.status_code != 200:
+            return False
+        d = r.json()
+        await vault.store_credential(VAULT_URL, DEFAULT_WORLD_URL,
+                                     kind="api_key")
+        await vault.store_credential(VAULT_TENANT, d["tenant"],
+                                     kind="api_key")
+        await vault.store_credential(VAULT_SECRET, d["secret"],
+                                     kind="api_key")
+        configure_remote(DEFAULT_WORLD_URL, d["tenant"], d["secret"],
+                         source="auto")
+        await migrate_local_character(user)
+        return True
+    except Exception:
+        return False
+
+
+async def migrate_local_character(user: str) -> bool:
+    """One-time import: a character made in local/dev play is pushed to
+    the world on first connect — nobody loses their climber. If the world
+    already has one, the world wins (local was the outage shadow)."""
+    remote, local = state["remote"], state["local"]
+    if remote is None or local is None:
+        return False
+    try:
+        doc = await local.load(user)
+        if doc.get("stage") != "playing":
+            return False
+        sheet = await remote.character(user)
+        if sheet.get("status") != "no character yet":
+            return False               # world character exists — world wins
+        out = await remote.import_doc(user, doc)
+        return bool(out.get("imported"))
+    except Exception:
+        return False
 
 
 def configure_remote(url: str, tenant: str, secret: str, source: str) -> None:

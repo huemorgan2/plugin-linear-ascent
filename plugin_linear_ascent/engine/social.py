@@ -318,6 +318,101 @@ def guildhall_found(p: dict, text: str) -> Scene:
                                    "your table")
 
 
+# ── The shared frontier Warden (007 §3) ──────────────────────────────────
+# One live Warden for the whole world: worldd injects its HP pool as
+# w["warden"]; strikes are effects the host resolves transactionally. The
+# kill (frontier raise, reward split, fall reports) happens server-side.
+
+def _warden_banner(fl) -> str:
+    from .combat import _creature_art
+    slug = f"warden_{fl.floor:03d}"
+    return slug if _creature_art(slug) else ""
+
+
+def _warden_fallen_scene(p: dict, fl) -> Scene:
+    p["location"] = "gate_town"
+    return Scene(
+        eyebrow=f"FLOOR {fl.floor} · {fl.biome.upper()} · THE KEEP",
+        headline=f"{fl.warden_name} has already fallen",
+        support="The keep is a monument now. The lift above stands open.",
+        body_lines=["Scorch marks and silence. Someone got here first."],
+        options=[Option("hunt", "Hunt the wilds", "1 ⚡"),
+                 Option("town", "Return to Roothollow")],
+        meters=meters(p),
+    )
+
+
+def warden_scene(p: dict, fl, note: str = "") -> Scene:
+    w = world(p) or {}
+    wd = w.get("warden") or {}
+    if wd.get("floor") != fl.floor:
+        return _warden_fallen_scene(p, fl)
+    hp, hp_max = int(wd.get("hp", 0)), max(1, int(wd.get("hp_max", 1)))
+    atk_w, def_w, _ = economy.warden_stats(fl.floor)
+    pct = max(0, round(100 * hp / hp_max))
+    lines = []
+    if note:
+        lines.append(note)
+    lines.append(fl.warden_prose)
+    lines.append(f"the Warden stands at {pct}% — {hp:,}/{hp_max:,} HP")
+    strikers = wd.get("strikers") or []
+    if strikers:
+        names = ", ".join(s.get("name") or "?" for s in strikers[:6])
+        lines.append(f"blades against it: {names}")
+    else:
+        lines.append("no blade has touched it yet — the first strike is "
+                     "yours to take")
+    return Scene(
+        eyebrow=f"FLOOR {fl.floor} · {fl.biome.upper()} · THE KEEP",
+        headline=f"{fl.warden_name} — ATK {atk_w} / DEF {def_w} / "
+                 f"HP {hp:,}/{hp_max:,}",
+        support="One Warden for the whole world. Whoever lands the last "
+                "blow opens this floor for everyone.",
+        body_lines=lines,
+        options=[Option("strike", "Strike the Warden",
+                        f"{economy.COST_WARDEN_ATTEMPT} ⚡"),
+                 Option("town", "Withdraw to Roothollow")],
+        meters=meters(p),
+        event_kind="boss",
+        banner=_warden_banner(fl),
+    )
+
+
+def warden_action(p: dict, fl, oid: str) -> Scene:
+    if oid != "strike":
+        return warden_scene(p, fl)
+    w = world(p) or {}
+    wd = w.get("warden") or {}
+    if wd.get("floor") != fl.floor:
+        return _warden_fallen_scene(p, fl)
+    if not state.spend_energy(p, economy.COST_WARDEN_ATTEMPT):
+        return warden_scene(p, fl, note="A strike takes 3 ⚡ you don't "
+                                        "have. The wilds cost less.")
+    atk_w, def_w, _ = economy.warden_stats(fl.floor)
+    raw = state.rng_int(p, state.atk(p) // 2, state.atk(p))
+    dmg = max(1, raw - def_w // 2)
+    _effect(p, "warden_strike", floor=fl.floor, damage=dmg)
+    _ledger(p, "warden_strike", note=f"floor {fl.floor} · {dmg}")
+    # the Warden answers — one counter-swing per strike
+    back_raw = state.rng_int(p, atk_w // 2, atk_w)
+    back = max(0, back_raw - state.dfs(p) // 2)
+    p["hp"] -= back
+    if p["hp"] <= 0:
+        # the dying blow still lands (the effect above is already queued)
+        from .combat import _death
+        p["encounter"] = {"kind": "warden", "name": fl.warden_name,
+                          "prose": "", "id": "", "atk": atk_w, "def": def_w,
+                          "hp": 1, "hp_max": 1, "floor": fl.floor,
+                          "shot_used": False}
+        return _death(p, fl)
+    wd["hp"] = max(0, int(wd.get("hp", 0)) - dmg)   # optimistic display
+    note = f"your blow lands for {dmg:,} — it answers for {back}"
+    if wd["hp"] <= 0:
+        note += (". It staggers. If it fell, word reaches Roothollow "
+                 "with your name on it")
+    return warden_scene(p, fl, note=note)
+
+
 # ── Milestone boss quorum ────────────────────────────────────────────────
 
 def boss_scene(p: dict, floor, note: str = "") -> Scene:

@@ -43,6 +43,7 @@ def new_player(luna_user: str) -> dict:
         "energy_ts": ts, "energy_val": float(economy.ENERGY_BASE_CAP),
         "lodged_until_day": -1,
         "last_seen": ts,
+        "news_day": world_day(),       # fresh climbers skip today's crier
         "rng_counter": 0,
         "scene": None,
         "encounter": None,
@@ -108,6 +109,7 @@ def ensure_current(p: dict) -> None:
     entry point, so docs created before a fix are healed on any backend
     (local plugin DB and worldd alike) the next time they're touched."""
     p.setdefault("hone", {s: 0 for s in economy.HONE_SLOTS})
+    p.setdefault("news_day", -1)       # 007: existing docs get the crier
     if p["gear"].get("weapon") is None:
         # pre-c4ab270 doc: never received the free starter weapon.
         p["gear"]["weapon"] = economy.STARTER_WEAPON.slug
@@ -195,6 +197,11 @@ def touch_daily(p: dict) -> None:
     """Reset per-day counters when the world day advanced."""
     day = world_day()
     if p["daily"].get("day") != day:
+        # 008: a night at the Lodge mends the sleeper. lodged_until_day
+        # covering today means last night was spent behind the palisade.
+        if (p.get("lodged_until_day", -1) >= day
+                and p.get("stage") == "playing"):
+            p["hp"] = min(max_hp(p), p["hp"] + economy.LODGE_NIGHT_HEAL_HP)
         p["daily"] = {"day": day, "pvp_used": 0, "energy_cell": False,
                       "death_save": False}
 

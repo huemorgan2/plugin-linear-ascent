@@ -67,3 +67,8 @@ class WorldClient:
 
     async def character(self, luna_user: str) -> dict:
         return await self._post("/v1/character", {"player": luna_user})
+
+    async def import_doc(self, luna_user: str, doc: dict) -> dict:
+        """One-time local→world character migration (007 Phase 1)."""
+        return await self._post("/v1/import", {"player": luna_user,
+                                               "doc": doc})

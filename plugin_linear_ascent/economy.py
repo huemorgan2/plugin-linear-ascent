@@ -82,14 +82,48 @@ def player_max_hp(level: int) -> int:
 # ── §3 Monsters, XP, gold ────────────────────────────────────────────────
 # 004 retune: monster ATK slope 4.0 → 3.3 keeps at-level wilds fights under
 # 40% of the HP pool on every floor once gear honing (below) is in play.
+# 008: wilds HP is DERIVED from the at-level player's damage so a common
+# kill takes ~2.5 rounds on floor 1, +0.5/floor, capped at ~7 — fights are
+# quick clicks early and never drag. Wardens keep the old HP budget
+# (they must still feel like bosses; see §5).
 
 MONSTER_ATK_SLOPE = 3.3
 BAND_INCOME_JUMP = 1.2         # gold/kill ×1.2 per gear band (004 §4.5)
 
+WILDS_ROUNDS_BASE = 2.0        # class-average rounds at floor 1 ≈ 2.5
+WILDS_ROUNDS_SLOPE = 0.5
+WILDS_ROUNDS_MAX = 7.0
+
+
+def wilds_rounds(floor: int) -> float:
+    """Target rounds-to-kill for a common wilds monster."""
+    return min(WILDS_ROUNDS_BASE + WILDS_ROUNDS_SLOPE * floor,
+               WILDS_ROUNDS_MAX)
+
 
 def monster_stats(floor: int) -> tuple[int, int, int]:
-    """(ATK, DEF, HP) for a regular monster on `floor`."""
-    return round(MONSTER_ATK_SLOPE * floor) + 2, 3 * floor, 12 * floor + 25
+    """(ATK, DEF, HP) for a common wilds monster on `floor`."""
+    atk = round(MONSTER_ATK_SLOPE * floor) + 2
+    dfs = 3 * floor
+    p_atk, _ = _at_level_loadout(floor)
+    p_dmg = max(1, round(0.75 * p_atk) - dfs // 2)
+    return atk, dfs, round(p_dmg * wilds_rounds(floor))
+
+
+# 008: per-encounter specimen roll — same averages, real variance.
+# Hard specimens pay more; the tag is visible on the encounter card so
+# running from an alpha is an informed choice. Expectations of hp and
+# gold multipliers are within a few % of 1.0 (sim gate asserts it).
+SPECIMENS: dict[str, dict] = {
+    "runt":   {"weight": 25, "hp": 0.55, "atk": 1.0, "gold": 0.45,
+               "tag": "gaunt and limping — an easy kill, thin pickings"},
+    "common": {"weight": 50, "hp": 1.0, "atk": 1.0, "gold": 1.0, "tag": ""},
+    "tough":  {"weight": 20, "hp": 1.4, "atk": 1.0, "gold": 1.4,
+               "tag": "scarred and heavy-set — dangerous, but it will pay"},
+    "alpha":  {"weight": 5, "hp": 2.0, "atk": 1.2, "gold": 2.3,
+               "tag": "an alpha, twice the size — worth a fortune or a "
+                      "funeral"},
+}
 
 
 def xp_per_kill(floor: int) -> int:
@@ -157,11 +191,18 @@ def _at_level_loadout(floor: int) -> tuple[int, int]:
             2 * floor + 5 * tier + 7 * tier + 2 * hone)
 
 
+def _boss_hp_base(floor: int) -> int:
+    """Pre-008 wilds HP curve. Wardens keep this budget so the 008
+    fast-kill retune never shrinks a boss — a Warden must still take
+    ~12+ rounds while a wilds animal takes 2.5–7."""
+    return 12 * floor + 25
+
+
 def warden_stats(floor: int) -> tuple[int, int, int]:
     """Regular Warden (floors not ending in 0), soloable at-level."""
     p_atk, p_def = _at_level_loadout(floor)
-    _, m_def, m_hp = monster_stats(floor)
-    hp = round(m_hp * WARDEN_HP_MULT)
+    m_def = 3 * floor
+    hp = round(_boss_hp_base(floor) * WARDEN_HP_MULT)
     if floor > WARDEN_SOFT_FLOOR:
         hp = round(hp * (1 + (floor - WARDEN_SOFT_FLOOR) / WARDEN_HP_RAMP))
     p_dmg = max(1, round(0.75 * p_atk) - m_def // 2)
@@ -183,6 +224,22 @@ def warden_xp(floor: int) -> int:
 
 def warden_gold(floor: int) -> int:
     return 80 * floor
+
+
+# ── §5b The shared frontier Warden (007 §3) ──────────────────────────────
+# The live Warden at the world frontier is ONE monster for everyone: a
+# world HP pool that any climber strikes for 3⚡. Slow regen makes solo
+# chipping possible but a handful of blades far faster. The reward pool
+# scales with the HP pool and splits by damage dealt, so the payout per
+# energy matches the solo-tuned warden.
+
+WARDEN_WORLD_HP_MULT = 4
+WARDEN_WORLD_REGEN_HOURLY = 0.08    # of max HP, back per hour
+WARDEN_WORLD_REWARD_MULT = WARDEN_WORLD_HP_MULT
+
+
+def world_warden_hp(floor: int) -> int:
+    return warden_stats(floor)[2] * WARDEN_WORLD_HP_MULT
 
 
 @dataclass(frozen=True)
@@ -347,6 +404,15 @@ APOTHECARY: dict[str, ShopItem] = {i.slug: i for i in [
     ShopItem("scout_optics", "Scout optics", 100, "scout_3",
              "sidekick reveals enemy stats, 3 charges"),
 ]}
+
+# ── §6c Cheap healing (008) ──────────────────────────────────────────────
+# The ladder: stew (2g, +5 HP, repeatable) → healer's tent (2×floor,
+# full — always below one kill's gold) → a Lodge night (+20 HP at dawn)
+# → potions for mid-fight emergencies.
+
+STEW_PRICE = 2
+STEW_HEAL_HP = 5
+LODGE_NIGHT_HEAL_HP = 20
 
 # ── §7 Bank, death, lodge, presents ──────────────────────────────────────
 

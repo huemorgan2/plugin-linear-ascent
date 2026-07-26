@@ -58,6 +58,9 @@ def apply_choice(p: dict, option_id: str, text: str = "") -> Scene:
 def _pop_pending_event(p: dict) -> Scene | None:
     if p.get("encounter"):
         return None                      # never interrupt a fight
+    ev = _maybe_news(p)
+    if ev:
+        return ev
     ev = _maybe_present(p)
     if ev:
         return ev
@@ -67,6 +70,92 @@ def _pop_pending_event(p: dict) -> Scene | None:
         p["pending_events"] = q
         return Scene.from_dict(d)
     return None
+
+
+# ── World news — the Morning Crier (007 §4) ──────────────────────────────
+
+def _maybe_news(p: dict) -> Scene | None:
+    """Once per world day, in world mode only: what happened while you
+    were gone. Data comes from worldd's injection — never invented."""
+    if p["stage"] != "playing":
+        return None
+    w = p.get("_world") or {}
+    if "census" not in w:
+        return None
+    day = state.world_day()
+    if p.get("news_day", -1) >= day:
+        return None
+    p["news_day"] = day
+    return _news_scene(p, w, day)
+
+
+def _news_scene(p: dict, w: dict, day: int) -> Scene:
+    frontier = int(w.get("frontier", 1))
+    census = w.get("census") or {}
+    by_floor = {int(k): int(v)
+                for k, v in (census.get("by_floor") or {}).items()}
+    total = int(census.get("total", 0))
+    my_floor = p["floor"] if p["floor"] > 0 else frontier
+    lines = [
+        f"· {total} climber{'s' if total != 1 else ''} on the Muster "
+        f"Roll — {by_floor.get(frontier, 0)} at the frontier "
+        f"(floor {frontier}), {by_floor.get(1, 0)} down at floor 1, "
+        f"{by_floor.get(my_floor, 0)} on floor {my_floor} with you.",
+    ]
+    wd = w.get("warden")
+    if wd and wd.get("hp_max"):
+        pct = max(0, round(100 * int(wd["hp"]) / int(wd["hp_max"])))
+        fl = schema.get_floor(int(wd["floor"]))
+        blades = len(wd.get("strikers") or [])
+        lines.append(
+            f"· {fl.warden_name} holds floor {wd['floor']} at {pct}% — "
+            + (f"{blades} blade{'s' if blades != 1 else ''} against it."
+               if blades else "no blade against it yet."))
+    gossip = w.get("gossip") or []
+    if gossip:
+        lines.append(f"heard around floor {my_floor}:")
+        lines += [f"· {g}" for g in gossip[:3]]
+    else:
+        lines.append(f"· floor {my_floor} was quiet — no news is its "
+                     "own kind of news.")
+    return Scene(
+        eyebrow="ROOTHOLLOW · THE MORNING CRIER",
+        headline=f"Day {day} on the Ascent — the frontier stands at "
+                 f"floor {frontier}",
+        support="What moved while you were away.",
+        shard_note=_news_advice(p, w, frontier, wd),
+        body_lines=lines,
+        options=[Option("town", "Into the square")],
+        meters=combat.meters(p),
+        event_kind="news",
+        banner="roothollow",
+    )
+
+
+def _news_advice(p: dict, w: dict, frontier: int, wd: dict | None) -> str:
+    """Where to work today for the fastest climb — honest engine math."""
+    req = economy.floor_level_req(frontier)
+    if p["level"] < req:
+        best = max(1, min(p["unlocked_floor"], p["level"] + 10))
+        return (f"Floor {frontier} wants level {req} legs — you are "
+                f"level {p['level']}. Fastest climb today: hunt floor "
+                f"{best}, full pay, no fade.")
+    if wd and wd.get("hp_max"):
+        pct = max(0, round(100 * int(wd["hp"]) / int(wd["hp_max"])))
+        if pct < 100:
+            return (f"The Warden of floor {frontier} is already wounded "
+                    f"({pct}%). Strikes at its keep are the fastest way "
+                    f"to open floor {frontier + 1} — for everyone.")
+        return (f"You are fit for the frontier. Hunt floor {frontier} "
+                f"and put strikes into its Warden — the floor above "
+                "opens for the whole world.")
+    if frontier in economy.MILESTONES:
+        ms = economy.MILESTONES[frontier]
+        return (f"Floor {frontier} is a milestone keep — {ms.name} falls "
+                f"to a war party of {ms.quorum}. Pledge your blade and "
+                "rally others.")
+    return (f"Hunt near the frontier (floor {frontier}) — that is where "
+            "the pay and the progress are.")
 
 
 def _maybe_present(p: dict) -> Scene | None:
@@ -147,6 +236,7 @@ def _build_scene(p: dict) -> Scene:
         "guildhall": social.guildhall_scene, "grants": social.grant_scene,
         "muster": social.muster_scene,
         "boss_keep": _boss_keep_scene,
+        "warden_keep": _warden_keep_scene,
     }
     return builders.get(loc, _town_scene)(p)
 
@@ -155,6 +245,12 @@ def _boss_keep_scene(p: dict) -> Scene:
     from . import social
     fl = schema.get_floor(max(1, p["floor"]))
     return social.boss_scene(p, fl)
+
+
+def _warden_keep_scene(p: dict) -> Scene:
+    from . import social
+    fl = schema.get_floor(max(1, p["floor"]))
+    return social.warden_scene(p, fl)
 
 
 def _dispatch(p: dict, oid: str) -> Scene:
@@ -360,6 +456,9 @@ def _dispatch_location(p: dict, oid: str) -> Scene:
         return social.grant_action(p, oid)
     if loc == "boss_keep":
         return social.boss_action(p, schema.get_floor(max(1, p["floor"])), oid)
+    if loc == "warden_keep":
+        return social.warden_action(
+            p, schema.get_floor(max(1, p["floor"])), oid)
     return _build_scene(p)
 
 
@@ -530,9 +629,36 @@ def _medlab_buy(p: dict, oid: str) -> Scene:
 
 # ── Lodge ────────────────────────────────────────────────────────────────
 
+def _eat_stew(p: dict, scene_fn) -> Scene:
+    """008: the cheap partial heal — ◈ 2 for +5 HP, repeatable."""
+    if p["gold"] < economy.STEW_PRICE:
+        s = scene_fn(p)
+        s.shard_note = (f"The stew costs ◈ {economy.STEW_PRICE} and the pot "
+                        "keeper doesn't run tabs.")
+        return s
+    if p["hp"] >= state.max_hp(p):
+        s = scene_fn(p)
+        s.shard_note = "You're whole. Save the coin for when you're not."
+        return s
+    p["gold"] -= economy.STEW_PRICE
+    p["hp"] = min(state.max_hp(p), p["hp"] + economy.STEW_HEAL_HP)
+    combat._ledger(p, "stew", gold=-economy.STEW_PRICE)
+    s = scene_fn(p)
+    s.body_lines.insert(0, f"+ {economy.STEW_HEAL_HP} HP — hot, thick, and "
+                           "mostly what the pot keeper claims it is.")
+    return s
+
+
 def _lodge_scene(p: dict) -> Scene:
     price = economy.LODGE_PRICE_PER_LEVEL * p["level"]
     lodged = p["lodged_until_day"] >= state.world_day() + 1
+    opts = []
+    if not lodged:
+        opts.append(Option("sleep", "Pay for the night", f"◈ {price}"))
+    if p["hp"] < state.max_hp(p):
+        opts.append(Option("stew", "Hunter's stew",
+                           f"◈ {economy.STEW_PRICE} · +{economy.STEW_HEAL_HP} HP"))
+    opts.append(Option("back", "Back to the square"))
     return Scene(
         eyebrow="ROOTHOLLOW · THE LODGE",
         headline="Sleep behind the palisade" if not lodged
@@ -540,16 +666,18 @@ def _lodge_scene(p: dict) -> Scene:
         support="Skip the lodge and you sleep in the fields — where anyone "
                 "may find you.",
         body_lines=[f"A night costs ◈ {price}. Banked gold can't buy it — "
-                    "carry coin."],
-        options=([Option("sleep", "Pay for the night", f"◈ {price}")]
-                 if not lodged else [])
-                + [Option("back", "Back to the square")],
+                    "carry coin.",
+                    f"A proper bed mends +{economy.LODGE_NIGHT_HEAL_HP} HP "
+                    "by dawn. The fields mend nothing."],
+        options=opts,
         meters=combat.meters(p),
         banner="lodge",
     )
 
 
 def _lodge_action(p: dict, oid: str) -> Scene:
+    if oid == "stew":
+        return _eat_stew(p, _lodge_scene)
     if oid != "sleep":
         return _lodge_scene(p)
     price = economy.LODGE_PRICE_PER_LEVEL * p["level"]
@@ -563,7 +691,9 @@ def _lodge_action(p: dict, oid: str) -> Scene:
     combat._ledger(p, "lodge", gold=-price)
     s = _lodge_scene(p)
     s.headline = "Your bunk is paid through tonight"
-    s.body_lines.insert(0, "+ one safe night. Nothing finds you here.")
+    s.body_lines.insert(0, "+ one safe night. Nothing finds you here — and "
+                           f"the bed gives back {economy.LODGE_NIGHT_HEAL_HP}"
+                           " HP by dawn.")
     return s
 
 
@@ -735,6 +865,8 @@ def _gate_town_options(p: dict, fl) -> list[Option]:
     heal_price = 2 * fl.floor
     opts = [Option("hunt", "Hunt the wilds", "1 ⚡")]
     if p["hp"] < state.max_hp(p):
+        opts.append(Option("stew", "Hunter's stew",
+                           f"◈ {economy.STEW_PRICE} · +{economy.STEW_HEAL_HP} HP"))
         opts.append(Option("heal", "The healer's tent", f"◈ {heal_price}"))
     opts.append(Option("keep", f"The Warden's keep — {fl.warden_name}", "3 ⚡"))
     opts.append(Option("town", "Return to Roothollow"))
@@ -777,12 +909,22 @@ def _gate_town_action(p: dict, oid: str) -> Scene:
         s = _gate_town_scene(p)
         s.body_lines.insert(0, "+ patched to full. The needle was clean. Probably.")
         return s
+    if oid == "stew":
+        return _eat_stew(p, _gate_town_scene)
     if oid == "keep":
+        w = p.get("_world") or {}
         # milestone keeps run the quorum flow in the shared world
-        if fl.milestone and p.get("_world"):
+        if fl.milestone and w:
             from . import social
             p["location"] = "boss_keep"
             return social.boss_scene(p, fl)
+        # 007 §3: the live frontier Warden is ONE shared monster
+        wd = w.get("warden") if w else None
+        if wd and wd.get("floor") == fl.floor:
+            from . import social
+            p["location"] = "warden_keep"
+            return social.warden_scene(p, fl)
+        # below the frontier (or local dev play): the per-player echo bout
         if not state.spend_energy(p, economy.COST_WARDEN_ATTEMPT):
             s = _gate_town_scene(p)
             s.shard_note = "A Warden takes 3 ⚡ you don't have. The wilds " \

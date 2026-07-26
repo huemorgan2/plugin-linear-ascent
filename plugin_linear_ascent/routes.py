@@ -1,6 +1,7 @@
 """Plugin HTTP surface.
 
-Settings tab: one-click world enrollment, status, disconnect — the
+Settings tab (007: the world is mandatory): connection status plus a
+manual "connect now" for when auto-enroll hasn't landed yet. The
 settings iframe calls these with the host's bearer token. Credentials
 live in Luna's vault; runtime.state switches the game backend live.
 
@@ -34,7 +35,7 @@ _ctx: PluginContext | None = None
 # fast clicking stays silent, exactly like a human watching over your
 # shoulder who only speaks when something happens.
 _MOMENT_KINDS = {"death", "boss"}
-_AWARENESS_KINDS = {"present", "letter", "loot"}
+_AWARENESS_KINDS = {"present", "letter", "loot", "news"}
 
 
 class JoinIn(BaseModel):
@@ -195,22 +196,6 @@ def register_routes(app, ctx: PluginContext) -> None:
             "headline": scene.headline,
         }
 
-    @router.post("/disconnect")
-    async def disconnect(user=Depends(get_current_user)) -> dict:
-        if runtime.state["source"] == "env":
-            raise HTTPException(
-                409, "World is pinned by env vars; remove them to disconnect.")
-        vault = _vault()
-        for name in (runtime.VAULT_URL, runtime.VAULT_TENANT,
-                     runtime.VAULT_SECRET):
-            try:
-                await vault.delete_credential(name)
-            except KeyError:
-                pass
-        # install_id is kept: re-joining returns the same tenant + progress
-        runtime.clear_remote()
-        return {"joined": False}
-
     @router.get("/ui/settings/", response_class=HTMLResponse)
     async def settings_ui():
         return HTMLResponse(_SETTINGS_HTML)
@@ -243,29 +228,24 @@ _SETTINGS_HTML = """<!doctype html>
   details { margin-top: 14px; } summary { cursor: pointer; color: #8b949e; }
 </style></head><body>
   <h1>◆ Linear Ascent</h1>
-  <div class="sub">The 100-floor Ascent — solo out of the box, one click to
-  join the shared world.</div>
+  <div class="sub">The 100-floor Ascent — one shared world, every install
+  plays in it. Connection is automatic.</div>
 
   <div class="card" id="status-card">Loading…</div>
 
   <div class="card" id="action-card" style="display:none">
     <div id="join-block">
-      <div style="margin-bottom:10px">Join the shared world: your install
-      gets its own credentials automatically and your climb joins everyone
-      else's — PvP, letters, guilds, world bosses.</div>
+      <div style="margin-bottom:10px">This install isn't connected yet.
+      The game enrolls itself automatically on startup and on your next
+      turn — or connect right now:</div>
       <label class="k">Display hint for your world name (optional)</label>
       <input id="hint" maxlength="32" placeholder="e.g. roys-luna">
       <details><summary>Advanced: custom world server</summary>
         <input id="url" placeholder="">
       </details>
       <div style="margin-top:12px">
-        <button id="join">Join the shared world</button>
+        <button id="join">Connect to the shared world</button>
       </div>
-    </div>
-    <div id="leave-block" style="display:none">
-      <div style="margin-bottom:12px">Leaving switches back to solo play.
-      Your shared-world character is kept — rejoin anytime to continue.</div>
-      <button class="secondary" id="leave">Disconnect from world</button>
     </div>
     <div id="msg"></div>
   </div>
@@ -293,10 +273,9 @@ async function refresh() {
                   : '<span class="bad">● unreachable</span>') + '</div>' +
     (d.source === 'env' ? '<div class="row"><span class="k">Config</span>' +
       '<span class="dim">pinned by host env vars</span></div>' : '')
-    : '<div class="dim">Playing on this Luna only. No other climbers.</div>');
-  $('action-card').style.display = '';
+    : '<div class="bad">Not connected — the game retries automatically.</div>');
+  $('action-card').style.display = world ? 'none' : '';
   $('join-block').style.display = world ? 'none' : '';
-  $('leave-block').style.display = (world && d.source !== 'env') ? '' : 'none';
   $('url').placeholder = d.default_world_url;
 }
 
@@ -320,15 +299,6 @@ $('join') && ($('join').onclick = async () => {
   $('join').disabled = false;
   refresh();
 });
-
-$('leave').onclick = async () => {
-  const r = await fetch(api('/disconnect'), {method: 'POST', headers: H});
-  const d = await r.json();
-  $('msg').innerHTML = r.ok
-    ? '<span class="dim">Disconnected — back to solo play.</span>'
-    : '<span class="bad">' + (d.detail || 'failed') + '</span>';
-  refresh();
-};
 
 refresh();
 </script></body></html>"""

@@ -1,7 +1,11 @@
 """Unit tests run without a Luna checkout — stub luna_sdk before imports."""
 
+import os
 import sys
 import types
+
+# 007: the world is mandatory for players; tests play the local engine.
+os.environ.setdefault("ASCENT_DEV_LOCAL", "1")
 
 
 def _stub_luna_sdk() -> None:

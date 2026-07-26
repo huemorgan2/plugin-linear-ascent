@@ -1,14 +1,16 @@
 """The Luna plugin — tools, backend selection, card delivery.
 
-Backend resolution (highest wins), applied at every tool call via runtime:
+007: the shared world is mandatory. Backend resolution (highest wins):
   1. env override (LUNA_ASCENT_WORLDD_URL + LUNA_ASCENT_SHARED_SECRET) — dev
-  2. vault credentials written by the settings page ("Join the shared world")
-  3. local single-tenant engine (solo play, zero config)
-Same scenes either way.
+  2. vault credentials (written by auto-enroll or the settings page)
+  3. auto-enroll against the default world (install_id in the vault)
+  4. ASCENT_DEV_LOCAL=1 → the local engine (tests/dojo only)
+If none of these lands, tools return the honest "lift is down" scene.
 """
 
 from __future__ import annotations
 
+import asyncio
 import json
 import os
 
@@ -132,11 +134,13 @@ class LinearAscentPlugin(LunaPlugin):
     async def on_load(self, ctx: PluginContext) -> None:
         from .backend.local import Base, LocalBackend
 
-        # Local tables always exist: solo mode + fallback after disconnect.
+        # Local tables always exist: the dev flag plays here, and old
+        # local characters are migrated to the world from here.
         async with ctx.engine.begin() as conn:
             for table in Base.metadata.sorted_tables:
                 await conn.run_sync(table.create, checkfirst=True)
         runtime.state["local"] = LocalBackend(ctx.db_session_factory)
+        runtime.state["ctx"] = ctx
 
         def _env(name: str) -> str:
             # ctx.get_env only resolves vars declared in Luna's own config
@@ -167,7 +171,14 @@ class LinearAscentPlugin(LunaPlugin):
                         runtime.configure_remote(
                             url, tenant, secret, source="vault")
                 except KeyError:
-                    pass  # never joined — solo mode
+                    pass  # never enrolled — auto-enroll below
+
+        # 007: mandatory world. Warm up enrollment in the background so
+        # the first tool call is already connected; tool calls also retry
+        # lazily, so a failed startup enroll never strands the player.
+        if runtime.state["remote"] is None and not runtime.dev_local():
+            asyncio.get_running_loop().create_task(
+                runtime.ensure_world(runtime.player_key()))
 
         _user = runtime.player_key
 
@@ -198,15 +209,26 @@ class LinearAscentPlugin(LunaPlugin):
 
         async def ascent_character() -> str:
             remote = runtime.state["remote"]
-            if remote:
-                sheet = await remote.character(_user())
-            else:
+            if remote is None and runtime.dev_local():
                 p = await runtime.state["local"].load(_user())
                 if p["stage"] != "playing":
                     return json.dumps({
                         "status": "no character yet",
                         "hint": "Call ascent_scene to start creation."})
                 sheet = character_sheet(p)
+            else:
+                if remote is None and not await runtime.ensure_world(_user()):
+                    return json.dumps({
+                        "status": "world unreachable",
+                        "hint": "The lift is down — the shared world isn't "
+                                "answering. Try again in a moment."})
+                try:
+                    sheet = await runtime.state["remote"].character(_user())
+                except Exception:
+                    return json.dumps({
+                        "status": "world unreachable",
+                        "hint": "The lift is down — the shared world isn't "
+                                "answering. Try again in a moment."})
             sheet["instructions"] = _SHARED_RULES
             return json.dumps(sheet)
 
