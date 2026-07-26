@@ -4,11 +4,18 @@ from plugin_linear_ascent import economy
 
 
 def test_monster_stats_match_design_table():
-    # 004 retune: ATK slope 3.3 (wilds ≤40% of pool at level, honed)
-    assert economy.monster_stats(5) == (18, 15, 85)
-    assert economy.monster_stats(25) == (84, 75, 325)
-    assert economy.monster_stats(55) == (184, 165, 685)
-    assert economy.monster_stats(95) == (316, 285, 1165)
+    # 004 retune: ATK slope 3.3; 008: HP derived from the at-level
+    # player's damage × a rounds budget (2.5 at floor 1, +0.5/floor,
+    # capped at 7) — quick kills early, never a slog
+    assert economy.monster_stats(5) == (18, 15, 54)
+    assert economy.monster_stats(25) == (84, 75, 273)
+    assert economy.monster_stats(55) == (184, 165, 553)
+    assert economy.monster_stats(95) == (316, 285, 931)
+    for f in (1, 5, 25, 95):
+        atk, dfs, hp = economy.monster_stats(f)
+        p_atk, _ = economy._at_level_loadout(f)
+        p_dmg = max(1, round(0.75 * p_atk) - dfs // 2)
+        assert hp == round(p_dmg * economy.wilds_rounds(f))
 
 
 def test_kill_rewards_jump_per_band():
@@ -38,15 +45,17 @@ def test_fade_rule_keys_on_floor_progress():
 
 
 def test_warden_derivation_and_milestones():
-    # 004 §4.1: wardens derive from the at-level player model
+    # 004 §4.1: wardens derive from the at-level player model.
+    # 008: their HP budget stays on the pre-008 curve (12F+25) so the
+    # wilds fast-kill retune never shrinks a boss.
     atk, dfs, hp = economy.warden_stats(7)
-    m_atk, m_def, m_hp = economy.monster_stats(7)
+    m_atk, m_def, _ = economy.monster_stats(7)
     assert dfs == m_def
-    assert hp == round(m_hp * economy.WARDEN_HP_MULT)
+    assert hp == round(economy._boss_hp_base(7) * economy.WARDEN_HP_MULT)
     assert atk > m_atk                                 # hits harder than wilds
     # solo odds decay past the soft floor: HP ramps
     assert economy.warden_stats(40)[2] > round(
-        economy.monster_stats(40)[2] * economy.WARDEN_HP_MULT)
+        economy._boss_hp_base(40) * economy.WARDEN_HP_MULT)
     g = economy.MILESTONES[10]
     assert (g.atk, g.dfs, g.hp, g.quorum) == (60, 50, 900, 2)
     assert economy.MILESTONES[100].name == "Vharuk, the Demon King"

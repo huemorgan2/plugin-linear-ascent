@@ -16,6 +16,14 @@ Criteria (004 §4, MC tolerance ±3pts at the band edges):
     no tier more than 1.6× the previous
   - floors 1–5 completable by a fresh solo character in ≤ 3 play-days
     (median over trials)
+
+Criteria (008 combat pace & variance):
+  - class-average rounds/kill at-level: within ±0.6 of
+    min(2.5 + 0.5·(F−1), 7) on floors 1–10, ≤ 8.5 on sampled floors
+  - specimen table: E[hp mult] and E[gold mult] within ±5% of 1.0
+  - heal invariant: healer's tent (2F) ≤ mean gold/kill on floors 1–100
+  - wardens byte-identical to the pre-008 baseline (bosses keep their
+    weight; the fast-kill budget is wilds-only)
 """
 from __future__ import annotations
 
@@ -169,6 +177,63 @@ def check_days_per_tier(n=1500):
     return ok
 
 
+def check_rounds(n=1500):
+    """008: class-average rounds/kill on the 2.5 → 7 line."""
+    ok = True
+    print("rounds per wilds kill (class average, at-level, geared):")
+    for f in [1, 2, 3, 4, 5, 6, 8, 10, 20, 40, 70, 100]:
+        w, s, a = geared(f)
+        got = []
+        for archer in (True, False):
+            rounds = [r for won, _, r in
+                      (fight(f, w, s, a, f, archer=archer)
+                       for _ in range(n)) if won]
+            got.append(sum(rounds) / max(1, len(rounds)))
+        avg = sum(got) / 2
+        target = min(2.5 + 0.5 * (f - 1), 7.0)
+        flag = ""
+        if f <= 10 and abs(avg - target) > 0.6:
+            flag, ok = "  <-- FAIL", False
+        if avg > 8.5:
+            flag, ok = "  <-- FAIL", False
+        print(f"  floor {f:>3}: archer {got[0]:4.1f} / no-class {got[1]:4.1f}"
+              f" -> avg {avg:4.1f} (target {target:.1f}){flag}")
+    return ok
+
+
+def check_specimens():
+    """008: variance is expectation-neutral; weights are a full table."""
+    total = sum(s["weight"] for s in economy.SPECIMENS.values())
+    hp_e = sum(s["weight"] * s["hp"] for s in economy.SPECIMENS.values()) / total
+    gold_e = sum(s["weight"] * s["gold"]
+                 for s in economy.SPECIMENS.values()) / total
+    ok = total == 100 and abs(hp_e - 1) <= 0.05 and abs(gold_e - 1) <= 0.05
+    print(f"specimens: weights {total}, E[hp]={hp_e:.3f}, "
+          f"E[gold]={gold_e:.3f}" + ("" if ok else "  <-- FAIL"))
+    return ok
+
+
+def check_heal_invariant():
+    """008: a full heal always costs less than one kill pays."""
+    bad = [f for f in range(1, 101)
+           if 2 * f > economy.gold_per_kill(f)]
+    print("heal invariant (tent 2F ≤ gold/kill): "
+          + ("OK" if not bad else f"FAIL at floors {bad}"))
+    return not bad
+
+
+def check_warden_baseline():
+    """008: bosses keep their pre-008 weight, byte-identical."""
+    baseline = {1: (14, 3, 70), 5: (28, 15, 162), 10: (47, 30, 276),
+                15: (60, 45, 390), 30: (111, 90, 732), 50: (185, 150, 1782),
+                75: (297, 225, 3736), 100: (445, 300, 6402)}
+    bad = {f: economy.warden_stats(f) for f, v in baseline.items()
+           if economy.warden_stats(f) != v}
+    print("warden baseline: " + ("unchanged OK" if not bad else
+                                 f"FAIL drifted {bad}"))
+    return not bad
+
+
 def check_early_game(trials=150):
     """Fresh solo archer, greedy-but-sane policy, floors 1–5."""
     def xp_need(lvl):
@@ -295,6 +360,10 @@ if __name__ == "__main__":
         ("wilds", check_wilds()),
         ("days/tier", check_days_per_tier()),
         ("early game", check_early_game()),
+        ("rounds", check_rounds()),
+        ("specimens", check_specimens()),
+        ("heal invariant", check_heal_invariant()),
+        ("warden baseline", check_warden_baseline()),
     ]
     failed = [name for name, ok in results if not ok]
     print()
