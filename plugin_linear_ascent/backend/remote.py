@@ -72,3 +72,37 @@ class WorldClient:
         """One-time local→world character migration (007 Phase 1)."""
         return await self._post("/v1/import", {"player": luna_user,
                                                "doc": doc})
+
+    # ── 010: score & community ───────────────────────────────────────────
+
+    async def leaderboard(self, luna_user: str) -> dict:
+        return await self._post("/v1/leaderboard", {"player": luna_user})
+
+    async def faction_list(self, luna_user: str) -> dict:
+        return await self._post("/v1/faction/list", {"player": luna_user})
+
+    async def faction_status(self, luna_user: str) -> dict:
+        return await self._post("/v1/faction/status", {"player": luna_user})
+
+    async def faction_create(self, luna_user: str, name: str,
+                             banner: str) -> dict:
+        return await self._post("/v1/faction/create", {
+            "player": luna_user, "name": name, "banner": banner})
+
+    async def faction_join(self, luna_user: str, faction: str) -> dict:
+        return await self._post("/v1/faction/join", {
+            "player": luna_user, "faction": faction})
+
+    async def faction_leave(self, luna_user: str) -> dict:
+        return await self._post("/v1/faction/leave", {"player": luna_user})
+
+    async def faction_kick(self, luna_user: str, target_tenant: str,
+                           target_player: str) -> dict:
+        return await self._post("/v1/faction/kick", {
+            "player": luna_user, "target_tenant": target_tenant,
+            "target_player": target_player})
+
+    async def faction_goal(self, luna_user: str, kind: str,
+                           target: int) -> dict:
+        return await self._post("/v1/faction/goal", {
+            "player": luna_user, "kind": kind, "target": target})

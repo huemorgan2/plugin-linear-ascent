@@ -2,9 +2,9 @@
 # generate_creatures.py / generate_faction_banners.py /
 # generate_event_gifs.py, ~2MB each (659MB for the full creature set)
 content/art/banners/raw/
-content/art/banners/factions/raw/
 content/art/creatures/raw/
 content/art/events/raw/
+plugin_linear_ascent/content/art/banners/factions/raw/
 
 # packaged plugin zips — build artifacts
 *.zip

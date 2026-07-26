@@ -45,6 +45,25 @@ class JoinIn(BaseModel):
     name_hint: str = Field(default="", max_length=32)
 
 
+class FactionCreateIn(BaseModel):
+    name: str = Field(min_length=3, max_length=24)
+    banner: str = Field(default="wolf_howl", max_length=32)
+
+
+class FactionJoinIn(BaseModel):
+    faction: str = Field(min_length=3, max_length=24)
+
+
+class FactionKickIn(BaseModel):
+    tenant: str = Field(min_length=1, max_length=64)
+    player: str = Field(min_length=1, max_length=128)
+
+
+class FactionGoalIn(BaseModel):
+    kind: str = Field(min_length=3, max_length=16)
+    target: int = Field(gt=0, le=10_000_000_000)
+
+
 class ActIn(BaseModel):
     option: str = Field(default="", max_length=64)
     text: str = Field(default="", max_length=200)
@@ -222,6 +241,89 @@ def register_routes(app, ctx: PluginContext) -> None:
         """Freshness probe: the last scene id this process produced for the
         player (chat-driven acts update it too). No world round trip."""
         return {"scene_id": runtime.last_scene_id(runtime.player_key())}
+
+    # ── 010: score & community (worldd proxies with the host's auth) ────
+
+    def _world():
+        remote = runtime.state["remote"]
+        if remote is None:
+            raise HTTPException(
+                503, "The world signal is gone — score and factions live "
+                     "in the shared world. Try again in a moment.")
+        return remote
+
+    async def _proxy(coro):
+        from .backend.remote import WorldError
+        try:
+            return await coro
+        except WorldError as e:
+            msg = str(e)
+            code = 400
+            for c in (402, 403, 404, 409, 422, 429):
+                if f"worldd {c}" in msg:
+                    code = c
+                    break
+            raise HTTPException(code, msg.split(": ", 1)[-1][:200])
+        except httpx.HTTPError:
+            raise HTTPException(502, "the world isn't answering")
+
+    @router.get("/pane/score")
+    async def pane_score(user=Depends(get_current_user)) -> dict:
+        return await _proxy(_world().leaderboard(runtime.player_key()))
+
+    @router.get("/pane/community")
+    async def pane_community(user=Depends(get_current_user)) -> dict:
+        w = _world()
+        key = runtime.player_key()
+        status = await _proxy(w.faction_status(key))
+        listing = await _proxy(w.faction_list(key))
+        return {"status": status, "list": listing}
+
+    @router.post("/pane/community/create")
+    async def pane_faction_create(body: FactionCreateIn,
+                                  user=Depends(get_current_user)) -> dict:
+        return await _proxy(_world().faction_create(
+            runtime.player_key(), body.name.strip(), body.banner.strip()))
+
+    @router.post("/pane/community/join")
+    async def pane_faction_join(body: FactionJoinIn,
+                                user=Depends(get_current_user)) -> dict:
+        return await _proxy(_world().faction_join(
+            runtime.player_key(), body.faction.strip()))
+
+    @router.post("/pane/community/leave")
+    async def pane_faction_leave(user=Depends(get_current_user)) -> dict:
+        return await _proxy(_world().faction_leave(runtime.player_key()))
+
+    @router.post("/pane/community/kick")
+    async def pane_faction_kick(body: FactionKickIn,
+                                user=Depends(get_current_user)) -> dict:
+        return await _proxy(_world().faction_kick(
+            runtime.player_key(), body.tenant, body.player))
+
+    @router.post("/pane/community/goal")
+    async def pane_faction_goal(body: FactionGoalIn,
+                                user=Depends(get_current_user)) -> dict:
+        return await _proxy(_world().faction_goal(
+            runtime.player_key(), body.kind, body.target))
+
+    @router.get("/art/factions/{slug}.png")
+    async def faction_banner(slug: str):
+        """Faction sigil art for the pane (white-ink 1-bit PNG, tinted
+        client-side via CSS mask). Public like the pane shell itself."""
+        import os as _os
+        import re as _re
+
+        from fastapi.responses import FileResponse
+        if not _re.fullmatch(r"[a-z0-9_]{1,32}", slug):
+            raise HTTPException(404, "no such sigil")
+        path = _os.path.join(
+            _os.path.dirname(_os.path.abspath(__file__)), "content", "art",
+            "banners", "factions", f"{slug}_320x112.png")
+        if not _os.path.exists(path):
+            raise HTTPException(404, "no such sigil")
+        return FileResponse(path, media_type="image/png",
+                            headers={"Cache-Control": "max-age=86400"})
 
     @router.get("/ui/", response_class=HTMLResponse)
     async def pane_ui():

@@ -203,6 +203,9 @@ def _victory(p: dict, floor) -> Scene:
             gold * economy.SPECIMENS[e.get("specimen", "common")]["gold"])
     if p.get("race") == "elf":
         xp = round(xp * (1 + economy.ELF_XP_BONUS))
+    buff = state.faction_buff_pct(p, "xp")
+    if buff:
+        xp = round(xp * (1 + buff / 100))     # 010: CLIMB week blessing
     p["xp"] += xp
     p["gold"] += gold
     _ledger(p, "kill", gold=gold, xp=xp, note=e["name"])

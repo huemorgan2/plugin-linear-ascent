@@ -8,9 +8,9 @@ The difference is the grammar: not a scene but a CREST — one bold
 centered emblem a founder picks when naming their faction.
 
 Usage: LUNA_GEMINI_API_KEY=... python tools/generate_faction_banners.py [slug ...]
-Outputs: content/art/banners/factions/<slug>_320x112.png
-         content/art/banners/factions/preview/faction_<slug>_preview.png
-         content/art/banners/factions/raw/<slug>_raw.png
+Outputs: plugin_linear_ascent/content/art/banners/factions/<slug>_320x112.png
+         .../factions/preview/faction_<slug>_preview.png
+         .../factions/raw/<slug>_raw.png
 """
 
 from __future__ import annotations
@@ -26,7 +26,8 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _HERE)
 import generate_banners as gb  # noqa: E402  (shared 1-bit pipeline)
 
-ART = os.path.join(_HERE, "..", "content", "art", "banners", "factions")
+ART = os.path.join(_HERE, "..", "plugin_linear_ascent", "content", "art",
+                   "banners", "factions")
 RAW = os.path.join(ART, "raw")
 PREVIEW = os.path.join(ART, "preview")
 

@@ -157,8 +157,20 @@ def dfs(p: dict) -> int:
                               gear_bonus(p, "armor"), p.get("race") or "")
 
 
+def faction_buff_pct(p: dict, kind: str) -> int:
+    """010: the faction's weekly blessing — {'kind','pct','week'} written
+    by worldd's weekly resolution; live only during its week."""
+    b = p.get("faction_buff")
+    if (isinstance(b, dict) and b.get("kind") == kind
+            and b.get("week") == world_day() // 7):
+        return max(0, int(b.get("pct", 0)))
+    return 0
+
+
 def max_hp(p: dict) -> int:
-    return economy.player_max_hp(p["level"])
+    base = economy.player_max_hp(p["level"])
+    pct = faction_buff_pct(p, "hp")
+    return round(base * (1 + pct / 100)) if pct else base
 
 
 def next_roll(p: dict) -> int:
