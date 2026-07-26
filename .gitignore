@@ -1,7 +1,13 @@
 # raw model outputs — regenerable via tools/generate_banners.py /
-# generate_creatures.py, ~2MB each (659MB for the full creature set)
+# generate_creatures.py / generate_faction_banners.py /
+# generate_event_gifs.py, ~2MB each (659MB for the full creature set)
 content/art/banners/raw/
+content/art/banners/factions/raw/
 content/art/creatures/raw/
+content/art/events/raw/
+
+# packaged plugin zips — build artifacts
+*.zip
 
 __pycache__/
 *.pyc
