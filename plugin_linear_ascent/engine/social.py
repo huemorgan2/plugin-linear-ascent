@@ -82,6 +82,7 @@ def relay_action(p: dict, oid: str) -> Scene:
                        "attitude by the page.",
             options=[],
             meters=meters(p),
+            awaits_text=f"the letter's words for {target}",
         )
     return relay_scene(p)
 
@@ -404,9 +405,11 @@ def _founding_scene(p: dict, st: dict, note: str = "") -> Scene:
     option pick."""
     step = st.get("step", "name")
     opts = [Option("cancel_found", "Never mind")]
+    awaits = ""
     if step == "name":
         head, sup = "Name your banner", "Say it in chat — 3 to 24 letters."
         lines = []
+        awaits = "the new banner's name"
     elif step == "banner":
         head, sup = f"A sigil for {st['name']}", \
             "Pick the mark your banner flies."
@@ -420,12 +423,14 @@ def _founding_scene(p: dict, st: dict, note: str = "") -> Scene:
                "climber who joins pays it once, into the store.")
         lines = ["Immutable after founding — pick numbers people can "
                  "read before they join."]
+        awaits = f"the join fee — a number, 0 to {JOIN_FEE_MAX}"
     else:  # dues
         head = "Set the weekly dues"
         sup = (f"Say a number in chat — ◈ {DUES_MIN} to {DUES_MAX}, "
                "collected from every member each week, into the store.")
         lines = [f"Join fee set at ◈ {st.get('fee', 0)}. You pay dues "
                  "too — the ◈ 500 founding price was your buy-in."]
+        awaits = f"the weekly dues — a number, {DUES_MIN} to {DUES_MAX}"
     if note:
         lines.insert(0, note)
     return Scene(
@@ -435,6 +440,7 @@ def _founding_scene(p: dict, st: dict, note: str = "") -> Scene:
         body_lines=lines,
         options=opts,
         meters=meters(p),
+        awaits_text=awaits,
     )
 
 
@@ -457,6 +463,7 @@ def _donate_prompt(p: dict, note: str = "") -> Scene:
         body_lines=[note] if note else [],
         options=[Option("cancel_donate", "Never mind")],
         meters=meters(p),
+        awaits_text="the donation amount — a number in carried gold",
     )
 
 

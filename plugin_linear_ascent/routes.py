@@ -90,6 +90,16 @@ def _notify_agent(scene, conversation_id: str | None) -> None:
             "Linear Ascent state (the player is playing in the game pane; "
             "this is for your awareness only — do not respond): "
             + _state_line(scene))
+    if scene.awaits_text:
+        content += (
+            "\n\nIMPORTANT: the game is now waiting for the player to TYPE "
+            f"something in chat — {scene.awaits_text}. If their next "
+            "message plausibly is that reply, pass it straight into the "
+            "game with ascent_choose text=<their exact message> — no "
+            "confirmation question first; the engine validates input and "
+            "refuses anything bad with a friendly note. Only skip the "
+            "pass-through when the message is clearly about something "
+            "else entirely.")
     title = f"Linear Ascent — {kind or 'the climb continues'}"
 
     async def _fire():
