@@ -253,6 +253,15 @@ def guildhall_scene(p: dict, note: str = "") -> Scene:
     mine = p.get("guild")
     lines = [note] if note else []
     opts = []
+    # 012: training — levels are bought here, never granted in the field.
+    fee = economy.levelup_gold(p["level"])
+    need = economy.xp_need(p["level"])
+    opts.append(Option("guild_train", f"Train to LEVEL {p['level'] + 1}",
+                       f"◈ {fee:,}"))
+    if p["xp"] < need and not note:
+        lines.append(f"The drillmaster sizes you up: XP {p['xp']:,}/{need:,}."
+                     " Come back with a full bar — the fee is "
+                     f"◈ {fee:,}.")
     if mine:
         roster = w.get("guild_roster", [])
         lines.append(f"Your banner: {mine} — "
@@ -278,7 +287,33 @@ def guildhall_scene(p: dict, note: str = "") -> Scene:
     )
 
 
+def guild_train(p: dict) -> Scene:
+    """012: buy the level — full XP bar is the license, gold is the fee.
+    XP banked past the cap carries over; wounds close on the level."""
+    need = economy.xp_need(p["level"])
+    fee = economy.levelup_gold(p["level"])
+    if p["xp"] < need:
+        return guildhall_scene(
+            p, note=f"The drillmaster shakes his head: XP "
+                    f"{p['xp']:,}/{need:,}. Earn the bar first — "
+                    "the tower is the only teacher.")
+    if p["gold"] < fee:
+        return guildhall_scene(
+            p, note=f"Training to LEVEL {p['level'] + 1} costs ◈ {fee:,} "
+                    f"— you carry ◈ {p['gold']:,}. Come back heavier.")
+    p["gold"] -= fee
+    p["xp"] -= need
+    p["level"] += 1
+    p["hp"] = state.max_hp(p)
+    _ledger(p, "levelup", gold=-fee, note=f"level {p['level']}")
+    return guildhall_scene(
+        p, note=f"+ LEVEL {p['level']} — the drill burns it into your "
+                "frame. Wounds close.")
+
+
 def guildhall_action(p: dict, oid: str, text: str = "") -> Scene:
+    if oid == "guild_train":
+        return guild_train(p)
     if oid == "found_guild":
         p["founding_guild"] = True
         return Scene(

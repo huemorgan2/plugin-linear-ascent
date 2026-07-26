@@ -127,7 +127,8 @@ SPECIMENS: dict[str, dict] = {
 
 
 def xp_per_kill(floor: int) -> int:
-    return 12 * floor          # ±25% applied by the roller
+    """012: XP is scarce — always below the kill's gold (8·floor and up)."""
+    return 4 * floor           # ±25% applied by the roller
 
 
 def gold_per_kill(floor: int) -> int:
@@ -146,6 +147,19 @@ def daily_income(floor: int) -> int:
 def xp_need(level: int) -> int:
     """XP to go from `level` to `level+1`: 60 · L^1.5."""
     return round(60 * level ** 1.5)
+
+
+# ── §4b Guild training (012) ─────────────────────────────────────────────
+# Levels are bought, never granted: a full XP bar is the license to train,
+# the gold fee is the price. One day of at-level income per level — the
+# same growth curve everything else is priced in (linear × 1.2 per band).
+
+LEVELUP_BASE_GOLD = 200        # the first level-up, by design
+
+
+def levelup_gold(level: int) -> int:
+    """Gold fee to train from `level` to `level+1` at the Guildhall."""
+    return max(LEVELUP_BASE_GOLD, round(daily_income(level) / 10) * 10)
 
 
 def fade_multiplier(unlocked_floor: int, floor: int) -> float:
@@ -219,7 +233,7 @@ def warden_stats(floor: int) -> tuple[int, int, int]:
 
 
 def warden_xp(floor: int) -> int:
-    return 60 * floor
+    return 25 * floor          # 012: below warden_gold — XP is scarce
 
 
 def warden_gold(floor: int) -> int:
@@ -254,17 +268,18 @@ class MilestoneBoss:
     gold: int
 
 
+# 012: milestone XP = 0.3 × gold — XP scarcer than gold, in all places.
 MILESTONES: dict[int, MilestoneBoss] = {m.floor: m for m in [
-    MilestoneBoss(10, "Gnarl, the Goblin King", 60, 50, 900, 2, 4_000, 5_000),
-    MilestoneBoss(20, "Warlord Skarn", 120, 100, 1_800, 3, 8_000, 10_000),
-    MilestoneBoss(30, "The Barrow King", 180, 150, 2_700, 4, 12_000, 15_000),
-    MilestoneBoss(40, "Matriarch Vyx", 240, 200, 3_600, 5, 16_000, 20_000),
-    MilestoneBoss(50, "Cindermaw the Wyrm", 300, 250, 4_500, 6, 20_000, 25_000),
-    MilestoneBoss(60, "Jarl Hrimgar", 360, 300, 5_400, 7, 24_000, 30_000),
-    MilestoneBoss(70, "Zephyra, the Storm Queen", 420, 350, 6_300, 8, 28_000, 35_000),
-    MilestoneBoss(80, "The Pale Huntsman", 480, 400, 7_200, 9, 32_000, 40_000),
-    MilestoneBoss(90, "Malgrim, Herald of the King", 540, 450, 8_100, 10, 36_000, 45_000),
-    MilestoneBoss(100, "Vharuk, the Demon King", 650, 550, 12_000, 12, 40_000, 50_000),
+    MilestoneBoss(10, "Gnarl, the Goblin King", 60, 50, 900, 2, 1_500, 5_000),
+    MilestoneBoss(20, "Warlord Skarn", 120, 100, 1_800, 3, 3_000, 10_000),
+    MilestoneBoss(30, "The Barrow King", 180, 150, 2_700, 4, 4_500, 15_000),
+    MilestoneBoss(40, "Matriarch Vyx", 240, 200, 3_600, 5, 6_000, 20_000),
+    MilestoneBoss(50, "Cindermaw the Wyrm", 300, 250, 4_500, 6, 7_500, 25_000),
+    MilestoneBoss(60, "Jarl Hrimgar", 360, 300, 5_400, 7, 9_000, 30_000),
+    MilestoneBoss(70, "Zephyra, the Storm Queen", 420, 350, 6_300, 8, 10_500, 35_000),
+    MilestoneBoss(80, "The Pale Huntsman", 480, 400, 7_200, 9, 12_000, 40_000),
+    MilestoneBoss(90, "Malgrim, Herald of the King", 540, 450, 8_100, 10, 13_500, 45_000),
+    MilestoneBoss(100, "Vharuk, the Demon King", 650, 550, 12_000, 12, 15_000, 50_000),
 ]}
 
 

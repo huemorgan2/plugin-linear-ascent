@@ -19,9 +19,9 @@ def test_monster_stats_match_design_table():
 
 
 def test_kill_rewards_jump_per_band():
-    assert economy.xp_per_kill(5) == 60
+    assert economy.xp_per_kill(5) == 20            # 012: XP scarce, 4×floor
     assert economy.gold_per_kill(5) == 40          # tier 1: base 8×floor
-    assert economy.xp_per_kill(95) == 1140
+    assert economy.xp_per_kill(95) == 380
     # 004 §4.5: ×1.2 per band — same work pays visibly better each band
     assert economy.gold_per_kill(95) == round(8 * 95 * 1.2 ** 9)
     assert economy.gold_per_kill(11) == round(8 * 11 * 1.2)
@@ -93,11 +93,11 @@ def test_caps_and_race_nudges():
 
 
 def test_xp_pool_costs_scale_with_floor():
-    # 006: ✦ costs are priced in frontier kills
-    assert economy.hone_xp(1) == 6            # half of 12
-    assert economy.hone_xp(17) == 102         # half of 204
-    assert economy.sleep_xp_cost(5) == 60     # exactly the kill skipped
-    assert economy.scan_xp_cost(5) == 30      # half a kill
+    # 006: XP costs are priced in frontier kills (012: kill = 4×floor)
+    assert economy.hone_xp(1) == 2            # half of 4
+    assert economy.hone_xp(17) == 34          # half of 68
+    assert economy.sleep_xp_cost(5) == 20     # exactly the kill skipped
+    assert economy.scan_xp_cost(5) == 10      # half a kill
 
 
 def test_level_gates():

@@ -170,7 +170,7 @@ def test_honing_refused_without_xp():
     s = choose(p, "hone_weapon")
     assert p["hone"]["weapon"] == 0          # atomic refusal:
     assert p["gold"] == gold_before          # neither currency charged
-    assert "✦" in s.shard_note
+    assert "XP" in s.shard_note
 
 
 def test_fade_no_longer_punishes_overleveling_on_frontier():
@@ -302,7 +302,7 @@ def test_sleep_spell_burns_kill_xp_and_awards_nothing():
     s = choose(p, "sleep_spell")
     assert p["encounter"] is not None
     assert p["xp"] == cost - 1
-    assert "✦" in "\n".join(s.body_lines)
+    assert "XP" in "\n".join(s.body_lines)
 
 
 def test_scan_prefers_charges_then_falls_back_to_xp():
@@ -321,7 +321,7 @@ def test_scan_prefers_charges_then_falls_back_to_xp():
     assert "scan" in "\n".join(s.body_lines)
     s = choose(p, "scout")                       # broke: refused, fight lives
     assert p["encounter"] is not None
-    assert "✦" in "\n".join(s.body_lines)
+    assert "XP" in "\n".join(s.body_lines)
 
 
 def test_forge_tier_gated_by_level():
@@ -356,8 +356,8 @@ def test_elf_learns_faster():
     choose(p, "hunt")
     p["encounter"]["hp"] = 1
     choose(p, "attack")
-    # base 12 ±25% then ×1.05: minimum possible is round(round(12·0.75)·1.05)
-    assert p["xp"] >= round(round(12 * 0.75) * 1.05)
+    # base 4 ±25% then ×1.05: minimum possible is round(round(4·0.75)·1.05)
+    assert p["xp"] >= round(round(4 * 0.75) * 1.05)
 
 
 def test_legacy_doc_with_mana_keys_still_loads():

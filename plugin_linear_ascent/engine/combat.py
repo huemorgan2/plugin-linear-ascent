@@ -55,7 +55,8 @@ def meters(p: dict) -> Meters:
         energy_max=economy.energy_cap(p["level"], p.get("race") or ""),
         xp=p["xp"],
         xp_need=economy.xp_need(p["level"]),
-        gold=p["gold"])
+        gold=p["gold"],
+        level=p["level"])
 
 
 def _eyebrow(p: dict, floor) -> str:
@@ -133,7 +134,7 @@ def fight_scene(p: dict, floor, opener: bool = False, note: str = "") -> Scene:
         opts.append(Option("shield_wall", "Shield wall", "class", aether=True))
     elif clazz == "sorcerer":
         opts.append(Option("sleep_spell", "Sleep spell",
-                           f"class · ✦ {economy.sleep_xp_cost(floor.floor)}",
+                           f"class · {economy.sleep_xp_cost(floor.floor)} XP",
                            aether=True))
     elif clazz == "archer" and not e["shot_used"]:
         opts.append(Option("treeline_shot", "Treeline shot", "class", aether=True))
@@ -143,7 +144,7 @@ def fight_scene(p: dict, floor, opener: bool = False, note: str = "") -> Scene:
     opts.append(Option(
         "scout", "Ask the shard to scan it",
         f"{charges} charges" if charges > 0
-        else f"✦ {economy.scan_xp_cost(floor.floor)}",
+        else f"{economy.scan_xp_cost(floor.floor)} XP",
         aether=True))
 
     body = [e["prose"]] if opener else []
@@ -185,15 +186,14 @@ def _player_hit(p: dict, mult: float = 1.0) -> int:
     return dmg
 
 
-def _level_ups(p: dict) -> list[str]:
-    lines = []
-    while p["xp"] >= economy.xp_need(p["level"]):
-        p["xp"] -= economy.xp_need(p["level"])
-        p["level"] += 1
-        p["hp"] = state.max_hp(p)
-        lines.append(f"LEVEL {p['level']} — your frame remembers how to be "
-                     "stronger. Wounds close.")
-    return lines
+def _train_nudge(p: dict) -> list[str]:
+    """012: levels are bought, never granted. When the bar fills, point
+    at the Guildhall instead of leveling — XP banks past the cap."""
+    if p["xp"] < economy.xp_need(p["level"]):
+        return []
+    fee = economy.levelup_gold(p["level"])
+    return [f"Your XP bar is full. The Guildhall trains climbers to "
+            f"LEVEL {p['level'] + 1} — the fee is ◈ {fee:,}."]
 
 
 def _victory(p: dict, floor) -> Scene:
@@ -223,12 +223,12 @@ def _victory(p: dict, floor) -> Scene:
     p["gold"] += gold
     _ledger(p, "kill", gold=gold, xp=xp, note=e["name"])
     lines = [f"The {e['name']} goes down.",
-             f"+ {xp} experience", f"+ ◈ {gold} carried gold"]
+             f"+ {xp} XP", f"+ ◈ {gold} carried gold"]
     if e.get("specimen") == "alpha":
         loot = state.rng_pick(p, [(70, "medgel"), (30, "luck_charm")])
         p["inventory"][loot] = p["inventory"].get(loot, 0) + 1
         lines.append(f"▪ alpha spoils: {economy.APOTHECARY[loot].name}")
-    lines += _level_ups(p)
+    lines += _train_nudge(p)
 
     first_clear = False
     if e["kind"] == "warden":
@@ -347,7 +347,7 @@ def resolve_fight_action(p: dict, floor, option_id: str) -> Scene:
             p["sidekick"]["scout_charges"] -= 1
         elif not state.spend_xp(p, economy.scan_xp_cost(floor.floor)):
             return fight_scene(p, floor, note=(
-                f"The shard needs ✦ {economy.scan_xp_cost(floor.floor)} of "
+                f"The shard needs {economy.scan_xp_cost(floor.floor)} XP of "
                 "what you've learned — you haven't learned enough yet."))
         return fight_scene(
             p, floor,
@@ -403,7 +403,7 @@ def resolve_fight_action(p: dict, floor, option_id: str) -> Scene:
         cost = economy.sleep_xp_cost(floor.floor)
         if not state.spend_xp(p, cost):
             return fight_scene(p, floor, note=(
-                f"Sleep burns ✦ {cost} of what you've learned — you don't "
+                f"Sleep burns {cost} XP of what you've learned — you don't "
                 "carry that much yet."))
         _ledger(p, "sleep", xp=-cost, note=e["name"])
         p["encounter"] = None
@@ -412,7 +412,7 @@ def resolve_fight_action(p: dict, floor, option_id: str) -> Scene:
             eyebrow=_eyebrow(p, floor),
             headline="Sleep takes it mid-snarl",
             body_lines=[f"The {e['name']} folds into the grass, snoring.",
-                        f"− ✦ {cost} experience burned — you step past it"],
+                        f"− {cost} XP burned — you step past it"],
             options=_after_fight_options(p, floor),
             meters=meters(p))
 

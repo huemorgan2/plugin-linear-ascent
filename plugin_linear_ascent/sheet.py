@@ -18,7 +18,8 @@ def character_sheet(p: dict) -> dict:
     return {
         "name": p["name"], "race": p["race"], "class": p["clazz"],
         "level": p["level"], "xp": p["xp"],
-        "xp_to_next": economy.xp_need(p["level"]) - p["xp"],
+        "xp_to_next": max(0, economy.xp_need(p["level"]) - p["xp"]),
+        "levelup_fee_gold": economy.levelup_gold(p["level"]),
         "hp": f"{p['hp']}/{pstate.max_hp(p)}",
         "atk": pstate.atk(p), "def": pstate.dfs(p),
         "energy": f"{pstate.energy_now(p)}/{economy.energy_cap(p['level'], race)}",

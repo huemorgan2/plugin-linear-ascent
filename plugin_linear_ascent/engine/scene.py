@@ -24,9 +24,10 @@ class Meters:
     hp_max: int
     energy: int
     energy_max: int
-    xp: int             # 006: the ✦ bar is the XP pool inside the level
-    xp_need: int        # xp_need(level) — full bar = next level
+    xp: int             # the XP pool inside the level (banks past the cap)
+    xp_need: int        # xp_need(level) — full bar = licensed to train
     gold: int
+    level: int = 1      # 012: shown next to the gold
 
 
 @dataclass
@@ -61,7 +62,7 @@ class Scene:
             m = self.meters
             lines.append(
                 f"HP {m.hp}/{m.hp_max}   ⚡ {m.energy}/{m.energy_max}   "
-                f"✦ {m.xp}/{m.xp_need}   gold {m.gold}")
+                f"XP {m.xp}/{m.xp_need}   LV {m.level}   gold {m.gold}")
         return "\n".join(lines)
 
     def to_dict(self) -> dict:

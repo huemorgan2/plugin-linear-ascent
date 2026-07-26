@@ -380,6 +380,10 @@ def _town_scene(p: dict) -> Scene:
                f"◈ {economy.LODGE_PRICE_PER_LEVEL * p['level']}/night"),
         Option("vault", "The Vault", "bank"),
         Option("pawn", "Pawn shop", "sell"),
+        # 012: the Guildhall is core — training (buying levels) lives
+        # there, so it must exist even without a connected world.
+        Option("guildhall", "The Guildhall",
+               p.get("guild") or "training"),
         Option("stone", "Stone of the Climb", "news"),
         Option("gate", "The tower gate", "climb"),
     ]
@@ -389,8 +393,6 @@ def _town_scene(p: dict) -> Scene:
             "relay", "The Relay Office",
             f"{inbox} letter{'s' if inbox != 1 else ''}" if inbox else "post"))
         opts.insert(6, Option("fields", "The fields", "pvp"))
-        opts.insert(7, Option("guildhall", "The Guildhall",
-                              p.get("guild") or "banners"))
         climbers = w.get("roster_count", 0)
         opts.insert(8, Option(
             "muster", "The Muster Roll",
@@ -489,7 +491,7 @@ def _forge_scene(p: dict) -> Scene:
         if slug and lvl < cap:
             name = economy.FORGE[slug].name
             opts.append(Option(f"hone_{slot}", f"Hone {name} +{lvl + 1}",
-                               f"◈ {price:,} + ✦ {hone_xp}"))
+                               f"◈ {price:,} + {hone_xp} XP"))
     if cap > 0:
         honed = ", ".join(
             f"{slot} +{state.hone_level(p, slot)}"
@@ -518,14 +520,14 @@ def _forge_hone(p: dict, slot: str) -> Scene:
     xp_cost = economy.hone_xp(p["unlocked_floor"])
     if p["gold"] < price:
         s = _forge_scene(p)
-        s.shard_note = (f"A honing pass costs ◈ {price:,} + ✦ {xp_cost}; "
+        s.shard_note = (f"A honing pass costs ◈ {price:,} + {xp_cost} XP; "
                         f"you carry ◈ {p['gold']:,}.")
         return s
     if p["xp"] < xp_cost:
         s = _forge_scene(p)
-        s.shard_note = (f"The bench takes ✦ {xp_cost} of what you've "
+        s.shard_note = (f"The bench takes {xp_cost} XP of what you've "
                         f"learned along with the coin — you carry "
-                        f"✦ {p['xp']}. Hunt first.")
+                        f"{p['xp']} XP. Hunt first.")
         return s
     p["gold"] -= price
     state.spend_xp(p, xp_cost)
@@ -535,7 +537,7 @@ def _forge_hone(p: dict, slot: str) -> Scene:
     s = _forge_scene(p)
     s.body_lines.insert(0, (f"+ {economy.FORGE[slug].name} honed to "
                             f"+{lvl + 1} — the edge sings on the stone "
-                            f"(− ✦ {xp_cost})"))
+                            f"(− {xp_cost} XP)"))
     return s
 
 
@@ -551,7 +553,8 @@ def _forge_buy(p: dict, oid: str) -> Scene:
     if p["level"] < req:
         s = _forge_scene(p)
         s.shard_note = (f"{g.name} answers to level {req} hands — you are "
-                        f"level {p['level']}. Levels are earned, never bought.")
+                        f"level {p['level']}. The Guildhall trains climbers "
+                        "with a full XP bar and the fee in gold.")
         return s
     if p["gold"] < g.price:
         s = _forge_scene(p)

@@ -123,10 +123,12 @@ _TIP_HP = ("HP — health. At 0 you die: all carried gold is lost and armor "
            "and shield break. Heal at the healer's tent or the Apothecary.")
 _TIP_EN = ("⚡ Energy — actions spend it: wilds hunt 1, Warden attempt 3, "
            "milestone boss 5, PvP attack 3. Regenerates 1 every 45 minutes.")
-_TIP_AE = ("✦ Aether — crystallized experience. Fills as you fight; a full "
-           "bar is the next level, and levels are forever. Honing, spells, "
-           "and shard scans burn it — spending slows your level, never "
-           "lowers it.")
+_TIP_XP = ("XP — experience. Fills as you fight and banks past the cap. "
+           "A full bar is your license to train: buy the next level with "
+           "gold at the Guildhall. Honing, spells, and shard scans burn "
+           "XP — spending delays training, never lowers a level.")
+_TIP_LV = ("LV — your level. Levels are bought at the Guildhall: a full "
+           "XP bar plus the training fee in gold.")
 _TIP_GOLD = ("◈ Carried gold — spendable anywhere but lost when you die. "
              "The Vault banks it safely at 5%/day interest.")
 
@@ -143,11 +145,13 @@ def _meters_html(m: Meters) -> str:
         f"<span>⚡ {m.energy}/{m.energy_max}</span>"
         f'<span class="blocks" aria-hidden="true">'
         f"{_blocks(m.energy, m.energy_max)}</span></span>"
-        f'<span class="meter ae" title="{_e(_TIP_AE)}">'
-        f"<span>✦ {m.xp:,}/{m.xp_need:,}</span>"
+        f'<span class="meter ae" title="{_e(_TIP_XP)}">'
+        f"<span>XP {m.xp:,}/{m.xp_need:,}</span>"
         f'<span class="blocks" aria-hidden="true">'
         f"{_blocks(m.xp, m.xp_need)}</span></span>"
-        f'<span class="gold" title="{_e(_TIP_GOLD)}">◈ {m.gold:,}</span>'
+        f'<span class="gold">'
+        f'<span class="lvl" title="{_e(_TIP_LV)}">LV {m.level}</span>'
+        f'<span title="{_e(_TIP_GOLD)}">◈ {m.gold:,}</span></span>'
         f"</div>")
 
 
@@ -352,7 +356,8 @@ SCENE_CSS = f"""
 .meter.hp.low .blocks{{color:{RED};}}
 .meter.en .blocks{{color:{AETHER};}}
 .meter.ae .blocks{{color:{VIOLET_SOFT};}}
-.rail .gold{{color:{GOLD};margin-left:auto;}}
+.rail .gold{{color:{GOLD};margin-left:auto;display:inline-flex;gap:1.5ch;}}
+.rail .lvl{{color:{TEXT};}}
 .type.pending{{visibility:hidden;}}
 .cursor{{display:inline-block;width:.55em;height:1.05em;background:{AETHER};
  vertical-align:text-bottom;margin-left:1px;
