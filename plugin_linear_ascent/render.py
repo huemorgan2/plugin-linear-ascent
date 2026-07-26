@@ -47,6 +47,10 @@ _ART_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                          "content", "art")
 _ART = os.path.join(_ART_ROOT, "banners")
 _CREATURES = os.path.join(_ART_ROOT, "creatures")
+_EVENTS = os.path.join(_ART_ROOT, "events")
+
+# 011 event animations tint by their moment, not the floor mood.
+_FX_TINT = {"ascent_open": VIOLET, "ascent_title": VIOLET_SOFT}
 
 
 def _banner_tint(slug: str, variant: str = "") -> str:
@@ -75,6 +79,32 @@ def _banner_data_url(slug: str) -> tuple[str, int, int] | None:
                 w, h = (int(n) for n in size.split("x"))
                 return f"data:image/png;base64,{b64}", w, h
     return None
+
+
+@lru_cache(maxsize=None)
+def _fx_data_url(slug: str) -> tuple[str, int, int] | None:
+    """(data_url, width, height) for an event animation, or None.
+
+    White-ink 1-bit GIFs from tools/generate_event_gifs.py, used exactly
+    like the PNG banners: as an alpha mask over a tint color. Chromium
+    (Luna's shell) animates GIF masks, so the kill plays in the card."""
+    for size in ("320x112", "320x200"):
+        path = os.path.join(_EVENTS, f"{slug}_{size}.gif")
+        if os.path.exists(path):
+            b64 = base64.b64encode(open(path, "rb").read()).decode()
+            w, h = (int(n) for n in size.split("x"))
+            return f"data:image/gif;base64,{b64}", w, h
+    return None
+
+
+def _fx_tint(scene: Scene) -> str:
+    if scene.fx in _FX_TINT:
+        return _FX_TINT[scene.fx]
+    if scene.event_kind == "boss":
+        return VIOLET
+    if scene.event_kind == "loot":
+        return GOLD
+    return DIM
 
 
 def _e(s: str) -> str:
@@ -215,10 +245,17 @@ def render_scene_fragment(scene: Scene) -> str:
     fragments in place and drives /act directly)."""
     parts: list[str] = []
 
+    # 011: an event animation owns the banner slot when it ships art;
+    # the static banner is the fallback for the same scene.
+    fx = _fx_data_url(scene.fx) if scene.fx else None
     banner = _banner_data_url(scene.banner) if scene.banner else None
-    if banner:
+    if fx:
+        url, w, h = fx
+        tint = _fx_tint(scene)
+    elif banner:
         url, w, h = banner
         tint = _banner_tint(scene.banner, scene.banner_variant)
+    if fx or banner:
         parts.append(
             f'<div class="banner" style="background-color:{tint};'
             f"aspect-ratio:{w}/{h};"

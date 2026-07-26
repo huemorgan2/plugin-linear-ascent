@@ -295,6 +295,7 @@ def _intro_scene(p: dict) -> Scene:
         ],
         options=[Option("begin", "Walk to the tower gate")],
         banner="title",
+        fx="ascent_title",
     )
 
 

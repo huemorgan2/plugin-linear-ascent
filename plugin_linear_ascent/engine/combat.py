@@ -35,6 +35,19 @@ def _opener_banner(e: dict, floor) -> str:
     return floor.banner if e["kind"] == "wilds" else ""
 
 
+def _kill_fx(e: dict, name: str, first_clear: bool) -> str:
+    """011: event animation slug for a victory scene. Creature-specific
+    kill GIFs win; a first floor clear plays the gate opening. The
+    renderer silently skips slugs with no shipped art."""
+    hay = f"{e.get('id', '')} {name}".lower()
+    for family in ("brackjaw", "boar", "goblin", "wolf"):
+        if family in hay:
+            return f"{family}_kill"
+    if first_clear:
+        return "ascent_open"
+    return ""
+
+
 def meters(p: dict) -> Meters:
     return Meters(
         hp=p["hp"], hp_max=state.max_hp(p),
@@ -246,6 +259,7 @@ def _victory(p: dict, floor) -> Scene:
         options=_after_fight_options(p, floor),
         meters=meters(p),
         event_kind=kind,
+        fx=_kill_fx(e, e["name"], first_clear),
     )
 
 

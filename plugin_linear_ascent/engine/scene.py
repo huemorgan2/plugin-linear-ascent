@@ -41,6 +41,7 @@ class Scene:
     event_kind: str = ""            # "" | loot | death | letter | boss | present
     banner: str = ""                # banner slug, "" = no banner
     banner_variant: str = ""        # 008 specimen: "" | runt | tough | alpha — retints the art
+    fx: str = ""                    # 011 event animation slug (kill GIFs, gate open, title)
     scene_id: str = ""              # nonce — ascent_choose must echo the ids of THIS scene
 
     def to_text(self) -> str:
@@ -77,6 +78,7 @@ class Scene:
             "event_kind": self.event_kind,
             "banner": self.banner,
             "banner_variant": self.banner_variant,
+            "fx": self.fx,
             "scene_id": self.scene_id,
         }
 
@@ -100,5 +102,6 @@ class Scene:
             event_kind=d.get("event_kind", ""),
             banner=d.get("banner", ""),
             banner_variant=d.get("banner_variant", ""),
+            fx=d.get("fx", ""),
             scene_id=d.get("scene_id", ""),
         )

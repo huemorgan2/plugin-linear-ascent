@@ -17,6 +17,18 @@ small factions that actually show up — lean into it, but keep scale
 worthwhile: factions **under 4 members get a 15% base bonus; 4+
 members get 20%**.
 
+Third directive (same day): factions run on a shared purse.
+
+- Founding a faction now sets two numbers besides name and banner:
+  the **join fee** (paid once by every climber who enters) and the
+  **weekly dues** (collected from every member each world-week —
+  small, "not a lot").
+- Both land in the **faction store** — a treasury the faction owns,
+  visible to every member.
+- **Every week the world posts a NEW challenge** to join as a group;
+  entering it costs gold, **paid from the store**.
+- Any member can **donate** carried gold to the store at any time.
+
 ## 0. Attendance math (the whole trick, pinned down)
 
 World weeks: `week = world_day // 7` (world_day already rolls at
@@ -49,18 +61,54 @@ of the ratio — that is the intended management lever, not an exploit.
 Mid-week joiners are prorated (`min(4, days remaining at join)`), so
 recruiting on day 6 can't dilute or juice the ratio.
 
+## 0b. The faction store — join fee, weekly dues, donations
+
+One treasury per faction; gold only ever flows IN from members
+(join fees, dues, donations) and OUT to weekly challenge entries —
+prizes are minted by the world, never drawn from the store. Nobody —
+steward included — can pocket it, so there is no embezzlement
+surface. Disbanding burns the store ("the Ascent keeps it").
+
+**Set at founding** (immutable after, keeps the social contract
+honest — pick numbers people can read before they join):
+
+    join_fee      ◈ 0–500    one-time, charged on /join, → store
+    weekly_dues   ◈ 1–50     per member per world-week, → store
+
+The founder pays no join fee (the ◈500 founding price is their
+buy-in) but pays dues like everyone else.
+
+**Dues collection** — lazy, inside the same weekly resolution
+transaction (§3): each member is charged carried gold first, then
+bank. A member who can't cover it goes **in arrears**: they stay in
+the faction but are excluded from that week's prize split, and the
+faction panel marks them (▲) — the steward's kick lever does the
+rest. Arrears clear automatically the first week they can pay again.
+
+**Donations** — any member, any time, from carried gold only (the
+bank is the safe place; donating should be a deliberate act). No cap.
+
+**Audit** — every store movement (join fee, dues, donation, challenge
+entry, prize payout) writes a row in `ascent_faction_ledger`, shown
+as the store history in the pane.
+
 ## 1. worldd schema — migration `006_factions.sql`
 
     ascent_factions        name PK, banner (slug from the 30-design
                            set), founder_tenant, founder_player,
-                           created_week, goal_kind, goal_target
+                           created_week, join_fee, weekly_dues,
+                           treasury                     -- the store
     ascent_faction_members faction, tenant, player, role
-                           ('steward'|'member'), joined_day,
+                           ('steward'|'member'), joined_day, arrears,
                            PK (tenant, player)          -- one faction each
     ascent_attendance      tenant, player, world_day, PK all three
     ascent_faction_weeks   faction, week, goal_kind, goal_target,
-                           progress, ratio, multiplier, prize_note,
+                           entered (bool), entry_paid, progress,
+                           ratio, multiplier, prize_note,
                            resolved_at                  -- history
+    ascent_faction_ledger  faction, week, kind ('join_fee'|'dues'|
+                           'donation'|'entry'|'payout'), amount,
+                           tenant, player, note, created_at
 
 Migrate `ascent_guilds` rows into `ascent_factions` (founder becomes
 steward); `doc["guild"]` remains the display link and is synced from
@@ -70,16 +118,29 @@ their next act — same lazy pattern as lodging).
 Attendance write: in `game.py`'s act path, `INSERT … ON CONFLICT DO
 NOTHING` of `(tenant, player, world_day)` — one cheap upsert per act.
 
-## 2. Goals — three kinds, three top-ups
+## 2. The weekly challenge — one NEW challenge every week
 
-Steward picks next week's goal from a menu; suggested targets scale
-with member count × average level so a 3-climber faction isn't chasing
-a 20-climber number.
+The world posts it, not the steward: `kind = week % 3` walks
+HOARD → CULL → CLIMB, so every faction in the world chases the same
+kind the same week (rivalry for free, and the Crier has one headline).
+Targets are still per-faction — scaled by member count × average
+level so a 3-climber faction isn't chasing a 20-climber number.
+
+**Entering costs store gold.** The steward joins the week's challenge
+from the faction panel; the entry fee is
+
+    entry = ◈ 5 × member count        (small — dues-sized, not rent)
+
+paid from the store at join time. Store can't cover it → the join is
+refused with the shortfall shown ("the store is ◈ 12 short — dues
+land at week's turn, or pass the hat"); that's what donations are
+for. A faction that doesn't enter plays a normal week: attendance is
+still recorded, but there is no prize to multiply.
 
 `base_pct` below is the size tier from section 0 — 15% under 4
 members, 20% at 4+.
 
-| Goal | Target | Reached → prize (before multiplier) |
+| Week kind | Target | Reached → prize (before multiplier) |
 |---|---|---|
 | **HOARD** | faction earns ≥ G gold this week | gold pool = base_pct of G, split among members proportional to attendance days |
 | **CULL** | faction kills ≥ N creatures | +base_pct max-HP blessing, all members, following week |
@@ -102,11 +163,18 @@ No cron. On the first faction-touching request of a new week (any
 member's act, or a faction API read), resolve the previous week inside
 one transaction:
 
-1. compute progress from ledger, attendance ratio, multiplier;
-2. pay gold / write blessings into member docs;
-3. write the `ascent_faction_weeks` history row;
-4. post an `ascent_happenings` line ("The Ember Pact met its hoard —
-   the Ascent pays out ◈214") — the Morning Crier picks it up free.
+1. **collect dues** from every member (gold → bank → arrears flag),
+   store += collected, ledger rows per member;
+2. if the faction had **entered** the week's challenge: compute
+   progress from ledger, attendance ratio, multiplier;
+3. pay gold / write blessings into member docs — members in arrears
+   are skipped from the split (their share stays in the pool for the
+   others);
+4. write the `ascent_faction_weeks` history row;
+5. post `ascent_happenings` lines ("The Ember Pact met its hoard —
+   the Ascent pays out ◈214") — the Morning Crier picks it up free;
+   the NEW week's challenge gets its own line ("This week the Ascent
+   demands a CULL — 120 heads per banner").
 
 ## 4. worldd endpoints (tenant HMAC, same auth as `/v1/act`)
 
@@ -114,16 +182,26 @@ one transaction:
                               class, level, gold (carried), bank,
                               faction, last_seen_days; sorted
                               level desc, then gold. Paginated (50).
-    POST /v1/faction/list     name, member count, steward, current
-                              goal + progress bar data
+    POST /v1/faction/list     name, member count, steward, join fee,
+                              weekly dues, current challenge +
+                              progress bar data
     POST /v1/faction/create   ◈500 (reuses guild-founding price);
                               body: name + banner slug (validated
-                              against the 30-design set)
-    POST /v1/faction/join     |  /leave  |  /kick (steward only)
-    POST /v1/faction/goal     steward sets next week's goal
-    POST /v1/faction/status   my faction: members with role + days
-                              attended this week, goal progress,
-                              live projected ratio/multiplier
+                              against the 30-design set) + join_fee
+                              (0–500) + weekly_dues (1–50)
+    POST /v1/faction/join     charges the join fee (gold → bank) into
+                              the store  |  /leave  |  /kick (steward)
+    POST /v1/faction/donate   ◈ N carried gold → store, ledger row
+    POST /v1/faction/enter    steward enters THIS week's world
+                              challenge; ◈5 × members from the store,
+                              refused (with shortfall) if it can't pay
+    POST /v1/faction/status   my faction: store balance, dues/fee,
+                              members with role + days attended this
+                              week + arrears flags, this week's
+                              challenge (kind, target, entered?,
+                              entry cost), goal progress, live
+                              projected ratio/multiplier, store
+                              ledger (last 20)
 
 `_roster` (Muster) stays as the in-game flavor location; the
 leaderboard is the complete, gold-visible table. Cross-tenant
@@ -150,16 +228,24 @@ Same monospace/dark-panel language as the game tab.
 
 **COMMUNITY** —
 
-- No faction: list of factions (banner + join button) + "Found a
-  faction" flow (◈500): the founder types the faction's name
-  (server-side validation, unique) and picks a banner from the
-  30-design gallery — same 320×112 1-bit white-ink banners the game
-  already uses, tinted per role like scene banners.
-- Member: faction panel — the faction banner across the top, members
-  with attendance pips for the week
-  (`▪▪▪▫▫▫▫ 3/4`), goal progress in `█░`, live projected multiplier
-  ("on pace for 110% of the prize"), leave button.
-- Steward extras: kick button per member, goal picker for next week.
+- No faction: list of factions (banner + member count + **join fee +
+  weekly dues shown up front** + join button) + "Found a faction"
+  flow (◈500): the founder types the faction's name (server-side
+  validation, unique), picks a banner from the 30-design gallery —
+  same 320×112 1-bit white-ink banners the game already uses, tinted
+  per role like scene banners — and sets the two purse numbers
+  (join fee, weekly dues) with the plan's caps enforced inline.
+- Member: faction panel — the faction banner across the top, the
+  **store** line (`STORE ◈ 342 · dues ◈ 5/week · join ◈ 25`), members
+  with attendance pips for the week (`▪▪▪▫▫▫▫ 3/4`, ▲ marks arrears),
+  **this week's challenge card** (kind, target, progress in `█░`,
+  "entered" stamp or the entry button with its store cost), live
+  projected multiplier ("on pace for 110% of the prize"), a
+  **donate** field (◈ from carried gold), the store ledger (last 20
+  movements), leave button.
+- Steward extras: kick button per member, the **enter-challenge**
+  button (◈5 × members, from the store — disabled with the shortfall
+  shown when the store can't cover it).
 
 **Faction banner assets** — 30 sigil designs, sci-fi-fantasy, in the
 game's 1-bit style: one bold centered emblem per banner (wolf sigil,
@@ -170,34 +256,53 @@ white-ink pipeline as scene banners, output to
 slugs; the pane renders them tinted on the panel like every other
 banner. (Assets already generated alongside this plan.)
 
-Every mutating action (join/create/kick/goal) also sends an
-`awareness` muted message so the agent knows ("Roy founded the Ember
-Pact"); weekly resolution results ride the existing happenings →
-Crier path.
+Every mutating action (create/join/leave/kick/donate/enter) also
+sends an `awareness` muted message so the agent knows ("Roy founded
+the Ember Pact"); weekly resolution results ride the existing
+happenings → Crier path.
 
 ## Execution order
 
-1. Migration 006 + attendance upsert + guild migration.
-2. Resolution engine + multiplier math (pure function first).
-3. Ledger `kind='kill'` tagging.
-4. worldd endpoints + tests.
-5. `WorldClient` methods + plugin proxy routes.
-6. Pane SCORE tab, then COMMUNITY tab.
-7. Blessing application in engine (HP/XP).
+1. Migration 006 (factions + members + attendance + weeks + faction
+   ledger, with join_fee / weekly_dues / treasury) + attendance
+   upsert + guild migration.
+2. Store mechanics: join fee, dues collection, donations, arrears —
+   pure functions + worldd endpoints, ledger rows throughout.
+3. Resolution engine + multiplier math (pure function first), dues
+   collection folded into the same transaction.
+4. Weekly world challenge: kind rotation, per-faction targets, entry
+   from the store.
+5. Ledger `kind='kill'` tagging.
+6. worldd endpoints + tests.
+7. `WorldClient` methods + plugin proxy routes.
+8. Pane SCORE tab, then COMMUNITY tab (store line, donate, challenge
+   card).
+9. Blessing application in engine (HP/XP).
 
 ## Acceptance
 
 - worldd pytest, table-driven on the section-0 examples: 20/20 →
   1.0; 15/20 → 0.75; 9/20 → 0; 35/20 → 1.75; kick removes both
   sides; mid-week join prorates; double-resolution is idempotent.
+- Store math, table-driven: join fee lands in the store with a ledger
+  row; dues collected gold-first-then-bank; a broke member goes into
+  arrears, is skipped by the payout split, and clears when solvent;
+  donation moves exactly N carried gold; entry refuses when the store
+  is short and shows the shortfall; double dues-collection for one
+  week is idempotent.
+- Challenge cadence: week k posts kind k % 3; a faction that never
+  enters gets attendance history but no prize; entry after the store
+  was topped up by a donation succeeds.
 - HOARD payout splits by attendance days and lands in docs + ledger;
   CULL blessing raises max HP 20%·multiplier for exactly one week.
 - Multiplier tiers: 3-member faction pays on the 15% base, adding a
   4th member bumps the same goal to 20%.
 - Dojo, real browser: SCORE lists every seeded player with level and
-  gold; found a faction — name it, pick a banner from the gallery,
-  banner shows on the faction panel and list; second player joins,
-  steward kicks them, goal set; attendance pips update after acts on
-  two consecutive world-days (time-warped via test hooks).
-- Agent stays silent through all of it unless asked; Crier mentions
-  the payout the next morning.
+  gold; found a faction — name it, pick a banner, set join fee ◈25 /
+  dues ◈5, both visible on the faction list; second player joins and
+  the store shows ◈25 with a ledger row; donate ◈30; steward enters
+  the week's challenge and the store drops by the entry; attendance
+  pips update after acts on two consecutive world-days (time-warped
+  via test hooks); week turn collects dues from both members.
+- Agent stays silent through all of it unless asked; Crier announces
+  the new week's challenge and mentions the payout the next morning.

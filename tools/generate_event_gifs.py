@@ -38,7 +38,8 @@ import urllib.request
 from PIL import Image
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
-ART = os.path.join(_HERE, "..", "content", "art", "events")
+ART = os.path.join(_HERE, "..", "plugin_linear_ascent", "content", "art",
+                   "events")
 RAW = os.path.join(ART, "raw")
 PREVIEW = os.path.join(ART, "preview")
 W, H = 320, 112  # same native grid as the scene banners

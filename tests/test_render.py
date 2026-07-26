@@ -60,4 +60,5 @@ def test_intro_card_shows_title_art_at_own_size():
     html = render_scene(core.current_scene(p))
     assert "LINEAR ASCENT" in html
     assert "aspect-ratio:320/200" in html               # title art, not 320x112
-    assert "data:image/png;base64" in html
+    # 011: the title screen animates — GIF mask instead of the static PNG
+    assert "data:image/gif;base64" in html
