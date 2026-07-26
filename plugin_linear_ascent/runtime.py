@@ -135,6 +135,9 @@ async def ensure_world(user: str) -> bool:
     vault = getattr(state["ctx"], "vault", None) if state["ctx"] else None
     if vault is None:
         return False
+    # env URL without a secret = auto-enroll target override (QA worlds)
+    url = (os.environ.get("LUNA_ASCENT_WORLDD_URL") or "").strip() \
+        .rstrip("/") or DEFAULT_WORLD_URL
     try:
         try:
             install_id = (await vault.get_credential(VAULT_INSTALL)).value
@@ -144,19 +147,17 @@ async def ensure_world(user: str) -> bool:
                                          kind="api_key")
         import httpx
         async with httpx.AsyncClient(timeout=15) as c:
-            r = await c.post(DEFAULT_WORLD_URL + "/v1/enroll",
+            r = await c.post(url + "/v1/enroll",
                              json={"install_id": install_id})
         if r.status_code != 200:
             return False
         d = r.json()
-        await vault.store_credential(VAULT_URL, DEFAULT_WORLD_URL,
-                                     kind="api_key")
+        await vault.store_credential(VAULT_URL, url, kind="api_key")
         await vault.store_credential(VAULT_TENANT, d["tenant"],
                                      kind="api_key")
         await vault.store_credential(VAULT_SECRET, d["secret"],
                                      kind="api_key")
-        configure_remote(DEFAULT_WORLD_URL, d["tenant"], d["secret"],
-                         source="auto")
+        configure_remote(url, d["tenant"], d["secret"], source="auto")
         await migrate_local_character(user)
         return True
     except Exception:

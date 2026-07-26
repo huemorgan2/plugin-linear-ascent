@@ -405,7 +405,15 @@ def warden_action(p: dict, fl, oid: str) -> Scene:
                           "hp": 1, "hp_max": 1, "floor": fl.floor,
                           "shot_used": False}
         return _death(p, fl)
-    wd["hp"] = max(0, int(wd.get("hp", 0)) - dmg)   # optimistic display
+    # optimistic display — the authoritative write is the effect above
+    wd["hp"] = max(0, int(wd.get("hp", 0)) - dmg)
+    strikers = wd.setdefault("strikers", [])
+    mine = next((s for s in strikers if s.get("name") == p.get("name")),
+                None)
+    if mine is None:
+        strikers.append({"name": p.get("name") or "?", "dmg": dmg})
+    else:
+        mine["dmg"] = int(mine.get("dmg", 0)) + dmg
     note = f"your blow lands for {dmg:,} — it answers for {back}"
     if wd["hp"] <= 0:
         note += (". It staggers. If it fell, word reaches Roothollow "

@@ -52,7 +52,12 @@ def test_strike_pays_energy_and_emits_damage_effect():
     assert fx and fx[0]["floor"] == 1 and fx[0]["damage"] >= 1
     # optimistic display: shown HP dropped by exactly the strike damage
     assert p["_world"]["warden"]["hp"] == hp_before - fx[0]["damage"]
-    assert "your blow lands" in " ".join(s.body_lines)
+    body = " ".join(s.body_lines)
+    assert "your blow lands" in body
+    # optimistic display: the striker sees their own name at once, never
+    # "no blade has touched it yet" right after their blow landed
+    assert p["name"] in body
+    assert "no blade has touched it" not in body
 
 
 def test_strike_without_energy_is_refused():
