@@ -39,6 +39,9 @@ _HEADLINE = {"death": RED, "loot": GOLD, "present": GOLD}
 _BOSS_SLUGS = {"gnarl", "skarn", "barrowking", "vyx", "cindermaw", "hrimgar",
                "zephyra", "huntsman", "malgrim", "vharuk"}
 _BANNER_TINT = {"death": RED, "present": GOLD}
+# 008 specimen variants reuse the creature's art with a different ink:
+# runts fade out, toughs read as danger, alphas as a prize.
+_VARIANT_TINT = {"runt": FAINT, "tough": VIOLET_SOFT, "alpha": GOLD}
 
 _ART_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                          "content", "art")
@@ -46,7 +49,9 @@ _ART = os.path.join(_ART_ROOT, "banners")
 _CREATURES = os.path.join(_ART_ROOT, "creatures")
 
 
-def _banner_tint(slug: str) -> str:
+def _banner_tint(slug: str, variant: str = "") -> str:
+    if variant in _VARIANT_TINT:
+        return _VARIANT_TINT[variant]
     if slug in _BANNER_TINT:
         return _BANNER_TINT[slug]
     if slug in _BOSS_SLUGS or slug.startswith("warden_"):
@@ -209,7 +214,7 @@ def render_scene(scene: Scene) -> str:
     banner = _banner_data_url(scene.banner) if scene.banner else None
     if banner:
         url, w, h = banner
-        tint = _banner_tint(scene.banner)
+        tint = _banner_tint(scene.banner, scene.banner_variant)
         parts.append(
             f'<div class="banner" style="background-color:{tint};'
             f"aspect-ratio:{w}/{h};"

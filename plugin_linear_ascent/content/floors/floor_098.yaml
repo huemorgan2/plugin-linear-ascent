@@ -10,7 +10,7 @@ arrival: >-
   full — word of you has climbed faster than you have. Tonight's
   card was cleared by royal order. The court has bet heavily anyway.
 encounters:
-  - id: court_champion
+  - id: lower_court_champion
     name: Champion of the lower court
     weight: 3
     prose: >-

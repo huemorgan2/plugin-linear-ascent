@@ -1,5 +1,7 @@
-# raw model outputs — regenerable via tools/generate_banners.py, ~2MB each
+# raw model outputs — regenerable via tools/generate_banners.py /
+# generate_creatures.py, ~2MB each (659MB for the full creature set)
 content/art/banners/raw/
+content/art/creatures/raw/
 
 __pycache__/
 *.pyc

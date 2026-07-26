@@ -146,6 +146,9 @@ def fight_scene(p: dict, floor, opener: bool = False, note: str = "") -> Scene:
         options=opts,
         meters=meters(p),
         banner=_opener_banner(e, floor) if opener else "",
+        banner_variant=(e.get("specimen", "")
+                        if e["kind"] == "wilds"
+                        and e.get("specimen") != "common" else ""),
         event_kind="boss" if e["kind"] == "warden" else "",
     )
 

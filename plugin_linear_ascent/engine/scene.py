@@ -40,6 +40,7 @@ class Scene:
     meters: Meters | None = None
     event_kind: str = ""            # "" | loot | death | letter | boss | present
     banner: str = ""                # banner slug, "" = no banner
+    banner_variant: str = ""        # 008 specimen: "" | runt | tough | alpha — retints the art
     scene_id: str = ""              # nonce — ascent_choose must echo the ids of THIS scene
 
     def to_text(self) -> str:
@@ -75,6 +76,7 @@ class Scene:
             "meters": vars(self.meters) if self.meters else None,
             "event_kind": self.event_kind,
             "banner": self.banner,
+            "banner_variant": self.banner_variant,
             "scene_id": self.scene_id,
         }
 
@@ -97,5 +99,6 @@ class Scene:
             meters=meters,
             event_kind=d.get("event_kind", ""),
             banner=d.get("banner", ""),
+            banner_variant=d.get("banner_variant", ""),
             scene_id=d.get("scene_id", ""),
         )
