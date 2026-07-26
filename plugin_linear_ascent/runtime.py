@@ -34,7 +34,19 @@ state: dict = {
     "source": "local",    # "env" | "vault" | "auto" | "local"
     "ctx": None,          # PluginContext (vault access for auto-enroll)
     "enroll_ts": 0.0,     # last auto-enroll attempt (throttle)
+    "last_scene": {},     # 009: user -> last scene_id, for /pane/peek —
+                          # chat-driven acts update it, so the pane can poll
+                          # freshness without a world round trip
 }
+
+
+def remember_scene(user: str, scene) -> None:
+    if getattr(scene, "scene_id", ""):
+        state["last_scene"][user] = scene.scene_id
+
+
+def last_scene_id(user: str) -> str:
+    return state["last_scene"].get(user, "")
 
 
 def dev_local() -> bool:
@@ -95,32 +107,39 @@ async def scene_for(user: str):
     from .engine import core
     from .engine.scene import Scene
     if state["remote"] is None and dev_local():
-        return await _local_run(user, core.current_scene)
-    if state["remote"] is None and not await ensure_world(user):
-        return _offline_scene()
-    try:
-        return Scene.from_dict(await state["remote"].scene(user))
-    except Exception:
-        return _offline_scene()
+        scene = await _local_run(user, core.current_scene)
+    elif state["remote"] is None and not await ensure_world(user):
+        scene = _offline_scene()
+    else:
+        try:
+            scene = Scene.from_dict(await state["remote"].scene(user))
+        except Exception:
+            scene = _offline_scene()
+    remember_scene(user, scene)
+    return scene
 
 
 async def act_for(user: str, option: str, text: str = ""):
     """Apply a choice via the world. The single game-action entry point
-    shared by the ascent_choose tool and the card /act route."""
+    shared by the ascent_choose tool, the card /act route, and the pane."""
     from .engine import core
     from .engine.scene import Scene
     if option == "retry":
         # the offline scene's lever: never a game option, always a re-sync
         return await scene_for(user)
     if state["remote"] is None and dev_local():
-        return await _local_run(
+        scene = await _local_run(
             user, lambda d: core.apply_choice(d, option, text))
-    if state["remote"] is None and not await ensure_world(user):
-        return _offline_scene()
-    try:
-        return Scene.from_dict(await state["remote"].act(user, option, text))
-    except Exception:
-        return _offline_scene()
+    elif state["remote"] is None and not await ensure_world(user):
+        scene = _offline_scene()
+    else:
+        try:
+            scene = Scene.from_dict(
+                await state["remote"].act(user, option, text))
+        except Exception:
+            scene = _offline_scene()
+    remember_scene(user, scene)
+    return scene
 
 
 async def ensure_world(user: str) -> bool:

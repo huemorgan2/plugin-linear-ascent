@@ -34,6 +34,11 @@ def _stub_luna_sdk() -> None:
             for k, v in kw.items():
                 setattr(self, k, v)
 
+    class SidebarSection:
+        def __init__(self, **kw):
+            for k, v in kw.items():
+                setattr(self, k, v)
+
     def declarative_base():
         try:
             from sqlalchemy.orm import declarative_base as real
@@ -57,6 +62,7 @@ def _stub_luna_sdk() -> None:
 
     m.LunaPlugin = LunaPlugin
     m.SettingsTab = SettingsTab
+    m.SidebarSection = SidebarSection
     m.PluginManifest = PluginManifest
     m.ToolDef = ToolDef
     m.PluginContext = PluginContext

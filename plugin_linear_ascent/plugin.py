@@ -14,8 +14,8 @@ import asyncio
 import json
 import os
 
-from luna_sdk import (LunaPlugin, PluginContext, PluginManifest, SettingsTab,
-                      ToolDef)
+from luna_sdk import (LunaPlugin, PluginContext, PluginManifest,
+                      SettingsTab, SidebarSection, ToolDef)
 
 from . import runtime
 from .engine.scene import Scene
@@ -34,7 +34,10 @@ _SHARED_RULES = (
     "the next level, never loses one. Nothing refills ✦ but fighting. "
     "The player "
     "picks options by number or plain words; map their words to the "
-    "closest option id. PACE: one player message = at most ONE "
+    "closest option id. THE INTERFACE lives in the Linear Ascent pane "
+    "in the sidebar — the player sees every scene there; NEVER paste "
+    "scene text, options, or HTML into the chat, and point a lost "
+    "player at the pane. PACE: one player message = at most ONE "
     "ascent_choose call, then STOP and wait for the player — never keep "
     "playing on your own, not even to finish a fight. Only when the "
     "player explicitly asks you to play for them ('keep going', 'finish "
@@ -83,29 +86,20 @@ _VOICE_RULES = (
     "you want to do?' (never do this — it re-reads the card)."
 )
 
-_EMBED_RULES = (
-    "The scene is ALREADY rendered as a card in the chat — do NOT repeat "
-    "the scene text. " + _VOICE_RULES + " " + _SHARED_RULES)
-
-_CARD_RULES = (
-    "The scene card was ALREADY posted to the chat as its own message — "
-    "the player sees it without you. " + _VOICE_RULES + " " + _SHARED_RULES)
+_PANE_RULES = (
+    "The scene is ALREADY on the player's screen in the Linear Ascent "
+    "pane (sidebar) — it renders there automatically; nothing gets "
+    "posted to the chat. NEVER repeat the scene text or the options. "
+    + _VOICE_RULES + " " + _SHARED_RULES)
 
 
-def build_payload(scene: Scene, card_posted: bool) -> str:
-    """Tool-result JSON. When the host rendered the scene as a standalone
-    card (post_chat_card), the model gets only text + voice rules; else the
-    embed rides along in the result (stock-Luna fallback)."""
-    if card_posted:
-        return json.dumps({
-            "scene_text": scene.to_text(),
-            "instructions": _CARD_RULES,
-        })
-    from .render import render_scene
+def build_payload(scene: Scene) -> str:
+    """Tool-result JSON (009): the pane is the display — the model gets
+    the scene as compact text purely for its own understanding, plus the
+    standing voice rules. No embeds, no cards."""
     return json.dumps({
         "scene_text": scene.to_text(),
-        "embed_iframe": render_scene(scene),
-        "instructions": _EMBED_RULES,
+        "instructions": _PANE_RULES,
     })
 
 
@@ -120,6 +114,15 @@ class LinearAscentPlugin(LunaPlugin):
             "King — with your Luna agent as your in-world shardmind sidekick."
         ),
         routes_module="routes",
+        sidebar_sections=[
+            SidebarSection(
+                id="linear-ascent",
+                label="Linear Ascent",
+                icon="swords",
+                sort_order=45,
+                path="ui/",
+            ),
+        ],
         settings_tabs=[
             SettingsTab(
                 id="linear-ascent",
@@ -182,30 +185,18 @@ class LinearAscentPlugin(LunaPlugin):
 
         _user = runtime.player_key
 
-        # 056 host capability: post the scene as its OWN chat message
-        # (standalone card, no agent bubble). Feature-detected so stock
-        # Luna keeps the 0.2.x inline-embed behavior.
-        post_card = getattr(ctx, "post_chat_card", None)
-
-        async def _deliver(scene: Scene) -> str:
-            if post_card is not None:
-                try:
-                    from .render import render_scene
-                    posted = await post_card(render_scene(scene))
-                except Exception:
-                    posted = None
-                if posted:
-                    return build_payload(scene, card_posted=True)
-            return build_payload(scene, card_posted=False)
+        # 009: the pane is the display. Tools no longer post chat cards —
+        # the scene reaches the player through the sidebar pane (it polls
+        # /pane/peek, so a chat-driven act shows up there within seconds).
 
         async def ascent_scene() -> str:
             scene = await runtime.scene_for(_user())
-            return await _deliver(scene)
+            return build_payload(scene)
 
         async def ascent_choose(option: str = "", text: str = "") -> str:
             scene = await runtime.act_for(
                 _user(), option.strip(), text.strip())
-            return await _deliver(scene)
+            return build_payload(scene)
 
         async def ascent_character() -> str:
             remote = runtime.state["remote"]

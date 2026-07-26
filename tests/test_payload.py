@@ -1,4 +1,4 @@
-"""Payload fork (056 standalone cards) + embed height-reporting script."""
+"""Tool payloads (009: the pane is the display — no cards, no embeds)."""
 
 import json
 
@@ -15,30 +15,27 @@ def scene():
     )
 
 
-def test_card_posted_payload_has_no_embed():
-    d = json.loads(plugmod.build_payload(scene(), card_posted=True))
+def test_payload_is_text_only():
+    d = json.loads(plugmod.build_payload(scene()))
     assert "embed_iframe" not in d
     assert "grey wolf" in d["scene_text"]
-    assert "ALREADY posted" in d["instructions"]
 
 
-def test_fallback_payload_keeps_inline_embed():
-    d = json.loads(plugmod.build_payload(scene(), card_posted=False))
-    assert d["embed_iframe"].startswith("<!doctype html>")
-    assert "ALREADY rendered" in d["instructions"]
+def test_payload_points_at_the_pane():
+    d = json.loads(plugmod.build_payload(scene()))
+    assert "Linear Ascent pane" in d["instructions"]
+    assert "NEVER repeat the scene text" in d["instructions"]
 
 
-def test_voice_rules_in_both_payloads():
-    for posted in (True, False):
-        d = json.loads(plugmod.build_payload(scene(), card_posted=posted))
-        ins = d["instructions"]
-        assert "never repeat, summarize, or re-list" in ins
-        assert "EMPTY message" in ins            # silence is sanctioned
-        assert "GOOD flavor" in ins              # calibration examples ride along
-        assert "engine decides everything" in ins  # shared rules intact
+def test_voice_rules_ride_along():
+    ins = json.loads(plugmod.build_payload(scene()))["instructions"]
+    assert "never repeat, summarize, or re-list" in ins
+    assert "EMPTY message" in ins            # silence is sanctioned
+    assert "GOOD flavor" in ins              # calibration examples ride along
+    assert "engine decides everything" in ins  # shared rules intact
 
 
-def test_cards_report_height_to_host():
+def test_legacy_cards_still_report_height_to_host():
     html = render_scene(scene())
     assert "luna:embed:height" in html
     assert "ResizeObserver" in html

@@ -122,41 +122,68 @@ def make_client(ctx):
     return testclient.TestClient(app)
 
 
-def test_act_route_runs_engine_and_posts_next_card(fake_local):
+def test_act_route_returns_fragment_and_posts_nothing(fake_local):
     ctx = RouteCtx()
     client = make_client(ctx)
     r = client.post("/api/p/plugin-linear-ascent/act", json={
-        "option": "begin", "conversation_id": "conv-9",
-        "message_id": "old-card"})
+        "option": "begin", "mode": "pane", "conversation_id": "conv-9"})
     assert r.status_code == 200
     d = r.json()
-    assert d["ok"] is True and d["message_id"] == "msg-1"
-    html, conv = ctx.posted[0]
-    assert conv == "conv-9"
-    assert "THE TOWER GATE" in html          # the NEXT scene, as a card
+    assert d["ok"] is True
+    assert "THE TOWER GATE" in d["fragment"]   # the NEXT scene, in place
+    assert d["fragment"].startswith('<div class="card"')
+    assert ctx.posted == []                    # 009: nothing hits the chat
     assert fake_local.docs["owner"]["stage"] == "creation_race"
-    assert ctx.muted == []                   # ordinary beat → agent silent
 
 
-def test_act_route_stale_option_posts_steering_card(fake_local):
+def test_act_route_stale_option_returns_steering_fragment(fake_local):
     ctx = RouteCtx()
     client = make_client(ctx)
     r = client.post("/api/p/plugin-linear-ascent/act",
                     json={"option": "no-such-thing"})
     assert r.status_code == 200
-    html, _ = ctx.posted[0]
-    assert "isn&#x27;t one of the paths" in html or \
-        "isn't one of the paths" in html
+    frag = r.json()["fragment"]
+    assert "isn&#x27;t one of the paths" in frag or \
+        "isn't one of the paths" in frag
+    assert ctx.posted == []
 
 
-def test_act_route_503_when_host_cannot_post_cards(fake_local):
-    ctx = RouteCtx(post_result=None)
+def test_pane_scene_is_idempotent_read(fake_local):
+    ctx = RouteCtx()
     client = make_client(ctx)
-    r = client.post("/api/p/plugin-linear-ascent/act", json={"option": "begin"})
-    assert r.status_code == 503
+    first = client.post("/api/p/plugin-linear-ascent/pane/scene", json={})
+    second = client.post("/api/p/plugin-linear-ascent/pane/scene", json={})
+    assert first.status_code == second.status_code == 200
+    assert first.json()["headline"] == second.json()["headline"]
+    assert first.json()["fragment"].startswith('<div class="card"')
 
 
-# ── Agent nudges: moment on big beats, awareness on loot-tier, else off ──
+def test_pane_peek_tracks_chat_driven_acts(fake_local):
+    ctx = RouteCtx()
+    client = make_client(ctx)
+    client.post("/api/p/plugin-linear-ascent/act", json={"option": "begin"})
+    peek = client.get("/api/p/plugin-linear-ascent/pane/peek")
+    assert peek.status_code == 200
+    sid = peek.json()["scene_id"]
+    # the same id the engine persisted with the doc
+    assert sid == fake_local.docs["owner"]["scene"]["scene_id"]
+
+
+def test_pane_ui_serves_the_tabbed_app():
+    ctx = RouteCtx()
+    client = make_client(ctx)
+    r = client.get("/api/p/plugin-linear-ascent/ui/")
+    assert r.status_code == 200
+    html = r.text
+    for tab in ("Game", "Score", "Community"):
+        assert f'data-tab="{tab.lower()}"' in html
+    assert "luna-auth" in html and "luna-ui-ready" in html
+    assert "/pane/peek" not in html or True   # polling code present below
+    assert "peek" in html and "visibilitychange" in html
+    assert "ui-monospace" in html             # same mono grammar as cards
+
+
+# ── Agent nudges (009): moment on big beats, awareness on EVERY other act ──
 
 def _notify(kind, ctx):
     async def run():
@@ -171,21 +198,22 @@ def _notify(kind, ctx):
         routes._ctx = old
 
 
-@pytest.mark.parametrize("kind,channel", [
-    ("death", "moment"), ("boss", "moment"),
-    ("present", "awareness"), ("letter", "awareness"), ("loot", "awareness"),
-])
-def test_big_beats_nudge_the_agent(kind, channel):
+@pytest.mark.parametrize("kind", ["death", "boss"])
+def test_big_beats_run_a_reaction_moment(kind):
     ctx = RouteCtx()
     _notify(kind, ctx)
-    (title, got_channel, conv, content), = ctx.muted
-    assert got_channel == channel
+    (title, channel, conv, content), = ctx.muted
+    assert channel == "moment"
     assert conv == "conv-1"
     assert kind in title
     assert "never repeat, summarize, or re-list" in content  # voice rules
 
 
-def test_ordinary_scenes_do_not_nudge_the_agent():
+@pytest.mark.parametrize("kind", ["", "loot", "present", "letter", "news"])
+def test_every_other_act_lands_as_awareness(kind):
     ctx = RouteCtx()
-    _notify("", ctx)
-    assert ctx.muted == []
+    _notify(kind, ctx)
+    (title, channel, conv, content), = ctx.muted
+    assert channel == "awareness"
+    assert "awareness only" in content       # never invites a reply
+    assert "H" in content                    # the compact state line

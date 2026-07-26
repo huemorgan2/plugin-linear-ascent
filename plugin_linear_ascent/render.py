@@ -208,7 +208,11 @@ let d=0;for(const el of later){setTimeout(()=>el.classList.add('shown'),d);d+=90
 })();</script>""".replace("__ACT__", _ACT_PATH)
 
 
-def render_scene(scene: Scene) -> str:
+def render_scene_fragment(scene: Scene) -> str:
+    """The scene panel itself — one `<div class="card">` with the full card
+    grammar. Shared verbatim by the legacy chat card (render_scene wraps it
+    in a document + bridge script) and the 009 game pane (which swaps
+    fragments in place and drives /act directly)."""
     parts: list[str] = []
 
     banner = _banner_data_url(scene.banner) if scene.banner else None
@@ -258,12 +262,15 @@ def render_scene(scene: Scene) -> str:
         parts.append(_meters_html(scene.meters))
 
     stripe = _STRIPE.get(scene.event_kind)
-    stripe_css = (f"border-left:3px solid {stripe};" if stripe else "")
+    style_attr = (f' style="border-left:3px solid {stripe};"' if stripe else "")
+    return (f'<div class="card" data-scene="{_e(scene.scene_id)}"{style_attr}>'
+            + "".join(parts) + "</div>")
 
-    return f"""<!doctype html><html><head><meta charset="utf-8"><style>
-html,body{{margin:0;padding:0;background:{INK};overflow:hidden;}}
-body{{padding:8px;}}
-.card{{background:{PANEL};border:1px solid {BORDER};{stripe_css}
+
+# The card grammar — shared by the legacy chat card document and the 009
+# game pane. Pure presentation tokens; hosts add their own page CSS.
+SCENE_CSS = f"""
+.card{{background:{PANEL};border:1px solid {BORDER};
  border-radius:0;margin:0;padding:12px 2ch 10px;color:{TEXT};
  font:14px/1.6 ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
  font-variant-numeric:tabular-nums;overflow:hidden;}}
@@ -320,4 +327,14 @@ body{{padding:8px;}}
  .type.pending{{visibility:visible;}}
  .later.waiting{{opacity:1;transition:none;}}
  .cursor{{display:none;}}}}
-</style></head><body data-scene="{_e(scene.scene_id)}"><div class="card">{''.join(parts)}</div>{_SCRIPT}</body></html>"""
+"""
+
+
+def render_scene(scene: Scene) -> str:
+    """Legacy chat-card document: fragment + doc shell + host bridge script.
+    Kept so cards already sitting in chat history still render and act."""
+    return (f'<!doctype html><html><head><meta charset="utf-8"><style>'
+            f"html,body{{margin:0;padding:0;background:{INK};overflow:hidden;}}"
+            f"body{{padding:8px;}}{SCENE_CSS}</style></head>"
+            f'<body data-scene="{_e(scene.scene_id)}">'
+            f"{render_scene_fragment(scene)}{_SCRIPT}</body></html>")
