@@ -132,7 +132,13 @@ class, without turning combat into a grid game:
 3. **Speed helps everyone**:
    - *Archers*: keep range → full bow effectiveness (their core loop).
    - *Everyone vs magic/attacks*: speed contributes a dodge component —
-     outrunning the fireball is a real defense (small, tiered, capped).
+     outrunning the fireball is a real defense. **Decided (2026-07-27):
+     dodge applies to everything but is very small and grows with
+     LOGARITHMIC decay** — each extra point of speed advantage adds less
+     dodge than the last, so stacking speed can never become a hidden
+     invulnerability hack. **Armor and resistance stay the main defense
+     axes**; dodge is a garnish (single-digit percentages at any
+     realistic speed).
    - *Fleeing*: run success = speed differential, telegraphed on the
      enemy card. You can walk away from the Slow; you cannot outrun the
      wolf without better shoes.
@@ -217,6 +223,7 @@ the very top of its shop, and so do we):
 | Relic | Effect | Limitation |
 |---|---|---|
 | **Stone of Undying** | Death is cancelled; you stand back up mid-fight | revive at *partial* HP (not full); **hold exactly 1**; consumed on trigger |
+| **Weapon Reincarnation Spell** | on death, your gear survives the random loss (¶7) **and all weapons + armor are repaired to full** | works **once** (consumed on the death that triggers it); **can hold many**, but spares are carried items — they can themselves be lost to a death |
 | **Golden Apple** | 2× HP overshield + all damage halved | timed (one fight); the bonus HP decays, never heals back |
 | **Thornmail** | attackers take damage every time they strike you | each reflection burns the armor's own durability |
 | **Veil Draught** | monsters can't target you… | …until your first attack; one fight; timed |
@@ -247,8 +254,11 @@ monster. Exists so late-game gold has somewhere legendary to go.
 Rules that keep this sane:
 
 - **Either/or exclusivity** where power concentrates (the
-  Infinity-XOR-Mending lesson): only one *insurance* relic active at a
-  time — Stone or Apple or Veil, pick before the fight.
+  Infinity-XOR-Mending lesson): only one *life*-insurance relic active
+  at a time — Stone or Apple or Veil, pick before the fight. The
+  Reincarnation Spell is *gear* insurance and stacks freely (hold many);
+  its own limiter is that spares ride in the pack and are themselves
+  at risk on death.
 - **Staged availability** (¶9): the catalog unrolls band by band; each
   new floor band's shops introduce 2–3 new relics, so there is always a
   new toy to discover and save for.
@@ -297,6 +307,17 @@ monster's next intent.
   mechanic at the exact moment it starts existing.
 - At 0% the item doesn't vanish — it's *broken* (heavy damage penalty)
   until repaired; you always still have the basic weapon (¶1.2).
+- **Death (decided 2026-07-27):** dying causes a **random loss of money
+  and weapons** — a random slice of carried gold plus randomly-picked
+  carried gear can be gone for good (replaces today's flat "all gold +
+  armor and shield destroyed"). **Unless** a **Weapon Reincarnation
+  Spell** (¶5) triggers: it's consumed, your gold and gear are safe, and
+  *all* your weapons and armor are repaired to full — death as a forge
+  visit you pre-paid for. You can stockpile several spells, with one
+  carve-out: the magic cannot protect its own kind — **spare
+  Reincarnation Spells stay in the random-loss pool even on a protected
+  death**, so a stockpile erodes. Exact loss odds and vault interactions
+  in plan.md.
 
 ## 8. Economy tightening
 
@@ -326,29 +347,33 @@ monster's next intent.
 
 ## 10. Agent messaging: stop the per-action spam
 
-**✅ SHIPPED EARLY — v0.17.1 (2026-07-27),** pulled forward at Roy's
-request. What went live:
+**✅ SHIPPED — v0.17.1 then tightened in v0.17.2 (2026-07-27).** Final
+state, per Roy's answer to open question 7 ("lose the 5 min digest
+completely — the agent, if talked with, should check"):
 
-- Ordinary pane acts **no longer message the agent at all** (previously
-  every click landed an awareness row — the token waste).
-- The sidekick gets **one check-in per ~5 minutes of active play**
-  (clock only advances while acts happen): current state + an
-  invitation to offer *one* helpful line, with silence explicitly
-  invited.
+- Ordinary pane acts **never message the agent** — no awareness rows,
+  **no periodic digest either** (the 5-minute check-in shipped in
+  0.17.1 was removed again in 0.17.2).
+- When the player talks to the agent, it **re-syncs itself** via
+  `ascent_scene` (the tool rules already mandate this whenever the
+  player's words don't match its last-seen scene).
 - **Instant paths kept:** death/boss moments, and the awaits_text
   pass-through hint (the agent must know the game expects typed input).
 
 Still open for plan.md (from the original design): the "you're fighting
 a hard-countered matchup" first-time-per-monster moment — that beat
-belongs with the defense-profile engine work, not the throttle.
+belongs with the defense-profile engine work.
 
 ## 11. Characters, races, movies, and art constraints
 
 - **Races: drop halfling; keep human / elf / dwarf.** Existing
-  halflings are **migrated, not grandfathered** (decided 2026-07-27):
-  on their next login they pick one of the three races (default: human
-  if they never choose); the halfling luck bonus retires with the race.
-  No new halfling creations.
+  halflings are **migrated, not grandfathered** (decided 2026-07-27,
+  refined same day): every existing player is **converted automatically
+  to the closest race for them** — no login dialog. Mapping rule for
+  plan.md: halfling → human is the default closest match (adaptable,
+  human-scaled); if a player's class/build reads clearly elf-ish or
+  dwarf-ish, map there instead. The halfling luck bonus retires with
+  the race. No new halfling creations.
 - **World lore — dwarves are GIANTS.** In the Ascent, "dwarf" is only
   the name: they are **massive, towering creatures — two heads taller
   than the human warrior and the elf, and visibly wider**, slab-built
@@ -356,11 +381,12 @@ belongs with the defense-profile engine work, not the throttle.
   shows a dwarf must render this scale (the dwarf wizard should loom
   over the other two showcase characters, never stand knee-high).
 - **Three showcase characters** carried consistently through all art
-  (intro movie, creation, endings):
-  - male **elf** (brief says warrior — see open question 1),
-  - old, strong-bodied **dwarf wizard** — a giant per the lore above,
+  (intro movie, creation, endings) — **confirmed 2026-07-27, one per
+  profession:**
+  - **male elf ARCHER**,
+  - old, strong-bodied **dwarf WIZARD** — a giant per the lore above,
     the largest figure in every frame,
-  - **female human warrior**, strong build.
+  - **female human WARRIOR**, strong build.
 - **Intro movie:** the refugee/climber scenes show these three (today's
   art is anonymous silhouettes — those scenes get re-generated).
 - **Kill/ending FX:** each monster death gets **3 variants — melee kill,
@@ -385,39 +411,34 @@ belongs with the defense-profile engine work, not the throttle.
 
 ---
 
-## Open questions (answer before plan.md)
+## Open questions — ALL RESOLVED (Roy, 2026-07-27 evening)
 
-1. **The elf showcase is listed as a warrior** — but then no archer
-   appears among the three showcase characters, and two of three are
-   warriors. Recommendation: make the elf the **archer** (bow iconography
-   reads instantly, elves=bows is genre-native), keeping dwarf=wizard,
-   human female=warrior — one character per profession.
-2. **Existing players** on the shared world: everyone's current
-   single-rung gear must migrate — map existing gear to nearest new
-   rung at full durability; everyone starts at Normal speed with no
-   shoes. ~~Halflings: grandfather or migrate?~~ **Resolved
-   (2026-07-27): migrate** — one-time race pick on next login, default
-   human, luck bonus retired (¶11).
-3. **Kill-FX ×3 variants** multiply the art budget (~5 monsters × 3 =
-   15 GIFs for the early floors alone, more as floors get variety). OK
-   to stage: floors 1–3 first, rest generated per content batch?
-4. **Degradation on death:** today death destroys armor+shield outright.
-   With durability in play, is death = destroy (as now), or death = heavy
-   durability hit (softer, since repairs cost gold+XP)? Recommendation:
-   heavy durability hit at L≤3 (mercy), destroy above — keeps death
-   scary without double-punishing the new repair economy.
-5. **How granular is the range model (¶3)?** Recommendation: exactly two
-   states — *at range* and *close* — with speed deciding how fast the
-   monster forces the transition and whether "open distance" succeeds.
-   Two states is readable in prose ("it closes in!"), needs no grid, and
-   still creates the full kiting game. Reject anything more granular.
-6. **Does speed-as-dodge apply to all damage or only spells?** The brief
-   says "dodging magic". Recommendation: small dodge vs *everything* at
-   speed advantage (simpler rule, one icon), capped low so armor/res
-   tiers stay the primary defense axes.
-7. **The 5-minute agent digest** — ~~flat 5 minutes, or beat-aligned?~~
-   **Resolved by shipping (¶10):** flat, act-driven clock; beat-aligned
-   refinement can ride along with the matchup-moment work if wanted.
+Nothing blocks plan.md. The decisions, for the record:
+
+1. **Showcase characters — one per profession:** male **elf archer**,
+   **female human warrior**, massive **dwarf wizard** (giant per the
+   ¶11 lore). Folded into ¶11.
+2. **Existing players:** convert automatically **to the closest thing
+   for them** — closest race (halfling → human by default, ¶11),
+   existing gear → nearest new rung at full durability, Normal speed,
+   no shoes. No login dialogs.
+3. **Kill-FX staging:** approved — floors 1–3 first, the rest generated
+   per content batch.
+4. **Death penalty:** **random loss of money and weapons**, cancelled
+   by a consumed **Weapon Reincarnation Spell** which also repairs all
+   weapons and armor to full; spells stack but spares can be lost to
+   deaths. Full rule in ¶7, relic in ¶5. (Supersedes today's "all gold
+   + armor/shield destroyed" and the old destroy-vs-durability-hit
+   debate.)
+5. **Range model:** agreed — exactly two states, *at range* and
+   *close* (¶3).
+6. **Speed-as-dodge:** yes, dodge applies to everything, but it is very
+   small and grows with **logarithmic decay** so speed stacking can
+   never become a hidden invulnerability hack; **armor stays the main
+   defense** (¶3.3).
+7. **Agent digest:** **removed entirely** — no periodic message at all;
+   the agent checks state via `ascent_scene` when talked to. Shipped as
+   v0.17.2 (¶10).
 
 ## Numbers to fix in plan.md (with the balance model)
 
@@ -426,8 +447,10 @@ belongs with the defense-profile engine work, not the throttle.
 - Armor/resistance tier percentages per named tier (proposal: 0 / 25 /
   50 / 75 / 90, Immune reserved for scripted encounters).
 - **Speed model:** tier values, gap-close rates, "open distance" success
-  odds, close-quarters bow penalty, dodge-from-speed coefficient and
-  cap, flee success curve.
+  odds, close-quarters bow penalty, the **logarithmic dodge curve**
+  (base, decay factor, hard cap — single digits), flee success curve.
+- **Death economy:** random-loss odds for gold and for each carried
+  item class, Reincarnation Spell price and availability band.
 - Durability pools per tier, wear per strike, break threshold, repair
   XP amounts.
 - **Relic catalog v1** (¶5): final list, prices, quantities, effect
@@ -450,8 +473,9 @@ belongs with the defense-profile engine work, not the throttle.
 4. **Relic catalog v1** (insurance + quiver + class tools; ultimates can
    trail).
 5. **Durability** (state, wear, repair, bar UI, staged onboarding).
-6. ~~Agent digest throttle~~ — **shipped in 0.17.1**; only the matchup
-   moment remains (rides with phase 1).
+6. ~~Agent digest throttle~~ — **done (0.17.1 + 0.17.2: total silence,
+   moments only)**; only the matchup moment remains (rides with
+   phase 1).
 7. **Town lock UI + gate copy/reorder.**
 8. **Races/characters + movie & kill-FX art batch.**
 9. **Economy retune + shared-world migration + playtest.**

@@ -183,7 +183,7 @@ def test_pane_ui_serves_the_tabbed_app():
     assert "ui-monospace" in html             # same mono grammar as cards
 
 
-# ── Agent nudges (017): instant on big beats, one check-in per ~5 min ──
+# ── Agent nudges (017): moments on big beats only; everything else silent ──
 
 def _notify(kind, ctx, awaits_text="", player="p1"):
     async def run():
@@ -199,13 +199,6 @@ def _notify(kind, ctx, awaits_text="", player="p1"):
         routes._ctx = old
 
 
-@pytest.fixture(autouse=True)
-def fresh_checkpoint_clock():
-    routes._last_contact.clear()
-    yield
-    routes._last_contact.clear()
-
-
 @pytest.mark.parametrize("kind", ["death", "boss"])
 def test_big_beats_run_a_reaction_moment(kind):
     ctx = RouteCtx()
@@ -219,30 +212,17 @@ def test_big_beats_run_a_reaction_moment(kind):
 
 @pytest.mark.parametrize("kind", ["", "loot", "present", "letter", "news"])
 def test_ordinary_acts_send_nothing(kind):
-    """017: no more per-click token spend — ordinary acts are silent."""
+    """017: no per-click token spend, no periodic digest — total silence.
+    The agent re-syncs via ascent_scene when the player talks to it."""
     ctx = RouteCtx()
-    _notify(kind, ctx)          # first sight: arms the clock, says nothing
-    _notify(kind, ctx)          # well inside the window: still nothing
+    for _ in range(3):
+        _notify(kind, ctx)
     assert ctx.muted == []
-
-
-def test_checkpoint_fires_after_interval_then_goes_quiet_again():
-    ctx = RouteCtx()
-    _notify("loot", ctx)                       # arms the clock silently
-    routes._last_contact["p1"] -= routes.CHECKPOINT_S + 1
-    _notify("loot", ctx)                       # window elapsed → check-in
-    _notify("loot", ctx)                       # window reset → silent
-    (title, channel, conv, content), = ctx.muted
-    assert channel == "moment"                 # a real (rare) turn
-    assert "check-in" in content
-    assert "H" in content                      # the compact state line
-    assert "stay silent" in content            # silence stays invited
 
 
 def test_awaits_text_notifies_immediately():
     """The pass-through hint can't wait — the player is about to type."""
     ctx = RouteCtx()
-    _notify("loot", ctx)                       # arms the clock
     _notify("naming", ctx, awaits_text="their character's name")
     (title, channel, conv, content), = ctx.muted
     assert channel == "awareness"
