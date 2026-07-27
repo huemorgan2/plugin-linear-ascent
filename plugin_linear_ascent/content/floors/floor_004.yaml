@@ -28,6 +28,14 @@ encounters:
     prose: >-
       A goblin in a harness of stolen lenses is prying glass from the
       fallen pylon. It draws a shard like a knife, unwilling to share.
+  - id: glare_moth
+    name: Glare moth
+    weight: 2
+    traits: [flying]
+    prose: >-
+      Out of the beam drops a moth with a wingspan like a barn door,
+      scales throwing the floodlight back in knives. It circles above
+      sword-reach, waiting for you to look up into the glare.
 warden:
   name: Warden Glarefang
   prose: >-

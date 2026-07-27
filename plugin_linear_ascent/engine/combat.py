@@ -81,14 +81,15 @@ def start_encounter(p: dict, floor, enc, kind: str = "wilds") -> Scene:
     else:
         atk, dfs, hp = floor.monster_atk, floor.monster_def, floor.monster_hp
         name, prose = enc.name, enc.prose
-    # 017: encounter traits — "armored" wears looted plate and a real
-    # blade: harder stats (multipliers in economy.py), and the archer's
-    # treeline shot loses its double against the plate.
+    # 017 §2: the defense profile — armor/resist tiers, flying, bulwark,
+    # speed — derived from qualitative content traits, priced in economy.
     traits = tuple(getattr(enc, "traits", ()) or ()) if enc is not None else ()
-    if "armored" in traits:
-        atk = round(atk * economy.ARMORED_ATK_MULT)
-        dfs = round(dfs * economy.ARMORED_DEF_MULT)
-        hp = round(hp * economy.ARMORED_HP_MULT)
+    if kind == "warden":
+        prof = economy.warden_profile(floor.floor)
+    else:
+        prof = economy.profile_from_traits(traits)
+    if prof["bulwark"]:
+        hp = round(hp * economy.BULWARK_HP_MULT)
     specimen = "common"
     if kind == "wilds":
         # 008: specimen roll — same averages, real variance. Visible on
@@ -100,14 +101,42 @@ def start_encounter(p: dict, floor, enc, kind: str = "wilds") -> Scene:
         hp = round(hp * spec["hp"])
         if spec["tag"]:
             prose = f"{prose} This one is {spec['tag']}."
+    if kind == "wilds" and prof["speed"] != economy.SPEED_NORMAL:
+        pass  # speed is chase-priced in 002; stored below, shown on cards
     p["encounter"] = {
         "kind": kind, "name": name, "prose": prose,
         "id": (enc.id if enc is not None else ""),
         "specimen": specimen, "traits": list(traits),
+        "profile": prof,
         "atk": atk, "def": dfs, "hp": hp, "hp_max": hp,
         "floor": floor.floor, "shot_used": False,
     }
     return fight_scene(p, floor, opener=True)
+
+
+def _profile(p: dict) -> dict:
+    """Encounter profile with a safe default for pre-017 docs mid-fight."""
+    return p["encounter"].get("profile") or economy.profile_from_traits(
+        p["encounter"].get("traits") or ())
+
+
+def _profile_line(prof: dict) -> str:
+    """One compact readable line — the [i] card (003) will do it justice;
+    until then the opener itself must say what the player is facing."""
+    bits = []
+    if prof.get("armor", "none") != "none":
+        bits.append(f"plate {economy.TIER_LABEL[prof['armor']]}")
+    if prof.get("resist", "none") != "none":
+        bits.append(f"spellguard {economy.TIER_LABEL[prof['resist']]}")
+    if prof.get("flying"):
+        bits.append("AIRBORNE")
+    if prof.get("bulwark"):
+        bits.append("bulwark")
+    if prof.get("speed", economy.SPEED_NORMAL) >= economy.SPEED_FAST:
+        bits.append("fast")
+    elif prof.get("speed", economy.SPEED_NORMAL) <= economy.SPEED_SLOW:
+        bits.append("slow")
+    return " · ".join(bits)
 
 
 def _shard_advice(p: dict, floor) -> str:
@@ -157,6 +186,11 @@ def fight_scene(p: dict, floor, opener: bool = False, note: str = "") -> Scene:
 
     body = [e["prose"]] if opener else []
     if opener:
+        # 017: the defense profile, named on sight — the counter system
+        # is invisible noise unless the enemy's sheet is readable.
+        pline = _profile_line(_profile(p))
+        if pline:
+            body.append(f"◈ {pline}")
         # 013: your own numbers, spelled out — armor was invisible and
         # players couldn't tell WHY hits landed for 0.
         guard = guard_name(p)
@@ -239,19 +273,42 @@ def _strike_text(p: dict, dmg: int) -> str:
     """The player's blow, explained: which weapon, how hard it bit."""
     e = p["encounter"]
     w = weapon_name(p)
+    prof = _profile(p)
     if dmg <= 0:
+        if prof.get("flying") and _damage_type(p) == "melee":
+            return (f"The {e['name']} lifts out of reach — your {w} "
+                    "cuts empty air. Steel can't touch what flies.")
         return (f"Your {w} glances off the {e['name']}'s hide — "
                 "nothing lands.")
+    tier_note = ""
+    dt = _damage_type(p)
+    if dt == "magic" and prof.get("resist", "none") != "none":
+        tier_note = (f" — its spellguard "
+                     f"({economy.TIER_LABEL[prof['resist']]}) eats part "
+                     "of the cast")
+    elif dt != "magic" and prof.get("armor", "none") != "none":
+        tier_note = (f" — its plate "
+                     f"({economy.TIER_LABEL[prof['armor']]}) turns part "
+                     "of the blow")
     if dmg >= max(1, e["hp_max"] // 3):
         return (f"Your {w} bites deep — {dmg} damage the "
-                f"{e['name']} won't shrug off.")
-    return f"Your {w} takes it for {dmg}."
+                f"{e['name']} won't shrug off{tier_note}.")
+    return f"Your {w} takes it for {dmg}{tier_note}."
+
+
+def _damage_type(p: dict) -> str:
+    return economy.DAMAGE_TYPE.get(p.get("clazz") or "", "melee")
 
 
 def _player_hit(p: dict, mult: float = 1.0) -> int:
+    # 017 §2: typed damage through the defense profile. Magic ignores
+    # flat DEF but eats the resist tier; melee/ranged keep raw−DEF/2 and
+    # eat the armor tier. Whatever CAN hit chips ≥1; melee vs flying is
+    # the one legal zero.
     e = p["encounter"]
     raw = state.rng_int(p, state.atk(p) // 2, state.atk(p))
-    dmg = max(0, round(raw * mult) - e["def"] // 2)
+    dmg = economy.typed_damage(_damage_type(p), round(raw * mult),
+                               e["def"], _profile(p))
     e["hp"] -= dmg
     return dmg
 
@@ -284,8 +341,8 @@ def _victory(p: dict, floor) -> Scene:
         # 008: hard specimens pay more, runts pay less
         gold = round(
             gold * economy.SPECIMENS[e.get("specimen", "common")]["gold"])
-        if "armored" in (e.get("traits") or ()):
-            gold = round(gold * economy.ARMORED_GOLD_MULT)  # 017: plate pays
+        # 017: a hard profile pays for the diagnosis it demands
+        gold = round(gold * economy.profile_gold_mult(_profile(p)))
     if p.get("race") == "elf":
         xp = round(xp * (1 + economy.ELF_XP_BONUS))
     buff = state.faction_buff_pct(p, "xp")
@@ -424,11 +481,13 @@ def resolve_fight_action(p: dict, floor, option_id: str) -> Scene:
             return fight_scene(p, floor, note=(
                 f"The shard needs {economy.scan_xp_cost(floor.floor)} XP of "
                 "what you've learned — you haven't learned enough yet."))
+        pline = _profile_line(_profile(p))
         return fight_scene(
             p, floor,
             note=f"◆ scan: {e['name']} — ATK {e['atk']} / DEF {e['def']} / "
-                 f"HP {e['hp']}/{e['hp_max']}. Your ATK {state.atk(p)} / "
-                 f"DEF {state.dfs(p)}.")
+                 f"HP {e['hp']}/{e['hp_max']}"
+                 + (f" · {pline}" if pline else "")
+                 + f". Your ATK {state.atk(p)} / DEF {state.dfs(p)}.")
 
     if option_id == "drink_tonic":
         p["inventory"]["trollblood_tonic"] -= 1
@@ -474,14 +533,28 @@ def resolve_fight_action(p: dict, floor, option_id: str) -> Scene:
         return fight_scene(p, floor, note=f"{braced} {held}")
 
     if option_id == "shield_wall" and p.get("clazz") == "warrior":
-        counter = max(0, state.atk(p) // 4 - e["def"] // 2)
+        # 017: the counter is a melee blow — it cannot reach a flyer
+        if _profile(p).get("flying"):
+            counter = 0
+        else:
+            counter = max(0, state.atk(p) // 4 - e["def"] // 2)
         e["hp"] -= counter
         if e["hp"] <= 0:
             return _victory(p, floor)
+        if counter <= 0 and _profile(p).get("flying"):
+            return fight_scene(p, floor, note=(
+                "Shield up — nothing gets through. But your counter "
+                "swings under it: the thing is airborne."))
         return fight_scene(p, floor, note=(
             f"Shield up — nothing gets through. Your counter takes {counter}."))
 
     if option_id == "sleep_spell" and p.get("clazz") == "sorcerer":
+        # 017: a High spellguard shrugs the lullaby off entirely —
+        # refused BEFORE the XP is spent, so probing costs nothing.
+        if _profile(p).get("resist") == "high":
+            return fight_scene(p, floor, note=(
+                f"You shape the lullaby and the {e['name']}'s spellguard "
+                "burns it off mid-air. This one won't sleep."))
         cost = economy.sleep_xp_cost(floor.floor)
         if not state.spend_xp(p, cost):
             return fight_scene(p, floor, note=(
@@ -501,8 +574,9 @@ def resolve_fight_action(p: dict, floor, option_id: str) -> Scene:
     if option_id == "treeline_shot" and p.get("clazz") == "archer" \
             and not e["shot_used"]:
         e["shot_used"] = True
-        if "armored" in (e.get("traits") or ()):
-            # plate over the vitals — the long shot loses its double
+        if _profile(p).get("armor") in ("med", "high"):
+            # 017: Medium+ plate over the vitals — the long shot loses
+            # its double (Low plate still leaves gaps for a marksman)
             dmg = _player_hit(p)
             if e["hp"] <= 0:
                 return _victory(p, floor)

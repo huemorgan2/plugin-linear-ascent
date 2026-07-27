@@ -447,6 +447,10 @@ def _creation_class_scene(p: dict) -> Scene:
 
 def _creation_pick_class(p: dict, oid: str) -> Scene:
     p["clazz"] = oid
+    # 017 §1: the gate issues the weapon of your calling — warriors a
+    # rusted sword, archers a basic bow (arrows never run out),
+    # sorcerers a worn staff. It never breaks and is never lost.
+    p["gear"]["weapon"] = economy.class_starter(oid).slug
     p["stage"] = "creation_name"
     return _creation_name_scene(p)
 

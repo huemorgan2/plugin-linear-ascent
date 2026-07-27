@@ -27,6 +27,14 @@ encounters:
     prose: >-
       The pen says GRAND CHAMPION in old letters. The bar is bent. The
       champion has opinions about being looked at.
+  - id: bunting_kite
+    name: Bunting kite
+    weight: 2
+    traits: [flying]
+    prose: >-
+      Something has been living in the flag-lines above the fair — a
+      kite-bird stitched with stolen bunting, wheeling down between
+      the stall roofs where no blade can follow it.
 warden:
   name: Warden Hookmaster
   prose: >-

@@ -123,7 +123,7 @@ def test_attack_note_names_the_weapon_and_the_block():
     p["hp"] = 10_000
     s = choose(p, "attack")
     note = " ".join(s.body_lines)
-    assert "Rusted Shiv" in note           # the strike, explained
+    assert "Rusted Sword" in note          # the strike, explained (017)
     # the counter names the guard whenever armor ate part of the blow
     assert ("Padded Jerkin" in note or "HP" in note)
 

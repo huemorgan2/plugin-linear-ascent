@@ -27,6 +27,14 @@ encounters:
     prose: >-
       A boar blackened from rooting in the burn charges through its own
       dust cloud, tusks scorched to points.
+  - id: ember_shade
+    name: Ember shade
+    weight: 2
+    traits: [resist_low]
+    prose: >-
+      The grey grass exhales, and the exhale has eyes — a shade of old
+      fire that never finished going out. Spells reach it dimmed, the
+      way a shout reaches the bottom of a well.
 warden:
   name: Warden Greycinder
   prose: >-

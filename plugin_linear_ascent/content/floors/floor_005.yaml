@@ -27,6 +27,14 @@ encounters:
     prose: >-
       From the shearing shed a goblin emerges wearing an entire fleece,
       scrap-rifle poking out of the wool. It bleats, then fires.
+  - id: downs_courser
+    name: Downs courser
+    weight: 2
+    traits: [fast]
+    prose: >-
+      A hound built like a greyhound crossed with a rumor comes over
+      the down flat-out, faster than anything has a right to run on
+      turf. Distance is not going to be your friend here.
 warden:
   name: Warden Ramsteel
   prose: >-

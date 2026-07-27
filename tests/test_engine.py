@@ -379,39 +379,37 @@ def test_elf_learns_faster():
     assert p["xp"] >= round(round(4 * 0.75) * 1.05)
 
 
-# ── 017: encounter traits — the armored goblin ──────────────────────────
+# ── 017: encounter traits → defense profiles ─────────────────────────────
 
-def test_goblin_straggler_is_armored_in_content():
+def test_floor_one_is_kindergarten():
+    """017 §2.3: floor 1 carries NO traits — every monster plain."""
     from plugin_linear_ascent.content import schema
     fl = schema.get_floor(1)
-    gob = next(e for e in fl.encounters if e.id == "goblin_straggler")
-    assert "armored" in gob.traits
-    assert "rifle" not in gob.prose.lower()          # the gun is gone
-    assert "sword" in gob.prose.lower()
+    assert len(fl.encounters) >= 4
+    for e in fl.encounters:
+        assert not e.traits, f"{e.id} carries traits on floor 1"
 
 
-def test_armored_trait_hardens_the_encounter():
+def test_profile_derived_and_stored_on_encounter():
     from plugin_linear_ascent.content import schema
     from plugin_linear_ascent.engine import combat
-    fl = schema.get_floor(1)
-    gob = next(e for e in fl.encounters if e.id == "goblin_straggler")
+    fl = schema.get_floor(2)
+    tortoise = next(e for e in fl.encounters
+                    if e.id == "shellback_tortoise")
     p = create_character(fresh())
-    combat.start_encounter(p, fl, gob)
-    e = p["encounter"]
-    assert e["traits"] == ["armored"]
-    # DEF is untouched by the specimen roll — the plate multiplier shows
-    assert e["def"] == round(fl.monster_def * economy.ARMORED_DEF_MULT)
-    assert e["atk"] >= round(fl.monster_atk * economy.ARMORED_ATK_MULT
-                             * 0.9)  # ≥ armored floor (specimen only adds)
+    combat.start_encounter(p, fl, tortoise)
+    prof = p["encounter"]["profile"]
+    assert prof["armor"] == "low" and prof["resist"] == "none"
+    assert not prof["flying"] and not prof["bulwark"]
 
 
-def test_armored_resists_the_treeline_shot():
+def test_med_plate_resists_the_treeline_shot():
     from plugin_linear_ascent.content import schema
     from plugin_linear_ascent.engine import combat
-    fl = schema.get_floor(1)
-    gob = next(e for e in fl.encounters if e.id == "goblin_straggler")
+    fl = schema.get_floor(10)
+    guard = next(e for e in fl.encounters if e.id == "kings_guard")
     p = create_character(fresh(), clazz="archer")
-    combat.start_encounter(p, fl, gob)
+    combat.start_encounter(p, fl, guard)
     e = p["encounter"]
     e["hp"] = e["hp_max"] = 10_000                   # survive the shot
     s = combat.resolve_fight_action(p, fl, "treeline_shot")

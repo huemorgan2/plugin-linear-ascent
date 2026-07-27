@@ -157,10 +157,10 @@ def test_playing_scenes_carry_the_pack():
     p["inventory"]["medgel"] = 2
     s = core.current_scene(p)
     by_slug = {i["slug"]: i for i in s.inventory}
-    shiv = by_slug["rusted_shiv"]
-    assert shiv["equipped"] and shiv["kind"] == "weapon"
+    sword = by_slug["rusted_sword"]                      # 017 class starter
+    assert sword["equipped"] and sword["kind"] == "weapon"
     assert by_slug["medgel"]["count"] == 2
-    assert s.inventory[0]["slug"] == "rusted_shiv"       # equipped first
+    assert s.inventory[0]["slug"] == "rusted_sword"      # equipped first
     d = Scene.from_dict(s.to_dict())
     assert d.inventory == s.inventory
 
@@ -169,7 +169,7 @@ def test_honed_gear_names_its_level():
     p = create_character(fresh())
     p["hone"]["weapon"] = 2
     s = core.current_scene(p)
-    assert s.inventory[0]["name"] == "Rusted Shiv +2"
+    assert s.inventory[0]["name"] == "Rusted Sword +2"
 
 
 def test_creation_scenes_carry_no_pack():

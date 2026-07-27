@@ -24,11 +24,16 @@ encounters:
   - id: goblin_straggler
     name: Goblin straggler
     weight: 2
-    traits: [armored]
     prose: >-
-      A lone goblin in scavenged plate armor drags a notched longsword
-      through the grass, old arrows snapped off against its breastplate.
-      It sees you, sets its feet behind the sword, and grins.
+      A lone goblin in a stitched rag-coat drags a notched longsword
+      through the grass, too heavy for it by half. It sees you, sets
+      its feet behind the sword anyway, and grins.
+  - id: hedge_rat
+    name: Hedgerow rat
+    weight: 2
+    prose: >-
+      Something the size of a dog bursts from the fencerow in a spray
+      of leaves — a rat grown fat on abandoned granaries, teeth first.
 warden:
   name: Warden Brackjaw
   prose: >-
