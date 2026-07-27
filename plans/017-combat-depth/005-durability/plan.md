@@ -22,9 +22,20 @@ for gold + a few XP; broken never means helpless.
    003 retro: the wrench grid already exists in `icons.py` (shipped
    with the 003 icon set as a CSS-mask data-URL) — reuse `_ticon`,
    don't add a second icon path.
+   004 retro: if durability adds any new visual mark (pips, cracked
+   icon), draw the glyph in the SAME commit — unit tests can't see a
+   bow rendered as a sword; only the dojo screenshot catches missing
+   or wrong art. And any prose template that names gear via joined
+   names (`guard_name` style) needs singular/plural verb branches —
+   the 004 dojo caught "your Glass Bead Focus soak".
 6. Pawn (from 006 if not yet landed): worn gear pays × durability
    fraction — coordinate ordering with 006.
-7. Vendor sync + deploy; version bump + publish.
+7. 004 retro (design decision, small): a non-caster who ends up with
+   a focus equipped gets full shield credit and may hone it — only
+   BUYING is class-gated today. Decide here (durability is the
+   natural lever: e.g. focuses wear fast in unfamiliar hands) or
+   explicitly bless it in a comment.
+8. Vendor sync + deploy; version bump + publish.
 
 ## Tests / acceptance
 
@@ -42,5 +53,11 @@ for gold + a few XP; broken never means helpless.
 - Migration: v1→v2 docs get full durability on existing gear.
 - Dojo: buy a Pigsticker, grind it down, watch the bar, repair it —
   confirm the teaching line and the hover text.
+  004 retro (hard rule): before ANY dojo click, kill worldd by PORT
+  (`lsof -ti :8600 | xargs kill -9`), start fresh, and check the new
+  pid's log for a clean bind — an "address already in use" restart
+  leaves the OLD engine serving and the whole dojo pass tests stale
+  code. Off-class arrow burn + shoe wear interact: run one dojo fight
+  as a non-archer with a bow and confirm wear + arrows both tick.
 
 Exit: all green, published, worldd synced, `execution_summary.md`.

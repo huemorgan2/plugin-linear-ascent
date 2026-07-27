@@ -43,6 +43,11 @@ for the new monsters.
   — don't "fix" a band by removing its fast monsters. Copy the sim
   loops from `test_017_damage_types.py` / `test_017_speed_chase.py`
   rather than re-deriving them.
+  004 retro: the full rung catalog now prices every band — run the
+  days-to-afford gate (`test_017_shops.py`) against each band's
+  actual income so floors 11-100 fund their rungs on the same smooth
+  curve (income tuning lives in floor gold, not in reprints of the
+  catalog).
 - Art: every encounter id with no shipped art logged and triaged (the
   renderer already skips silently — the list is the deliverable).
 - Dojo spot-checks: one floor per band — read three [i] cards, verify

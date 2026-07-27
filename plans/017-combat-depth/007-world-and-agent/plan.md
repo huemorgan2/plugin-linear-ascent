@@ -22,7 +22,14 @@ Goal: the shared-world and sidekick pieces — faction armory donations
 3. **Town readability:** locked rows with unlock levels for Arcanum /
    Relay / Fields / non-day-1 areas ("🔒 Arcanum — level 6"); **Tower
    Gate moves to the top** as "The Tower Gate — leave town and climb".
-4. Vendor sync + **worldd deploy with migration** + version bump +
+   004 note: the Arcanum row + refusal line already shipped in 0.21.0
+   — this task is now only Relay/Fields/other locked rows + the gate
+   reorder.
+4. **Shop owned-state (004 dojo carryover):** a rung you already own
+   stays fully buyable — mark it ("✓ worn") or drop it from the rack
+   so the two buyable rows are always NEW steps. Same `_rack` helper,
+   one branch.
+5. Vendor sync + **worldd deploy with migration** + version bump +
    publish.
 
 ## Tests / acceptance

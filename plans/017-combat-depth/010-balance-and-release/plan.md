@@ -34,6 +34,12 @@ shared-world migration check, end-to-end dojo playtest, release.
   (e.g. warden stats in `test_008_pace`) — update them deliberately
   with a dated note rather than loosening the assertion; income
   smoothness allows upward steps, forbids down-cliffs/regressions.
+  004 retro: run the WORLDD suite in the same pass — the plugin suite
+  went green while a worldd test still asserted the pre-017 fight
+  grammar (`attack` vs `close_in`); the vendor sync makes worldd's
+  tests part of every phase's definition of green, and a "flaky"
+  worldd failure is guilty until re-run in isolation proves
+  otherwise.
 - Migration rehearsal: 100% of prod docs upgrade cleanly; no player
   loses gear, gold, or floors (race change + basic-weapon swap are the
   only visible deltas, both announced in-world).

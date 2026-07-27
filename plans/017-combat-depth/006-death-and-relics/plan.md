@@ -33,6 +33,12 @@ so the new sinks matter.
    the [i]-card pattern (zero JS, agent reads the same facts via
    `to_text`). Active relic effects in a fight must be NAMED on
    screen (002/003 lesson: unexplained number changes read as bugs).
+   004 retro: ~14 new relics = ~14 new 1-bit glyphs (quiver types can
+   share the arrow grid with tint variants like the 008 specimen
+   inks). Draw them in the same commit — only the dojo screenshot
+   catches a relic wearing the pack-crate fallback. Death-scene loss
+   lists join gear names: verb agreement needs the singular/plural
+   branch (004's "focus soak" bug).
 5. Vendor sync + deploy; version bump + publish.
 
 ## Tests / acceptance

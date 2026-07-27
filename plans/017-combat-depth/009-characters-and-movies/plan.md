@@ -28,6 +28,12 @@ the damage-type kill hooks only).
    003 retro: trait icons ship as CSS-mask SVG data-URLs built from
    grids in `icons.py` (`test_017_info_card.py` asserts 16-wide grids
    and valid masks) — the audit extends those tests, not eyeballs.
+   004 retro: the gear set now has weapon/bow/staff/focus/shoes/arrows
+   glyphs and `icon_key` resolves weapons BY LINE (FORGE lookup) —
+   audit that every catalog line/slot maps to a non-fallback glyph
+   (`test_017_shops.py::test_weapon_icons_follow_the_line` is the
+   pattern to extend), and that no new item kind ships wearing the
+   pack crate.
 6. Vendor sync + deploy; version bump + publish.
 
 ## Tests / acceptance
