@@ -223,7 +223,7 @@ the very top of its shop, and so do we):
 | Relic | Effect | Limitation |
 |---|---|---|
 | **Stone of Undying** | Death is cancelled; you stand back up mid-fight | revive at *partial* HP (not full); **hold exactly 1**; consumed on trigger |
-| **Weapon Reincarnation Spell** | on death, your gear survives the random loss (¶7) **and all weapons + armor are repaired to full** | works **once** (consumed on the death that triggers it); **can hold many**, but spares are carried items — they can themselves be lost to a death |
+| **Weapon Reincarnation Spell** | on death, your gear survives the random loss (¶7) **and all weapons + armor are repaired to full** | works **once** (consumed on the death that triggers it); you can hold many, but **spare spells are the only thing a protected death can still take** — holding one is optimal, hoarding is taxed |
 | **Golden Apple** | 2× HP overshield + all damage halved | timed (one fight); the bonus HP decays, never heals back |
 | **Thornmail** | attackers take damage every time they strike you | each reflection burns the armor's own durability |
 | **Veil Draught** | monsters can't target you… | …until your first attack; one fight; timed |
@@ -256,9 +256,9 @@ Rules that keep this sane:
 - **Either/or exclusivity** where power concentrates (the
   Infinity-XOR-Mending lesson): only one *life*-insurance relic active
   at a time — Stone or Apple or Veil, pick before the fight. The
-  Reincarnation Spell is *gear* insurance and stacks freely (hold many);
-  its own limiter is that spares ride in the pack and are themselves
-  at risk on death.
+  Reincarnation Spell is *gear* insurance and may be held in multiples;
+  its own limiter is that spare spells are the only thing a protected
+  death can still take — one is safe, a hoard leaks.
 - **Staged availability** (¶9): the catalog unrolls band by band; each
   new floor band's shops introduce 2–3 new relics, so there is always a
   new toy to discover and save for.
@@ -313,11 +313,13 @@ monster's next intent.
   armor and shield destroyed"). **Unless** a **Weapon Reincarnation
   Spell** (¶5) triggers: it's consumed, your gold and gear are safe, and
   *all* your weapons and armor are repaired to full — death as a forge
-  visit you pre-paid for. You can stockpile several spells, with one
-  carve-out: the magic cannot protect its own kind — **spare
-  Reincarnation Spells stay in the random-loss pool even on a protected
-  death**, so a stockpile erodes. Exact loss odds and vault interactions
-  in plan.md.
+  visit you pre-paid for. One carve-out (Roy, clarified): on a protected
+  death **the ONLY thing that can still be lost is spare Reincarnation
+  Spells** — the magic cannot protect its own kind. Hold exactly one and
+  it simply works; hold five and the death that consumes the first may
+  take some of the other four with it. The rule exists to dissuade
+  stockpiling, not to punish buying one. Exact loss odds and vault
+  interactions in plan.md.
 
 ## 8. Economy tightening
 

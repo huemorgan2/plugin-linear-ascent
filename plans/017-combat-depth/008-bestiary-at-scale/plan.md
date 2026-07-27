@@ -1,0 +1,36 @@
+# Phase 008 — Bestiary at scale (floors 11–100)
+
+Goal: the whole tower speaks the new language. Every floor gets 4–5
+encounters with a deliberate matchup spread, profiles, lore, and art
+for the new monsters.
+
+## Tasks
+
+1. Content retrofit floors 11–100 in band batches (11–20, 21–30, …):
+   - 4–5 encounters per floor; per-band spread rule: ≥1 good and ≥1 bad
+     target per class, ≥1 fast, ≥1 slow, flyers from band 1 end (floor
+     4+ per the staircase), bulwarks from floor 6.
+   - `lore:` on every encounter; trait placement follows each band's
+     biome story (fusion-halls favor armor, the bio-lit forest favors
+     resist, sky-ship wrecks favor flying …).
+2. `content/schema.py` lint: enforce the spread rule per band + lore
+   presence for floors ≥ 11 (floors 1–10 done in 001/003).
+3. Warden/milestone profiles per plan §2.2 across all bands.
+4. Art batch: 1-bit banners for every NEW monster (creature pipeline,
+   `tools/generate_creatures.py`); alt text/lore alignment.
+5. Vendor sync + deploy; version bump + publish (content-only bumps
+   can ship per band batch — don't hold ten bands hostage).
+
+## Tests / acceptance
+
+- Content lint green with the new spread rules across all 100 floors.
+- **Matchup sim at scale:** the 001 sim gate runs across every band —
+  each class always has a viable hunting pool on its frontier
+  (win ≥70% vs at least 2 encounter types per floor).
+- Art: every encounter id with no shipped art logged and triaged (the
+  renderer already skips silently — the list is the deliverable).
+- Dojo spot-checks: one floor per band — read three [i] cards, verify
+  spread is felt ("this floor has my prey and my predator").
+
+Exit: all bands green, published, worldd synced,
+`execution_summary.md`.

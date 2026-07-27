@@ -1,0 +1,47 @@
+# Phase 006 — Death economy & the relic catalog
+
+Goal: death gets its decided shape (random gold+weapon loss, cancelled
+by the Weapon Reincarnation Spell) and the relic catalog v1 ships —
+every relic one dramatic effect + one hard limitation. Faucets tighten
+so the new sinks matter.
+
+## Tasks
+
+1. `engine/combat.py` `_death` rework (plan §3.6):
+   - level > 3, unprotected: gold −rng(40–60%); each paid weapon rolls
+     20% gone; armor/shield/shoes take −50% durability (never destroyed
+     by death anymore).
+   - Protected: consume one Reincarnation Spell — nothing lost, all
+     weapons+armor repaired to full; each SPARE spell rolls 50% lost
+     (the only possible loss on a protected death — Roy's rule).
+   - death_save + mercy (L≤3) unchanged; death scene lists exactly what
+     was lost/saved.
+2. `economy.py`: relic table v1 (plan §3.7 — items, DI-anchored prices,
+   band availability, exclusivity groups); faucet cuts (alpha charm
+   10%, warden charm 15%); pawn variable rate 25–55% by world_day.
+3. `engine/combat.py` relic effects: quiver arrow types (poison DoT
+   no-stack, slowing −2 spd, piercing, fire), oils, net, sky-hook,
+   strip potion, curse scroll, polymorph (skip, no loot/XP), veil,
+   golden apple (overshield + half damage), stone of undying (30% HP
+   revive, hold-1), severing word (non-Warden instakill, hold-1).
+   Life-insurance exclusivity: one of Stone/Apple/Veil per fight.
+4. `engine/core.py`: shop stock wiring (Forge quiver/tools, Arcanum
+   mage relics, apothecary insurance); pawn scene shows today's rate;
+   hold-1 purchase refusals.
+5. Vendor sync + deploy; version bump + publish.
+
+## Tests / acceptance
+
+- Unit: every relic effect + its limitation (no-stack, hold-1,
+  not-on-Wardens, spare-spell leak, exclusivity refusal); death matrix
+  (mercy / save / unprotected / protected / protected-with-spares).
+- **Economy sim gate:** expected unprotected death cost at band 2–4 ≈
+  1–2 hunting days (visible sting, not a wipe); one held Reincarnation
+  Spell is EV-positive by band 2 (the intended buy); hoarding 3+ is
+  EV-negative vs banking (the intended dissuasion); charm faucet ≤ 1/3
+  of today's rate in sim.
+- Dojo: die unprotected (read the loss list); die holding one spell
+  (nothing lost, gear repaired); die holding three (watch a spare
+  leak); try to buy a second Stone of Undying (refused).
+
+Exit: all green, published, worldd synced, `execution_summary.md`.
