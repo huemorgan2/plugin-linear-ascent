@@ -148,6 +148,14 @@ def fight_scene(p: dict, floor, opener: bool = False, note: str = "") -> Scene:
         aether=True))
 
     body = [e["prose"]] if opener else []
+    if opener:
+        # 013: your own numbers, spelled out — armor was invisible and
+        # players couldn't tell WHY hits landed for 0.
+        guard = guard_name(p)
+        body.append(
+            f"You — ATK {state.atk(p)} with your {weapon_name(p)}, "
+            f"DEF {state.dfs(p)} "
+            + (f"behind your {guard}." if guard else "on reflex alone."))
     if note:
         body.append(note)
     return Scene(
@@ -167,15 +175,69 @@ def fight_scene(p: dict, floor, opener: bool = False, note: str = "") -> Scene:
     )
 
 
-def _monster_hit(p: dict, halved: bool = False) -> int:
+def weapon_name(p: dict) -> str:
+    slug = p["gear"].get("weapon") or economy.STARTER_WEAPON.slug
+    item = economy.FORGE.get(slug)
+    name = item.name if item else "blade"
+    return f"honed {name}" if state.hone_level(p, "weapon") else name
+
+
+def guard_name(p: dict) -> str:
+    """'Riveted Leather and Ironbound Targe', or '' when bare."""
+    names = []
+    for slot in ("armor", "shield"):
+        slug = p["gear"].get(slot)
+        if slug and slug in economy.FORGE:
+            names.append(economy.FORGE[slug].name)
+    return " and ".join(names)
+
+
+def _monster_hit(p: dict, halved: bool = False) -> dict:
+    """013: armor blunts, it never nullifies — every landed hit chips at
+    least ⌈raw/4⌉ (min 1) through any DEF. Returns the breakdown so the
+    card can SAY what the armor did instead of silently eating hits."""
     e = p["encounter"]
-    day = state.world_day()
     raw = state.rng_int(p, e["atk"] // 2, e["atk"])
-    dmg = max(0, raw - state.dfs(p) // 2)
+    chip = max(1, -(-raw // economy.CHIP_DIVISOR))
+    dmg = max(chip, raw - state.dfs(p) // 2)
     if halved:
         dmg //= 2
     p["hp"] -= dmg
-    return dmg
+    return {"dmg": dmg, "raw": raw, "blocked": raw - dmg}
+
+
+def _counter_text(p: dict, hit: dict, lead: str = "") -> str:
+    """One line that explains the enemy's blow: what landed, what the
+    armor ate. The player asked for this by name — never a bare number."""
+    e = p["encounter"]
+    guard = guard_name(p)
+    dmg, blocked = hit["dmg"], hit["blocked"]
+    lead = lead or f"The {e['name']} answers"
+    if dmg <= 0:
+        what = f"your {guard}" if guard else "your guard"
+        return f"{lead} — {what} turns the whole blow. 0 damage."
+    if guard and blocked >= dmg:
+        return (f"{lead} — your {guard} soak almost all of it: "
+                f"only −{dmg} HP gets through.")
+    if guard and blocked > 0:
+        return (f"{lead} for −{dmg} HP — your {guard} blunted "
+                f"{blocked} of it.")
+    if guard:
+        return f"{lead} and finds a gap past your {guard}: −{dmg} HP."
+    return f"{lead} with nothing between you and its teeth: −{dmg} HP."
+
+
+def _strike_text(p: dict, dmg: int) -> str:
+    """The player's blow, explained: which weapon, how hard it bit."""
+    e = p["encounter"]
+    w = weapon_name(p)
+    if dmg <= 0:
+        return (f"Your {w} glances off the {e['name']}'s hide — "
+                "nothing lands.")
+    if dmg >= max(1, e["hp_max"] // 3):
+        return (f"Your {w} bites deep — {dmg} damage the "
+                f"{e['name']} won't shrug off.")
+    return f"Your {w} takes it for {dmg}."
 
 
 def _player_hit(p: dict, mult: float = 1.0) -> int:
@@ -222,8 +284,10 @@ def _victory(p: dict, floor) -> Scene:
     p["xp"] += xp
     p["gold"] += gold
     _ledger(p, "kill", gold=gold, xp=xp, note=e["name"])
-    lines = [f"The {e['name']} goes down.",
-             f"+ {xp} XP", f"+ ◈ {gold} carried gold"]
+    downed = (f"The {e['name']} goes down — no match for your "
+              f"{weapon_name(p)}."
+              if e["kind"] == "wilds" else f"The {e['name']} goes down.")
+    lines = [downed, f"+ {xp} XP", f"+ ◈ {gold} carried gold"]
     if e.get("specimen") == "alpha":
         loot = state.rng_pick(p, [(70, "medgel"), (30, "luck_charm")])
         p["inventory"][loot] = p["inventory"].get(loot, 0) + 1
@@ -288,7 +352,8 @@ def _death(p: dict, floor) -> Scene:
                        "like this again.",
             body_lines=[f"The {e['name']} loses you in the grass.",
                         "You are at 1 HP. The gate town is close."],
-            options=[Option("heal", "The healer's tent", f"◈ {2 * floor.floor}"),
+            options=[Option("heal", "The healer's tent",
+                            f"◈ {economy.HEALER_TENT_PER_FLOOR * floor.floor}"),
                      Option("town", "Limp back to Roothollow")],
             meters=meters(p),
             event_kind="death",
@@ -360,12 +425,13 @@ def resolve_fight_action(p: dict, floor, option_id: str) -> Scene:
         if p["inventory"]["trollblood_tonic"] <= 0:
             del p["inventory"]["trollblood_tonic"]
         p["hp"] = state.max_hp(p)
-        dmg = _monster_hit(p)
+        hit = _monster_hit(p)
         if p["hp"] <= 0:
             return _death(p, floor)
         return fight_scene(p, floor, note=(
-            f"The tonic burns going down — full health. The {e['name']} "
-            f"strikes while you drink: −{dmg} HP."))
+            "The tonic burns going down — full health. "
+            + _counter_text(p, hit,
+                            lead=f"The {e['name']} strikes while you drink")))
 
     if option_id == "run":
         if state.roll_ok(p, 0.60):
@@ -378,18 +444,24 @@ def resolve_fight_action(p: dict, floor, option_id: str) -> Scene:
                 body_lines=["You put fence and dark between you and it."],
                 options=_after_fight_options(p, floor),
                 meters=meters(p))
-        dmg = _monster_hit(p)
+        hit = _monster_hit(p)
         if p["hp"] <= 0:
             return _death(p, floor)
         return fight_scene(p, floor, note=(
-            f"It cuts off your line — no way out. −{dmg} HP."))
+            "It cuts off your line — no way out. "
+            + _counter_text(p, hit, lead="It catches you turning")))
 
     if option_id == "stand":
-        dmg = _monster_hit(p, halved=True)
+        hit = _monster_hit(p, halved=True)
         if p["hp"] <= 0:
             return _death(p, floor)
-        return fight_scene(p, floor, note=(
-            f"You brace and give ground slowly. −{dmg} HP, guard held."))
+        guard = guard_name(p)
+        braced = (f"You brace behind your {guard} and give ground slowly."
+                  if guard else "You brace and give ground slowly.")
+        held = ("Nothing gets through — guard held."
+                if hit["dmg"] <= 0 else
+                f"−{hit['dmg']} HP, guard held.")
+        return fight_scene(p, floor, note=f"{braced} {held}")
 
     if option_id == "shield_wall" and p.get("clazz") == "warrior":
         counter = max(0, state.atk(p) // 4 - e["def"] // 2)
@@ -433,4 +505,4 @@ def resolve_fight_action(p: dict, floor, option_id: str) -> Scene:
     if p["hp"] <= 0:
         return _death(p, floor)
     return fight_scene(p, floor, note=(
-        f"You take it for {dmg}. It answers for {back}."))
+        f"{_strike_text(p, dmg)} {_counter_text(p, back)}"))

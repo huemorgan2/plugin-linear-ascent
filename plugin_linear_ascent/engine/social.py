@@ -753,9 +753,12 @@ def warden_action(p: dict, fl, oid: str) -> Scene:
     dmg = max(1, raw - def_w // 2)
     _effect(p, "warden_strike", floor=fl.floor, damage=dmg)
     _ledger(p, "warden_strike", note=f"floor {fl.floor} · {dmg}")
-    # the Warden answers — one counter-swing per strike
+    # the Warden answers — one counter-swing per strike. 013: same chip
+    # rule as the wilds — armor blunts, it never nullifies.
     back_raw = state.rng_int(p, atk_w // 2, atk_w)
-    back = max(0, back_raw - state.dfs(p) // 2)
+    chip = max(1, -(-back_raw // economy.CHIP_DIVISOR))
+    back = max(chip, back_raw - state.dfs(p) // 2)
+    back_blocked = back_raw - back
     p["hp"] -= back
     if p["hp"] <= 0:
         # the dying blow still lands (the effect above is already queued)
@@ -775,6 +778,8 @@ def warden_action(p: dict, fl, oid: str) -> Scene:
     else:
         mine["dmg"] = int(mine.get("dmg", 0)) + dmg
     note = f"your blow lands for {dmg:,} — it answers for {back}"
+    if back_blocked > 0:
+        note += f" (your armor blunted {back_blocked})"
     if wd["hp"] <= 0:
         note += (". It staggers. If it fell, word reaches Roothollow "
                  "with your name on it")
