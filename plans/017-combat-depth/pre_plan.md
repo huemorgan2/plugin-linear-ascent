@@ -344,13 +344,22 @@ belongs with the defense-profile engine work, not the throttle.
 
 ## 11. Characters, races, movies, and art constraints
 
-- **Races: drop halfling; keep human / elf / dwarf.** (Today halfling
-  exists with a luck bonus — migrate existing halflings or grandfather
-  them; decision in plan.md.)
+- **Races: drop halfling; keep human / elf / dwarf.** Existing
+  halflings are **migrated, not grandfathered** (decided 2026-07-27):
+  on their next login they pick one of the three races (default: human
+  if they never choose); the halfling luck bonus retires with the race.
+  No new halfling creations.
+- **World lore — dwarves are GIANTS.** In the Ascent, "dwarf" is only
+  the name: they are **massive, towering creatures — two heads taller
+  than the human warrior and the elf, and visibly wider**, slab-built
+  mountain folk. Every art prompt, creation blurb, and movie scene that
+  shows a dwarf must render this scale (the dwarf wizard should loom
+  over the other two showcase characters, never stand knee-high).
 - **Three showcase characters** carried consistently through all art
   (intro movie, creation, endings):
   - male **elf** (brief says warrior — see open question 1),
-  - old, strong-bodied, large **dwarf wizard**,
+  - old, strong-bodied **dwarf wizard** — a giant per the lore above,
+    the largest figure in every frame,
   - **female human warrior**, strong build.
 - **Intro movie:** the refugee/climber scenes show these three (today's
   art is anonymous silhouettes — those scenes get re-generated).
@@ -383,11 +392,12 @@ belongs with the defense-profile engine work, not the throttle.
    warriors. Recommendation: make the elf the **archer** (bow iconography
    reads instantly, elves=bows is genre-native), keeping dwarf=wizard,
    human female=warrior — one character per profession.
-2. **Existing players** on the shared world: halfling players and
-   everyone's current single-rung gear must migrate. Proposal:
-   grandfather halflings (race stays, no new creations), map existing
-   gear to nearest new rung at full durability, everyone starts at
-   Normal speed with no shoes.
+2. **Existing players** on the shared world: everyone's current
+   single-rung gear must migrate — map existing gear to nearest new
+   rung at full durability; everyone starts at Normal speed with no
+   shoes. ~~Halflings: grandfather or migrate?~~ **Resolved
+   (2026-07-27): migrate** — one-time race pick on next login, default
+   human, luck bonus retired (¶11).
 3. **Kill-FX ×3 variants** multiply the art budget (~5 monsters × 3 =
    15 GIFs for the early floors alone, more as floors get variety). OK
    to stage: floors 1–3 first, rest generated per content batch?
