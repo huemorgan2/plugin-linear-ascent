@@ -36,6 +36,34 @@ def test_fight_card_and_escaping():
     assert "&lt;script&gt;" in html
 
 
+def test_combat_numbers_are_colored():
+    # damage the player deals reads orange; HP the player loses reads red
+    from plugin_linear_ascent.render import ORANGE, RED, _combat_html
+    line = ("Your Rusted Shiv bites deep — 9 damage the Feral boar won't "
+            "shrug off. The Feral boar answers — your Scrapwood Buckler "
+            "soak almost all of it: only −1 HP gets through.")
+    html = _combat_html(line)
+    assert f'<span style="color:{ORANGE}">9 damage</span>' in html
+    assert f'<span style="color:{RED}">−1 HP</span>' in html
+    # the other strike/counter phrasings
+    assert f'color:{ORANGE}">14' in _combat_html("Your blade takes it for 14.")
+    assert f'color:{ORANGE}">3' in _combat_html("Your counter takes 3.")
+    assert f'color:{RED}">−5 HP' in _combat_html(
+        "It catches you turning for −5 HP — your mail blunted 4 of it.")
+    assert f'color:{RED}">−2 HP' in _combat_html("−2 HP, guard held.")
+    # 017: the armored goblin's arrow-proof plate note
+    assert f'color:{ORANGE}">7 damage' in _combat_html(
+        "Your arrow snaps against its plate — 7 damage, no clean gap "
+        "for a killing shot.")
+    # world Warden strike (social.py phrasing)
+    w = _combat_html("your blow lands for 1,234 — it answers for 9")
+    assert f'color:{ORANGE}">1,234' in w
+    assert f'color:{RED}">9' in w
+    # a fully blocked enemy blow stays uncolored
+    assert "span" not in _combat_html("your guard turns the whole blow. "
+                                      "0 damage.")
+
+
 def test_death_card_has_stripe():
     p = make_player()
     p["daily"]["death_save"] = True

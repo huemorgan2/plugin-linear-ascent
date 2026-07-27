@@ -81,6 +81,14 @@ def start_encounter(p: dict, floor, enc, kind: str = "wilds") -> Scene:
     else:
         atk, dfs, hp = floor.monster_atk, floor.monster_def, floor.monster_hp
         name, prose = enc.name, enc.prose
+    # 017: encounter traits — "armored" wears looted plate and a real
+    # blade: harder stats (multipliers in economy.py), and the archer's
+    # treeline shot loses its double against the plate.
+    traits = tuple(getattr(enc, "traits", ()) or ()) if enc is not None else ()
+    if "armored" in traits:
+        atk = round(atk * economy.ARMORED_ATK_MULT)
+        dfs = round(dfs * economy.ARMORED_DEF_MULT)
+        hp = round(hp * economy.ARMORED_HP_MULT)
     specimen = "common"
     if kind == "wilds":
         # 008: specimen roll — same averages, real variance. Visible on
@@ -95,7 +103,7 @@ def start_encounter(p: dict, floor, enc, kind: str = "wilds") -> Scene:
     p["encounter"] = {
         "kind": kind, "name": name, "prose": prose,
         "id": (enc.id if enc is not None else ""),
-        "specimen": specimen,
+        "specimen": specimen, "traits": list(traits),
         "atk": atk, "def": dfs, "hp": hp, "hp_max": hp,
         "floor": floor.floor, "shot_used": False,
     }
@@ -276,6 +284,8 @@ def _victory(p: dict, floor) -> Scene:
         # 008: hard specimens pay more, runts pay less
         gold = round(
             gold * economy.SPECIMENS[e.get("specimen", "common")]["gold"])
+        if "armored" in (e.get("traits") or ()):
+            gold = round(gold * economy.ARMORED_GOLD_MULT)  # 017: plate pays
     if p.get("race") == "elf":
         xp = round(xp * (1 + economy.ELF_XP_BONUS))
     buff = state.faction_buff_pct(p, "xp")
@@ -491,6 +501,14 @@ def resolve_fight_action(p: dict, floor, option_id: str) -> Scene:
     if option_id == "treeline_shot" and p.get("clazz") == "archer" \
             and not e["shot_used"]:
         e["shot_used"] = True
+        if "armored" in (e.get("traits") or ()):
+            # plate over the vitals — the long shot loses its double
+            dmg = _player_hit(p)
+            if e["hp"] <= 0:
+                return _victory(p, floor)
+            return fight_scene(p, floor, note=(
+                f"Your arrow snaps against its plate — {dmg} damage, "
+                "no clean gap for a killing shot."))
         dmg = _player_hit(p, mult=2.0)
         if e["hp"] <= 0:
             return _victory(p, floor)

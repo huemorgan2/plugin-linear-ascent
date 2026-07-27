@@ -14,6 +14,7 @@ from __future__ import annotations
 import base64
 import html
 import os
+import re
 from functools import lru_cache
 
 from . import icons
@@ -34,6 +35,7 @@ VIOLET = "#8b5cf6"
 VIOLET_SOFT = "#a78bfa"
 RED = "#f4645f"
 OK = "#3ad29f"
+ORANGE = "#ff9a3c"
 
 _STRIPE = {"loot": GOLD, "present": GOLD, "death": RED,
            "letter": AETHER, "boss": VIOLET, "news": AETHER}
@@ -167,6 +169,26 @@ def _fx_tint(scene: Scene) -> str:
 
 def _e(s: str) -> str:
     return html.escape(s, quote=True)
+
+
+# Combat numbers, colored in place: damage the player deals reads orange,
+# HP the player loses reads red. Scene content stays plain text (the
+# renderer contract) — these match the battle-text phrasings from
+# engine/combat.py and engine/social.py after escaping. "0 damage" (a
+# fully blocked enemy blow) is deliberately left uncolored.
+_HIT_HP = re.compile(r"[−-]\d+ HP|(?<=answers for )[1-9][\d,]*")
+_HIT_DMG = re.compile(
+    r"[1-9]\d* damage|(?<=takes it for )[1-9]\d*"
+    r"|(?<=counter takes )[1-9]\d*|(?<=blow lands for )[1-9][\d,]*")
+
+
+def _combat_html(line: str) -> str:
+    s = _e(line)
+    s = _HIT_HP.sub(
+        lambda m: f'<span style="color:{RED}">{m.group(0)}</span>', s)
+    s = _HIT_DMG.sub(
+        lambda m: f'<span style="color:{ORANGE}">{m.group(0)}</span>', s)
+    return s
 
 
 def _blocks(cur: int, cap: int, cells: int = 10) -> str:
@@ -432,7 +454,7 @@ def render_scene_fragment(scene: Scene) -> str:
             parts.append(f'<div class="body type" style="color:{RED}">'
                          f"{_e(line)}</div>")
         else:
-            parts.append(f'<div class="body type">{_e(line)}</div>')
+            parts.append(f'<div class="body type">{_combat_html(line)}</div>')
 
     if scene.options:
         rows = []

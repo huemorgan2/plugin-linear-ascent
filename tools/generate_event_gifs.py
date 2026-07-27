@@ -128,16 +128,19 @@ EVENTS: dict[str, dict] = {
     "goblin_kill": {
         "prompt": (
             "a lone hunter silhouette with a long spear faces a small "
-            "long-eared goblin silhouette resting a scrap-rifle twice its "
-            "size across a wooden fence rail in a dusk meadow, hedgerows "
-            "and a distant watchtower behind. The goblin fires one wild "
-            "shot with a bright muzzle-flash glow; the hunter charges in "
-            "low and strikes one clean killing blow; the goblin tumbles "
-            "over the fence rail and lies completely still, the oversized "
-            "rifle fallen in the grass, and the dust settles quickly. The "
-            "FINAL TWO SECONDS are a perfectly still tableau: the hunter "
-            "standing motionless over the fallen goblin, spear planted, "
-            "absolutely nothing moving — a frozen closing frame."),
+            "long-eared goblin silhouette in heavy scavenged plate armor, "
+            "old snapped arrows bristling from its breastplate, dragging "
+            "a notched longsword beside a wooden fence rail in a dusk "
+            "meadow, hedgerows and a distant watchtower behind. The "
+            "armored goblin heaves the longsword up and swings once, "
+            "wild; the hunter slips inside the arc and drives the spear "
+            "through the gap at its collar in one clean killing thrust; "
+            "the goblin crashes down in its plate and lies completely "
+            "still, the longsword fallen in the grass, and the dust "
+            "settles quickly. The FINAL TWO SECONDS are a perfectly "
+            "still tableau: the hunter standing motionless over the "
+            "fallen armored goblin, spear planted, absolutely nothing "
+            "moving — a frozen closing frame."),
         "tint": DIM, "seconds": 8, "loop": False, "hold_ms": 2000,
         "trim": (0.0, 5.5),
     },

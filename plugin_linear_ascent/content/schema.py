@@ -23,6 +23,10 @@ BANNED_WORDS = (
     "click", "button", "json", "yaml",
 )
 _FORBIDDEN_NUMERIC_KEYS = {"atk", "def", "hp", "xp", "gold", "damage", "price"}
+# Encounter traits: qualitative flags the engine turns into numbers
+# (economy.py) — content stays prose-only. "armored": plate and a blade —
+# harder stats, and ranged class shots lose their bonus.
+ALLOWED_TRAITS = {"armored"}
 
 
 class ContentError(ValueError):
@@ -35,6 +39,7 @@ class Encounter:
     name: str
     prose: str
     weight: int
+    traits: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -93,10 +98,14 @@ def _load_floor_file(path: str) -> Floor:
         seen.add(e["id"])
         if int(e.get("weight", 1)) <= 0:
             raise ContentError(f"{where}/{e['id']}: weight must be positive")
+        traits = tuple(e.get("traits") or ())
+        for t in traits:
+            if t not in ALLOWED_TRAITS:
+                raise ContentError(f"{where}/{e['id']}: unknown trait {t!r}")
         _check_prose(e["prose"], f"{where}/{e['id']}")
         encounters.append(Encounter(
             id=e["id"], name=e["name"], prose=e["prose"],
-            weight=int(e.get("weight", 1))))
+            weight=int(e.get("weight", 1)), traits=traits))
     if not encounters:
         raise ContentError(f"{where}: no encounters")
     _check_prose(raw["arrival"], f"{where}/arrival")

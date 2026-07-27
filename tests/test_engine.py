@@ -379,6 +379,49 @@ def test_elf_learns_faster():
     assert p["xp"] >= round(round(4 * 0.75) * 1.05)
 
 
+# ── 017: encounter traits — the armored goblin ──────────────────────────
+
+def test_goblin_straggler_is_armored_in_content():
+    from plugin_linear_ascent.content import schema
+    fl = schema.get_floor(1)
+    gob = next(e for e in fl.encounters if e.id == "goblin_straggler")
+    assert "armored" in gob.traits
+    assert "rifle" not in gob.prose.lower()          # the gun is gone
+    assert "sword" in gob.prose.lower()
+
+
+def test_armored_trait_hardens_the_encounter():
+    from plugin_linear_ascent.content import schema
+    from plugin_linear_ascent.engine import combat
+    fl = schema.get_floor(1)
+    gob = next(e for e in fl.encounters if e.id == "goblin_straggler")
+    p = create_character(fresh())
+    combat.start_encounter(p, fl, gob)
+    e = p["encounter"]
+    assert e["traits"] == ["armored"]
+    # DEF is untouched by the specimen roll — the plate multiplier shows
+    assert e["def"] == round(fl.monster_def * economy.ARMORED_DEF_MULT)
+    assert e["atk"] >= round(fl.monster_atk * economy.ARMORED_ATK_MULT
+                             * 0.9)  # ≥ armored floor (specimen only adds)
+
+
+def test_armored_resists_the_treeline_shot():
+    from plugin_linear_ascent.content import schema
+    from plugin_linear_ascent.engine import combat
+    fl = schema.get_floor(1)
+    gob = next(e for e in fl.encounters if e.id == "goblin_straggler")
+    p = create_character(fresh(), clazz="archer")
+    combat.start_encounter(p, fl, gob)
+    e = p["encounter"]
+    e["hp"] = e["hp_max"] = 10_000                   # survive the shot
+    s = combat.resolve_fight_action(p, fl, "treeline_shot")
+    assert e["shot_used"] is True
+    note = " ".join(s.body_lines)
+    assert "snaps against its plate" in note         # no double damage
+    dealt = 10_000 - e["hp"]
+    assert dealt <= state.atk(p)                     # single-mult ceiling
+
+
 def test_legacy_doc_with_mana_keys_still_loads():
     p = create_character(fresh())
     # a pre-006 doc carries mana keys and a stored scene with mana meters —

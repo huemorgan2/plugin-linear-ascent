@@ -24,9 +24,11 @@ encounters:
   - id: goblin_straggler
     name: Goblin straggler
     weight: 2
+    traits: [armored]
     prose: >-
-      A lone goblin drags a scrap-rifle twice its size through the grass.
-      It sees you, drops the barrel across a fence rail, and grins.
+      A lone goblin in scavenged plate armor drags a notched longsword
+      through the grass, old arrows snapped off against its breastplate.
+      It sees you, sets its feet behind the sword, and grins.
 warden:
   name: Warden Brackjaw
   prose: >-

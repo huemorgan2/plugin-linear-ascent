@@ -132,6 +132,16 @@ SPECIMENS: dict[str, dict] = {
 }
 
 
+# 017: encounter traits (content `traits:` list) — qualitative flags the
+# engine prices here. "armored" wears looted plate and swings a real
+# blade: harder everything, better pay, and ranged class shots (the
+# archer's treeline shot) lose their multiplier against the plate.
+ARMORED_ATK_MULT = 1.25
+ARMORED_DEF_MULT = 1.5
+ARMORED_HP_MULT = 1.25
+ARMORED_GOLD_MULT = 1.35
+
+
 def xp_per_kill(floor: int) -> int:
     """012: XP is scarce — always below the kill's gold (8·floor and up)."""
     return 4 * floor           # ±25% applied by the roller
