@@ -124,3 +124,55 @@ from a few orthogonal, readable, named rules with intended counters —
 never from stat inflation.** A player should look at a monster card and
 know within two seconds *why* this fight is bad for them and *who* it
 would be good for.
+
+---
+
+## Addendum (2026-07-27): weapon abilities and the consumable shop
+
+*Added for the relic/upgrade catalog work. Sources:
+[Shop (KR wiki)](https://kingdomrushtd.fandom.com/wiki/Shop),
+[Rangers Hideout](https://kingdomrushtd.fandom.com/wiki/Rangers_Hideout),
+[Arcane Wizard](https://kingdomrushtd.fandom.com/wiki/Arcane_Wizard),
+[Magic Towers overview](https://kingdomrushtd.fandom.com/wiki/Category:Magic_Towers).*
+
+### Named ability upgrades (level-4 tower specials)
+
+Every top-tier tower forks into two named, dramatic, counter-specific
+abilities — this is where KR's *weapon variety* actually lives:
+
+| Ability | Tower | Effect | Built-in limiter |
+|---|---|---|---|
+| **Poison Arrows** | Rangers Hideout | **true damage** over time — *ignores armor entirely* | does **not stack**; some enemies immune; pricey |
+| **Wrath of the Forest** | Rangers Hideout | vines **trap enemies in place** + damage over time | needs 2+ targets, cooldown, max 3 uses per enemy, excludes bosses |
+| **Barrage / Falconer** | Crossbow Fort | burst volley / **+range aura** for nearby towers | modest damage, support role |
+| **Teleport** | Arcane Wizard | throws a group of enemies **backward** (tempo, not damage) | cooldown; weak vs fast enemies |
+| **Death Ray** | Arcane Wizard | **instakill** one enemy, ignores everything | long cooldown; **never works on bosses** |
+| **Polymorph** | Sorcerer Mage | turns an enemy into a harmless sheep | chance-based, one at a time |
+| **Curse** | Sorcerer Mage | true damage + **halves enemy armor** | slow attack; support-grade damage |
+
+Lessons: (a) armor-bypass comes in flavors — poison-as-true-damage,
+curse-as-armor-strip, instakill-as-ultimate — each with its own limiter;
+(b) **"no-stack" and "not on bosses" are the two standard fairness
+rules**; (c) crowd-control (trap, slow, push-back) is as valuable as
+damage and much easier to balance.
+
+### The consumable shop
+
+Single-use battlefield items, each an instant dramatic effect at a steep
+price (gems). The line-up per game, roughly by price tier:
+
+- **Cheap burst:** Dynamite / Cluster Bomb / Junk Bomb (instant AoE
+  damage), Frozotov / Ice Ball (AoE freeze/slow).
+- **Mid tactical:** Teleport Scroll (push a wave back), Chill Wand
+  (sustained slow), Horn of Heroism (buff), Proximity Mine, Vial of
+  poison, Portable Coil (auto-zapper).
+- **Expensive insurance / economy:** Hearts in a Bottle / Medical Kit
+  (restore lives), **Second Breath (revive/continue)**, Gem of Timewarp,
+  Hand of Midas / Gold Bag (gold infusion), Goblin Thief.
+- **Ultimate:** Death's Touch (instakill), Rod of Dragon Fire, Wrath of
+  Elynie, Fat Boy (nuke) — priced near the top (300–999).
+
+Lessons: (a) consumables never grant *permanent* power — they buy back a
+mistake or win one moment; (b) the price ladder is steep and the top end
+is deliberately extravagant; (c) revival ("Second Breath") exists even
+in KR — always as the single most expensive class of purchase.
