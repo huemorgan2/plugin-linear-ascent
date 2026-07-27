@@ -45,6 +45,15 @@ class JoinIn(BaseModel):
     name_hint: str = Field(default="", max_length=32)
 
 
+class FactionNameIn(BaseModel):
+    name: str = Field(min_length=1, max_length=24)
+
+
+class FactionTargetIn(BaseModel):
+    tenant: str = Field(min_length=1, max_length=64)
+    player: str = Field(min_length=1, max_length=128)
+
+
 class ActIn(BaseModel):
     option: str = Field(default="", max_length=64)
     text: str = Field(default="", max_length=200)
@@ -264,9 +273,69 @@ def register_routes(app, ctx: PluginContext) -> None:
 
     @router.get("/pane/community")
     async def pane_community(user=Depends(get_current_user)) -> dict:
-        """The faction news board — read-only. Joining and managing a
-        faction happens in-game, at the Guildhall."""
+        """The faction news board — the desk (015) hangs off it."""
         return await _proxy(_world().faction_board(runtime.player_key()))
+
+    # ── 015: the faction desk — ledger, pages, requests, admin acts ─────
+
+    @router.get("/pane/factions")
+    async def pane_factions(q: str = "",
+                            user=Depends(get_current_user)) -> dict:
+        """THE LEDGER: top 10 banners; ?q= searches server-side."""
+        return await _proxy(
+            _world().faction_list(runtime.player_key(), q[:24]))
+
+    @router.post("/pane/faction/detail")
+    async def pane_faction_detail(body: FactionNameIn,
+                                  user=Depends(get_current_user)) -> dict:
+        return await _proxy(
+            _world().faction_detail(runtime.player_key(), body.name))
+
+    @router.post("/pane/faction/request")
+    async def pane_faction_request(body: FactionNameIn,
+                                   user=Depends(get_current_user)) -> dict:
+        return await _proxy(
+            _world().faction_request(runtime.player_key(), body.name))
+
+    @router.post("/pane/faction/cancel_request")
+    async def pane_faction_cancel(user=Depends(get_current_user)) -> dict:
+        return await _proxy(
+            _world().faction_cancel_request(runtime.player_key()))
+
+    @router.post("/pane/faction/approve")
+    async def pane_faction_approve(body: FactionTargetIn,
+                                   user=Depends(get_current_user)) -> dict:
+        return await _proxy(_world().faction_approve(
+            runtime.player_key(), body.tenant, body.player))
+
+    @router.post("/pane/faction/reject")
+    async def pane_faction_reject(body: FactionTargetIn,
+                                  user=Depends(get_current_user)) -> dict:
+        return await _proxy(_world().faction_reject(
+            runtime.player_key(), body.tenant, body.player))
+
+    @router.post("/pane/faction/kick")
+    async def pane_faction_kick(body: FactionTargetIn,
+                                user=Depends(get_current_user)) -> dict:
+        return await _proxy(_world().faction_kick(
+            runtime.player_key(), body.tenant, body.player))
+
+    @router.post("/pane/faction/promote")
+    async def pane_faction_promote(body: FactionTargetIn,
+                                   user=Depends(get_current_user)) -> dict:
+        return await _proxy(_world().faction_promote(
+            runtime.player_key(), body.tenant, body.player))
+
+    @router.post("/pane/faction/rename")
+    async def pane_faction_rename(body: FactionNameIn,
+                                  user=Depends(get_current_user)) -> dict:
+        return await _proxy(
+            _world().faction_rename(runtime.player_key(), body.name))
+
+    @router.post("/pane/faction/enter")
+    async def pane_faction_enter(user=Depends(get_current_user)) -> dict:
+        """Admin accepts the week's challenge — paid from the vault."""
+        return await _proxy(_world().faction_enter(runtime.player_key()))
 
     @router.get("/art/factions/{slug}.png")
     async def faction_banner(slug: str):

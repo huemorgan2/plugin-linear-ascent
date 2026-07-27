@@ -52,37 +52,47 @@ def fx(p, kind):
 
 
 # ── The hall list (no banner yet) ────────────────────────────────────────
+# 015: joining is a REQUEST — no gold moves until an admin accepts it.
 
-def test_hall_lists_fees_up_front_and_join_charges_them():
+def test_hall_lists_fees_up_front_and_join_files_a_request():
     p = playing(world=hall_world())
     p["gold"], p["bank"] = 10, 40
     core.apply_choice(p, "guildhall")
     s = core.current_scene(p)
     join = next(o for o in s.options if o.id == "join_Ember Pact")
+    assert join.label == "Ask to join Ember Pact"
     assert "join ◈ 25" in join.hint and "dues ◈ 5/wk" in join.hint
     s = core.apply_choice(p, "join_Ember Pact")
-    # gold first, then bank — ◈25 total, into the store
-    assert (p["gold"], p["bank"]) == (0, 25)
-    assert p["guild"] == "Ember Pact"
-    assert fx(p, "guild_join")
-    assert any("◈ 25 to the store" in ln for ln in s.body_lines)
-
-
-def test_join_refused_when_broke_even_with_bank():
-    p = playing(world=hall_world())
-    p["gold"], p["bank"] = 10, 5
-    core.apply_choice(p, "guildhall")
-    s = core.apply_choice(p, "join_Ember Pact")
+    # nothing charged, no colors yet — the admins decide at the desk
+    assert (p["gold"], p["bank"]) == (10, 40)
     assert p.get("guild") is None
     assert not fx(p, "guild_join")
-    assert any("can't cover it" in ln for ln in s.body_lines)
+    assert fx(p, "faction_request")[0]["guild"] == "Ember Pact"
+    assert any("admins" in ln for ln in s.body_lines)
+
+
+def test_broke_climber_can_still_ask_fee_charged_on_accept():
+    p = playing(world=hall_world())
+    p["gold"], p["bank"] = 0, 0
+    core.apply_choice(p, "guildhall")
+    s = core.apply_choice(p, "join_Ember Pact")
+    assert fx(p, "faction_request")
+    assert any("charged if they take you" in ln for ln in s.body_lines)
+
+
+def test_pending_request_shows_instead_of_the_join_option():
+    p = playing(world=hall_world(faction_requested="Ember Pact"))
+    core.apply_choice(p, "guildhall")
+    s = core.current_scene(p)
+    assert not any(o.id == "join_Ember Pact" for o in s.options)
+    assert any("request waits at their desk" in ln for ln in s.body_lines)
 
 
 # ── Founding: name → sigil → join fee → dues ─────────────────────────────
 
 def test_founding_flow_sets_the_purse_numbers():
     p = playing(world=hall_world())
-    p["gold"] = 600
+    p["gold"], p["level"] = 600, 4          # 015: founding takes rank
     core.apply_choice(p, "guildhall")
     s = core.apply_choice(p, "found_guild")
     assert "Name your banner" in s.headline
@@ -105,7 +115,7 @@ def test_founding_flow_sets_the_purse_numbers():
 
 def test_founding_validates_the_numbers_and_can_cancel():
     p = playing(world=hall_world())
-    p["gold"] = 600
+    p["gold"], p["level"] = 600, 4
     core.apply_choice(p, "guildhall")
     core.apply_choice(p, "found_guild")
     core.apply_choice(p, "", "Night Ledger")
