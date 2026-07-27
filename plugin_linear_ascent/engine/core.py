@@ -302,6 +302,12 @@ def _warden_keep_scene(p: dict) -> Scene:
 
 def _dispatch(p: dict, oid: str) -> Scene:
     if p["stage"] == "intro":
+        # 016: Next steps through the movie; the title card's "begin"
+        # (past the last story beat) walks to the tower gate.
+        step = p.get("intro_step", 0)
+        if step < len(_INTRO_MOVIE):
+            p["intro_step"] = step + 1
+            return _intro_scene(p)
         p["stage"] = "creation_race"
         return _creation_race_scene(p)
     if p["stage"] == "creation_race":
@@ -318,28 +324,91 @@ def _dispatch(p: dict, oid: str) -> Scene:
 
 # ── Creation ─────────────────────────────────────────────────────────────
 
+# 016: the intro movie — one scene per story beat, comic-book pacing.
+# Each step is (fx slug, headline, body lines); the card/pane typewriter
+# does the "text written gradually" part, the single Next option does the
+# rest. There is deliberately NO skip — every climber sees the story once.
+# fx slugs with split art (intro+loop gifs) settle from their action beat
+# into an ambient loop; the renderer handles the swap.
+_INTRO_MOVIE: list[tuple[str, str, list[str]]] = [
+    ("intro_aldervale", "The world that was", [
+        "Aldervale was whole once — and it was never primitive.",
+        "Human river-ports under blinking signal towers. Elven woods "
+        "lit from within. Dwarven forges splitting atoms beneath the "
+        "mountains.",
+        "Magic and machine were one craft there. They called it aether.",
+    ]),
+    ("intro_theft", "The theft", [
+        "Then Vharuk, the Demon King, rose from below.",
+        "He did not burn the world. He stole it — realm by realm, torn "
+        "out of the ground with everyone still on it.",
+    ]),
+    ("intro_tower", "The Ascent", [
+        "He welded what he took into a tower of a hundred floors — "
+        "black iron, grav-engines, chains of aether.",
+        "Every floor is a captured realm. The people below gave it the "
+        "only name that fits: the Ascent.",
+    ]),
+    ("intro_warden", "The Wardens", [
+        "On every floor, a Warden holds the lift to the next — half "
+        "beast, half war-machine.",
+        "And on the hundredth floor, in a citadel half throne room, "
+        "half reactor core, the Demon King sits with the whole world "
+        "stacked beneath him.",
+    ]),
+    ("intro_refugee", "You", [
+        "You were on one of those floors.",
+        "Your home is up there now — locked behind a hundred Wardens. "
+        "You walked out of the wreckage with a rusted shiv and fifty "
+        "coins.",
+        "That makes you what everyone here is: a refugee. And a climber.",
+    ]),
+    ("intro_roothollow", "Roothollow", [
+        "At the tower's foot stands the last free settlement: Roothollow.",
+        "Tarps over titanium. A plasma forge next to a horse trough. "
+        "Refugees of every stolen realm, all of them climbers now.",
+        "Every climb starts here — and every dead climber wakes here. "
+        "The tower does not get to keep you.",
+    ]),
+    ("intro_stone", "No one climbs alone", [
+        "When a Warden falls, the lift opens for everyone — every "
+        "climber, everywhere.",
+        "And the names of those who did it are cut into the Stone of "
+        "the Climb, lit from within by aether.",
+    ]),
+    ("intro_shard", "The shardmind", [
+        "At the gate, a shard of old Aldervale will choose you — a "
+        "machine spirit that remembers the world as it was.",
+        "It will scout ahead of you, carry what you cannot lose, and "
+        "drag you back from death.",
+        "It is speaking to you right now.",
+    ]),
+    ("intro_muster", "The muster", [
+        "The great Wardens do not fall to one blade.",
+        "Climbers pledge at the keep, and when enough have gathered, "
+        "they break it — together. Floor by floor. Warden by Warden. "
+        "All the way to the throne.",
+    ]),
+]
+
+_ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"]
+
+
 def _intro_scene(p: dict) -> Scene:
+    step = p.get("intro_step", 0)
+    if step < len(_INTRO_MOVIE):
+        fx, headline, body = _INTRO_MOVIE[step]
+        return Scene(
+            eyebrow=f"THE STORY SO FAR · {_ROMAN[step]}",
+            headline=headline,
+            body_lines=body,
+            options=[Option("next", "Next")],
+            fx=fx,
+        )
     return Scene(
-        eyebrow="LINEAR ASCENT · THE STORY SO FAR",
+        eyebrow="LINEAR ASCENT",
         headline="Climb the Ascent. Cast down the Demon King.",
         support="One hundred floors between Roothollow and the throne.",
-        body_lines=[
-            "Aldervale was whole once — human river-ports, elven deep "
-            "woods, dwarven fusion-forges. Magic and machine were one "
-            "craft there. They called it aether.",
-            "Then Vharuk, the Demon King, rose from below. He did not "
-            "burn the world — he stole it: realm by realm, torn from the "
-            "ground and stacked into a tower of a hundred floors, welded "
-            "with black iron and chains of aether.",
-            "Every floor is a captured realm. On every floor a Warden "
-            "holds the lift. On the hundredth, in a citadel half throne "
-            "room, half reactor core, sits Vharuk himself.",
-            "At the tower's foot stands Roothollow, the last free "
-            "settlement — where every climber starts, and every dead "
-            "climber wakes. When a Warden falls, the lift opens for "
-            "everyone, and the names that did it are cut into the Stone "
-            "of the Climb.",
-        ],
         options=[Option("begin", "Walk to the tower gate")],
         banner="title",
         fx="ascent_title",

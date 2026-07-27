@@ -24,6 +24,8 @@ _TIPS: dict[str, str] = {
     "back": "Back to the square — nothing spent, nothing changed.",
 
     # creation
+    "next": ("The story of the Ascent, one scene at a time. Nothing is "
+             "spent — watch, then climb."),
     "begin": ("Register at the tower gate: pick a line and a craft, take "
               "your shardmind and ◈ 50, and start hunting floor 1. Every "
               "climber the world has starts exactly here."),

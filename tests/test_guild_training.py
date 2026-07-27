@@ -19,7 +19,8 @@ def choose(p, option="", text=""):
 
 def create_character(p, race="human", clazz="warrior", name="Trainee"):
     core.current_scene(p)
-    choose(p, "begin")
+    while p["stage"] == "intro":                # 016: through the movie
+        choose(p, "1")
     choose(p, race)
     choose(p, clazz)
     choose(p, text=name)

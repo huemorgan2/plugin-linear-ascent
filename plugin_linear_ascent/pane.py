@@ -22,7 +22,7 @@ whenever the session changes; the pane also answers 401s by asking again
 from __future__ import annotations
 
 from .render import (AETHER, BORDER, DIM, FAINT, INK, PANEL, PANEL2,
-                     SCENE_CSS, TEXT, TIP_JS, VIOLET, VIOLET_SOFT)
+                     SCENE_CSS, SWAP_JS, TEXT, TIP_JS, VIOLET, VIOLET_SOFT)
 
 _API = "/api/p/plugin-linear-ascent"
 
@@ -234,6 +234,9 @@ async function runFX(root) {
   }
 }
 
+/* ── 016 split fx: the action gif plays once, then the ambient loop ─── */
+function swapFX() { __SWAP_JS__ }
+
 /* ── the game loop: swap fragments in place, act directly ───────────── */
 const game = document.getElementById('game');
 function showScene(d) {
@@ -250,6 +253,7 @@ function showScene(d) {
   }
   wireOptions();
   runFX(game);
+  swapFX();               // 016: split banner art settles into its loop
 }
 function showErr(msg) {
   const e = document.createElement('div');
@@ -654,5 +658,5 @@ def render_pane() -> str:
   <div id="community" class="pane"><div class="placeholder">
     <div class="eyebrow">the guildhall</div>unrolling the charters…</div></div>
 </div>
-<script>{_JS.replace("__API__", _API)}</script>
+<script>{_JS.replace("__API__", _API).replace("__SWAP_JS__", SWAP_JS)}</script>
 <script>{TIP_JS}</script></body></html>"""

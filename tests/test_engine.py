@@ -14,31 +14,51 @@ def choose(p, option="", text=""):
     return core.apply_choice(p, option, text)
 
 
-def create_character(p, race="human", clazz="warrior", name="Testa"):
+def watch_movie(p):
+    """016: step through the intro movie to the title card's gate."""
     core.current_scene(p)
-    choose(p, "begin")
+    while p["stage"] == "intro":
+        choose(p, "1")                       # next … next, then begin
+    return p
+
+
+def create_character(p, race="human", clazz="warrior", name="Testa"):
+    watch_movie(p)
     choose(p, race)
     choose(p, clazz)
     choose(p, text=name)
     return p
 
 
-def test_intro_precedes_creation():
+def test_intro_movie_precedes_creation():
     p = fresh()
     s = core.current_scene(p)
     assert p["stage"] == "intro"
-    assert s.banner == "title"
-    assert "Demon King" in s.headline
-    assert any("Roothollow" in line for line in s.body_lines)
-    # the only way forward is the gate
+    # 016: the movie opens on Aldervale, one Next, no skip
+    assert s.fx == "intro_aldervale"
+    assert [o.id for o in s.options] == ["next"]
+    assert any("aether" in line for line in s.body_lines)
+    # begin is refused mid-movie — Next is the only way forward
     s = choose(p, "begin")
+    assert p["stage"] == "intro" and s.shard_note
+    for expected in ("intro_theft", "intro_tower", "intro_warden",
+                     "intro_refugee", "intro_roothollow", "intro_stone",
+                     "intro_shard", "intro_muster"):
+        s = choose(p, "next")
+        assert s.fx == expected
+        assert [o.id for o in s.options] == ["next"]
+    # after the last beat: the title card, and the gate
+    s = choose(p, "next")
+    assert s.banner == "title" and s.fx == "ascent_title"
+    assert "Demon King" in s.headline
+    assert [o.id for o in s.options] == ["begin"]
+    choose(p, "begin")
     assert p["stage"] == "creation_race"
 
 
 def test_creation_flow_and_gates():
     p = fresh()
-    core.current_scene(p)
-    choose(p, "begin")
+    watch_movie(p)
     s = core.current_scene(p)
     assert "shard" in s.headline.lower() or s.options
     # skipping ahead is refused with a steering hint
@@ -58,8 +78,7 @@ def test_creation_flow_and_gates():
 
 def test_numbered_fallback_resolves_positionally():
     p = fresh()
-    core.current_scene(p)
-    choose(p, "1")                           # intro: begin
+    watch_movie(p)                           # "1" advances every movie step
     s = choose(p, "1")                       # first race option
     assert p["stage"] == "creation_class"
 

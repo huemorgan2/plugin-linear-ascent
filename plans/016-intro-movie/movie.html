@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>LINEAR ASCENT — intro movie (016 prototype)</title>
+<style>
+  :root {
+    --ink: #0b0e14;
+    --panel: #11151f;
+    --dim: #c3cbdd;
+    --gold: #f5a524;
+    --cyan: #5eaefc;
+  }
+  html, body {
+    margin: 0; height: 100%;
+    background: var(--ink);
+    color: var(--dim);
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    display: flex; align-items: center; justify-content: center;
+  }
+  #stage { width: 660px; }
+  #frame {
+    width: 640px; height: 400px;
+    background: var(--panel);
+    border: 1px solid #1d2433;
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  #frame img {
+    width: 640px; height: 400px;
+    image-rendering: pixelated;
+    position: absolute; inset: 0;
+  }
+  #eyebrow {
+    margin: 18px 2px 10px;
+    font-size: 11px; letter-spacing: .18em;
+    color: #7d88a3; text-transform: uppercase;
+    min-height: 13px;
+  }
+  #text {
+    margin: 0 2px;
+    font-size: 14px; line-height: 1.65;
+    min-height: 140px; white-space: pre-wrap;
+    color: var(--dim);
+  }
+  #text .caret {
+    display: inline-block; width: 8px; height: 15px;
+    background: var(--cyan); vertical-align: -2px;
+    animation: blink 1s steps(1) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+  #controls {
+    margin: 16px 2px 0;
+    display: flex; justify-content: flex-end; align-items: center;
+    min-height: 34px;
+  }
+  button {
+    background: none; color: var(--cyan);
+    border: 1px solid #24406b; padding: 7px 18px;
+    font: inherit; font-size: 13px; letter-spacing: .08em;
+    cursor: pointer; visibility: hidden;
+  }
+  button:hover { background: #101c30; }
+  #headline {
+    display: none; font-size: 19px; color: #ffffff;
+    margin: 18px 2px 6px; letter-spacing: .02em;
+  }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="frame"><img id="art" alt=""></div>
+  <div id="eyebrow"></div>
+  <div id="headline"></div>
+  <div id="text"></div>
+  <div id="controls">
+    <button id="next">Next &#9656;</button>
+  </div>
+</div>
+<script>
+const ART = "../../plugin_linear_ascent/content/art/events/";
+const FPS = 12;
+
+// split scenes: intro gif plays once (introFrames/FPS seconds), then the
+// pane swaps in the loop gif — same swap the game will do.
+const SCENES = [
+  { slug: "intro_aldervale", eyebrow: "THE STORY SO FAR · I",
+    text: "Aldervale was whole once.\n\nHuman river-ports under blinking signal towers. Elven woods lit from within. Dwarven forges splitting atoms beneath the mountains.\n\nMagic and machine were one craft there. They called it aether." },
+  { slug: "intro_theft", split: 60, eyebrow: "THE STORY SO FAR · II",
+    text: "Then Vharuk, the Demon King, rose from below.\n\nHe did not burn the world. He stole it — realm by realm, torn out of the ground with everyone still on it." },
+  { slug: "intro_tower", eyebrow: "THE STORY SO FAR · III",
+    text: "He welded what he took into a tower of a hundred floors — black iron, grav-engines, chains of aether.\n\nEvery floor is a captured realm. The people below gave it the only name that fits: the Ascent." },
+  { slug: "intro_warden", eyebrow: "THE STORY SO FAR · IV",
+    text: "On every floor, a Warden holds the lift to the next — half beast, half war-machine.\n\nAnd on the hundredth floor, in a citadel half throne room, half reactor core, the Demon King sits with the whole world stacked beneath him." },
+  { slug: "intro_refugee", split: 60, eyebrow: "THE STORY SO FAR · V",
+    text: "You were on one of those floors.\n\nYour home is up there now — locked behind a hundred Wardens. You walked out of the wreckage with a rusted shiv and fifty coins.\n\nThat makes you what everyone here is: a refugee. And a climber." },
+  { slug: "intro_roothollow", eyebrow: "THE STORY SO FAR · VI",
+    text: "At the tower's foot stands the last free settlement: Roothollow.\n\nTarps over titanium. A plasma forge next to a horse trough. Refugees of every stolen realm, all of them climbers now.\n\nEvery climb starts here — and every dead climber wakes here. The tower does not get to keep you." },
+  { slug: "intro_stone", split: 60, eyebrow: "THE STORY SO FAR · VII",
+    text: "No one climbs alone.\n\nWhen a Warden falls, the lift opens for everyone — every climber, everywhere. And the names of those who did it are cut into the Stone of the Climb, lit from within by aether." },
+  { slug: "intro_shard", split: 60, eyebrow: "THE STORY SO FAR · VIII",
+    text: "At the gate, a shard of old Aldervale will choose you — a machine spirit that remembers the world as it was.\n\nIt will scout ahead of you, carry what you cannot lose, and drag you back from death.\n\nIt is speaking to you right now." },
+  { slug: "intro_muster", eyebrow: "THE STORY SO FAR · IX",
+    text: "The great Wardens do not fall to one blade.\n\nClimbers pledge at the keep, and when enough have gathered, they break it — together. Floor by floor. Warden by Warden. All the way to the throne." },
+  { slug: "ascent_title", title: true, eyebrow: "LINEAR ASCENT",
+    headline: "Climb the Ascent. Cast down the Demon King.",
+    text: "One hundred floors between Roothollow and the throne.",
+    button: "Walk to the tower gate \u25B8" },
+];
+
+const art = document.getElementById("art");
+const eyebrow = document.getElementById("eyebrow");
+const headline = document.getElementById("headline");
+const textEl = document.getElementById("text");
+const nextBtn = document.getElementById("next");
+
+let idx = 0, typing = null, swapTimer = null, curText = "";
+
+function gifUrl(slug, seg) {
+  const name = seg ? `${slug}_${seg}_320x200.gif` : `${slug}_320x200.gif`;
+  return ART + name + "?t=" + Date.now();  // fresh URL -> gif restarts
+}
+
+function show(i) {
+  idx = i;
+  const s = SCENES[i];
+  clearTimeout(swapTimer); clearInterval(typing);
+  eyebrow.textContent = s.eyebrow;
+  // every scene leads with a big white headline: either the explicit one
+  // (title card) or the text's first paragraph, promoted.
+  let head = s.headline, body = s.text;
+  if (!head) {
+    const cut = s.text.indexOf("\n\n");
+    if (cut > 0) { head = s.text.slice(0, cut); body = s.text.slice(cut + 2); }
+  }
+  headline.style.display = head ? "block" : "none";
+  headline.textContent = head || "";
+  nextBtn.style.visibility = "hidden";
+  nextBtn.innerHTML = s.button || "Next \u25B8";
+
+  if (s.split) {
+    art.src = gifUrl(s.slug, "intro");
+    swapTimer = setTimeout(() => { art.src = gifUrl(s.slug, "loop"); },
+                           Math.round(s.split / FPS * 1000));
+  } else {
+    art.src = gifUrl(s.slug);
+  }
+
+  curText = body;
+  let n = 0;
+  textEl.innerHTML = '<span class="caret"></span>';
+  typing = setInterval(() => {
+    n += 1;
+    if (n >= curText.length) {
+      clearInterval(typing); typing = null;
+      textEl.textContent = curText;
+      nextBtn.style.visibility = "visible";
+    } else {
+      textEl.innerHTML = escapeHtml(curText.slice(0, n)) +
+                         '<span class="caret"></span>';
+    }
+  }, 28);
+}
+
+function escapeHtml(s) {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+}
+
+function finishTypingOrNext() {
+  if (typing) {           // first click completes the typewriter
+    clearInterval(typing); typing = null;
+    textEl.textContent = curText;
+    nextBtn.style.visibility = "visible";
+  } else if (idx < SCENES.length - 1) {
+    show(idx + 1);
+  } else {
+    show(0);              // prototype: the gate button restarts the movie
+  }
+}
+
+nextBtn.addEventListener("click", finishTypingOrNext);
+textEl.addEventListener("click", finishTypingOrNext);
+document.getElementById("frame").addEventListener("click", finishTypingOrNext);
+document.addEventListener("keydown", e => {
+  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); finishTypingOrNext(); }
+});
+
+show(0);
+</script>
+</body>
+</html>

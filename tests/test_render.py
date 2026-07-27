@@ -7,7 +7,8 @@ from plugin_linear_ascent.render import render_scene, _banner_data_url
 def make_player():
     p = state.new_player("render-test")
     core.current_scene(p)
-    core.apply_choice(p, "begin")
+    while p["stage"] == "intro":                # 016: through the movie
+        core.apply_choice(p, "1")
     core.apply_choice(p, "halfling")
     core.apply_choice(p, "archer")
     core.apply_choice(p, "", "Renda")
@@ -55,9 +56,31 @@ def test_all_referenced_banners_exist():
         assert _banner_data_url(slug), f"missing banner: {slug}"
 
 
-def test_intro_card_shows_title_art_at_own_size():
+def test_intro_movie_card_shows_scene_art_at_own_size():
+    # 016: a fresh player opens on the movie's first beat, 320x200 art
     p = state.new_player("intro-render")
     html = render_scene(core.current_scene(p))
+    assert "THE STORY SO FAR · I" in html
+    assert "aspect-ratio:320/200" in html
+    assert "data:image/gif;base64" in html
+
+
+def test_intro_movie_split_scene_carries_the_swap():
+    # 016: the theft's action gif plays once, then swaps to its loop
+    p = state.new_player("intro-render-2")
+    core.current_scene(p)
+    html = render_scene(core.apply_choice(p, "next"))   # scene II: theft
+    assert "THE STORY SO FAR · II" in html
+    assert 'data-swap="data:image/gif;base64' in html
+    assert 'data-swap-ms="' in html
+
+
+def test_title_card_still_closes_the_movie():
+    p = state.new_player("intro-render-3")
+    core.current_scene(p)
+    while p.get("intro_step", 0) < 9:
+        scene = core.apply_choice(p, "next")
+    html = render_scene(scene)
     assert "LINEAR ASCENT" in html
     assert "aspect-ratio:320/200" in html               # title art, not 320x112
     # 011: the title screen animates — GIF mask instead of the static PNG

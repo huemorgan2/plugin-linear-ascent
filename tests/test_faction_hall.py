@@ -9,7 +9,8 @@ from plugin_linear_ascent.engine import core, state
 def playing(name="Hally", world=None):
     p = state.new_player(f"t:{name}")
     core.current_scene(p)
-    core.apply_choice(p, "begin")
+    while p["stage"] == "intro":                # 016: through the movie
+        core.apply_choice(p, "1")
     core.apply_choice(p, "human")
     core.apply_choice(p, "warrior")
     core.apply_choice(p, "", name)
