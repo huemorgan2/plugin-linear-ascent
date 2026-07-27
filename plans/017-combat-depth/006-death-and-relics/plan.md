@@ -35,6 +35,12 @@ so the new sinks matter.
 - Unit: every relic effect + its limitation (no-stack, hold-1,
   not-on-Wardens, spare-spell leak, exclusivity refusal); death matrix
   (mercy / save / unprotected / protected / protected-with-spares).
+- 002 retro: the slowing arrow (−2 spd) feeds straight into the chase
+  curves — a fast (7) monster slowed to 5 loses its close pressure
+  (p_close 0.55→0.25) AND its counter status. Sim the archer-vs-fast
+  matchup with slowing arrows equipped; price/availability must keep
+  it a purchased answer, not a free one. Fight-test helpers: pin
+  `encounter["range"]` explicitly (002 made range part of every fight).
 - **Economy sim gate:** expected unprotected death cost at band 2–4 ≈
   1–2 hunting days (visible sting, not a wipe); one held Reincarnation
   Spell is EV-positive by band 2 (the intended buy); hoarding 3+ is
