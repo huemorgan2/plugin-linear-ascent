@@ -11,24 +11,36 @@ arrival: >-
 encounters:
   - id: fair_barker
     name: Goblin barker
+    lore: >-
+      It still works the crowd, though the crowd is gone. The pitch
+      ends with a knife every time.
     weight: 3
     prose: >-
       A goblin barker spreads its arms in welcome from a stall of
       stolen boots. The two behind it with scrap-rifles aren't smiling.
   - id: carousel_wolf
     name: Carousel wolf
+    lore: >-
+      It circles by habit, sun-wise, always. Break the circle and you
+      break the wolf.
     weight: 3
     prose: >-
       Among the painted horses one shape isn't painted. The wolf steps
       down off the carousel deck with terrible patience.
   - id: prize_boar
     name: Prize boar
+    lore: >-
+      Blue rosette still stapled to one ear. It won its class by
+      weight, and the weight is all muscle now.
     weight: 2
     prose: >-
       The pen says GRAND CHAMPION in old letters. The bar is bent. The
       champion has opinions about being looked at.
   - id: bunting_kite
     name: Bunting kite
+    lore: >-
+      It nests in the flag-lines above the stalls and stoops on
+      whatever glitters. Your buckles glitter.
     weight: 2
     traits: [flying]
     prose: >-

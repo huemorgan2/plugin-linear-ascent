@@ -17,7 +17,7 @@ import os
 import re
 from functools import lru_cache
 
-from . import icons
+from . import economy, icons
 from .engine import tips
 from .engine.scene import Meters, Scene
 
@@ -237,6 +237,116 @@ def _meters_html(m: Meters) -> str:
         f"</div>")
 
 
+# ── 017/003: the enemy header + the [i] dossier ─────────────────────────
+# The counter system is invisible noise unless the enemy's sheet is
+# readable at a glance (the Kingdom Rush lesson). scene.enemy carries the
+# payload; the header shows the always-on HP bar, the range chip and the
+# active damage modifier; the [i] badge opens the dossier — a native
+# <details>, all data inlined, no server round-trip, no model in the path.
+
+_TIER_ICON = {"armor": "t_armor", "resist": "t_resist", "flying": "t_wing",
+              "bulwark": "t_bulwark", "speed": "t_speed"}
+
+
+def _ticon(key: str, tint: str = DIM) -> str:
+    url = icons.icon_data_url(key)
+    return (f'<span class="ticon" style="background-color:{tint};'
+            f"-webkit-mask-image:url('{url}');mask-image:url('{url}');\">"
+            f"</span>")
+
+
+def _speed_word(spd: int) -> str:
+    if spd >= 7:
+        return "fast"
+    if spd <= 3:
+        return "slow"
+    return "steady"
+
+
+def _active_mods(en: dict) -> list[str]:
+    """The 002 retro line: every live damage modifier, NAMED — the bow's
+    close-quarters collapse read as a bug when nothing on screen said why."""
+    mods = []
+    rng, dt = en.get("range", ""), en.get("dtype", "")
+    prof = en.get("profile") or {}
+    if rng == "at_range":
+        mods.append("its blows land at HALF — it hasn't reached you")
+        if dt == "melee":
+            mods.append("your steel can't swing until you close")
+    elif rng == "close":
+        if dt == "ranged":
+            mods.append("your bow works at ×0.6 in this press — open "
+                        "distance to shoot full")
+    if prof.get("flying") and dt == "melee":
+        mods.append("AIRBORNE — your steel cannot touch it")
+    if en.get("dodge"):
+        mods.append(f"your speed edge slips {en['dodge']}% of its blows")
+    return mods
+
+
+def _enemy_head_html(en: dict) -> str:
+    hp, cap = int(en.get("hp", 0)), max(1, int(en.get("hp_max", 1)))
+    low = " low" if hp * 10 <= cap * 3 else ""
+    rng = en.get("range", "")
+    chip = ""
+    if rng == "at_range":
+        chip = '<span class="rchip">◇ at range</span>'
+    elif rng == "close":
+        chip = '<span class="rchip">◇ close quarters</span>'
+    mods = _active_mods(en)
+    mod = (f'<span class="mchip">{_e(mods[0])}</span>' if mods else "")
+    return (f'<div class="ehead later">'
+            f'<span class="meter foe{low}" data-tip="The enemy\'s health — '
+            f'visible from the first breath. Kill it before it kills you.">'
+            f"<span>HP {hp}/{cap}</span>"
+            f'<span class="blocks" aria-hidden="true">'
+            f"{_blocks(hp, cap)}</span></span>"
+            f"{chip}{mod}</div>")
+
+
+def _dossier_html(en: dict) -> str:
+    prof = en.get("profile") or {}
+    rows = []
+
+    def row(icon: str, head: str, text: str, tint: str = DIM) -> None:
+        rows.append(f'<div class="drw">{_ticon(icon, tint)}'
+                    f'<span><b>{_e(head)}</b> {_e(text)}</span></div>')
+
+    if prof.get("armor", "none") != "none":
+        row("t_armor", f"plate — {economy.TIER_LABEL[prof['armor']]}.",
+            "Turns part of every blow of steel or shot. Spellwork "
+            "ignores it.", TEXT)
+    if prof.get("resist", "none") != "none":
+        row("t_resist", f"spellguard — {economy.TIER_LABEL[prof['resist']]}.",
+            "Eats part of every cast. Steel and shot ignore it.", TEXT)
+    if prof.get("flying"):
+        row("t_wing", "airborne.",
+            "Steel cannot reach it. Arrows and spellwork fly.", VIOLET_SOFT)
+    if prof.get("bulwark"):
+        row("t_bulwark", "bulwark.",
+            "Half again the flesh — this will take time.", TEXT)
+    mspd = int(en.get("mspd", 5))
+    pspd = int(en.get("pspd", 5))
+    if mspd > pspd:
+        chase = "It closes ground you cannot hold — don't count on outrunning it."
+    elif mspd < pspd:
+        chase = "You hold the range and you choose the exit — kite it."
+    else:
+        chase = "An even footrace — no one gets away clean."
+    row("t_speed", f"speed — {_speed_word(mspd)} ({mspd}) against "
+        f"your {pspd}.", chase,
+        RED if mspd > pspd else (OK if mspd < pspd else DIM))
+    for m in _active_mods(en):
+        rows.append(f'<div class="drw"><span class="dmark">◇</span>'
+                    f"<span>{_e(m)}</span></div>")
+    if en.get("lore"):
+        rows.append(f'<div class="dlore">{_e(en["lore"])}</div>')
+    return (f'<details class="dx"><summary role="note" aria-label="enemy '
+            f'dossier">i</summary><div class="dossier">'
+            f'<div class="dhead">{_e(en.get("name", ""))} — the shard\'s '
+            f"dossier</div>{''.join(rows)}</div></details>")
+
+
 def _inventory_html(scene: Scene) -> str:
     """014: the pack strip — 32×32 single-color 1-bit icons under the
     rail. Equipped gear reads bright, pack items dim; every cell
@@ -441,6 +551,11 @@ def render_scene_fragment(scene: Scene) -> str:
     hl_col = _HEADLINE.get(scene.event_kind, TEXT)
     parts.append(f'<div class="headline type" style="color:{hl_col}">'
                  f"{_e(scene.headline)}</div>")
+    if scene.enemy:
+        # 003: the always-on enemy bar + range chip, and the [i] badge
+        # (top-right of the card — over the banner when there is one).
+        parts.append(_enemy_head_html(scene.enemy))
+        parts.append(_dossier_html(scene.enemy))
     if scene.support:
         parts.append(f'<div class="support type">{_e(scene.support)}</div>')
     if scene.shard_note:
@@ -491,7 +606,37 @@ SCENE_CSS = f"""
 .card{{background:{PANEL};border:1px solid {BORDER};
  border-radius:0;margin:0;padding:12px 2ch 10px;color:{TEXT};
  font:14px/1.6 ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
- font-variant-numeric:tabular-nums;overflow:hidden;}}
+ font-variant-numeric:tabular-nums;overflow:hidden;position:relative;}}
+/* ── 017/003: enemy header + [i] dossier ── */
+.ehead{{display:flex;flex-wrap:wrap;align-items:center;gap:1ch 2ch;
+ margin-top:6px;color:{DIM};}}
+.meter.foe .blocks{{color:{VIOLET_SOFT};}}
+.meter.foe.low .blocks{{color:{RED};}}
+.rchip{{color:{VIOLET_SOFT};letter-spacing:.04em;}}
+.mchip{{color:{ORANGE};font-size:12px;}}
+.dx summary{{position:absolute;top:8px;right:8px;z-index:3;
+ list-style:none;display:flex;align-items:center;padding:1px .6ch;
+ background:{INK};border:1px solid {AETHER};color:{AETHER};
+ cursor:help;user-select:none;font-style:italic;font-size:13px;
+ line-height:1.5;}}
+.dx summary::-webkit-details-marker{{display:none;}}
+.dx summary::before{{content:"[";font-style:normal;}}
+.dx summary::after{{content:"]";font-style:normal;}}
+.dx summary:hover,.dx[open] summary{{background:{AETHER};color:{INK};}}
+.dossier{{border:1px solid {AETHER};background:color-mix(in srgb,
+ {AETHER} 6%,{PANEL});padding:10px 1.5ch;margin:8px 0 2px;}}
+.dhead{{color:{AETHER};text-transform:uppercase;letter-spacing:.08em;
+ font-size:12px;margin-bottom:6px;}}
+.drw{{display:flex;gap:1ch;align-items:flex-start;padding:3px 0;
+ color:{DIM};}}
+.drw b{{color:{TEXT};font-weight:700;}}
+.drw .dmark{{color:{VIOLET_SOFT};flex:none;width:16px;text-align:center;}}
+.ticon{{width:16px;height:16px;flex:none;display:inline-block;
+ margin-top:3px;mask-size:100% 100%;-webkit-mask-size:100% 100%;
+ mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;
+ image-rendering:pixelated;}}
+.dlore{{color:{FAINT};font-style:italic;margin-top:6px;
+ border-top:1px dashed {BORDER};padding-top:6px;}}
 .banner{{display:block;width:calc(100% + 4ch);margin:-12px -2ch 10px;
  mask-size:100% 100%;-webkit-mask-size:100% 100%;mask-repeat:no-repeat;
  -webkit-mask-repeat:no-repeat;image-rendering:pixelated;

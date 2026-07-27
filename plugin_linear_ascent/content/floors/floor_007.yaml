@@ -11,24 +11,36 @@ arrival: >-
 encounters:
   - id: race_goblin
     name: Millrace goblin
+    lore: >-
+      It runs the sluice-tops like a towpath. Wet planks are its home
+      ground and your bad footing.
     weight: 3
     prose: >-
       A goblin hauls its wire net from the race, finds it empty again,
       and decides you will make a better catch.
   - id: sluice_wolf
     name: Sluice wolf
+    lore: >-
+      It waits below the weir where the water pushes you. The current
+      does half its hunting.
     weight: 3
     prose: >-
       A wolf drinks at the sluice gate, unbothered — until its head
       comes up dripping and its ears go flat.
   - id: wheel_boar
     name: Wheelhouse boar
+    lore: >-
+      It shelters in the dead wheelhouse and defends it like a den.
+      The doorway is exactly boar-shaped.
     weight: 2
     prose: >-
       A boar has made its wallow in the wheelhouse shade. It rises out
       of the mud like a landslide changing its mind.
   - id: coolant_crab
     name: Coolant crab
+    lore: >-
+      Grown vast in the warm outflow. Its shell is machine-fed
+      mineral, laid on in rings.
     weight: 2
     traits: [armor_low]
     prose: >-

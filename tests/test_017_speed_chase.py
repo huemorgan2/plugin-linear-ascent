@@ -89,7 +89,10 @@ def test_fights_open_at_range_and_the_scene_says_so():
     fl, enc = _enc(1, "grey_wolf")
     s = combat.start_encounter(p, fl, enc)
     assert p["encounter"]["range"] == "at_range"
-    assert any("at range" in ln for ln in s.body_lines)
+    # 003: the range state moved into the fight header (scene.enemy);
+    # the text fallback still says it in words.
+    assert (s.enemy or {}).get("range") == "at_range"
+    assert "at range" in s.to_text()
 
 
 def test_melee_at_range_gets_close_in_not_attack():

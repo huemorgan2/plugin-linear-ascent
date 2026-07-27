@@ -11,12 +11,18 @@ arrival: >-
 encounters:
   - id: beacon_goblin
     name: Beacon-camp goblin
+    lore: >-
+      It tends the signal fires that called the horde down. It will
+      die keeping one lit.
     weight: 3
     prose: >-
       A goblin sentry steps into the beam's edge, scrap-rifle raised,
       squinting past the glare at your silhouette.
   - id: shadow_wolf
     name: Shadow-line wolf
+    lore: >-
+      It has learned the lamplight's edges and hunts one step
+      outside them.
     weight: 3
     prose: >-
       Along the dark edge of the beam a wolf keeps pace with you,
@@ -24,12 +30,18 @@ encounters:
       and sheathed.
   - id: goblin_lampwright
     name: Goblin lampwright
+    lore: >-
+      Half artisan, half arsonist. The lamps it hangs burn green and
+      mark the paths its kin avoid.
     weight: 2
     prose: >-
       A goblin in a harness of stolen lenses is prying glass from the
       fallen pylon. It draws a shard like a knife, unwilling to share.
   - id: glare_moth
     name: Glare moth
+    lore: >-
+      It rides the beacon updrafts above spear-height. Nothing on the
+      ground has touched it in years.
     weight: 2
     traits: [flying]
     prose: >-
