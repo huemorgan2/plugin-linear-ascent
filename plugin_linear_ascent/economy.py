@@ -176,7 +176,12 @@ SHOE_SPEED: dict[str, int] = {}
 
 def player_speed(p: dict) -> int:
     shoes = (p.get("gear") or {}).get("shoes") or ""
-    return PLAYER_BASE_SPEED + SHOE_SPEED.get(shoes, 0)
+    bonus = SHOE_SPEED.get(shoes, 0)
+    # 005: broken boots drag — half the spring until the Forge sees them.
+    dur = (p.get("durability") or {}).get("shoes")
+    if bonus and dur is not None and dur <= 0:
+        bonus //= 2
+    return PLAYER_BASE_SPEED + bonus
 
 
 def _clamp(x: float, lo: float, hi: float) -> float:
@@ -790,6 +795,44 @@ def max_hone(unlocked_floor: int) -> int:
 
 def hone_price(unlocked_floor: int) -> int:
     return max(5, round(HONE_PRICE_PCT * daily_income(unlocked_floor)))
+
+
+# ── §6d Durability (005 §3.5) ────────────────────────────────────────────
+# Power is a running cost, not a plateau. Every PAID piece carries a
+# use pool sized so a fresh piece lasts ROUGHLY a week of at-level
+# hunting (≈30 fights × ~6 rounds a day — the same model daily_income
+# anchors on). Pools GROW with tier but repair scales with price, so
+# the gold-per-use climbs anyway: the running-cost tax rises smoothly
+# from ~8% of daily income at T1 to ~12% at T10 and never breaks a
+# piece inside one day. (The pre-plan's "better gear wears faster"
+# pool CURVE failed the ≤20%-of-income gate by up to 14× at T10 —
+# the tax keeps the intent, the pool direction had to flip.)
+# Basic (tier-0) gear never wears; broken means half strength, never
+# helpless.
+
+DURABILITY_BASE = 1300
+DURABILITY_GROWTH = 0.25
+REPAIR_PRICE_PCT = 0.20        # of item price × missing fraction
+DURABILITY_SLOTS = ("weapon", "shield", "armor", "shoes")
+
+
+def durability_pool(tier: float) -> int:
+    """Uses in a fresh piece of this tier (mids sit between wholes)."""
+    t = max(1.0, float(tier))
+    return round(DURABILITY_BASE * (1 + DURABILITY_GROWTH * (t - 1)))
+
+
+def item_pool(item: GearItem) -> int:
+    """Pool for a specific piece — mid-rungs (rung 1.5, 2.5…) wear a
+    touch faster than the whole tier below them, so the rung is the
+    truth when the item carries one."""
+    return durability_pool(item.rung or item.tier)
+
+
+def repair_price(item: GearItem, missing_frac: float) -> int:
+    """The Forge mends for a fraction of what the smith charged."""
+    return max(1, round(REPAIR_PRICE_PCT * item.price
+                        * max(0.0, min(1.0, missing_frac))))
 
 
 # ── §6 Apothecary & Medlab ───────────────────────────────────────────────

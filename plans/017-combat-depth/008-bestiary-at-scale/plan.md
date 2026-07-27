@@ -48,6 +48,11 @@ for the new monsters.
   actual income so floors 11-100 fund their rungs on the same smooth
   curve (income tuning lives in floor gold, not in reprints of the
   catalog).
+  005 retro: the repair tax rides on rounds-per-fight — if a band's
+  retuned encounters push average rounds up, weapon/armor wear per
+  day rises with them. Re-run the 005 repair-tax gate
+  (`test_017_durability.py`) after each band batch, alongside the
+  days-to-afford gate; both read the same income table.
 - Art: every encounter id with no shipped art logged and triaged (the
   renderer already skips silently — the list is the deliverable).
 - Dojo spot-checks: one floor per band — read three [i] cards, verify

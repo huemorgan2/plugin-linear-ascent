@@ -129,7 +129,7 @@ def _v1_playing_doc(clazz):
 def test_v1_archer_gets_bow_and_letter():
     p = _v1_playing_doc("archer")
     state.ensure_current(p)
-    assert p["version"] == 2
+    assert p["version"] >= 2      # 005 pushed docs to v3
     assert p["gear"]["weapon"] == "basic_bow"
     ev = p["pending_events"][0]
     assert "weapon" in ev["headline"].lower()

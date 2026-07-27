@@ -382,12 +382,26 @@ def _inventory_html(scene: Scene) -> str:
         ct = (f'<span class="ct">×{count}</span>'
               if count > 1 and not equipped else "")
         tip = tips.item_tip(slug, equipped=equipped)
+        # 005: worn gear shows a hairline bar under its icon; the hover
+        # names the number ("62% — repair at the Forge").
+        dur = it.get("dur")
+        durbar = ""
+        if dur is not None and dur < 1.0:
+            pct = max(0, round(dur * 100))
+            col = RED if dur <= 0 else (GOLD if dur < 0.34 else OK)
+            durbar = (f'<span class="dur"><span class="durf" '
+                      f'style="width:{max(pct, 4)}%;'
+                      f'background-color:{col};"></span></span>')
+            tip = (f"{tip} · " if tip else "") + (
+                "broken — half strength until the Forge repairs it"
+                if dur <= 0 else f"{pct}% — repair at the Forge")
         cells.append(
             f'<span class="item{" eq" if equipped else ""}" tabindex="0" '
             f'data-tip="{_e(tip)}">'
-            f'<span class="picon" style="background-color:{tint};'
+            f'<span class="pico"><span class="picon" '
+            f'style="background-color:{tint};'
             f"-webkit-mask-image:url('{url}');mask-image:url('{url}');\">"
-            f"</span>"
+            f"</span>{durbar}</span>"
             f'<span class="pname">{_e(it.get("name", slug))}{ct}</span>'
             f"</span>")
     return (f'<div class="inv later"><span class="invlbl">pack</span>'
@@ -727,6 +741,9 @@ SCENE_CSS = f"""
 .inv .pname{{color:{DIM};}}
 .inv .item.eq .pname{{color:{TEXT};}}
 .inv .ct{{color:{FAINT};margin-left:.5ch;}}
+.pico{{display:inline-flex;flex-direction:column;flex:none;gap:2px;}}
+.pico .dur{{display:block;width:32px;height:3px;background:{BORDER};}}
+.pico .durf{{display:block;height:100%;}}
 #tipbox{{position:fixed;display:none;z-index:99;max-width:340px;
  background:{INK};border:1px solid {VIOLET};color:{TEXT};
  padding:8px 1.5ch;font-size:12px;line-height:1.55;

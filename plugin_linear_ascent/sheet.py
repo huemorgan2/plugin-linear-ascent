@@ -10,8 +10,18 @@ def character_sheet(p: dict) -> dict:
     def _piece(slot: str, slug: str | None) -> str:
         if not slug:
             return "—"
+        g = economy.FORGE[slug]
         hone = pstate.hone_level(p, slot)
-        return economy.FORGE[slug].name + (f" (honed +{hone})" if hone else "")
+        name = g.name + (f" (honed +{hone})" if hone else "")
+        # 005: the sheet names the wear the pack strip draws.
+        left = (p.get("durability") or {}).get(slot)
+        if left is not None and g.price > 0:
+            pool = economy.item_pool(g)
+            if left <= 0:
+                name += " (BROKEN — half strength)"
+            elif pool and left < pool:
+                name += f" (worn to {round(100 * left / pool)}%)"
+        return name
 
     gear = {slot: _piece(slot, slug) for slot, slug in p["gear"].items()}
     race = p.get("race") or ""

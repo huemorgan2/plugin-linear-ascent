@@ -16,6 +16,12 @@ so the new sinks matter.
      (the only possible loss on a protected death — Roy's rule).
    - death_save + mercy (L≤3) unchanged; death scene lists exactly what
      was lost/saved.
+   - 005 retro: wear lives on the ITEM — a weapon lost to death must
+     drop its `durability_pack` stash too; the Reincarnation "repaired
+     to full" means both equipped `durability` pools AND every stash
+     in `durability_pack` (spell prose promises "all weapons+armor").
+     The −50% durability hit uses `economy.item_pool(g)` (rung-aware),
+     never `durability_pool(g.tier)`.
 2. `economy.py`: relic table v1 (plan §3.7 — items, DI-anchored prices,
    band availability, exclusivity groups); faucet cuts (alpha charm
    10%, warden charm 15%); pawn variable rate 25–55% by world_day.
@@ -57,6 +63,12 @@ so the new sinks matter.
   Spell is EV-positive by band 2 (the intended buy); hoarding 3+ is
   EV-negative vs banking (the intended dissuasion); charm faucet ≤ 1/3
   of today's rate in sim.
+  005 retro (hard rule): compute every recurring cost as a fraction of
+  `daily_income` at EVERY band IN THE PLAN before coding — 005's pool
+  curve read fine as flavor and missed the gate by 14× at T10. Death
+  cost + repair tax + relic prices must be summed per band: the
+  combined drain at-level must stay under ~40% of income or the climb
+  stalls.
 - Dojo: die unprotected (read the loss list); die holding one spell
   (nothing lost, gear repaired); die holding three (watch a spare
   leak); try to buy a second Stone of Undying (refused).

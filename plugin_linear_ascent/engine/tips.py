@@ -287,6 +287,13 @@ def option_tip(oid: str) -> str:
                 "item — replace it and the honing goes with it — so "
                 "hone the piece you'll keep wearing. Spending XP delays "
                 "training but never lowers your level.")
+    if oid.startswith("repair_"):
+        slot = oid.removeprefix("repair_")
+        return (f"Paid gear wears with use — every swing, blow taken or "
+                f"sprint spends a little of it. At zero it's broken, "
+                f"not gone: half strength until mended. This restores "
+                f"the {slot} to full for a fraction of its price plus "
+                "a few XP.")
     if oid.startswith("sell_"):
         slug = oid.removeprefix("sell_")
         g = economy.FORGE.get(slug)

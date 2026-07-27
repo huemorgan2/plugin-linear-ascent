@@ -9,10 +9,13 @@ the damage-type kill hooks only).
 
 ## Tasks
 
-1. **Race migration** (`engine/state.py` doc v2): halfling → closest
-   race, default human (an in-world pending-event letter explains the
-   change and the retired luck bonus); creation menu drops halfling;
-   `RACES` table updated. Luck-day flag/charm mechanics unaffected.
+1. **Race migration** (`engine/state.py` doc v4 — 005 took v3): 
+   halfling → closest race, default human (an in-world pending-event
+   letter explains the change and the retired luck bonus); creation
+   menu drops halfling; `RACES` table updated. Luck-day flag/charm
+   mechanics unaffected.
+   005 retro: version-pinning tests break on every bump — assert
+   `version >= N`, not `== N` (005 tripped 017's `== 2`).
 2. **Art canon:** all character prompts updated to the three showcase
    characters + the giant-dwarf scale rule (two heads taller, wider —
    `vision/story.md` is canon). Creation scene blurbs re-checked.

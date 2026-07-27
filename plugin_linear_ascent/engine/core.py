@@ -40,9 +40,16 @@ def _pack_strip(p: dict) -> list[dict]:
         if not g:
             continue
         hone = (p.get("hone") or {}).get(slot, 0)
-        strip.append({"slug": slug, "kind": slot, "count": 1,
-                      "equipped": True,
-                      "name": g.name + (f" +{hone}" if hone else "")})
+        cell = {"slug": slug, "kind": slot, "count": 1,
+                "equipped": True,
+                "name": g.name + (f" +{hone}" if hone else "")}
+        # 005: paid gear carries its wear onto the strip — the bar and
+        # the hover both read from this one number.
+        left = (p.get("durability") or {}).get(slot)
+        if left is not None and g.price > 0:
+            pool = economy.item_pool(g)
+            cell["dur"] = max(0.0, min(1.0, left / pool)) if pool else 1.0
+        strip.append(cell)
     pack = p.get("inventory") or {}
     order = sorted(pack.items(),
                    key=lambda kv: (kv[0] not in economy.APOTHECARY, kv[0]))
@@ -691,6 +698,21 @@ def _forge_scene(p: dict) -> Scene:
             name = economy.FORGE[slug].name
             opts.append(Option(f"hone_{slot}", f"Hone {name} +{lvl + 1}",
                                f"◈ {price:,} + {hone_xp} XP"))
+    # 005: the repair bench — every worn PAID piece on the body gets a
+    # row; price scales with the missing fraction, XP mirrors honing.
+    for slot in economy.DURABILITY_SLOTS:
+        g = economy.FORGE.get(p["gear"].get(slot) or "")
+        left = (p.get("durability") or {}).get(slot)
+        if not g or g.price <= 0 or left is None:
+            continue
+        pool = economy.item_pool(g)
+        if left >= pool:
+            continue
+        rprice = economy.repair_price(g, 1 - left / pool)
+        opts.append(Option(
+            f"repair_{slot}",
+            f"Repair {g.name}" + (" — broken" if left <= 0 else ""),
+            f"◈ {rprice:,} + {hone_xp} XP"))
     if cap > 0:
         honed = ", ".join(
             f"{slot} +{state.hone_level(p, slot)}"
@@ -742,6 +764,39 @@ def _forge_hone(p: dict, slot: str) -> Scene:
     return s
 
 
+def _forge_repair(p: dict, slot: str) -> Scene:
+    """005: mend a worn piece — 20% of its price × the missing fraction,
+    plus the honing bench's XP ask. Same refusal grammar as honing."""
+    g = economy.FORGE.get(p["gear"].get(slot) or "")
+    left = (p.get("durability") or {}).get(slot)
+    if not g or g.price <= 0 or left is None:
+        return _forge_scene(p)
+    pool = economy.item_pool(g)
+    if left >= pool:
+        return _forge_scene(p)
+    price = economy.repair_price(g, 1 - left / pool)
+    xp_cost = economy.hone_xp(p["unlocked_floor"])
+    if p["gold"] < price:
+        s = _forge_scene(p)
+        s.shard_note = (f"Mending the {g.name} costs ◈ {price:,} + "
+                        f"{xp_cost} XP; you carry ◈ {p['gold']:,}.")
+        return s
+    if p["xp"] < xp_cost:
+        s = _forge_scene(p)
+        s.shard_note = (f"The smith takes {xp_cost} XP of what you've "
+                        f"learned along with the coin — you carry "
+                        f"{p['xp']} XP. Hunt first.")
+        return s
+    p["gold"] -= price
+    state.spend_xp(p, xp_cost)
+    p["durability"][slot] = pool
+    combat._ledger(p, "repair", gold=-price, xp=-xp_cost, note=slot)
+    s = _forge_scene(p)
+    s.body_lines.insert(0, (f"+ {g.name} made whole on the anvil — "
+                            f"every use back in it (− {xp_cost} XP)"))
+    return s
+
+
 def _gear_purchase(p: dict, g, scene_fn) -> Scene:
     """Shared buy path for the Forge and the Arcanum: level gate,
     off-class ×3 pricing, equip + old piece to the pack."""
@@ -765,6 +820,13 @@ def _gear_purchase(p: dict, g, scene_fn) -> Scene:
     p["gear"][g.slot] = g.slug
     if g.slot in p.get("hone", {}):
         p["hone"][g.slot] = 0        # honing lives on the item it honed
+    # 005: wear lives on the item too — stash the old piece's remaining
+    # uses with the pack (it comes back as worn as it left), fresh pool
+    # on the new one.
+    old_dur = (p.get("durability") or {}).pop(g.slot, None)
+    if old and old_dur is not None:
+        p.setdefault("durability_pack", {})[old] = old_dur
+    p.setdefault("durability", {})[g.slot] = economy.item_pool(g)
     if g.slot == "shoes":
         note = f"+ {g.name} laced on (+{g.speed} speed)"
     else:
@@ -777,6 +839,13 @@ def _gear_purchase(p: dict, g, scene_fn) -> Scene:
         note += f" — your {economy.FORGE[old].name} goes to your pack"
     elif old:
         note += f" — the {economy.FORGE[old].name} goes in the scrap bin"
+    # 005 staged onboarding: the slot's FIRST paid piece teaches wear
+    # in one line, then never again.
+    flag = f"dur_taught_{g.slot}"
+    if not p["flags"].get(flag):
+        p["flags"][flag] = True
+        note += (" — paid gear wears with use; the Forge repairs it "
+                 "for a fraction of its price")
     combat._ledger(p, "buy", gold=-price, note=g.slug)
     s = scene_fn(p)
     s.body_lines.insert(0, note)
@@ -794,6 +863,14 @@ def _wear_from_pack(p: dict, slug: str, scene_fn) -> Scene:
     p["gear"][g.slot] = slug
     if g.slot in p.get("hone", {}):
         p["hone"][g.slot] = 0
+    # 005: swap the wear along with the piece — no fresh pool for free.
+    stash = p.setdefault("durability_pack", {})
+    old_dur = (p.get("durability") or {}).pop(g.slot, None)
+    if old and old_dur is not None:
+        stash[old] = old_dur
+    if g.price > 0:
+        p.setdefault("durability", {})[g.slot] = stash.pop(
+            slug, economy.item_pool(g))
     note = f"+ {g.name} back on"
     if old and economy.FORGE.get(old) and economy.FORGE[old].price > 0:
         p["inventory"][old] = p["inventory"].get(old, 0) + 1
@@ -807,6 +884,9 @@ def _forge_buy(p: dict, oid: str) -> Scene:
     if oid.startswith("hone_") and oid.removeprefix("hone_") in \
             economy.HONE_SLOTS:
         return _forge_hone(p, oid.removeprefix("hone_"))
+    if oid.startswith("repair_") and oid.removeprefix("repair_") in \
+            economy.DURABILITY_SLOTS:
+        return _forge_repair(p, oid.removeprefix("repair_"))
     if oid == "buy_arrow_pack":
         if p["gold"] < economy.ARROW_PACK_PRICE:
             s = _forge_scene(p)
@@ -889,6 +969,10 @@ def _arcanum_buy(p: dict, oid: str) -> Scene:
                        "smith's trade. The Forge is across the square."
         return s
     if g.slot == "shield" and (p.get("clazz") or "") != "sorcerer":
+        # 005 design decision: only BUYING a focus is class-gated. One
+        # already owned (class change, hand-me-down) keeps working as a
+        # shield and may be honed/repaired — it's the wearer's guard
+        # now, and durability taxes it like any other paid piece.
         s = _arcanum_scene(p)
         s.shard_note = ("The focus goes dark in your hand — it answers "
                         "only to a caster.")
@@ -1073,15 +1157,32 @@ def _vault_action(p: dict, oid: str) -> Scene:
 
 # ── Pawn shop ────────────────────────────────────────────────────────────
 
+def _pawn_frac(p: dict, g) -> float:
+    """005: worn gear pays × its remaining durability fraction. The
+    broker checks the stash the pack carries; unworn gear is 1.0."""
+    left = (p.get("durability_pack") or {}).get(g.slug)
+    if left is None or g.price <= 0:
+        return 1.0
+    pool = economy.item_pool(g)
+    return max(0.0, min(1.0, left / pool)) if pool else 1.0
+
+
+def _pawn_offer(p: dict, g) -> int:
+    return int(g.price * economy.PAWN_BUYBACK * _pawn_frac(p, g))
+
+
 def _pawn_scene(p: dict) -> Scene:
     gear_in_pack = [k for k in p["inventory"] if k in economy.FORGE]
     opts = []
     lines = []
     for slug in gear_in_pack:
         g = economy.FORGE[slug]
-        offer = int(g.price * economy.PAWN_BUYBACK)
+        offer = _pawn_offer(p, g)
+        frac = _pawn_frac(p, g)
+        worn = f", worn to {round(frac * 100)}%" if frac < 1.0 else ""
         opts.append(Option(f"sell_{slug}", f"Sell {g.name}", f"◈ {offer:,}"))
-        lines.append(f"{g.name} ×{p['inventory'][slug]} — offers ◈ {offer:,}")
+        lines.append(f"{g.name} ×{p['inventory'][slug]}{worn} — "
+                     f"offers ◈ {offer:,}")
     if not lines:
         lines.append("Nothing in your pack the broker wants today.")
     opts.append(Option("back", "Back to the square"))
@@ -1100,10 +1201,11 @@ def _pawn_action(p: dict, oid: str) -> Scene:
     slug = oid.removeprefix("sell_")
     if slug in p["inventory"] and slug in economy.FORGE:
         g = economy.FORGE[slug]
-        offer = int(g.price * economy.PAWN_BUYBACK)
+        offer = _pawn_offer(p, g)
         p["inventory"][slug] -= 1
         if p["inventory"][slug] <= 0:
             del p["inventory"][slug]
+            (p.get("durability_pack") or {}).pop(slug, None)
         p["gold"] += offer
         combat._ledger(p, "pawn", gold=offer, note=slug)
         s = _pawn_scene(p)

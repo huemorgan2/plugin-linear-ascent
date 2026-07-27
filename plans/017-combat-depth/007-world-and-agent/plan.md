@@ -12,6 +12,10 @@ Goal: the shared-world and sidekick pieces — faction armory donations
      (member-only, admin can purge); caps (e.g. 50 items/faction).
    - Plugin: pawn scene gains "donate to the armory" for faction
      members; 015 desk gets an ARMORY section (list + take).
+   - 005 retro: the "durability fraction" column is live now —
+     deposit moves the item's `durability_pack` stash into the row
+     (× `economy.item_pool(g)`), take restores it. An armory donation
+     must never launder a worn piece back to full.
 2. **Matchup moment (plan §5):** first fight per monster TYPE whose
    profile hard-counters the player's class → one moment nudge via
    `send_muted_message` (flag per type in the doc); silence invited,
@@ -41,6 +45,10 @@ Goal: the shared-world and sidekick pieces — faction armory donations
 - Dojo: donate a worn sword, take it with a second member account;
   fight the first flyer as warrior and see exactly one sidekick tip;
   verify the town list order and locked rows as a fresh player.
+  005 retro (hard rule): the pane replays the scene payload CACHED in
+  the doc — after any DB edit, drive one navigation click before
+  reading the screen; after any plugin render change, restart Luna by
+  port-kill (8765) the same way worldd is killed by 8600.
 
 Exit: all green, published, worldd migrated + deployed,
 `execution_summary.md`.

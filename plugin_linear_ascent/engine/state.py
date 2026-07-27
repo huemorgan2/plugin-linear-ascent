@@ -29,7 +29,7 @@ def world_day(at: dt.datetime | None = None) -> int:
 def new_player(luna_user: str) -> dict:
     ts = now().isoformat()
     return {
-        "version": 2,
+        "version": 3,
         "luna_user": luna_user,
         "stage": "intro",              # intro → creation_race → creation_class → creation_name → playing
         "name": None, "race": None, "clazz": None,
@@ -39,6 +39,10 @@ def new_player(luna_user: str) -> dict:
         "gear": {"weapon": economy.STARTER_WEAPON.slug,
                  "shield": None, "armor": None, "shoes": None},
         "hone": {s: 0 for s in economy.HONE_SLOTS},
+        # 005: staged onboarding — a slot gets a durability entry only
+        # when its first PAID piece is bought (free gear never wears).
+        "durability": {},
+        "durability_pack": {},
         "inventory": {},
         "energy_ts": ts, "energy_val": float(economy.ENERGY_BASE_CAP),
         "lodged_until_day": -1,
@@ -111,6 +115,8 @@ def ensure_current(p: dict) -> None:
     p.setdefault("hone", {s: 0 for s in economy.HONE_SLOTS})
     p.setdefault("news_day", -1)       # 007: existing docs get the crier
     p["gear"].setdefault("shoes", None)    # 004: the shoes ladder
+    p.setdefault("durability", {})         # 005: wear per equipped slot
+    p.setdefault("durability_pack", {})    # 005: wear stashed with the pack
     if p["gear"].get("weapon") is None:
         # pre-c4ab270 doc: never received the free starter weapon.
         p["gear"]["weapon"] = economy.STARTER_WEAPON.slug
@@ -158,6 +164,39 @@ def ensure_current(p: dict) -> None:
                     event_kind="present",
                 ).to_dict())
         p["version"] = 2
+    if p.get("version", 1) < 3:
+        # 005: docs that predate durability get FULL pools on whatever
+        # paid gear they already wear — nobody's kit arrives pre-worn.
+        for slot in economy.DURABILITY_SLOTS:
+            g = economy.FORGE.get(p["gear"].get(slot) or "")
+            if g and g.price > 0 and slot not in p["durability"]:
+                p["durability"][slot] = economy.item_pool(g)
+        p["version"] = 3
+
+
+# ── Durability (005 §3.5) ────────────────────────────────────────────────
+
+def durability_max(p: dict, slot: str) -> int:
+    """The full pool of the slot's equipped item; 0 for free gear."""
+    g = economy.FORGE.get(p["gear"].get(slot) or "")
+    return economy.item_pool(g) if g and g.price > 0 else 0
+
+
+def is_broken(p: dict, slot: str) -> bool:
+    dur = (p.get("durability") or {}).get(slot)
+    return dur is not None and dur <= 0 and durability_max(p, slot) > 0
+
+
+def wear_gear(p: dict, slot: str, n: int = 1) -> bool:
+    """−n uses on the slot's paid piece. True exactly on the wear that
+    snaps it — the caller owes the player one line for that moment."""
+    dur = p.get("durability")
+    if not dur or slot not in dur or durability_max(p, slot) <= 0:
+        return False
+    if dur[slot] <= 0:
+        return False
+    dur[slot] = max(0, dur[slot] - n)
+    return dur[slot] == 0
 
 
 # ── Derived stats ────────────────────────────────────────────────────────
@@ -174,7 +213,10 @@ def gear_bonus(p: dict, slot: str) -> int:
         return economy.STARTER_WEAPON.bonus if slot == "weapon" else 0
     item = economy.FORGE.get(slug)
     base = item.bonus if item else 0
-    return base + hone_level(p, slot)
+    total = base + hone_level(p, slot)
+    if is_broken(p, slot):
+        total //= 2                    # 005: broken, never gone
+    return total
 
 
 def atk(p: dict) -> int:

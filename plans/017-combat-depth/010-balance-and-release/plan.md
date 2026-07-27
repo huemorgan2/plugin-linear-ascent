@@ -10,6 +10,11 @@ shared-world migration check, end-to-end dojo playtest, release.
    combination — e.g. repair drag + death loss + relic spend stacking
    on the same income. Amend `plan.md` §2–3 constants in place with a
    dated note for every change.
+   005 retro: the repair tax is live at ~8→12% of daily income per
+   band (`test_017_durability.py` gates ≤20% and ≤10 pp between
+   bands) — the stacked-drain budget for death + relics starts from
+   there, and 005's lesson stands: express every drain as a fraction
+   of `daily_income` per band BEFORE touching constants.
 2. **Shared-world migration rehearsal:** export prod player docs
    (worldd, render-production skill), run `ensure_current` v2 over all
    of them locally, diff meters/gear/race outcomes, fix surprises.

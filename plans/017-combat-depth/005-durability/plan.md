@@ -8,6 +8,16 @@ for gold + a few XP; broken never means helpless.
 1. `economy.py`: `pool(T) = round(240 / (1 + 0.3·(T−1)))`; repair price
    = 20% of item price × missing fraction; repair XP =
    `hone_xp(frontier)`.
+   **Tuned in execution:** the shrinking-pool curve failed the ≤20%
+   economy gate by up to 14× — kit prices run 3–14 DAYS of income, so
+   burning a whole pool per day makes daily repair cost 15–20% of the
+   KIT PRICE, not of income. Shipped instead:
+   `pool(T) = round(1300 · (1 + 0.25·(T−1)))` (grows with tier, a
+   piece lasts ≥3 hunting days, roughly a week at level) — the
+   running-cost intent lives in the gold-per-use, which still rises
+   with tier; the tax curve lands at ~8% of daily income (T1) → ~12%
+   (T10), smooth between bands. Pools key off `item.rung` (mid-rungs
+   sit between wholes) via `economy.item_pool(g)`.
 2. `engine/state.py`: doc v2 — `durability: {slot: uses_left}` set on
    purchase (per-slot staged activation: slots without a paid item have
    no entry and no UI); helpers `wear(p, slot)`, `is_broken`.

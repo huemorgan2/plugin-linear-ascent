@@ -305,13 +305,25 @@ def guard_name(p: dict) -> str:
     return " and ".join(names)
 
 
+def _wear(p: dict, slot: str, n: int = 1) -> str:
+    """005: wear the slot's paid piece. The FIRST time it snaps, say so
+    on the card — an unexplained half-strength number reads as a bug
+    (002/003 law). Every round after, the pack strip carries the state."""
+    if not state.wear_gear(p, slot, n):
+        return ""
+    g = economy.FORGE.get(p["gear"].get(slot) or "")
+    name = g.name if g else slot
+    return (f"Your {name} gives out — cracked and dull, half its "
+            "strength until the Forge repairs it.")
+
+
 def _monster_hit(p: dict, halved: bool = False) -> dict:
     """013: armor blunts, it never nullifies — every landed hit chips at
     least ⌈raw/4⌉ (min 1) through any DEF. Returns the breakdown so the
     card can SAY what the armor did instead of silently eating hits.
     002: a speed advantage gives a small capped dodge before anything
     else; a monster still at range strikes at −50% (charging, not
-    fighting)."""
+    fighting). 005: every landed blow wears the guard that met it."""
     dodge = economy.dodge_pct(economy.player_speed(p), _mspd(p))
     if dodge and state.roll_ok(p, dodge / 100):
         return {"dmg": 0, "raw": 0, "blocked": 0, "dodged": True}
@@ -324,7 +336,8 @@ def _monster_hit(p: dict, halved: bool = False) -> dict:
     if halved:
         dmg //= 2
     p["hp"] -= dmg
-    return {"dmg": dmg, "raw": raw, "blocked": raw - dmg}
+    broke = [note for s in ("shield", "armor") if (note := _wear(p, s))]
+    return {"dmg": dmg, "raw": raw, "blocked": raw - dmg, "broke": broke}
 
 
 def _counter_text(p: dict, hit: dict, lead: str = "") -> str:
@@ -334,21 +347,23 @@ def _counter_text(p: dict, hit: dict, lead: str = "") -> str:
     guard = guard_name(p)
     dmg, blocked = hit["dmg"], hit["blocked"]
     lead = lead or f"The {e['name']} answers"
+    # 005: the round a guard piece snaps, the card says so right here.
+    tail = " " + " ".join(hit["broke"]) if hit.get("broke") else ""
     if hit.get("dodged"):
         return f"{lead} — you slip the blow entirely. Speed tells."
     if dmg <= 0:
         what = f"your {guard}" if guard else "your guard"
-        return f"{lead} — {what} turns the whole blow. 0 damage."
+        return f"{lead} — {what} turns the whole blow. 0 damage.{tail}"
     if guard and blocked >= dmg:
         soak = "soak" if " and " in guard else "soaks"
         return (f"{lead} — your {guard} {soak} almost all of it: "
-                f"only −{dmg} HP gets through.")
+                f"only −{dmg} HP gets through.{tail}")
     if guard and blocked > 0:
         return (f"{lead} for −{dmg} HP — your {guard} blunted "
-                f"{blocked} of it.")
+                f"{blocked} of it.{tail}")
     if guard:
-        return f"{lead} and finds a gap past your {guard}: −{dmg} HP."
-    return f"{lead} with nothing between you and its teeth: −{dmg} HP."
+        return f"{lead} and finds a gap past your {guard}: −{dmg} HP.{tail}"
+    return f"{lead} with nothing between you and its teeth: −{dmg} HP.{tail}"
 
 
 def _strike_text(p: dict, dmg: int) -> str:
@@ -627,34 +642,39 @@ def resolve_fight_action(p: dict, floor, option_id: str) -> Scene:
         # −50% while you cross the open ground. A bare "attack" from a
         # melee player at range IS the crossing — steel can't swing yet.
         e["range"] = "close"
+        snap = _wear(p, "shoes")       # 005: crossing spends shoe tread
         hit = _monster_hit(p, halved=True)
         if p["hp"] <= 0:
             return _death(p, floor)
         return fight_scene(p, floor, note=(
             "You cross the open ground fast and low. "
             + _counter_text(p, hit,
-                            lead=f"The {e['name']} meets you mid-stride")))
+                            lead=f"The {e['name']} meets you mid-stride")
+            + (f" {snap}" if snap else "")))
 
     if option_id == "open_distance" and _range_state(p) == "close":
         # §2.4: speed decides; on failure the monster gets a free
         # halved hit while you turn.
+        snap = _wear(p, "shoes")       # 005: the turn spends shoe tread
         if state.roll_ok(p, economy.p_open(economy.player_speed(p),
                                            _mspd(p))):
             e["range"] = "at_range"
             chase = _advance_chase(p)
             return fight_scene(p, floor, note=(
                 "You break contact and put ground between you. "
-                + chase))
+                + chase + (f" {snap}" if snap else "")))
         hit = _monster_hit(p, halved=True)
         if p["hp"] <= 0:
             return _death(p, floor)
         return fight_scene(p, floor, note=(
             "No gap opens — it stays with you. "
             + _counter_text(p, hit,
-                            lead=f"The {e['name']} punishes the turn")))
+                            lead=f"The {e['name']} punishes the turn")
+            + (f" {snap}" if snap else "")))
 
     if option_id == "run":
         # §2.4: the flat 60% is gone — speed decides the getaway.
+        snap = _wear(p, "shoes")       # 005: the sprint spends shoe tread
         if state.roll_ok(p, economy.p_flee(economy.player_speed(p),
                                            _mspd(p))):
             p["encounter"] = None
@@ -663,7 +683,8 @@ def resolve_fight_action(p: dict, floor, option_id: str) -> Scene:
                 eyebrow=_eyebrow(p, floor),
                 headline="You break away",
                 support="No shame the grass will remember.",
-                body_lines=["You put fence and dark between you and it."],
+                body_lines=(["You put fence and dark between you and it."]
+                            + ([snap] if snap else [])),
                 options=_after_fight_options(p, floor),
                 meters=meters(p))
         hit = _monster_hit(p)
@@ -673,7 +694,8 @@ def resolve_fight_action(p: dict, floor, option_id: str) -> Scene:
         return fight_scene(p, floor, note=(
             "It cuts off your line — no way out. "
             + _counter_text(p, hit, lead="It catches you turning")
-            + (f" {chase}" if chase else "")))
+            + (f" {chase}" if chase else "")
+            + (f" {snap}" if snap else "")))
 
     if option_id == "stand":
         hit = _monster_hit(p, halved=True)
@@ -685,10 +707,11 @@ def resolve_fight_action(p: dict, floor, option_id: str) -> Scene:
         held = ("Nothing gets through — guard held."
                 if hit["dmg"] <= 0 else
                 f"−{hit['dmg']} HP, guard held.")
+        broke = " " + " ".join(hit["broke"]) if hit.get("broke") else ""
         chase = _advance_chase(p)
         return fight_scene(
             p, floor,
-            note=f"{braced} {held}" + (f" {chase}" if chase else ""))
+            note=f"{braced} {held}{broke}" + (f" {chase}" if chase else ""))
 
     if option_id == "shield_wall" and p.get("clazz") == "warrior":
         # 017: the counter is a melee blow — it cannot reach a flyer,
@@ -740,6 +763,7 @@ def resolve_fight_action(p: dict, floor, option_id: str) -> Scene:
     if option_id == "treeline_shot" and p.get("clazz") == "archer" \
             and not e["shot_used"]:
         e["shot_used"] = True
+        snap = _wear(p, "weapon")      # 005: the long shot is an attack
         if _profile(p).get("armor") in ("med", "high"):
             # 017: Medium+ plate over the vitals — the long shot loses
             # its double (Low plate still leaves gaps for a marksman)
@@ -750,14 +774,16 @@ def resolve_fight_action(p: dict, floor, option_id: str) -> Scene:
             return fight_scene(p, floor, note=(
                 f"Your arrow snaps against its plate — {dmg} damage, "
                 "no clean gap for a killing shot."
-                + (f" {chase}" if chase else "")))
+                + (f" {chase}" if chase else "")
+                + (f" {snap}" if snap else "")))
         dmg = _player_hit(p, mult=2.0)
         if e["hp"] <= 0:
             return _victory(p, floor)
         chase = _advance_chase(p)
         return fight_scene(p, floor, note=(
             f"Your shot from cover takes it for {dmg} before it finds you."
-            + (f" {chase}" if chase else "")))
+            + (f" {chase}" if chase else "")
+            + (f" {snap}" if snap else "")))
 
     # default: attack
     # 004 §3.2: off-class hands — a bow burns bought arrows for anyone
@@ -772,23 +798,30 @@ def resolve_fight_action(p: dict, floor, option_id: str) -> Scene:
                 p["gear"]["weapon"] = economy.class_starter(
                     p.get("clazz") or "").slug
                 p["hone"]["weapon"] = 0
+                # 005: the bow keeps its wear in the pack; the basic
+                # weapon underneath never wears.
+                bow_dur = (p.get("durability") or {}).pop("weapon", None)
+                if bow_dur is not None:
+                    p.setdefault("durability_pack", {})[bow] = bow_dur
                 return fight_scene(p, floor, note=(
                     "Your quiver runs dry — the bow goes over your "
                     f"shoulder and your {weapon_name(p)} comes back "
                     "out. The Forge sells arrows by the pack."))
             p["inventory"]["arrows"] = arrows - 1
-        if state.roll_ok(p, economy.OFF_CLASS_MISS):
-            back = _monster_hit(p)
-            if p["hp"] <= 0:
-                return _death(p, floor)
-            chase = _advance_chase(p)
-            return fight_scene(p, floor, note=(
-                f"Not your weapon — your {weapon_name(p)} goes wide "
-                "of anything that matters. "
-                + _counter_text(p, back,
-                                lead=f"The {e['name']} makes you pay "
-                                     "for the fumble")
-                + (f" {chase}" if chase else "")))
+    snap = _wear(p, "weapon")          # 005: every swing spends the edge
+    if _off_class(p) and state.roll_ok(p, economy.OFF_CLASS_MISS):
+        back = _monster_hit(p)
+        if p["hp"] <= 0:
+            return _death(p, floor)
+        chase = _advance_chase(p)
+        return fight_scene(p, floor, note=(
+            f"Not your weapon — your {weapon_name(p)} goes wide "
+            "of anything that matters. "
+            + _counter_text(p, back,
+                            lead=f"The {e['name']} makes you pay "
+                                 "for the fumble")
+            + (f" {chase}" if chase else "")
+            + (f" {snap}" if snap else "")))
     dmg = _player_hit(p)
     if e["hp"] <= 0:
         return _victory(p, floor)
@@ -798,4 +831,5 @@ def resolve_fight_action(p: dict, floor, option_id: str) -> Scene:
     chase = _advance_chase(p)
     return fight_scene(p, floor, note=(
         f"{_strike_text(p, dmg)} {_counter_text(p, back)}"
-        + (f" {chase}" if chase else "")))
+        + (f" {chase}" if chase else "")
+        + (f" {snap}" if snap else "")))
