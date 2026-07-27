@@ -120,7 +120,7 @@ def test_grant_burn_and_cap():
 
 def test_guild_found_flow():
     p = playing(world={"social": True, "guilds": []})
-    p["gold"] = 600
+    p["gold"], p["level"] = 600, 4          # 015: founding takes rank
     core.apply_choice(p, "guildhall")
     core.apply_choice(p, "found_guild")
     assert p.get("founding_guild")

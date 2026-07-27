@@ -5,10 +5,14 @@ rendered by Luna's shell as a sidebar-section iframe. GAME reuses the exact
 card grammar (render.SCENE_CSS + render_scene_fragment served by
 /pane/scene and /act) so the pane is pixel-identical to the old chat cards;
 clicks call /act directly with the host token — no card bridge, no model in
-the path. SCORE is the full-world leaderboard; COMMUNITY is the faction
-NEWS BOARD (read-only): weekly winners, the wins ranking, the biggest /
-richest / highest-levelled banners. Joining, founding and managing a
-faction happens IN-GAME at the Guildhall in Roothollow.
+the path. SCORE is the full-world leaderboard. COMMUNITY (015) is the
+faction surface: the news board, THE LEDGER (top 10 + server-side search),
+and per-faction pages where names are clickable everywhere. Admins get the
+ADMIN DESK inline — rename, join requests (accept/reject), kick/promote,
+and the week's challenge paid from the coin vault. Founding still happens
+IN-GAME at the Guildhall (level 4+); joining files a request the admins
+settle at the desk. Everything is ANSI-block styled, monospace, in-pane —
+no popups.
 
 Auth: the shell posts {type:'luna-auth', token} into the iframe on load and
 whenever the session changes; the pane also answers 401s by asking again
@@ -91,6 +95,36 @@ select.ti{{background:{INK};color:{TEXT};border:1px solid {BORDER};
 .mrow{{display:grid;grid-template-columns:1fr 6ch 10ch auto;gap:1ch;
  padding:4px 0;border-bottom:1px dashed {BORDER};align-items:center;}}
 .mrow .r{{text-align:right;}}
+/* ── 015: the faction desk ── */
+.facname{{color:{TEXT};cursor:pointer;text-decoration:none;
+ border-bottom:1px dotted {DIM};}}
+.facname:hover{{color:{AETHER};border-bottom-color:{AETHER};}}
+.back{{display:inline-block;color:{DIM};cursor:pointer;margin-bottom:10px;
+ border:1px solid {BORDER};background:{PANEL};padding:5px 1.5ch;}}
+.back:hover{{color:{TEXT};border-color:{VIOLET};}}
+.findrow{{display:flex;gap:1ch;margin-bottom:8px;align-items:center;}}
+.findrow .k{{color:{FAINT};letter-spacing:.08em;}}
+.lrow{{display:grid;grid-template-columns:3ch 1fr 9ch 9ch;gap:1ch;
+ padding:4px 0;border-bottom:1px dashed {BORDER};align-items:baseline;
+ white-space:nowrap;overflow:hidden;}}
+.lrow .r{{text-align:right;}}
+.drow{{display:grid;grid-template-columns:1fr auto;gap:1ch;padding:5px 0;
+ border-bottom:1px dashed {BORDER};align-items:center;}}
+.drow .who .sub{{color:{FAINT};}}
+.rowbtns{{display:flex;gap:6px;}}
+.btn.mini{{padding:3px 1ch;font-size:12px;}}
+.btn.armed{{border-color:#f4645f;color:#f4645f;}}
+.tag{{color:{VIOLET_SOFT};}}
+.tag.founder{{color:#f5a524;}}
+.deskmsg{{color:{DIM};padding:6px 0 0;min-height:18px;}}
+.deskmsg.bad{{color:#f4645f;}}
+.deskmsg.good{{color:{AETHER};}}
+.deskbar{{border:1px solid {BORDER};border-left:3px solid {VIOLET};
+ background:{PANEL};color:{DIM};padding:9px 2ch;margin-top:10px;
+ cursor:pointer;letter-spacing:.06em;}}
+.deskbar:hover{{color:{TEXT};border-color:{VIOLET};}}
+.savebar{{display:flex;gap:6px;margin-top:6px;}}
+.savebar input{{flex:1;}}
 """
 
 # Plain string on purpose: real braces everywhere — no f-string doubling.
@@ -154,14 +188,16 @@ function paneFail(el, eyebrow, msg) {
 
 /* ── tabs ───────────────────────────────────────────────────────────── */
 const tabs = [...document.querySelectorAll('.tab')];
-tabs.forEach(t => t.addEventListener('click', () => {
-  tabs.forEach(x => x.classList.toggle('active', x === t));
+function switchTab(name) {
+  tabs.forEach(x => x.classList.toggle('active', x.dataset.tab === name));
   document.querySelectorAll('.pane').forEach(p =>
-    p.classList.toggle('active', p.id === t.dataset.tab));
-  if (t.dataset.tab === 'game') loadScene(true);
-  if (t.dataset.tab === 'score') loadScore();
-  if (t.dataset.tab === 'community') loadCommunity();
-}));
+    p.classList.toggle('active', p.id === name));
+  if (name === 'game') loadScene(true);
+  if (name === 'score') loadScore();
+  if (name === 'community') loadCommunity();
+}
+tabs.forEach(t => t.addEventListener('click',
+  () => switchTab(t.dataset.tab)));
 
 /* ── scene grammar FX: the mock's typewriter, scoped to the pane ────── */
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -203,6 +239,15 @@ const game = document.getElementById('game');
 function showScene(d) {
   sceneId = d.scene_id || '';
   game.innerHTML = d.fragment;
+  // 015: the Guildhall opens straight onto the faction desk
+  if ((d.fragment || '').indexOf('THE GUILDHALL') !== -1) {
+    const bar = document.createElement('div');
+    bar.className = 'deskbar';
+    bar.textContent = '\u25ba FACTION DESK \u2014 the ledger, requests '
+      + 'and admin live in COMMUNITY';
+    bar.addEventListener('click', () => switchTab('community'));
+    game.appendChild(bar);
+  }
   wireOptions();
   runFX(game);
 }
@@ -280,12 +325,27 @@ async function loadScore() {
   }
 }
 
-/* ── COMMUNITY: the faction news board (read-only) ──────────────────── */
+/* ── COMMUNITY: the board, THE LEDGER, faction pages + admin desk (015) */
 const community = document.getElementById('community');
+let comm = {view: 'board', name: '', q: ''};
+let deskBusy = false;
+
+const fac = name => '<span class="facname" data-fac="' + esc(name) + '">'
+  + esc(name) + '</span>';
+
 async function loadCommunity() {
   try {
-    const d = await call('/pane/community');
-    community.innerHTML = renderBoard(d);
+    if (comm.view === 'detail') {
+      const d = await call('/pane/faction/detail', {name: comm.name});
+      comm.name = d.name;                 // follows a rename
+      community.innerHTML = renderFaction(d);
+      return;
+    }
+    const [board, ledger] = await Promise.all([
+      call('/pane/community'),
+      call('/pane/factions?q=' + encodeURIComponent(comm.q))]);
+    community.innerHTML = renderLedger(ledger) + renderBoard(board);
+    wireFind();
   } catch (err) {
     if (err.message !== 'auth')
       paneFail(community, 'the faction board', err.message);
@@ -300,9 +360,213 @@ function chipRow(name, banners, right) {
   const slug = banners[name] || '';
   return '<div class="frow">'
     + (slug ? sig(slug) : '<div class="fbanner"></div>')
-    + '<div class="meta"><div>' + esc(name) + '</div></div>'
+    + '<div class="meta"><div>' + fac(name) + '</div></div>'
     + '<span class="dim">' + right + '</span></div>';
 }
+
+/* ── THE LEDGER: top 10 + server-side search ────────────────────────── */
+function ledgerRows(d) {
+  if (!d.factions.length)
+    return '<div class="faint">no banner answers to that name</div>';
+  return d.factions.map((f, i) =>
+    '<div class="lrow"><span class="faint">' + (i + 1) + '</span>'
+    + '<span>' + fac(f.name) + '</span>'
+    + '<span class="r dim">' + f.members + ' at table</span>'
+    + '<span class="r gold">\u25c8 ' + num(f.treasury) + '</span></div>'
+  ).join('');
+}
+
+function renderLedger(d) {
+  return '<div class="panel"><div class="eyebrow">the ledger \u2014 '
+    + num(d.total) + ' banner' + (d.total === 1 ? '' : 's')
+    + ' \u00b7 top 10 by table</div>'
+    + '<div class="findrow"><span class="k">FIND</span>'
+    + '<input id="find" class="ti" maxlength="24" '
+    + 'placeholder="a banner\u2019s name\u2026"></div>'
+    + '<div id="ledgerlist">' + ledgerRows(d) + '</div></div>';
+}
+
+function wireFind() {
+  const fi = community.querySelector('#find');
+  if (!fi) return;
+  fi.value = comm.q;
+  let t = 0;
+  fi.addEventListener('input', () => {
+    comm.q = fi.value;
+    clearTimeout(t);
+    t = setTimeout(async () => {
+      try {
+        const d = await call('/pane/factions?q='
+          + encodeURIComponent(comm.q));
+        const el = community.querySelector('#ledgerlist');
+        if (el) el.innerHTML = ledgerRows(d);
+      } catch (e) {}
+    }, 250);
+  });
+}
+
+/* ── the faction page + the admin desk ──────────────────────────────── */
+function memberRow(m, v) {
+  let tags = '';
+  if (m.founder) tags += ' <span class="tag founder">\u2605 FOUNDER</span>';
+  else if (m.role === 'steward') tags += ' <span class="tag">\u25c6 ADMIN</span>';
+  if (m.arrears) tags += ' <span class="dim">\u25b2 arrears</span>';
+  if (m.you) tags += ' <span class="faint">\u2190 you</span>';
+  let btns = '';
+  if (v.admin && !m.you) {
+    if (m.role !== 'steward')
+      btns += '<button class="btn mini" data-desk="promote" data-t="'
+        + esc(m.tenant) + '" data-p="' + esc(m.player)
+        + '">PROMOTE</button>';
+    if (m.role !== 'steward' || v.founder)
+      btns += '<button class="btn mini danger" data-desk="kick" data-t="'
+        + esc(m.tenant) + '" data-p="' + esc(m.player) + '">KICK</button>';
+  }
+  return '<div class="drow"><div class="who">' + esc(m.name)
+    + ' <span class="faint">L' + m.level + '</span>' + tags
+    + '<div class="sub">' + m.days + 'd at the table this week</div></div>'
+    + '<div class="rowbtns">' + btns + '</div></div>';
+}
+
+function requestRow(r) {
+  return '<div class="drow"><div class="who">' + esc(r.name || r.player)
+    + ' <span class="faint">L' + (r.level || 1) + '</span>'
+    + '<div class="sub">asked on day ' + (r.requested_day || 0) + '</div></div>'
+    + '<div class="rowbtns">'
+    + '<button class="btn mini" data-desk="approve" data-t="'
+    + esc(r.tenant) + '" data-p="' + esc(r.player) + '">ACCEPT</button>'
+    + '<button class="btn mini danger" data-desk="reject" data-t="'
+    + esc(r.tenant) + '" data-p="' + esc(r.player) + '">REJECT</button>'
+    + '</div></div>';
+}
+
+function renderFaction(d) {
+  const v = d.viewer || {};
+  let h = '<span class="back" id="back">\u25c0 THE BOARD</span>';
+  h += '<div class="panel">' + sig(d.banner, 'big')
+    + '<div class="eyebrow" style="margin-top:8px">' + esc(d.name)
+    + '</div>'
+    + '<div class="kv"><span class="k">founded by</span>'
+    + '<span><span class="tag founder">\u2605</span> ' + esc(d.founder)
+    + '</span></div>'
+    + '<div class="kv"><span class="k">at the table</span><span>'
+    + d.members.length + '</span></div>'
+    + '<div class="kv"><span class="k">coin vault</span>'
+    + '<span class="gold">\u25c8 ' + num(d.store) + '</span></div>'
+    + '<div class="kv"><span class="k">join fee</span><span>\u25c8 '
+    + num(d.join_fee) + '</span></div>'
+    + '<div class="kv"><span class="k">weekly dues</span><span>\u25c8 '
+    + num(d.dues) + '</span></div>'
+    + '<div class="kv"><span class="k">weeks won</span><span>' + d.wins
+    + '</span></div>';
+  // an outsider's call to action
+  if (!v.in_faction) {
+    h += v.requested
+      ? '<div class="deskmsg good">your request waits at their desk</div>'
+        + '<button class="btn" data-desk="withdraw">WITHDRAW THE '
+        + 'REQUEST</button>'
+      : '<button class="btn" data-desk="request" data-name="'
+        + esc(d.name) + '">ASK TO JOIN \u2014 \u25c8 ' + num(d.join_fee)
+        + ' if accepted</button>';
+  } else if (!v.member) {
+    h += '<div class="deskmsg">you sit at another table</div>';
+  }
+  h += '</div>';
+
+  h += '<div class="panel"><div class="eyebrow">the roster</div>'
+    + d.members.map(m => memberRow(m, v)).join('') + '</div>';
+
+  if (v.admin) {
+    const wk = d.week || {};
+    h += '<div class="panel"><div class="eyebrow">admin desk \u2014 '
+      + 'the banner</div>'
+      + '<div class="faint">rename flies new colors for everyone \u2014 '
+      + '3\u201324 letters</div>'
+      + '<div class="savebar"><input id="rn" class="ti" maxlength="24" '
+      + 'value="' + esc(d.name) + '">'
+      + '<button class="btn" data-desk="rename">SAVE</button></div>'
+      + '<div class="deskmsg" id="deskmsg"></div></div>';
+    h += '<div class="panel"><div class="eyebrow">admin desk \u2014 '
+      + 'requests</div>'
+      + ((d.requests || []).length
+         ? d.requests.map(requestRow).join('')
+         : '<div class="faint">no one waits at the desk</div>')
+      + '</div>';
+    h += '<div class="panel"><div class="eyebrow">admin desk \u2014 '
+      + 'the week\u2019s challenge</div>'
+      + '<div class="kv"><span class="k">the Ascent demands</span><span>'
+      + esc((KIND_LABEL[wk.kind] || wk.kind || '').toString())
+      + '</span></div>'
+      + '<div class="kv"><span class="k">entry, from the vault</span>'
+      + '<span class="gold">\u25c8 ' + num(wk.entry_cost) + '</span></div>'
+      + '<div class="kv"><span class="k">vault holds</span>'
+      + '<span class="gold">\u25c8 ' + num(d.store) + '</span></div>'
+      + (wk.entered
+         ? '<div class="deskmsg good">entered \u2014 everything the table '
+           + 'earns this week counts (target ' + num(wk.target) + ')</div>'
+         : '<button class="btn" data-desk="enter">ACCEPT THE CHALLENGE '
+           + '\u2014 PAY \u25c8 ' + num(wk.entry_cost)
+           + ' FROM THE VAULT</button>')
+      + '</div>';
+  }
+  return h;
+}
+
+/* ── desk actions: delegated, inline, no popups ─────────────────────── */
+function deskMsg(text, cls) {
+  const el = community.querySelector('#deskmsg');
+  if (el) { el.textContent = text; el.className = 'deskmsg ' + (cls || ''); }
+}
+
+community.addEventListener('click', async (e) => {
+  const back = e.target.closest('#back');
+  if (back) { comm.view = 'board'; comm.name = ''; loadCommunity(); return; }
+  const fname = e.target.closest('[data-fac]');
+  if (fname) {
+    comm.view = 'detail'; comm.name = fname.dataset.fac;
+    loadCommunity(); return;
+  }
+  const btn = e.target.closest('[data-desk]');
+  if (!btn || deskBusy) return;
+  const kind = btn.dataset.desk;
+  // destructive acts arm on first click — confirm inline, never a popup
+  if (kind === 'kick' && !btn.classList.contains('armed')) {
+    btn.classList.add('armed'); btn.textContent = 'SURE?';
+    setTimeout(() => {
+      if (btn.isConnected) { btn.classList.remove('armed');
+        btn.textContent = 'KICK'; }
+    }, 2600);
+    return;
+  }
+  deskBusy = true; btn.disabled = true;
+  try {
+    if (kind === 'request')
+      await call('/pane/faction/request', {name: btn.dataset.name});
+    else if (kind === 'withdraw')
+      await call('/pane/faction/cancel_request', {});
+    else if (kind === 'rename') {
+      const rn = community.querySelector('#rn');
+      const d = await call('/pane/faction/rename',
+        {name: (rn ? rn.value : '').trim()});
+      comm.name = d.name || comm.name;
+    } else if (kind === 'enter')
+      await call('/pane/faction/enter', {});
+    else
+      await call('/pane/faction/' + kind,
+        {tenant: btn.dataset.t, player: btn.dataset.p});
+    await loadCommunity();
+  } catch (err) {
+    btn.disabled = false;
+    if (err.message !== 'auth') {
+      deskMsg(err.message, 'bad');
+      if (!community.querySelector('#deskmsg')) {
+        const m = document.createElement('div');
+        m.className = 'deskmsg bad'; m.textContent = err.message;
+        btn.parentElement.appendChild(m);
+      }
+    }
+  } finally { deskBusy = false; }
+});
 
 function renderBoard(d) {
   const banners = d.banners || {};
@@ -321,7 +585,7 @@ function renderBoard(d) {
     h += '<div style="margin-top:8px">';
     d.last_week.forEach(wk => {
       h += '<div class="kv"><span' + (wk.won ? '' : ' class="k"') + '>'
-        + (wk.won ? '★ ' : '') + esc(wk.faction) + ' — '
+        + (wk.won ? '★ ' : '') + fac(wk.faction) + ' — '
         + esc(wk.goal_kind).toUpperCase() + '</span><span class="dim">'
         + esc(wk.prize_note || (num(wk.progress) + '/'
         + num(wk.goal_target))) + '</span></div>';
@@ -338,7 +602,7 @@ function renderBoard(d) {
   if (d.wins.length) {
     d.wins.forEach((w, i) => {
       h += '<div class="kv"><span' + (i ? ' class="k"' : '') + '>'
-        + (i === 0 ? '#1 ' : (i + 1) + '  ') + esc(w.faction)
+        + (i === 0 ? '#1 ' : (i + 1) + '  ') + fac(w.faction)
         + '</span><span>' + w.wins + ' win' + (w.wins === 1 ? '' : 's')
         + '</span></div>';
     });

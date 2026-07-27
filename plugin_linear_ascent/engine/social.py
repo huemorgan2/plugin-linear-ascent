@@ -251,6 +251,7 @@ def grant_action(p: dict, oid: str) -> Scene:
 # doc-string guilds with none of the purse mechanics.
 
 GUILD_FOUND_FEE = 500
+FOUND_MIN_LEVEL = 4        # 015: founding is a rank privilege
 JOIN_FEE_MAX = 500
 DUES_MIN, DUES_MAX = 1, 50
 
@@ -340,13 +341,21 @@ def _member_panel(p: dict, fac: dict, lines: list, opts: list) -> None:
                      f"{wk.get('target', 0):,} · entry "
                      f"◈ {wk.get('entry_cost', 0)} from the store")
     for m in fac.get("members", [])[:8]:
-        tag = " · steward" if m.get("role") == "steward" else ""
+        tag = ""
+        if m.get("founder"):
+            tag = " · ★ founder"
+        elif m.get("role") == "steward":
+            tag = " · admin"
         arr = " ▲ arrears" if m.get("arrears") else ""
         lines.append(f"{m.get('name', '?')}{tag} — "
                      f"{_pips(m.get('days', 0), m.get('required', 4))}"
                      f"{arr}")
     if fac.get("last_week"):
         lines.append(f"last week: {fac['last_week']}")
+    if fac.get("role") == "steward" and fac.get("pending_requests"):
+        n = int(fac["pending_requests"])
+        lines.append(f"▲ {n} request{'s' if n != 1 else ''} wait at the "
+                     "desk — the Community pane holds the ledger")
     opts.append(Option("donate", "Donate to the store", "carried ◈"))
     if fac.get("role") == "steward":
         if not wk.get("entered"):
@@ -360,15 +369,27 @@ def _member_panel(p: dict, fac: dict, lines: list, opts: list) -> None:
 
 
 def _hall_list(p: dict, factions: list, lines: list, opts: list) -> None:
+    """015: joining is a REQUEST an admin accepts; founding takes rank."""
+    requested = (world(p) or {}).get("faction_requested", "")
     if not factions:
         lines.append("No banners fly yet. Yours could be the first.")
     for f in factions[:5]:
         n = f.get("members", 0)
         lines.append(f"{f['name']} — {n} at the table")
-        opts.append(Option(f"join_{f['name']}", f"Join {f['name']}",
-                           f"join ◈ {f.get('join_fee', 0)} · dues "
-                           f"◈ {f.get('weekly_dues', 0)}/wk"))
-    if p["gold"] + p.get("bank", 0) >= GUILD_FOUND_FEE:
+        if f["name"] == requested:
+            lines.append("  your request waits at their desk")
+        else:
+            opts.append(Option(f"join_{f['name']}", f"Ask to join {f['name']}",
+                               f"join ◈ {f.get('join_fee', 0)} · dues "
+                               f"◈ {f.get('weekly_dues', 0)}/wk"))
+    if len(factions) > 5:
+        lines.append(f"…and {len(factions) - 5} more — the full ledger "
+                     "hangs in the Community pane")
+    if p["level"] < FOUND_MIN_LEVEL:
+        lines.append(f"The hall charters new banners for level "
+                     f"{FOUND_MIN_LEVEL}+ climbers — ◈ {GUILD_FOUND_FEE} "
+                     "when you get there.")
+    elif p["gold"] + p.get("bank", 0) >= GUILD_FOUND_FEE:
         opts.append(Option("found_guild", "Raise a new banner",
                            f"◈ {GUILD_FOUND_FEE}"))
     else:
@@ -520,6 +541,10 @@ def guildhall_action(p: dict, oid: str, text: str = "") -> Scene:
     if oid == "guild_train":
         return guild_train(p)
     if oid == "found_guild":
+        if p["level"] < FOUND_MIN_LEVEL:
+            return guildhall_scene(
+                p, note=f"The hall charters new banners for level "
+                        f"{FOUND_MIN_LEVEL}+ climbers. Train first.")
         if w.get("factions") is None:
             # local dev mode — legacy one-shot naming, no purse
             p["founding_guild"] = True
@@ -561,22 +586,20 @@ def guildhall_action(p: dict, oid: str, text: str = "") -> Scene:
     if oid.startswith("join_"):
         g = oid.removeprefix("join_")
         if w.get("factions") is not None:
+            # 015: joining is a request — no gold moves until an admin
+            # accepts it (the fee is charged at the desk, on accept)
             f = next((x for x in w["factions"] if x["name"] == g), None)
             if f is None:
                 return guildhall_scene(p, note="That banner came down "
                                                "while you read the wall.")
+            _effect(p, "faction_request", guild=g)
+            w["faction_requested"] = g
             fee = int(f.get("join_fee", 0))
-            if fee and not _take_gold(p, fee):
-                return guildhall_scene(
-                    p, note=f"The join fee is ◈ {fee} — you can't cover "
-                            "it, even with the bank.")
-            if fee:
-                _ledger(p, "faction_join", gold=-fee, note=g)
-            p["guild"] = g
-            _effect(p, "guild_join", guild=g)
+            fee_note = (f" — the ◈ {fee} join fee is charged if they "
+                        "take you" if fee else "")
             return guildhall_scene(
-                p, note=f"+ you sit under the {g} banner now"
-                        + (f" — ◈ {fee} to the store" if fee else ""))
+                p, note=f"+ your name goes to the {g} admins{fee_note}. "
+                        "Watch the Community desk.")
         p["guild"] = g
         _effect(p, "guild_join", guild=g)
         return guildhall_scene(p, note=f"+ you drink under the {g} banner now")

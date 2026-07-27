@@ -78,16 +78,20 @@ class WorldClient:
     async def leaderboard(self, luna_user: str) -> dict:
         return await self._post("/v1/leaderboard", {"player": luna_user})
 
-    async def faction_list(self, luna_user: str) -> dict:
-        return await self._post("/v1/faction/list", {"player": luna_user})
+    async def faction_list(self, luna_user: str, q: str = "") -> dict:
+        """The ledger: top 10 by members; q searches server-side (015)."""
+        return await self._post("/v1/faction/list",
+                                {"player": luna_user, "q": q})
 
     async def faction_status(self, luna_user: str) -> dict:
         return await self._post("/v1/faction/status", {"player": luna_user})
 
-    async def faction_create(self, luna_user: str, name: str,
-                             banner: str) -> dict:
+    async def faction_create(self, luna_user: str, name: str, banner: str,
+                             join_fee: int = 0,
+                             weekly_dues: int = 5) -> dict:
         return await self._post("/v1/faction/create", {
-            "player": luna_user, "name": name, "banner": banner})
+            "player": luna_user, "name": name, "banner": banner,
+            "join_fee": join_fee, "weekly_dues": weekly_dues})
 
     async def faction_join(self, luna_user: str, faction: str) -> dict:
         return await self._post("/v1/faction/join", {
@@ -112,3 +116,39 @@ class WorldClient:
     async def faction_board(self, luna_user: str) -> dict:
         """The COMMUNITY news board — read-only faction rankings + news."""
         return await self._post("/v1/faction/board", {"player": luna_user})
+
+    # ── 015: the faction desk ────────────────────────────────────────────
+
+    async def faction_detail(self, luna_user: str, name: str) -> dict:
+        return await self._post("/v1/faction/detail",
+                                {"player": luna_user, "name": name})
+
+    async def faction_request(self, luna_user: str, name: str) -> dict:
+        return await self._post("/v1/faction/request",
+                                {"player": luna_user, "name": name})
+
+    async def faction_cancel_request(self, luna_user: str) -> dict:
+        return await self._post("/v1/faction/cancel_request",
+                                {"player": luna_user})
+
+    async def faction_approve(self, luna_user: str, target_tenant: str,
+                              target_player: str) -> dict:
+        return await self._post("/v1/faction/approve", {
+            "player": luna_user, "target_tenant": target_tenant,
+            "target_player": target_player})
+
+    async def faction_reject(self, luna_user: str, target_tenant: str,
+                             target_player: str) -> dict:
+        return await self._post("/v1/faction/reject", {
+            "player": luna_user, "target_tenant": target_tenant,
+            "target_player": target_player})
+
+    async def faction_rename(self, luna_user: str, name: str) -> dict:
+        return await self._post("/v1/faction/rename",
+                                {"player": luna_user, "name": name})
+
+    async def faction_promote(self, luna_user: str, target_tenant: str,
+                              target_player: str) -> dict:
+        return await self._post("/v1/faction/promote", {
+            "player": luna_user, "target_tenant": target_tenant,
+            "target_player": target_player})
