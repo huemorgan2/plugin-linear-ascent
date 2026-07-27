@@ -24,6 +24,10 @@ stopgap gear.
 3. `engine/state.py`: doc v2 additions — `gear.shoes`, off-class arrow
    counts in inventory.
 4. `pane.py`: sheet shows shoes + speed; shop rows use 32×32 icons.
+   003 retro: build shop rows on a STRUCTURED payload (like
+   `scene.enemy`), not prose lines — cheaper to render and to test. If
+   a row needs expandable detail (stats, lore), use a styled
+   `<details>` like the dossier: zero JS, zero card-action plumbing.
 5. Vendor sync + deploy; version bump + publish.
 
 ## Tests / acceptance
@@ -41,6 +45,8 @@ stopgap gear.
   6→24 days-in-tier line with mid rungs included; off-class gear is
   never income-positive vs in-class (sim proves "stopgap not build").
 - Content lint unaffected (no numbers in content).
+- 003 retro: tests that assert on rendered HTML must dodge escaping —
+  `can't` renders `can&#x27;t`; assert apostrophe-free substrings.
 - Dojo: as archer — see the bow line (not blades), buy Cobbled Boots,
   see the locked next rung with its level; as warrior pre-L6 — see the
   locked Arcanum row in town.
