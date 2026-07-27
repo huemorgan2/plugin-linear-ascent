@@ -11,18 +11,27 @@ arrival: >-
 encounters:
   - id: lane_wolf
     name: Lane wolf
+    lore: >-
+      The sunken lanes bend sound. By the time you hear it, the lane
+      has already chosen which of you leaves.
     weight: 3
     prose: >-
       Claws on packed earth, behind you, closing. In the hollow lane
       there is no room to circle — the wolf knows it too.
   - id: hedge_goblin
     name: Hedge-blind goblin
+    lore: >-
+      It cut shooting-slots in the hedge banks. It knows every one;
+      you'll find them with your ribs.
     weight: 3
     prose: >-
       A goblin bursts through the hedge wall in a shower of thorn,
       scrap-rifle first, as surprised as you are and quicker to shoot.
   - id: lane_boar
     name: Lane bull-boar
+    lore: >-
+      Wall to wall in a sunken lane there is no around it — only
+      through. It knows that too, and stands.
     weight: 2
     traits: [bulwark, slow]
     prose: >-
@@ -31,6 +40,9 @@ encounters:
       ever sent at it. Slow, vast, and very hard to whittle down.
   - id: bank_marten
     name: Bank marten
+    lore: >-
+      It dens in the lane banks and takes what climbers drop. Quick
+      teeth, quicker exits.
     weight: 2
     prose: >-
       A marten the length of your arm flows down the hedge bank like

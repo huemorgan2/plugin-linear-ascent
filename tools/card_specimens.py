@@ -20,6 +20,8 @@ OUT = "/tmp/ascent-cards.html"
 def player():
     p = state.new_player("specimen")
     core.current_scene(p)
+    while p.get("stage") == "intro":     # 016: the intro movie beats
+        core.apply_choice(p, "1")
     core.apply_choice(p, "elf")
     core.apply_choice(p, "sorcerer")
     core.apply_choice(p, "", "Vael")
@@ -52,6 +54,23 @@ def main() -> None:
     from plugin_linear_ascent.engine import combat
     s = combat.resolve_fight_action(p, schema.get_floor(1), "attack")
     cards.append(("victory / loot", render_scene(s)))
+    # 017/003: dossier specimens — the [i] card on an armored, a flying
+    # and a fast monster, rendered open (details open attr injected) so
+    # the sheet is read at a glance without a click.
+    from plugin_linear_ascent.content import schema as _schema
+    from plugin_linear_ascent.engine import combat as _combat
+    for floor_no, enc_id, label in ((10, "kings_guard", "armored"),
+                                    (4, "glare_moth", "flying"),
+                                    (5, "downs_courser", "fast")):
+        p3 = player()
+        p3["level"] = floor_no
+        p3["unlocked_floor"] = floor_no
+        fl = _schema.get_floor(floor_no)
+        enc = next(e for e in fl.encounters if e.id == enc_id)
+        s = _combat.start_encounter(p3, fl, enc)
+        html = render_scene(s).replace("<details class=\"dx\">",
+                                       "<details class=\"dx\" open>")
+        cards.append((f"dossier open — {label} ({enc_id})", html))
     # death card
     p2 = player()
     p2["daily"]["death_save"] = True

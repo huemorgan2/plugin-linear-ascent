@@ -208,9 +208,12 @@ def test_sleep_refused_by_high_spellguard_costs_nothing():
 
 
 def test_opener_names_the_profile():
+    # 003: the profile moved off the body and into scene.enemy — the
+    # fight header + [i] dossier render it, and the text fallback keeps
+    # naming it for card-less hosts.
     _, _, opener = _fight("warrior", 10, "kings_guard")
-    joined = " ".join(opener.body_lines).lower()
-    assert "plate medium" in joined
+    assert "plate Medium" in (opener.enemy or {}).get("tiers", [])
+    assert "plate medium" in opener.to_text().lower()
 
 
 def test_scan_includes_the_profile():

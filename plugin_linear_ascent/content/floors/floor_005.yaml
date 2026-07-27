@@ -11,24 +11,36 @@ arrival: >-
 encounters:
   - id: downs_boar
     name: Downs boar
+    lore: >-
+      Downland turf made it heavy; downhill charges made it
+      confident. It is usually right.
     weight: 3
     prose: >-
       A boar with a broken spear-shaft healed into its shoulder crests
       the down and comes straight on, remembering the spear.
   - id: goblin_drover
     name: Goblin drover
+    lore: >-
+      It herded the stolen flocks up-tower. The crook doubles as a
+      hook for climbers' ankles.
     weight: 3
     prose: >-
       A goblin drover cracks a wire whip, driving two leashed wolves
       ahead of it like dogs. It looses the leashes when it sees you.
   - id: shed_raider
     name: Shed raider
+    lore: >-
+      It strips shearing sheds of iron and wool alike. The shears it
+      carries were not made as a weapon. It doesn't care.
     weight: 2
     prose: >-
       From the shearing shed a goblin emerges wearing an entire fleece,
       scrap-rifle poking out of the wool. It bleats, then fires.
   - id: downs_courser
     name: Downs courser
+    lore: >-
+      Bred from hounds to run down deserters. Open ground is its
+      answer to everything, and here it is all open ground.
     weight: 2
     traits: [fast]
     prose: >-

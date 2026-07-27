@@ -11,24 +11,36 @@ arrival: >-
 encounters:
   - id: ash_goblin
     name: Ash-crew goblin
+    lore: >-
+      It rakes the burn-lines for anything metal. The rake is taller
+      than it is and sharpened on both edges.
     weight: 3
     prose: >-
       A goblin in a mask of soot and bottle glass straightens from its
       rake. It taps the rake twice on the ground — a signal, or a threat.
   - id: cinder_wolf
     name: Cinder wolf
+    lore: >-
+      Its coat is singed to wire. It drives prey toward the hot
+      ground and waits at the cool edge.
     weight: 3
     prose: >-
       A wolf the color of the burnt field rises from where it was
       invisible, ash sliding from its back like grey snow.
   - id: charred_boar
     name: Char-tusk boar
+    lore: >-
+      It survived the burn that took the floor. What's left doesn't
+      feel much, and remembers the fire's side.
     weight: 2
     prose: >-
       A boar blackened from rooting in the burn charges through its own
       dust cloud, tusks scorched to points.
   - id: ember_shade
     name: Ember shade
+    lore: >-
+      Heat-ghost off the cinder beds. Spellwork feeds it a little
+      before it bites.
     weight: 2
     traits: [resist_low]
     prose: >-

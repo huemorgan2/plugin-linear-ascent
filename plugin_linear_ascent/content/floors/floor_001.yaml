@@ -11,18 +11,27 @@ arrival: >-
 encounters:
   - id: grey_wolf
     name: Grey wolf
+    lore: >-
+      Farm dogs once kept them past the fences. The dogs are gone; the
+      wolves remember the gap in the third hedge.
     weight: 3
     prose: >-
       A grey wolf slides out of the hedgerow, ribs showing under a dull
       coat. It has learned that climbers carry meat.
   - id: feral_boar
     name: Feral boar
+    lore: >-
+      Sty stock gone wild in two generations. It charges first and
+      decides why later.
     weight: 3
     prose: >-
       A boar the size of a cart tears up the turf between you and the
       path, tusks yellowed and one ear ragged from old fights.
   - id: goblin_straggler
     name: Goblin straggler
+    lore: >-
+      Left behind when the war-band moved up. Too proud to drop the
+      sword, too small to lift it right.
     weight: 2
     prose: >-
       A lone goblin in a stitched rag-coat drags a notched longsword
@@ -30,6 +39,9 @@ encounters:
       its feet behind the sword anyway, and grins.
   - id: hedge_rat
     name: Hedgerow rat
+    lore: >-
+      Granary doors stood open the night the farms fell. What ate its
+      fill in the dark kept growing.
     weight: 2
     prose: >-
       Something the size of a dog bursts from the fencerow in a spray

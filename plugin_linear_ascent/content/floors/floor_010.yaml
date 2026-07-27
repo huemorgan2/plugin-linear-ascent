@@ -11,6 +11,9 @@ arrival: >-
 encounters:
   - id: kings_guard
     name: Goblin king's guard
+    lore: >-
+      Gnarl armors his own in tower-scrap, plate over plate. Under it
+      beats a heart loyal past sense.
     weight: 3
     traits: [armor_med]
     prose: >-
@@ -19,18 +22,27 @@ encounters:
       arrows lie snapped in the gravel where its plate turned them.
   - id: banner_wolf
     name: Banner-broken wolf
+    lore: >-
+      It carried the king's standard until the standard burned. It
+      fights like it still owes the debt.
     weight: 2
     prose: >-
       A wolf on a chain guards the crate-wall, banner-cloth knotted at
       its collar. It has stopped fighting the chain. It waits for you.
   - id: drill_sergeant
     name: Goblin drill sergeant
+    lore: >-
+      It taught a thousand goblins where to put a spear. It has no
+      plans to be out-taught by you.
     weight: 3
     prose: >-
       A goblin sergeant halts its squad's drill, hands you one long
       look, and sends the recruits to lunch. This one it keeps.
   - id: kings_courier
     name: King's courier
+    lore: >-
+      It runs the king's word between camps and has never once been
+      caught. It would rather die than be late.
     weight: 2
     traits: [fast]
     prose: >-

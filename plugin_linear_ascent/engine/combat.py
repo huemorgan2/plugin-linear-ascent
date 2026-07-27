@@ -133,12 +133,6 @@ def _mspd(p: dict) -> int:
     return _profile(p).get("speed", economy.SPEED_NORMAL)
 
 
-def _range_line(p: dict) -> str:
-    if _range_state(p) == "at_range":
-        return "◇ at range — it hasn't reached you yet"
-    return "◇ close quarters — it is on top of you"
-
-
 def _advance_chase(p: dict) -> str:
     """End of an at-range round: the monster tries to close the gap
     (§2.4 p_close). Returns the line that tells the player what moved."""
@@ -151,9 +145,9 @@ def _advance_chase(p: dict) -> str:
     return f"The {e['name']} comes on across open ground."
 
 
-def _profile_line(prof: dict) -> str:
-    """One compact readable line — the [i] card (003) will do it justice;
-    until then the opener itself must say what the player is facing."""
+def _profile_tiers(prof: dict) -> list[str]:
+    """The profile as named tiers — the [i] dossier's rows and the text
+    fallback's compact line share this list."""
     bits = []
     if prof.get("armor", "none") != "none":
         bits.append(f"plate {economy.TIER_LABEL[prof['armor']]}")
@@ -167,7 +161,43 @@ def _profile_line(prof: dict) -> str:
         bits.append("fast")
     elif prof.get("speed", economy.SPEED_NORMAL) <= economy.SPEED_SLOW:
         bits.append("slow")
-    return " · ".join(bits)
+    return bits
+
+
+def _profile_line(prof: dict) -> str:
+    return " · ".join(_profile_tiers(prof))
+
+
+def _lore(e: dict, floor) -> str:
+    """003: the dossier's flavor line, from content by encounter id."""
+    slug = e.get("id", "")
+    for enc in getattr(floor, "encounters", ()):
+        if enc.id == slug:
+            return getattr(enc, "lore", "") or ""
+    return ""
+
+
+def _enemy_payload(p: dict, floor) -> dict:
+    """003: everything the [i] card and the fight header need, in one
+    dict on the Scene — the renderer never reads the player doc."""
+    e = p["encounter"]
+    prof = _profile(p)
+    pspd = economy.player_speed(p)
+    return {
+        "name": e["name"],
+        "hp": max(0, e["hp"]), "hp_max": e["hp_max"],
+        "atk": e["atk"], "def": e["def"],
+        "profile": prof,
+        "tiers": _profile_tiers(prof),
+        "range": e.get("range", ""),
+        "lore": _lore(e, floor),
+        "specimen": e.get("specimen", ""),
+        "pspd": pspd,
+        "mspd": prof.get("speed", economy.SPEED_NORMAL),
+        "dtype": _damage_type(p),
+        "dodge": economy.dodge_pct(pspd,
+                                   prof.get("speed", economy.SPEED_NORMAL)),
+    }
 
 
 def _shard_advice(p: dict, floor) -> str:
@@ -225,13 +255,10 @@ def fight_scene(p: dict, floor, opener: bool = False, note: str = "") -> Scene:
 
     body = [e["prose"]] if opener else []
     if opener:
-        # 017: the defense profile, named on sight — the counter system
-        # is invisible noise unless the enemy's sheet is readable.
-        pline = _profile_line(_profile(p))
-        if pline:
-            body.append(f"◈ {pline}")
         # 013: your own numbers, spelled out — armor was invisible and
         # players couldn't tell WHY hits landed for 0.
+        # (003: the enemy's profile moved off the body and into the
+        # fight header + [i] dossier — scene.enemy carries it.)
         guard = guard_name(p)
         body.append(
             f"You — ATK {state.atk(p)} with your {weapon_name(p)}, "
@@ -239,14 +266,11 @@ def fight_scene(p: dict, floor, opener: bool = False, note: str = "") -> Scene:
             + (f"behind your {guard}." if guard else "on reflex alone."))
     if note:
         body.append(note)
-    if "range" in e:
-        # §2.4: the range state is named on every scene — the chase is a
-        # rule the player plays, not a hidden roll.
-        body.append(_range_line(p))
     return Scene(
         eyebrow=_eyebrow(p, floor),
-        headline=f"{e['name']} — ATK {e['atk']} / DEF {e['def']}"
-                 + (f" / HP {e['hp']}/{e['hp_max']}" if not opener else ""),
+        # 003: the headline keeps ATK/DEF; HP lives in the always-on
+        # enemy bar (scene.enemy) from round one.
+        headline=f"{e['name']} — ATK {e['atk']} / DEF {e['def']}",
         support="It is between you and the way forward.",
         shard_note=_shard_advice(p, floor) if opener else "",
         body_lines=body,
@@ -257,6 +281,7 @@ def fight_scene(p: dict, floor, opener: bool = False, note: str = "") -> Scene:
                         if e["kind"] == "wilds"
                         and e.get("specimen") != "common" else ""),
         event_kind="boss" if e["kind"] == "warden" else "",
+        enemy=_enemy_payload(p, floor),
     )
 
 
@@ -539,12 +564,24 @@ def resolve_fight_action(p: dict, floor, option_id: str) -> Scene:
                 f"The shard needs {economy.scan_xp_cost(floor.floor)} XP of "
                 "what you've learned — you haven't learned enough yet."))
         pline = _profile_line(_profile(p))
+        # 003: the scan's edge over the free dossier — exact numbers
+        # plus the monster's NEXT INTENT, odds named.
+        intent = ""
+        if _range_state(p) == "at_range":
+            pc = round(100 * economy.p_close(_mspd(p),
+                                             economy.player_speed(p)))
+            intent = (f" It will try to close this round — "
+                      f"{pc}% it makes it.")
+        elif _profile(p).get("speed",
+                             economy.SPEED_NORMAL) >= economy.SPEED_FAST:
+            intent = " It is faster than you — it will stay on you."
         return fight_scene(
             p, floor,
             note=f"◆ scan: {e['name']} — ATK {e['atk']} / DEF {e['def']} / "
                  f"HP {e['hp']}/{e['hp_max']}"
                  + (f" · {pline}" if pline else "")
-                 + f". Your ATK {state.atk(p)} / DEF {state.dfs(p)}.")
+                 + f". Your ATK {state.atk(p)} / DEF {state.dfs(p)}."
+                 + intent)
 
     if option_id == "drink_tonic":
         p["inventory"]["trollblood_tonic"] -= 1

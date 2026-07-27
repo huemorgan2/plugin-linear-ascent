@@ -18,6 +18,7 @@ from .. import economy
 FLOORS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "floors")
 
 PROSE_CAP = 260
+LORE_CAP = 160          # 003: the [i] dossier's flavor line — one breath
 BANNED_WORDS = (
     "plugin", "tool", "llm", "ai model", "database", "server", "api",
     "click", "button", "json", "yaml",
@@ -62,6 +63,7 @@ class Encounter:
     prose: str
     weight: int
     traits: tuple[str, ...] = ()
+    lore: str = ""      # 003: dossier flavor — optional, ≤ LORE_CAP
 
 
 @dataclass(frozen=True)
@@ -134,9 +136,15 @@ def _load_floor_file(path: str) -> Floor:
                     f"{where}/{e['id']}: trait {t!r} before its intro "
                     f"floor {intro} (017 staircase)")
         _check_prose(e["prose"], f"{where}/{e['id']}")
+        lore = str(e.get("lore") or "").strip()
+        if lore:
+            if len(lore) > LORE_CAP:
+                raise ContentError(
+                    f"{where}/{e['id']}: lore over {LORE_CAP} chars")
+            _check_prose(lore, f"{where}/{e['id']}/lore")
         encounters.append(Encounter(
             id=e["id"], name=e["name"], prose=e["prose"],
-            weight=int(e.get("weight", 1)), traits=traits))
+            weight=int(e.get("weight", 1)), traits=traits, lore=lore))
     if not encounters:
         raise ContentError(f"{where}: no encounters")
     _check_prose(raw["arrival"], f"{where}/arrival")

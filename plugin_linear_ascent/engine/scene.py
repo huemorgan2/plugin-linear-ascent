@@ -53,6 +53,12 @@ class Scene:
                                     # every playing scene. Entries:
                                     # {slug, name, count, kind, equipped?}
                                     # kind ∈ weapon|shield|armor|item
+    enemy: dict | None = None       # 017/003: the fight dossier payload —
+                                    # {name, hp, hp_max, atk, def, profile,
+                                    #  range, lore, specimen, pspd, dtype,
+                                    #  dodge}. The renderer draws the enemy
+                                    #  HP bar, range chip and [i] card from
+                                    #  this; content stays markup-free.
 
     def to_text(self) -> str:
         """Plain-text fallback — always works, cards are enhancement."""
@@ -62,6 +68,15 @@ class Scene:
         if self.awaits_text:
             lines.append(f"⌨ waiting for a typed chat reply: "
                          f"{self.awaits_text}")
+        if self.enemy:
+            en = self.enemy
+            lines.append(f"{en['name']} HP {en['hp']}/{en['hp_max']}")
+            if en.get("tiers"):
+                lines.append("◈ " + " · ".join(en["tiers"]))
+            if en.get("range") == "at_range":
+                lines.append("◇ at range — it hasn't reached you yet")
+            elif en.get("range") == "close":
+                lines.append("◇ close quarters — it is on top of you")
         if self.shard_note:
             lines.append(f"◆ {self.shard_note}")
         lines += self.body_lines
@@ -95,6 +110,7 @@ class Scene:
             "scene_id": self.scene_id,
             "awaits_text": self.awaits_text,
             "inventory": self.inventory,
+            "enemy": self.enemy,
         }
 
     @staticmethod
@@ -121,4 +137,5 @@ class Scene:
             scene_id=d.get("scene_id", ""),
             awaits_text=d.get("awaits_text", ""),
             inventory=list(d.get("inventory", [])),
+            enemy=(dict(d["enemy"]) if d.get("enemy") else None),
         )
