@@ -48,6 +48,11 @@ class Scene:
                                     # chat, e.g. "the banner's name" — the
                                     # sidekick forwards the player's next
                                     # message as ascent_choose text
+    inventory: list[dict] = field(default_factory=list)
+                                    # 014: the pack strip — stamped by core on
+                                    # every playing scene. Entries:
+                                    # {slug, name, count, kind, equipped?}
+                                    # kind ∈ weapon|shield|armor|item
 
     def to_text(self) -> str:
         """Plain-text fallback — always works, cards are enhancement."""
@@ -89,6 +94,7 @@ class Scene:
             "fx": self.fx,
             "scene_id": self.scene_id,
             "awaits_text": self.awaits_text,
+            "inventory": self.inventory,
         }
 
     @staticmethod
@@ -114,4 +120,5 @@ class Scene:
             fx=d.get("fx", ""),
             scene_id=d.get("scene_id", ""),
             awaits_text=d.get("awaits_text", ""),
+            inventory=list(d.get("inventory", [])),
         )

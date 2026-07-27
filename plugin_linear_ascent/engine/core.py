@@ -20,9 +20,45 @@ from .scene import Meters, Option, Scene
 def _stamp(p: dict, scene: Scene) -> Scene:
     """scene_id = the act counter. Every choice bumps it, reads reuse it —
     /pane/peek compares ids, so a chat-driven act refreshes the pane
-    while idempotent reads never do."""
+    while idempotent reads never do. 014: the pack strip rides every
+    playing scene the same way."""
     scene.scene_id = f"s{p.get('act_seq', 0)}"
+    scene.inventory = _pack_strip(p)
     return scene
+
+
+def _pack_strip(p: dict) -> list[dict]:
+    """014: what the player carries — equipped gear first (hone level in
+    the name), then pack items. Rendered under the meters as 1-bit
+    icons; empty before the character exists."""
+    if p.get("stage") != "playing":
+        return []
+    strip: list[dict] = []
+    for slot in ("weapon", "shield", "armor"):
+        slug = (p.get("gear") or {}).get(slot)
+        g = economy.FORGE.get(slug) if slug else None
+        if not g:
+            continue
+        hone = (p.get("hone") or {}).get(slot, 0)
+        strip.append({"slug": slug, "kind": slot, "count": 1,
+                      "equipped": True,
+                      "name": g.name + (f" +{hone}" if hone else "")})
+    pack = p.get("inventory") or {}
+    order = sorted(pack.items(),
+                   key=lambda kv: (kv[0] not in economy.APOTHECARY, kv[0]))
+    for slug, count in order:
+        if count <= 0:
+            continue
+        if slug in economy.APOTHECARY:
+            name, kind = economy.APOTHECARY[slug].name, "item"
+        elif slug in economy.FORGE:
+            g = economy.FORGE[slug]
+            name, kind = g.name, g.slot
+        else:
+            name, kind = slug.replace("_", " "), "item"
+        strip.append({"slug": slug, "kind": kind, "count": int(count),
+                      "name": name})
+    return strip
 
 
 def current_scene(p: dict) -> Scene:
@@ -884,6 +920,15 @@ def _gate_town_options(p: dict, fl) -> list[Option]:
         opts.append(Option("stew", "Hunter's stew",
                            f"◈ {economy.STEW_PRICE} · +{economy.STEW_HEAL_HP} HP"))
         opts.append(Option("heal", "The healer's tent", f"◈ {heal_price}"))
+        # 014: the pack heals finally have a mouth — usable at the camp
+        # fire (the tonic stays the only MID-fight heal, per 013).
+        for slug in ("medgel", "trauma_kit"):
+            have = p["inventory"].get(slug, 0)
+            if have:
+                item = economy.APOTHECARY[slug]
+                amount = int(item.effect.rsplit("_", 1)[1])
+                opts.append(Option(f"use_{slug}", f"Use a {item.name}",
+                                   f"+{amount} HP · {have} left"))
     opts.append(Option("keep", f"The Warden's keep — {fl.warden_name}", "3 ⚡"))
     opts.append(Option("town", "Return to Roothollow"))
     return opts
@@ -927,6 +972,27 @@ def _gate_town_action(p: dict, oid: str) -> Scene:
         return s
     if oid == "stew":
         return _eat_stew(p, _gate_town_scene)
+    if oid.startswith("use_"):
+        slug = oid.removeprefix("use_")
+        item = economy.APOTHECARY.get(slug)
+        if not (item and item.effect.startswith("heal_")
+                and p["inventory"].get(slug, 0) > 0):
+            return _gate_town_scene(p)
+        if p["hp"] >= state.max_hp(p):
+            s = _gate_town_scene(p)
+            s.shard_note = "You're whole. Keep it sealed for when you're not."
+            return s
+        p["inventory"][slug] -= 1
+        if p["inventory"][slug] <= 0:
+            del p["inventory"][slug]
+        amount = int(item.effect.rsplit("_", 1)[1])
+        before = p["hp"]
+        p["hp"] = min(state.max_hp(p), p["hp"] + amount)
+        combat._ledger(p, "use", note=slug)
+        s = _gate_town_scene(p)
+        s.body_lines.insert(0, f"+ {p['hp'] - before} HP — the "
+                               f"{item.name.lower()} does its work.")
+        return s
     if oid == "keep":
         w = p.get("_world") or {}
         # milestone keeps run the quorum flow in the shared world

@@ -16,6 +16,8 @@ import html
 import os
 from functools import lru_cache
 
+from . import icons
+from .engine import tips
 from .engine.scene import Meters, Scene
 
 # ── tokens (design/chat_components.html) ─────────────────────────────────
@@ -119,6 +121,8 @@ def _blocks(cur: int, cap: int, cells: int = 10) -> str:
 
 
 # Hover tooltips — the rail is the HUD, so each meter explains itself.
+# 014: data-tip + the shared instant tipbox (was native title= — the
+# browser's 500ms+ delay made them undiscoverable).
 _TIP_HP = ("HP — health. At 0 you die: all carried gold is lost and armor "
            "and shield break. Heal at the healer's tent or the Apothecary.")
 _TIP_EN = ("⚡ Energy — actions spend it: wilds hunt 1, Warden attempt 3, "
@@ -137,22 +141,50 @@ def _meters_html(m: Meters) -> str:
     low = " low" if m.hp * 10 <= m.hp_max * 3 else ""
     return (
         f'<div class="rail later">'
-        f'<span class="meter hp{low}" title="{_e(_TIP_HP)}">'
+        f'<span class="meter hp{low}" data-tip="{_e(_TIP_HP)}">'
         f"<span>HP {m.hp}/{m.hp_max}</span>"
         f'<span class="blocks" aria-hidden="true">'
         f"{_blocks(m.hp, m.hp_max)}</span></span>"
-        f'<span class="meter en" title="{_e(_TIP_EN)}">'
+        f'<span class="meter en" data-tip="{_e(_TIP_EN)}">'
         f"<span>⚡ {m.energy}/{m.energy_max}</span>"
         f'<span class="blocks" aria-hidden="true">'
         f"{_blocks(m.energy, m.energy_max)}</span></span>"
-        f'<span class="meter ae" title="{_e(_TIP_XP)}">'
+        f'<span class="meter ae" data-tip="{_e(_TIP_XP)}">'
         f"<span>XP {m.xp:,}/{m.xp_need:,}</span>"
         f'<span class="blocks" aria-hidden="true">'
         f"{_blocks(m.xp, m.xp_need)}</span></span>"
         f'<span class="gold">'
-        f'<span class="lvl" title="{_e(_TIP_LV)}">LV {m.level}</span>'
-        f'<span title="{_e(_TIP_GOLD)}">◈ {m.gold:,}</span></span>'
+        f'<span class="lvl" data-tip="{_e(_TIP_LV)}">LV {m.level}</span>'
+        f'<span data-tip="{_e(_TIP_GOLD)}">◈ {m.gold:,}</span></span>'
         f"</div>")
+
+
+def _inventory_html(scene: Scene) -> str:
+    """014: the pack strip — 32×32 single-color 1-bit icons under the
+    rail. Equipped gear reads bright, pack items dim; every cell
+    explains itself through the instant tipbox."""
+    if not scene.inventory:
+        return ""
+    cells = []
+    for it in scene.inventory:
+        slug = it.get("slug", "")
+        equipped = bool(it.get("equipped"))
+        url = icons.icon_data_url(icons.icon_key(slug, it.get("kind", "")))
+        tint = TEXT if equipped else DIM
+        count = int(it.get("count", 1))
+        ct = (f'<span class="ct">×{count}</span>'
+              if count > 1 and not equipped else "")
+        tip = tips.item_tip(slug, equipped=equipped)
+        cells.append(
+            f'<span class="item{" eq" if equipped else ""}" tabindex="0" '
+            f'data-tip="{_e(tip)}">'
+            f'<span class="picon" style="background-color:{tint};'
+            f"-webkit-mask-image:url('{url}');mask-image:url('{url}');\">"
+            f"</span>"
+            f'<span class="pname">{_e(it.get("name", slug))}{ct}</span>'
+            f"</span>")
+    return (f'<div class="inv later"><span class="invlbl">pack</span>'
+            f'{"".join(cells)}</div>')
 
 
 # The card's script, three blocks in one tag:
@@ -168,6 +200,42 @@ def _meters_html(m: Meters) -> str:
 #     after a timeout and the player types a number — cards stay
 #     enhancement, never a gate.
 _ACT_PATH = "/api/p/plugin-linear-ascent/act"
+
+# 014: the instant tipbox — one fixed element, delegated wiring (survives
+# the pane's fragment swaps), zero delay. Shared verbatim by the chat
+# card script below and the pane document (pane.py embeds TIP_JS).
+TIP_JS = """(function () {
+  if (document.getElementById('tipbox')) return;
+  var box = document.createElement('div');
+  box.id = 'tipbox';
+  document.body.appendChild(box);
+  var cur = null;
+  function show(el) {
+    cur = el;
+    box.textContent = el.getAttribute('data-tip') || '';
+    if (!box.textContent) return hide();
+    box.style.display = 'block';
+    var r = el.getBoundingClientRect();
+    box.style.maxWidth = Math.min(340, innerWidth - 16) + 'px';
+    var x = Math.max(8, Math.min(r.left, innerWidth - box.offsetWidth - 8));
+    var y = r.top - box.offsetHeight - 6;
+    if (y < 4) y = Math.min(r.bottom + 6, innerHeight - box.offsetHeight - 4);
+    box.style.left = x + 'px';
+    box.style.top = Math.max(4, y) + 'px';
+  }
+  function hide() { cur = null; box.style.display = 'none'; }
+  document.addEventListener('mouseover', function (e) {
+    var t = e.target.closest ? e.target.closest('[data-tip]') : null;
+    if (t && t !== cur) show(t);
+    else if (!t && cur) hide();
+  });
+  document.addEventListener('focusin', function (e) {
+    var t = e.target.closest ? e.target.closest('[data-tip]') : null;
+    if (t) show(t);
+  });
+  document.addEventListener('focusout', hide);
+  window.addEventListener('scroll', hide, true);
+})();"""
 
 _SCRIPT = """<script>(()=>{
 if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
@@ -239,7 +307,9 @@ let d=0;for(const el of later){setTimeout(()=>el.classList.add('shown'),d);d+=90
       body: {option: b.dataset.opt,
              scene_id: document.body.dataset.scene || ''}}, '*');
   }); });
-})();</script>""".replace("__ACT__", _ACT_PATH)
+})();
+__TIP_JS__</script>""".replace("__ACT__", _ACT_PATH) \
+                      .replace("__TIP_JS__", TIP_JS)
 
 
 def render_scene_fragment(scene: Scene) -> str:
@@ -291,16 +361,22 @@ def render_scene_fragment(scene: Scene) -> str:
             key_cls = " aether" if o.aether else ""
             hint = (f'<span class="hint">{_e(o.hint)}</span>'
                     if o.hint else "")
-            rows.append(
-                f'<button type="button" class="opt" data-opt="{_e(o.id)}">'
-                f'<span class="key{key_cls}">{i}</span>'
-                f'<span class="lbl">{_e(o.label)}</span>{hint}</button>')
+            btn = (f'<button type="button" class="opt" data-opt="{_e(o.id)}">'
+                   f'<span class="key{key_cls}">{i}</span>'
+                   f'<span class="lbl">{_e(o.label)}</span>{hint}</button>')
+            # 014: the whisper glyph — [i] OUTSIDE the button, so tapping
+            # it never fires the option; tip resolves by option id.
+            tip = tips.option_tip(o.id)
+            info = (f'<span class="info" tabindex="0" role="note" '
+                    f'data-tip="{_e(tip)}">i</span>' if tip else "")
+            rows.append(f'<div class="orow">{btn}{info}</div>')
         parts.append(f'<div class="options later">{"".join(rows)}'
                      f'<div class="reply">click an option — or reply '
                      f"with a number</div></div>")
 
     if scene.meters:
         parts.append(_meters_html(scene.meters))
+    parts.append(_inventory_html(scene))
 
     stripe = _STRIPE.get(scene.event_kind)
     style_attr = (f' style="border-left:3px solid {stripe};"' if stripe else "")
@@ -345,6 +421,15 @@ SCENE_CSS = f"""
 .opt .key::after{{content:"]";color:{FAINT};}}
 .opt .key.aether{{color:{AETHER};}}
 .opt .hint{{margin-left:auto;color:{FAINT};text-align:right;}}
+.orow{{display:flex;align-items:stretch;gap:5px;}}
+.orow .opt{{flex:1;min-width:0;}}
+.info{{flex:none;display:flex;align-items:center;padding:0 .5ch;
+ background:{PANEL2};border:1px solid {BORDER};color:{FAINT};
+ cursor:help;user-select:none;font-style:italic;}}
+.info::before{{content:"[";font-style:normal;}}
+.info::after{{content:"]";font-style:normal;}}
+.info:hover,.info:focus-visible{{color:{AETHER};border-color:{AETHER};
+ outline:none;}}
 .reply{{color:{FAINT};letter-spacing:.08em;margin-top:5px;}}
 .reply::before{{content:"· ";}}
 .rail{{display:flex;flex-wrap:wrap;align-items:center;gap:2ch;
@@ -357,7 +442,25 @@ SCENE_CSS = f"""
 .meter.en .blocks{{color:{AETHER};}}
 .meter.ae .blocks{{color:{VIOLET_SOFT};}}
 .rail .gold{{color:{GOLD};margin-left:auto;display:inline-flex;gap:1.5ch;}}
+.rail .gold [data-tip]{{cursor:help;}}
 .rail .lvl{{color:{TEXT};}}
+.inv{{display:flex;flex-wrap:wrap;align-items:center;gap:6px 2ch;
+ margin-top:8px;padding-top:8px;border-top:1px dashed {BORDER};}}
+.invlbl{{color:{FAINT};text-transform:uppercase;letter-spacing:.08em;}}
+.inv .item{{display:inline-flex;align-items:center;gap:1ch;cursor:help;
+ outline:none;}}
+.inv .item:hover .pname,.inv .item:focus-visible .pname{{color:{TEXT};}}
+.picon{{width:32px;height:32px;flex:none;display:inline-block;
+ mask-size:100% 100%;-webkit-mask-size:100% 100%;mask-repeat:no-repeat;
+ -webkit-mask-repeat:no-repeat;image-rendering:pixelated;}}
+.inv .pname{{color:{DIM};}}
+.inv .item.eq .pname{{color:{TEXT};}}
+.inv .ct{{color:{FAINT};margin-left:.5ch;}}
+#tipbox{{position:fixed;display:none;z-index:99;max-width:340px;
+ background:{INK};border:1px solid {VIOLET};color:{TEXT};
+ padding:8px 1.5ch;font-size:12px;line-height:1.55;
+ box-shadow:0 4px 18px rgba(0,0,0,.55);pointer-events:none;
+ white-space:normal;}}
 .type.pending{{visibility:hidden;}}
 .cursor{{display:inline-block;width:.55em;height:1.05em;background:{AETHER};
  vertical-align:text-bottom;margin-left:1px;

@@ -18,7 +18,7 @@ whenever the session changes; the pane also answers 401s by asking again
 from __future__ import annotations
 
 from .render import (AETHER, BORDER, DIM, FAINT, INK, PANEL, PANEL2,
-                     SCENE_CSS, TEXT, VIOLET, VIOLET_SOFT)
+                     SCENE_CSS, TEXT, TIP_JS, VIOLET, VIOLET_SOFT)
 
 _API = "/api/p/plugin-linear-ascent"
 
@@ -390,4 +390,5 @@ def render_pane() -> str:
   <div id="community" class="pane"><div class="placeholder">
     <div class="eyebrow">the guildhall</div>unrolling the charters…</div></div>
 </div>
-<script>{_JS.replace("__API__", _API)}</script></body></html>"""
+<script>{_JS.replace("__API__", _API)}</script>
+<script>{TIP_JS}</script></body></html>"""
