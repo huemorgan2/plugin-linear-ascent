@@ -10,12 +10,15 @@ cards. The chat shell's card-action bridge calls it when the player
 clicks an option button — pure engine, no model in the path. The route
 posts the next scene as its own card and, on big beats only, nudges the
 agent to react in character (a "moment"), so the sidekick responds to
-the game like the player does instead of driving it.
+the game like the player does instead of driving it. Ordinary acts are
+silent (017): the sidekick instead gets one check-in per ~5 minutes of
+active play.
 """
 
 from __future__ import annotations
 
 import asyncio
+import time
 import uuid
 
 import httpx
@@ -29,12 +32,16 @@ from . import runtime
 
 _ctx: PluginContext | None = None
 
-# Which event kinds warrant which agent nudge. A "moment" runs a genuine
-# reaction turn (the sidekick speaks on its own); "awareness" just lands in
-# history — no model turn — so the agent always knows the state when it DOES
-# speak. 009: every act notifies; moments stay reserved for the big beats so
-# fast grind clicking never spends model turns on silence.
+# Which event kinds warrant an INSTANT agent nudge. A "moment" runs a genuine
+# reaction turn (the sidekick speaks on its own). 017: ordinary acts no longer
+# notify at all — they used to land an awareness row on EVERY click, which
+# burned tokens for nothing. Instead the sidekick gets one periodic check-in
+# per CHECKPOINT_S of *active* play (clock only advances while acts happen),
+# where it may offer a single helpful line. awaits_text still notifies
+# immediately: the agent must know to pass the player's typed reply through.
 _MOMENT_KINDS = {"death", "boss"}
+CHECKPOINT_S = 300  # one sidekick check-in per ~5 minutes of gameplay
+_last_contact: dict[str, float] = {}  # player key → monotonic ts of last send
 
 
 class JoinIn(BaseModel):
@@ -77,16 +84,36 @@ def _state_line(scene) -> str:
     return " · ".join(b for b in bits if b)
 
 
-def _notify_agent(scene, conversation_id: str | None) -> None:
-    """Fire-and-forget sidekick nudge on EVERY act (009): big beats get a
-    moment (a real reaction turn, silence invited); everything else lands
-    as an awareness row so the agent tracks state without spending turns.
+def _notify_agent(scene, conversation_id: str | None,
+                  player: str = "") -> None:
+    """Fire-and-forget sidekick nudge (017: throttled). Big beats (death,
+    boss) get an instant moment. awaits_text gets an instant awareness row
+    (the agent must know to pass the typed reply through). Everything else
+    is silent — except one periodic check-in moment per CHECKPOINT_S of
+    active play, where the sidekick may offer a single helpful line.
     Never blocks the click response — the pane must feel like code."""
     kind = scene.event_kind
-    channel = "moment" if kind in _MOMENT_KINDS else "awareness"
     send = getattr(_ctx, "send_muted_message", None) if _ctx else None
     if send is None:
         return
+
+    now = time.monotonic()
+    last = _last_contact.get(player)
+    if kind in _MOMENT_KINDS:
+        channel = "moment"
+    elif scene.awaits_text:
+        channel = "awareness"
+    elif last is None:
+        # first act this process sees: arm the clock, say nothing — the
+        # player just started (or the plugin just reloaded); no tip needed.
+        _last_contact[player] = now
+        return
+    elif now - last >= CHECKPOINT_S:
+        channel = "checkpoint"
+    else:
+        return
+    _last_contact[player] = now
+
     if channel == "moment":
         from .plugin import _VOICE_RULES
         content = (
@@ -94,6 +121,18 @@ def _notify_agent(scene, conversation_id: str | None) -> None:
             "the scene below is ALREADY on their screen. You are their "
             "shardmind sidekick, reacting to what just happened.\n\n"
             + scene.to_text() + "\n\n" + _VOICE_RULES)
+    elif channel == "checkpoint":
+        from .plugin import _VOICE_RULES
+        channel = "moment"  # a real turn, but a rarer, gentler one
+        content = (
+            "Periodic sidekick check-in: the player has been playing Linear "
+            "Ascent in the game pane for a while (you are NOT told about "
+            "every action — this is a ~5-minute pulse). Current state: "
+            + _state_line(scene) +
+            "\n\nIf you have ONE genuinely useful suggestion or a short "
+            "flavor beat, say it in a single sentence. If you have nothing "
+            "to add, reply with a single space to stay silent — silence is "
+            "the right call most of the time.\n\n" + _VOICE_RULES)
     else:
         content = (
             "Linear Ascent state (the player is playing in the game pane; "
@@ -212,7 +251,7 @@ def register_routes(app, ctx: PluginContext) -> None:
         key = runtime.player_key()
         scene = await runtime.act_for(key, body.option.strip(),
                                       body.text.strip())
-        _notify_agent(scene, body.conversation_id)
+        _notify_agent(scene, body.conversation_id, player=key)
         return {
             "ok": True,
             "scene_id": scene.scene_id,
