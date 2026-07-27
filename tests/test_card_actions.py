@@ -72,10 +72,10 @@ def fake_local(monkeypatch):
 
 
 def test_act_for_advances_and_persists(fake_local):
-    scene = asyncio.run(runtime.act_for("owner", "begin"))
-    assert scene.eyebrow.startswith("THE TOWER GATE")
+    scene = asyncio.run(runtime.act_for("owner", "next"))
+    assert scene.eyebrow == "THE STORY SO FAR · II"   # 016: movie step 2
     doc = fake_local.docs["owner"]
-    assert doc["stage"] == "creation_race"
+    assert doc["stage"] == "intro" and doc["intro_step"] == 1
     assert doc["scene"] == scene.to_dict()   # scene persisted with the doc
 
 
@@ -126,14 +126,14 @@ def test_act_route_returns_fragment_and_posts_nothing(fake_local):
     ctx = RouteCtx()
     client = make_client(ctx)
     r = client.post("/api/p/plugin-linear-ascent/act", json={
-        "option": "begin", "mode": "pane", "conversation_id": "conv-9"})
+        "option": "next", "mode": "pane", "conversation_id": "conv-9"})
     assert r.status_code == 200
     d = r.json()
     assert d["ok"] is True
-    assert "THE TOWER GATE" in d["fragment"]   # the NEXT scene, in place
+    assert "THE STORY SO FAR · II" in d["fragment"]  # the NEXT scene
     assert d["fragment"].startswith('<div class="card"')
     assert ctx.posted == []                    # 009: nothing hits the chat
-    assert fake_local.docs["owner"]["stage"] == "creation_race"
+    assert fake_local.docs["owner"]["stage"] == "intro"
 
 
 def test_act_route_stale_option_returns_steering_fragment(fake_local):
@@ -161,7 +161,7 @@ def test_pane_scene_is_idempotent_read(fake_local):
 def test_pane_peek_tracks_chat_driven_acts(fake_local):
     ctx = RouteCtx()
     client = make_client(ctx)
-    client.post("/api/p/plugin-linear-ascent/act", json={"option": "begin"})
+    client.post("/api/p/plugin-linear-ascent/act", json={"option": "next"})
     peek = client.get("/api/p/plugin-linear-ascent/pane/peek")
     assert peek.status_code == 200
     sid = peek.json()["scene_id"]

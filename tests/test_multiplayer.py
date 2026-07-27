@@ -8,7 +8,8 @@ from plugin_linear_ascent.engine import core, state
 def playing(name="Sosa", world=None):
     p = state.new_player(f"t:{name}")
     core.current_scene(p)
-    core.apply_choice(p, "begin")
+    while p["stage"] == "intro":                # 016: through the movie
+        core.apply_choice(p, "1")
     core.apply_choice(p, "human")
     core.apply_choice(p, "warrior")
     core.apply_choice(p, "", name)
@@ -197,4 +198,5 @@ def test_dev_flag_plays_local(monkeypatch):
     monkeypatch.setitem(runtime.state, "remote", None)
     monkeypatch.setitem(runtime.state, "local", FakeLocal())
     s = asyncio.run(runtime.scene_for("owner"))
-    assert "LINEAR ASCENT" in s.eyebrow      # the intro card, not an outage
+    # 016: the movie's first beat — the intro card, not an outage
+    assert s.eyebrow == "THE STORY SO FAR · I"

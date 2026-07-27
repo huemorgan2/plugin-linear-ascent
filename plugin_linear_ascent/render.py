@@ -52,7 +52,14 @@ _CREATURES = os.path.join(_ART_ROOT, "creatures")
 _EVENTS = os.path.join(_ART_ROOT, "events")
 
 # 011 event animations tint by their moment, not the floor mood.
-_FX_TINT = {"ascent_open": VIOLET, "ascent_title": VIOLET_SOFT}
+_FX_TINT = {"ascent_open": VIOLET, "ascent_title": VIOLET_SOFT,
+            # 016 intro movie — world scenes dim, the enemy violet,
+            # hearth and aether gold.
+            "intro_aldervale": DIM, "intro_theft": VIOLET,
+            "intro_tower": DIM, "intro_warden": VIOLET,
+            "intro_refugee": DIM, "intro_roothollow": GOLD,
+            "intro_stone": GOLD, "intro_shard": GOLD,
+            "intro_muster": DIM}
 
 
 def _banner_tint(slug: str, variant: str = "") -> str:
@@ -96,6 +103,55 @@ def _fx_data_url(slug: str) -> tuple[str, int, int] | None:
             b64 = base64.b64encode(open(path, "rb").read()).decode()
             w, h = (int(n) for n in size.split("x"))
             return f"data:image/gif;base64,{b64}", w, h
+    return None
+
+
+def _gif_duration_ms(path: str) -> int:
+    """Total play time of a GIF, from its Graphic Control delays.
+    Stdlib-only block walk (no Pillow at plugin runtime)."""
+    data = open(path, "rb").read()
+    pos, total = 13, 0
+    if data[10] & 0x80:                          # global color table
+        pos += 3 * (2 << (data[10] & 0x07))
+    while pos < len(data):
+        marker = data[pos]
+        if marker == 0x21:                       # extension block
+            label = data[pos + 1]
+            pos += 2
+            if label == 0xF9:                    # graphic control: delay
+                total += int.from_bytes(data[pos + 2:pos + 4],
+                                        "little") * 10
+            while data[pos]:                     # skip sub-blocks
+                pos += 1 + data[pos]
+            pos += 1
+        elif marker == 0x2C:                     # image descriptor
+            lflags = data[pos + 9]
+            pos += 10
+            if lflags & 0x80:                    # local color table
+                pos += 3 * (2 << (lflags & 0x07))
+            pos += 1                             # LZW min code size
+            while data[pos]:                     # image sub-blocks
+                pos += 1 + data[pos]
+            pos += 1
+        else:                                    # 0x3B trailer (or junk)
+            break
+    return total
+
+
+@lru_cache(maxsize=None)
+def _fx_split(slug: str) -> tuple[str, str, int, int, int] | None:
+    """(intro_url, loop_url, w, h, intro_ms) for split event art (016):
+    <slug>_intro plays its action once, then the card swaps the mask to
+    <slug>_loop, the ambient tail. None when the slug isn't split."""
+    intro = _fx_data_url(f"{slug}_intro")
+    loop = _fx_data_url(f"{slug}_loop")
+    if not intro or not loop:
+        return None
+    url, w, h = intro
+    for size in ("320x112", "320x200"):
+        path = os.path.join(_EVENTS, f"{slug}_intro_{size}.gif")
+        if os.path.exists(path):
+            return url, loop[0], w, h, _gif_duration_ms(path)
     return None
 
 
@@ -237,7 +293,21 @@ TIP_JS = """(function () {
   window.addEventListener('scroll', hide, true);
 })();"""
 
-_SCRIPT = """<script>(()=>{
+# 016: split fx — the banner's action gif plays once, then the mask swaps
+# to the ambient loop. Shared by the chat card script and the pane.
+SWAP_JS = """(function () {
+  document.querySelectorAll('.banner[data-swap]').forEach(function (b) {
+    if (b.dataset.swapped) return;
+    b.dataset.swapped = '1';
+    setTimeout(function () {
+      if (!b.isConnected) return;
+      var u = "url('" + b.dataset.swap + "')";
+      b.style.webkitMaskImage = u; b.style.maskImage = u;
+    }, parseInt(b.dataset.swapMs || '5000', 10));
+  });
+})();"""
+
+_SCRIPT = """<script>__SWAP_JS__(()=>{
 if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
 const typed=[...document.querySelectorAll('.type')];
 const later=[...document.querySelectorAll('.later')];
@@ -309,7 +379,8 @@ let d=0;for(const el of later){setTimeout(()=>el.classList.add('shown'),d);d+=90
   }); });
 })();
 __TIP_JS__</script>""".replace("__ACT__", _ACT_PATH) \
-                      .replace("__TIP_JS__", TIP_JS)
+                      .replace("__TIP_JS__", TIP_JS) \
+                      .replace("__SWAP_JS__", SWAP_JS)
 
 
 def render_scene_fragment(scene: Scene) -> str:
@@ -321,20 +392,28 @@ def render_scene_fragment(scene: Scene) -> str:
 
     # 011: an event animation owns the banner slot when it ships art;
     # the static banner is the fallback for the same scene.
+    # 016: split art (intro+loop) plays the action once, then the swap
+    # script settles the banner into the ambient loop.
     fx = _fx_data_url(scene.fx) if scene.fx else None
+    split = _fx_split(scene.fx) if scene.fx and not fx else None
     banner = _banner_data_url(scene.banner) if scene.banner else None
+    swap_attr = ""
     if fx:
         url, w, h = fx
         tint = _fx_tint(scene)
+    elif split:
+        url, loop_url, w, h, intro_ms = split
+        tint = _fx_tint(scene)
+        swap_attr = f' data-swap="{loop_url}" data-swap-ms="{intro_ms}"'
     elif banner:
         url, w, h = banner
         tint = _banner_tint(scene.banner, scene.banner_variant)
-    if fx or banner:
+    if fx or split or banner:
         parts.append(
             f'<div class="banner" style="background-color:{tint};'
             f"aspect-ratio:{w}/{h};"
             f"-webkit-mask-image:url('{url}');"
-            f"mask-image:url('{url}');\"></div>")
+            f"mask-image:url('{url}');\"{swap_attr}></div>")
 
     parts.append(f'<div class="eyebrow type">{_e(scene.eyebrow)}</div>')
     hl_col = _HEADLINE.get(scene.event_kind, TEXT)

@@ -84,6 +84,13 @@ DIM, VIOLET, GOLD, RED = "#8b93a7", "#8b5cf6", "#f5a524", "#f4645f"
 #              loop=True, so the loop has no visible seam
 #   size       output grid (defaults to the 320x112 banner grid; the
 #              title card uses 320x200)
+#   split      seconds (measured after trim) where the one-shot action
+#              ends and the ambient tail begins. Emits TWO gifs instead
+#              of one: <slug>_intro (plays once, holds) and <slug>_loop
+#              (ambient tail, crossfaded seam, loops forever). Dither
+#              levels are computed across BOTH segments so the pane can
+#              swap intro -> loop without a visible jump. `crossfade`
+#              applies to the loop segment.
 EVENTS: dict[str, dict] = {
     "boar_kill": {
         "prompt": (
@@ -179,6 +186,158 @@ EVENTS: dict[str, dict] = {
         "size": (320, 200),
         "image": os.path.join("content", "art", "title",
                               "ascent_title_raw.png"),
+    },
+    # ── 016 intro movie ── one scene per story beat, all 320x200.
+    # Ambient scenes loop forever; scenes with an action beat are split
+    # into <slug>_intro (plays once) + <slug>_loop (ambient tail).
+    "intro_aldervale": {
+        "prompt": (
+            "a vast peaceful fantasy panorama at dusk stands PERFECTLY "
+            "STILL — a river winding past a small port town, slender "
+            "signal towers with beacon lights along the banks, a softly "
+            "glowing forest on one side, huge mountains on the far "
+            "horizon with warm furnace light at their roots; nothing "
+            "moves or changes at all. The ONLY motion in the entire "
+            "shot: the river water glints softly, the signal beacons "
+            "pulse slowly, the forest glow and forge glow breathe "
+            "almost imperceptibly, and thin mist drifts very slowly "
+            "across the valley. Extremely subtle, calm, ambient, "
+            "continuous motion. Absolutely no zoom, no pan, no camera "
+            "drift."),
+        "tint": DIM, "seconds": 8, "loop": True, "crossfade": 1.5,
+        "size": (320, 200),
+    },
+    "intro_theft": {
+        "prompt": (
+            "a dark night landscape: a whole hill with a small town on "
+            "it, its windows still lit, tears free of the ground along "
+            "cracks of blinding light and rises slowly and majestically "
+            "into the black sky, dust and debris pouring off its ragged "
+            "underside, tiny human silhouettes standing at the rim of "
+            "the crater below, watching their home leave without them. "
+            "In the FINAL THREE SECONDS the risen land comes to rest "
+            "hanging high in the sky and holds there — the only "
+            "remaining motion is thin dust drifting down and the cracks "
+            "of light in the ground pulsing faintly."),
+        "tint": VIOLET, "seconds": 8, "split": 5.0, "crossfade": 1.0,
+        "size": (320, 200),
+    },
+    "intro_tower": {
+        "prompt": (
+            "an impossibly tall megastructure tower seen from near the "
+            "ground: a narrow colossal column of dozens and dozens of "
+            "thin stacked horizontal bands of captured land welded with "
+            "black iron seams, rising straight up PAST THE TOP OF THE "
+            "FRAME — its summit is never visible, lost far above the "
+            "clouds; two great anchor chains sweep down from high on "
+            "its flanks to the dark ground, small engine lights glowing "
+            "along the weld seams. Everything stands PERFECTLY STILL. "
+            "The ONLY motion in the entire shot: a cloud deck drifts "
+            "very slowly and steadily sideways across the tower's "
+            "middle, and the weld lights pulse almost imperceptibly. "
+            "Extremely subtle, calm, ambient, continuous motion. "
+            "Absolutely no zoom, no pan, no camera drift."),
+        "tint": DIM, "seconds": 8, "loop": True, "crossfade": 1.5,
+        "size": (320, 200),
+    },
+    "intro_warden": {
+        "prompt": (
+            "a night scene inside a captured realm: a vast dark "
+            "industrial wall of riveted black iron spans the entire "
+            "background, with a single pair of enormous sealed "
+            "elevator doors at its center, twenty times human height; "
+            "tall thin floodlight masts rake hard beams down across a "
+            "dark grassy field in front of the wall. Before the doors "
+            "stands the silhouette of a Warden — a huge four-legged "
+            "beast of welded armor plate, half animal half "
+            "war-machine, two bright eye-lamps burning — standing "
+            "guard, PERFECTLY STILL. No tents, no buildings. The ONLY "
+            "motion in the entire shot: the floodlight beams flicker "
+            "subtly, the Warden's shoulders rise and fall very slowly "
+            "as if breathing, and its eye-lamps pulse faintly. "
+            "Extremely subtle, calm, ambient, continuous motion. "
+            "Absolutely no zoom, no pan, no camera drift."),
+        "tint": VIOLET, "seconds": 8, "loop": True, "crossfade": 1.5,
+        "size": (320, 200),
+    },
+    "intro_refugee": {
+        "prompt": (
+            "seen from behind at a low angle with a STATIC camera: a "
+            "small lone hooded figure carrying almost nothing walks "
+            "slowly through wreckage-strewn ground toward the base of a "
+            "colossal dark banded tower that fills the whole sky ahead, "
+            "then comes to a stop and stands completely still, looking "
+            "up at it. In the FINAL THREE SECONDS the figure stands "
+            "motionless — the only remaining motion is thin dust "
+            "drifting sideways and the tower's distant lights pulsing "
+            "faintly. The camera never moves: no zoom, no pan, no "
+            "tracking."),
+        "tint": DIM, "seconds": 8, "split": 5.0, "crossfade": 1.0,
+        "size": (320, 200),
+    },
+    "intro_roothollow": {
+        "prompt": (
+            "a quiet refugee shantytown at night huddled at the foot "
+            "of a colossal dark tower wall: rows of small shacks and "
+            "tents made of tarps stretched over scrap metal, several "
+            "SMALL calm cookfires — only two or three of them, tiny, "
+            "knee-height, far smaller than the tents — with "
+            "silhouettes of figures sitting around them, warm gradient "
+            "firelight pooling on the ground and shack walls against "
+            "the black mass of the tower behind. Most of the camp is "
+            "dark and asleep. NO large fire, NO explosion, NO big "
+            "smoke plume, NO wall of flames — a calm, sleeping camp "
+            "lit by a few embers. Everything stands PERFECTLY STILL "
+            "except: the tiny flames flicker softly, thin smoke wisps "
+            "rise slowly, and the fire glow breathes. Extremely "
+            "subtle, calm, ambient, continuous motion. Absolutely no "
+            "zoom, no pan, no camera drift."),
+        "tint": GOLD, "seconds": 8, "loop": True, "crossfade": 1.5,
+        "size": (320, 200),
+    },
+    "intro_stone": {
+        "prompt": (
+            "a night square in a refugee camp: a tall granite monolith "
+            "standing on a low plinth, small silhouettes gathered "
+            "around it. Engraved lines of names on the monolith ignite "
+            "one by one from within with bright light, line after line "
+            "down the stone; then, high above in the black sky behind "
+            "it, one whole horizontal band of a colossal dark tower "
+            "snaps alight, flooding the scene with light from above. "
+            "In the FINAL THREE SECONDS everything holds still — the "
+            "only remaining motion is the lit names shimmering faintly "
+            "and the lit tower band glowing steadily."),
+        "tint": GOLD, "seconds": 8, "split": 5.0, "crossfade": 1.0,
+        "size": (320, 200),
+    },
+    "intro_shard": {
+        "prompt": (
+            "close shot: an open scarred hand held out, palm up, over "
+            "dark rubble. A small crystal shard rises slowly from the "
+            "rubble and ignites with brilliant light, coming to rest "
+            "floating just above the palm, throwing hard rim light "
+            "across the silhouetted figure and the wreckage around. In "
+            "the FINAL THREE SECONDS the shard simply floats in place "
+            "above the motionless palm — the only remaining motion is "
+            "its light pulsing slowly, like breathing."),
+        "tint": GOLD, "seconds": 8, "split": 5.0, "crossfade": 1.0,
+        "size": (320, 200),
+    },
+    "intro_muster": {
+        "prompt": (
+            "before the towering sealed doors of a fortress keep, lit "
+            "by one great luminous gradient backlight: a broad line of "
+            "many climber silhouettes — swords, bows, spears, one "
+            "hulking salvaged war-machine frame among them — standing "
+            "shoulder to shoulder facing the doors, under tall tattered "
+            "banners on poles. Everything stands PERFECTLY STILL "
+            "except: the banners ripple slowly in the wind, thin dust "
+            "drifts sideways low over the ground, and the backlight "
+            "halo breathes almost imperceptibly. Extremely subtle, "
+            "calm, ambient, continuous motion. Absolutely no zoom, no "
+            "pan, no camera drift."),
+        "tint": DIM, "seconds": 8, "loop": True, "crossfade": 1.5,
+        "size": (320, 200),
     },
 }
 
@@ -424,6 +583,41 @@ def _set_size(cfg: dict) -> None:
     W, H = cfg.get("size", (320, 112))
 
 
+def process_split(slug: str, cfg: dict, grays: list[Image.Image]) -> str:
+    """Two-gif output for scenes with an action beat: <slug>_intro plays
+    once and holds; <slug>_loop is the ambient tail with a crossfaded
+    seam. One shared level stretch across both segments keeps the pane's
+    intro->loop swap invisible."""
+    si = round(cfg["split"] * FPS)
+    if not 0 < si < len(grays) - 1:
+        raise ValueError(f"{slug}: split {cfg['split']}s outside clip")
+    intro = grays[:si]
+    k = max(1, round(cfg.get("crossfade", 1.0) * FPS))
+    tail = crossfade_loop(grays[si:], k)
+    print(f"  split: {len(intro)} intro + {len(tail)} loop frames "
+          f"(crossfaded seam)", flush=True)
+    lo, hi = global_levels(intro + tail)
+    print(f"  levels {lo}..{hi} (shared across segments)", flush=True)
+    intro_bits = [to_bits(g, lo, hi) for g in intro]
+    loop_bits = [to_bits(g, lo, hi) for g in tail]
+    save_gif_transparent(
+        [bits_to_frame(b, (255, 255, 255)) for b in intro_bits],
+        os.path.join(ART, f"{slug}_intro_{W}x{H}.gif"), FPS, loop=False)
+    save_gif_transparent(
+        [bits_to_frame(b, (255, 255, 255)) for b in loop_bits],
+        os.path.join(ART, f"{slug}_loop_{W}x{H}.gif"), FPS, loop=True)
+    # review preview: the intro, then the tail looping a few times
+    prev = [bits_to_frame(b, _hx(cfg["tint"]), scale=2, bg=PANEL)
+            for b in intro_bits + loop_bits * 3]
+    save_gif_opaque(prev, os.path.join(PREVIEW, f"{slug}_preview.gif"),
+                    FPS, loop=True)
+    n = len(intro_bits) + len(loop_bits)
+    ink = (sum(sum(map(sum, b)) for b in intro_bits + loop_bits)
+           / (W * H * n))
+    return (f"ok   {slug}: {len(intro_bits)} intro + {len(loop_bits)} "
+            f"loop frames, ink {ink:.0%}, split")
+
+
 def process(slug: str, mp4: str) -> str:
     cfg = EVENTS[slug]
     _set_size(cfg)
@@ -435,6 +629,8 @@ def process(slug: str, mp4: str) -> str:
                         round(e * FPS) if e is not None else len(frames)]
         print(f"  trimmed to {len(frames)} frames", flush=True)
     grays = [crop_gray(f) for f in frames]
+    if "split" in cfg:
+        return process_split(slug, cfg, grays)
     if loop and cfg.get("crossfade"):
         grays = crossfade_loop(grays, max(1, round(cfg["crossfade"] * FPS)))
         print(f"  crossfaded loop seam, {len(grays)} frames", flush=True)

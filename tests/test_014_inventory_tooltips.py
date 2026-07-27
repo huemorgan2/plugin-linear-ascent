@@ -18,7 +18,8 @@ def choose(p, option="", text=""):
 
 def create_character(p, name="Packa"):
     core.current_scene(p)
-    choose(p, "begin")
+    while p["stage"] == "intro":                # 016: through the movie
+        choose(p, "1")
     choose(p, "human")
     choose(p, "warrior")
     choose(p, text=name)
@@ -127,8 +128,10 @@ def test_every_option_in_a_full_walk_has_a_tip():
             if not tips.option_tip(o.id):
                 missing.add(o.id)
 
-    check(core.current_scene(p))                 # intro
-    check(choose(p, "begin"))                    # races
+    check(core.current_scene(p))                 # intro movie, scene I
+    while p["stage"] == "intro":                 # 016: every movie step
+        check(choose(p, "1"))
+    check(core.current_scene(p))                 # races
     check(choose(p, "human"))                    # classes
     choose(p, "warrior")
     choose(p, text="Packa")
@@ -172,7 +175,7 @@ def test_honed_gear_names_its_level():
 def test_creation_scenes_carry_no_pack():
     p = fresh()
     assert core.current_scene(p).inventory == []
-    s = choose(p, "begin")
+    s = choose(p, "next")
     assert s.inventory == []
 
 
