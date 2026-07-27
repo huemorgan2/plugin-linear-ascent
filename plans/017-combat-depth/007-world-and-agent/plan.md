@@ -16,6 +16,9 @@ Goal: the shared-world and sidekick pieces — faction armory donations
    profile hard-counters the player's class → one moment nudge via
    `send_muted_message` (flag per type in the doc); silence invited,
    VOICE rules attached. No other messaging (0.17.2 stays).
+   001 retro: ground the agent — every muted state line must name the
+   CURRENT enemy and floor explicitly (in the 001 dojo the sidekick
+   called a feral boar "Brackjaw" because the state line let it guess).
 3. **Town readability:** locked rows with unlock levels for Arcanum /
    Relay / Fields / non-day-1 areas ("🔒 Arcanum — level 6"); **Tower
    Gate moves to the top** as "The Tower Gate — leave town and climb".

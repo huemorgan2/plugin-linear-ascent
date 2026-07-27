@@ -30,6 +30,10 @@ shared-world migration check, end-to-end dojo playtest, release.
 ## Tests / acceptance
 
 - Every sim gate green in one run; no phase's gate regressed.
+  001 retro: economy changes legitimately shift frozen baselines
+  (e.g. warden stats in `test_008_pace`) — update them deliberately
+  with a dated note rather than loosening the assertion; income
+  smoothness allows upward steps, forbids down-cliffs/regressions.
 - Migration rehearsal: 100% of prod docs upgrade cleanly; no player
   loses gear, gold, or floors (race change + basic-weapon swap are the
   only visible deltas, both announced in-world).

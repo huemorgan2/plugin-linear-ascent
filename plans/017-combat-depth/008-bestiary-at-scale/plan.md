@@ -27,6 +27,11 @@ for the new monsters.
 - **Matchup sim at scale:** the 001 sim gate runs across every band —
   each class always has a viable hunting pool on its frontier
   (win ≥70% vs at least 2 encounter types per floor).
+  001 retro: reuse 001's constants verbatim — hard-counter means
+  win <30% OR rounds ≥1.6× plain (closed-form sims compress variance;
+  the planned 2× never triggers). Smoothness on income allows upward
+  steps (only down-cliffs/regressions fail), and rounds/risk must
+  filter through `_is_intended` or off-class monsters poison averages.
 - Art: every encounter id with no shipped art logged and triaged (the
   renderer already skips silently — the list is the deliverable).
 - Dojo spot-checks: one floor per band — read three [i] cards, verify

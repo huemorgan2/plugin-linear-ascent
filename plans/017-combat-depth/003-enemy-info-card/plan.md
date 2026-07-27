@@ -18,6 +18,9 @@ player-facing from 001/002 is considered "done" until this ships.
    - Dossier fragment: enemy HP bar (visible from round 1, mirrors the
      player meters), named tiers with icons, speed tier, lore lines.
    - Range state indicator (at range / close) in the fight header.
+   - 001 retro: the opener's `◆ plate Low` line uses the SAME diamond
+     as the tactics hint — they read as one system at a glance. Give
+     the profile line its trait icons here and retire the bare ◆.
 4. `engine/combat.py`: scout upgrade — exact numbers + next intent
    ("it will try to close this round"); headline keeps ATK/DEF but HP
    bar replaces the post-first-exchange HP reveal.
