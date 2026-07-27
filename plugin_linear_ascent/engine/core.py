@@ -878,7 +878,7 @@ def _gate_pick(p: dict, oid: str) -> Scene:
 
 
 def _gate_town_options(p: dict, fl) -> list[Option]:
-    heal_price = 2 * fl.floor
+    heal_price = economy.HEALER_TENT_PER_FLOOR * fl.floor
     opts = [Option("hunt", "Hunt the wilds", "1 ⚡")]
     if p["hp"] < state.max_hp(p):
         opts.append(Option("stew", "Hunter's stew",
@@ -914,7 +914,7 @@ def _gate_town_action(p: dict, oid: str) -> Scene:
         combat._ledger(p, "energy", note="wilds")
         return combat.start_encounter(p, fl, enc, "wilds")
     if oid == "heal":
-        price = 2 * fl.floor
+        price = economy.HEALER_TENT_PER_FLOOR * fl.floor
         if p["gold"] < price:
             s = _gate_town_scene(p)
             s.shard_note = f"The healer wants ◈ {price} you don't carry."

@@ -90,6 +90,12 @@ def player_max_hp(level: int) -> int:
 MONSTER_ATK_SLOPE = 3.3
 BAND_INCOME_JUMP = 1.2         # gold/kill ×1.2 per gear band (004 §4.5)
 
+# 013: armor blunts, it never nullifies. A landed hit always chips at
+# least ⌈raw/CHIP_DIVISOR⌉ (min 1) through any DEF — pre-013 the
+# max(0, raw − DEF/2) formula let floor-1 animals deal literally zero
+# to anyone wearing gear, and HP stopped being a cost at all.
+CHIP_DIVISOR = 4
+
 WILDS_ROUNDS_BASE = 2.0        # class-average rounds at floor 1 ≈ 2.5
 WILDS_ROUNDS_SLOPE = 0.5
 WILDS_ROUNDS_MAX = 7.0
@@ -139,9 +145,11 @@ def gold_per_kill(floor: int) -> int:
 
 def daily_income(floor: int) -> int:
     """Design estimate of net gold per day of at-level hunting on `floor`
-    (≈30 fights, healer's tent after most of them). Anchors hone prices
-    and the tier price ladder — not paid to anyone directly."""
-    return round((gold_per_kill(floor) - 2 * floor * 0.8) * 30)
+    (≈30 fights, a ◈5×floor tent visit every ~3 fights now that chip
+    damage is real). Anchors hone prices and the tier price ladder —
+    not paid to anyone directly."""
+    return round((gold_per_kill(floor) - HEALER_TENT_PER_FLOOR * floor / 3)
+                 * 30)
 
 
 def xp_need(level: int) -> int:
@@ -420,14 +428,17 @@ APOTHECARY: dict[str, ShopItem] = {i.slug: i for i in [
              "sidekick reveals enemy stats, 3 charges"),
 ]}
 
-# ── §6c Cheap healing (008) ──────────────────────────────────────────────
-# The ladder: stew (2g, +5 HP, repeatable) → healer's tent (2×floor,
-# full — always below one kill's gold) → a Lodge night (+20 HP at dawn)
-# → potions for mid-fight emergencies.
+# ── §6c Healing (008, repriced by 013) ───────────────────────────────────
+# The ladder: stew (2g, +5 HP, repeatable) → healer's tent (5×floor,
+# full — still below one kill's gold, but a real bite of it now that
+# armor chips instead of nullifying) → a Lodge night (+20 HP at dawn)
+# → potions for mid-fight emergencies. HP is meant to be the scarcer
+# currency: gold flows every kill, health only trickles back.
 
 STEW_PRICE = 2
 STEW_HEAL_HP = 5
 LODGE_NIGHT_HEAL_HP = 20
+HEALER_TENT_PER_FLOOR = 5      # full heal: ◈ 5 × floor (was 2 pre-013)
 
 # ── §7 Bank, death, lodge, presents ──────────────────────────────────────
 
