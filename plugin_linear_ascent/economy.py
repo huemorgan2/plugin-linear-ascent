@@ -6,6 +6,8 @@ numbers; the loader and engine compute them. Keep the SHAPES when tuning.
 
 from __future__ import annotations
 
+import math
+
 from dataclasses import dataclass
 
 # ── §1 Meters ────────────────────────────────────────────────────────────
@@ -156,6 +158,52 @@ SPEED_NORMAL = 5
 SPEED_FAST = 7
 
 WARDEN_PROFILE_FLOOR = 21      # band 3+: wardens get low/low tiers
+
+# ── 017 §2.4: speed and the two-state range model (phase 002) ─────────────
+# Fights open at range. Bows and spells carry; steel must close. Every
+# probability below is a pure function of the two speeds, so the [i] card
+# can show the whole chase without a single hidden number.
+
+PLAYER_BASE_SPEED = 5
+ALPHA_SPEED_BONUS = 1          # alphas run +1 on the 1–10 scale
+BOW_CLOSE_MULT = 0.6           # bow damage in close quarters
+DODGE_CAP_PCT = 12             # speed never becomes the main defense
+
+# Shoes ship in 004 (the Forge ladder). The speed hook lands with the
+# chase model so 004 only adds catalog rows here.
+SHOE_SPEED: dict[str, int] = {}
+
+
+def player_speed(p: dict) -> int:
+    shoes = (p.get("gear") or {}).get("shoes") or ""
+    return PLAYER_BASE_SPEED + SHOE_SPEED.get(shoes, 0)
+
+
+def _clamp(x: float, lo: float, hi: float) -> float:
+    return max(lo, min(hi, x))
+
+
+def p_close(mspd: int, pspd: int) -> float:
+    """End of an at-range round: the monster tries to close the gap."""
+    return _clamp(0.25 + 0.15 * (mspd - pspd), 0.05, 0.95)
+
+
+def p_open(pspd: int, mspd: int) -> float:
+    """Open distance from close quarters — the archer's bread and butter."""
+    return _clamp(0.50 + 0.15 * (pspd - mspd), 0.05, 0.90)
+
+
+def p_flee(pspd: int, mspd: int) -> float:
+    """Leave the fight. You can walk away from the slow; you cannot
+    outrun the wolf without shoes."""
+    return _clamp(0.60 + 0.12 * (pspd - mspd), 0.10, 0.95)
+
+
+def dodge_pct(pspd: int, mspd: int) -> int:
+    """Log-decay dodge from speed ADVANTAGE only — capped so armor and
+    resist stay the primary defenses by construction."""
+    a = max(0, pspd - mspd)
+    return min(DODGE_CAP_PCT, round(7 * math.log2(1 + a)))
 
 
 def tier_up(tier: str) -> str:

@@ -199,6 +199,7 @@ def test_fade_no_longer_punishes_overleveling_on_frontier():
     choose(p, "gate")
     choose(p, "floor_1")
     choose(p, "hunt")
+    p["encounter"]["range"] = "close"        # 002: skip the crossing
     p["encounter"]["hp"] = 1                 # next hit kills
     xp_before = p["xp"]
     gold_before = p["gold"]
@@ -373,6 +374,7 @@ def test_elf_learns_faster():
     choose(p, "gate")
     choose(p, "floor_1")
     choose(p, "hunt")
+    p["encounter"]["range"] = "close"        # 002: skip the crossing
     p["encounter"]["hp"] = 1
     choose(p, "attack")
     # base 4 ±25% then ×1.05: minimum possible is round(round(4·0.75)·1.05)

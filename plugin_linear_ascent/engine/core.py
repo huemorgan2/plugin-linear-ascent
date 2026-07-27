@@ -92,6 +92,10 @@ def apply_choice(p: dict, option_id: str, text: str = "") -> Scene:
         # numbered fallback: "1".."9" resolve positionally
         if option_id.isdigit() and 1 <= int(option_id) <= len(scene.options):
             option_id = scene.options[int(option_id) - 1].id
+        elif option_id == "attack" and "close_in" in valid:
+            # 002: players and the sidekick say "attack" by habit — at
+            # range, for steel, that means crossing the ground.
+            option_id = "close_in"
         else:
             scene.shard_note = (
                 f"That isn't one of the paths in front of us. "

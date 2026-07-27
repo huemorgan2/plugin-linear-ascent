@@ -96,6 +96,7 @@ def test_alpha_kill_drops_extra_loot(monkeypatch):
     force_specimen(monkeypatch, "alpha")
     p = at_gate_town(create_character(fresh()))
     choose(p, "hunt")
+    p["encounter"]["range"] = "close"         # 002: skip the crossing
     p["encounter"]["hp"] = 1                  # next hit kills
     s = choose(p, "attack")
     assert p["encounter"] is None
@@ -108,6 +109,7 @@ def test_runt_pays_less_gold(monkeypatch):
     monkeypatch.setattr(state, "rng_jitter", lambda p, base, pct: base)
     p = at_gate_town(create_character(fresh()))
     choose(p, "hunt")
+    p["encounter"]["range"] = "close"         # 002: skip the crossing
     p["encounter"]["hp"] = 1
     gold_before = p["gold"]
     choose(p, "attack")

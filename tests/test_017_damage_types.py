@@ -167,6 +167,7 @@ def _fight(clazz, floor_no, enc_id):
 
 def test_melee_cannot_touch_a_flyer():
     p, fl, _ = _fight("warrior", 4, "glare_moth")
+    p["encounter"]["range"] = "close"        # 002: past the crossing
     hp0 = p["encounter"]["hp"]
     s = combat.resolve_fight_action(p, fl, "attack")
     assert p["encounter"]["hp"] == hp0                 # zero, not chip
@@ -240,6 +241,8 @@ def reference_player(clazz, floor):
 
 
 def _sim_fight(clazz, floor_no, enc, seed):
+    """Each class plays its natural game (002): steel closes and trades,
+    the bow kites — reopen distance when caught — and magic just casts."""
     fl = schema.get_floor(floor_no)
     p = reference_player(clazz, floor_no)
     p["luna_user"] = f"sim-{clazz}-{floor_no}-{enc.id}-{seed}"
@@ -247,7 +250,11 @@ def _sim_fight(clazz, floor_no, enc, seed):
     rounds = 0
     while p["encounter"] is not None and rounds < 60:
         rounds += 1
-        s = combat.resolve_fight_action(p, fl, "attack")
+        if clazz == "archer" and \
+                p["encounter"].get("range", "close") == "close":
+            s = combat.resolve_fight_action(p, fl, "open_distance")
+        else:
+            s = combat.resolve_fight_action(p, fl, "attack")
         if s.event_kind == "death" or p["hp"] <= 0:
             return False, rounds
     return p["encounter"] is None, rounds
@@ -259,6 +266,13 @@ def _class_mult(clazz, profile):
         return 0.0
     tier = profile["resist"] if dtype == "magic" else profile["armor"]
     return economy.TIER_MULT[tier]
+
+
+def _speed_counters(clazz, profile):
+    """002: FAST counters the bow — the kite fails (p_open 20%) and
+    close quarters cost the archer ×0.6. A counter axis, same as tiers."""
+    return (economy.DAMAGE_TYPE[clazz] == "ranged"
+            and profile["speed"] >= economy.SPEED_FAST)
 
 
 N_SIM = 40
@@ -284,9 +298,10 @@ def test_matchup_gate_floors_1_to_10():
                     plain_rounds = rounds_sum / N_SIM
             for enc_id, (winrate, avg_rounds, profile) in results.items():
                 mult = _class_mult(clazz, profile)
-                hard = mult <= 0.5 or profile["bulwark"]
+                speed_hard = _speed_counters(clazz, profile)
+                hard = mult <= 0.5 or profile["bulwark"] or speed_hard
                 where = f"floor {floor_no} {clazz} vs {enc_id}"
-                if mult >= 1.0 and not profile["bulwark"]:
+                if mult >= 1.0 and not profile["bulwark"] and not speed_hard:
                     assert winrate >= 0.80, f"{where}: win {winrate:.0%}"
                 elif hard:
                     # overkill on the final round compresses the ratio

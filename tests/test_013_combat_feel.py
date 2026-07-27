@@ -35,7 +35,8 @@ def at_gate_town(p):
 def in_fight(p):
     choose(p, "hunt")
     assert p["encounter"] is not None
-    return p
+    p["encounter"]["range"] = "close"     # 002: these tests probe blows,
+    return p                              # not the chase — skip the crossing
 
 
 def geared(p):

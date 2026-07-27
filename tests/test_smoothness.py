@@ -46,7 +46,8 @@ def _expected_monster_damage(floor):
 
 
 def _is_intended(clazz, profile):
-    """A target the class hunts: no tier cut, reachable, not a bulwark.
+    """A target the class hunts: no tier cut, reachable, not a bulwark,
+    and (002) not the class's speed predator — FAST counters the bow.
     Everything else the at-level player either avoids or treats as a
     priced slog — those belong to the matchup gate, not the pace curve."""
     dtype = economy.DAMAGE_TYPE[clazz]
@@ -54,14 +55,46 @@ def _is_intended(clazz, profile):
         return False
     if profile["bulwark"]:
         return False
+    if dtype == "ranged" and \
+            profile.get("speed", economy.SPEED_NORMAL) >= economy.SPEED_FAST:
+        return False
     tier = profile["resist"] if dtype == "magic" else profile["armor"]
     return economy.TIER_MULT[tier] >= 1.0
+
+
+def _chase_adjusted(clazz, kill_rounds, profile):
+    """002 §2.4: fights open at range. Returns (total_rounds,
+    expected_hits_taken_in_full_hit_units) for the class's NATURAL play:
+    melee closes immediately; magic stands and casts (full at both
+    ranges, halved hits while the monster crosses); the bow KITES —
+    shoot until caught, spend rounds reopening, repeat. The kite cycle
+    is a flat multiplier (shoot+reopen)/shoot, so the pace curve stays
+    a curve instead of accelerating once kill_rounds outgrows the
+    crossing time."""
+    dtype = economy.DAMAGE_TYPE[clazz]
+    pspd = economy.PLAYER_BASE_SPEED
+    mspd = profile.get("speed", economy.SPEED_NORMAL)
+    dodge = 1 - economy.dodge_pct(pspd, mspd) / 100
+    if dtype == "melee":
+        return kill_rounds + 1, (0.5 + kill_rounds) * dodge
+    exp_at_range = 1 / economy.p_close(mspd, pspd)
+    if dtype == "ranged":
+        shoot = exp_at_range                     # rounds shooting per cycle
+        reopen = 1 / economy.p_open(pspd, mspd)  # rounds reopening per cycle
+        cycle = shoot + reopen
+        total = kill_rounds * cycle / shoot
+        taken = (0.5 * shoot + reopen) / cycle * total * dodge
+        return total, taken
+    total = kill_rounds
+    at_range = min(total, exp_at_range)
+    taken = (0.5 * at_range + (total - at_range)) * dodge
+    return total, taken
 
 
 def _floor_metrics(clazz, floor):
     fl = schema.get_floor(floor)
     _, _, m_hp = economy.monster_stats(floor)
-    rounds_w = weight_w = 0.0
+    rounds_w = risk_w = weight_w = 0.0
     gold_w = gold_weight = 0.0
     for enc in fl.encounters:
         profile = economy.profile_from_traits(enc.traits)
@@ -70,11 +103,14 @@ def _floor_metrics(clazz, floor):
         if not _is_intended(clazz, profile):
             continue                              # priced slog or a flee
         dmg = _expected_player_damage(clazz, floor, profile)
-        rounds_w += enc.weight * (m_hp / max(1, dmg))
+        kill_rounds = m_hp / max(1, dmg)
+        total, taken = _chase_adjusted(clazz, kill_rounds, profile)
+        rounds_w += enc.weight * total
+        risk_w += enc.weight * taken
         weight_w += enc.weight
     assert weight_w > 0, f"floor {floor}: no intended target for {clazz}"
     rounds = rounds_w / weight_w
-    risk = rounds * _expected_monster_damage(floor) \
+    risk = (risk_w / weight_w) * _expected_monster_damage(floor) \
         / economy.player_max_hp(floor)
     income = economy.gold_per_kill(floor) * (gold_w / gold_weight)
     return rounds, risk, income
@@ -90,14 +126,21 @@ def _series(clazz):
     return {"rounds": rounds, "risk": risk, "income": income}
 
 
-def _max_step(values):
+def _max_step(values, floor=0.2):
     worst, where = 0.0, 0
     for i, (a, b) in enumerate(zip(values, values[1:])):
-        base = max(a, 0.2)                        # damp tiny-value noise
+        base = max(a, floor)                      # damp tiny-value noise
         step = abs(b - a) / base
         if step > worst:
             worst, where = step, i + 1
     return worst, where
+
+
+# Risk is a 0..1 share of max HP: on the kindergarten floors it sits at
+# 0.05-0.15 where a designed +5-point ramp reads as a huge RELATIVE step.
+# A 0.25 base means only moves above ~6 HP-points per floor can fail —
+# absolute cliffs, not ramp noise. Rounds live at 2+ so 0.2 never bites.
+BASE_FLOOR = {"rounds": 0.2, "risk": 0.25}
 
 
 def _moving_average(values, window=5):
@@ -119,7 +162,7 @@ def test_no_cliffs_between_adjacent_floors():
         series = _series(clazz)
         for name in DIFFICULTY:
             values = series[name]
-            worst, at = _max_step(values)
+            worst, at = _max_step(values, BASE_FLOOR[name])
             assert worst <= ADJACENT_CAP, (
                 f"{clazz}/{name}: {worst:.0%} step at floor {at}→{at + 1} "
                 f"({values[at - 1]:.2f} → {values[at]:.2f})")
@@ -133,7 +176,7 @@ def test_band_boundaries_are_absorbed():
             values = series[name]
             for band_end in range(10, 100, 10):
                 a, b = values[band_end - 1], values[band_end]
-                step = abs(b - a) / max(a, 0.2)
+                step = abs(b - a) / max(a, BASE_FLOOR[name])
                 assert step <= ADJACENT_CAP, (
                     f"{clazz}/{name}: {step:.0%} wall at band boundary "
                     f"{band_end}→{band_end + 1}")
@@ -144,7 +187,7 @@ def test_trends_drift_smoothly():
         series = _series(clazz)
         for name in DIFFICULTY:
             smooth = _moving_average(series[name])
-            worst, at = _max_step(smooth)
+            worst, at = _max_step(smooth, BASE_FLOOR[name])
             assert worst <= TREND_CAP, (
                 f"{clazz}/{name}: smoothed trend jumps {worst:.0%} at "
                 f"floor {at}→{at + 1}")
