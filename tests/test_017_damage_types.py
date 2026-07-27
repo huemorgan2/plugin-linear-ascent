@@ -233,10 +233,14 @@ def reference_player(clazz, floor):
     p.update(stage="playing", race="human", clazz=clazz, name="Ref",
              level=floor, unlocked_floor=floor)
     tier = economy.gear_tier_for_floor(floor)
-    for g in economy.forge_tier(tier):
-        p["gear"][g.slot] = g.slug
-    if clazz != "warrior":  # weapon slot: class basic replaced by tier gear
-        pass                # (same forge weapon for every class today)
+    # 004: three weapon lines mirror each other's numbers — equip the
+    # CLASS line's whole-tier rung so the damage type stays in-class.
+    p["gear"]["weapon"] = next(
+        g for g in economy.weapon_line(clazz) if g.rung == tier).slug
+    p["gear"]["shield"] = next(
+        g for g in economy.gear_rungs("shield") if g.rung == tier).slug
+    p["gear"]["armor"] = next(
+        g for g in economy.gear_rungs("armor") if g.rung == tier).slug
     hone = economy.reference_hone(floor)
     p["hone"] = {s: hone for s in economy.HONE_SLOTS}
     p["hp"] = economy.player_max_hp(floor)

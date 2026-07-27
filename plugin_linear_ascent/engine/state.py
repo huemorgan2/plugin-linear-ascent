@@ -37,7 +37,7 @@ def new_player(luna_user: str) -> dict:
         "gold": 50, "bank": 0, "bank_day": world_day(),
         "floor": 0, "location": "town",
         "gear": {"weapon": economy.STARTER_WEAPON.slug,
-                 "shield": None, "armor": None},
+                 "shield": None, "armor": None, "shoes": None},
         "hone": {s: 0 for s in economy.HONE_SLOTS},
         "inventory": {},
         "energy_ts": ts, "energy_val": float(economy.ENERGY_BASE_CAP),
@@ -110,6 +110,7 @@ def ensure_current(p: dict) -> None:
     (local plugin DB and worldd alike) the next time they're touched."""
     p.setdefault("hone", {s: 0 for s in economy.HONE_SLOTS})
     p.setdefault("news_day", -1)       # 007: existing docs get the crier
+    p["gear"].setdefault("shoes", None)    # 004: the shoes ladder
     if p["gear"].get("weapon") is None:
         # pre-c4ab270 doc: never received the free starter weapon.
         p["gear"]["weapon"] = economy.STARTER_WEAPON.slug

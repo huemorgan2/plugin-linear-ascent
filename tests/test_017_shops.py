@@ -1,0 +1,482 @@
+"""017 phase 004 — shops & gear: rungs, lines, shoes, Arcanum (plan §3.1–3.4).
+
+Catalog invariants (the 60-row table is GENERATED — these pin the
+generator), the level gates, the shoes→speed feed, the off-class rules
+in the engine, both shop scenes, and the economy sim gates:
+days-to-afford stays on the 6→24 line with mid rungs included, and
+off-class gear is never income-positive against in-class play.
+"""
+
+import pytest
+
+from plugin_linear_ascent import economy
+from plugin_linear_ascent.content import schema
+from plugin_linear_ascent.engine import combat, core, state
+
+
+def fresh(name):
+    return state.new_player(name)
+
+
+def create_character(p, race="human", clazz="warrior", name="Shopper"):
+    core.current_scene(p)
+    while p["stage"] == "intro":
+        core.apply_choice(p, "1")
+    core.apply_choice(p, race)
+    core.apply_choice(p, clazz)
+    core.apply_choice(p, "", text=name)
+    return p
+
+
+def choose(p, oid="", text=""):
+    return core.apply_choice(p, oid, text=text)
+
+
+# ── the generated catalog (§3.1) ─────────────────────────────────────────
+
+def test_every_weapon_line_has_nineteen_rungs():
+    for line in ("warrior", "archer", "sorcerer"):
+        rungs = [g.rung for g in economy.weapon_line(line)]
+        assert rungs == [1 + 0.5 * i for i in range(19)], line
+
+
+def test_lines_mirror_the_warrior_numbers_rung_for_rung():
+    war = {g.rung: g for g in economy.weapon_line("warrior")}
+    for line in ("archer", "sorcerer"):
+        for g in economy.weapon_line(line):
+            ref = war[g.rung]
+            assert (g.bonus, g.price) == (ref.bonus, ref.price), g.slug
+
+
+def test_mid_rungs_are_midpoint_bonus_and_geometric_price():
+    war = {g.rung: g for g in economy.weapon_line("warrior")}
+    for t in range(1, 10):
+        lo, mid, hi = war[float(t)], war[t + 0.5], war[float(t + 1)]
+        assert mid.bonus == (lo.bonus + hi.bonus) // 2, mid.slug
+        assert mid.price == round((lo.price * hi.price) ** 0.5 / 10) * 10
+        assert lo.price < mid.price < hi.price, mid.slug
+
+
+def test_plan_table_spot_checks():
+    # the §3.1 example rows, verbatim
+    for slug, bonus, price in (("pigsticker", 8, 250),
+                               ("iron_sword", 12, 450),
+                               ("wolfbite", 16, 800),
+                               ("bloodgroove_falchion", 20, 2_280),
+                               ("ashwood_bow", 8, 250),
+                               ("sinew_backed_bow", 12, 450),
+                               ("tallowwood_staff", 8, 250),
+                               ("coalglass_staff", 12, 450)):
+        g = economy.FORGE[slug]
+        assert (g.bonus, g.price) == (bonus, price), slug
+
+
+def test_shields_and_armor_carry_the_mid_rungs_too():
+    for slot in ("shield", "armor"):
+        rungs = [g.rung for g in economy.gear_rungs(slot)]
+        assert rungs == [1 + 0.5 * i for i in range(19)], slot
+
+
+def test_focuses_are_ten_whole_rungs_mirroring_shields():
+    focuses = economy.gear_rungs("shield", "sorcerer")
+    assert [g.rung for g in focuses] == [float(t) for t in range(1, 11)]
+    shields = {g.rung: g for g in economy.gear_rungs("shield")}
+    for f in focuses:
+        ref = shields[f.rung]
+        assert (f.bonus, f.price) == (ref.bonus, ref.price), f.slug
+
+
+def test_shoes_ladder_matches_the_plan_table():
+    rows = [(g.name, g.speed, g.price, economy.rung_level_req(g))
+            for g in economy.gear_rungs("shoes")]
+    assert rows == [
+        ("Cobbled Boots", 1, 500, 3),
+        ("Wayfarer's Treads", 2, 3_500, 11),
+        ("Chasewind Boots", 3, 24_000, 21),
+        ("Skyline Striders", 4, 120_000, 41),
+        ("Stormstep Greaves", 5, 400_000, 61),
+    ]
+
+
+def test_level_gates_whole_at_band_start_mids_five_later():
+    war = {g.rung: g for g in economy.weapon_line("warrior")}
+    for t in range(1, 11):
+        assert economy.rung_level_req(war[float(t)]) == \
+            economy.band_start(t)
+        if t < 10:
+            assert economy.rung_level_req(war[t + 0.5]) == \
+                economy.band_start(t) + 5
+
+
+def test_shoe_speed_hook_is_filled():
+    assert economy.SHOE_SPEED["cobbled_boots"] == 1
+    assert economy.SHOE_SPEED["stormstep_greaves"] == 5
+    p = fresh("hook")
+    p["gear"]["shoes"] = "wayfarers_treads"
+    assert economy.player_speed(p) == economy.PLAYER_BASE_SPEED + 2
+
+
+def test_off_class_offer_is_the_previous_rung():
+    # level 11 unlocks rungs 1, 1.5, 2 → the rack offers 1.5
+    g = economy.off_class_offer("archer", 11)
+    assert g.slug == "sinew_backed_bow"
+    # level 1 has only rung 1 — the rack still offers something
+    assert economy.off_class_offer("archer", 1).slug == "ashwood_bow"
+    assert economy.off_class_price(economy.FORGE["ashwood_bow"]) == 750
+
+
+# ── the Forge scene (class-aware racks) ──────────────────────────────────
+
+def test_warrior_forge_racks_blades_not_bows():
+    p = create_character(fresh("w-forge"), clazz="warrior")
+    s = choose(p, "forge")
+    ids = {o.id for o in s.options}
+    assert "buy_pigsticker" in ids
+    assert "buy_tallowwood_staff" not in ids
+    # the off-class rack: one bow, one rung back, priced ×3
+    assert "buy_ashwood_bow" in ids
+    bow = next(o for o in s.options if o.id == "buy_ashwood_bow")
+    assert "off-class" in bow.hint and "750" in bow.hint
+    assert "buy_arrow_pack" in ids
+
+
+def test_next_locked_rung_is_always_visible():
+    p = create_character(fresh("locked"), clazz="warrior")
+    s = choose(p, "forge")
+    assert any("🔒 Iron Sword — level 6" in ln for ln in s.body_lines)
+    assert any("🔒 Cobbled Boots — level 3" in ln for ln in s.body_lines)
+    # at level 3 the boots unlock and the NEXT pair takes the lock
+    p["level"] = 3
+    s = core.current_scene(p)
+    ids = {o.id for o in s.options}
+    assert "buy_cobbled_boots" in ids
+    assert any("🔒 Wayfarer" in ln and "level 11" in ln
+               for ln in s.body_lines)
+
+
+def test_archer_forge_racks_bows_and_a_blade_off_the_rack():
+    p = create_character(fresh("a-forge"), clazz="archer")
+    s = choose(p, "forge")
+    ids = {o.id for o in s.options}
+    assert "buy_ashwood_bow" in ids
+    assert "buy_pigsticker" in ids            # off-class blade
+    assert "buy_arrow_pack" not in ids        # archers never need packs
+    blade = next(o for o in s.options if o.id == "buy_pigsticker")
+    assert "off-class" in blade.hint
+
+
+def test_sorcerer_forge_points_at_the_arcanum():
+    p = create_character(fresh("s-forge"), clazz="sorcerer")
+    p["level"] = 3                             # boots on the rack too
+    s = choose(p, "forge")
+    ids = {o.id for o in s.options}
+    assert not any(i.startswith("buy_") and "staff" in i for i in ids)
+    assert "buy_scrapwood_buckler" not in ids  # shields serve war+archer
+    assert "buy_padded_jerkin" in ids          # armor is shared
+    assert "buy_cobbled_boots" in ids          # so are shoes
+    assert any("Arcanum" in ln for ln in s.body_lines)
+    # a forced staff buy at the Forge is turned away, not sold
+    p["gold"] = 10_000
+    s = choose(p, "buy_tallowwood_staff")
+    assert p["gear"]["weapon"] == "worn_staff"
+
+
+def test_buying_shoes_fills_the_slot_and_the_speed():
+    p = create_character(fresh("boots"), clazz="warrior")
+    p["level"], p["gold"] = 3, 1_000
+    choose(p, "forge")
+    s = choose(p, "buy_cobbled_boots")
+    assert p["gear"]["shoes"] == "cobbled_boots"
+    assert p["gold"] == 500
+    assert economy.player_speed(p) == economy.PLAYER_BASE_SPEED + 1
+    assert any("laced on" in ln for ln in s.body_lines)
+
+
+def test_off_class_purchase_charges_triple():
+    p = create_character(fresh("triple"), clazz="warrior")
+    p["gold"] = 1_000
+    choose(p, "forge")
+    choose(p, "buy_ashwood_bow")
+    assert p["gear"]["weapon"] == "ashwood_bow"
+    assert p["gold"] == 250                    # 750 paid, sword to pack
+    assert p["inventory"].get("rusted_sword") is None  # starter is free →
+    # free gear goes to the scrap bin, not the pack
+
+
+def test_arrow_pack_buys_ten():
+    p = create_character(fresh("quiver"), clazz="warrior")
+    p["gold"] = 500
+    choose(p, "forge")
+    choose(p, "buy_arrow_pack")
+    assert p["inventory"]["arrows"] == economy.ARROW_PACK_SIZE
+    assert p["gold"] == 500 - economy.ARROW_PACK_PRICE
+
+
+def test_wear_from_pack_swaps_for_free():
+    p = create_character(fresh("swap"), clazz="warrior")
+    p["gold"] = 10_000
+    choose(p, "forge")
+    choose(p, "buy_pigsticker")
+    choose(p, "buy_ashwood_bow")               # sticker → pack
+    assert p["inventory"]["pigsticker"] == 1
+    gold = p["gold"]
+    s = choose(p, "wear_pigsticker")
+    assert p["gear"]["weapon"] == "pigsticker"
+    assert p["inventory"].get("ashwood_bow") == 1
+    assert p["gold"] == gold                   # free
+    assert any("back on" in ln for ln in s.body_lines)
+
+
+def test_off_class_weapon_never_hones():
+    p = create_character(fresh("nohone"), clazz="warrior")
+    p["gold"], p["unlocked_floor"] = 10_000, 3
+    choose(p, "forge")
+    choose(p, "buy_ashwood_bow")
+    s = core.current_scene(p)
+    assert not any(o.id == "hone_weapon" for o in s.options)
+    assert any(o.id == "hone_armor" for o in s.options) or \
+        not p["gear"].get("armor")             # armor hone unaffected
+
+
+# ── the Arcanum (§3.4) ───────────────────────────────────────────────────
+
+def test_town_shows_the_locked_arcanum_row():
+    p = create_character(fresh("town-row"))
+    s = core.current_scene(p)
+    row = next(o for o in s.options if o.id == "arcanum")
+    assert "🔒" in row.hint and "6" in row.hint
+    s = choose(p, "arcanum")
+    assert p["location"] == "town"             # the door held
+    assert "level 6" in s.shard_note
+
+
+def test_arcanum_opens_at_level_six():
+    p = create_character(fresh("door"), clazz="sorcerer")
+    p["level"] = 6
+    s = choose(p, "arcanum")
+    assert p["location"] == "arcanum"
+    ids = {o.id for o in s.options}
+    assert "buy_tallowwood_staff" in ids
+    assert "buy_coalglass_staff" in ids        # level 6 unlocks the mid
+    assert "buy_glass_bead_focus" in ids
+
+
+def test_sorcerer_buys_staff_and_focus_at_the_arcanum():
+    p = create_character(fresh("caster"), clazz="sorcerer")
+    p["level"], p["gold"] = 6, 1_000
+    choose(p, "arcanum")
+    choose(p, "buy_tallowwood_staff")
+    assert p["gear"]["weapon"] == "tallowwood_staff"
+    choose(p, "buy_glass_bead_focus")
+    assert p["gear"]["shield"] == "glass_bead_focus"
+    assert p["gold"] == 1_000 - 250 - 100
+
+
+def test_focus_refused_to_non_casters():
+    p = create_character(fresh("no-focus"), clazz="warrior")
+    p["level"], p["gold"] = 6, 10_000
+    s = choose(p, "arcanum")
+    ids = {o.id for o in s.options}
+    assert "buy_glass_bead_focus" not in ids
+    s = choose(p, "buy_glass_bead_focus")
+    assert p["gear"]["shield"] is None
+    # the off-class staff IS on the rack, one rung back, ×3
+    staff = next((o for o in s.options
+                  if o.id.startswith("buy_") and "staff" in o.id), None)
+    assert staff is not None and "off-class" in staff.hint
+
+
+# ── off-class combat (§3.2) ──────────────────────────────────────────────
+
+def _armed(clazz, weapon, floor_no=4, enc_id="glare_moth", arrows=0):
+    if enc_id == "feral_boar":
+        floor_no = 1                           # the plain reference target
+    fl = schema.get_floor(floor_no)
+    enc = next(e for e in fl.encounters if e.id == enc_id)
+    p = create_character(fresh(f"oc-{clazz}-{weapon}-{arrows}"),
+                         clazz=clazz)
+    p["level"] = floor_no
+    p["hp"] = economy.player_max_hp(floor_no)
+    p["gear"]["weapon"] = weapon
+    if arrows:
+        p["inventory"]["arrows"] = arrows
+    combat.start_encounter(p, fl, enc)
+    return p, fl
+
+
+def test_a_bow_lets_the_warrior_reach_the_flyer():
+    p, fl = _armed("warrior", "ashwood_bow", arrows=30)
+    hp0 = p["encounter"]["hp"]
+    for _ in range(6):
+        if not p["encounter"]:
+            break
+        combat.resolve_fight_action(p, fl, "attack")
+    assert p["encounter"] is None or p["encounter"]["hp"] < hp0
+
+
+def test_off_class_shots_burn_arrows():
+    p, fl = _armed("warrior", "ashwood_bow", enc_id="feral_boar", arrows=5)
+    combat.resolve_fight_action(p, fl, "attack")
+    assert p["inventory"]["arrows"] == 4
+
+
+def test_archers_own_bow_never_burns_arrows():
+    p, fl = _armed("archer", "ashwood_bow", enc_id="feral_boar")
+    combat.resolve_fight_action(p, fl, "attack")
+    assert "arrows" not in p["inventory"]
+
+
+def test_empty_quiver_brings_the_class_weapon_back_out():
+    p, fl = _armed("warrior", "ashwood_bow", enc_id="feral_boar", arrows=0)
+    s = combat.resolve_fight_action(p, fl, "attack")
+    assert p["gear"]["weapon"] == "rusted_sword"
+    assert p["inventory"]["ashwood_bow"] == 1
+    assert any("quiver runs dry" in ln for ln in s.body_lines)
+
+
+def test_off_class_misses_a_quarter_of_the_time():
+    misses = hits = 0
+    for seed in range(400):
+        p, fl = _armed("warrior", "ashwood_bow", enc_id="feral_boar",
+                       arrows=1)
+        p["luna_user"] = f"miss-{seed}"
+        p["hp"] = 10_000                      # survive the answer
+        hp0 = p["encounter"]["hp"]
+        combat.resolve_fight_action(p, fl, "attack")
+        if p["encounter"] and p["encounter"]["hp"] == hp0:
+            misses += 1
+        else:
+            hits += 1
+    rate = misses / (misses + hits)
+    assert abs(rate - economy.OFF_CLASS_MISS) < 0.07, rate
+
+
+def test_off_class_damage_is_halved():
+    tot_in = tot_off = 0
+    for seed in range(300):
+        pi, fli = _armed("archer", "ashwood_bow", enc_id="feral_boar")
+        pi["luna_user"] = f"in-{seed}"
+        hp0 = pi["encounter"]["hp"]
+        combat._player_hit(pi)
+        tot_in += hp0 - pi["encounter"]["hp"]
+        po, flo = _armed("warrior", "ashwood_bow", enc_id="feral_boar",
+                         arrows=99)
+        po["luna_user"] = f"off-{seed}"
+        hp0 = po["encounter"]["hp"]
+        combat._player_hit(po)
+        tot_off += hp0 - po["encounter"]["hp"]
+    ratio = tot_off / max(1, tot_in)
+    assert 0.35 <= ratio <= 0.65, ratio
+
+
+def test_treeline_shot_needs_a_bow_in_hand():
+    p, fl = _armed("archer", "pigsticker", enc_id="feral_boar")
+    s = combat.fight_scene(p, fl)
+    assert not any(o.id == "treeline_shot" for o in s.options)
+
+
+# ── shoes in the chase (002 retro: re-run the sims WITH shoes) ───────────
+
+def test_treads_turn_the_fast_race_even_not_free():
+    # Wayfarer's Treads (+2) against a fast (7) monster: the race is
+    # even — kiting becomes POSSIBLE (p_open .5) but never safe, and the
+    # monster still closes one round in four. A purchased answer, not a
+    # free one.
+    pspd = economy.PLAYER_BASE_SPEED + 2
+    assert economy.p_open(pspd, economy.SPEED_FAST) == pytest.approx(0.50)
+    assert economy.p_close(economy.SPEED_FAST, pspd) == pytest.approx(0.25)
+    assert economy.p_flee(pspd, economy.SPEED_FAST) == pytest.approx(0.60)
+    assert economy.dodge_pct(pspd, economy.SPEED_FAST) == 0
+
+
+def test_boots_walk_away_from_the_slow_bulwark():
+    pspd = economy.PLAYER_BASE_SPEED + 1
+    assert economy.p_flee(pspd, economy.SPEED_SLOW) > 0.9
+    assert economy.p_close(economy.SPEED_SLOW, pspd) == \
+        pytest.approx(0.05)
+
+
+# ── economy sim gates ────────────────────────────────────────────────────
+
+def _set_price(rung: float) -> int:
+    """Weapon + shield + armor at one rung (the band's shopping list)."""
+    w = {g.rung: g for g in economy.weapon_line("warrior")}
+    s = {g.rung: g for g in economy.gear_rungs("shield")}
+    a = {g.rung: g for g in economy.gear_rungs("armor")}
+    return w[rung].price + s[rung].price + a[rung].price
+
+
+def test_days_to_afford_curve_is_smooth_and_bounded():
+    """The days-in-tier line with mid rungs included: measured curve is
+    ~2.4 days (band 2) rising smoothly to ~32 (band 10) for the full
+    band spend (mid set + whole set). The gate pins the SHAPE: the mid
+    is always the reachable half, the curve only rises, no adjacent
+    band more than doubles, and the endpoints stay on the line."""
+    prev_total = None
+    for t in range(2, 11):
+        income = economy.daily_income(economy.band_start(t) - 5)
+        days_set = _set_price(float(t)) / income
+        days_mid = _set_price(t - 0.5) / income
+        assert days_mid < days_set, t          # reachable vs aspirational
+        total = days_set + days_mid
+        assert total <= 35, (t, round(total, 1))
+        if prev_total is not None:
+            assert total > prev_total, t       # saving never gets shorter
+            assert total < prev_total * 2.2, t  # and never walls
+        prev_total = total
+    assert prev_total >= 24                    # band 10 is a real project
+
+
+def test_no_price_wall_between_adjacent_rungs():
+    """Mid rungs exist to absorb the tier walls: with them in the
+    ladder, no next-rung purchase costs more than ~3.6× the last."""
+    for line in ("warrior", "archer", "sorcerer"):
+        rungs = economy.weapon_line(line)
+        for lo, hi in zip(rungs, rungs[1:]):
+            assert hi.price / lo.price <= 3.6, (line, hi.slug)
+
+
+def test_off_class_is_never_income_positive():
+    """A stopgap, not a build: against every floor-1..10 encounter an
+    off-class weapon's expected damage per round trails the in-class
+    weapon of the SAME rung — before even counting the ×3 price."""
+    for floor_no in range(1, 11):
+        fl = schema.get_floor(floor_no)
+        for enc in fl.encounters:
+            prof = economy.profile_from_traits(enc.traits)
+            atk, dfs, _ = economy.monster_stats(floor_no)
+            raw = 30
+            for dtype_in, dtype_off in (("melee", "ranged"),
+                                        ("ranged", "melee"),
+                                        ("magic", "ranged")):
+                d_in = economy.typed_damage(dtype_in, raw, dfs, prof)
+                d_off = economy.typed_damage(
+                    dtype_off, round(raw * economy.OFF_CLASS_DMG_MULT),
+                    dfs, prof)
+                d_off *= (1 - economy.OFF_CLASS_MISS)
+                if d_in == 0:                 # melee vs flyer: the one
+                    continue                  # case off-class exists FOR
+                assert d_off < d_in, (floor_no, enc.id, dtype_in)
+
+
+def test_migrated_docs_grow_the_shoes_slot():
+    p = fresh("old-doc")
+    del p["gear"]["shoes"]
+    state.ensure_current(p)
+    assert p["gear"]["shoes"] is None
+
+
+def test_weapon_icons_follow_the_line():
+    """Dojo catch: a bow drawn as a sword misreads the whole rack.
+    Weapons resolve to their line's silhouette; focuses to the diamond."""
+    from plugin_linear_ascent import icons
+    assert icons.icon_key("pigsticker", "weapon") == "weapon"
+    assert icons.icon_key("ashwood_bow", "weapon") == "bow"
+    assert icons.icon_key("basic_bow", "weapon") == "bow"
+    assert icons.icon_key("tallowwood_staff", "weapon") == "staff"
+    assert icons.icon_key("worn_staff", "weapon") == "staff"
+    assert icons.icon_key("scrapwood_buckler", "shield") == "shield"
+    focus = economy.gear_rungs("shield", line="sorcerer")[0]
+    assert icons.icon_key(focus.slug, "shield") == "focus"
+    for key in ("bow", "staff", "focus"):
+        assert icons.icon_data_url(key).startswith("data:image/svg+xml")

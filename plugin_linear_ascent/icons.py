@@ -72,6 +72,101 @@ _GRIDS: dict[str, list[str]] = {
         "................",
         "................",
     ],
+    # a boot in profile — heel, laces, sole (004: the shoes ladder)
+    "shoes": [
+        "................",
+        "....######......",
+        "....######......",
+        "....##..##......",
+        "....##..##......",
+        "....##..##......",
+        "....##..##......",
+        "....##..####....",
+        "....##....####..",
+        "....##......##..",
+        "..####......##..",
+        ".##..........##.",
+        ".##############.",
+        ".##############.",
+        "................",
+        "................",
+    ],
+    # a fletched arrow, point down (004: the off-class quiver)
+    "arrows": [
+        "................",
+        "......##.##.....",
+        ".....##..##.....",
+        "....##..##.##...",
+        "........##......",
+        ".......##.......",
+        ".......##.......",
+        "......##........",
+        "......##........",
+        ".....##.........",
+        ".....##.........",
+        "....##..........",
+        "...####.........",
+        "...####.........",
+        "................",
+        "................",
+    ],
+    # strung bow, arrow nocked and pointing right (004: the archer line)
+    "bow": [
+        "................",
+        "................",
+        "..........##....",
+        "........##.#....",
+        ".......#...#....",
+        "......#....#....",
+        ".....#.....#.#..",
+        "...############.",
+        ".....#.....#.#..",
+        "......#....#....",
+        ".......#...#....",
+        "........##.#....",
+        "..........##....",
+        "................",
+        "................",
+        "................",
+    ],
+    # orb-topped rod, banded near the foot (004: the sorcerer line)
+    "staff": [
+        "................",
+        "......###.......",
+        ".....#...#......",
+        ".....#...#......",
+        "......###.......",
+        ".......##.......",
+        ".......##.......",
+        ".......##.......",
+        ".......##.......",
+        ".......##.......",
+        ".......##.......",
+        ".......##.......",
+        "......####......",
+        ".......##.......",
+        "................",
+        "................",
+    ],
+    # hollow diamond — the caster's focus (004: the Arcanum rack)
+    "focus": [
+        "................",
+        "................",
+        "................",
+        "................",
+        ".......##.......",
+        "......#..#......",
+        ".....#....#.....",
+        "....#......#....",
+        "....#......#....",
+        ".....#....#.....",
+        "......#..#......",
+        ".......##.......",
+        "................",
+        "................",
+        "................",
+        "................",
+    ],
     # sealed gel vial, carved cross
     "medgel": [
         "................",
@@ -328,11 +423,21 @@ ICON_KEYS = tuple(_GRIDS)
 
 
 def icon_key(slug: str, kind: str = "") -> str:
-    """Resolve an inventory entry to an icon key. Gear resolves by its
-    slot (kind), apothecary items by slug, anything else is a pack."""
+    """Resolve an inventory entry to an icon key. Weapons draw their
+    line's silhouette (blade / bow / staff, focuses their diamond); other
+    gear resolves by slot, apothecary items by slug, the rest is a pack."""
     if slug in _GRIDS:
         return slug
-    if kind in ("weapon", "shield", "armor"):
+    if kind in ("weapon", "shield"):
+        from . import economy
+        g = economy.FORGE.get(slug)
+        line = getattr(g, "line", "") if g is not None else ""
+        if kind == "weapon":
+            return {"archer": "bow", "sorcerer": "staff"}.get(line, "weapon")
+        if g is not None and g.slot == "shield" and line == "sorcerer":
+            return "focus"
+        return "shield"
+    if kind in ("armor", "shoes"):
         return kind
     return "pack"
 

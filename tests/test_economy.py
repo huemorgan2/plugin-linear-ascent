@@ -62,12 +62,14 @@ def test_warden_derivation_and_milestones():
 
 
 def test_forge_catalog_shape():
+    # 017/004: tier 1 now spans the three weapon lines, shield + focus,
+    # armor and the first shoe rung
     t1 = economy.forge_tier(1)
-    assert {g.slot for g in t1} == {"weapon", "shield", "armor"}
+    assert {g.slot for g in t1} == {"weapon", "shield", "armor", "shoes"}
     pig = economy.FORGE["pigsticker"]
     assert (pig.bonus, pig.price) == (8, 250)
     # 004 §4.4: late tiers repriced from exponential to quadratic
-    dawn = [g for g in economy.forge_tier(10) if g.slot == "weapon"][0]
+    dawn = economy.FORGE["dawnbreaker"]
     assert (dawn.bonus, dawn.price) == (80, 685_000)
 
 

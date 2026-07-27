@@ -347,6 +347,25 @@ def _dossier_html(en: dict) -> str:
             f"dossier</div>{''.join(rows)}</div></details>")
 
 
+def _opt_gear_icon(oid: str) -> str:
+    """004: shop rows carry their 1-bit gear icon (32×32 display of the
+    16×16 grids) — buy_/wear_ options only, everything else stays text."""
+    if not (oid.startswith("buy_") or oid.startswith("wear_")):
+        return ""
+    slug = oid.split("_", 1)[1]
+    if slug == "arrow_pack":
+        key = "arrows"
+    else:
+        g = economy.FORGE.get(slug)
+        if g is None:
+            return ""
+        key = icons.icon_key(slug, g.slot)
+    url = icons.icon_data_url(key)
+    return (f'<span class="gicon" aria-hidden="true" '
+            f"style=\"-webkit-mask-image:url('{url}');"
+            f"mask-image:url('{url}')\"></span>")
+
+
 def _inventory_html(scene: Scene) -> str:
     """014: the pack strip — 32×32 single-color 1-bit icons under the
     rail. Equipped gear reads bright, pack items dim; every cell
@@ -577,8 +596,9 @@ def render_scene_fragment(scene: Scene) -> str:
             key_cls = " aether" if o.aether else ""
             hint = (f'<span class="hint">{_e(o.hint)}</span>'
                     if o.hint else "")
+            gicon = _opt_gear_icon(o.id)
             btn = (f'<button type="button" class="opt" data-opt="{_e(o.id)}">'
-                   f'<span class="key{key_cls}">{i}</span>'
+                   f'<span class="key{key_cls}">{i}</span>{gicon}'
                    f'<span class="lbl">{_e(o.label)}</span>{hint}</button>')
             # 014: the whisper glyph — [i] OUTSIDE the button, so tapping
             # it never fires the option; tip resolves by option id.
@@ -667,6 +687,11 @@ SCENE_CSS = f"""
 .opt .key::after{{content:"]";color:{FAINT};}}
 .opt .key.aether{{color:{AETHER};}}
 .opt .hint{{margin-left:auto;color:{FAINT};text-align:right;}}
+.opt .gicon{{width:32px;height:32px;flex:none;display:inline-block;
+ background-color:{DIM};mask-size:100% 100%;-webkit-mask-size:100% 100%;
+ mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;
+ image-rendering:pixelated;}}
+.opt:hover .gicon{{background-color:{TEXT};}}
 .orow{{display:flex;align-items:stretch;gap:5px;}}
 .orow .opt{{flex:1;min-width:0;}}
 .info{{flex:none;display:flex;align-items:center;padding:0 .5ch;

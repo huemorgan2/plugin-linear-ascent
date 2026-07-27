@@ -447,10 +447,16 @@ class GearItem:
     slug: str
     name: str
     flavor: str
-    slot: str          # weapon | shield | armor
+    slot: str          # weapon | shield | armor | shoes
     tier: int
     bonus: int
     price: int
+    # 017/004: the buying game — three class weapon lines, mid rungs,
+    # the shoes ladder, and the Arcanum's focuses.
+    line: str = ""     # weapon/focus owner class ("" = shared gear)
+    rung: float = 0.0  # 1, 1.5, 2 … (0 = starter / pre-004 semantics)
+    speed: int = 0     # shoes: +speed on the 1–10 scale
+    level: int = 0     # explicit level gate override (shoes ladder)
 
 
 # 004 §4.4 reprice: tiers 3–10 follow the quadratic ladder
@@ -491,19 +497,183 @@ _FORGE_ROWS = [
 ]
 
 
+# ── 004 §3.1: the mid rungs and the three weapon lines ──────────────────
+# Between every tier T and T+1 a rung T.5: bonus = midpoint, price =
+# geometric mean (rounded to ◈10) — days-to-afford stays smooth. Archer
+# and sorcerer lines mirror the warrior numbers rung for rung; only the
+# names differ. Names below; numbers all derive from _FORGE_ROWS.
+
+_WARRIOR_MIDS = {
+    1.5: ("Iron Sword", "honest forge-iron, honest weight"),
+    2.5: ("Bloodgroove Falchion", "the channel drinks so the edge doesn't"),
+    3.5: ("Seared Cleaver", "quench-burnt edge, still warm"),
+    4.5: ("Moonwake Saber", "elven mono-edge, second polish"),
+    5.5: ("Bannerbreak Blade", "knight steel that outlived its knight"),
+    6.5: ("Ironstorm Maul", "half thunder, all weight"),
+    7.5: ("Tempest Edge", "storm-cell steel, twice charged"),
+    8.5: ("Night-Iron Glaive", "phase-etched — light won't hold it"),
+    9.5: ("Kingsguard Razor", "demon-steel, palace-forged"),
+}
+
+_ARCHER_WEAPONS = {
+    1: ("Ashwood Bow", "straight-grain ash, dependable"),
+    1.5: ("Sinew-Backed Bow", "backed for the longer throw"),
+    2: ("Wolfsight Recurve", "shock-tip recurve, keen at distance"),
+    2.5: ("Horncore Bow", "horn core under tension"),
+    3: ("Emberflight Longbow", "dwarf-lathed, plasma nock"),
+    3.5: ("Cinderfletch", "burns as it leaves the string"),
+    4: ("Thornstring", "elven mono-fiber string"),
+    4.5: ("Silverlimb", "silverthread limbs, no creak"),
+    5: ("Oathstring", "knight's arc-bow"),
+    5.5: ("Drakespine Recurve", "ribbed with wyrm bone"),
+    6: ("Grimflight", "a giant-slaying ballista in one hand"),
+    6.5: ("Frosthawk Bow", "cold-field nock, quiet release"),
+    7: ("Starshot", "storm-cell compound bow"),
+    7.5: ("Stormnock", "twice-charged limbs"),
+    8: ("Duskwhisper", "phase-etched — the string makes no sound"),
+    8.5: ("Gloamreach", "cloak-field limbs"),
+    9: ("Kingspiercer", "demon-steel railbow"),
+    9.5: ("Hellbarb Bow", "barbed for what won't die"),
+    10: ("Dawnstring", "fusion-core bow — the last light, bent double"),
+}
+
+_SORCERER_WEAPONS = {
+    1: ("Tallowwood Staff", "candle-soft wood that holds a spark"),
+    1.5: ("Coalglass Staff", "coalglass core, banked heat"),
+    2: ("Stormtwig Staff", "green wood that remembers lightning"),
+    2.5: ("Embervein Staff", "ember veins under the bark"),
+    3: ("Ashspire Staff", "dwarf-kilned, draws like a chimney"),
+    3.5: ("Cinderheart Staff", "the knot at its heart still burns"),
+    4: ("Thornweave Staff", "elven mono-fiber wrap"),
+    4.5: ("Silverbough Staff", "silverthread graft, cold light"),
+    5: ("Oathflame Staff", "knight's arc-focus"),
+    5.5: ("Wyrmtongue Staff", "speaks fire back"),
+    6: ("Grimspark Staff", "giant-slaying thunder rod"),
+    6.5: ("Frostbrand Staff", "a cold-field emitter on a stave"),
+    7: ("Starcaller Staff", "storm-cell core"),
+    7.5: ("Stormcrown Staff", "twice-charged crown"),
+    8: ("Duskbinder Staff", "phase-etched heartwood"),
+    8.5: ("Nightwell Staff", "draws from somewhere dark"),
+    9: ("Kingscourge Staff", "demon-steel core"),
+    9.5: ("Hellrune Staff", "runes that shouldn't hold — and do"),
+    10: ("Dawncaller Staff", "fusion-core staff — the last light answers"),
+}
+
+_SHIELD_MIDS = {
+    1.5: ("Banded Kite", "iron bands over ashwood"),
+    2.5: ("Boarhide Aspis", "boiled hide on a boss of iron"),
+    3.5: ("Kilnplate Round", "kiln-fired ceramic facing"),
+    4.5: ("Moonglass Targe", "light bends around the rim"),
+    5.5: ("Wyvernbone Wall", "ribbed like the thing it stopped"),
+    6.5: ("Frostrim Tower", "the rim sweats cold"),
+    7.5: ("Tempest Aegis", "a deflector wound twice"),
+    8.5: ("Gloamguard", "the cloak-field hums"),
+    9.5: ("Hellgrate Shield", "grated demon-steel, still warm"),
+}
+
+_ARMOR_MIDS = {
+    1.5: ("Studded Jack", "canvas and rivets, better than luck"),
+    2.5: ("Boiled Cuirass", "leather boiled to plank"),
+    3.5: ("Kilnforged Scale", "ceramic scale, kiln-set"),
+    4.5: ("Moonthread Weave", "silverthread, double weave"),
+    5.5: ("Drakehide Plate", "hide over plate over hide"),
+    6.5: ("Frostbound Carapace", "powerplate with a cold heart"),
+    7.5: ("Tempestweave", "storm-cell mesh"),
+    8.5: ("Gloamshroud Mail", "nightweave, second shadow"),
+    9.5: ("Hellforged Panoply", "demonbone, re-forged and obedient"),
+}
+
+# The Arcanum's focuses: the sorcerer's shield-slot. Whole tiers only —
+# the Arcanum stocks ten rungs and no mids (§3.4).
+_FOCUS_NAMES = {
+    1: ("Glass Bead Focus", "a bead that bends the spark"),
+    2: ("Ironglass Prism", "smoked prism in an iron claw"),
+    3: ("Kilnfire Lens", "dwarf-kilned, drinks the flare"),
+    4: ("Moonwater Orb", "elven glass, always cool"),
+    5: ("Oathlight Prism", "knight-cut, holds a vow of light"),
+    6: ("Grimlight Core", "a thunder rod's stolen heart"),
+    7: ("Starwell Lens", "storm-cell condenser"),
+    8: ("Duskmirror Orb", "phase-etched — it reflects later"),
+    9: ("Kingseye Prism", "demon-steel setting, unblinking"),
+    10: ("Dawnprism", "the last light, folded"),
+}
+
+# 004 §3.3: the shoes ladder — explicit level gates (3/11/21/41/61), paid
+# gear, wears per chase action once 005 lands. Speed feeds §2.4 directly.
+_SHOE_ROWS = [
+    (1, "Cobbled Boots", "resoled twice, they'll hold", 1, 500, 3),
+    (2, "Wayfarer's Treads", "road-sworn leather, spring in the heel",
+     2, 3_500, 11),
+    (3, "Chasewind Boots", "elven soles — the ground agrees to help",
+     3, 24_000, 21),
+    (4, "Skyline Striders", "storm-cell arches, half a jump each step",
+     4, 120_000, 41),
+    (5, "Stormstep Greaves", "the thunder arrives after you do",
+     5, 400_000, 61),
+]
+
+
+def _slugify(name: str) -> str:
+    return name.lower().replace("'", "").replace(" ", "_").replace(
+        "—", "").replace(",", "").replace("-", "_")
+
+
+def _gmean_price(a: int, b: int) -> int:
+    return round(math.sqrt(a * b) / 10) * 10
+
+
 def _build_forge() -> dict[str, GearItem]:
     items: dict[str, GearItem] = {}
-    for tier, weapon, shield, armor, (pw, ps, pa) in _FORGE_ROWS:
-        for (name, flavor, bonus), slot, price in (
-                (weapon, "weapon", pw), (shield, "shield", ps),
-                (armor, "armor", pa)):
-            slug = name.lower().replace("'", "").replace(" ", "_").replace(
-                "—", "").replace(",", "")
-            items[slug] = GearItem(slug, name, flavor, slot, tier, bonus, price)
+
+    def put(name: str, flavor: str, slot: str, rung: float, bonus: int,
+            price: int, line: str = "", speed: int = 0, level: int = 0):
+        slug = _slugify(name)
+        assert slug not in items, f"forge slug collision: {slug}"
+        items[slug] = GearItem(slug, name, flavor, slot, int(rung), bonus,
+                               price, line=line, rung=float(rung),
+                               speed=speed, level=level)
+
+    rows = {t: (w, s, a, p) for t, w, s, a, p in _FORGE_ROWS}
+    for tier, (w, s, a, (pw, ps, pa)) in rows.items():
+        put(w[0], w[1], "weapon", tier, w[2], pw, line="warrior")
+        put(s[0], s[1], "shield", tier, s[2], ps)
+        put(a[0], a[1], "armor", tier, a[2], pa)
+    for t in range(1, 10):
+        w1, s1, a1, (pw1, ps1, pa1) = rows[t]
+        w2, s2, a2, (pw2, ps2, pa2) = rows[t + 1]
+        r = t + 0.5
+        n, f = _WARRIOR_MIDS[r]
+        put(n, f, "weapon", r, (w1[2] + w2[2]) // 2,
+            _gmean_price(pw1, pw2), line="warrior")
+        n, f = _SHIELD_MIDS[r]
+        put(n, f, "shield", r, (s1[2] + s2[2]) // 2, _gmean_price(ps1, ps2))
+        n, f = _ARMOR_MIDS[r]
+        put(n, f, "armor", r, (a1[2] + a2[2]) // 2, _gmean_price(pa1, pa2))
+
+    # the other two weapon lines mirror the warrior numbers rung for rung
+    warrior = {g.rung: g for g in items.values()
+               if g.slot == "weapon" and g.line == "warrior"}
+    for line, table in (("archer", _ARCHER_WEAPONS),
+                        ("sorcerer", _SORCERER_WEAPONS)):
+        for r, (n, f) in table.items():
+            ref = warrior[float(r)]
+            put(n, f, "weapon", float(r), ref.bonus, ref.price, line=line)
+
+    shields = {g.rung: g for g in items.values()
+               if g.slot == "shield" and g.rung == int(g.rung)}
+    for t, (n, f) in _FOCUS_NAMES.items():
+        ref = shields[float(t)]
+        put(n, f, "shield", float(t), ref.bonus, ref.price, line="sorcerer")
+
+    for t, n, f, spd, price, lvl in _SHOE_ROWS:
+        put(n, f, "shoes", float(t), 0, price, speed=spd, level=lvl)
     return items
 
 
 FORGE: dict[str, GearItem] = _build_forge()
+
+SHOE_SPEED.update({g.slug: g.speed for g in FORGE.values()
+                   if g.slot == "shoes"})
 
 # Tier-0 gate issue, free at creation. Bare-handed ATK at level 1 is 3 vs
 # floor-1 monsters at DEF 3 / HP 37 — ~1 damage a round, unwinnable. The
@@ -522,15 +692,15 @@ CLASS_STARTERS: dict[str, GearItem] = {
     "warrior": GearItem(
         "rusted_sword", "Rusted Sword",
         "gate-issue salvage steel, honest weight — it will never leave you",
-        "weapon", 0, 5, 0),
+        "weapon", 0, 5, 0, line="warrior"),
     "archer": GearItem(
         "basic_bow", "Basic Bow",
         "gate-issue laminate bow — the quiver of plain arrows never empties",
-        "weapon", 0, 5, 0),
+        "weapon", 0, 5, 0, line="archer"),
     "sorcerer": GearItem(
         "worn_staff", "Worn Wooden Staff",
         "gate-issue focus wood, thumb-polished — the spark answers you, always",
-        "weapon", 0, 5, 0),
+        "weapon", 0, 5, 0, line="sorcerer"),
 }
 for _g in CLASS_STARTERS.values():
     FORGE[_g.slug] = _g
@@ -544,6 +714,54 @@ PAWN_BUYBACK = 0.40
 
 def forge_tier(tier: int) -> list[GearItem]:
     return [g for g in FORGE.values() if g.tier == tier]
+
+
+def gear_rungs(slot: str, line: str = "") -> list[GearItem]:
+    """All PAID rungs of a slot (and weapon/focus line), rung-sorted."""
+    return sorted((g for g in FORGE.values()
+                   if g.slot == slot and g.line == line and g.rung >= 1),
+                  key=lambda g: g.rung)
+
+
+def weapon_line(line: str) -> list[GearItem]:
+    return gear_rungs("weapon", line)
+
+
+def rung_level_req(g: GearItem) -> int:
+    """Level gate: rung T at band_start(T), T.5 at band_start(T)+5 —
+    the shoes ladder carries explicit gates instead."""
+    if g.level:
+        return g.level
+    t = int(g.rung)
+    return band_start(t) + (5 if g.rung != t else 0)
+
+
+# ── 004 §3.2: off-class stopgap gear ─────────────────────────────────────
+# Any class can buy the previous-rung weapon of another line: ×3 price,
+# ×0.5 damage, a 25% miss that eats the round, never hones, and a bow in
+# off-class hands burns bought arrows. A tool for breaking a hard
+# counter, priced so it can never be a build.
+
+OFF_CLASS_PRICE_MULT = 3
+OFF_CLASS_DMG_MULT = 0.5
+OFF_CLASS_MISS = 0.25
+ARROW_PACK_SIZE = 10
+ARROW_PACK_PRICE = 120
+
+ARCANUM_LEVEL = 6              # 004 §3.4: the mage shop's unlock level
+
+
+def off_class_price(g: GearItem) -> int:
+    return g.price * OFF_CLASS_PRICE_MULT
+
+
+def off_class_offer(line: str, level: int) -> GearItem | None:
+    """The one off-class weapon on the rack: the rung BELOW the highest
+    this level unlocks in `line` (the first rung when nothing is below)."""
+    unlocked = [g for g in weapon_line(line) if rung_level_req(g) <= level]
+    if not unlocked:
+        return None
+    return unlocked[-2] if len(unlocked) >= 2 else unlocked[0]
 
 
 def gear_tier_for_floor(floor: int) -> int:

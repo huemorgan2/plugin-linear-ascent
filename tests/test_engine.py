@@ -345,15 +345,18 @@ def test_scan_prefers_charges_then_falls_back_to_xp():
 
 
 def test_forge_tier_gated_by_level():
+    # 004: the shop only RACKS what your level unlocks — the next rung
+    # shows greyed with its level, and a forced buy is refused unpaid.
     p = create_character(fresh())
     p["gold"] = 100_000
     p["unlocked_floor"] = 11                     # tier-2 stock, level 11 req
-    choose(p, "forge")
+    s = choose(p, "forge")
+    assert not any(o.id == "buy_wolfbite" for o in s.options)
+    assert any("🔒" in ln and "level 6" in ln for ln in s.body_lines)
     s = choose(p, "buy_wolfbite")
     assert p["gear"]["weapon"] != "wolfbite"     # refused at level 1
     assert p["gold"] == 100_000                  # not charged
-    assert "level 11" in s.shard_note
-    p["level"] = 11
+    p["level"] = 11                              # the rack re-reads level
     choose(p, "buy_wolfbite")
     assert p["gear"]["weapon"] == "wolfbite"
 

@@ -36,6 +36,11 @@ _TIPS: dict[str, str] = {
               "what makes higher floors survivable, and higher floors pay "
               "more gold and XP per hunt. Each tier answers to a level: "
               "train at the Guildhall to wear the next one."),
+    "arcanum": ("The mage shop — staves and focuses only a caster can "
+                "own, behind a door that reads the hand on it (level 6). "
+                "Warriors and archers can buy a stopgap staff off the "
+                "rack at triple price; the good glass answers only to "
+                "sorcerers."),
     "medlab": ("The shelf that keeps a hunting run going: Medgel +25 HP, "
                "Trauma kit +80 HP, Trollblood tonic full heal usable "
                "MID-fight, Energy cell +5 ⚡ (one a day), Luck charm for "
@@ -233,9 +238,15 @@ for _c, _t in _CLASS_ANGLE.items():
 def _buy_tip(slug: str) -> str:
     g = economy.FORGE.get(slug)
     if g:
-        req = economy.gear_level_req(g.tier)
+        req = economy.rung_level_req(g)
+        if g.slot == "shoes":
+            return (f"{g.name} — footwear, +{g.speed} speed (wants "
+                    f"level {req}). {g.flavor.capitalize()}. Speed "
+                    "decides the chase: kiting, fleeing, and the small "
+                    "dodge. Expensive on purpose — it buys out of a "
+                    "lot of bad matchups.")
         stat = "ATK" if g.slot == "weapon" else "DEF"
-        return (f"{g.name} — {g.slot}, {stat} +{g.bonus}, tier {g.tier} "
+        return (f"{g.name} — {g.slot}, {stat} +{g.bonus}, rung {g.rung:g} "
                 f"(wants level {req}). {g.flavor.capitalize()}. Better "
                 f"{stat} is what turns deeper, richer floors from deadly "
                 "into farmable; your replaced piece goes to your pack "
@@ -254,8 +265,20 @@ def option_tip(oid: str) -> str:
     t = _TIPS.get(oid)
     if t:
         return t
+    if oid == "buy_arrow_pack":
+        return (f"A pack of {economy.ARROW_PACK_SIZE} arrows for a bow "
+                "in off-class hands — an archer's basic quiver never "
+                "empties, everyone else's does. When the pack runs dry "
+                "mid-fight your own weapon comes back out on its own.")
     if oid.startswith("buy_"):
         return _buy_tip(oid.removeprefix("buy_"))
+    if oid.startswith("wear_"):
+        slug = oid.removeprefix("wear_")
+        g = economy.FORGE.get(slug)
+        name = g.name if g else "it"
+        return (f"Take {name} out of your pack and wear it — free, on "
+                "the spot; whatever it replaces goes to the pack. "
+                "Honing stays with the bench, not the swap.")
     if oid.startswith("hone_"):
         slot = oid.removeprefix("hone_")
         stat = _HONE_STAT.get(slot, "its stat")
@@ -339,6 +362,10 @@ _ITEM_TIPS: dict[str, str] = {
     "scout_optics": ("Scout optics — 3 shard scans: exact enemy ATK, "
                      "DEF and HP before you commit. Fights you can "
                      "read are fights you don't lose."),
+    "arrows": ("Bought arrows — every off-class bow shot burns one. "
+               "When they run out mid-fight your own weapon comes "
+               "back out. Archers never need these; their basic "
+               "quiver refills itself."),
 }
 
 

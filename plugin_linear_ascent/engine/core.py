@@ -34,7 +34,7 @@ def _pack_strip(p: dict) -> list[dict]:
     if p.get("stage") != "playing":
         return []
     strip: list[dict] = []
-    for slot in ("weapon", "shield", "armor"):
+    for slot in ("weapon", "shield", "armor", "shoes"):
         slug = (p.get("gear") or {}).get(slot)
         g = economy.FORGE.get(slug) if slug else None
         if not g:
@@ -279,7 +279,8 @@ def _build_scene(p: dict) -> Scene:
     from . import social
     loc = p["location"]
     builders = {
-        "town": _town_scene, "forge": _forge_scene, "medlab": _medlab_scene,
+        "town": _town_scene, "forge": _forge_scene,
+        "arcanum": _arcanum_scene, "medlab": _medlab_scene,
         "lodge": _lodge_scene, "vault": _vault_scene, "pawn": _pawn_scene,
         "stone": _stone_scene, "gate": _gate_scene,
         "gate_town": _gate_town_scene,
@@ -500,6 +501,11 @@ def _town_scene(p: dict) -> Scene:
         lines.append(f"· {h}")
     opts = [
         Option("forge", "The Forge", "gear"),
+        # 004 §3.4: the mage shop — a locked row until level 6, so the
+        # roadmap is readable from the square itself.
+        Option("arcanum", "The Arcanum",
+               "mage gear" if p["level"] >= economy.ARCANUM_LEVEL
+               else f"🔒 level {economy.ARCANUM_LEVEL}"),
         Option("medlab", "Apothecary & Medlab", "potions"),
         Option("lodge", "The Lodge",
                f"◈ {economy.LODGE_PRICE_PER_LEVEL * p['level']}/night"),
@@ -514,12 +520,12 @@ def _town_scene(p: dict) -> Scene:
     ]
     if w:
         inbox = w.get("inbox_count", 0)
-        opts.insert(5, Option(
+        opts.insert(6, Option(
             "relay", "The Relay Office",
             f"{inbox} letter{'s' if inbox != 1 else ''}" if inbox else "post"))
-        opts.insert(6, Option("fields", "The fields", "pvp"))
+        opts.insert(7, Option("fields", "The fields", "pvp"))
         climbers = w.get("roster_count", 0)
-        opts.insert(8, Option(
+        opts.insert(9, Option(
             "muster", "The Muster Roll",
             f"{climbers} climber{'s' if climbers != 1 else ''}"
             if climbers else "climbers"))
@@ -544,9 +550,16 @@ def _dispatch_location(p: dict, oid: str) -> Scene:
         p["location"] = "town"
         p["floor"] = 0
         return _town_scene(p)
-    town_menus = ("forge", "medlab", "lodge", "vault", "pawn", "stone",
-                  "gate", "relay", "fields", "guildhall", "muster")
+    town_menus = ("forge", "arcanum", "medlab", "lodge", "vault", "pawn",
+                  "stone", "gate", "relay", "fields", "guildhall", "muster")
     if loc == "town" and oid in town_menus:
+        if oid == "arcanum" and p["level"] < economy.ARCANUM_LEVEL:
+            s = _town_scene(p)
+            s.shard_note = (
+                "The Arcanum's door reads the hand on it — it wants "
+                f"level {economy.ARCANUM_LEVEL}. Climb first; the "
+                "star-charts will keep.")
+            return s
         p["location"] = oid
         return _build_scene(p)
     if oid == "back":
@@ -562,6 +575,8 @@ def _dispatch_location(p: dict, oid: str) -> Scene:
 
     if loc == "forge":
         return _forge_buy(p, oid)
+    if loc == "arcanum":
+        return _arcanum_buy(p, oid)
     if loc == "medlab":
         return _medlab_buy(p, oid)
     if loc == "lodge":
@@ -590,29 +605,88 @@ def _dispatch_location(p: dict, oid: str) -> Scene:
     return _build_scene(p)
 
 
-# ── Forge ────────────────────────────────────────────────────────────────
+# ── Forge & Arcanum (004: rungs, lines, shoes, off-class) ───────────────
+
+def _rack(p: dict, items: list, opts: list, lines: list) -> None:
+    """One gear ladder in a shop: the last two buyable rungs as options,
+    then the NEXT rung greyed with its unlock level — every shop answers
+    'what am I saving for' by itself (004 §3.1)."""
+    lvl = p["level"]
+    buyable = [g for g in items if economy.rung_level_req(g) <= lvl]
+    nxt = next((g for g in items if economy.rung_level_req(g) > lvl), None)
+    for g in buyable[-2:]:
+        owned = " — equipped" if p["gear"].get(g.slot) == g.slug else ""
+        stat = ("+{} spd".format(g.speed) if g.slot == "shoes"
+                else ("+{} ATK".format(g.bonus) if g.slot == "weapon"
+                      else "+{} DEF".format(g.bonus)))
+        opts.append(Option(f"buy_{g.slug}", g.name, f"◈ {g.price:,}"))
+        flavor = f", {g.flavor}" if g.flavor else ""
+        lines.append(f"{g.name}{flavor} — {stat}{owned}")
+    if nxt is not None:
+        stat = (f"+{nxt.speed} spd" if nxt.slot == "shoes"
+                else f"+{nxt.bonus}")
+        lines.append(f"🔒 {nxt.name} — level {economy.rung_level_req(nxt)} "
+                     f"({stat}, ◈ {nxt.price:,})")
+
+
+def _wearable_pack(p: dict) -> list:
+    """Paid gear riding in the pack that could be worn instead."""
+    out = []
+    for slug in p.get("inventory") or {}:
+        g = economy.FORGE.get(slug)
+        if g and g.slot in ("weapon", "shield", "armor", "shoes") \
+                and (p["inventory"].get(slug) or 0) > 0:
+            out.append(g)
+    return sorted(out, key=lambda g: (g.slot, g.rung))
+
 
 def _forge_scene(p: dict) -> Scene:
-    tier = economy.gear_tier_for_floor(p["unlocked_floor"])
-    level_req = economy.gear_level_req(tier)
-    locked = p["level"] < level_req
+    clazz = p.get("clazz") or ""
     opts, lines = [], []
-    for g in economy.forge_tier(tier):
-        owned = " — equipped" if p["gear"].get(g.slot) == g.slug else ""
-        hint = f"◈ {g.price:,}" + (f" · level {level_req}" if locked else "")
-        opts.append(Option(f"buy_{g.slug}", g.name, hint))
-        flavor = f", {g.flavor}" if g.flavor else ""
-        lines.append(
-            f"{g.name}{flavor} — {g.slot} +{g.bonus}{owned}")
-    if locked:
-        lines.append(f"The smith sizes you up: tier {tier} steel answers "
-                     f"to level {level_req} hands.")
+    # weapons: your own line at the Forge — staves live at the Arcanum
+    if clazz in ("warrior", "archer"):
+        _rack(p, economy.weapon_line(clazz), opts, lines)
+    elif clazz == "sorcerer":
+        lines.append("The smith nods at your staff and points across "
+                     "the square: staves and focuses live at the Arcanum.")
+    if clazz != "sorcerer":
+        # shields serve warrior and archer; the caster's guard is the
+        # Arcanum's focus (same slot, different shop)
+        _rack(p, economy.gear_rungs("shield"), opts, lines)
+    _rack(p, economy.gear_rungs("armor"), opts, lines)
+    _rack(p, economy.gear_rungs("shoes"), opts, lines)
+    # 004 §3.2: the off-class rack — the other physical line, one rung
+    # back, at triple price. A tool for a bad matchup, never a build.
+    off_lines = {"warrior": ("archer",), "archer": ("warrior",),
+                 "sorcerer": ("warrior", "archer")}.get(clazz, ())
+    for line in off_lines:
+        g = economy.off_class_offer(line, p["level"])
+        if g:
+            price = economy.off_class_price(g)
+            opts.append(Option(f"buy_{g.slug}", g.name,
+                               f"◈ {price:,} · off-class"))
+            lines.append(f"{g.name} — not your weapon: ×3 the coin, "
+                         "half the bite, and one shot in four goes wide")
+    if clazz != "archer":
+        opts.append(Option(
+            "buy_arrow_pack", "Arrow pack",
+            f"◈ {economy.ARROW_PACK_PRICE} · {economy.ARROW_PACK_SIZE} "
+            "arrows"))
+    for g in _wearable_pack(p):
+        if p["gear"].get(g.slot) != g.slug:
+            opts.append(Option(f"wear_{g.slug}", f"Wear {g.name}",
+                               "from your pack"))
     cap = economy.max_hone(p["unlocked_floor"])
     price = economy.hone_price(p["unlocked_floor"])
     hone_xp = economy.hone_xp(p["unlocked_floor"])
     for slot in economy.HONE_SLOTS:
         slug = p["gear"].get(slot)
         lvl = state.hone_level(p, slot)
+        item = economy.FORGE.get(slug or "")
+        # off-class gear never hones (004 §3.2)
+        if slot == "weapon" and item is not None and item.line \
+                and clazz and item.line != clazz:
+            continue
         if slug and lvl < cap:
             name = economy.FORGE[slug].name
             opts.append(Option(f"hone_{slot}", f"Hone {name} +{lvl + 1}",
@@ -624,10 +698,12 @@ def _forge_scene(p: dict) -> Scene:
         lines.append(f"Honing bench: up to +{cap} per piece this band"
                      + (f" — yours: {honed}" if honed else ""))
     opts.append(Option("back", "Back to the square"))
+    tier = economy.gear_tier_for_floor(p["unlocked_floor"])
     return Scene(
         eyebrow="ROOTHOLLOW · THE FORGE",
         headline=f"Tier {tier} steel, scrap to plasma",
-        support="One named piece per slot per tier. Own the set, wear the climb.",
+        support="Blades, bows, plate and boots. The locked rung is the "
+                "one you're saving for.",
         body_lines=lines,
         options=opts,
         meters=combat.meters(p),
@@ -666,40 +742,158 @@ def _forge_hone(p: dict, slot: str) -> Scene:
     return s
 
 
-def _forge_buy(p: dict, oid: str) -> Scene:
-    if oid.startswith("hone_") and oid.removeprefix("hone_") in \
-            economy.HONE_SLOTS:
-        return _forge_hone(p, oid.removeprefix("hone_"))
-    slug = oid.removeprefix("buy_")
-    g = economy.FORGE.get(slug)
-    if not g:
-        return _forge_scene(p)
-    req = economy.gear_level_req(g.tier)
+def _gear_purchase(p: dict, g, scene_fn) -> Scene:
+    """Shared buy path for the Forge and the Arcanum: level gate,
+    off-class ×3 pricing, equip + old piece to the pack."""
+    clazz = p.get("clazz") or ""
+    off = bool(g.line) and clazz and g.line != clazz
+    req = economy.rung_level_req(g)
+    price = economy.off_class_price(g) if off else g.price
     if p["level"] < req:
-        s = _forge_scene(p)
+        s = scene_fn(p)
         s.shard_note = (f"{g.name} answers to level {req} hands — you are "
                         f"level {p['level']}. The Guildhall trains climbers "
                         "with a full XP bar and the fee in gold.")
         return s
-    if p["gold"] < g.price:
-        s = _forge_scene(p)
-        s.shard_note = f"{g.name} wants ◈ {g.price:,}; you carry ◈ {p['gold']:,}. " \
+    if p["gold"] < price:
+        s = scene_fn(p)
+        s.shard_note = f"{g.name} wants ◈ {price:,}; you carry ◈ {p['gold']:,}. " \
                        "The Vault pays interest for a reason."
         return s
     old = p["gear"].get(g.slot)
-    p["gold"] -= g.price
+    p["gold"] -= price
     p["gear"][g.slot] = g.slug
-    p["hone"][g.slot] = 0            # honing lives on the item it honed
-    note = f"+ {g.name} equipped ({g.slot} +{g.bonus})"
+    if g.slot in p.get("hone", {}):
+        p["hone"][g.slot] = 0        # honing lives on the item it honed
+    if g.slot == "shoes":
+        note = f"+ {g.name} laced on (+{g.speed} speed)"
+    else:
+        stat = "ATK" if g.slot == "weapon" else "DEF"
+        note = f"+ {g.name} equipped ({g.slot} +{g.bonus} {stat})"
+    if off:
+        note += " — off-class: half the bite, one in four goes wide"
     if old and economy.FORGE[old].price > 0:
         p["inventory"][old] = p["inventory"].get(old, 0) + 1
         note += f" — your {economy.FORGE[old].name} goes to your pack"
     elif old:
         note += f" — the {economy.FORGE[old].name} goes in the scrap bin"
-    combat._ledger(p, "buy", gold=-g.price, note=g.slug)
-    s = _forge_scene(p)
+    combat._ledger(p, "buy", gold=-price, note=g.slug)
+    s = scene_fn(p)
     s.body_lines.insert(0, note)
     return s
+
+
+def _wear_from_pack(p: dict, slug: str, scene_fn) -> Scene:
+    g = economy.FORGE.get(slug)
+    if not g or (p.get("inventory") or {}).get(slug, 0) <= 0:
+        return scene_fn(p)
+    old = p["gear"].get(g.slot)
+    p["inventory"][slug] -= 1
+    if p["inventory"][slug] <= 0:
+        del p["inventory"][slug]
+    p["gear"][g.slot] = slug
+    if g.slot in p.get("hone", {}):
+        p["hone"][g.slot] = 0
+    note = f"+ {g.name} back on"
+    if old and economy.FORGE.get(old) and economy.FORGE[old].price > 0:
+        p["inventory"][old] = p["inventory"].get(old, 0) + 1
+        note += f" — the {economy.FORGE[old].name} goes to your pack"
+    s = scene_fn(p)
+    s.body_lines.insert(0, note)
+    return s
+
+
+def _forge_buy(p: dict, oid: str) -> Scene:
+    if oid.startswith("hone_") and oid.removeprefix("hone_") in \
+            economy.HONE_SLOTS:
+        return _forge_hone(p, oid.removeprefix("hone_"))
+    if oid == "buy_arrow_pack":
+        if p["gold"] < economy.ARROW_PACK_PRICE:
+            s = _forge_scene(p)
+            s.shard_note = (f"A pack of arrows is ◈ "
+                            f"{economy.ARROW_PACK_PRICE} and you carry "
+                            f"◈ {p['gold']:,}.")
+            return s
+        p["gold"] -= economy.ARROW_PACK_PRICE
+        p["inventory"]["arrows"] = (p["inventory"].get("arrows", 0)
+                                    + economy.ARROW_PACK_SIZE)
+        combat._ledger(p, "buy", gold=-economy.ARROW_PACK_PRICE,
+                       note="arrow_pack")
+        s = _forge_scene(p)
+        s.body_lines.insert(0, f"+ {economy.ARROW_PACK_SIZE} arrows — "
+                            f"{p['inventory']['arrows']} in the quiver")
+        return s
+    if oid.startswith("wear_"):
+        return _wear_from_pack(p, oid.removeprefix("wear_"), _forge_scene)
+    slug = oid.removeprefix("buy_")
+    g = economy.FORGE.get(slug)
+    if not g:
+        return _forge_scene(p)
+    if g.line == "sorcerer":
+        s = _forge_scene(p)
+        s.shard_note = "The smith shrugs: caster's work. The Arcanum " \
+                       "sells the staves and the focuses."
+        return s
+    return _gear_purchase(p, g, _forge_scene)
+
+
+# ── The Arcanum (004 §3.4) ───────────────────────────────────────────────
+
+def _arcanum_scene(p: dict) -> Scene:
+    if p["level"] < economy.ARCANUM_LEVEL:
+        p["location"] = "town"
+        s = _town_scene(p)
+        s.shard_note = (f"The Arcanum wants level {economy.ARCANUM_LEVEL} "
+                        "hands. Climb first.")
+        return s
+    clazz = p.get("clazz") or ""
+    opts, lines = [], []
+    if clazz == "sorcerer":
+        _rack(p, economy.weapon_line("sorcerer"), opts, lines)
+        _rack(p, economy.gear_rungs("shield", "sorcerer"), opts, lines)
+    else:
+        # 004 §3.2: staves off the rack, one rung back, triple coin —
+        # focuses answer only to a caster's hand.
+        g = economy.off_class_offer("sorcerer", p["level"])
+        if g:
+            opts.append(Option(f"buy_{g.slug}", g.name,
+                               f"◈ {economy.off_class_price(g):,} · "
+                               "off-class"))
+            lines.append(f"{g.name} — not your weapon: ×3 the coin, "
+                         "half the bite, and one cast in four fizzles")
+        lines.append("The focuses behind the counter won't wake for "
+                     "you — caster's gear, caster's hand.")
+    opts.append(Option("back", "Back to the square"))
+    return Scene(
+        eyebrow="ROOTHOLLOW · THE ARCANUM",
+        headline="Star-charts, staves and patient glass",
+        support="The shop hums a half-tone above silence. The "
+                "shopkeeper's eyes are the only bright thing in it.",
+        body_lines=lines,
+        options=opts,
+        meters=combat.meters(p),
+        banner="arcanum",
+    )
+
+
+def _arcanum_buy(p: dict, oid: str) -> Scene:
+    if oid.startswith("wear_"):
+        return _wear_from_pack(p, oid.removeprefix("wear_"), _arcanum_scene)
+    slug = oid.removeprefix("buy_")
+    g = economy.FORGE.get(slug)
+    if not g:
+        return _arcanum_scene(p)
+    if g.line != "sorcerer":
+        s = _arcanum_scene(p)
+        s.shard_note = "The shopkeeper tilts her head: steel is the " \
+                       "smith's trade. The Forge is across the square."
+        return s
+    if g.slot == "shield" and (p.get("clazz") or "") != "sorcerer":
+        s = _arcanum_scene(p)
+        s.shard_note = ("The focus goes dark in your hand — it answers "
+                        "only to a caster.")
+        return s
+    return _gear_purchase(p, g, _arcanum_scene)
 
 
 # ── Medlab ───────────────────────────────────────────────────────────────

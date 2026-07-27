@@ -91,6 +91,15 @@ SCENES: dict[str, tuple[str, str]] = {
         "holding the door open with lamplight flooding out in a wide "
         "gradient wedge, chimney smoke drifting as a soft dithered "
         "gradient into a starry sky.", DIM),
+    "arcanum": (
+        "inside a tall narrow mage shop at night — floor-to-ceiling "
+        "shelves of orbs, prisms and rolled star-charts climbing into "
+        "gradient darkness, a long counter with the SHOPKEEPER "
+        "silhouette holding up a glowing focus crystal whose light "
+        "blooms in a wide radial gradient, a rack of staves leaning by "
+        "the door, a sorcerer customer reaching for one, hanging "
+        "astrolabes catching the glow, motes of light drifting as "
+        "sparse dither.", DIM),
     "medlab": (
         "a busy apothecary med-lab interior — the APOTHECARY silhouette "
         "bent over a bandaged climber on a cot, an assistant reaching "

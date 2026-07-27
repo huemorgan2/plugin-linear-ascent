@@ -242,7 +242,10 @@ def fight_scene(p: dict, floor, opener: bool = False, note: str = "") -> Scene:
         opts.append(Option("sleep_spell", "Sleep spell",
                            f"class · {economy.sleep_xp_cost(floor.floor)} XP",
                            aether=True))
-    elif clazz == "archer" and not e["shot_used"]:
+    elif clazz == "archer" and not e["shot_used"] \
+            and _damage_type(p) == "ranged":
+        # 004: the long shot needs a bow in hand — an archer swinging
+        # off-class steel has no string to draw.
         opts.append(Option("treeline_shot", "Treeline shot", "class", aether=True))
     if p["inventory"].get("trollblood_tonic"):
         opts.append(Option("drink_tonic", "Drink trollblood tonic", "full heal"))
@@ -337,7 +340,8 @@ def _counter_text(p: dict, hit: dict, lead: str = "") -> str:
         what = f"your {guard}" if guard else "your guard"
         return f"{lead} — {what} turns the whole blow. 0 damage."
     if guard and blocked >= dmg:
-        return (f"{lead} — your {guard} soak almost all of it: "
+        soak = "soak" if " and " in guard else "soaks"
+        return (f"{lead} — your {guard} {soak} almost all of it: "
                 f"only −{dmg} HP gets through.")
     if guard and blocked > 0:
         return (f"{lead} for −{dmg} HP — your {guard} blunted "
@@ -374,8 +378,24 @@ def _strike_text(p: dict, dmg: int) -> str:
     return f"Your {w} takes it for {dmg}{tier_note}."
 
 
+def _weapon_line(p: dict) -> str:
+    """004: the equipped weapon's class line ('' for pre-class docs)."""
+    item = economy.FORGE.get(p["gear"].get("weapon") or "")
+    return getattr(item, "line", "") if item else ""
+
+
 def _damage_type(p: dict) -> str:
+    # 004 §3.2: the WEAPON decides the damage type — a warrior holding
+    # a bought bow shoots (badly). Line-less docs fall back to class.
+    line = _weapon_line(p)
+    if line:
+        return economy.DAMAGE_TYPE[line]
     return economy.DAMAGE_TYPE.get(p.get("clazz") or "", "melee")
+
+
+def _off_class(p: dict) -> bool:
+    line = _weapon_line(p)
+    return bool(line) and bool(p.get("clazz")) and line != p["clazz"]
 
 
 def _player_hit(p: dict, mult: float = 1.0) -> int:
@@ -388,6 +408,9 @@ def _player_hit(p: dict, mult: float = 1.0) -> int:
     # keep full strength at both ranges.
     if _damage_type(p) == "ranged" and _range_state(p) == "close":
         mult *= economy.BOW_CLOSE_MULT
+    # 004 §3.2: an off-class weapon is a stopgap — half strength always.
+    if _off_class(p):
+        mult *= economy.OFF_CLASS_DMG_MULT
     raw = state.rng_int(p, state.atk(p) // 2, state.atk(p))
     dmg = economy.typed_damage(_damage_type(p), round(raw * mult),
                                e["def"], _profile(p))
@@ -737,6 +760,35 @@ def resolve_fight_action(p: dict, floor, option_id: str) -> Scene:
             + (f" {chase}" if chase else "")))
 
     # default: attack
+    # 004 §3.2: off-class hands — a bow burns bought arrows for anyone
+    # but an archer, and every off-class swing misses 25% of the time
+    # (the miss eats the round; the monster answers).
+    if _off_class(p):
+        if _damage_type(p) == "ranged":
+            arrows = int(p["inventory"].get("arrows", 0))
+            if arrows <= 0:
+                bow = p["gear"]["weapon"]
+                p["inventory"][bow] = p["inventory"].get(bow, 0) + 1
+                p["gear"]["weapon"] = economy.class_starter(
+                    p.get("clazz") or "").slug
+                p["hone"]["weapon"] = 0
+                return fight_scene(p, floor, note=(
+                    "Your quiver runs dry — the bow goes over your "
+                    f"shoulder and your {weapon_name(p)} comes back "
+                    "out. The Forge sells arrows by the pack."))
+            p["inventory"]["arrows"] = arrows - 1
+        if state.roll_ok(p, economy.OFF_CLASS_MISS):
+            back = _monster_hit(p)
+            if p["hp"] <= 0:
+                return _death(p, floor)
+            chase = _advance_chase(p)
+            return fight_scene(p, floor, note=(
+                f"Not your weapon — your {weapon_name(p)} goes wide "
+                "of anything that matters. "
+                + _counter_text(p, back,
+                                lead=f"The {e['name']} makes you pay "
+                                     "for the fumble")
+                + (f" {chase}" if chase else "")))
     dmg = _player_hit(p)
     if e["hp"] <= 0:
         return _victory(p, floor)
