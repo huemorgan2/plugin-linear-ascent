@@ -19,6 +19,9 @@ for gold + a few XP; broken never means helpless.
    one line on the first paid purchase per slot.
 5. `pane.py` + `render.py`: durability bar under equipped items
    (16×16 wrench icon, hover text "90% — repair at the Forge").
+   003 retro: the wrench grid already exists in `icons.py` (shipped
+   with the 003 icon set as a CSS-mask data-URL) — reuse `_ticon`,
+   don't add a second icon path.
 6. Pawn (from 006 if not yet landed): worn gear pays × durability
    fraction — coordinate ordering with 006.
 7. Vendor sync + deploy; version bump + publish.

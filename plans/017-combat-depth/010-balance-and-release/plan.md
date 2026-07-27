@@ -39,6 +39,10 @@ shared-world migration check, end-to-end dojo playtest, release.
   only visible deltas, both announced in-world).
 - Dojo playtest: no dead ends, no unexplained numbers, the sidekick
   speaks only at moments — reviewed against the pre-plan's promises.
+  003 retro: "no unexplained numbers" has a concrete test now — every
+  active modifier must be NAMED on screen (header chip or dossier
+  line); run the one-glance check ("why is this fight bad for me")
+  on each [i] card the playtest opens.
 - Marketplace serves the final version; production worldd healthy.
 
 Exit: 017 done — the tower has teeth, and they're readable.

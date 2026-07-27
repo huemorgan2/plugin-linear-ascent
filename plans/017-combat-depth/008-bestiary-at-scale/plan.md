@@ -15,6 +15,10 @@ for the new monsters.
      resist, sky-ship wrecks favor flying …).
 2. `content/schema.py` lint: enforce the spread rule per band + lore
    presence for floors ≥ 11 (floors 1–10 done in 001/003).
+   003 retro: the `lore:` field, ≤160-char cap and prose lint already
+   exist — this phase only flips lint from optional to required for
+   floors ≥ 11. Authoring pace from 003: ~40 lore lines is one sitting;
+   budget 4–5 sittings per ten-band retrofit, ship per band batch.
 3. Warden/milestone profiles per plan §2.2 across all bands.
 4. Art batch: 1-bit banners for every NEW monster (creature pipeline,
    `tools/generate_creatures.py`); alt text/lore alignment.

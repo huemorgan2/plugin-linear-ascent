@@ -25,6 +25,9 @@ the damage-type kill hooks only).
    silently (later floors ride 008 batches).
 5. Icons/consistency pass: 16×16/32×32 1-bit constraint audit on
    everything 003–006 added.
+   003 retro: trait icons ship as CSS-mask SVG data-URLs built from
+   grids in `icons.py` (`test_017_info_card.py` asserts 16-wide grids
+   and valid masks) — the audit extends those tests, not eyeballs.
 6. Vendor sync + deploy; version bump + publish.
 
 ## Tests / acceptance

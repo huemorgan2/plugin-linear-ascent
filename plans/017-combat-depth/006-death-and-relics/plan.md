@@ -28,6 +28,11 @@ so the new sinks matter.
 4. `engine/core.py`: shop stock wiring (Forge quiver/tools, Arcanum
    mage relics, apothecary insurance); pawn scene shows today's rate;
    hold-1 purchase refusals.
+   003 retro: relic inspection (effect + limitation) should be a
+   structured payload rendered as a `<details>` dossier, not prose —
+   the [i]-card pattern (zero JS, agent reads the same facts via
+   `to_text`). Active relic effects in a fight must be NAMED on
+   screen (002/003 lesson: unexplained number changes read as bugs).
 5. Vendor sync + deploy; version bump + publish.
 
 ## Tests / acceptance
