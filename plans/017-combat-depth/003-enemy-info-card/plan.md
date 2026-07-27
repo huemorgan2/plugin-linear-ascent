@@ -21,6 +21,11 @@ player-facing from 001/002 is considered "done" until this ships.
    - 001 retro: the opener's `◆ plate Low` line uses the SAME diamond
      as the tactics hint — they read as one system at a glance. Give
      the profile line its trait icons here and retire the bare ◆.
+   - 002 retro: active damage modifiers must be NAMED in the dossier
+     and/or fight header — "bow ×0.6 in close quarters", "its blows
+     land at half while it hasn't reached you". In the 002 dojo the
+     bow collapse (15 → 1-4 dmg) read as a bug because nothing on
+     screen said why. Same for the dodge line source ("speed tells").
 4. `engine/combat.py`: scout upgrade — exact numbers + next intent
    ("it will try to close this round"); headline keeps ATK/DEF but HP
    bar replaces the post-first-exchange HP reveal.

@@ -32,6 +32,13 @@ for the new monsters.
   the planned 2× never triggers). Smoothness on income allows upward
   steps (only down-cliffs/regressions fail), and rounds/risk must
   filter through `_is_intended` or off-class monsters poison averages.
+  002 retro: sims must be chase-aware or archers lose to everything
+  fast — model the class strategies (melee pays one crossing round,
+  archer kites and re-opens when caught, sorcerer stands). Ranged vs
+  fast is an INTENDED hard counter (`_speed_counters` in the 001 gate)
+  — don't "fix" a band by removing its fast monsters. Copy the sim
+  loops from `test_017_damage_types.py` / `test_017_speed_chase.py`
+  rather than re-deriving them.
 - Art: every encounter id with no shipped art logged and triaged (the
   renderer already skips silently — the list is the deliverable).
 - Dojo spot-checks: one floor per band — read three [i] cards, verify

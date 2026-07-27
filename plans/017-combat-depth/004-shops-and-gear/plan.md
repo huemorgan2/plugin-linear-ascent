@@ -31,6 +31,12 @@ stopgap gear.
 - Unit: table generation invariants (monotone prices, midpoint bonuses,
   gate levels); off-class math (miss consumes round, monster answers);
   arcanum gating; shoes speed feed into 002 formulas.
+- 002 retro: the speed hook already exists — fill `economy.SHOE_SPEED`
+  (empty dict shipped in 002) and `player_speed()` picks it up; the
+  chase-rate tests in `test_017_speed_chase.py` will exercise it free.
+  Kite/flee sims must be re-run WITH shoes: +2 speed vs a fast (7)
+  monster flips p_open from 0.05 to 0.35 — check that doesn't trivialize
+  the archer-counter before shipping.
 - **Economy sim gate:** days-to-afford curve stays within the 004-era
   6→24 days-in-tier line with mid rungs included; off-class gear is
   never income-positive vs in-class (sim proves "stopgap not build").

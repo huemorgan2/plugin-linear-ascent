@@ -31,6 +31,11 @@ for gold + a few XP; broken never means helpless.
 - **Economy sim gate:** reference at-level play — repair spend ≤20% of
   income at every band; a player who never repairs still clears their
   intended matchups (broken ≠ bricked) with the basic weapon.
+  002 retro: rounds-per-fight now differ hard by class — a kiting
+  archer took 23 rounds on a slow bulwark in the dojo (vs ~6 for a
+  warrior trade). Per-attack weapon wear must be simmed per class with
+  the chase-aware loops (`test_017_speed_chase.py`), or bow durability
+  costs will silently tax the archer's whole playstyle.
 - Migration: v1→v2 docs get full durability on existing gear.
 - Dojo: buy a Pigsticker, grind it down, watch the bar, repair it —
   confirm the teaching line and the hover text.
