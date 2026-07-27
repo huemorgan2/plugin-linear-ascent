@@ -126,8 +126,17 @@ _TIPS: dict[str, str] = {
               "zero. Buys a breath when HP runs low — the fight goes "
               "on until you attack or run."),
     "run": ("Leave the fight. No gold, no XP — but you keep your HP, "
-            "your gear and your carried coin. A skipped fight costs a "
-            "round; a death costs everything you carry."),
+            "your gear and your carried coin. Your speed against its "
+            "speed decides the getaway: walk away from the slow, don't "
+            "count on outrunning the fast."),
+    "close_in": ("Cross the open ground to swing steel. Always works, "
+                 "costs the round — the monster strikes at HALF power "
+                 "while you close. Bows and spellwork don't need this; "
+                 "a blade does."),
+    "open_distance": ("Break contact and put ground between you — your "
+                      "speed against its speed. Costs the round; if no "
+                      "gap opens it gets a free half-power hit. At range "
+                      "a bow shoots full and its blows land at half."),
     "scout": ("Your shard scans the enemy — exact ATK, DEF and HP. "
               "Free on an optics charge, otherwise it burns XP. Knowing "
               "when to press and when to run saves more than it "

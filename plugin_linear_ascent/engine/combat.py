@@ -81,14 +81,15 @@ def start_encounter(p: dict, floor, enc, kind: str = "wilds") -> Scene:
     else:
         atk, dfs, hp = floor.monster_atk, floor.monster_def, floor.monster_hp
         name, prose = enc.name, enc.prose
-    # 017: encounter traits — "armored" wears looted plate and a real
-    # blade: harder stats (multipliers in economy.py), and the archer's
-    # treeline shot loses its double against the plate.
+    # 017 §2: the defense profile — armor/resist tiers, flying, bulwark,
+    # speed — derived from qualitative content traits, priced in economy.
     traits = tuple(getattr(enc, "traits", ()) or ()) if enc is not None else ()
-    if "armored" in traits:
-        atk = round(atk * economy.ARMORED_ATK_MULT)
-        dfs = round(dfs * economy.ARMORED_DEF_MULT)
-        hp = round(hp * economy.ARMORED_HP_MULT)
+    if kind == "warden":
+        prof = economy.warden_profile(floor.floor)
+    else:
+        prof = economy.profile_from_traits(traits)
+    if prof["bulwark"]:
+        hp = round(hp * economy.BULWARK_HP_MULT)
     specimen = "common"
     if kind == "wilds":
         # 008: specimen roll — same averages, real variance. Visible on
@@ -100,14 +101,73 @@ def start_encounter(p: dict, floor, enc, kind: str = "wilds") -> Scene:
         hp = round(hp * spec["hp"])
         if spec["tag"]:
             prose = f"{prose} This one is {spec['tag']}."
+    if specimen == "alpha":
+        prof["speed"] += economy.ALPHA_SPEED_BONUS
     p["encounter"] = {
         "kind": kind, "name": name, "prose": prose,
         "id": (enc.id if enc is not None else ""),
         "specimen": specimen, "traits": list(traits),
+        "profile": prof,
         "atk": atk, "def": dfs, "hp": hp, "hp_max": hp,
         "floor": floor.floor, "shot_used": False,
+        # 017 §2.4: fights open at range — bows and spells carry,
+        # steel must close.
+        "range": "at_range",
     }
     return fight_scene(p, floor, opener=True)
+
+
+def _profile(p: dict) -> dict:
+    """Encounter profile with a safe default for pre-017 docs mid-fight."""
+    return p["encounter"].get("profile") or economy.profile_from_traits(
+        p["encounter"].get("traits") or ())
+
+
+def _range_state(p: dict) -> str:
+    """'at_range' or 'close'. Pre-002 encounters mid-fight default to
+    close — the only state they ever knew."""
+    return p["encounter"].get("range", "close")
+
+
+def _mspd(p: dict) -> int:
+    return _profile(p).get("speed", economy.SPEED_NORMAL)
+
+
+def _range_line(p: dict) -> str:
+    if _range_state(p) == "at_range":
+        return "◇ at range — it hasn't reached you yet"
+    return "◇ close quarters — it is on top of you"
+
+
+def _advance_chase(p: dict) -> str:
+    """End of an at-range round: the monster tries to close the gap
+    (§2.4 p_close). Returns the line that tells the player what moved."""
+    e = p["encounter"]
+    if e.get("range") != "at_range":
+        return ""
+    if state.roll_ok(p, economy.p_close(_mspd(p), economy.player_speed(p))):
+        e["range"] = "close"
+        return f"The {e['name']} closes the gap — it is on you now."
+    return f"The {e['name']} comes on across open ground."
+
+
+def _profile_line(prof: dict) -> str:
+    """One compact readable line — the [i] card (003) will do it justice;
+    until then the opener itself must say what the player is facing."""
+    bits = []
+    if prof.get("armor", "none") != "none":
+        bits.append(f"plate {economy.TIER_LABEL[prof['armor']]}")
+    if prof.get("resist", "none") != "none":
+        bits.append(f"spellguard {economy.TIER_LABEL[prof['resist']]}")
+    if prof.get("flying"):
+        bits.append("AIRBORNE")
+    if prof.get("bulwark"):
+        bits.append("bulwark")
+    if prof.get("speed", economy.SPEED_NORMAL) >= economy.SPEED_FAST:
+        bits.append("fast")
+    elif prof.get("speed", economy.SPEED_NORMAL) <= economy.SPEED_SLOW:
+        bits.append("slow")
+    return " · ".join(bits)
 
 
 def _shard_advice(p: dict, floor) -> str:
@@ -132,12 +192,20 @@ def _shard_advice(p: dict, floor) -> str:
 
 def fight_scene(p: dict, floor, opener: bool = False, note: str = "") -> Scene:
     e = p["encounter"]
-    opts = [
-        Option("attack", "Attack"),
+    clazz = p.get("clazz")
+    at_range = _range_state(p) == "at_range"
+    # 017 §2.4: at range steel cannot attack — Close in replaces it.
+    # In close quarters anyone may try to Open distance.
+    if at_range and _damage_type(p) == "melee":
+        opts = [Option("close_in", "Close in", "cross the ground")]
+    else:
+        opts = [Option("attack", "Attack")]
+    if not at_range:
+        opts.append(Option("open_distance", "Open distance"))
+    opts += [
         Option("stand", "Stand your ground"),
         Option("run", "Run"),
     ]
-    clazz = p.get("clazz")
     if clazz == "warrior":
         opts.append(Option("shield_wall", "Shield wall", "class", aether=True))
     elif clazz == "sorcerer":
@@ -157,6 +225,11 @@ def fight_scene(p: dict, floor, opener: bool = False, note: str = "") -> Scene:
 
     body = [e["prose"]] if opener else []
     if opener:
+        # 017: the defense profile, named on sight — the counter system
+        # is invisible noise unless the enemy's sheet is readable.
+        pline = _profile_line(_profile(p))
+        if pline:
+            body.append(f"◈ {pline}")
         # 013: your own numbers, spelled out — armor was invisible and
         # players couldn't tell WHY hits landed for 0.
         guard = guard_name(p)
@@ -166,6 +239,10 @@ def fight_scene(p: dict, floor, opener: bool = False, note: str = "") -> Scene:
             + (f"behind your {guard}." if guard else "on reflex alone."))
     if note:
         body.append(note)
+    if "range" in e:
+        # §2.4: the range state is named on every scene — the chase is a
+        # rule the player plays, not a hidden roll.
+        body.append(_range_line(p))
     return Scene(
         eyebrow=_eyebrow(p, floor),
         headline=f"{e['name']} — ATK {e['atk']} / DEF {e['def']}"
@@ -203,8 +280,16 @@ def guard_name(p: dict) -> str:
 def _monster_hit(p: dict, halved: bool = False) -> dict:
     """013: armor blunts, it never nullifies — every landed hit chips at
     least ⌈raw/4⌉ (min 1) through any DEF. Returns the breakdown so the
-    card can SAY what the armor did instead of silently eating hits."""
+    card can SAY what the armor did instead of silently eating hits.
+    002: a speed advantage gives a small capped dodge before anything
+    else; a monster still at range strikes at −50% (charging, not
+    fighting)."""
+    dodge = economy.dodge_pct(economy.player_speed(p), _mspd(p))
+    if dodge and state.roll_ok(p, dodge / 100):
+        return {"dmg": 0, "raw": 0, "blocked": 0, "dodged": True}
     e = p["encounter"]
+    if _range_state(p) == "at_range":
+        halved = True
     raw = state.rng_int(p, e["atk"] // 2, e["atk"])
     chip = max(1, -(-raw // economy.CHIP_DIVISOR))
     dmg = max(chip, raw - state.dfs(p) // 2)
@@ -221,6 +306,8 @@ def _counter_text(p: dict, hit: dict, lead: str = "") -> str:
     guard = guard_name(p)
     dmg, blocked = hit["dmg"], hit["blocked"]
     lead = lead or f"The {e['name']} answers"
+    if hit.get("dodged"):
+        return f"{lead} — you slip the blow entirely. Speed tells."
     if dmg <= 0:
         what = f"your {guard}" if guard else "your guard"
         return f"{lead} — {what} turns the whole blow. 0 damage."
@@ -239,19 +326,46 @@ def _strike_text(p: dict, dmg: int) -> str:
     """The player's blow, explained: which weapon, how hard it bit."""
     e = p["encounter"]
     w = weapon_name(p)
+    prof = _profile(p)
     if dmg <= 0:
+        if prof.get("flying") and _damage_type(p) == "melee":
+            return (f"The {e['name']} lifts out of reach — your {w} "
+                    "cuts empty air. Steel can't touch what flies.")
         return (f"Your {w} glances off the {e['name']}'s hide — "
                 "nothing lands.")
+    tier_note = ""
+    dt = _damage_type(p)
+    if dt == "magic" and prof.get("resist", "none") != "none":
+        tier_note = (f" — its spellguard "
+                     f"({economy.TIER_LABEL[prof['resist']]}) eats part "
+                     "of the cast")
+    elif dt != "magic" and prof.get("armor", "none") != "none":
+        tier_note = (f" — its plate "
+                     f"({economy.TIER_LABEL[prof['armor']]}) turns part "
+                     "of the blow")
     if dmg >= max(1, e["hp_max"] // 3):
         return (f"Your {w} bites deep — {dmg} damage the "
-                f"{e['name']} won't shrug off.")
-    return f"Your {w} takes it for {dmg}."
+                f"{e['name']} won't shrug off{tier_note}.")
+    return f"Your {w} takes it for {dmg}{tier_note}."
+
+
+def _damage_type(p: dict) -> str:
+    return economy.DAMAGE_TYPE.get(p.get("clazz") or "", "melee")
 
 
 def _player_hit(p: dict, mult: float = 1.0) -> int:
+    # 017 §2: typed damage through the defense profile. Magic ignores
+    # flat DEF but eats the resist tier; melee/ranged keep raw−DEF/2 and
+    # eat the armor tier. Whatever CAN hit chips ≥1; melee vs flying is
+    # the one legal zero.
     e = p["encounter"]
+    # 002: a bow in close quarters is half a weapon; magic and steel
+    # keep full strength at both ranges.
+    if _damage_type(p) == "ranged" and _range_state(p) == "close":
+        mult *= economy.BOW_CLOSE_MULT
     raw = state.rng_int(p, state.atk(p) // 2, state.atk(p))
-    dmg = max(0, round(raw * mult) - e["def"] // 2)
+    dmg = economy.typed_damage(_damage_type(p), round(raw * mult),
+                               e["def"], _profile(p))
     e["hp"] -= dmg
     return dmg
 
@@ -284,8 +398,8 @@ def _victory(p: dict, floor) -> Scene:
         # 008: hard specimens pay more, runts pay less
         gold = round(
             gold * economy.SPECIMENS[e.get("specimen", "common")]["gold"])
-        if "armored" in (e.get("traits") or ()):
-            gold = round(gold * economy.ARMORED_GOLD_MULT)  # 017: plate pays
+        # 017: a hard profile pays for the diagnosis it demands
+        gold = round(gold * economy.profile_gold_mult(_profile(p)))
     if p.get("race") == "elf":
         xp = round(xp * (1 + economy.ELF_XP_BONUS))
     buff = state.faction_buff_pct(p, "xp")
@@ -424,11 +538,13 @@ def resolve_fight_action(p: dict, floor, option_id: str) -> Scene:
             return fight_scene(p, floor, note=(
                 f"The shard needs {economy.scan_xp_cost(floor.floor)} XP of "
                 "what you've learned — you haven't learned enough yet."))
+        pline = _profile_line(_profile(p))
         return fight_scene(
             p, floor,
             note=f"◆ scan: {e['name']} — ATK {e['atk']} / DEF {e['def']} / "
-                 f"HP {e['hp']}/{e['hp_max']}. Your ATK {state.atk(p)} / "
-                 f"DEF {state.dfs(p)}.")
+                 f"HP {e['hp']}/{e['hp_max']}"
+                 + (f" · {pline}" if pline else "")
+                 + f". Your ATK {state.atk(p)} / DEF {state.dfs(p)}.")
 
     if option_id == "drink_tonic":
         p["inventory"]["trollblood_tonic"] -= 1
@@ -438,13 +554,49 @@ def resolve_fight_action(p: dict, floor, option_id: str) -> Scene:
         hit = _monster_hit(p)
         if p["hp"] <= 0:
             return _death(p, floor)
+        chase = _advance_chase(p)
         return fight_scene(p, floor, note=(
             "The tonic burns going down — full health. "
             + _counter_text(p, hit,
-                            lead=f"The {e['name']} strikes while you drink")))
+                            lead=f"The {e['name']} strikes while you drink")
+            + (f" {chase}" if chase else "")))
+
+    if option_id in ("close_in", "attack") and _damage_type(p) == "melee" \
+            and _range_state(p) == "at_range":
+        # §2.4: always succeeds, costs the round; the monster strikes at
+        # −50% while you cross the open ground. A bare "attack" from a
+        # melee player at range IS the crossing — steel can't swing yet.
+        e["range"] = "close"
+        hit = _monster_hit(p, halved=True)
+        if p["hp"] <= 0:
+            return _death(p, floor)
+        return fight_scene(p, floor, note=(
+            "You cross the open ground fast and low. "
+            + _counter_text(p, hit,
+                            lead=f"The {e['name']} meets you mid-stride")))
+
+    if option_id == "open_distance" and _range_state(p) == "close":
+        # §2.4: speed decides; on failure the monster gets a free
+        # halved hit while you turn.
+        if state.roll_ok(p, economy.p_open(economy.player_speed(p),
+                                           _mspd(p))):
+            e["range"] = "at_range"
+            chase = _advance_chase(p)
+            return fight_scene(p, floor, note=(
+                "You break contact and put ground between you. "
+                + chase))
+        hit = _monster_hit(p, halved=True)
+        if p["hp"] <= 0:
+            return _death(p, floor)
+        return fight_scene(p, floor, note=(
+            "No gap opens — it stays with you. "
+            + _counter_text(p, hit,
+                            lead=f"The {e['name']} punishes the turn")))
 
     if option_id == "run":
-        if state.roll_ok(p, 0.60):
+        # §2.4: the flat 60% is gone — speed decides the getaway.
+        if state.roll_ok(p, economy.p_flee(economy.player_speed(p),
+                                           _mspd(p))):
             p["encounter"] = None
             p["location"] = "gate_town"
             return Scene(
@@ -457,9 +609,11 @@ def resolve_fight_action(p: dict, floor, option_id: str) -> Scene:
         hit = _monster_hit(p)
         if p["hp"] <= 0:
             return _death(p, floor)
+        chase = _advance_chase(p)
         return fight_scene(p, floor, note=(
             "It cuts off your line — no way out. "
-            + _counter_text(p, hit, lead="It catches you turning")))
+            + _counter_text(p, hit, lead="It catches you turning")
+            + (f" {chase}" if chase else "")))
 
     if option_id == "stand":
         hit = _monster_hit(p, halved=True)
@@ -471,17 +625,42 @@ def resolve_fight_action(p: dict, floor, option_id: str) -> Scene:
         held = ("Nothing gets through — guard held."
                 if hit["dmg"] <= 0 else
                 f"−{hit['dmg']} HP, guard held.")
-        return fight_scene(p, floor, note=f"{braced} {held}")
+        chase = _advance_chase(p)
+        return fight_scene(
+            p, floor,
+            note=f"{braced} {held}" + (f" {chase}" if chase else ""))
 
     if option_id == "shield_wall" and p.get("clazz") == "warrior":
-        counter = max(0, state.atk(p) // 4 - e["def"] // 2)
+        # 017: the counter is a melee blow — it cannot reach a flyer,
+        # and (002) it cannot reach a monster still crossing open ground.
+        at_range = _range_state(p) == "at_range"
+        if _profile(p).get("flying") or at_range:
+            counter = 0
+        else:
+            counter = max(0, state.atk(p) // 4 - e["def"] // 2)
         e["hp"] -= counter
         if e["hp"] <= 0:
             return _victory(p, floor)
+        chase = _advance_chase(p)
+        if counter <= 0 and _profile(p).get("flying"):
+            return fight_scene(p, floor, note=(
+                "Shield up — nothing gets through. But your counter "
+                "swings under it: the thing is airborne."))
+        if counter <= 0 and at_range:
+            return fight_scene(p, floor, note=(
+                "Shield up — nothing gets through. Your counter finds "
+                "only air: it hasn't reached you yet."
+                + (f" {chase}" if chase else "")))
         return fight_scene(p, floor, note=(
             f"Shield up — nothing gets through. Your counter takes {counter}."))
 
     if option_id == "sleep_spell" and p.get("clazz") == "sorcerer":
+        # 017: a High spellguard shrugs the lullaby off entirely —
+        # refused BEFORE the XP is spent, so probing costs nothing.
+        if _profile(p).get("resist") == "high":
+            return fight_scene(p, floor, note=(
+                f"You shape the lullaby and the {e['name']}'s spellguard "
+                "burns it off mid-air. This one won't sleep."))
         cost = economy.sleep_xp_cost(floor.floor)
         if not state.spend_xp(p, cost):
             return fight_scene(p, floor, note=(
@@ -501,19 +680,24 @@ def resolve_fight_action(p: dict, floor, option_id: str) -> Scene:
     if option_id == "treeline_shot" and p.get("clazz") == "archer" \
             and not e["shot_used"]:
         e["shot_used"] = True
-        if "armored" in (e.get("traits") or ()):
-            # plate over the vitals — the long shot loses its double
+        if _profile(p).get("armor") in ("med", "high"):
+            # 017: Medium+ plate over the vitals — the long shot loses
+            # its double (Low plate still leaves gaps for a marksman)
             dmg = _player_hit(p)
             if e["hp"] <= 0:
                 return _victory(p, floor)
+            chase = _advance_chase(p)
             return fight_scene(p, floor, note=(
                 f"Your arrow snaps against its plate — {dmg} damage, "
-                "no clean gap for a killing shot."))
+                "no clean gap for a killing shot."
+                + (f" {chase}" if chase else "")))
         dmg = _player_hit(p, mult=2.0)
         if e["hp"] <= 0:
             return _victory(p, floor)
+        chase = _advance_chase(p)
         return fight_scene(p, floor, note=(
-            f"Your shot from cover takes it for {dmg} before it finds you."))
+            f"Your shot from cover takes it for {dmg} before it finds you."
+            + (f" {chase}" if chase else "")))
 
     # default: attack
     dmg = _player_hit(p)
@@ -522,5 +706,7 @@ def resolve_fight_action(p: dict, floor, option_id: str) -> Scene:
     back = _monster_hit(p)
     if p["hp"] <= 0:
         return _death(p, floor)
+    chase = _advance_chase(p)
     return fight_scene(p, floor, note=(
-        f"{_strike_text(p, dmg)} {_counter_text(p, back)}"))
+        f"{_strike_text(p, dmg)} {_counter_text(p, back)}"
+        + (f" {chase}" if chase else "")))

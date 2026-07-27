@@ -31,6 +31,7 @@ def _kill_one(p: dict) -> object:
     choose(p, "gate")
     choose(p, "floor_1")
     choose(p, "hunt")
+    p["encounter"]["range"] = "close"        # 002: skip the crossing
     p["encounter"]["hp"] = 1
     return choose(p, "attack")
 

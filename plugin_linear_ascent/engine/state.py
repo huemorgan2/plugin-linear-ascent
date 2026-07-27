@@ -29,7 +29,7 @@ def world_day(at: dt.datetime | None = None) -> int:
 def new_player(luna_user: str) -> dict:
     ts = now().isoformat()
     return {
-        "version": 1,
+        "version": 2,
         "luna_user": luna_user,
         "stage": "intro",              # intro → creation_race → creation_class → creation_name → playing
         "name": None, "race": None, "clazz": None,
@@ -129,6 +129,34 @@ def ensure_current(p: dict) -> None:
                 options=[Option("town", "Pocket it and move on")],
                 event_kind="present",
             ).to_dict())
+    if p.get("version", 1) < 2:
+        # 017 §1: doc v2 — every class carries its OWN basic weapon.
+        # Existing docs holding the generic shiv get their class piece;
+        # archers/sorcerers see a letter (their weapon visibly changed),
+        # the warrior's shiv just grew into its proper name.
+        clazz = p.get("clazz")
+        if (p.get("stage") == "playing" and clazz in economy.CLASS_STARTERS
+                and p["gear"].get("weapon") == economy.STARTER_WEAPON.slug):
+            starter = economy.class_starter(clazz)
+            p["gear"]["weapon"] = starter.slug
+            if clazz in ("archer", "sorcerer"):
+                from .scene import Option, Scene
+                p.setdefault("pending_events", []).insert(0, Scene(
+                    eyebrow="ROOTHOLLOW · A LETTER FROM THE GATE ARMORY",
+                    headline="Your own weapon, at last",
+                    support="The armory finally sorted its ledgers: "
+                            "climbers fight with the weapon of their "
+                            "calling, not a spare shiv.",
+                    shard_note="It fits your hands. It always should have.",
+                    body_lines=[
+                        f"▪ {starter.name} — {starter.flavor}",
+                        "▪ the basic weapon never breaks, never runs "
+                        "out, and is never lost",
+                    ],
+                    options=[Option("town", "Take it up")],
+                    event_kind="present",
+                ).to_dict())
+        p["version"] = 2
 
 
 # ── Derived stats ────────────────────────────────────────────────────────

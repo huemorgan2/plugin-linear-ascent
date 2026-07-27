@@ -27,6 +27,14 @@ encounters:
     prose: >-
       Two lamps on a pole — no, a goblin on stilts, scrap-rifle slung
       high, picking through the flood for anything worth stealing.
+  - id: shellback_tortoise
+    name: Shellback tortoise
+    weight: 2
+    traits: [armor_low]
+    prose: >-
+      The hay rick you took for an island stands up. A tortoise broad
+      as a cart bed, shell scarred white where blades have tried it
+      before, wades toward you with terrible patience.
 warden:
   name: Warden Sedgeback
   prose: >-

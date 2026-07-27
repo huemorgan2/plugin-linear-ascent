@@ -6,6 +6,8 @@ numbers; the loader and engine compute them. Keep the SHAPES when tuning.
 
 from __future__ import annotations
 
+import math
+
 from dataclasses import dataclass
 
 # ── §1 Meters ────────────────────────────────────────────────────────────
@@ -132,14 +134,142 @@ SPECIMENS: dict[str, dict] = {
 }
 
 
-# 017: encounter traits (content `traits:` list) — qualitative flags the
-# engine prices here. "armored" wears looted plate and swings a real
-# blade: harder everything, better pay, and ranged class shots (the
-# archer's treeline shot) lose their multiplier against the plate.
-ARMORED_ATK_MULT = 1.25
-ARMORED_DEF_MULT = 1.5
-ARMORED_HP_MULT = 1.25
-ARMORED_GOLD_MULT = 1.35
+# ── 017 §2: damage types & defense profiles ──────────────────────────────
+# Three professions, three damage types. Every monster carries a defense
+# profile derived from qualitative content traits — content never carries
+# numbers. Tier multipliers cut the FINAL damage of the affected type.
+
+DAMAGE_TYPE = {"warrior": "melee", "archer": "ranged", "sorcerer": "magic"}
+
+TIER_MULT = {"none": 1.0, "low": 0.75, "med": 0.50, "high": 0.25}
+TIER_LABEL = {"none": "None", "low": "Low", "med": "Medium", "high": "High"}
+_TIER_ORDER = ("none", "low", "med", "high")
+
+# gold bumps: a hard profile pays for the diagnosis it demands
+PROFILE_GOLD = {"low": 1.1, "med": 1.25, "high": 1.4}
+FLYING_GOLD_MULT = 1.2
+BULWARK_GOLD_MULT = 1.5
+BULWARK_HP_MULT = 2.2          # the outlast-you enemy
+
+# speed scale (1–10) — priced by the chase model (phase 002); authorable
+# and displayed from 001 so content and cards never need a second pass.
+SPEED_SLOW = 3
+SPEED_NORMAL = 5
+SPEED_FAST = 7
+
+WARDEN_PROFILE_FLOOR = 21      # band 3+: wardens get low/low tiers
+
+# ── 017 §2.4: speed and the two-state range model (phase 002) ─────────────
+# Fights open at range. Bows and spells carry; steel must close. Every
+# probability below is a pure function of the two speeds, so the [i] card
+# can show the whole chase without a single hidden number.
+
+PLAYER_BASE_SPEED = 5
+ALPHA_SPEED_BONUS = 1          # alphas run +1 on the 1–10 scale
+BOW_CLOSE_MULT = 0.6           # bow damage in close quarters
+DODGE_CAP_PCT = 12             # speed never becomes the main defense
+
+# Shoes ship in 004 (the Forge ladder). The speed hook lands with the
+# chase model so 004 only adds catalog rows here.
+SHOE_SPEED: dict[str, int] = {}
+
+
+def player_speed(p: dict) -> int:
+    shoes = (p.get("gear") or {}).get("shoes") or ""
+    return PLAYER_BASE_SPEED + SHOE_SPEED.get(shoes, 0)
+
+
+def _clamp(x: float, lo: float, hi: float) -> float:
+    return max(lo, min(hi, x))
+
+
+def p_close(mspd: int, pspd: int) -> float:
+    """End of an at-range round: the monster tries to close the gap."""
+    return _clamp(0.25 + 0.15 * (mspd - pspd), 0.05, 0.95)
+
+
+def p_open(pspd: int, mspd: int) -> float:
+    """Open distance from close quarters — the archer's bread and butter."""
+    return _clamp(0.50 + 0.15 * (pspd - mspd), 0.05, 0.90)
+
+
+def p_flee(pspd: int, mspd: int) -> float:
+    """Leave the fight. You can walk away from the slow; you cannot
+    outrun the wolf without shoes."""
+    return _clamp(0.60 + 0.12 * (pspd - mspd), 0.10, 0.95)
+
+
+def dodge_pct(pspd: int, mspd: int) -> int:
+    """Log-decay dodge from speed ADVANTAGE only — capped so armor and
+    resist stay the primary defenses by construction."""
+    a = max(0, pspd - mspd)
+    return min(DODGE_CAP_PCT, round(7 * math.log2(1 + a)))
+
+
+def tier_up(tier: str) -> str:
+    return _TIER_ORDER[min(len(_TIER_ORDER) - 1,
+                           _TIER_ORDER.index(tier) + 1)]
+
+
+def profile_from_traits(traits) -> dict:
+    """Defense profile from content traits. Legacy 'armored' → armor_med."""
+    prof = {"armor": "none", "resist": "none", "flying": False,
+            "bulwark": False, "speed": SPEED_NORMAL}
+    for t in traits or ():
+        if t.startswith("armor_"):
+            prof["armor"] = t[len("armor_"):]
+        elif t.startswith("resist_"):
+            prof["resist"] = t[len("resist_"):]
+        elif t == "armored":               # legacy content, pre-017 tiers
+            prof["armor"] = "med"
+        elif t == "flying":
+            prof["flying"] = True
+        elif t == "bulwark":
+            prof["bulwark"] = True
+        elif t == "slow":
+            prof["speed"] = SPEED_SLOW
+        elif t == "fast":
+            prof["speed"] = SPEED_FAST
+    if prof["bulwark"]:
+        prof["armor"] = tier_up(prof["armor"])
+    return prof
+
+
+def profile_gold_mult(prof: dict) -> float:
+    m = 1.0
+    m *= PROFILE_GOLD.get(prof.get("armor", "none"), 1.0)
+    m *= PROFILE_GOLD.get(prof.get("resist", "none"), 1.0)
+    if prof.get("flying"):
+        m *= FLYING_GOLD_MULT
+    if prof.get("bulwark"):
+        m *= BULWARK_GOLD_MULT
+    return m
+
+
+def typed_damage(dtype: str, raw: int, monster_def: int, prof: dict) -> int:
+    """Player damage through a defense profile. Magic ignores flat DEF but
+    eats the resist tier; melee/ranged keep raw−DEF/2 and eat the armor
+    tier. Anything that CAN hit chips ≥1 (the 013 lesson). The single
+    legal zero: melee vs flying — the blade cannot reach."""
+    if dtype == "melee" and prof.get("flying"):
+        return 0
+    if dtype == "magic":
+        base = raw
+        mult = TIER_MULT[prof.get("resist", "none")]
+    else:
+        base = raw - monster_def // 2
+        mult = TIER_MULT[prof.get("armor", "none")]
+    return max(1, round(max(1, base) * mult))
+
+
+def warden_profile(floor: int) -> dict:
+    """Wardens join the system gently: nothing below floor 21, low/low
+    tiers after, med/med on milestone bosses (damage checks, not walls)."""
+    if floor % 10 == 0:
+        return profile_from_traits(("armor_med", "resist_med"))
+    if floor >= WARDEN_PROFILE_FLOOR:
+        return profile_from_traits(("armor_low", "resist_low"))
+    return profile_from_traits(())
 
 
 def xp_per_kill(floor: int) -> int:
@@ -238,6 +368,11 @@ def warden_stats(floor: int) -> tuple[int, int, int]:
     if floor > WARDEN_SOFT_FLOOR:
         hp = round(hp * (1 + (floor - WARDEN_SOFT_FLOOR) / WARDEN_HP_RAMP))
     p_dmg = max(1, round(0.75 * p_atk) - m_def // 2)
+    if floor >= WARDEN_PROFILE_FLOOR:
+        # 017: band-3+ wardens carry low tiers (both axes, so every class
+        # feels it equally) — the reference damage drops ×0.75 and the
+        # rounds/ATK budget below re-tunes itself by construction.
+        p_dmg = max(1, round(p_dmg * TIER_MULT["low"]))
     rounds = max(3, hp // p_dmg)
     # floors 1–5 ramp in gently: fresh climbers reach these gates with
     # partial kits (the first with the bare shiv), and the first hour
@@ -372,13 +507,37 @@ FORGE: dict[str, GearItem] = _build_forge()
 
 # Tier-0 gate issue, free at creation. Bare-handed ATK at level 1 is 3 vs
 # floor-1 monsters at DEF 3 / HP 37 — ~1 damage a round, unwinnable. The
-# shiv makes floor 1 hard-but-fair while keeping the ◈250 Pigsticker a
-# real first goal. Never sold (forge_tier lists tiers ≥ 1).
+# basic weapon makes floor 1 hard-but-fair while keeping the ◈250 tier-1
+# purchase a real first goal. Never sold (forge_tier lists tiers ≥ 1).
+# 017 §1: the basic weapon is a floor, not a phase — one per class, it
+# never degrades, never runs out, is never lost. rusted_shiv stays as the
+# pre-class / legacy-doc slug (same stats as the warrior sword).
 STARTER_WEAPON = GearItem(
     "rusted_shiv", "Rusted Shiv",
     "gate-issue salvage steel — barely better than teeth",
     "weapon", 0, 5, 0)
 FORGE[STARTER_WEAPON.slug] = STARTER_WEAPON
+
+CLASS_STARTERS: dict[str, GearItem] = {
+    "warrior": GearItem(
+        "rusted_sword", "Rusted Sword",
+        "gate-issue salvage steel, honest weight — it will never leave you",
+        "weapon", 0, 5, 0),
+    "archer": GearItem(
+        "basic_bow", "Basic Bow",
+        "gate-issue laminate bow — the quiver of plain arrows never empties",
+        "weapon", 0, 5, 0),
+    "sorcerer": GearItem(
+        "worn_staff", "Worn Wooden Staff",
+        "gate-issue focus wood, thumb-polished — the spark answers you, always",
+        "weapon", 0, 5, 0),
+}
+for _g in CLASS_STARTERS.values():
+    FORGE[_g.slug] = _g
+
+
+def class_starter(clazz: str) -> GearItem:
+    return CLASS_STARTERS.get(clazz or "", STARTER_WEAPON)
 
 PAWN_BUYBACK = 0.40
 

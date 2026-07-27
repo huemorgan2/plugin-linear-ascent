@@ -27,6 +27,14 @@ encounters:
     prose: >-
       A boar reels out of the windfalls, drunk on rot and mean with it,
       foam at the tusks and no interest in going around you.
+  - id: windfall_haunt
+    name: Windfall haunt
+    weight: 2
+    traits: [resist_low]
+    prose: >-
+      The sweet rot between two rows thickens into a shape — a haunt
+      fed on spoiled harvest, wearing the orchard's shimmer like a
+      coat. Spellwork slides off it the way light slides off cider.
 warden:
   name: Warden Applewrath
   prose: >-

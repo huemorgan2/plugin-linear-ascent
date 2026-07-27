@@ -24,9 +24,31 @@ BANNED_WORDS = (
 )
 _FORBIDDEN_NUMERIC_KEYS = {"atk", "def", "hp", "xp", "gold", "damage", "price"}
 # Encounter traits: qualitative flags the engine turns into numbers
-# (economy.py) — content stays prose-only. "armored": plate and a blade —
-# harder stats, and ranged class shots lose their bonus.
-ALLOWED_TRAITS = {"armored"}
+# (economy.py profile_from_traits) — content stays prose-only.
+# 017 §2.2: armor/resist tiers, flying, bulwark, speed. Legacy "armored"
+# maps to armor_med and is only legal on floors > 10 until phase 008
+# migrates them.
+ALLOWED_TRAITS = {
+    "armor_low", "armor_med", "armor_high",
+    "resist_low", "resist_med", "resist_high",
+    "flying", "bulwark", "slow", "fast",
+    "armored",  # legacy — lint forbids it on floors ≤ 10
+}
+
+# 017 §2.3 the intro staircase: the first floor where a rule may appear.
+# Floor 1 is kindergarten — no traits at all. Lint enforces both.
+TRAIT_INTRO_FLOOR = {
+    "armor": 2, "resist": 3, "flying": 4, "fast": 5,
+    "bulwark": 6, "slow": 6,
+}
+
+
+def _trait_family(trait: str) -> str:
+    if trait.startswith("armor_") or trait == "armored":
+        return "armor"
+    if trait.startswith("resist_"):
+        return "resist"
+    return trait
 
 
 class ContentError(ValueError):
@@ -102,6 +124,15 @@ def _load_floor_file(path: str) -> Floor:
         for t in traits:
             if t not in ALLOWED_TRAITS:
                 raise ContentError(f"{where}/{e['id']}: unknown trait {t!r}")
+            if t == "armored" and f <= 10:
+                raise ContentError(
+                    f"{where}/{e['id']}: legacy trait 'armored' — floors "
+                    "1-10 use the 017 tier traits")
+            intro = TRAIT_INTRO_FLOOR.get(_trait_family(t))
+            if intro is not None and f < intro:
+                raise ContentError(
+                    f"{where}/{e['id']}: trait {t!r} before its intro "
+                    f"floor {intro} (017 staircase)")
         _check_prose(e["prose"], f"{where}/{e['id']}")
         encounters.append(Encounter(
             id=e["id"], name=e["name"], prose=e["prose"],

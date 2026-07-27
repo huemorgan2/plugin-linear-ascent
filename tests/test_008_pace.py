@@ -56,9 +56,12 @@ def test_wilds_hp_derived_from_rounds_budget():
 
 
 def test_warden_baseline_unchanged_by_008():
+    # 017: floors ≥ 21 wardens carry low/low defense tiers, so the
+    # reference damage (and thus the ATK budget) re-tunes: ATK dips a
+    # touch, HP identical. Floors < 21 untouched.
     baseline = {1: (14, 3, 70), 5: (28, 15, 162), 10: (47, 30, 276),
-                15: (60, 45, 390), 30: (111, 90, 732), 50: (185, 150, 1782),
-                75: (297, 225, 3736), 100: (445, 300, 6402)}
+                15: (60, 45, 390), 30: (101, 90, 732), 50: (174, 150, 1782),
+                75: (284, 225, 3736), 100: (428, 300, 6402)}
     for f, want in baseline.items():
         assert economy.warden_stats(f) == want
 
@@ -93,6 +96,7 @@ def test_alpha_kill_drops_extra_loot(monkeypatch):
     force_specimen(monkeypatch, "alpha")
     p = at_gate_town(create_character(fresh()))
     choose(p, "hunt")
+    p["encounter"]["range"] = "close"         # 002: skip the crossing
     p["encounter"]["hp"] = 1                  # next hit kills
     s = choose(p, "attack")
     assert p["encounter"] is None
@@ -105,6 +109,7 @@ def test_runt_pays_less_gold(monkeypatch):
     monkeypatch.setattr(state, "rng_jitter", lambda p, base, pct: base)
     p = at_gate_town(create_character(fresh()))
     choose(p, "hunt")
+    p["encounter"]["range"] = "close"         # 002: skip the crossing
     p["encounter"]["hp"] = 1
     gold_before = p["gold"]
     choose(p, "attack")

@@ -24,9 +24,18 @@ encounters:
   - id: lane_boar
     name: Lane bull-boar
     weight: 2
+    traits: [bulwark, slow]
     prose: >-
-      Filling the lane wall to wall, a bull-boar lowers its head. There
-      is exactly one direction it intends to travel, and you are in it.
+      Filling the lane wall to wall, a bull-boar lowers its head — a
+      slab of scar and gristle that has outlasted everything the lanes
+      ever sent at it. Slow, vast, and very hard to whittle down.
+  - id: bank_marten
+    name: Bank marten
+    weight: 2
+    prose: >-
+      A marten the length of your arm flows down the hedge bank like
+      spilled ink, all teeth and hunger, quick into the gap between
+      your knee and your guard.
 warden:
   name: Warden Thornhide
   prose: >-

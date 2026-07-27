@@ -27,6 +27,14 @@ encounters:
     prose: >-
       A boar has made its wallow in the wheelhouse shade. It rises out
       of the mud like a landslide changing its mind.
+  - id: coolant_crab
+    name: Coolant crab
+    weight: 2
+    traits: [armor_low]
+    prose: >-
+      A crab the size of a millstone climbs out of the race, shell
+      grown around scraps of pump-iron until beast and machine armor
+      are the same thing. Its claws open with a hydraulic sigh.
 warden:
   name: Warden Milldrown
   prose: >-

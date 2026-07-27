@@ -38,5 +38,11 @@ kiting, fleeing, catching, and the small log-decay dodge. Depends on
   rounds-to-kill within +1 of today).
 - Dojo: kite a slow bulwark as archer; get run down by a wolf; flee a
   slow monster successfully.
+- Dojo technique (001 retro): swap `doc.clazz` + `gear.weapon` in the
+  local worldd DB for class switches (plus `energy_val`/`hp` top-ups
+  and `ascent_world.frontier` for high floors) instead of creating
+  three characters. Navigation: the floor list is ONLY at
+  Roothollow → tower gate; "Back to the tower gate" from a floor lands
+  at that floor's camp — scripted loops must route through town.
 
 Exit: all green, published, worldd synced, `execution_summary.md`.

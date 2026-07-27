@@ -12,9 +12,11 @@ encounters:
   - id: kings_guard
     name: Goblin king's guard
     weight: 3
+    traits: [armor_med]
     prose: >-
       Two crossed scrap-rifles bar the path — a king's guard in salvaged
-      breastplate, better fed than any goblin below, and prouder.
+      breastplate, better fed than any goblin below, and prouder. Old
+      arrows lie snapped in the gravel where its plate turned them.
   - id: banner_wolf
     name: Banner-broken wolf
     weight: 2
@@ -27,6 +29,14 @@ encounters:
     prose: >-
       A goblin sergeant halts its squad's drill, hands you one long
       look, and sends the recruits to lunch. This one it keeps.
+  - id: kings_courier
+    name: King's courier
+    weight: 2
+    traits: [fast]
+    prose: >-
+      A goblin courier in cut-down harness sprints the raked paths
+      with the King's dispatches — and swerves at you, because a
+      climber's head is worth more than any letter it carries.
 warden:
   name: Gnarl, the Goblin King
   prose: >-
