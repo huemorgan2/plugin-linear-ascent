@@ -40,7 +40,9 @@ from PIL import Image
 _HERE = os.path.dirname(os.path.abspath(__file__))
 ART = os.path.join(_HERE, "..", "plugin_linear_ascent", "content", "art",
                    "events")
-RAW = os.path.join(ART, "raw")
+# Raw Veo mp4s are reference material, not runtime assets — they live at the
+# repo root (like banners/creatures raw) so they never ship in the plugin zip.
+RAW = os.path.join(_HERE, "..", "content", "art", "events", "raw")
 PREVIEW = os.path.join(ART, "preview")
 W, H = 320, 112  # same native grid as the scene banners
 FPS = 12         # GIF playback rate; Veo footage is resampled down to this
