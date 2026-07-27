@@ -38,6 +38,10 @@ that) — but every effect is already spelled out in fight prose.
   floor-1..10 profile: intended-victim win rate ≥80%, hard-countered
   win <30% or rounds ≥2× baseline. Committed as a pytest sim like the
   specimen gate.
+- **Difficulty smoothness gate (plan §7.3) lands here:**
+  `tests/test_smoothness.py` — closed-form floor-1..100 walk per class:
+  rounds-to-kill, death risk, income/energy; adjacent-floor and
+  band-boundary deltas ≤25%, trend-monotone. Grows with later phases.
 - Content lint passes (staircase rule: the introducing floor carries
   exactly one monster with the new trait).
 - Doc migration: v1 docs (fixtures for each class) upgrade losslessly;

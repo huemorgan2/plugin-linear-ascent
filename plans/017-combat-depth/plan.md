@@ -299,12 +299,28 @@ has value. No other messaging changes (0.17.2 silence stays).
    <30% or 2× longer), chase sim (kiting/flee curves within ±5% of
    spec), economy sim (repairs ≤20% of reference income; death loss
    expectation within spec; relic prices vs DI anchors).
-3. **Content lint** (`lint_floors` + new spread/lore/trait rules) stays
+3. **Difficulty smoothness gate (no bumps, no step functions):** a
+   full-playthrough sim (`tests/test_smoothness.py`, lands in phase 001
+   and grows with every phase) walks the at-level reference player of
+   each class floor 1 → 100 and records, per floor: rounds-to-kill vs
+   the floor's intended targets, death risk per fight, net income per
+   energy, and days-to-next-purchase. Gate asserts:
+   - adjacent-floor delta of every metric ≤ 25% (no cliffs);
+   - band boundaries (10→11, 20→21, …) obey the SAME cap — tier jumps
+     must be absorbed by the mid rungs, not felt as walls;
+   - metrics are trend-monotone (smoothed slope never flips sign for
+     >2 consecutive floors) so difficulty climbs, dips never spike.
+   Every economy-touching phase must leave this gate green.
+4. **Content lint** (`lint_floors` + new spread/lore/trait rules) stays
    a CI gate.
-4. **Dojo browser test** per phase: real conversation + pane clicks
-   against a local Luna, DOM timeline + screenshots (run-dojo skill).
-5. Ship: version bump, marketplace publish, worldd vendor sync +
+5. **Dojo browser test** per phase: real conversation + pane clicks
+   against a local Luna, DOM timeline + screenshots (run-dojo skill) —
+   the screen is read with eyes, not assumed from code.
+6. Ship: version bump, marketplace publish, worldd vendor sync +
    Render deploy, `execution_summary.md` per phase.
+7. **Phase retrospective (devprocess §7):** after each summary, re-read
+   and amend ALL remaining phase plans with what the phase taught
+   (date-stamped `> retro(NNN):` notes) before starting the next.
 
 ## 8. Phase index (folders in this directory)
 
