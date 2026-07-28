@@ -1052,11 +1052,12 @@ BOARD_PRICE = 10
 
 # ── Races & classes ──────────────────────────────────────────────────────
 
+# 009: three lines climb the Ascent — the halfling listing is retired
+# (doc v4 re-registers existing halflings as human).
 RACES = {
     "human": "Adaptable: +1 energy cap. Port-town survivors.",
     "elf": "Keen: +5% experience from kills. Their bio-lit forest is floor 23.",
     "dwarf": "Stubborn: +5% armor value. The fusion-halls are floors 11-20.",
-    "halfling": "Lucky: better present and loot rolls.",
 }
 
 CLASSES = {

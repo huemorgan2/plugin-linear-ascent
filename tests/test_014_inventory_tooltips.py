@@ -62,7 +62,7 @@ def test_icon_key_resolution():
 
 STATIC_IDS = [
     # navigation + creation
-    "town", "back", "begin", "human", "elf", "dwarf", "halfling",
+    "town", "back", "begin", "human", "elf", "dwarf",
     "warrior", "sorcerer", "archer",
     # town buildings
     "forge", "medlab", "lodge", "vault", "pawn", "relay", "fields",

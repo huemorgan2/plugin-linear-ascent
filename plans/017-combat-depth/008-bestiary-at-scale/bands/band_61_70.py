@@ -174,8 +174,10 @@ SPEC = {
             "rigging_ghast": ["slow"],
         },
         "new": [{
+            # 009: slow+armor_med is prey-grade (the 008 rule) — this one
+            # slipped the day-seeded gate; armor_high makes the shell real.
             "id": "shroud_crab", "name": "Shroud crab", "weight": 2,
-            "traits": ["armor_med", "slow"],
+            "traits": ["armor_high", "slow"],
             "lore": (
                 "It climbed up from some hold with the fleet and "
                 "never left the rigging. The shell has out-lasted "

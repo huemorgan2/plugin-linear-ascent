@@ -212,9 +212,6 @@ _RACE_ANGLE = {
             "gear, floors and power — the compounding pick."),
     "dwarf": ("+5% armor value. Hits land softer, the healer is paid "
               "less, and hunting runs stretch longer per coin."),
-    "halfling": ("Better present and loot rolls. Fortune favors you "
-                 "daily — more free gold, gear and charms over a "
-                 "climb."),
 }
 _CLASS_ANGLE = {
     "warrior": ("Unlocks Shield Wall in fights: take a whole round on "

@@ -29,7 +29,7 @@ def world_day(at: dt.datetime | None = None) -> int:
 def new_player(luna_user: str) -> dict:
     ts = now().isoformat()
     return {
-        "version": 3,
+        "version": 4,
         "luna_user": luna_user,
         "stage": "intro",              # intro → creation_race → creation_class → creation_name → playing
         "name": None, "race": None, "clazz": None,
@@ -172,6 +172,37 @@ def ensure_current(p: dict) -> None:
             if g and g.price > 0 and slot not in p["durability"]:
                 p["durability"][slot] = economy.item_pool(g)
         p["version"] = 3
+    if p.get("version", 1) < 4:
+        # 009: the halfling line is retired — the canon cast is human,
+        # elf and dwarf. Existing halflings are re-registered human
+        # (the closest line: port-town survivors, adaptable) and told
+        # so in-world. The racial luck bonus retires with the line;
+        # luck DAYS and luck CHARMS are unchanged — they never keyed
+        # off the race.
+        if p.get("race") == "halfling":
+            p["race"] = "human"
+            if p.get("stage") == "playing":
+                from .scene import Option, Scene
+                p.setdefault("pending_events", []).insert(0, Scene(
+                    eyebrow="ROOTHOLLOW · A LETTER FROM THE REGISTRAR",
+                    headline="The Stone re-registers your line",
+                    support="The registrar's slate was recut: three lines "
+                            "climb the Ascent — human, elf, dwarf. Yours "
+                            "now reads HUMAN.",
+                    shard_note="The registry changed, not you. Your name "
+                               "on the Stone stands exactly as carved.",
+                    body_lines=[
+                        "▪ your line on the slate: HUMAN — adaptable, "
+                        "+1 energy cap, effective immediately",
+                        "▪ the old luck-of-the-line bonus is retired "
+                        "with the listing",
+                        "▪ luck charms and luck days work exactly as "
+                        "before",
+                    ],
+                    options=[Option("town", "Fold the letter and climb on")],
+                    event_kind="present",
+                ).to_dict())
+        p["version"] = 4
 
 
 # ── Durability (005 §3.5) ────────────────────────────────────────────────

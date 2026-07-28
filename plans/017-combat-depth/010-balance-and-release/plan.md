@@ -47,11 +47,32 @@ shared-world migration check, end-to-end dojo playtest, release.
      for archers (kiting slow is free — the armor tax never lands).
      Slow armored monsters need armor_high; fast-or-normal speed can
      carry armor_med.
+   009 retro — the gates are DAY-PINNED now (`_SIM_DAY = 137` in
+   `test_017_damage_types._sim_fight`): every roll keys on
+   `(user, world_day, counter)`, so unpinned gates re-rolled each UTC
+   morning and marginal matchups flipped with the date (three
+   "passing" walls were actually prey-grade: rod_wisp 15, shroud_crab
+   66 — an armor_med+slow that slipped 008's own rule — and
+   glade_dancers 74; all bumped to high tiers). For the retune this
+   means: (a) any test failing "for no reason" after 06:00 UTC is the
+   day seed until proven otherwise; (b) when a threshold gate passes,
+   check the MARGIN (`plans/.../009-.../scan_walls.py` prints every
+   wall's win/drag numbers — rerun it after the retune and treat
+   anything within ~0.1× of a bar as unshipped); (c) med tiers barely
+   register at reference gear — a wall the player should FEEL wants
+   the high tier.
 2. **Shared-world migration rehearsal:** export prod player docs
    (worldd, render-production skill), run `ensure_current` v2 over all
    of them locally, diff meters/gear/race outcomes, fix surprises.
    Then: staged deploy — worldd first (engine is backward-tolerant),
    plugin publish after.
+   009 retro: the tool exists — `plans/.../009-.../soak.py` runs
+   `ensure_current` over every doc (local docker by default, any
+   `DATABASE_URL` for prod), reports doc shapes + halfling counts +
+   errors, never writes. The local pass covered 1,535 docs / 17
+   shapes / zero errors; the rehearsal is that script pointed at the
+   prod export. Doc v4 = halfling→human with a one-time registrar
+   letter (playing docs only; mid-creation docs migrate silently).
 3. **Full dojo playtest** (run-dojo skill, all three classes):
    creation → floor 1 kindergarten → first armored / resistant / flyer
    / fast / bulwark floors → shoes purchase → kite → repair → die
@@ -97,6 +118,18 @@ shared-world migration check, end-to-end dojo playtest, release.
   band with `plans/.../008-.../dojo/teleport.py`, refill via
   `energy_val`. Expected moment budget from the 008 pass: ~25 hunts
   across nine bands = 2 matchup moments; anything chattier regressed.
+  009 retro (browser mechanics + art): restart LUNA too after any art
+  lands — `render._fx_data_url` lru-caches misses. On
+  `/p/linear-ascent` the pane iframe is the one whose src contains
+  `plugin-linear-ascent` (index 3 after brain/talk/voice). After a
+  psql doc edit, reload the iframe and wait ~3 s in a SEPARATE
+  evaluate — clicks in the same evaluate land on the stale scene.
+  `doc->'scene'->>'fx'` is ground truth for which kill ending played
+  (expect `<family>_kill_<melee|arrow|magic>` per class on floors
+  1–3). If a Veo slug fails twice with error code 13 while others
+  pass, reword the prompt ("ghostly/translucent" tripped it); chain
+  generator commands with `;` not `&&` — one bad slug aborts the
+  whole batch.
 - Marketplace serves the final version; production worldd healthy.
 
 Exit: 017 done — the tower has teeth, and they're readable.

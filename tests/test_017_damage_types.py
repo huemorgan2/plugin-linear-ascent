@@ -247,24 +247,37 @@ def reference_player(clazz, floor):
     return p
 
 
+# 009: the sims are pinned to one world day. Every roll is keyed by
+# (user, world_day, counter), so an unpinned gate re-rolls every UTC
+# morning — and a matchup sitting at the 1.6× drag bar flips green/red
+# with the date (floor 15 rod_wisp did exactly that). The gates measure
+# DESIGN, not today's dice.
+_SIM_DAY = 137
+
+
 def _sim_fight(clazz, floor_no, enc, seed):
     """Each class plays its natural game (002): steel closes and trades,
     the bow kites — reopen distance when caught — and magic just casts."""
     fl = schema.get_floor(floor_no)
     p = reference_player(clazz, floor_no)
     p["luna_user"] = f"sim-{clazz}-{floor_no}-{enc.id}-{seed}"
-    combat.start_encounter(p, fl, enc)
     rounds = 0
-    while p["encounter"] is not None and rounds < 60:
-        rounds += 1
-        if clazz == "archer" and \
-                p["encounter"].get("range", "close") == "close":
-            s = combat.resolve_fight_action(p, fl, "open_distance")
-        else:
-            s = combat.resolve_fight_action(p, fl, "attack")
-        if s.event_kind == "death" or p["hp"] <= 0:
-            return False, rounds
-    return p["encounter"] is None, rounds
+    orig_day = state.world_day
+    state.world_day = lambda at=None: _SIM_DAY
+    try:
+        combat.start_encounter(p, fl, enc)
+        while p["encounter"] is not None and rounds < 60:
+            rounds += 1
+            if clazz == "archer" and \
+                    p["encounter"].get("range", "close") == "close":
+                s = combat.resolve_fight_action(p, fl, "open_distance")
+            else:
+                s = combat.resolve_fight_action(p, fl, "attack")
+            if s.event_kind == "death" or p["hp"] <= 0:
+                return False, rounds
+        return p["encounter"] is None, rounds
+    finally:
+        state.world_day = orig_day
 
 
 def _class_mult(clazz, profile):

@@ -142,8 +142,10 @@ SPEC = {
             "forge_remnant": ["slow", "armor_high"],
         },
         "new": [{
+            # 009: resist_med sat AT the 1.6x drag bar for sorcerers and
+            # flapped with the day seed — resist_high makes the wall real.
             "id": "rod_wisp", "name": "Rod-wisp", "weight": 2,
-            "traits": ["flying", "resist_med"],
+            "traits": ["flying", "resist_high"],
             "lore": (
                 "Light that leaked from a cracked core and learned the "
                 "shape of a lantern-bearer. Spells pass through it like "
