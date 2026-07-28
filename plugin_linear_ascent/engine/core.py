@@ -226,8 +226,9 @@ def _maybe_present(p: dict) -> Scene | None:
     p["last_seen"] = state.now().isoformat()
     if away_h < economy.PRESENT_AWAY_HOURS:
         return None
-    lucky = p.get("race") == "halfling" or \
-        p["flags"].get("luck_day") == state.world_day()
+    # 009: luck is a DAY now (charm-bought) — the racial bonus retired
+    # with the halfling listing.
+    lucky = p["flags"].get("luck_day") == state.world_day()
     table = list(economy.PRESENT_TABLE)
     if lucky:
         table = [(w + (5 if k in ("jackpot", "gold") else 0), k)

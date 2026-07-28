@@ -51,7 +51,7 @@ encounters:
       It climbed up from some hold with the fleet and never left the
       rigging. The shell has out-lasted three hulls.
     weight: 2
-    traits: [armor_med, slow]
+    traits: [armor_high, slow]
     prose: >-
       A crab the size of a capstan picks its way down a shroud on point-
       tipped legs, shell barnacled with brass, and drops the last fathom

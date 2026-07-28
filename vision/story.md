@@ -25,7 +25,7 @@ Playable characters are refugees of the stolen realms. Race is flavor plus a sma
 - **Human** — adaptable: +1 energy cap. Port-town survivors; good with anything that has a trigger or a hilt.
 - **Elf** — keen: +1 aether (mana) cap. Their bio-lit forest is floor 23; older elves refuse to say what walks there now.
 - **Dwarf** — stubborn: +5% armor value. Their fusion-halls are floors 11–20; they want them back, room by room. **In the Ascent, "dwarf" is only the name — they are giants.** Slab-built mountain folk, two heads taller than a human or an elf and visibly wider; a dwarf fills a doorway and looms in every frame. All art must render this scale (decided 2026-07-27, see 017 pre-plan ¶11).
-- **Halfling** — lucky: better rolls on presents and loot. Nobody remembers which floor was theirs, least of all the halflings. *(Being retired by the 017 overhaul — existing halflings migrate to one of the three races above.)*
+- **Halfling** — *retired (017 phase 009, doc v4)*: the listing is gone from the registrar's slate; existing halflings were re-registered human and told so in-world (a letter from the registrar). The racial luck bonus retired with the line; luck days and luck charms are unchanged.
 
 ## The enemies (tiered, familiar, tech-twisted)
 

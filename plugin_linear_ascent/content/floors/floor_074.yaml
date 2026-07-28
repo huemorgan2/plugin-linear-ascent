@@ -16,7 +16,7 @@ encounters:
       The round has a gap where someone used to be, and every grey face
       turns to you with the same polite, starving expectation.
     weight: 3
-    traits: [resist_med]
+    traits: [resist_high]
     prose: >-
       The wedding glade needs a partner tonight — a gap in the round
       where someone used to be. The dancers stop. Every grey face

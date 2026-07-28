@@ -9,7 +9,7 @@ def make_player():
     core.current_scene(p)
     while p["stage"] == "intro":                # 016: through the movie
         core.apply_choice(p, "1")
-    core.apply_choice(p, "halfling")
+    core.apply_choice(p, "elf")
     core.apply_choice(p, "archer")
     core.apply_choice(p, "", "Renda")
     return p

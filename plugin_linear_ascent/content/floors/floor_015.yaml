@@ -48,7 +48,7 @@ encounters:
       Light that leaked from a cracked core and learned the shape of a
       lantern-bearer. Spells pass through it like more light.
     weight: 2
-    traits: [flying, resist_med]
+    traits: [flying, resist_high]
     prose: >-
       Between the vault doors the air brightens wrong — a figure of bare
       glow drifting the seam-light, carrying nothing, casting no shadow,

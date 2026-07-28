@@ -154,6 +154,9 @@ def test_open_distance_success_and_failure(monkeypatch):
     p2["encounter"]["range"] = "close"
     hp0 = p2["hp"]
     monkeypatch.setattr(state, "roll_ok", lambda pl, prob: False)
+    # 009: pin the damage roll high — a LOW day-seeded roll can chip 1,
+    # which the −50% legally rounds to 0 (the flake that ate a day roll)
+    monkeypatch.setattr(state, "rng_int", lambda pl, lo, hi: hi)
     s2 = combat.resolve_fight_action(p2, fl, "open_distance")
     assert p2["encounter"]["range"] == "close"
     assert p2["hp"] < hp0

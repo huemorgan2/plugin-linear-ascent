@@ -115,7 +115,9 @@ SPEC = {
                 "a sheepdog."),
         },
         "traits": {
-            "glade_dancers": ["resist_med"],
+            # 009: resist_med sat under the felt bar at the pinned sim
+            # day — resist_high makes the sorcerer wall real.
+            "glade_dancers": ["resist_high"],
             "skirmish_shade": ["resist_low"],
             "glade_hound": ["fast"],
         },

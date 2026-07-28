@@ -15,11 +15,17 @@ from .scene import Meters, Option, Scene
 
 _CREATURES = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                           "..", "content", "art", "creatures")
+_EVENTS = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                       "..", "content", "art", "events")
 
 
 def _creature_art(slug: str) -> bool:
     return any(os.path.exists(os.path.join(_CREATURES, f"{slug}_{s}.png"))
                for s in ("320x112", "320x200"))
+
+
+def _event_art(slug: str) -> bool:
+    return os.path.exists(os.path.join(_EVENTS, f"{slug}_320x112.gif"))
 
 
 def _opener_banner(e: dict, floor) -> str:
@@ -35,14 +41,30 @@ def _opener_banner(e: dict, floor) -> str:
     return floor.banner if e["kind"] == "wilds" else ""
 
 
-def _kill_fx(e: dict, name: str, first_clear: bool) -> str:
-    """011: event animation slug for a victory scene. Creature-specific
-    kill GIFs win; a first floor clear plays the gate opening. The
+# 009: kill GIF variants per damage type — the ending shows YOUR kill:
+# steel is the warrior's blade, arrows the archer's shot, magic the
+# wizard's cast. Family match is per-token (prefix) so "curator" never
+# plays the rat's death.
+_KILL_FAMILIES = ("brackjaw", "tortoise", "haunt", "goblin", "boar",
+                  "wolf", "rat")
+_KILL_SUFFIX = {"melee": "melee", "ranged": "arrow", "magic": "magic"}
+
+
+def _kill_fx(e: dict, name: str, first_clear: bool, dtype: str = "") -> str:
+    """011/009: event animation slug for a victory scene. A typed kill
+    GIF (family × landing damage type) wins; the family's untyped kill
+    is the fallback; a first floor clear plays the gate opening. The
     renderer silently skips slugs with no shipped art."""
-    hay = f"{e.get('id', '')} {name}".lower()
-    for family in ("brackjaw", "boar", "goblin", "wolf"):
-        if family in hay:
+    tokens = f"{e.get('id', '')} {name}".lower().replace("_", " ").split()
+    for family in _KILL_FAMILIES:
+        if not any(t.startswith(family) for t in tokens):
+            continue
+        suffix = _KILL_SUFFIX.get(dtype, "")
+        if suffix and _event_art(f"{family}_kill_{suffix}"):
+            return f"{family}_kill_{suffix}"
+        if _event_art(f"{family}_kill"):
             return f"{family}_kill"
+        break
     if first_clear:
         return "ascent_open"
     return ""
@@ -661,8 +683,8 @@ def _victory(p: dict, floor) -> Scene:
             gold = round(floor.milestone.gold / 2 * fade)
     else:
         xp = round(state.rng_jitter(p, economy.xp_per_kill(floor.floor), 0.25) * fade)
-        lucky = (p.get("race") == "halfling" or
-                 p["flags"].get("luck_day") == state.world_day())
+        # 009: luck is a DAY now — the halfling racial bonus is retired.
+        lucky = p["flags"].get("luck_day") == state.world_day()
         gold = round(state.rng_jitter(p, economy.gold_per_kill(floor.floor),
                                       0.50 if not lucky else 0.25) * fade)
         # 008: hard specimens pay more, runts pay less
@@ -723,7 +745,7 @@ def _victory(p: dict, floor) -> Scene:
         options=_after_fight_options(p, floor),
         meters=meters(p),
         event_kind=kind,
-        fx=_kill_fx(e, e["name"], first_clear),
+        fx=_kill_fx(e, e["name"], first_clear, _damage_type(p)),
     )
 
 

@@ -70,6 +70,22 @@ STYLE = (
 
 DIM, VIOLET, GOLD, RED = "#8b93a7", "#8b5cf6", "#f5a524", "#f4645f"
 
+# ── 009 art canon: the three showcase characters ─────────────────────────
+# Every human figure in event art is one of these three (vision/story.md
+# is canon; the giant-dwarf scale rule is non-negotiable — a dwarf is two
+# heads taller than a human or an elf and visibly wider, and must loom).
+CAST_WARRIOR = (
+    "a female human warrior silhouette — compact and athletic, straight "
+    "sword in hand, a round shield slung on her back")
+CAST_ARCHER = (
+    "a slender male elf archer silhouette — tall and light on his feet, "
+    "long sharp ears, a longbow in hand and a quiver at his hip")
+CAST_WIZARD = (
+    "a dwarf wizard silhouette rendered as a GIANT — slab-built mountain "
+    "folk, two heads taller than a human and visibly wider, a huge "
+    "bearded mass that looms over the frame, holding a heavy iron-shod "
+    "staff with a softly glowing head")
+
 # Per-event config:
 #   prompt     scene description appended to STYLE
 #   tint       preview ink color
@@ -94,16 +110,19 @@ DIM, VIOLET, GOLD, RED = "#8b93a7", "#8b5cf6", "#f5a524", "#f4645f"
 #              swap intro -> loop without a visible jump. `crossfade`
 #              applies to the loop segment.
 EVENTS: dict[str, dict] = {
+    # Legacy untyped kills (shipped 011, spear-hunter era). The prompts
+    # below are recut to the canon warrior so any reshoot lands on
+    # canon; the typed 009 variants supersede them at runtime.
     "boar_kill": {
         "prompt": (
-            "a lone hunter silhouette with a long spear faces a feral boar "
-            "the size of a cart in a moonlit meadow, huge luminous gradient "
-            "sky behind them. The boar charges once; the hunter sidesteps "
-            "and drives the spear down in one clean killing thrust; the "
-            "boar crashes to the turf and lies completely still, and the "
-            "dust settles quickly. The FINAL TWO SECONDS are a perfectly "
-            "still tableau: the hunter standing motionless over the dead "
-            "boar, spear planted, absolutely nothing moving — a frozen "
+            f"{CAST_WARRIOR} faces a feral boar the size of a cart in a "
+            "moonlit meadow, huge luminous gradient sky behind them. The "
+            "boar charges once; the warrior sidesteps and cuts it down "
+            "with one clean killing sword stroke; the boar crashes to "
+            "the turf and lies completely still, and the dust settles "
+            "quickly. The FINAL TWO SECONDS are a perfectly still "
+            "tableau: the warrior standing motionless over the dead "
+            "boar, sword lowered, absolutely nothing moving — a frozen "
             "closing frame."),
         "tint": DIM, "seconds": 8, "loop": False, "hold_ms": 2000,
         # the source clip's last ~2.5s are a near-identical held tableau;
@@ -112,51 +131,51 @@ EVENTS: dict[str, dict] = {
     },
     "wolf_kill": {
         "prompt": (
-            "a lone hunter silhouette with a long spear faces a gaunt grey "
-            "wolf, ribs showing, beside a dark hedgerow in a moonlit "
-            "meadow, a distant floodlight tower sweeping one gradient beam "
-            "across the grass. The wolf lunges once; the hunter braces and "
-            "meets it with the spear in one clean killing thrust; the wolf "
-            "drops to the grass and lies completely still, and the dust "
-            "settles quickly. The FINAL TWO SECONDS are a perfectly still "
-            "tableau: the hunter standing motionless over the dead wolf, "
-            "spear planted, absolutely nothing moving — a frozen closing "
-            "frame."),
+            f"{CAST_WARRIOR} faces a gaunt grey wolf, ribs showing, "
+            "beside a dark hedgerow in a moonlit meadow, a distant "
+            "floodlight tower sweeping one gradient beam across the "
+            "grass. The wolf lunges once; the warrior braces and meets "
+            "it with one clean killing sword stroke; the wolf drops to "
+            "the grass and lies completely still, and the dust settles "
+            "quickly. The FINAL TWO SECONDS are a perfectly still "
+            "tableau: the warrior standing motionless over the dead "
+            "wolf, sword lowered, absolutely nothing moving — a frozen "
+            "closing frame."),
         "tint": DIM, "seconds": 8, "loop": False, "hold_ms": 2000,
         "trim": (0.0, 5.5),
     },
     "goblin_kill": {
         "prompt": (
-            "a lone hunter silhouette with a long spear faces a small "
-            "long-eared goblin silhouette in heavy scavenged plate armor, "
-            "old snapped arrows bristling from its breastplate, dragging "
-            "a notched longsword beside a wooden fence rail in a dusk "
-            "meadow, hedgerows and a distant watchtower behind. The "
-            "armored goblin heaves the longsword up and swings once, "
-            "wild; the hunter slips inside the arc and drives the spear "
-            "through the gap at its collar in one clean killing thrust; "
-            "the goblin crashes down in its plate and lies completely "
+            f"{CAST_WARRIOR} faces a small long-eared goblin silhouette "
+            "in heavy scavenged plate armor, old snapped arrows "
+            "bristling from its breastplate, dragging a notched "
+            "longsword beside a wooden fence rail in a dusk meadow, "
+            "hedgerows and a distant watchtower behind. The armored "
+            "goblin heaves the longsword up and swings once, wild; the "
+            "warrior slips inside the arc and drives her sword through "
+            "the gap at its collar in one clean killing thrust; the "
+            "goblin crashes down in its plate and lies completely "
             "still, the longsword fallen in the grass, and the dust "
             "settles quickly. The FINAL TWO SECONDS are a perfectly "
-            "still tableau: the hunter standing motionless over the "
-            "fallen armored goblin, spear planted, absolutely nothing "
+            "still tableau: the warrior standing motionless over the "
+            "fallen armored goblin, sword lowered, absolutely nothing "
             "moving — a frozen closing frame."),
         "tint": DIM, "seconds": 8, "loop": False, "hold_ms": 2000,
         "trim": (0.0, 5.5),
     },
     "brackjaw_kill": {
         "prompt": (
-            "a lone hunter silhouette with a long spear faces Warden "
-            "Brackjaw — a huge wolf of welded armor plate with glowing "
-            "eyes, half machine — on a moonlit meadow before a dark "
-            "stair-lift gantry, one floodlight beam raking the grass. The "
-            "machine-wolf charges once; the hunter sidesteps and drives "
-            "the spear deep between its armor plates in one clean killing "
-            "thrust; a burst of sparks, and the machine-wolf crashes to "
-            "the turf and goes dark and completely still, its eyes fading "
-            "out, and the dust settles quickly. The FINAL TWO SECONDS are "
-            "a perfectly still tableau: the hunter standing motionless "
-            "over the dead machine, spear planted, absolutely nothing "
+            f"{CAST_WARRIOR} faces Warden Brackjaw — a huge wolf of "
+            "welded armor plate with glowing eyes, half machine — on a "
+            "moonlit meadow before a dark stair-lift gantry, one "
+            "floodlight beam raking the grass. The machine-wolf charges "
+            "once; the warrior sidesteps and drives her sword deep "
+            "between its armor plates in one clean killing thrust; a "
+            "burst of sparks, and the machine-wolf crashes to the turf "
+            "and goes dark and completely still, its eyes fading out, "
+            "and the dust settles quickly. The FINAL TWO SECONDS are a "
+            "perfectly still tableau: the warrior standing motionless "
+            "over the dead machine, sword lowered, absolutely nothing "
             "moving — a frozen closing frame."),
         "tint": VIOLET, "seconds": 8, "loop": False, "hold_ms": 2000,
         "trim": (0.0, 5.5),
@@ -266,17 +285,21 @@ EVENTS: dict[str, dict] = {
         "size": (320, 200),
     },
     "intro_refugee": {
+        # 009: the refugee walk is the showcase cast — and the dwarf
+        # must visibly loom over the other two.
         "prompt": (
-            "seen from behind at a low angle with a STATIC camera: a "
-            "small lone hooded figure carrying almost nothing walks "
-            "slowly through wreckage-strewn ground toward the base of a "
-            "colossal dark banded tower that fills the whole sky ahead, "
-            "then comes to a stop and stands completely still, looking "
-            "up at it. In the FINAL THREE SECONDS the figure stands "
-            "motionless — the only remaining motion is thin dust "
-            "drifting sideways and the tower's distant lights pulsing "
-            "faintly. The camera never moves: no zoom, no pan, no "
-            "tracking."),
+            "seen from behind at a low angle with a STATIC camera: "
+            "three small refugee silhouettes carrying almost nothing "
+            f"walk slowly side by side — {CAST_WARRIOR}; {CAST_ARCHER}; "
+            f"and {CAST_WIZARD}, towering two heads over his two "
+            "companions — through wreckage-strewn ground toward the "
+            "base of a colossal dark banded tower that fills the whole "
+            "sky ahead, then they come to a stop and stand completely "
+            "still, looking up at it. In the FINAL THREE SECONDS the "
+            "three figures stand motionless — the only remaining motion "
+            "is thin dust drifting sideways and the tower's distant "
+            "lights pulsing faintly. The camera never moves: no zoom, "
+            "no pan, no tracking."),
         "tint": DIM, "seconds": 8, "split": 5.0, "crossfade": 1.0,
         "size": (320, 200),
     },
@@ -329,13 +352,18 @@ EVENTS: dict[str, dict] = {
         "size": (320, 200),
     },
     "intro_muster": {
+        # 009: the showcase cast anchors the muster line's center; the
+        # giant dwarf breaks the line's silhouette.
         "prompt": (
             "before the towering sealed doors of a fortress keep, lit "
             "by one great luminous gradient backlight: a broad line of "
             "many climber silhouettes — swords, bows, spears, one "
             "hulking salvaged war-machine frame among them — standing "
             "shoulder to shoulder facing the doors, under tall tattered "
-            "banners on poles. Everything stands PERFECTLY STILL "
+            f"banners on poles. At the line's center: {CAST_WARRIOR}; "
+            f"{CAST_ARCHER}; and {CAST_WIZARD}, looming two heads over "
+            "every other climber in the line, his bulk breaking the "
+            "line's silhouette. Everything stands PERFECTLY STILL "
             "except: the banners ripple slowly in the wind, thin dust "
             "drifts sideways low over the ground, and the backlight "
             "halo breathes almost imperceptibly. Extremely subtle, "
@@ -345,6 +373,71 @@ EVENTS: dict[str, dict] = {
         "size": (320, 200),
     },
 }
+
+# ── 009 kill FX variants: floors 1–3 families × landing damage type ─────
+# The victory scene shows YOUR kill: melee is the warrior's sword,
+# arrow the archer's shot, magic the giant wizard's cast. Engine side:
+# combat._kill_fx prefers <family>_kill_<type>, falls back to the
+# legacy <family>_kill, and the renderer skips missing art silently.
+_KILL_MONSTERS = {
+    "wolf": ("a gaunt grey wolf, ribs showing, beside a dark hedgerow "
+             "in a moonlit meadow", "wolf"),
+    "boar": ("a feral boar the size of a cart in a moonlit meadow, "
+             "huge luminous gradient sky behind", "boar"),
+    "goblin": ("a small long-eared goblin in heavy scavenged plate "
+               "armor dragging a notched longsword, by a wooden fence "
+               "rail in a dusk meadow", "armored goblin"),
+    "rat": ("a hedgerow rat grown to the size of a hound, low and "
+            "quick, by a broken granary fence in a moonlit meadow",
+            "giant rat"),
+    "tortoise": ("a shellback tortoise the size of a cart, huge domed "
+                 "shell scarred like old armor, on dark marsh ground "
+                 "under thin drifting mist", "tortoise"),
+    # NOTE: "translucent ghostly haunt" made Veo fail server-side
+    # (code 13, twice) — the wisp-of-light wording below generates fine.
+    "haunt": ("a strange wisp creature — a small drifting cloud of pale "
+              "glowing light with a faint flickering core, hovering "
+              "above the orchard floor between dark apple trees",
+              "wisp creature"),
+}
+
+_KILL_BEATS = {
+    "melee": (CAST_WARRIOR,
+              "The {noun} comes on once; the warrior steps in and cuts "
+              "it down with one clean killing sword stroke; the {noun} "
+              "crashes down and lies completely still, and the dust "
+              "settles quickly. The FINAL TWO SECONDS are a perfectly "
+              "still tableau: the warrior standing motionless over the "
+              "dead {noun}, sword lowered, absolutely nothing moving — "
+              "a frozen closing frame."),
+    "arrow": (CAST_ARCHER,
+              "The {noun} charges across the open ground; the archer "
+              "draws and looses a single arrow in one smooth motion; "
+              "the shot takes the {noun} clean and it crashes down "
+              "mid-stride and lies completely still. The FINAL TWO "
+              "SECONDS are a perfectly still tableau: the archer "
+              "standing motionless, bow lowered, the dead {noun} on "
+              "the ground before him, absolutely nothing moving — a "
+              "frozen closing frame."),
+    "magic": (CAST_WIZARD,
+              "The {noun} closes in; the giant wizard plants his staff "
+              "and one brilliant bolt of light leaps from its glowing "
+              "head and strikes the {noun}; a hard flash, and the "
+              "{noun} drops and lies dark and completely still. The "
+              "FINAL TWO SECONDS are a perfectly still tableau: the "
+              "giant wizard standing motionless, staff planted, "
+              "looming over the dead {noun}, absolutely nothing "
+              "moving — a frozen closing frame."),
+}
+
+for _fam, (_scene, _noun) in _KILL_MONSTERS.items():
+    for _dt, (_cast, _beat) in _KILL_BEATS.items():
+        EVENTS[f"{_fam}_kill_{_dt}"] = {
+            "prompt": (f"{_cast} faces {_scene}. "
+                       + _beat.format(noun=_noun)),
+            "tint": DIM, "seconds": 8, "loop": False, "hold_ms": 2000,
+            "trim": (0.0, 5.5),
+        }
 
 PANEL = (0x11, 0x15, 0x1F)
 
