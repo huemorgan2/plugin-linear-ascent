@@ -39,7 +39,7 @@ class Scene:
     body_lines: list[str] = field(default_factory=list)
     options: list[Option] = field(default_factory=list)
     meters: Meters | None = None
-    event_kind: str = ""            # "" | loot | death | letter | boss | present
+    event_kind: str = ""    # "" | loot | death | letter | boss | present | matchup
     banner: str = ""                # banner slug, "" = no banner
     banner_variant: str = ""        # 008 specimen: "" | runt | tough | alpha — retints the art
     fx: str = ""                    # 011 event animation slug (kill GIFs, gate open, title)
@@ -79,7 +79,11 @@ class Scene:
                 lines.append("◇ close quarters — it is on top of you")
         if self.shard_note:
             lines.append(f"◆ {self.shard_note}")
-        lines += self.body_lines
+        for b in self.body_lines:
+            # 007 fold markers degrade to a plain divider in text
+            if b == "▣.":
+                continue
+            lines.append(f"— {b[2:]} —" if b.startswith("▣ ") else b)
         if self.options:
             lines.append("─" * 40)
             for i, o in enumerate(self.options, 1):

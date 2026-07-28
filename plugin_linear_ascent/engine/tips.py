@@ -309,6 +309,19 @@ def option_tip(oid: str) -> str:
                 f"not gone: half strength until mended. This restores "
                 f"the {slot} to full for a fraction of its price plus "
                 "a few XP.")
+    if oid.startswith("donate_"):
+        slug = oid.removeprefix("donate_")
+        g = economy.FORGE.get(slug)
+        name = g.name if g else "it"
+        return (f"Hang {name} on your faction's armory racks — no coin "
+                "changes hands, and its wear travels with it exactly as "
+                "it is. Any member can take one piece a day at the "
+                "Guildhall. Generosity, not a market.")
+    if oid.startswith("take_arm_"):
+        return ("Lift this piece off the faction racks into your pack — "
+                "free, wear included, exactly as the donor left it. One "
+                "take per day, members only. Wear or pawn it like "
+                "anything else you own.")
     if oid.startswith("sell_"):
         slug = oid.removeprefix("sell_")
         g = economy.FORGE.get(slug)

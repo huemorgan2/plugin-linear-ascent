@@ -597,7 +597,20 @@ def render_scene_fragment(scene: Scene) -> str:
     if scene.shard_note:
         parts.append(f'<div class="shard type"><span class="glyph">◆</span>'
                      f"<span>{_e(scene.shard_note)}</span></div>")
+    in_fold = False
     for line in scene.body_lines:
+        # 007: ▣ fold markers — long shop shelves collapse into a
+        # <details> block (the [i]-dossier pattern, zero JS).
+        if line.startswith("▣ "):
+            parts.append(f'<details class="fold"><summary class="type">'
+                         f"{_e(line[2:])}</summary>")
+            in_fold = True
+            continue
+        if line == "▣.":
+            if in_fold:
+                parts.append("</details>")
+                in_fold = False
+            continue
         if line.startswith("+"):
             parts.append(f'<div class="body type" style="color:{OK}">'
                          f"{_e(line)}</div>")
@@ -606,6 +619,8 @@ def render_scene_fragment(scene: Scene) -> str:
                          f"{_e(line)}</div>")
         else:
             parts.append(f'<div class="body type">{_combat_html(line)}</div>')
+    if in_fold:
+        parts.append("</details>")
 
     if scene.options:
         rows = []
@@ -686,6 +701,14 @@ SCENE_CSS = f"""
  padding:8px 1.5ch;margin-top:8px;color:{DIM};}}
 .shard .glyph{{color:{AETHER};flex:none;}}
 .body{{margin:6px 0 0;white-space:pre-wrap;}}
+/* ── 007: folded shop shelves (▣ markers) ── */
+.fold{{margin:6px 0 0;}}
+.fold summary{{list-style:none;cursor:pointer;user-select:none;
+ color:{VIOLET_SOFT};}}
+.fold summary::-webkit-details-marker{{display:none;}}
+.fold summary::before{{content:"▸ ";color:{FAINT};}}
+.fold[open] summary::before{{content:"▾ ";}}
+.fold .body{{margin-left:1ch;}}
 .options{{margin:10px 0 0;padding:10px 0 0;border-top:1px dashed {BORDER};
  display:flex;flex-direction:column;gap:5px;}}
 .opt{{display:flex;align-items:center;gap:1ch;width:100%;

@@ -64,8 +64,20 @@ for the new monsters.
   11, polymorph at 21, severing at 31).
 - Art: every encounter id with no shipped art logged and triaged (the
   renderer already skips silently — the list is the deliverable).
+- 007 retro: the MATCHUP moment now reads the bestiary — every new
+  hard-counter type on a band is one more first-contact nudge. The
+  spread rule caps this naturally (1-2 bad targets per class per
+  band), but sanity-check a band's dojo pass: a player crossing ten
+  floors should meet a handful of moments, not a stream.
 - Dojo spot-checks: one floor per band — read three [i] cards, verify
   spread is felt ("this floor has my prey and my predator").
+  007 retro (dojo mechanics): drive clicks by
+  `button.opt[data-opt="<id>"]` — never by label regex; the button
+  text embeds the key digit and the [i] glyph ("3Run" breaks
+  `^Run$`), and ids are stable where labels aren't. And remember the
+  scene returned by an act renders BEFORE worldd effects mutate the
+  doc — after any effect-backed click (armory, letters), drive one
+  extra navigation before asserting the pack strip or meters.
 
 Exit: all bands green, published, worldd synced,
 `execution_summary.md`.

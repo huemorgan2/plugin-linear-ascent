@@ -508,10 +508,12 @@ def _town_scene(p: dict) -> Scene:
     lines = []
     for h in (w.get("happenings") or [])[:5]:
         lines.append(f"· {h}")
+    # 007 town readability: the gate leads — leaving town is THE verb —
+    # and every not-yet area reads its unlock level from the square
+    # (the Arcanum set the pattern in 004).
     opts = [
+        Option("gate", "The Tower Gate", "leave town and climb"),
         Option("forge", "The Forge", "gear"),
-        # 004 §3.4: the mage shop — a locked row until level 6, so the
-        # roadmap is readable from the square itself.
         Option("arcanum", "The Arcanum",
                "mage gear" if p["level"] >= economy.ARCANUM_LEVEL
                else f"🔒 level {economy.ARCANUM_LEVEL}"),
@@ -525,16 +527,20 @@ def _town_scene(p: dict) -> Scene:
         Option("guildhall", "The Guildhall",
                p.get("guild") or "training"),
         Option("stone", "Stone of the Climb", "news"),
-        Option("gate", "The tower gate", "climb"),
     ]
     if w:
         inbox = w.get("inbox_count", 0)
-        opts.insert(6, Option(
+        opts.append(Option(
             "relay", "The Relay Office",
-            f"{inbox} letter{'s' if inbox != 1 else ''}" if inbox else "post"))
-        opts.insert(7, Option("fields", "The fields", "pvp"))
+            (f"{inbox} letter{'s' if inbox != 1 else ''}" if inbox
+             else "post") if p["level"] >= economy.RELAY_LEVEL
+            else f"🔒 level {economy.RELAY_LEVEL}"))
+        opts.append(Option(
+            "fields", "The fields",
+            "pvp" if p["level"] >= economy.FIELDS_LEVEL
+            else f"🔒 level {economy.FIELDS_LEVEL}"))
         climbers = w.get("roster_count", 0)
-        opts.insert(9, Option(
+        opts.append(Option(
             "muster", "The Muster Roll",
             f"{climbers} climber{'s' if climbers != 1 else ''}"
             if climbers else "climbers"))
@@ -568,6 +574,20 @@ def _dispatch_location(p: dict, oid: str) -> Scene:
                 "The Arcanum's door reads the hand on it — it wants "
                 f"level {economy.ARCANUM_LEVEL}. Climb first; the "
                 "star-charts will keep.")
+            return s
+        # 007: the other locked doors follow the Arcanum's grammar —
+        # a level, a reason, no scene change.
+        if oid == "relay" and p["level"] < economy.RELAY_LEVEL:
+            s = _town_scene(p)
+            s.shard_note = (
+                "The Relay clerk sorts post for names the Stone knows — "
+                f"level {economy.RELAY_LEVEL} first. Letters keep.")
+            return s
+        if oid == "fields" and p["level"] < economy.FIELDS_LEVEL:
+            s = _town_scene(p)
+            s.shard_note = (
+                "The fields take climbers who can take a hit back — "
+                f"level {economy.FIELDS_LEVEL}. The tower first.")
             return s
         p["location"] = oid
         return _build_scene(p)
@@ -623,14 +643,18 @@ def _rack(p: dict, items: list, opts: list, lines: list) -> None:
     lvl = p["level"]
     buyable = [g for g in items if economy.rung_level_req(g) <= lvl]
     nxt = next((g for g in items if economy.rung_level_req(g) > lvl), None)
-    for g in buyable[-2:]:
-        owned = " — equipped" if p["gear"].get(g.slot) == g.slug else ""
+    # 007 (004 dojo carryover): the rung on your body leaves the rack —
+    # the two buyable rows are always NEW steps, the worn one is a line.
+    worn = p["gear"].get(items[0].slot) if items else None
+    if worn and any(g.slug == worn for g in buyable):
+        lines.append(f"✓ {economy.FORGE[worn].name} — worn")
+    for g in [g for g in buyable if g.slug != worn][-2:]:
         stat = ("+{} spd".format(g.speed) if g.slot == "shoes"
                 else ("+{} ATK".format(g.bonus) if g.slot == "weapon"
                       else "+{} DEF".format(g.bonus)))
         opts.append(Option(f"buy_{g.slug}", g.name, f"◈ {g.price:,}"))
         flavor = f", {g.flavor}" if g.flavor else ""
-        lines.append(f"{g.name}{flavor} — {stat}{owned}")
+        lines.append(f"{g.name}{flavor} — {stat}")
     if nxt is not None:
         stat = (f"+{nxt.speed} spd" if nxt.slot == "shoes"
                 else f"+{nxt.bonus}")
@@ -651,12 +675,17 @@ def _wearable_pack(p: dict) -> list:
 
 def _relic_rows(p: dict, shop: str, opts: list, lines: list) -> None:
     """006 §3.7: the shop's relic shelf — every row names the one
-    dramatic effect AND the one hard limitation (the law, out loud)."""
+    dramatic effect AND the one hard limitation (the law, out loud).
+    007 (006 retro): on a page already past ~8 prose rows the shelf
+    folds into a <details> block — ▣ opens the fold, ▣. closes it;
+    the renderer draws the summary, to_text draws a plain divider."""
     stock = economy.relic_stock(shop, p["unlocked_floor"],
                                 p.get("clazz") or "")
     if not stock:
         return
-    lines.append("— the relic shelf —")
+    fold = len(lines) > 8
+    lines.append(f"▣ the relic shelf — {len(stock)} on the wall"
+                 if fold else "— the relic shelf —")
     for r in stock:
         price = economy.relic_price(r.slug, p["unlocked_floor"])
         owned = p["inventory"].get(r.slug, 0)
@@ -664,6 +693,8 @@ def _relic_rows(p: dict, shop: str, opts: list, lines: list) -> None:
         opts.append(Option(f"buy_{r.slug}", r.name, hint))
         lines.append(f"{r.name} — {r.effect}. The catch: {r.limit}."
                      + (f" (you hold {owned})" if owned else ""))
+    if fold:
+        lines.append("▣.")
 
 
 def _relic_buy(p: dict, slug: str, scene_fn) -> Scene:
@@ -1262,6 +1293,23 @@ def _pawn_scene(p: dict) -> Scene:
         lines.append(f"{r.name} ×{p['inventory'][slug]} — offers ◈ {offer:,}")
     if not gear_in_pack and not relics_in_pack:
         lines.append("Nothing in your pack the broker wants today.")
+    # 007: members can route a piece PAST the broker to the faction
+    # racks — no gold moves, the wear rides with it (the EV law).
+    w = p.get("_world") or {}
+    if w.get("faction") and w.get("armory") is not None:
+        cap = int(w.get("armory_cap", 50))
+        rack = w.get("armory") or []
+        donatable = [k for k in gear_in_pack
+                     if economy.FORGE[k].price > 0]
+        if donatable:
+            lines.append(f"Or skip the broker: the "
+                         f"{w['faction'].get('name', 'faction')} armory "
+                         f"racks hold {len(rack)}/{cap}.")
+            for slug in donatable:
+                g = economy.FORGE[slug]
+                opts.append(Option(f"donate_{slug}",
+                                   f"Donate {g.name} to the armory",
+                                   "no coin — the banner keeps it"))
     opts.append(Option("back", "Back to the square"))
     return Scene(
         eyebrow="ROOTHOLLOW · PAWN SHOP",
@@ -1275,6 +1323,8 @@ def _pawn_scene(p: dict) -> Scene:
 
 
 def _pawn_action(p: dict, oid: str) -> Scene:
+    if oid.startswith("donate_"):
+        return _pawn_donate(p, oid.removeprefix("donate_"))
     slug = oid.removeprefix("sell_")
     if slug in p["inventory"] and slug in economy.FORGE:
         g = economy.FORGE[slug]
@@ -1301,6 +1351,34 @@ def _pawn_action(p: dict, oid: str) -> Scene:
                             f"{economy.RELICS[slug].name}")
         return s
     return _pawn_scene(p)
+
+
+def _pawn_donate(p: dict, slug: str) -> Scene:
+    """007: hand a paid piece to the faction racks. No gold, ever —
+    the wear stash travels WITH the piece (a worn copy leaves first,
+    so the racks can never launder wear away)."""
+    w = p.get("_world") or {}
+    g = economy.FORGE.get(slug)
+    if (g is None or g.price <= 0 or slug not in p["inventory"]
+            or not w.get("faction") or w.get("armory") is None):
+        return _pawn_scene(p)
+    if len(w.get("armory") or []) >= int(w.get("armory_cap", 50)):
+        s = _pawn_scene(p)
+        s.shard_note = "The armory racks are full — nothing fits."
+        return s
+    from . import social
+    p["inventory"][slug] -= 1
+    if p["inventory"][slug] <= 0:
+        del p["inventory"][slug]
+    uses = (p.get("durability_pack") or {}).pop(slug, None)
+    social._effect(p, "armory_deposit", slug=slug, uses_left=uses)
+    combat._ledger(p, "armory_give", gold=0, note=slug)
+    s = _pawn_scene(p)
+    s.body_lines.insert(
+        0, f"The {g.name} goes to the "
+           f"{w['faction'].get('name', 'faction')} racks — the banner "
+           "keeps it now.")
+    return s
 
 
 # ── Stone of the Climb ───────────────────────────────────────────────────

@@ -55,5 +55,11 @@ the damage-type kill hooks only).
   unmistakable; movie plays in `movie.html`.
 - Dojo: create a character (3 races only); kill a wolf as each class
   and see three different endings.
+  007 retro: click by `button.opt[data-opt="<id>"]`, not label text
+  (labels embed key digits and [i] glyphs). If a kill FX rides a
+  worldd effect, remember act-scenes render before effects land —
+  one extra navigation before asserting state. And the ▣ fold marker
+  exists now (`render.py` + `scene.to_text`): if the creation or
+  post-kill scenes run long, fold, don't trim.
 
 Exit: all green, published, worldd synced, `execution_summary.md`.

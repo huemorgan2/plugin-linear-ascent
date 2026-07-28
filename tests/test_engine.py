@@ -177,7 +177,11 @@ def test_honing_buy_flow_and_reset_on_purchase():
     assert p["hone"]["weapon"] == 2
     s = choose(p, "hone_weapon")             # at cap — refused
     assert p["hone"]["weapon"] == 2
-    choose(p, "buy_pigsticker")              # re-buy resets the hone
+    # 007: the worn rung leaves the rack — the hone-lives-on-the-item
+    # rule now shows on the NEXT rung's purchase instead of a re-buy
+    p["level"] = 6
+    choose(p, "buy_iron_sword")
+    assert p["gear"]["weapon"] == "iron_sword"
     assert p["hone"]["weapon"] == 0
 
 
@@ -245,14 +249,19 @@ def test_forge_buy_equips_and_pawns_old():
     choose(p, "buy_pigsticker")
     assert p["gear"]["weapon"] == "pigsticker"
     assert p["gold"] == 1250
-    s = choose(p, "buy_pigsticker")          # buy again: old one to pack
+    # 007: the worn rung leaves the rack — the spare reaches the pack
+    # by outgrowing it (the next rung up sends the old paid one back)
+    s = core.current_scene(p)
+    assert not any(o.id == "buy_pigsticker" for o in s.options)
+    p["level"] = 6
+    choose(p, "buy_iron_sword")
     assert p["inventory"].get("pigsticker") == 1
     choose(p, "back")
     choose(p, "pawn")
     s = choose(p, "sell_pigsticker")
     # 006: the broker pays the day's rate (25–55%), not a flat 40%
     offer = int(250 * economy.pawn_rate(state.world_day()))
-    assert p["gold"] == 1250 - 250 + offer
+    assert p["gold"] == 1250 - 450 + offer
     assert "pigsticker" not in p["inventory"]
 
 

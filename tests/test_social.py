@@ -36,6 +36,7 @@ def test_world_mode_adds_social_options_and_happenings():
 def test_pvp_attack_pays_energy_and_emits_effect():
     p = playing(world={"social": True, "pvp_targets": [
         {"name": "Mara", "level": 8}]})
+    p["level"] = economy.FIELDS_LEVEL            # 007: the fields' lock
     core.apply_choice(p, "fields")
     e_before = state.energy_now(p)
     core.apply_choice(p, "attack_Mara")
@@ -47,6 +48,7 @@ def test_pvp_attack_pays_energy_and_emits_effect():
 def test_pvp_daily_cap():
     p = playing(world={"social": True, "pvp_targets": [
         {"name": "Mara", "level": 8}]})
+    p["level"] = economy.FIELDS_LEVEL            # 007: the fields' lock
     core.apply_choice(p, "fields")
     p["daily"]["pvp_used"] = economy.PVP_ATTACKS_PER_DAY
     s = core.apply_choice(p, "attack_Mara")
@@ -56,6 +58,7 @@ def test_pvp_daily_cap():
 
 def test_letter_compose_flow_is_free():
     p = playing(world={"social": True, "letters": [], "names": ["Rilo"]})
+    p["level"] = economy.RELAY_LEVEL             # 007: the relay's lock
     core.apply_choice(p, "relay")
     s = core.current_scene(p)
     write = [o for o in s.options if o.id == "write_Rilo"]

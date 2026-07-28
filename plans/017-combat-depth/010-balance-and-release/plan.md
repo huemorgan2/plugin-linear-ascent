@@ -24,6 +24,12 @@ shared-world migration check, end-to-end dojo playtest, release.
    AROUND: spell 0.5 DI (EV-positive from band 2 by ~0.1 DI — thin on
    purpose), death cost 0.6→2.5 DI band 2→10, charms 10%/12%,
    pawn 25–55%.
+   007 retro: the armory is economically NEUTRAL by construction (no
+   gold crosses its boundary, wear rides through) — the retune can
+   ignore it as a faucet/sink and only sanity-check its caps
+   (50 rows, one take/day). That's the pattern worth repeating: when
+   a new system can be written so the exploit inequality is zero by
+   definition, no tuning budget is spent guarding it.
 2. **Shared-world migration rehearsal:** export prod player docs
    (worldd, render-production skill), run `ensure_current` v2 over all
    of them locally, diff meters/gear/race outcomes, fix surprises.
@@ -59,6 +65,12 @@ shared-world migration check, end-to-end dojo playtest, release.
   only visible deltas, both announced in-world).
 - Dojo playtest: no dead ends, no unexplained numbers, the sidekick
   speaks only at moments — reviewed against the pre-plan's promises.
+  007 retro: "moments" now = death, boss, AND first-contact matchup
+  (once per hard-counter type, `matchup_seen` in the doc) — the
+  playtest should hear exactly one tip at the first flyer/plate/
+  spellguard wall per class and silence at the second. Drive dojo
+  clicks by `data-opt` id, and add one navigation after any
+  effect-backed click before reading state.
   003 retro: "no unexplained numbers" has a concrete test now — every
   active modifier must be NAMED on screen (header chip or dossier
   line); run the one-glance check ("why is this fight bad for me")

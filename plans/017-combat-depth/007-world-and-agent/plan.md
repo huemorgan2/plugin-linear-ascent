@@ -10,12 +10,28 @@ Goal: the shared-world and sidekick pieces — faction armory donations
      durability fraction, deposited_at).
    - Endpoints (HMAC, idempotent like the ledger): deposit, list, take
      (member-only, admin can purge); caps (e.g. 50 items/faction).
+     **Executed as effects, not endpoints (2026-07-28):** the desk is
+     an engine scene since 015, so deposit/take ride the
+     `execute_effects` pipeline (`armory_deposit` / `armory_take`)
+     and the shelf rides `inject_world` — same HMAC, same
+     doc-in-flight semantics, zero new HTTP surface.
    - 006 retro (EV first): write the armory's exploit inequality in
      this plan BEFORE coding — a donate/take round-trip must never
      beat the pawn shop (donate full, take, pawn at a good
      `pawn_rate` day = free arbitrage unless takes are member-gated
      with a cooldown or the fraction rides through untouched). State
      the inequality, then pick the caps.
+     **Stated (2026-07-28):** no gold ever enters or leaves through
+     the armory — deposit moves `(slug, wear-fraction)` from the doc
+     into the row, take moves the SAME pair back, so
+     `value(round-trip) − value(never-donated) = 0` for any
+     `pawn_rate` path: arbitrage is impossible by construction.
+     Remaining abuse surfaces and their caps: storage (armory as a
+     bottomless pack) → 50 rows per faction; vacuuming (one member
+     draining the shelf) → one take per player per world day,
+     member-only both ways; laundering (worn in, fresh out) →
+     forbidden by the same fraction-rides-through rule the 005 retro
+     demands. Donor name stays on the row for the audit.
    - Plugin: pawn scene gains "donate to the armory" for faction
      members; 015 desk gets an ARMORY section (list + take).
    - 005 retro: the "durability fraction" column is live now —

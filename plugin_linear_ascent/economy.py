@@ -762,6 +762,12 @@ ARROW_PACK_PRICE = 120
 
 ARCANUM_LEVEL = 6              # 004 §3.4: the mage shop's unlock level
 
+# 007 town readability: every not-day-1 door reads its level from the
+# square. Relay opens once a name means something (letters, grants at
+# 5 anyway); the fields once a climber can afford to lose a scrap.
+RELAY_LEVEL = 3
+FIELDS_LEVEL = 5
+
 
 def off_class_price(g: GearItem) -> int:
     return g.price * OFF_CLASS_PRICE_MULT

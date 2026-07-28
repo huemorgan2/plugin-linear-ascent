@@ -38,7 +38,7 @@ _ctx: PluginContext | None = None
 # ascent_scene when the player talks to it (_SHARED_RULES cover this).
 # awaits_text still notifies immediately: the agent must know to pass the
 # player's typed reply through.
-_MOMENT_KINDS = {"death", "boss"}
+_MOMENT_KINDS = {"death", "boss", "matchup"}
 
 
 class JoinIn(BaseModel):
@@ -102,11 +102,24 @@ def _notify_agent(scene, conversation_id: str | None,
 
     if channel == "moment":
         from .plugin import _VOICE_RULES
-        content = (
-            "The player just advanced Linear Ascent from the game pane — "
-            "the scene below is ALREADY on their screen. You are their "
-            "shardmind sidekick, reacting to what just happened.\n\n"
-            + scene.to_text() + "\n\n" + _VOICE_RULES)
+        if kind == "matchup":
+            # 007: first fight vs a type that hard-counters the class.
+            # 001 retro: the scene text names the CURRENT enemy and
+            # floor — react to THAT enemy only, never a guessed one.
+            frame = (
+                "The player just ran into a monster type that hard-"
+                "counters their build for the FIRST time — the scene "
+                "below is ALREADY on their screen. You are their "
+                "shardmind sidekick: give ONE short tactical read about "
+                "THIS exact enemy (name it as the scene names it), or "
+                "stay silent if the scene already says it all.")
+        else:
+            frame = (
+                "The player just advanced Linear Ascent from the game "
+                "pane — the scene below is ALREADY on their screen. You "
+                "are their shardmind sidekick, reacting to what just "
+                "happened.")
+        content = frame + "\n\n" + scene.to_text() + "\n\n" + _VOICE_RULES
     else:
         content = (
             "Linear Ascent state (the player is playing in the game pane; "

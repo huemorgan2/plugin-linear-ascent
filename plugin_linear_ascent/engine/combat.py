@@ -114,7 +114,42 @@ def start_encounter(p: dict, floor, enc, kind: str = "wilds") -> Scene:
         # steel must close.
         "range": "at_range",
     }
-    return fight_scene(p, floor, opener=True)
+    s = fight_scene(p, floor, opener=True)
+    # 007: first fight per type that hard-counters the class — the one
+    # agent beat besides death and boss. A warden keeps "boss".
+    if not s.event_kind and _matchup_moment(p, prof):
+        s.event_kind = "matchup"
+    return s
+
+
+def _hard_counter(p: dict, prof: dict) -> bool:
+    """007: does this profile hard-counter the player's damage type?
+    Soft drags (fast vs kiting, bulwark HP) don't count — only the
+    walls: steel can't touch wings, arrows snap on real plate, spells
+    die on real spellguard."""
+    dt = _damage_type(p)
+    if dt == "melee":
+        return bool(prof.get("flying"))
+    if dt == "ranged":
+        return prof.get("armor", "none") in ("med", "high")
+    if dt == "magic":
+        return prof.get("resist", "none") in ("med", "high")
+    return False
+
+
+def _matchup_moment(p: dict, prof: dict) -> bool:
+    """007: the ONE remaining agent beat — the first fight against each
+    monster TYPE that hard-counters the class earns a sidekick moment.
+    Flagged per encounter id in the doc; never twice, never for soft
+    counters (0.17.2 silence holds everywhere else)."""
+    eid = p["encounter"].get("id", "")
+    if not eid or not _hard_counter(p, prof):
+        return False
+    seen = p.setdefault("matchup_seen", [])
+    if eid in seen:
+        return False
+    seen.append(eid)
+    return True
 
 
 def _profile(p: dict) -> dict:

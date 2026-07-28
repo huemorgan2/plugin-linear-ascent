@@ -352,6 +352,27 @@ def _member_panel(p: dict, fac: dict, lines: list, opts: list) -> None:
                      f"{arr}")
     if fac.get("last_week"):
         lines.append(f"last week: {fac['last_week']}")
+    # 007: the armory — the banner's shared rack. Donations go in at
+    # the pawn shop; here a member takes ONE piece a day, wear intact.
+    w = world(p) or {}
+    rack = w.get("armory")
+    if rack is not None:
+        cap = int(w.get("armory_cap", 50))
+        lines.append(f"ARMORY {len(rack)}/{cap} — donate at the pawn "
+                     "shop; one take a day")
+        took = bool(w.get("armory_took_today"))
+        for it in rack[:6]:
+            worn = (f", worn to {round(it.get('frac', 1.0) * 100)}%"
+                    if it.get("frac", 1.0) < 1.0 else "")
+            lines.append(f"  {it['name']}{worn} — from {it['donor']}")
+            if not took:
+                opts.append(Option(f"take_arm_{it['id']}",
+                                   f"Take the {it['name']}",
+                                   "the racks open again tomorrow"))
+        if len(rack) > 6:
+            lines.append(f"  …and {len(rack) - 6} more on the racks")
+        if rack and took:
+            lines.append("  you already took your piece today")
     if fac.get("role") == "steward" and fac.get("pending_requests"):
         n = int(fac["pending_requests"])
         lines.append(f"▲ {n} request{'s' if n != 1 else ''} wait at the "
@@ -561,6 +582,8 @@ def guildhall_action(p: dict, oid: str, text: str = "") -> Scene:
     if oid == "donate" and fac:
         p["faction_donating"] = True
         return _donate_prompt(p)
+    if oid.startswith("take_arm_") and fac:
+        return _armory_take(p, oid.removeprefix("take_arm_"))
     if oid == "enter_week" and fac and fac.get("role") == "steward":
         wk = fac.get("week") or {}
         cost = int(wk.get("entry_cost", 0))
@@ -609,6 +632,36 @@ def guildhall_action(p: dict, oid: str, text: str = "") -> Scene:
             _effect(p, "guild_leave", guild=g)
         return guildhall_scene(p, note="You fold your colors and walk out.")
     return guildhall_scene(p)
+
+
+def _armory_take(p: dict, raw_id: str) -> Scene:
+    """007: lift a piece off the banner's rack. The engine validates
+    against the injected shelf (cooldown, row still there) and emits
+    the effect; worldd moves the piece into the pack, wear intact —
+    no gold anywhere in the loop (the EV law)."""
+    w = world(p) or {}
+    rack = w.get("armory")
+    if rack is None:
+        return guildhall_scene(p)
+    if w.get("armory_took_today"):
+        return guildhall_scene(
+            p, note="One piece a day — the racks open again tomorrow.")
+    try:
+        item_id = int(raw_id)
+    except ValueError:
+        return guildhall_scene(p)
+    it = next((x for x in rack if int(x.get("id", -1)) == item_id), None)
+    if it is None:
+        return guildhall_scene(
+            p, note="That piece already left the rack.")
+    _effect(p, "armory_take", item_id=item_id)
+    w["armory"] = [x for x in rack if int(x.get("id", -1)) != item_id]
+    w["armory_took_today"] = True
+    worn = (f" — worn to {round(it.get('frac', 1.0) * 100)}%"
+            if it.get("frac", 1.0) < 1.0 else "")
+    return guildhall_scene(
+        p, note=f"+ the {it['name']} comes off the rack into your "
+                f"pack{worn}. {it['donor']} hung it there.")
 
 
 def guildhall_found(p: dict, text: str) -> Scene:
