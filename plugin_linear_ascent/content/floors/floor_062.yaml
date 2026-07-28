@@ -12,7 +12,11 @@ arrival: >-
 encounters:
   - id: wreck_harpy
     name: Salvage harpy
+    lore: >-
+      The clan matriarch wears three captains' coats at once. Everything
+      on this peak is claimed, including, as of now, your gear.
     weight: 3
+    traits: [flying]
     prose: >-
       A harpy clan has stripped this hull to the ribs, and the clan
       matriarch lands on the keel above you wearing three captains'
@@ -20,18 +24,38 @@ encounters:
       as of now, your gear.
   - id: hold_drake
     name: Hold-nesting drake
+    lore: >-
+      Brooding a clutch on a bed of trade silver — possessive, charged,
+      and recently a parent.
     weight: 3
+    traits: [resist_med]
     prose: >-
       A storm drake has nested in a cargo hold, brooding a clutch on
       a bed of trade silver. The hull groans under it as it comes
       out — possessive, charged, and recently a parent.
   - id: dead_crew
     name: Crew of the wreck
+    lore: >-
+      They rise in harness and oilskin, moving with the roll of a deck
+      that stopped rolling years ago.
     weight: 2
+    traits: [slow]
     prose: >-
       Below decks, the crew never left their stations. They rise from
       the ribs of the hull in harness and oilskin, moving with the
       roll of a deck that stopped rolling years ago.
+  - id: hull_borer
+    name: Hull borer
+    lore: >-
+      It ate through the fleet's timber for years and grew a back of
+      lapped ship-iron doing it. Cutting it down is a shipwright's job,
+      not a soldier's.
+    weight: 2
+    traits: [bulwark, slow]
+    prose: >-
+      The keel above you flexes and a borer backs out of the timber — a
+      grub gone the size of a longboat, plated in the iron it could not
+      digest, blind and unbothered and between you and the path.
 warden:
   name: Warden Keelhaul
   prose: >-

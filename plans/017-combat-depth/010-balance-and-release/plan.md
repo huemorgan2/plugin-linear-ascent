@@ -30,6 +30,23 @@ shared-world migration check, end-to-end dojo playtest, release.
    (50 rows, one take/day). That's the pattern worth repeating: when
    a new system can be written so the exploit inequality is zero by
    definition, no tuning budget is spent guarding it.
+   008 retro — two tools and two rules the retune inherits:
+   - WEIGHTS are the smoothing knob. Trait placement is design; the
+     per-floor weighted mix is tunable by integer encounter weights
+     without touching any pool/spread lint.
+     `plans/.../008-.../tune_weights.py` runs greedy search against
+     the exact gate math (imports `tests/test_smoothness.py`) — rerun
+     it after ANY income/trait retune instead of hand-poking floors.
+   - Drag is measured over VICTORIES only (deaths end fights early
+     and flatter the very monsters that kill you), and a hard counter
+     must not be PREY-GRADE: risky (win ≤75%) or a drag (≥1.6×), never
+     safe AND quick (`test_017_bestiary.py`). The playtest should use
+     the same words: a counter you farm safely at full speed is a
+     content bug, not a tuning knob.
+   - Content rule found the hard way: slow+armor_med is prey-grade
+     for archers (kiting slow is free — the armor tax never lands).
+     Slow armored monsters need armor_high; fast-or-normal speed can
+     carry armor_med.
 2. **Shared-world migration rehearsal:** export prod player docs
    (worldd, render-production skill), run `ensure_current` v2 over all
    of them locally, diff meters/gear/race outcomes, fix surprises.
@@ -75,6 +92,11 @@ shared-world migration check, end-to-end dojo playtest, release.
   active modifier must be NAMED on screen (header chip or dossier
   line); run the one-glance check ("why is this fight bad for me")
   on each [i] card the playtest opens.
+  008 retro: vendor-sync worldd + restart BEFORE the playtest (turns
+  resolve in the vendored engine — Luna only renders), teleport per
+  band with `plans/.../008-.../dojo/teleport.py`, refill via
+  `energy_val`. Expected moment budget from the 008 pass: ~25 hunts
+  across nine bands = 2 matchup moments; anything chattier regressed.
 - Marketplace serves the final version; production worldd healthy.
 
 Exit: 017 done — the tower has teeth, and they're readable.

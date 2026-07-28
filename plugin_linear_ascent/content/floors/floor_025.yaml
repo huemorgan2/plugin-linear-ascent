@@ -12,13 +12,20 @@ arrival: >-
 encounters:
   - id: procession_wight
     name: Procession-wight
+    lore: >-
+      It has led ten thousand funerals and been short one mourner for a
+      century. Grief that old stops taking no.
     weight: 3
+    traits: [resist_med]
     prose: >-
       A wight in mourning-grey walks the center of the road, bell in
       hand, leading a procession of nobody. It stops. It has been short
       one mourner for a very long time.
   - id: verge_ghoul
     name: Verge ghoul
+    lore: >-
+      Funerals mean fresh graves; the road taught it that generations ago.
+      It keeps polite funeral distance until it doesn't.
     weight: 3
     prose: >-
       Ghouls learned generations ago that funerals mean fresh graves,
@@ -26,11 +33,26 @@ encounters:
       the reeds, keeping polite funeral distance.
   - id: bell_wisp
     name: Passing-bell light
+    lore: >-
+      It rings a passing-bell for the about-to-die. It is rarely wrong,
+      and it is ringing now.
     weight: 2
+    traits: [flying, resist_low]
     prose: >-
       A light drifts ahead of you tolling like a small bell, keeping
       just at the edge of sight. It is ringing a passing-bell, you
       realize. It is ringing it for you.
+  - id: coffin_bearer
+    name: Coffin-bearer
+    lore: >-
+      Two bearers fused to one iron-bound coffin, still walking the route.
+      Nobody has looked inside and reported back.
+    weight: 2
+    traits: [slow, armor_low]
+    prose: >-
+      Up the center of the road comes a shape of two bearers grown into
+      one iron-bound coffin, step by processional step. It sets its burden
+      down. It opens the lid for you.
 warden:
   name: Warden Mournhide
   prose: >-

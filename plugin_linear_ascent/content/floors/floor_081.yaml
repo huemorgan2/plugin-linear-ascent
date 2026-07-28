@@ -12,7 +12,11 @@ arrival: >-
 encounters:
   - id: outwork_imp
     name: Outwork imp
+    lore: >-
+      Maintenance doubles as sentry duty out here. It reports you with the
+      rivet gun.
     weight: 3
+    traits: [fast]
     prose: >-
       An imp scuttles along the rampart top with a rivet gun and a
       quota. Maintenance doubles as sentry duty out here, and it has
@@ -20,7 +24,11 @@ encounters:
       rivet gun.
   - id: gate_knight
     name: Hellknight of the gate
+    lore: >-
+      Armor welded shut a lifetime ago, engine-heart idling up through the
+      plate. The halberd is part of the arm.
     weight: 3
+    traits: [armor_med]
     prose: >-
       A hellknight steps out of a wall-niche where it has stood
       since the outwork was raised — armor welded shut a lifetime
@@ -28,12 +36,27 @@ encounters:
       halberd that is part of its arm.
   - id: wall_growth
     name: Wall-flesh
+    lore: >-
+      The outwork's living mortar. The wall behind it heals over before it
+      has crossed half the distance.
     weight: 2
+    traits: [slow]
     prose: >-
       A patch of rampart peels itself off the wall and comes at you
       — plate and sinew in equal parts, the outwork's living mortar.
       The wall behind it heals over before it has crossed half the
       distance.
+  - id: outwork_crow
+    name: Outwork crow
+    lore: >-
+      Iron walls still feed crows. The gun-slits breathe out, and
+      something always rides the warm draft.
+    weight: 2
+    traits: [flying]
+    prose: >-
+      A crow with soot-slicked feathers lifts off a gun-slit's lip, rides
+      the wall's warm exhalation over your head, and calls you in to
+      whatever keeps the ledger inside.
 warden:
   name: Warden Rivetgrim
   prose: >-

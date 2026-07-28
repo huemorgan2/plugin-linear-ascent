@@ -12,13 +12,20 @@ arrival: >-
 encounters:
   - id: peat_king
     name: Peat-cured king
+    lore: >-
+      A thousand years in the peat tanned him tough as boat leather. Every
+      wound closes with a wet brown sound — outlast him if you can.
     weight: 3
+    traits: [bulwark, slow]
     prose: >-
       A bog king climbs from the cut-bank, tanned black by a thousand
       years of peat, torc still bright. He was somebody once, and being
       dead has not talked him out of it.
   - id: cutter_ghoul
     name: Cutter ghoul
+    lore: >-
+      It works the banks with a peat-cutter's blade and a harvester's
+      patience. You are standing on its next cut.
     weight: 3
     prose: >-
       A ghoul works a peat-cutter's blade along the bank with terrible
@@ -26,10 +33,24 @@ encounters:
       you stand as its next cut.
   - id: turf_hound
     name: Turf hound
+    lore: >-
+      Packed peat and root in the shape of loyalty. Thrown stones just
+      improve it.
     weight: 2
     prose: >-
       A hound of packed peat and root shakes itself apart and back
       together, coming up the cut. Thrown stones just improve it.
+  - id: midge_cloud
+    name: Midge cloud
+    lore: >-
+      Marsh midges in a swarm dense enough to have opinions. The cuts
+      breed them by the ton.
+    weight: 2
+    traits: [flying]
+    prose: >-
+      The fog line detaches a piece of itself and hums toward you — a
+      midge cloud thick enough to blot the cut-banks, moving with one slow
+      appetite.
 warden:
   name: Warden Peatlock
   prose: >-

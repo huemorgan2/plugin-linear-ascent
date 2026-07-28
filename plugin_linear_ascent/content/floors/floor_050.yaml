@@ -12,13 +12,20 @@ arrival: >-
 encounters:
   - id: nest_wyrmling
     name: Nest wyrmling
+    lore: >-
+      The runt of the nest, barge-sized, with a runt's temper about
+      visitors. The word runt is doing heavy work.
     weight: 3
+    traits: [flying, resist_low]
     prose: >-
       A wyrmling the size of a river barge suns itself on the caldera
       rim. It is the runt. It has a runt's temper about visitors, and
       a keel of muscle that says the word runt is doing heavy work.
   - id: rim_ogre
     name: Tribute ogre
+    lore: >-
+      The clan hauls tribute to keep the wyrm off their terraces. The
+      wagon shed a wheel; you are lighter than the wagon.
     weight: 3
     prose: >-
       An ogre clan hauls a wagon of scrap-steel up the rim road,
@@ -26,11 +33,25 @@ encounters:
       wheel. The clan decides you are lighter than the wagon.
   - id: caldera_salamander
     name: Caldera salamander
+    lore: >-
+      In the nest's shadow they grow to the size of oxen and fear nothing
+      that walks. The turning is the whole announcement.
     weight: 2
+    traits: [resist_med]
     prose: >-
       In the nest's shadow the salamanders grow to the size of oxen
       and fear nothing that walks. This one does not stalk you. It
       simply turns, and the turning is the whole announcement.
+  - id: rim_jackal
+    name: Rim jackal
+    lore: >-
+      It works the tribute-road for what falls off the wagons, and
+      climbers count as falling off.
+    weight: 2
+    prose: >-
+      A jackal picks along the caldera rim between half-melted offerings,
+      lean and businesslike, and cuts your line of march with the
+      confidence of a toll-keeper.
 warden:
   name: Cindermaw the Wyrm
   prose: >-

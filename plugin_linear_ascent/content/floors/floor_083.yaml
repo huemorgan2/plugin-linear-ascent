@@ -12,7 +12,11 @@ arrival: >-
 encounters:
   - id: stoker_imp
     name: Stoker imp
+    lore: >-
+      The furnace is running lean, the schedule says feed it, and you are
+      standing on the hatch — which counts as volunteering.
     weight: 3
+    traits: [fast]
     prose: >-
       A stoker imp rides its coal-chute up onto the road, shovel
       first. The furnace below is running lean, the schedule says
@@ -20,19 +24,39 @@ encounters:
       counts as volunteering.
   - id: road_knight
     name: Road-warden knight
+    lore: >-
+      It patrols the grate barefoot, soles glowing dull red. Heat
+      discipline is a point of pride, and it means to teach the standard.
     weight: 3
+    traits: [armor_med]
     prose: >-
       A hellknight patrols the grate-road barefoot, plate soles
       glowing dull red. Heat discipline is a point of pride in the
       March. It means to teach you the standard.
   - id: grate_thing
     name: Under-grate thing
+    lore: >-
+      It lives between the furnaces, eating what the chutes deliver. It
+      has learned the sound of footsteps stopping, and spells cook off
+      before they reach it.
     weight: 2
+    traits: [resist_med]
     prose: >-
       Fingers come up through the grate ahead of you — too many,
       too long, comfortable in the light of the channel. Something
       lives between the furnaces, eating what the chutes deliver,
       and it has learned the sound of footsteps stopping.
+  - id: cinder_swift
+    name: Cinder swift
+    lore: >-
+      It nests in the road grating and hunts the updraft. Nothing else on
+      the March flies this low on purpose.
+    weight: 2
+    traits: [flying]
+    prose: >-
+      A swift snaps up out of the channel-light between two grates, wings
+      trailing threads of smoke, and carves a hot circle around your head,
+      herding you off its nesting run.
 warden:
   name: Warden Cindergrate
   prose: >-

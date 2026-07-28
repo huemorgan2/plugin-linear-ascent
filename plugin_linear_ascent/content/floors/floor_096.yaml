@@ -12,7 +12,12 @@ arrival: >-
 encounters:
   - id: graft_horror
     name: Grafted horror
+    lore: >-
+      Somewhere inside it is a cutting of the forest from floor twenty-
+      three, and it remembers you passing. The graft drinks spellwork like
+      lamp-oil.
     weight: 3
+    traits: [resist_med]
     prose: >-
       A lamp-tree crossed with something that once had opinions pulls
       its roots and comes at you glowing, half bio-light and half
@@ -20,6 +25,9 @@ encounters:
       walked on floor twenty-three, and it remembers you passing.
   - id: garden_keeper
     name: Keeper of the beds
+    lore: >-
+      You are standing on the floor-one turf. It is very rare. It is very
+      rare because of people like you.
     weight: 3
     prose: >-
       A demon gardener straightens up among the iron-roses, shears
@@ -28,11 +36,25 @@ encounters:
       advancing. It is very rare because of people like you.
   - id: pollen_shade
     name: Night-pollen drift
+    lore: >-
+      What it pollinates, the gardeners harvest. Do not inhale the future.
     weight: 2
+    traits: [flying, resist_low]
     prose: >-
       The gardens pollinate after dark, and the drift finds you — a
       golden cloud with a slow, deliberate shape to its drifting. What
       it pollinates, the gardeners harvest. Do not inhale the future.
+  - id: rose_beetle
+    name: Iron-rose beetle
+    lore: >-
+      It feeds on the dwarven iron-roses and grows its shell from the
+      clippings. The gardeners call it a pest with tenure.
+    weight: 2
+    traits: [armor_med]
+    prose: >-
+      A beetle armored in overlapping rose-iron petals drops off a grafted
+      trellis, lands with a clank on the rare turf, and advances on you
+      like a small opinionated fortress.
 warden:
   name: Warden Thornglass
   prose: >-

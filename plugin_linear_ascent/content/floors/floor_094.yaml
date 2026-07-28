@@ -13,7 +13,12 @@ arrival: >-
 encounters:
   - id: queue_veteran
     name: Queue veteran
+    lore: >-
+      It has waited so long it became part of the protocol — robes fused
+      to the stone, token worn smooth. You will tire before it does;
+      everyone has.
     weight: 3
+    traits: [bulwark, slow]
     prose: >-
       The thing on the bench beside the door has waited so long it
       has become part of the protocol — robes fused to the stone,
@@ -21,7 +26,11 @@ encounters:
       you intend to jump the line.
   - id: chamberlain
     name: Under-chamberlain
+    lore: >-
+      Your paperwork is fatally out of order. The regret is genuine. The
+      fatality is procedural.
     weight: 3
+    traits: [resist_med]
     prose: >-
       An under-chamberlain sweeps toward you, a demon of ledgers
       and closed doors, robes hissing on the glass floor. Your
@@ -29,12 +38,26 @@ encounters:
       genuine. The fatality is procedural.
   - id: token_swarm
     name: Recalled tokens
+    lore: >-
+      A century of the queue, voided, and the recalled tokens want their
+      holders. Yours is getting warmer.
     weight: 2
+    traits: [fast]
     prose: >-
       Somewhere a clerk voids a century of the queue, and the
       recalled tokens come looking for their holders — a drift of
       black glass chips moving with intent. Yours, in your pocket,
       is getting warmer.
+  - id: petitioners_hound
+    name: Petitioner's hound
+    lore: >-
+      Its master's number was never called. It holds the bench, and the
+      grudge, on his behalf.
+    weight: 2
+    prose: >-
+      A hound rises from beneath an empty bench where somebody's robes
+      still sit, stretches a century out of its joints, and crosses the
+      anteroom to explain what it thinks of queue-jumpers.
 warden:
   name: Warden Anteroom
   prose: >-

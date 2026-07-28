@@ -12,6 +12,9 @@ arrival: >-
 encounters:
   - id: warren_tough
     name: Warren tough
+    lore: >-
+      A glandular marvel, the locals say. You are new custom, walking
+      unprotected.
     weight: 3
     prose: >-
       An imp twice imp-size — a glandular marvel, the locals say —
@@ -20,7 +23,11 @@ encounters:
       of firecrackers.
   - id: press_gang
     name: Warren press-gang
+    lore: >-
+      The Welding Halls pay a bounty per body, and yours is worth a month
+      of quota. It is nothing personal. It is documented.
     weight: 3
+    traits: [fast]
     prose: >-
       Three imps with a length of net and one with a clipboard
       block the alley. The Welding Halls pay a bounty per body,
@@ -28,12 +35,27 @@ encounters:
       It is nothing personal. It is documented.
   - id: slumlord_knight
     name: Off-duty hellknight
+    lore: >-
+      Retired into the warrens, rent collected in teeth. It is sure beyond
+      argument that you owe it something.
     weight: 2
+    traits: [armor_med]
     prose: >-
       A hellknight has retired into the warrens as a slumlord, rent
       collected in teeth. It fills the whole street when it steps
       out, engine-heart knocking, sure beyond argument that you owe
       it something.
+  - id: flue_bat
+    name: Flue bat
+    lore: >-
+      A million chimneys, one bat per flue. The warrens sell the guano and
+      lose the arguments.
+    weight: 2
+    traits: [flying]
+    prose: >-
+      Something drops out of the nearest flue-pipe in a puff of soot and
+      takes the alley at head height — a bat fat on market scraps,
+      indignant that the airspace is occupied.
 warden:
   name: Warden Fluegrim
   prose: >-

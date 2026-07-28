@@ -12,13 +12,20 @@ arrival: >-
 encounters:
   - id: door_wight
     name: Doorstone warder
+    lore: >-
+      Set at its stone a thousand years ago to challenge whatever comes
+      off the moor. The mail rusted; the orders didn't.
     weight: 3
+    traits: [armor_med]
     prose: >-
       A wight in rusted mail leans against its stone the way it has for
       centuries, spear planted. It was set here to challenge whatever
       comes off the moor. That is you.
   - id: moor_ghoul
     name: Moor ghoul
+    lore: >-
+      This far in, the ghouls are old and careful and fat on what leaks
+      through the doors. It can afford to wait.
     weight: 3
     prose: >-
       This far in, the ghouls are old and careful and fat on what leaks
@@ -26,11 +33,25 @@ encounters:
       see whether the moor kills you first.
   - id: unsealed_thing
     name: Something unsealed
+    lore: >-
+      The old folk went to real trouble sealing it. It is half out of the
+      world still, and spells reach only the half that isn't here.
     weight: 2
+    traits: [resist_med]
     prose: >-
       From a stone standing ajar comes something the old folk went to
       real trouble over — half shadow, half smell of deep earth. It
       pours itself upright and takes a shape roughly yours.
+  - id: moor_hound
+    name: Moor hound
+    lore: >-
+      It courses the stone rows at night. What it was bred to keep in, it
+      now keeps company.
+    weight: 2
+    traits: [fast]
+    prose: >-
+      Between two standing stones a hound breaks from a flat-out run to a
+      stalk — moor-grey, low, and already closer than the fog said it was.
 warden:
   name: Warden Doorstone
   prose: >-

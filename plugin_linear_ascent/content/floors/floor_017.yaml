@@ -11,6 +11,9 @@ arrival: >-
 encounters:
   - id: slag_rat
     name: Slag rat
+    lore: >-
+      Generations in the warm dark under the ladles made it big, and none
+      of them made it timid.
     weight: 3
     prose: >-
       A rat the size of a hound noses out of a cooled ladle, coat
@@ -18,6 +21,9 @@ encounters:
       have not made it timid.
   - id: ladle_crew
     name: Kobold ladle-crew
+    lore: >-
+      Three kobolds, one crank, and a firm belief that whatever the ladle
+      lands on had it coming.
     weight: 3
     prose: >-
       Three kobolds work a hand-crank to swing a full ladle over the
@@ -25,11 +31,26 @@ encounters:
       whose fault it is about to be.
   - id: smelter_boss
     name: Red Orc smelter-boss
+    lore: >-
+      Quota is short and the plate is thick with spatter no chisel will
+      shift. Everything here is salvage to it, you included.
     weight: 2
+    traits: [armor_med]
     prose: >-
       The orc who claims this floor's metal wears a warframe caked in
       spatter and carries a tapping-rod like a spear. Quota is short.
       You are made of salvage, technically.
+  - id: heat_haunt
+    name: Heat-haunt
+    lore: >-
+      The shimmer over the slag-runs sometimes stands up and walks. The
+      old smelter crews would not work alone.
+    weight: 2
+    traits: [resist_low]
+    prose: >-
+      The air over the slag channel gathers into a standing shimmer, man-
+      shaped and patient, warping the gallery behind it. It closes the
+      distance without seeming to cross it.
 warden:
   name: Warden Smeltjaw
   prose: >-

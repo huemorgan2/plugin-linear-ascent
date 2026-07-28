@@ -12,25 +12,57 @@ arrival: >-
 encounters:
   - id: honor_guard
     name: Red Orc honor guard
+    lore: >-
+      Skarn's own, in plate polished to a dull red shine. The posting cost
+      them blood, and they intend it to cost you more.
     weight: 3
+    traits: [armor_med]
     prose: >-
       Two orcs of Skarn's own guard, warframes polished to a dull red
       shine, cross their glaives without a word. Getting this posting
       cost them both something. It shows.
   - id: warframe_champion
     name: Warframe champion
+    lore: >-
+      It fought up from the gear galleries pit by pit for the honor of
+      meeting you first. The salvaged frame fits like a reputation.
     weight: 3
+    traits: [armor_low]
     prose: >-
       A pit champion in a full salvaged warframe rolls its shoulders,
       plates ringing. It fought its way up from the gear galleries for
       the honor of being the one you meet.
   - id: camp_hound
     name: Warcamp hound
+    lore: >-
+      Short chain, shorter rations, and it slipped both. The camp is
+      betting on the hound.
     weight: 2
+    traits: [fast]
     prose: >-
       The Red Orcs kennel their rust hounds on short chain and shorter
       rations. This one has slipped both, and the camp watches with
       professional interest to see how you do.
+  - id: drum_kobold
+    name: Drum kobold
+    lore: >-
+      It keeps the warcamp's slow time. The drums are not for you — but a
+      dropped beat brings the whole camp's eyes.
+    weight: 2
+    prose: >-
+      A kobold with a war-drum bigger than itself plants its sticks mid-
+      beat when it sees you. Protocol is clear: the beat must not stop,
+      and you must.
+  - id: camp_looter
+    name: Camp looter
+    lore: >-
+      Every army drags a tail of things that fight for the leavings. This
+      one has done well by the Red Orcs.
+    weight: 2
+    prose: >-
+      A scarred goblin picks along the racked warframes with a sack of
+      lifted buckles, sees you, and weighs the sack against the bounty
+      Skarn posts on climbers. The sack loses.
 warden:
   name: Warlord Skarn
   prose: >-

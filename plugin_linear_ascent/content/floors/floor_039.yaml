@@ -12,13 +12,20 @@ arrival: >-
 encounters:
   - id: gallery_sentinel
     name: Gallery sentinel
+    lore: >-
+      The spiders here do not hunt; they garrison. The challenge phrase is
+      real, and there is no right answer.
     weight: 3
+    traits: [armor_med]
     prose: >-
       The spiders here do not hunt; they garrison. A sentinel drops
       into the aisle with drilled precision, mouthparts moving in what
       is unmistakably a challenge phrase.
   - id: hatching_sac
     name: Hatching sac
+    lore: >-
+      Newborn and knee-high, it knows the two facts of its life: it is
+      hungry, and you are near.
     weight: 3
     prose: >-
       An egg-sac beside you splits with a sound like wet canvas. What
@@ -26,11 +33,25 @@ encounters:
       facts of its life: it is hungry, and you are near.
   - id: broodfed_troll
     name: Brood-fed troll
+    lore: >-
+      Paid for guard duty in whatever fails inspection. It takes the work
+      seriously; the work is you.
     weight: 2
     prose: >-
       A deep troll has been given the run of the galleries in exchange
       for guard duty, paid in whatever fails inspection. It takes its
       work seriously. Its work is you.
+  - id: sac_light
+    name: Sac-light
+    lore: >-
+      The glow that moves inside the eggs sometimes moves outside them.
+      Vyx counts those too.
+    weight: 2
+    traits: [flying, resist_low]
+    prose: >-
+      One of the egg-glows slips its sac and drifts the gallery like a
+      lantern looking for its keeper, and whatever it lights leans toward
+      you in its shell.
 warden:
   name: Warden Husklight
   prose: >-

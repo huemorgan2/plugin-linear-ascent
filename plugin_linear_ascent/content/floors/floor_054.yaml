@@ -12,25 +12,49 @@ arrival: >-
 encounters:
   - id: bridge_troll
     name: Bridge-troll
+    lore: >-
+      It doubled its rates for the season and glued the detour shut. The
+      deed is in one fist, in case you argue.
     weight: 3
+    traits: [armor_low]
     prose: >-
       The troll under the third span has doubled its rates for the
       season and glued the detour shut with new ice. It comes up over
       the rail with the deed in one fist, in case you argue.
   - id: toll_wolf
     name: Toll-runner wolf
+    lore: >-
+      It crosses without paying and shakes the spans until paying
+      customers fall off. The trolls call it undignified. It calls it
+      lunch.
     weight: 3
+    traits: [fast]
     prose: >-
       The wolves cross without paying, which the trolls tolerate
       because catching them is undignified. This one has learned to
       shake bridges until paying customers fall off.
   - id: crevasse_wight
     name: Crevasse climber
+    lore: >-
+      Not everyone who fell short on the toll hit the bottom. It climbs
+      with its grudge in both hands.
     weight: 2
+    traits: [slow, resist_low]
     prose: >-
       Not everyone who fell short on the toll hit the bottom.
       Something climbs out of the blue depth on fingers of ice,
       carrying its grudge in both hands.
+  - id: gorge_raven
+    name: Gorge raven
+    lore: >-
+      It nests under the spans and audits every crossing. Whatever falls,
+      it files.
+    weight: 4
+    traits: [flying]
+    prose: >-
+      A raven drops off the underside of the bridge and hangs on the gorge
+      wind at your eye level, head tilted, deciding whether you are
+      traffic or windfall.
 warden:
   name: Warden Spanbreak
   prose: >-

@@ -12,14 +12,22 @@ arrival: >-
 encounters:
   - id: ride_hound
     name: Ride-warden hound
+    lore: >-
+      You are game, walking the master's ride. The one low note is it
+      logging the flush.
     weight: 3
+    traits: [fast]
     prose: >-
       A gloom hound stands at the ride's edge, marking the verge the
       way a gamekeeper marks a covert. You are game, walking the
       master's ride. It sounds one note, low, to log the flush.
   - id: grey_rider
     name: Grey outrider
+    lore: >-
+      One of the Huntsman's whips, grey from hat to boot. The lean as it
+      passes is a fitting — for the next hunt's card.
     weight: 3
+    traits: [fast, armor_low]
     prose: >-
       A rider comes up the ride at a canter that makes no hoofbeats
       — one of the Huntsman's whips, grey from hat to boot, face
@@ -27,11 +35,26 @@ encounters:
       for the next hunt's card.
   - id: verge_shade
     name: Verge-runner shade
+    lore: >-
+      Once quarry, still running the verge on hunt nights, unable to stop.
+      Behind it the ride goes cold, remembering.
     weight: 2
+    traits: [resist_low]
     prose: >-
       Something that was once quarry still runs the verge on hunt
       nights, unable to stop. It bursts past you in rags of shadow,
       and behind it the ride goes cold, remembering.
+  - id: ride_crow
+    name: Ride crow
+    lore: >-
+      It follows the hunts the way its kind follow armies, and it has
+      learned the calendar better than the towns.
+    weight: 2
+    traits: [flying]
+    prose: >-
+      A crow drops from the black canopy to the ride's grey turf ahead of
+      you, checks the empty avenue both ways like a connoisseur, and
+      decides the hunt has come early this week.
 warden:
   name: Warden Tallyhorn
   prose: >-

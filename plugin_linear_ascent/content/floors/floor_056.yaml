@@ -12,25 +12,48 @@ arrival: >-
 encounters:
   - id: quarry_troll
     name: Quarry-gang troll
+    lore: >-
+      It works a two-troll saw alone, which is against the gang rules,
+      which it ate.
     weight: 3
+    traits: [armor_low]
     prose: >-
       An ice troll works a two-troll saw alone, which is against the
       gang rules, which it ate. It leaves the saw singing in the cut
       and picks up the breaking-bar instead.
   - id: block_wight
     name: Quarried thing
-    weight: 3
+    lore: >-
+      The deep blocks were not left unfinished by accident. It has been
+      sawing from its side, and it is nearly out.
+    weight: 2
+    traits: [slow, resist_med]
     prose: >-
       One of the deep blocks has a shape inside it, and the shape has
       been sawing from its side. Your lamp is the first light it has
       had to work by in an age, and it is grateful, and nearly out.
   - id: gantry_wolf
     name: Gantry wolf
+    lore: >-
+      It patrols the top gantry like a foreman and comes down the ramps
+      collecting the pack as it comes.
     weight: 2
+    traits: [fast]
     prose: >-
       A wolf patrols the top gantry like a foreman, looking down the
       terraces at you. It starts down the ramps at a trot, unhurried,
       collecting the pack as it comes.
+  - id: quarry_crow
+    name: Quarry crow
+    lore: >-
+      Every work site feeds its crows. This quarry's crows have opinions
+      about who counts as site waste.
+    weight: 3
+    traits: [flying]
+    prose: >-
+      A crow lifts off the idle gantry crane and rides the cold down the
+      terraces toward you, wings set, calling the count of you to the
+      whole cut.
 warden:
   name: Warden Hewnheart
   prose: >-

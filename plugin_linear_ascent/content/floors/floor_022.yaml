@@ -12,13 +12,20 @@ arrival: >-
 encounters:
   - id: tithe_wight
     name: Tithe-wight
+    lore: >-
+      The custom is older than the priest: the dead are owed bread and
+      tin. The bowl has been empty a long time.
     weight: 3
+    traits: [resist_low]
     prose: >-
       A wight in the rags of a tithe-priest stands at a barrow door,
       holding out a bowl of green-scaled tin. The custom is older than
       it is. Pay, or be paid.
   - id: barrow_ghoul
     name: Barrow ghoul
+    lore: >-
+      It dug clean through a king's barrow and came out proud, wearing his
+      torc. Rank, among ghouls, is worn on the forearm.
     weight: 3
     prose: >-
       This ghoul has dug clean through a barrow and out the other side,
@@ -26,11 +33,25 @@ encounters:
       the torc. It comes on all fours.
   - id: grave_beetle
     name: Grave beetle
+    lore: >-
+      The old dead fed a whole economy under the turf. Its shell is the
+      marsh's answer to a shield wall.
     weight: 2
+    traits: [armor_high, slow]
     prose: >-
       A beetle the size of a shield surfaces through the turf of a
       barrow roof, mandibles working wetly. The old dead fed a whole
       economy down there, and you count as a delivery.
+  - id: barrow_rat
+    name: Barrow rat
+    lore: >-
+      It lives on offerings and offal, and it has learned that climbers
+      carry both.
+    weight: 2
+    prose: >-
+      A rat noses out of a toppled offering-post, sleek on a century of
+      bread left for the dead, and takes your arrival for the next
+      delivery.
 warden:
   name: Warden Tithegrim
   prose: >-

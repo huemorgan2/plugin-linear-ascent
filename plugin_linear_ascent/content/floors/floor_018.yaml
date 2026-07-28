@@ -12,6 +12,9 @@ arrival: >-
 encounters:
   - id: blind_digger
     name: Blind kobold digger
+    lore: >-
+      Wax-pale and eyeless three generations down. In the dark you are the
+      one at the disadvantage, and it knows it.
     weight: 3
     prose: >-
       A kobold pale as candle-wax feels its way along the drift, pick
@@ -19,18 +22,37 @@ encounters:
       here that is all the introduction it needs.
   - id: winch_crawler
     name: Winch-crawler
+    lore: >-
+      A winch head climbing on its own cable, hand over iron hand. It has
+      never hurried and never let go.
     weight: 3
+    traits: [slow, armor_low]
     prose: >-
       A winch head has pulled itself off its mounts and climbs the
       drift on its own cable, hand over iron hand. It pays out a loop
       toward your ankles, patient as machinery.
   - id: pit_hound
     name: Pit hound
+    lore: >-
+      The deep shafts bred the rust hounds longer and quieter. By the time
+      you hear it, it has counted your paces.
     weight: 2
+    traits: [fast]
     prose: >-
       The rust hounds that went down the shafts bred stranger — longer,
       quieter, eyes gone milky and ears gone huge. This one has been
       pacing you for three turnings.
+  - id: drift_moth
+    name: Drift moth
+    lore: >-
+      It feeds on lamp-oil and dust, and it likes its meals lit. Miners
+      learned to work dark for a reason.
+    weight: 2
+    traits: [flying]
+    prose: >-
+      Your lamp gutters as a moth the span of two hands settles out of the
+      drift's ceiling dark, wings shedding grey powder, drawn to the flame
+      you cannot afford to put out.
 warden:
   name: Warden Deepwinch
   prose: >-

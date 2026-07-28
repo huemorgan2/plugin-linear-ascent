@@ -12,13 +12,20 @@ arrival: >-
 encounters:
   - id: slag_salamander
     name: Slag salamander
+    lore: >-
+      Denned in a red seam, fat on the heat, scales gone the color of
+      cooling iron. Annoyed is most of the way to violence.
     weight: 3
+    traits: [resist_low]
     prose: >-
       A salamander has denned in a red seam and grown fat on the heat,
       scales gone the color of cooling iron. It comes out annoyed,
       which for a salamander is most of the way to violence.
   - id: ridge_ogre
     name: Ridge ogre
+    lore: >-
+      It struck a good seam and claimed the hill with one bellow. The
+      claim, as it understands things, includes you.
     weight: 3
     prose: >-
       An ogre clan works the barrens for half-smelted metal, and this
@@ -26,11 +33,25 @@ encounters:
       backlit red, and claims the whole hill with one bellow.
   - id: clinker_hound
     name: Clinker hound
+    lore: >-
+      It cools as it comes, and by arrival it is hard as a bell. It knows
+      this. It is not hurrying.
     weight: 2
+    traits: [armor_high, slow]
     prose: >-
       A hound-shaped clot of slag and cinder trots the ridge road,
       cooling as it comes. By the time it reaches you it will be hard
       as a bell. It knows this. It is not hurrying.
+  - id: cinder_bat
+    name: Cinder bat
+    lore: >-
+      It dens in the warm hills with everything else big enough to matter,
+      and hunts the ridge roads by heat.
+    weight: 2
+    traits: [flying]
+    prose: >-
+      Off the glowing cut-face a bat unfolds, wings edged in ember-light,
+      and banks down the ridge road at head height — yours.
 warden:
   name: Warden Slagbone
   prose: >-

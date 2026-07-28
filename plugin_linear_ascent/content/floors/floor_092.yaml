@@ -12,7 +12,11 @@ arrival: >-
 encounters:
   - id: gallery_duelist
     name: Gallery duelist
+    lore: >-
+      A century against its own reflection, and the reflection finally let
+      it win. Dueling here is how the court says hello.
     weight: 3
+    traits: [fast]
     prose: >-
       A demon of the lesser court has been practicing against its
       own reflection for a century, and the reflection finally let
@@ -20,7 +24,11 @@ encounters:
       refuse — dueling here is how the court says hello.
   - id: orphan_reflection
     name: Orphaned reflection
+    lore: >-
+      Its owner died at some forgotten intrigue. It has found a body it
+      likes, and spells slide off the glass it lives behind.
     weight: 3
+    traits: [resist_med]
     prose: >-
       A reflection whose owner died at some forgotten intrigue still
       walks the black glass, hall to hall, looking out. It has found
@@ -28,12 +36,26 @@ encounters:
       nearest you, testing.
   - id: whisper_courtier
     name: Whispering courtier
+    lore: >-
+      All silk and sympathy until the third sentence, when the sympathy
+      runs out and the silk turns out to be wire.
     weight: 2
+    traits: [resist_low]
     prose: >-
       A courtier falls into step beside you, all silk and sympathy,
       trading rumors you did not ask for. Somewhere in the third
       sentence the sympathy runs out, and the silk turns out to be
       wire.
+  - id: sconce_imp
+    name: Sconce imp
+    lore: >-
+      It tends the gallery lamps and taxes every shadow they throw. Yours
+      arrived unregistered.
+    weight: 2
+    prose: >-
+      An imp swings down from a lamp-sconce with a taper-snuffer held like
+      a halberd, counts your reflections in the black glass, and presents
+      the bill.
 warden:
   name: Warden Backglass
   prose: >-

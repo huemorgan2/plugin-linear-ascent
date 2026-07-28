@@ -12,25 +12,47 @@ arrival: >-
 encounters:
   - id: brood_swarm
     name: Broodling swarm
+    lore: >-
+      Forty small spiders with one opinion. They have never once been
+      individually.
     weight: 3
+    traits: [fast]
     prose: >-
       A patch of wall-silk sloughs off and becomes forty small spiders
       with one opinion. Individually they are nothing. They have never
       once been individually.
   - id: warren_troll
     name: Warren troll
+    lore: >-
+      Silk-blinded and kept as a nursery guard, fed just enough. It fills
+      the tunnel wall to wall — you will not go around it, only through.
     weight: 3
+    traits: [bulwark, slow]
     prose: >-
       A deep troll has been silk-blinded and kept as a nursery guard,
       fed just enough. It fills the tunnel wall to wall, and it hears
       your heartbeat change.
   - id: midwife_spider
     name: Brood-midwife
+    lore: >-
+      It turns each egg-sac with terrible gentleness, and it put itself
+      between you and the clutch before you decided anything.
     weight: 2
     prose: >-
       A long-legged spider tends a row of egg-sacs, turning each with
       terrible gentleness. It puts itself between you and the clutch
       before you have decided anything.
+  - id: warren_bat
+    name: Warren bat
+    lore: >-
+      It nests in the one warm cavern of the Webdeep and pays rent in
+      whatever it knocks from the air.
+    weight: 2
+    traits: [flying]
+    prose: >-
+      Something leathery cuts through the milk-warm air of the warrens,
+      shoulder-high and fast, riding the heat off the brood walls straight
+      at your lamp.
 warden:
   name: Warden Cradlesilk
   prose: >-

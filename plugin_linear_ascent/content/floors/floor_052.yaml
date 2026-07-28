@@ -12,25 +12,48 @@ arrival: >-
 encounters:
   - id: floe_wolf
     name: Floe wolf pack-leader
+    lore: >-
+      It hunts by ear, through the ice, from below. The pack above is only
+      there to steer you.
     weight: 3
+    traits: [fast]
     prose: >-
       The wolves out on the sea hunt by ear, listening for footsteps
       through the ice. Somewhere under you, one has matched your
       pace. The pack is above, politely driving you along.
   - id: swell_troll
     name: Swell troll
+    lore: >-
+      It hangs in the green glass of its wave like a fly in amber, wearing
+      the sea itself for plate.
     weight: 3
+    traits: [armor_med]
     prose: >-
       An ice troll has hollowed a standing wave into a den and hangs
       in the green glass like a fly in amber, watching the road. The
       wave's face is cracked. Recently.
   - id: coolant_wight
     name: Coolant wight
+    lore: >-
+      It drowned before the sea froze and walks under the ice, upside
+      down. Spells refract somewhere on the way through.
     weight: 2
+    traits: [resist_med]
     prose: >-
       Something that drowned in the sea before it froze walks under
       the ice, upside down, matching your route. At the next thin
       patch it stops. So should you not.
+  - id: brine_gull
+    name: Brine gull
+    lore: >-
+      It works the frozen swells for whatever the wolves leave, and it has
+      stopped waiting for the wolves.
+    weight: 2
+    traits: [flying]
+    prose: >-
+      A gull the size of a dog lifts off a standing wave crest, wings
+      stiff with rime, and comes down the road cut at mast height,
+      screaming its claim.
 warden:
   name: Warden Floeback
   prose: >-

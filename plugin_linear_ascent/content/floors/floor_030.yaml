@@ -12,13 +12,20 @@ arrival: >-
 encounters:
   - id: kings_herald
     name: Herald of the barrow
+    lore: >-
+      It announces you to the barrow in a note you feel in your fillings,
+      which is worse than an ambush.
     weight: 3
+    traits: [resist_low]
     prose: >-
       A wight in the wreck of royal livery bars the tribute-road,
       horn raised. It winds a note you feel in your fillings, and
       announces you, which is worse than an ambush.
   - id: tribute_ghoul
     name: Tribute-bearer
+    lore: >-
+      Dropping the offering would shame it before the King. It sets the
+      body down carefully, first.
     weight: 3
     prose: >-
       A ghoul struggles toward the moat under a dead soldier in full
@@ -26,11 +33,26 @@ encounters:
       It sets the body down carefully, first.
   - id: barrow_guard
     name: Kingsbarrow guard
+    lore: >-
+      Buried in their mail, buried with their rigs. Rust and bone move as
+      one thing, and the plate remembers its trade.
     weight: 2
+    traits: [armor_med]
     prose: >-
       The King's own guard wear the mail they were buried in and the
       exo-rigs they were buried with, rust and bone moving as one
       thing. Two of them peel off the barrow's flank toward you.
+  - id: moat_watcher
+    name: Moat watcher
+    lore: >-
+      A century of tribute sank into the black moat, and something grew
+      fond of the collection.
+    weight: 2
+    traits: [slow]
+    prose: >-
+      The moat's skin of black water bulges and a watcher rises draped in
+      sunken tribute — crowns, sword-belts, rig-plate — wearing the hoard
+      it is about to defend.
 warden:
   name: The Barrow King
   prose: >-

@@ -12,25 +12,47 @@ arrival: >-
 encounters:
   - id: wire_weaver
     name: Wire-weaver
+    lore: >-
+      Its web is half copper and carries a charge. The flies die before
+      they finish landing; climbers take a moment longer.
     weight: 3
+    traits: [resist_low]
     prose: >-
       A spider picks its way down a live cable, abdomen glowing faint
       with stolen charge. Its web is half metal, and the flies it
       catches die before they finish landing.
   - id: cable_troll
     name: Cable troll
+    lore: >-
+      It wears a chewed trunk cable like a stole, and the leakage has done
+      things to its temper the dark never managed.
     weight: 3
+    traits: [slow, armor_low]
     prose: >-
       A deep troll has chewed into a trunk cable and sits wearing it
       over its shoulders like a stole, jaw sparking. The leakage has
       done things to its temper.
   - id: sparked_husk
     name: Jittering husk
+    lore: >-
+      It twitches in time with the current that keeps it. Cut the web and
+      it just twitches toward you instead.
     weight: 2
     prose: >-
       A cocooned husk hangs tangled in the copper web, twitching in
       time with the current. When your shadow crosses it, it twitches
       toward you instead.
+  - id: charge_wisp
+    name: Charge-wisp
+    lore: >-
+      Leakage that pooled long enough to want things. Spells feed it more
+      than they hurt it.
+    weight: 2
+    traits: [flying, resist_med]
+    prose: >-
+      A bead of St. Elmo's light detaches from a cable joint and drifts
+      down the aisle of webs toward you, swelling as it comes, the copper
+      silk chiming under it.
 warden:
   name: Warden Wirefang
   prose: >-

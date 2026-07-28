@@ -12,7 +12,11 @@ arrival: >-
 encounters:
   - id: updraft_harpy
     name: Updraft duelist
+    lore: >-
+      Three passes, honor satisfied — the local dueling form. Nobody has
+      explained what satisfies it.
     weight: 3
+    traits: [flying]
     prose: >-
       A harpy rises past you going straight up, flips at the top of
       the column, and stoops. This is the local dueling form — three
@@ -20,7 +24,11 @@ encounters:
       it.
   - id: kite_pirate
     name: Kite-line cutter
+    lore: >-
+      It drops travelers into the valley for the things below. You are not
+      even attached to a line. Free lunch.
     weight: 3
+    traits: [fast]
     prose: >-
       Something with shears for a beak works the kite-lines above
       the pass, dropping travelers into the valley for the things
@@ -28,11 +36,25 @@ encounters:
       line. Free lunch.
   - id: column_drake
     name: Column drake
+    lore: >-
+      Asleep on the wind in the updraft's core. Your scent goes up the
+      column ahead of you.
     weight: 2
+    traits: [flying, resist_low]
     prose: >-
       A storm drake hangs in the updraft's core, wings barely
       moving, asleep on the wind. Your scent goes up the column
       ahead of you. Its eyes open at your altitude exactly.
+  - id: pass_boar
+    name: Pass boar
+    lore: >-
+      The only local that never took the free lift. It holds the valley
+      floor out of pure principle.
+    weight: 2
+    prose: >-
+      Under the kite-lines a boar roots the pass gravel, deaf to the whole
+      sky economy, and takes your landing on its floor as the day's first
+      trespass.
 warden:
   name: Warden Galecrest
   prose: >-

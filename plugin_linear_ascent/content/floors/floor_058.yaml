@@ -12,25 +12,47 @@ arrival: >-
 encounters:
   - id: wall_giant
     name: Wall-warden giant
+    lore: >-
+      It leans into the gale holding a shield the size of a barn door —
+      shelter for travelers, for a fee. You are past due.
     weight: 3
+    traits: [armor_med]
     prose: >-
       A frost giant leans into the gale at the third wall, holding a
       shield the size of a barn door for travelers to shelter behind
       — for a fee. You are past due before you reach it.
   - id: wind_wolf
     name: Gale-running wolf
+    lore: >-
+      It runs with the gale at its back and arrives at twice a wolf's
+      honest speed. The bell rings once.
     weight: 3
+    traits: [fast]
     prose: >-
       The wolves here have learned to run with the gale at their
       backs, arriving at twice a wolf's honest speed. The bell rings
       once. That is all the warning the system has.
   - id: shutter_troll
     name: Shutter troll
+    lore: >-
+      Paid in fish heads and deference. Today the shutters stay down, and
+      its back is against them.
     weight: 2
     prose: >-
       An ice troll operates the storm shutters at the crossing, paid
       in fish heads and deference. Today it has decided the shutters
       stay down, and it puts its back against them to make the point.
+  - id: gale_kite
+    name: Gale kite
+    lore: >-
+      It is the only thing that flies the pass by choice, and it uses the
+      wind the way an angler uses a river.
+    weight: 3
+    traits: [flying]
+    prose: >-
+      Something rides the pass wind without a single wingbeat — a kite-
+      shape holding station over the crossing slot, waiting for the sprint
+      the bell is about to ask of you.
 warden:
   name: Warden Galebone
   prose: >-

@@ -166,10 +166,61 @@ def _load_floor_file(path: str) -> Floor:
 _floors: dict[int, Floor] | None = None
 
 
+def _class_pool_errors(fl: Floor) -> list[str]:
+    """008: every class keeps a hunting pool on every floor ≥ 11 —
+    at least two encounter types it hits at full damage (no bulwark,
+    no speed counter). The sim gate proves the pool wins; this lint
+    proves the pool EXISTS before anyone runs a sim."""
+    errors = []
+    for clazz, dtype in economy.DAMAGE_TYPE.items():
+        good = 0
+        for e in fl.encounters:
+            prof = economy.profile_from_traits(e.traits)
+            if dtype == "melee" and prof["flying"]:
+                continue
+            tier = prof["resist"] if dtype == "magic" else prof["armor"]
+            if economy.TIER_MULT[tier] < 1.0 or prof["bulwark"]:
+                continue
+            if dtype == "ranged" and prof["speed"] >= economy.SPEED_FAST:
+                continue
+            good += 1
+        if good < 2:
+            errors.append(
+                f"floor {fl.floor}: {clazz} has {good} full-damage "
+                "targets — needs ≥2 (008 spread rule)")
+    return errors
+
+
+def _band_spread_errors(band: list[Floor]) -> list[str]:
+    """008: each ten-floor band carries the whole vocabulary — ≥1 bad
+    target per class (armor for steel and string, resist for the wand,
+    flying for the blade), ≥1 fast, ≥1 slow, ≥1 bulwark."""
+    lo, hi = band[0].floor, band[-1].floor
+    have: set[str] = set()
+    for fl in band:
+        for e in fl.encounters:
+            prof = economy.profile_from_traits(e.traits)
+            if economy.TIER_MULT[prof["armor"]] <= 0.5:
+                have.add("armor_med+")
+            if economy.TIER_MULT[prof["resist"]] <= 0.5:
+                have.add("resist_med+")
+            for flag in ("flying", "bulwark"):
+                if prof[flag]:
+                    have.add(flag)
+            if prof["speed"] >= economy.SPEED_FAST:
+                have.add("fast")
+            if prof["speed"] <= economy.SPEED_SLOW:
+                have.add("slow")
+    need = {"armor_med+", "resist_med+", "flying", "bulwark",
+            "fast", "slow"}
+    return [f"band {lo}-{hi}: no {m} encounter (008 spread rule)"
+            for m in sorted(need - have)]
+
+
 def lint_floors() -> list[str]:
     """Strict pass over every floor file. Returns all errors (CI gate)."""
     errors: list[str] = []
-    seen: set[int] = set()
+    floors: dict[int, Floor] = {}
     for fname in sorted(os.listdir(FLOORS_DIR)):
         if not fname.endswith(".yaml"):
             continue
@@ -178,9 +229,26 @@ def lint_floors() -> list[str]:
         except Exception as e:  # noqa: BLE001 — collect, don't abort
             errors.append(str(e))
             continue
-        if fl.floor in seen:
+        if fl.floor in floors:
             errors.append(f"{fname}: duplicate floor {fl.floor}")
-        seen.add(fl.floor)
+        floors[fl.floor] = fl
+        # 008: floors ≥ 11 speak the full language — lore on every
+        # encounter (the [i] dossier's one breath) and a 4-5 shelf.
+        if fl.floor >= 11:
+            if not 4 <= len(fl.encounters) <= 5:
+                errors.append(
+                    f"floor {fl.floor}: {len(fl.encounters)} encounters "
+                    "— 008 wants 4-5")
+            for e in fl.encounters:
+                if not e.lore:
+                    errors.append(
+                        f"floor {fl.floor}/{e.id}: missing lore (008)")
+            errors.extend(_class_pool_errors(fl))
+    # band spread: 11-20, 21-30, … — only bands that exist in full
+    for lo in range(11, 100, 10):
+        band = [floors[n] for n in range(lo, lo + 10) if n in floors]
+        if len(band) == 10:
+            errors.extend(_band_spread_errors(band))
     return errors
 
 

@@ -12,14 +12,22 @@ arrival: >-
 encounters:
   - id: seam_imp
     name: Seam-checker imp
+    lore: >-
+      It taps you twice, frowns at the sound of unmodified meat, and flags
+      you for the gantries.
     weight: 3
+    traits: [fast]
     prose: >-
       A quality-imp moves down the line tapping welds with a little
       hammer, listening. It taps you twice, frowns at the sound of
       unmodified meat, and flags you for the gantries.
   - id: fresh_welded
     name: Fresh-welded soldier
+    lore: >-
+      It does not know its own name yet. It knows its function, and its
+      function is walking toward you.
     weight: 3
+    traits: [armor_med]
     prose: >-
       Something newly finished sits up on the line, seams still
       smoking, and swings its legs down. It does not know its own
@@ -27,12 +35,27 @@ encounters:
       toward you.
   - id: rejected_lot
     name: The rejected lot
+    lore: >-
+      The failures have organized — wrong joints, extra arms, grievances
+      in writing.
     weight: 2
+    traits: [slow]
     prose: >-
       Behind the halls is the scrap-yard of what failed inspection,
       and the failures have organized. A committee of them comes
       over the fence — wrong joints, extra arms, grievances in
       writing.
+  - id: arc_moth
+    name: Arc moth
+    lore: >-
+      It drinks the welding light. The gantry crews bill the King for what
+      it costs them in torches.
+    weight: 4
+    traits: [flying]
+    prose: >-
+      A moth with wings like smoked mica detaches from a gantry lamp and
+      beats down the line toward the brightest thing on the floor, which —
+      between arcs — is your lamp.
 warden:
   name: Warden Seamwright
   prose: >-

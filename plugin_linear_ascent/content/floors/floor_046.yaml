@@ -12,25 +12,46 @@ arrival: >-
 encounters:
   - id: dune_swimmer
     name: Dune-swimmer salamander
+    lore: >-
+      The wake comes first, quick as a skipped stone. The breach comes
+      last, jaws open, gloriously happy.
     weight: 3
+    traits: [fast]
     prose: >-
       The wake comes first — a ridge of disturbed ash running at you
       through the dune, quick as a skipped stone. The salamander
       breaches at the last moment, jaws open, gloriously happy.
   - id: ember_ogre
     name: Ember-blind ogre
-    weight: 3
+    lore: >-
+      Blind from staring into too many years of ember-glow. It navigates
+      by smell now, and it has found yours.
+    weight: 2
     prose: >-
       An ogre wanders the dunes at night with its eyes wrapped, blind
       from staring into too many years of ember-glow. It navigates by
       smell now, and stops, and turns toward yours.
   - id: glow_moth_swarm
     name: Ember moths
+    lore: >-
+      Each one carries a live cinder in its belly, drawn to anything
+      warmer than the desert. You qualify.
     weight: 2
+    traits: [flying]
     prose: >-
       A drift of moths rises off a glowing dune face, each one carrying
       a live cinder in its belly. They are drawn to anything warmer
       than the desert. You are much warmer than the desert.
+  - id: dune_adder
+    name: Dune adder
+    lore: >-
+      It hunts the glowing dune faces at night, striking at whatever
+      blocks the light.
+    weight: 2
+    prose: >-
+      Between two slow bands of dune-glow a length of shadow uncoils — an
+      adder the color of cold cinder, head up, reading the heat of you
+      against the orange.
 warden:
   name: Warden Emberback
   prose: >-

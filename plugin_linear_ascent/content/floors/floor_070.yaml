@@ -12,7 +12,11 @@ arrival: >-
 encounters:
   - id: court_champion
     name: Queen's champion drake
+    lore: >-
+      It fights before the throne, which means it fights beautifully,
+      which does not mean it fights fair.
     weight: 3
+    traits: [flying, resist_med]
     prose: >-
       The Queen's champion descends from the high perch without
       hurry, storm-glass gorget flashing. It fights before the
@@ -20,19 +24,37 @@ encounters:
       mean it fights fair.
   - id: livery_harpy
     name: Court guard harpy
+    lore: >-
+      Protocol requires all challengers to arrive bleeding. The court
+      dislikes ambiguity; the pike and the plate remove it.
     weight: 3
+    traits: [armor_med]
     prose: >-
       Two of the court guard cross pikes of ship-spar in front of
       you. Protocol, one explains, requires all challengers to
       arrive bleeding. The court dislikes ambiguity.
   - id: bottled_gale
     name: Unbottled gale
+    lore: >-
+      Bottled since the fleet fell, dropped the way courts do accidents.
+      It holds you personally responsible.
     weight: 2
+    traits: [fast, resist_low]
     prose: >-
       A courtier drops a lantern-globe as you pass, accidentally,
       the way courts do accidents. What gets out has been bottled
       since the fleet fell, and it holds you personally
       responsible.
+  - id: perch_squire
+    name: Perch squire
+    lore: >-
+      A groom of the court perches, armed with the champion's second-best
+      gorget and none of its patience.
+    weight: 2
+    prose: >-
+      A young harpy in half-livery vaults the perch rail with the
+      champion's spare gorget banging on its chest, determined to be
+      noticed doing something about you.
 warden:
   name: Zephyra, the Storm Queen
   prose: >-

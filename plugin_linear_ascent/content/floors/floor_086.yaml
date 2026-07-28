@@ -12,13 +12,19 @@ arrival: >-
 encounters:
   - id: drill_knight
     name: Drill-square knight
+    lore: >-
+      It has rehearsed this fight so long it starts with your counter.
     weight: 3
+    traits: [armor_high]
     prose: >-
       A hellknight steps off the drill square mid-exercise, given
       leave at last to work the live version of the problem. It has
       rehearsed this fight so long it starts with your counter.
   - id: bastion_imp_crew
     name: Ballista crew
+    lore: >-
+      Their record on moving targets is chalked on the wall. It is
+      embarrassing, and they know you can read it.
     weight: 3
     prose: >-
       An imp crew swings a wall-ballista around with drilled speed,
@@ -27,12 +33,39 @@ encounters:
       and they know you can read it.
   - id: parade_hulk
     name: Parade hulk
+    lore: >-
+      Polished for parades, at attention for a decade, waiting for an
+      order worth having. Your arrival is an order — and it was built to
+      be impossible to stop.
     weight: 2
+    traits: [bulwark, slow]
     prose: >-
       The garrison keeps one welded hulk polished for parades, and
       it has been standing at attention for a decade waiting for an
       order worth having. Your arrival is an order. It falls out
       with a sound like a drawbridge.
+  - id: rampart_falcon
+    name: Rampart falcon
+    lore: >-
+      The garrisons fly messages between bastions. The falcons have
+      standing orders about interceptors.
+    weight: 2
+    traits: [flying]
+    prose: >-
+      A falcon in a message-harness checks its line between bastions,
+      folds, and stoops at you instead — the standing orders, it turns
+      out, define interceptor generously.
+  - id: sally_hound
+    name: Sally hound
+    lore: >-
+      Kenneled at the sally ports and fed on drill-square mistakes. It
+      knows the gap in every formation.
+    weight: 2
+    traits: [fast]
+    prose: >-
+      A sally port cracks and a hound comes through it flat and silent,
+      taking the drill square's diagonal — the one line no formation
+      covers — straight to you.
 warden:
   name: Warden Bastionheart
   prose: >-
