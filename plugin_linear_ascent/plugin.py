@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import logging
 import os
 
 from luna_sdk import (LunaPlugin, PluginContext, PluginManifest,
@@ -21,6 +22,65 @@ from . import runtime
 from .engine.scene import Scene
 from .sheet import character_sheet
 from .version import VERSION
+
+log = logging.getLogger(__name__)
+
+# Luna rolls an upgrade back if on_load raises, so a Postgres that happens
+# to be restarting when the player clicks Update makes the plugin
+# un-upgradeable until they retry at a luckier moment. Hosted Luna shares
+# one Postgres cluster across tenants, so that window is not rare.
+_DDL_ATTEMPTS = 5
+_DDL_BACKOFF = 0.5
+
+# Postgres 57P03 and the connection errors that come with a restart or
+# failover — all of them clear on their own within seconds.
+_TRANSIENT_DB = (
+    "in recovery mode",
+    "starting up",
+    "shutting down",
+    "cannot connect now",
+    "connection refused",
+    "server closed the connection",
+    "terminating connection",
+    "connection was closed",
+)
+
+
+def _is_transient_db(exc: BaseException) -> bool:
+    text = str(exc).lower()
+    return any(sig in text for sig in _TRANSIENT_DB)
+
+
+async def _ensure_local_tables(ctx: PluginContext) -> bool:
+    """Create the plugin's own tables, riding out a restarting database.
+
+    Returns False instead of raising: these tables serve dev-local play and
+    the migration of legacy local characters, while the shared world is the
+    real game — losing them is not worth failing (and rolling back) the
+    whole plugin.
+    """
+    from .backend.local import Base
+
+    delay, last = _DDL_BACKOFF, None
+    for attempt in range(1, _DDL_ATTEMPTS + 1):
+        try:
+            async with ctx.engine.begin() as conn:
+                for table in Base.metadata.sorted_tables:
+                    await conn.run_sync(table.create, checkfirst=True)
+            return True
+        except Exception as e:  # noqa: BLE001 — load must survive any of them
+            last = e
+            if attempt == _DDL_ATTEMPTS or not _is_transient_db(e):
+                break
+            log.warning(
+                "linear-ascent: database busy (%s), retrying table setup "
+                "in %.1fs [%d/%d]", e, delay, attempt, _DDL_ATTEMPTS)
+            await asyncio.sleep(delay)
+            delay *= 2
+    log.error("linear-ascent: could not create local tables (%s) — loading "
+              "anyway; the shared world does not need them", last)
+    return False
+
 
 _SHARED_RULES = (
     "You are the player's shardmind sidekick INSIDE the game world of "
@@ -145,13 +205,11 @@ class LinearAscentPlugin(LunaPlugin):
     )
 
     async def on_load(self, ctx: PluginContext) -> None:
-        from .backend.local import Base, LocalBackend
+        from .backend.local import LocalBackend
 
         # Local tables always exist: the dev flag plays here, and old
         # local characters are migrated to the world from here.
-        async with ctx.engine.begin() as conn:
-            for table in Base.metadata.sorted_tables:
-                await conn.run_sync(table.create, checkfirst=True)
+        await _ensure_local_tables(ctx)
         runtime.state["local"] = LocalBackend(ctx.db_session_factory)
         runtime.state["ctx"] = ctx
 
