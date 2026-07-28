@@ -157,8 +157,8 @@ def _news_scene(p: dict, w: dict, day: int) -> Scene:
     total = int(census.get("total", 0))
     my_floor = p["floor"] if p["floor"] > 0 else frontier
     lines = [
-        f"· {total} climber{'s' if total != 1 else ''} on the Muster "
-        f"Roll — {by_floor.get(frontier, 0)} at the frontier "
+        f"· {total} climber{'s' if total != 1 else ''} on the "
+        f"Ascent — {by_floor.get(frontier, 0)} at the frontier "
         f"(floor {frontier}), {by_floor.get(1, 0)} down at floor 1, "
         f"{by_floor.get(my_floor, 0)} on floor {my_floor} with you.",
     ]
@@ -288,6 +288,9 @@ def _build_scene(p: dict) -> Scene:
         return combat.fight_scene(p, fl)
     from . import social
     loc = p["location"]
+    if loc == "muster":
+        # The Muster Roll is retired; saved docs may still stand there.
+        p["location"] = loc = "town"
     builders = {
         "town": _town_scene, "forge": _forge_scene,
         "arcanum": _arcanum_scene, "medlab": _medlab_scene,
@@ -296,7 +299,6 @@ def _build_scene(p: dict) -> Scene:
         "gate_town": _gate_town_scene,
         "relay": social.relay_scene, "fields": social.fields_scene,
         "guildhall": social.guildhall_scene, "grants": social.grant_scene,
-        "muster": social.muster_scene,
         "boss_keep": _boss_keep_scene,
         "warden_keep": _warden_keep_scene,
     }
@@ -540,11 +542,6 @@ def _town_scene(p: dict) -> Scene:
             "fields", "The fields",
             "pvp" if p["level"] >= economy.FIELDS_LEVEL
             else f"🔒 level {economy.FIELDS_LEVEL}"))
-        climbers = w.get("roster_count", 0)
-        opts.append(Option(
-            "muster", "The Muster Roll",
-            f"{climbers} climber{'s' if climbers != 1 else ''}"
-            if climbers else "climbers"))
     return Scene(
         eyebrow="ROOTHOLLOW · THE SQUARE",
         headline=f"Roothollow — floor {max(1, p['unlocked_floor'])} is the "
@@ -567,7 +564,7 @@ def _dispatch_location(p: dict, oid: str) -> Scene:
         p["floor"] = 0
         return _town_scene(p)
     town_menus = ("forge", "arcanum", "medlab", "lodge", "vault", "pawn",
-                  "stone", "gate", "relay", "fields", "guildhall", "muster")
+                  "stone", "gate", "relay", "fields", "guildhall")
     if loc == "town" and oid in town_menus:
         if oid == "arcanum" and p["level"] < economy.ARCANUM_LEVEL:
             s = _town_scene(p)
@@ -639,28 +636,38 @@ def _dispatch_location(p: dict, oid: str) -> Scene:
 
 def _rack(p: dict, items: list, opts: list, lines: list) -> None:
     """One gear ladder in a shop: the last two buyable rungs as options,
-    then the NEXT rung greyed with its unlock level — every shop answers
-    'what am I saving for' by itself (004 §3.1)."""
+    then the NEXT rung as a LOCKED row with its unlock level — every shop
+    answers 'what am I saving for' by itself (004 §3.1, 019 rows).
+    019: the worn rung stays on the rack — spares exist to be donated to
+    the faction armory, so owning a piece never hides it from the shop."""
     lvl = p["level"]
     buyable = [g for g in items if economy.rung_level_req(g) <= lvl]
     nxt = next((g for g in items if economy.rung_level_req(g) > lvl), None)
-    # 007 (004 dojo carryover): the rung on your body leaves the rack —
-    # the two buyable rows are always NEW steps, the worn one is a line.
     worn = p["gear"].get(items[0].slot) if items else None
-    if worn and any(g.slug == worn for g in buyable):
-        lines.append(f"✓ {economy.FORGE[worn].name} — worn")
-    for g in [g for g in buyable if g.slug != worn][-2:]:
+    # the two newest steps stay, and the worn rung keeps its row even
+    # when it sits below them — a spare is always on sale
+    show = [g for g in buyable if g.slug != worn][-2:]
+    if worn and any(g.slug == worn for g in buyable) \
+            and all(g.slug != worn for g in show):
+        show.append(next(g for g in buyable if g.slug == worn))
+        show.sort(key=lambda g: g.rung)
+    for g in show:
         stat = ("+{} spd".format(g.speed) if g.slot == "shoes"
                 else ("+{} ATK".format(g.bonus) if g.slot == "weapon"
                       else "+{} DEF".format(g.bonus)))
-        opts.append(Option(f"buy_{g.slug}", g.name, f"◈ {g.price:,}"))
+        hint = (f"◈ {g.price:,} · worn — buy a spare"
+                if g.slug == worn else f"◈ {g.price:,}")
+        opts.append(Option(f"buy_{g.slug}", g.name, hint))
         flavor = f", {g.flavor}" if g.flavor else ""
         lines.append(f"{g.name}{flavor} — {stat}")
     if nxt is not None:
         stat = (f"+{nxt.speed} spd" if nxt.slot == "shoes"
                 else f"+{nxt.bonus}")
-        lines.append(f"🔒 {nxt.name} — level {economy.rung_level_req(nxt)} "
-                     f"({stat}, ◈ {nxt.price:,})")
+        opts.append(Option(
+            f"buy_{nxt.slug}", nxt.name,
+            f"🔒 level {economy.rung_level_req(nxt)} · ◈ {nxt.price:,}",
+            locked=True))
+        lines.append(f"{nxt.name} — {stat}, the rung you're saving for")
 
 
 def _wearable_pack(p: dict) -> list:
@@ -900,6 +907,20 @@ def _gear_purchase(p: dict, g, scene_fn) -> Scene:
                        "The Vault pays interest for a reason."
         return s
     old = p["gear"].get(g.slot)
+    if old == g.slug:
+        # 019: a spare of the piece you wear — straight to the pack,
+        # fresh pool, nothing on your body moves. Wear in the pack is
+        # tracked per slug: a fresh copy only claims the key when no
+        # stashed copy holds it (the armory takes donations as-is).
+        p["gold"] -= price
+        p["inventory"][g.slug] = p["inventory"].get(g.slug, 0) + 1
+        p.setdefault("durability_pack", {}).setdefault(
+            g.slug, economy.item_pool(g))
+        combat._ledger(p, "buy", gold=-price, note=f"{g.slug} (spare)")
+        s = scene_fn(p)
+        s.body_lines.insert(0, (f"+ {g.name} — a spare for the pack "
+                                "(the armory takes donations)"))
+        return s
     p["gold"] -= price
     p["gear"][g.slot] = g.slug
     if g.slot in p.get("hone", {}):

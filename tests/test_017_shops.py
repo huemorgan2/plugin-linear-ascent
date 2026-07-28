@@ -141,17 +141,20 @@ def test_warrior_forge_racks_blades_not_bows():
 
 
 def test_next_locked_rung_is_always_visible():
+    # 019: the rung you're saving for is a LOCKED ROW, not prose
     p = create_character(fresh("locked"), clazz="warrior")
     s = choose(p, "forge")
-    assert any("🔒 Iron Sword — level 6" in ln for ln in s.body_lines)
-    assert any("🔒 Cobbled Boots — level 3" in ln for ln in s.body_lines)
+    sword = next(o for o in s.options if o.id == "buy_iron_sword")
+    assert sword.locked and "level 6" in sword.hint and "450" in sword.hint
+    boots = next(o for o in s.options if o.id == "buy_cobbled_boots")
+    assert boots.locked and "level 3" in boots.hint
     # at level 3 the boots unlock and the NEXT pair takes the lock
     p["level"] = 3
     s = core.current_scene(p)
-    ids = {o.id for o in s.options}
-    assert "buy_cobbled_boots" in ids
-    assert any("🔒 Wayfarer" in ln and "level 11" in ln
-               for ln in s.body_lines)
+    boots = next(o for o in s.options if o.id == "buy_cobbled_boots")
+    assert not boots.locked
+    treads = next(o for o in s.options if o.id == "buy_wayfarers_treads")
+    assert treads.locked and "level 11" in treads.hint
 
 
 def test_archer_forge_racks_bows_and_a_blade_off_the_rack():

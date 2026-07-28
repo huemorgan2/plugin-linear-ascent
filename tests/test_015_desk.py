@@ -9,12 +9,14 @@ from tests.test_faction_hall import fx, hall_world, member_world, playing
 
 # ── Founding is a rank privilege ─────────────────────────────────────────
 
-def test_no_founding_option_below_level_four():
+def test_founding_row_is_locked_below_level_four():
+    # 019: the door never hides — below the rank it's a LOCKED row
     p = playing(world=hall_world())
     p["gold"], p["level"] = 600, 3
     s = core.apply_choice(p, "guildhall")
-    assert not any(o.id == "found_guild" for o in s.options)
-    assert any("level 4+" in ln for ln in s.body_lines)
+    row = next(o for o in s.options if o.id == "found_guild")
+    assert row.locked
+    assert "level 4" in row.hint and "◈ 300" in row.hint
 
 
 def test_founding_option_appears_at_level_four():
@@ -77,12 +79,15 @@ def test_admin_sees_requests_waiting_at_the_desk():
 
 
 def test_hall_points_at_the_full_ledger_when_deep():
+    # 019: the pointer is a ROW (hall_ledger), not prose
     w = hall_world()
     w["factions"] = [dict(w["factions"][0], name=f"Banner {i}")
                      for i in range(8)]
+    w["factions_total"] = 8
     p = playing(world=w)
     s = core.apply_choice(p, "guildhall")
-    assert any("full ledger" in ln for ln in s.body_lines)
+    row = next(o for o in s.options if o.id == "hall_ledger")
+    assert "8" in row.hint and "Community" in row.hint
     assert sum(o.id.startswith("join_") for o in s.options) == 5
 
 

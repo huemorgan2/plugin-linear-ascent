@@ -122,14 +122,15 @@ def test_locked_doors_read_their_level_from_the_square():
 
 # ── shop owned-state (004 dojo carryover) ────────────────────────────────
 
-def test_the_worn_rung_leaves_the_rack():
+def test_the_worn_rung_stays_on_the_rack_as_a_spare():
+    # 019: owning a piece never hides it — spares feed the armory
     p = create_character(fresh("sh-1"))
     p["gold"] = 10_000
     choose(p, "forge")
     choose(p, "buy_pigsticker")
     s = core.current_scene(p)
-    assert not any(o.id == "buy_pigsticker" for o in s.options)
-    assert any(l.startswith("✓ Pigsticker — worn") for l in s.body_lines)
+    row = next(o for o in s.options if o.id == "buy_pigsticker")
+    assert "worn — buy a spare" in row.hint
 
 
 # ── folded shelves (006 retro) ───────────────────────────────────────────

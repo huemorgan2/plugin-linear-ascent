@@ -98,38 +98,6 @@ def relay_compose(p: dict, text: str) -> Scene:
     return relay_scene(p, note=f"+ sealed and slotted for {target}")
 
 
-# ── The Muster Roll (004 §C.2 — every climber, on one board) ────────────
-
-def muster_scene(p: dict, note: str = "") -> Scene:
-    w = world(p) or {}
-    roster = w.get("roster", [])
-    count = w.get("roster_count", len(roster))
-    frontier = w.get("frontier", p["unlocked_floor"])
-    lines = [note] if note else []
-    for r in roster[:12]:
-        me = " ← you" if r.get("name") == p.get("name") else ""
-        seen = r.get("last_seen_days", 0)
-        seen_txt = ("today" if seen <= 0 else
-                    f"{seen}d ago" if seen < 30 else "long gone")
-        lines.append(
-            f"{r.get('name', '?')} — {r.get('race', '?')} "
-            f"{r.get('clazz', '?')}, L{r.get('level', 1)} · "
-            f"power {r.get('power', 0)} · floor {r.get('floor', 1)} · "
-            f"wealth #{r.get('bank_rank', '?')} · {seen_txt}{me}")
-    if not roster:
-        lines.append("The board is freshly sanded. Yours could be the "
-                     "first name on it.")
-    return Scene(
-        eyebrow="ROOTHOLLOW · THE MUSTER ROLL",
-        headline=f"{count} climber{'s' if count != 1 else ''} on the Ascent",
-        support=f"Every name on this board is climbing the same tower. "
-                f"The frontier stands at floor {frontier}.",
-        body_lines=lines,
-        options=[Option("town", "Back to the square")],
-        meters=meters(p),
-    )
-
-
 # ── The fields (PvP) ─────────────────────────────────────────────────────
 
 def fields_scene(p: dict, note: str = "") -> Scene:
@@ -250,7 +218,7 @@ def grant_action(p: dict, oid: str) -> Scene:
 # w["factions"] (the hall list); local dev mode keeps the legacy
 # doc-string guilds with none of the purse mechanics.
 
-GUILD_FOUND_FEE = 500
+GUILD_FOUND_FEE = 300      # 019: mirrored by worldd factions.FOUND_FEE
 FOUND_MIN_LEVEL = 4        # 015: founding is a rank privilege
 JOIN_FEE_MAX = 500
 DUES_MIN, DUES_MAX = 1, 50
@@ -311,7 +279,12 @@ def guildhall_scene(p: dict, note: str = "") -> Scene:
         else:
             for g in w.get("guilds", [])[:6]:
                 opts.append(Option(f"join_{g}", f"Join {g}"))
-            if p["gold"] >= GUILD_FOUND_FEE:
+            # 019: the founding door is always a row, locked below rank
+            if p["level"] < FOUND_MIN_LEVEL:
+                opts.append(Option("found_guild", "Found a guild",
+                                   f"🔒 level {FOUND_MIN_LEVEL} · "
+                                   f"◈ {GUILD_FOUND_FEE}", locked=True))
+            else:
                 opts.append(Option("found_guild", "Found a guild",
                                    f"◈ {GUILD_FOUND_FEE}"))
     opts.append(Option("town", "Back to the square"))
@@ -390,8 +363,11 @@ def _member_panel(p: dict, fac: dict, lines: list, opts: list) -> None:
 
 
 def _hall_list(p: dict, factions: list, lines: list, opts: list) -> None:
-    """015: joining is a REQUEST an admin accepts; founding takes rank."""
-    requested = (world(p) or {}).get("faction_requested", "")
+    """015: joining is a REQUEST an admin accepts; founding takes rank.
+    019: both doors are always ROWS — founding shows locked below the
+    rank, and the full ledger has its own row into the Community tab."""
+    w = world(p) or {}
+    requested = w.get("faction_requested", "")
     if not factions:
         lines.append("No banners fly yet. Yours could be the first.")
     for f in factions[:5]:
@@ -403,18 +379,17 @@ def _hall_list(p: dict, factions: list, lines: list, opts: list) -> None:
             opts.append(Option(f"join_{f['name']}", f"Ask to join {f['name']}",
                                f"join ◈ {f.get('join_fee', 0)} · dues "
                                f"◈ {f.get('weekly_dues', 0)}/wk"))
-    if len(factions) > 5:
-        lines.append(f"…and {len(factions) - 5} more — the full ledger "
-                     "hangs in the Community pane")
+    total = int(w.get("factions_total", len(factions)))
+    if total:
+        opts.append(Option("hall_ledger", "Join a banner",
+                           f"{total} flying · the Community tab"))
     if p["level"] < FOUND_MIN_LEVEL:
-        lines.append(f"The hall charters new banners for level "
-                     f"{FOUND_MIN_LEVEL}+ climbers — ◈ {GUILD_FOUND_FEE} "
-                     "when you get there.")
-    elif p["gold"] + p.get("bank", 0) >= GUILD_FOUND_FEE:
+        opts.append(Option("found_guild", "Raise a new banner",
+                           f"🔒 level {FOUND_MIN_LEVEL} · "
+                           f"◈ {GUILD_FOUND_FEE}", locked=True))
+    else:
         opts.append(Option("found_guild", "Raise a new banner",
                            f"◈ {GUILD_FOUND_FEE}"))
-    else:
-        lines.append(f"Raising a new banner costs ◈ {GUILD_FOUND_FEE}.")
 
 
 def guild_train(p: dict) -> Scene:
@@ -561,11 +536,29 @@ def guildhall_action(p: dict, oid: str, text: str = "") -> Scene:
         return guildhall_scene(p)
     if oid == "guild_train":
         return guild_train(p)
+    if oid == "hall_ledger":
+        # 019: the door to the board — the pane switches tabs on this
+        # id client-side; the chat path gets told where the ledger is.
+        return guildhall_scene(
+            p, note="The full ledger hangs in the Community tab — "
+                    "every banner, every desk. Ask to join from there, "
+                    "or raise your own right here.")
     if oid == "found_guild":
+        if fac or p.get("guild"):
+            # 019: one banner per climber — leaving first is the path
+            name = (fac or {}).get("name") or p.get("guild")
+            return guildhall_scene(
+                p, note=f"You already sit at the {name} table — leave "
+                        "it before you raise your own.")
         if p["level"] < FOUND_MIN_LEVEL:
             return guildhall_scene(
                 p, note=f"The hall charters new banners for level "
                         f"{FOUND_MIN_LEVEL}+ climbers. Train first.")
+        if p["gold"] < GUILD_FOUND_FEE:
+            return guildhall_scene(
+                p, note=f"The charter takes ◈ {GUILD_FOUND_FEE} carried "
+                        f"— you hold ◈ {p['gold']:,}. The Vault gives "
+                        "back what it keeps.")
         if w.get("factions") is None:
             # local dev mode — legacy one-shot naming, no purse
             p["founding_guild"] = True
@@ -718,7 +711,8 @@ def _found_finish(p: dict, name: str, banner: str, join_fee: int,
         return guildhall_scene(p, note="Three letters at least. Banners "
                                        "need room for glory.")
     if p["gold"] < GUILD_FOUND_FEE:
-        return guildhall_scene(p, note="The fee stands at ◈ 500. Come back "
+        return guildhall_scene(p, note=f"The fee stands at "
+                                       f"◈ {GUILD_FOUND_FEE}. Come back "
                                        "heavier.")
     p["gold"] -= GUILD_FOUND_FEE
     p["guild"] = name
