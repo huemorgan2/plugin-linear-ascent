@@ -15,8 +15,8 @@ encounters:
     lore: >-
       A thousand years in the peat tanned him tough as boat leather. Every
       wound closes with a wet brown sound — outlast him if you can.
-    weight: 3
-    traits: [bulwark, slow]
+    weight: 1
+    traits: [bulwark, slow, resist_med]
     prose: >-
       A bog king climbs from the cut-bank, tanned black by a thousand
       years of peat, torc still bright. He was somebody once, and being

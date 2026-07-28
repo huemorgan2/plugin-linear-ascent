@@ -103,7 +103,7 @@ SPEC = {
                 "thing beside it learned that light draws rescuers."),
         },
         "traits": {
-            "rig_wight": ["armor_med"],
+            "rig_wight": ["armor_high"],  # 010: was armor_med — felt by 0.05x drag only
             "marsh_ghoul_crew": ["armor_low"],
             "drowned_light": ["resist_low"],
         },
@@ -164,7 +164,7 @@ SPEC = {
                 "stones just improve it."),
         },
         "traits": {
-            "peat_king": ["bulwark", "slow"],
+            "peat_king": ["bulwark", "slow", "resist_med"],  # 010: sorcerer drag was 1.61x
         },
         "new": [{
             "id": "midge_cloud", "name": "Midge cloud", "weight": 2,

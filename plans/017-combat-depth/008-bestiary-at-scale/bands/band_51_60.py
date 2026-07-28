@@ -259,7 +259,7 @@ SPEC = {
                 "duty."),
         },
         "traits": {
-            "road_thane": ["armor_med"],
+            "road_thane": ["armor_high"],  # 010: was armor_med — win 70%, 5pp from prey-grade
             "herald_wolf": ["fast"],
         },
         "new": [{

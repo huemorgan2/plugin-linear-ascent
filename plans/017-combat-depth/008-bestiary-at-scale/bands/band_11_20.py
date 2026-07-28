@@ -300,7 +300,7 @@ SPEC = {
                 "camp is betting on the hound."),
         },
         "traits": {
-            "honor_guard": ["armor_med"],
+            "honor_guard": ["armor_high"],  # 010: was armor_med — felt by 0.03x drag only
             "warframe_champion": ["armor_low"],
             "camp_hound": ["fast"],
         },

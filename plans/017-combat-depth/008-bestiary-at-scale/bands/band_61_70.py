@@ -80,7 +80,7 @@ SPEC = {
         "traits": {
             "rookery_warden_harpy": ["flying"],
             "fledgling_mob": ["fast"],
-            "nest_drake": ["resist_med"],
+            "nest_drake": ["resist_high"],  # 010: was resist_med — felt by 0.08x drag only
         },
         "new": [{
             "id": "rook_marten", "name": "Rook marten", "weight": 2,
