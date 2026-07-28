@@ -88,14 +88,49 @@ still stands. Only gear bought before the lines existed is forgiven.
 real intent — a paid weapon is never demoted to the free starter — rather
 than the literal slug it happened to produce.
 
+## Production rollout
+
+Shipped as plugin v0.27.3, vendored to worldd in `85523dc`. Render's
+auto-deploy did not fire on the push and the deploy had to be triggered
+by hand — worth checking after any future push.
+
+The reporting player healed on their own next turn, before the write-back
+ran: `pigsticker → ashwood_bow`, doc v4 → v5. `writeback.py --apply` then
+brought the remaining seven forward.
+
+Final audit — all 8 live documents:
+
+| player | class | weapon | v |
+|---|---|---|---|
+| MASTER-CHIEF | elf archer | Ashwood Bow | 5 |
+| huemorgan | elf archer | Basic Bow | 5 |
+| Sir Akselrod | human sorcerer | Worn Wooden Staff | 5 |
+| Torvald ×2, Roydric, Chipprod, (unnamed dwarf) | warrior | Rusted Sword | 5 |
+
+Every stored document was then re-derived from the pre-migration backup
+and compared field by field: 0 unexpected mismatches. The only deltas on
+MASTER-CHIEF are `gold`, `xp`, `floor`, `location` and `durability` —
+they moved because the player kept playing.
+
 ## Scripts
 
-Both live in this folder and take the JSONL dump:
+All three live in this folder.
 
 ```bash
 psql "$PROD_DB" -At -c "SELECT json_build_object('tenant',tenant,
     'player',player,'doc',doc)::text FROM ascent_players" > docs.jsonl
 
-python rehearse.py docs.jsonl        # dry run, reports every change
+python rehearse.py docs.jsonl                        # dry run
 DATABASE_URL=... python worldd_check.py docs.jsonl   # real worldd turn
+PROD_DB=... python writeback.py [--apply]            # heal live docs now
 ```
+
+`writeback.py` is only an accelerator — `ensure_current` heals every
+document on load anyway. It guards each UPDATE on the document it read,
+so a turn played mid-run is never clobbered.
+
+> The first cut of `writeback.py` built SQL by string interpolation and
+> misparsed `RETURNING`, so it reported "skipped" for rows it had in fact
+> written. It was rewritten on asyncpg with bound parameters. If you write
+> another one-off against production: **bind your parameters**, and verify
+> against the data rather than trusting the script's own summary.
