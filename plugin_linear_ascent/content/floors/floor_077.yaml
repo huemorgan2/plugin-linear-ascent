@@ -12,14 +12,22 @@ arrival: >-
 encounters:
   - id: kennel_master
     name: Kennel-master shade
+    lore: >-
+      It looks you over as stock, checks the feeding book, and unclips the
+      first lead. The apron has seen use.
     weight: 3
+    traits: [resist_med]
     prose: >-
       The kennel-master comes out wiping its hands on a leather
       apron that has seen use. It looks you over as stock, checks
       something in the feeding book, and unclips the first lead.
   - id: pack_matron
     name: Pack matron
+    lore: >-
+      She does not run with the hunts anymore; she trains what does. The
+      whole court goes quiet to watch the lesson.
     weight: 3
+    traits: [slow]
     prose: >-
       The oldest hound in the kennels does not run with the hunts
       anymore; she trains what does. She comes off her stone bench
@@ -27,11 +35,26 @@ encounters:
       watch the lesson.
   - id: mews_mare
     name: Mews-kept nightmare
+    lore: >-
+      Stabled for re-breaking, and the door is open again. It wears its
+      freedom like a dare.
     weight: 2
+    traits: [fast]
     prose: >-
       A nightmare is stabled here for re-breaking, and it has
       gotten the door open again. It comes across the court trailing
       a snapped rope, wearing its freedom like a dare.
+  - id: mews_owl
+    name: Mews owl
+    lore: >-
+      The winged things in the mews are hooded for a reason. This one
+      worked its hood off.
+    weight: 2
+    traits: [flying]
+    prose: >-
+      Something leaves the mews' dark through a gap no wider than a hymnal
+      — an owl in a torn hood, climbing fast, and the first stoop is for
+      whoever opened the court gate.
 warden:
   name: Warden Leashbone
   prose: >-

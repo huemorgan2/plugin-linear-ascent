@@ -12,13 +12,20 @@ arrival: >-
 encounters:
   - id: glow_sick_kobold
     name: Glow-sick kobold
+    lore: >-
+      The vault-light got into it years back. Fear burned away first, and
+      spells find little left to grip.
     weight: 3
+    traits: [resist_low]
     prose: >-
       A kobold that has slept too close to the vault doors comes at you
       shedding faint light, fur out in patches, eyes wrong. It is past
       fear, which is worse.
   - id: fuel_thief
     name: Red Orc fuel-thief
+    lore: >-
+      Two runs a night, lead pannier full, and every climber met is time
+      lost. It has no plans to lose time politely.
     weight: 3
     prose: >-
       An orc hauls a lead-lined pannier of stolen core-rods, warframe
@@ -26,11 +33,26 @@ encounters:
       it means to go through you.
   - id: forge_remnant
     name: Forge remnant
+    lore: >-
+      A vault-tender in dwarf-plate, headless and thorough. The checklist
+      is gone; the round continues.
     weight: 2
+    traits: [slow, armor_high]
     prose: >-
       A dwarven vault-tender, headless since the fall, still walks its
       rounds on magnetic feet. It cannot find its checklist, so it has
       simplified the job: nothing passes.
+  - id: rod_wisp
+    name: Rod-wisp
+    lore: >-
+      Light that leaked from a cracked core and learned the shape of a
+      lantern-bearer. Spells pass through it like more light.
+    weight: 2
+    traits: [flying, resist_med]
+    prose: >-
+      Between the vault doors the air brightens wrong — a figure of bare
+      glow drifting the seam-light, carrying nothing, casting no shadow,
+      coming to see yours.
 warden:
   name: Warden Coreburn
   prose: >-

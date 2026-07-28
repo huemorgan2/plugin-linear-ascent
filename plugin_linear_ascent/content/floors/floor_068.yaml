@@ -12,25 +12,47 @@ arrival: >-
 encounters:
   - id: aerie_drake
     name: Aerie heir
+    lore: >-
+      Young enough to want a story worth telling, old enough to make one
+      out of you.
     weight: 3
+    traits: [flying, resist_low]
     prose: >-
       A drake in its first adult molt drops from the home crag to
       look you over. It is young enough to want a story worth
       telling and old enough to make one out of you.
   - id: drake_harrier
     name: Harpy drake-groom
+    lore: >-
+      Drake-scale livery and airs to match. Removing you before the master
+      wakes is the kind of initiative that gets noticed.
     weight: 3
+    traits: [armor_med]
     prose: >-
       The harpies that serve the aeries wear drake-scale livery and
       airs to match. Two of them decide removing you before the
       master wakes is the kind of initiative that gets noticed.
   - id: old_tyrant
     name: Deposed tyrant
+    lore: >-
+      Beaten off its crag, wings scarred, charge gone grey. It has nothing
+      left but seniority, and it means to spend it on you.
     weight: 2
+    traits: [slow]
     prose: >-
       An old drake beaten off its crag by a younger rival haunts the
       lower ledges, wings scarred, charge gone grey. It has nothing
       left but seniority, and it means to spend it on you.
+  - id: hoard_lizard
+    name: Hoard lizard
+    lore: >-
+      It lives in the aeries' wreck-metal hoards and defends them harder
+      than the owners do.
+    weight: 2
+    prose: >-
+      A lizard long as a skiff slides off a heap of charge-blackened
+      salvage, tongue reading the air, and squares up over the hoard like
+      a creditor at a will-reading.
 warden:
   name: Warden Stoopfall
   prose: >-

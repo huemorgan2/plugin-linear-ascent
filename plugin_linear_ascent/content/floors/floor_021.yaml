@@ -12,6 +12,9 @@ arrival: >-
 encounters:
   - id: mire_ghoul
     name: Mire ghoul
+    lore: >-
+      It has eaten better since the tower came than its whole line ate
+      before it. It sees no reason the run should end.
     weight: 3
     prose: >-
       A ghoul rises out of the standing water without hurry, grave-mud
@@ -19,18 +22,36 @@ encounters:
       and it looks at you like more of the same.
   - id: bog_hound
     name: Bog hound
+    lore: >-
+      It died loyal to somebody on the old towpath. What runs it now keeps
+      the route and lost the loyalty.
     weight: 3
+    traits: [fast]
     prose: >-
       Something that used to be a hound follows the old towpath, coat
       slicked black, too many joints working. It died loyal to somebody.
       It is not loyal now.
   - id: cairn_wisp
     name: Cairn-light
+    lore: >-
+      The locals had one rule about the cairn-lights: never follow. Nobody
+      made a rule for when the light follows you.
     weight: 2
+    traits: [flying, resist_low]
     prose: >-
       A soft light drifts off a cairn and comes across the water toward
       you, warm as a lodge window. The locals had one rule about the
       lights, and this is exactly the wrong direction.
+  - id: mire_leech
+    name: Mire leech
+    lore: >-
+      The drowned fields feed everything slowly except the leeches, which
+      have never once been patient.
+    weight: 2
+    prose: >-
+      The water between two cairns humps and slides — a leech long as a
+      rowboat, back crusted with old coins that stuck, homing in on the
+      warmth of you.
 warden:
   name: Warden Mirebone
   prose: >-

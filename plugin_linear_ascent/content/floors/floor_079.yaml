@@ -12,13 +12,20 @@ arrival: >-
 encounters:
   - id: pacer_hound
     name: Pacing hound
+    lore: >-
+      It is not hunting. It is pacing you, for the handicap, and it keeps
+      glancing at your knees.
     weight: 3
+    traits: [fast]
     prose: >-
       A gloom hound falls in beside you at an easy lope, matching
       you stride for stride. It is not hunting. It is pacing you,
       for the handicap, and it keeps glancing at your knees.
   - id: rival_quarry
     name: Rival quarry
+    lore: >-
+      Three hunts' worth of broken snares hang off it. Thinning the
+      competition counts as strategy.
     weight: 3
     prose: >-
       Something else is on tonight's card — a grey elk with three
@@ -27,11 +34,26 @@ encounters:
       competition counts as strategy.
   - id: course_steward
     name: Course steward
+    lore: >-
+      You are off the marked course. Rejoining is compulsory. The flag is
+      not a request.
     weight: 2
+    traits: [resist_med]
     prose: >-
       A shade in a steward's sash steps onto the turf and raises a
       grey flag. You are, it indicates, off the marked course.
       Rejoining is compulsory. The flag is not a request.
+  - id: stand_crow
+    name: Stand crow
+    lore: >-
+      It works the audience hides for dropped stakes and settles bets
+      nobody survived to collect.
+    weight: 2
+    traits: [flying]
+    prose: >-
+      A crow flaps up from the master of hounds' stand with a betting slip
+      in its beak, takes one lap of the course over your head, and marks
+      you down as tonight's long odds.
 warden:
   name: Warden Foxglove
   prose: >-

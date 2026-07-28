@@ -12,13 +12,20 @@ arrival: >-
 encounters:
   - id: chantry_wight
     name: Chantry cantor
+    lore: >-
+      It keeps the offices in a voice like water in a crypt. The old river
+      gods may even still be listening.
     weight: 3
+    traits: [resist_med]
     prose: >-
       A wight stands waist-deep at the altar, keeping the offices in a
       voice like water in a crypt. You have interrupted. The
       congregation, surfacing behind you, agrees.
   - id: font_ghoul
     name: Font ghoul
+    lore: >-
+      It claimed sanctuary in the great font years ago. Sanctuary, it has
+      decided, does not extend to visitors.
     weight: 3
     prose: >-
       A ghoul crouches in the great stone font like a bird bath gone
@@ -26,11 +33,26 @@ encounters:
       sanctuary here for years. It does not extend it.
   - id: vigil_light
     name: Vigil light
+    lore: >-
+      A votive flame that outlived its brass boat. Each pew it passes,
+      something under the water sits up.
     weight: 2
+    traits: [flying, resist_low]
     prose: >-
       A votive flame floats up the flooded nave toward you, its little
       brass boat long since sunk. Each pew it passes, something under
       the water sits up.
+  - id: drowned_congregant
+    name: Drowned congregant
+    lore: >-
+      The congregation never left the pews when the nave flooded.
+      Attendance, in fact, has improved.
+    weight: 2
+    traits: [slow]
+    prose: >-
+      A pew shifts and one of the congregation stands up through the black
+      water, hymnal still in hand, and wades into the aisle to greet the
+      interruption.
 warden:
   name: Warden Bellrot
   prose: >-

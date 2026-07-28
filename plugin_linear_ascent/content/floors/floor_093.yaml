@@ -12,7 +12,11 @@ arrival: >-
 encounters:
   - id: lead_crowned
     name: Lead-crowned engineer
+    lore: >-
+      Interruptions to the great work are bled off like excess pressure.
+      Under the lead and the smoked glass, almost nothing gets through.
     weight: 3
+    traits: [armor_high]
     prose: >-
       One of the reactor's keepers turns from its console of levers,
       lead crown low over a face gone bright behind smoked glass.
@@ -20,7 +24,11 @@ encounters:
       pressure. It reaches for the valve that is you.
   - id: light_leak
     name: Light-leak
+    lore: >-
+      A thread of the heart's light that learned to move against the
+      draft, feeling for something to be inside.
     weight: 3
+    traits: [flying, resist_med]
     prose: >-
       A hairline crack in the gallery wall lets a thread of the
       heart's light through, and the thread has learned to move
@@ -28,12 +36,26 @@ encounters:
       lightning, feeling for something to be inside.
   - id: coil_demon
     name: Coil-fed demon
+    lore: >-
+      Jaw wired straight into the shielding, radiant with theft. It should
+      not be here either, which makes you a witness.
     weight: 2
+    traits: [resist_med]
     prose: >-
       A demon of the middle court has tapped the reactor's coils to
       feed on, jaw wired straight into the shielding, radiant with
       theft. It should not be here either, which makes you a
       witness.
+  - id: sluice_rat
+    name: Sluice rat
+    lore: >-
+      It nests in the reactor shielding, warm and half-bright, and defends
+      the warmth like a birthright.
+    weight: 2
+    prose: >-
+      A rat with a faint glow under its skin slips out of a shielding
+      seam, whiskers reading the gallery hum, and stands its ground on the
+      warm plate you need to cross.
 warden:
   name: Warden Halflight
   prose: >-

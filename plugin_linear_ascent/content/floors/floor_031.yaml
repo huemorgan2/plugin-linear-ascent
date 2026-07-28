@@ -12,25 +12,47 @@ arrival: >-
 encounters:
   - id: cave_broodling
     name: Cave broodling
+    lore: >-
+      It has a thousand siblings audible above, and every one of them
+      learned to drop before it learned to walk.
     weight: 3
+    traits: [fast]
     prose: >-
       A spider the size of a dog drops from nowhere on a thread you
       never saw, legs finding your shoulders like an old friend. Its
       thousand siblings are audible, faintly, above.
   - id: silk_husk
     name: Silk-wrapped husk
-    weight: 3
+    lore: >-
+      The struggling cocoon is the lure. The floor under it is not floor,
+      and it has all day.
+    weight: 2
+    traits: [slow]
     prose: >-
       A cocooned shape hangs at eye level across the path, and as your
       lamp touches it, it starts to struggle. That is the trap. The
       floor under it is not floor.
   - id: blind_moth
     name: Grave-moth
+    lore: >-
+      Harmless itself — but what hunts by the dust it sheds is not, and
+      the moth knows exactly whom to lead it to.
     weight: 2
+    traits: [flying]
     prose: >-
       A moth with a wingspan like a cloak blunders into your lamplight,
       eyeless and frantic. It is not dangerous. What follows it,
       hunting by the dust it sheds, is.
+  - id: threshold_beetle
+    name: Threshold beetle
+    lore: >-
+      It cleans the webs of whatever the spiders leave, and it has stopped
+      waiting for them to finish.
+    weight: 3
+    prose: >-
+      A beetle the size of a hound works along the base of the first webs,
+      jaws crunching through old husks, and swings its lamp-bright eyes up
+      at the fresher thing walking in.
 warden:
   name: Warden Duskspin
   prose: >-

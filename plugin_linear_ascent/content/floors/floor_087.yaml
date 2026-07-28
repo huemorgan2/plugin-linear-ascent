@@ -12,7 +12,11 @@ arrival: >-
 encounters:
   - id: gardener_imp
     name: Pruning-torch imp
+    lore: >-
+      Contamination of the beds is the one sin the head gardener flogs
+      for, and you are tracking in pollen from ninety floors of elsewhere.
     weight: 3
+    traits: [fast]
     prose: >-
       A gardener imp is grafting a fresh arm onto a young ram when
       you interrupt. Contamination of the beds is the one sin the
@@ -20,6 +24,9 @@ encounters:
       ninety floors of elsewhere.
   - id: unripe_engine
     name: Unripe engine
+    lore: >-
+      Green, unbalanced, and eager — a colt with a battering head, ruining
+      the rows to reach you.
     weight: 3
     prose: >-
       A ram not due for another season tears loose of its trellis at
@@ -28,12 +35,27 @@ encounters:
       reach you.
   - id: scarecrow_knight
     name: Garden scarecrow
+    lore: >-
+      The gardeners forgot to tell it the war it fell in is over. It comes
+      off the frame with the nails still in.
     weight: 2
+    traits: [armor_high, slow]
     prose: >-
       What keeps the carrion birds off the beds is a hellknight
       crucified on a trellis, still running. The gardeners forgot
       to tell it the war it fell in is over. It comes off the frame
       with the nails still in.
+  - id: carrion_kite
+    name: Carrion kite
+    lore: >-
+      What the scarecrow is for. It has been testing the scarecrow's
+      patience for years, and yours looks shorter.
+    weight: 2
+    traits: [flying]
+    prose: >-
+      A kite wheels down off the trellis-rows where the scarecrow cannot
+      reach, bone-meal dust in its primaries, and makes its approach run
+      at the softest thing in the garden.
 warden:
   name: Warden Rootram
   prose: >-

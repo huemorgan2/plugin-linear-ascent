@@ -12,6 +12,9 @@ arrival: >-
 encounters:
   - id: coin_sifter
     name: Kobold coin-sifter
+    lore: >-
+      It cannot read the scrip it hoards, but it knows exactly what a hand
+      reaching for the pile means.
     weight: 3
     prose: >-
       A kobold sits in a drift of worthless scrip, sorting it by color.
@@ -19,18 +22,47 @@ encounters:
       weighing-hammer.
   - id: tally_engine
     name: Haywire tally-engine
+    lore: >-
+      Brass casing, broken arithmetic. It has been counting to the same
+      wrong number for years.
     weight: 3
+    traits: [armor_low]
     prose: >-
       A brass engine unbolts itself from the counting bench, arms still
       flicking beads on a broken frame. It has found an error in the
       ledger, and the error is you.
   - id: debt_collector
     name: Red Orc debt-collector
+    lore: >-
+      The warband taxes everything that walks this floor. The plate is
+      company property; the enthusiasm is its own.
     weight: 2
+    traits: [armor_med]
     prose: >-
       An orc in a warframe painted with tally-marks blocks the aisle.
       The warband taxes this floor, it explains, and you have walked in
       carrying assets.
+  - id: ledger_wisp
+    name: Ledger wisp
+    lore: >-
+      The Counting Halls remember every unpaid ounce. Some of that memory
+      has come loose and drifts.
+    weight: 2
+    traits: [flying, resist_low]
+    prose: >-
+      A pale figure of dust and lamplight rises off the grand ledger — a
+      wisp in the shape of a column of figures, drifting toward you to be
+      balanced.
+  - id: scrip_rat
+    name: Scrip rat
+    lore: >-
+      It nests in worthless money and defends it like treasure, which on
+      this floor passes for wisdom.
+    weight: 2
+    prose: >-
+      A rat surfaces from a drift of colored scrip, cheeks packed with
+      paper, and decides the shortest way to its next nest runs straight
+      through you.
 warden:
   name: Warden Brassbone
   prose: >-

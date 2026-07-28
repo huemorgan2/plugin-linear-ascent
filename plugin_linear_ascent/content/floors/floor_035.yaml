@@ -12,25 +12,50 @@ arrival: >-
 encounters:
   - id: rack_spider
     name: Rack-weaver
+    lore: >-
+      It webbed a whole engine-rack into its nest and grew strange on the
+      warmth. Its eyes reflect your lamp in rows, like little status
+      lights.
     weight: 3
+    traits: [resist_low]
     prose: >-
       A spider has webbed an entire engine-rack into its nest and grown
       strange on the warmth. Its eyes reflect your lamp in rows, like
       little status lights.
   - id: signal_husk
     name: Signal husk
+    lore: >-
+      The engines have been using it. It walks with a purpose nothing dead
+      should have, and spells blur against whatever is being computed
+      inside.
     weight: 3
+    traits: [resist_med]
     prose: >-
       A husk hangs wired into the racks, and the engines have been
       using it — it walks toward you with a purpose nothing dead should
       have, trailing neat bundles of cable.
   - id: heat_troll
     name: Heat-drunk troll
+    lore: >-
+      It sleeps pressed to the warmest rack like a cat against a stove.
+      Your footstep landed wrong.
     weight: 2
+    traits: [slow]
     prose: >-
       A deep troll sleeps pressed against the warmest rack like a cat
       against a stove. Your footstep lands wrong. It is not asleep
       anymore.
+  - id: aisle_runner
+    name: Aisle-runner
+    lore: >-
+      Bred lean by generations of hunting the warm aisles. The racks light
+      up as it passes, row by row.
+    weight: 2
+    traits: [fast]
+    prose: >-
+      Down the long aisle every rack flickers in sequence, faster and
+      faster — and then the spider making them flicker is already at your
+      knee, all legs and momentum.
 warden:
   name: Warden Echobone
   prose: >-

@@ -12,13 +12,20 @@ arrival: >-
 encounters:
   - id: delving_troll
     name: Delving troll
+    lore: >-
+      You are standing on its spoil-heap. This is, by troll law, the whole
+      of the case against you.
     weight: 3
+    traits: [armor_low]
     prose: >-
       A deep troll comes up the gallery dragging a hand-sledge of
       rubble, knuckles first. You are standing on its spoil-heap.
       This is, by troll law, the whole of the case against you.
   - id: troll_whelp
     name: Troll whelp
+    lore: >-
+      It has just learned that soft things dig easier, and you are the
+      softest thing it has seen all week.
     weight: 3
     prose: >-
       A young troll the size of an ox practices its digging against
@@ -26,11 +33,25 @@ encounters:
       easier, and you are the softest thing it has seen all week.
   - id: gallery_spider
     name: Gallery stalker
+    lore: >-
+      It follows the troll digs the way gulls follow a plow, and it keeps
+      to the ceiling seam, patient as arithmetic.
     weight: 2
     prose: >-
       The spiders follow the troll digs the way gulls follow a plow.
       This one keeps to the ceiling seam above you, matching your
       pace, patient as arithmetic.
+  - id: rubble_borer
+    name: Rubble borer
+    lore: >-
+      A chitin engine the trolls' digging woke. It eats stone; everything
+      else it bores through on principle.
+    weight: 2
+    traits: [armor_high, slow]
+    prose: >-
+      The spoil-heap shifts and a borer surfaces — a segmented thing in
+      plates of polished basalt, mouthparts turning like a drill-head as
+      it corrects course toward you.
 warden:
   name: Warden Mossmaul
   prose: >-

@@ -12,13 +12,20 @@ arrival: >-
 encounters:
   - id: wall_sentinel
     name: Eye-wall sentinel
+    lore: >-
+      One of the Queen's own watch, half weather itself. It does not roar;
+      thunder does that for it, on cue.
     weight: 3
+    traits: [flying, resist_med]
     prose: >-
       A shape peels off the inside of the storm wall — a drake of
       cloud and charge, half weather itself, one of the Queen's own
       watch. It does not roar. Thunder does that for it, on cue.
   - id: lull_harpy
     name: Lull courtier
+    lore: >-
+      Her Majesty knows you are here. What remains to be decided is the
+      manner of your arrival — walking, or delivered.
     weight: 3
     prose: >-
       A harpy in the Queen's white lands ahead of you, formal as an
@@ -27,12 +34,27 @@ encounters:
       or delivered.
   - id: pressure_ghast
     name: Pressure-ghost
+    lore: >-
+      A climber the storm took, worn down to a pressure change with a
+      grudge. Your lungs notice it before your eyes do.
     weight: 2
+    traits: [resist_med]
     prose: >-
       In the Lull your ears keep popping, and one of the pops is a
       figure arriving beside you — a climber the storm took, worn
       down to a pressure change with a grudge. Your lungs notice it
       before your eyes do.
+  - id: rain_hound
+    name: Rain hound
+    lore: >-
+      The Queen kennels the squalls that behave. This one behaves right up
+      until the leash comes off.
+    weight: 2
+    traits: [fast]
+    prose: >-
+      A hound made of moving rain slips the eye-wall and crosses the Lull
+      at a sprint, its paws printing wet on dry stone, gone and arrived in
+      the same breath.
 warden:
   name: Warden Stillmark
   prose: >-

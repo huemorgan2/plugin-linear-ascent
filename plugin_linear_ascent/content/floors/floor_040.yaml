@@ -12,25 +12,58 @@ arrival: >-
 encounters:
   - id: throne_guard
     name: Throne-web guard
+    lore: >-
+      Bred big and patient, holding the throne's own anchor-lines. It lets
+      you see it coming — the lesson is the point.
     weight: 3
+    traits: [armor_low]
     prose: >-
       The Matriarch's guard are bred big and patient, and they hold
       the anchor-lines of the throne itself. This one lets you see it
       coming. The lesson is the point.
   - id: silk_knight
     name: Wrapped knight
+    lore: >-
+      A climber in good plate got this far once. The armor still works
+      fine; the man inside works for Vyx now.
     weight: 3
+    traits: [armor_med]
     prose: >-
       A climber in good plate got this far once, and Vyx kept him —
       webbed upright, armed, walking the perimeter on her threads like
       a puppet on patrol. The armor still works fine.
   - id: consort_spider
     name: Pale consort
+    lore: >-
+      It has outlived every rival by being exactly this careful, and it is
+      faster than careful looks.
     weight: 2
+    traits: [fast]
     prose: >-
       A slender white spider descends with courtly slowness, one of
       the Matriarch's consorts. It has outlived all its rivals by
       being exactly this careful.
+  - id: thread_page
+    name: Thread-page
+    lore: >-
+      It runs messages along the throne-lines. What it reports, the whole
+      chamber hears.
+    weight: 3
+    prose: >-
+      A small spider drops to the floor ahead of you, taps out something
+      quick on a taut anchor-line, and squares up — the message is sent,
+      and the messenger has orders too.
+  - id: tribute_husk
+    name: Tribute husk
+    lore: >-
+      The Deep sends its rent up to the throne walking. Interfering with
+      the post is taken poorly.
+    weight: 2
+    traits: [slow]
+    prose: >-
+      A husk climbs the great web hand over hand with a wrapped bundle
+      roped to its back, tribute-bound for the dark overhead — and turns
+      its dry face toward the obstacle you have just become.
 warden:
   name: Matriarch Vyx
   prose: >-

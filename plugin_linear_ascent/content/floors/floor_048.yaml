@@ -12,13 +12,20 @@ arrival: >-
 encounters:
   - id: char_salamander
     name: Charcoal salamander
+    lore: >-
+      It hunts by holding still against the trunks and being, briefly, the
+      wrong tree.
     weight: 3
+    traits: [resist_low]
     prose: >-
       A salamander has gone black to match the forest, invisible until
       it opens its mouth. It hunts by holding still against the trunks
       and being, briefly, the wrong tree.
   - id: rooter_ogre
     name: Rooter ogre
+    lore: >-
+      It rips stumps with no rope and no wedge, only opinion. The opinion
+      transfers.
     weight: 3
     prose: >-
       An ogre works the forest floor, ripping stumps for the charcoal
@@ -26,11 +33,26 @@ encounters:
       the opinion to you.
   - id: standing_dead
     name: Hollow trunk
+    lore: >-
+      It has stood in the row long enough to fool the birds. Burned wood
+      does not hurry, and does not bruise.
     weight: 2
+    traits: [slow, armor_low]
     prose: >-
       One of the burned trunks is not a trunk. It has stood in the row
       long enough to fool the birds, waiting with the patience of
       wood, and it steps out of line behind you.
+  - id: soot_owl
+    name: Soot owl
+    lore: >-
+      It nests in the hollow trunks and hunts the organ-note wind. Silent,
+      except for the forest holding its breath.
+    weight: 2
+    traits: [flying]
+    prose: >-
+      The low pipe-note of the wind cuts off — an owl the color of burned
+      paper is already over you, wings spread wider than the trunks it
+      slipped between.
 warden:
   name: Warden Charspine
   prose: >-

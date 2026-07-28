@@ -12,26 +12,48 @@ arrival: >-
 encounters:
   - id: cloudline_harpy
     name: Cloudline harpy
+    lore: >-
+      The insults in fluent trade-tongue are a range-finding exercise. The
+      stoop comes on the punchline.
     weight: 3
+    traits: [flying]
     prose: >-
       A harpy rides the updraft along the cliff face, keeping pace
       with you at arm's length, insulting your footwork in fluent
       trade-tongue. The insults are a range-finding exercise.
   - id: young_drake
     name: Squall drake
+    lore: >-
+      It has not learned to aim its lightning yet. It does not especially
+      need to.
     weight: 3
+    traits: [flying, resist_low]
     prose: >-
       A young storm drake breaks out of the cloud deck below you,
       static crawling on its wing edges. It has not learned to aim
       its lightning yet. It does not especially need to.
   - id: rigger_ghast
     name: Fallen rigger
+    lore: >-
+      It clips its frayed line to your belt with terrible courtesy. Its
+      ship is down there somewhere, and it means to introduce you.
     weight: 2
+    traits: [slow]
     prose: >-
       A sky-ship crewman in a rotted harness climbs over the trail's
       edge, dragging a length of frayed safety line. It clips the
       line to your belt with terrible courtesy. Its ship is down
       there somewhere.
+  - id: cliff_goat
+    name: Cliff goat
+    lore: >-
+      It holds the trail ledges against all comers, and the drop has never
+      once been its problem.
+    weight: 2
+    prose: >-
+      A goat with storm-tattered wool rounds the cliff corner at a trot,
+      sees you on its ledge, and lowers a boss of horn worn smooth by
+      better arguments than yours.
 warden:
   name: Warden Thermal
   prose: >-

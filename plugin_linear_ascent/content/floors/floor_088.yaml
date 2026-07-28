@@ -12,7 +12,12 @@ arrival: >-
 encounters:
   - id: furnace_priest
     name: Furnace-priest
+    lore: >-
+      It has preached your arrival for years and would hate to waste the
+      congregation. The litany turns spellwork back like heat off a
+      firebox.
     weight: 3
+    traits: [resist_med]
     prose: >-
       A priest of the down-going faith turns from its altar, censer
       streaming coal-smoke, firebox heart glowing through the
@@ -20,7 +25,11 @@ encounters:
       would hate to waste the congregation.
   - id: choir_imp
     name: Choir imp
+    lore: >-
+      Heresy duty is the only part of the liturgy they enjoy, and you are
+      unmistakably not in the hymnal.
     weight: 3
+    traits: [fast]
     prose: >-
       The choir loft empties as one — a dozen imps in singed
       surplices, still holding the note. Heresy duty is the only
@@ -28,12 +37,27 @@ encounters:
       in the hymnal.
   - id: penitent_knight
     name: Penitent hellknight
+    lore: >-
+      Chained to the pew by its own request. Absolution, in the March, is
+      worked off in single combat.
     weight: 2
+    traits: [armor_med]
     prose: >-
       A hellknight kneels in the nave doing penance for some sin no
       one will name, chained to the pew by its own request. It looks
       up at you with terrible hope. Absolution, in the March, is
       worked off in single combat.
+  - id: smoke_haunt
+    name: Censer haunt
+    lore: >-
+      Enough coal-smoke has been swung at the King's name that some of it
+      stayed to listen.
+    weight: 2
+    traits: [flying, resist_low]
+    prose: >-
+      The censer-smoke over the nave stops rising and starts deciding — a
+      haunt of grey coils drifting down the aisle toward you, keeping
+      liturgical time.
 warden:
   name: Warden Vespergrim
   prose: >-

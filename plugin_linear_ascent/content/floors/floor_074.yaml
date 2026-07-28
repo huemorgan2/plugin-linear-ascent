@@ -12,14 +12,22 @@ arrival: >-
 encounters:
   - id: glade_dancers
     name: The dancers
+    lore: >-
+      The round has a gap where someone used to be, and every grey face
+      turns to you with the same polite, starving expectation.
     weight: 3
+    traits: [resist_med]
     prose: >-
       The wedding glade needs a partner tonight — a gap in the round
       where someone used to be. The dancers stop. Every grey face
       turns to you with the same polite, starving expectation.
   - id: skirmish_shade
     name: Skirmish remnant
+    lore: >-
+      After all these years it has noticed the enemy stopped coming. It is
+      relieved beyond words to have somebody real.
     weight: 3
+    traits: [resist_low]
     prose: >-
       In the battle glade one soldier has noticed, after all these
       years, that the enemy stopped coming. It walks out of the
@@ -27,12 +35,27 @@ encounters:
       words to have somebody real.
   - id: glade_hound
     name: Glade-shy hound
+    lore: >-
+      The hounds will not enter the glades, which tells you something. It
+      drives travelers in instead, patient as a sheepdog.
     weight: 2
+    traits: [fast]
     prose: >-
       The gloom hounds will not enter the glades, which tells you
       something. This one has learned to drive travelers into them
       instead, and it works you toward the wedding light with the
       patience of a sheepdog.
+  - id: glade_moth
+    name: Glade moth
+    lore: >-
+      It feeds on the grey light of the replays, and it resents every
+      shadow that dims the show.
+    weight: 2
+    traits: [flying]
+    prose: >-
+      A moth the grey of the wedding light lifts off the glade's edge and
+      makes for you in slow spirals, wings printed with a pattern that is
+      almost faces.
 warden:
   name: Warden Encore
   prose: >-

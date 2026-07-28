@@ -13,14 +13,22 @@ arrival: >-
 encounters:
   - id: shroud_harpy
     name: Shroud-runner harpy
+    lore: >-
+      She runs the rigging without touching wing to air, herding you
+      toward the net stretch where the clan waits.
     weight: 3
+    traits: [fast]
     prose: >-
       A harpy runs the rigging between masts without touching wing
       to air, herding you gently off the path. Somewhere ahead is
       the net stretch, and her whole clan is waiting at it.
   - id: mast_drake
     name: Crowsnest drake
+    lore: >-
+      Grown into the tallest crow's nest, spars through the wing membrane.
+      It rings every stay on the way down.
     weight: 3
+    traits: [flying, resist_low]
     prose: >-
       A storm drake has taken the tallest crow's nest as a roost and
       grown into it — spars through the wing membrane, at home. It
@@ -28,11 +36,26 @@ encounters:
       way.
   - id: rigging_ghast
     name: Tangled topman
+    lore: >-
+      A topman hanging where his line caught him. The swinging stops
+      against the wind, and the line starts paying out.
     weight: 2
+    traits: [slow]
     prose: >-
       A topman hangs in the shrouds where his line caught him,
       swinging all these years. As you pass beneath, the swinging
       stops — against the wind — and the line starts paying out.
+  - id: shroud_crab
+    name: Shroud crab
+    lore: >-
+      It climbed up from some hold with the fleet and never left the
+      rigging. The shell has out-lasted three hulls.
+    weight: 2
+    traits: [armor_med, slow]
+    prose: >-
+      A crab the size of a capstan picks its way down a shroud on point-
+      tipped legs, shell barnacled with brass, and drops the last fathom
+      onto the path with a sound like a dropped anchor.
 warden:
   name: Warden Mastwrack
   prose: >-

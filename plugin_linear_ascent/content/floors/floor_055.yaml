@@ -12,25 +12,46 @@ arrival: >-
 encounters:
   - id: steading_giant
     name: Freeholder giant
+    lore: >-
+      The near field is posted and the post is the hammer. Freeholders
+      this size do not lose arguments on their own land — they last them
+      out.
     weight: 3
+    traits: [bulwark, slow]
     prose: >-
       A frost giant straightens up from mending a fence of whole
       trees, hammer dangling. You are on the near field. The near
       field is posted. The post is the hammer.
   - id: giant_hound
     name: Steading hound
+    lore: >-
+      Bred to giant scale, it clears the pine fence without touching it.
+      It is not angry. It is on the clock.
     weight: 3
+    traits: [fast]
     prose: >-
       The giants breed their hounds to giant scale, and this one
       clears the pine fence without touching it. It is not angry.
       It is doing its job, at the size it was bred to do it.
   - id: hayrick_troll
     name: Rick-thief troll
+    lore: >-
+      It was stealing hay until you arrived and became the better idea.
     weight: 2
     prose: >-
       An ice troll is stealing hay by the armload, pursued by nobody
       yet. Your arrival gives it a better idea than hay, and it drops
       the armload where it stands.
+  - id: steading_bull
+    name: Steading bull
+    lore: >-
+      Cattle bred for owners four men tall. It does not recognize fences,
+      seasons, or you.
+    weight: 2
+    prose: >-
+      A bull the size of a barn door tears free of the near-field herd
+      with a fence rail still roped to one horn, and commits to the
+      argument at a canter.
 warden:
   name: Warden Fencewright
   prose: >-

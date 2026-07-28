@@ -12,7 +12,11 @@ arrival: >-
 encounters:
   - id: way_herald
     name: Herald of precedence
+    lore: >-
+      Processions require rank, and rank requires patents, and you have
+      neither — only, it allows, a certain momentum.
     weight: 3
+    traits: [resist_med]
     prose: >-
       A court herald plants its staff in your path with a crack like
       ice. Processions require rank, and rank requires patents, and
@@ -20,7 +24,11 @@ encounters:
       calls the challenge in High Court speech, then translates.
   - id: banner_wraith
     name: Banner-wraith
+    lore: >-
+      The flag of a dead realm flying itself, looking for hands to carry
+      it right side up. Yours are occupied. It intends to free them.
     weight: 3
+    traits: [flying, resist_med]
     prose: >-
       One of the inverted banners unhooks itself and comes down the
       avenue — the flag of a dead realm flying itself, looking for
@@ -28,12 +36,28 @@ encounters:
       intends to free them.
   - id: procession_guard
     name: Kingsway guard
+    lore: >-
+      They have drilled the arrest of an unauthorized walker every day for
+      a thousand years. You can tell — and the plate has drilled with
+      them.
     weight: 2
+    traits: [armor_high]
     prose: >-
       Two archdemons of the road-watch descend from their alcoves in
       step, glaives crossing with ceremonial precision. They have
       drilled the arrest of an unauthorized walker every day for a
       thousand years. You can tell.
+  - id: kingsway_hound
+    name: Kingsway hound
+    lore: >-
+      The road-watch runs hounds down the avenue between processions.
+      Unauthorized walkers are their whole diet.
+    weight: 3
+    traits: [fast]
+    prose: >-
+      From an alcove a hound in road-watch livery takes the avenue's black
+      glass at a sprint that never slips, and its line ends precisely
+      where you are standing.
 warden:
   name: Warden Waymarshal
   prose: >-

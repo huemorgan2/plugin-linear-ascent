@@ -12,13 +12,20 @@ arrival: >-
 encounters:
   - id: rime_stag
     name: Glass-antlered stag
+    lore: >-
+      Its antlers are solid ice, grown that way, points refreshed nightly.
+      It has stopped running from things — the antlers are why.
     weight: 3
+    traits: [armor_low]
     prose: >-
       A stag steps through the ringing trees with antlers of solid
       ice, grown that way, points refreshed nightly by the cold. It
       has stopped running from things. The antlers are why.
   - id: forest_troll
     name: Hammer-logger troll
+    lore: >-
+      It logs the frozen pines with a maul and gang-rules it ate. Your
+      footsteps ring the forest like an alarm.
     weight: 3
     prose: >-
       An ice troll works a stand of frozen pines with a maul, filling
@@ -26,11 +33,27 @@ encounters:
       like an alarm, and the maul comes up.
   - id: bell_wolf
     name: Bell-wise wolf
+    lore: >-
+      It learned to walk without ringing the trees, and it made the wolf
+      soft-footed beyond nature. The first you hear is its weight
+      arriving.
     weight: 2
+    traits: [fast]
     prose: >-
       The wolves here have learned to walk without ringing the trees,
       and it has made them soft-footed beyond nature. The first you
       hear of this one is its weight arriving.
+  - id: chime_sprite
+    name: Chime sprite
+    lore: >-
+      When the forest rings, something in the ringing answers. It prefers
+      the quiet, and enforces it.
+    weight: 2
+    traits: [flying, resist_low]
+    prose: >-
+      The bells of the iced needles gather into one clear tone, and the
+      tone comes down the row of pines toward you — a small bright blur
+      that the trees ring for as it passes.
 warden:
   name: Warden Rimehide
   prose: >-

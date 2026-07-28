@@ -12,7 +12,11 @@ arrival: >-
 encounters:
   - id: vault_curator
     name: The curator
+    lore: >-
+      It knows the provenance of everything in the vaults, including the
+      piece the empty plinth is waiting for.
     weight: 3
+    traits: [resist_med]
     prose: >-
       A demon in archivist's grey moves down the gallery straightening
       labels. It knows the provenance of everything in the vaults,
@@ -20,7 +24,11 @@ encounters:
       empty plinth is waiting for.
   - id: exhibit_awake
     name: Exhibit, awake
+    lore: >-
+      A realm's champion, taken whole, armor and all. Its terrible
+      question: which side of a plinth are you on?
     weight: 3
+    traits: [armor_high]
     prose: >-
       One of the exhibits — a realm's champion, taken whole, armor
       and all — has been on its plinth long enough to work one foot
@@ -28,11 +36,26 @@ encounters:
       question: which side of a plinth are you on?
   - id: appraiser_imp
     name: Court appraiser
+    lore: >-
+      Your gear disappoints it. Your defiance, it says, brightening, will
+      mount beautifully.
     weight: 2
+    traits: [fast]
     prose: >-
       An imp with a jeweler's glass screwed into each eye circles
       you twice, muttering valuations. Your gear disappoints it.
       Your defiance, it says, brightening, will mount beautifully.
+  - id: case_moth
+    name: Case moth
+    lore: >-
+      It eats the exhibits — tapestry first, provenance second. The
+      curator has posted a bounty in three scripts.
+    weight: 2
+    traits: [flying]
+    prose: >-
+      A moth the grey of old banners lifts off a drowned realm's colors
+      with a mouthful of history, and makes for the freshest fabric in the
+      vaults, which is what you are wearing.
 warden:
   name: Warden Plinthguard
   prose: >-

@@ -12,14 +12,23 @@ arrival: >-
 encounters:
   - id: pasture_mare
     name: Grazing nightmare
+    lore: >-
+      Whatever it dreams while it grazes, you have just walked into it,
+      and it objects.
     weight: 3
+    traits: [resist_low]
     prose: >-
       A nightmare lifts its head from the black grass and considers
       you with eyes like banked coals. Whatever it dreams while it
       grazes, you have just walked into it, and it objects.
   - id: herd_stallion
     name: Herd stallion
+    lore: >-
+      A tower of black muscle and slow smoke. It puts itself between you
+      and the herd and hopes you will insist — you will not wear it down
+      before dark.
     weight: 3
+    traits: [bulwark]
     prose: >-
       The stallion comes over at a walk, which the herd-boys will
       tell you is the bad sign — a tower of black muscle and slow
@@ -27,11 +36,26 @@ encounters:
       will insist.
   - id: meadow_hound
     name: Pasture hound
+    lore: >-
+      Chosen for patience. It watched you cross half a mile of meadow
+      without moving. Now it moves.
     weight: 2
+    traits: [fast]
     prose: >-
       The hounds that mind the herd are chosen for patience, and
       this one has been watching you cross the meadow for half a
       mile without once moving. Now it moves.
+  - id: black_crake
+    name: Black crake
+    lore: >-
+      It nests in the whispering grass and screams the herd's alarms. The
+      herd-boys hate it more than the herd.
+    weight: 2
+    traits: [flying]
+    prose: >-
+      The black grass detonates a wingspan from your boot — a crake going
+      up in a clatter of dark feathers, circling back at head height to
+      scream you to the whole meadow.
 warden:
   name: Warden Nightbridle
   prose: >-

@@ -12,6 +12,9 @@ arrival: >-
 encounters:
   - id: bridge_weaver
     name: Bridge-weaver
+    lore: >-
+      It is not repairing the bridge you are standing on. It is adjusting
+      the load rating.
     weight: 3
     prose: >-
       A spider re-strings a sagging silk bridge ahead of you, working
@@ -19,18 +22,37 @@ encounters:
       repairing the bridge. It is adjusting the load rating.
   - id: city_husk
     name: Citizen husk
+    lore: >-
+      Arranged at a silk window with care, one arm raised. As you pass,
+      the arm finishes the gesture.
     weight: 3
+    traits: [slow]
     prose: >-
       A husk sits at a silk window in a silk chair, arranged with
       care, one arm raised in something like a wave. As you pass, the
       arm finishes the gesture.
   - id: chasm_troll
     name: Chasm troll
+    lore: >-
+      Too heavy for any street, it climbs the city's underside, tearing
+      handholds in other people's architecture.
     weight: 2
+    traits: [armor_low]
     prose: >-
       A deep troll climbs the city's underside, too heavy for any
       street, tearing handholds in other people's architecture. It
       surfaces through the floor ahead of you, apologizing to no one.
+  - id: silk_drifter
+    name: Silk drifter
+    lore: >-
+      It balloons between the silk towers on threads of its own casting,
+      and it boards passing climbers like cargo.
+    weight: 2
+    traits: [flying]
+    prose: >-
+      Above the swaying street a small shape casts a thread to the wind
+      that does not blow, and rides it down toward your shoulders with the
+      confidence of long practice.
 warden:
   name: Warden Skeinback
   prose: >-

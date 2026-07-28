@@ -12,7 +12,11 @@ arrival: >-
 encounters:
   - id: marshal_knight
     name: Marshal of the March
+    lore: >-
+      Presenting the Herald with your head might be worth the flogging. It
+      has done the arithmetic, visibly, and closed the ledger.
     weight: 3
+    traits: [armor_high]
     prose: >-
       A Marshal in campaign plate leaves the reviewing line without
       leave — an ambitious breach. Presenting the Herald with your
@@ -20,7 +24,11 @@ encounters:
       visibly, and closed the ledger.
   - id: herald_imp
     name: The Herald's secretary
+    lore: >-
+      Fat and precise on state secrets, carrying a pre-signed writ of
+      execution. Spells blur against what it knows and will not say.
     weight: 3
+    traits: [resist_med]
     prose: >-
       Malgrim's personal secretary is an imp grown fat and precise
       on state secrets. It meets you with a writ of execution,
@@ -28,12 +36,37 @@ encounters:
       dagger, and the dagger like a pen.
   - id: gate_hulk
     name: Gate-tender hulk
+    lore: >-
+      One duty and no discretion — nothing passes while the Herald holds
+      court. It has the patience and the build of architecture.
     weight: 2
+    traits: [bulwark, slow]
     prose: >-
       The hulk that tends the great gate has one duty and no
       discretion — nothing passes while the Herald holds court. It
       plants itself with the finality of architecture and waits for
       you to test the point.
+  - id: muster_hound
+    name: Muster hound
+    lore: >-
+      It runs the parade ground's edge at every muster. Dismissing the
+      guard did not dismiss the dog.
+    weight: 2
+    traits: [fast]
+    prose: >-
+      A hound in a studded muster-collar breaks from the reviewing line's
+      shadow, taking the parade ground in a flat arc that ends, by old
+      training, at the throat of whatever stands where you are standing.
+  - id: drummer_imp
+    name: Drummer imp
+    lore: >-
+      The muster-beat must be kept while the gate stands. Nobody told it
+      the muster was over.
+    weight: 2
+    prose: >-
+      One imp on the empty parade ground keeps the muster-beat on a drum
+      of gate-iron, eyes shut, and when your footfall breaks its rhythm it
+      opens them on you like a grievance.
 warden:
   name: Malgrim, Herald of the King
   prose: >-

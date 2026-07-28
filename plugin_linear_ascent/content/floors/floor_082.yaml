@@ -12,26 +12,49 @@ arrival: >-
 encounters:
   - id: chain_imp_gang
     name: Chain-gang imp
+    lore: >-
+      The foreman has spotted a way to lighten the load — you look sturdy,
+      and the harness is adjustable.
     weight: 3
+    traits: [fast]
     prose: >-
       A gang of imps hauls a new-forged link toward the lift-heads,
       and the foreman imp has spotted a way to lighten the load —
       you look sturdy, and the harness is adjustable.
   - id: quench_knight
     name: Quench-tempered knight
+    lore: >-
+      Fresh from tempering, issued nothing yet but the need to test
+      itself.
     weight: 3
+    traits: [armor_med]
     prose: >-
       A hellknight climbs out of the quench-pit trailing black oil,
       armor still ticking with heat. It is fresh from tempering and
       has been issued nothing yet but the need to test itself.
   - id: loose_chain
     name: Living chain
-    weight: 2
+    lore: >-
+      The forge puts a little of the fire into everything it makes. This
+      one got a temper.
+    weight: 1
+    traits: [slow]
     prose: >-
       A length of chain slides off its overhead run and pools on the
       yard floor, then rears like something with a spine. The forge
       puts a little of the fire into everything it makes, and this
       one got a temper.
+  - id: pit_eel
+    name: Quench-pit eel
+    lore: >-
+      It swims the black oil between temperings and eats what the quench
+      rejects. Spellwork slicks off it with the oil.
+    weight: 2
+    traits: [resist_low]
+    prose: >-
+      The quench-pit's skin of oil parts without a sound and an eel pours
+      itself over the lip, black on black, tasting the yard-floor heat for
+      the shape of you.
 warden:
   name: Warden Anchorwrath
   prose: >-

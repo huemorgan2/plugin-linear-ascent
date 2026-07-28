@@ -61,5 +61,16 @@ the damage-type kill hooks only).
   one extra navigation before asserting state. And the ▣ fold marker
   exists now (`render.py` + `scene.to_text`): if the creation or
   post-kill scenes run long, fold, don't trim.
+  008 retro (STALE-VENDOR TRAP — this one bit): the game TURN runs in
+  worldd's vendored engine; Luna's editable plugin install only
+  renders. Run `worldd/tools/vendor_game.sh` + restart local worldd
+  BEFORE the dojo run, or you browser-test stale logic while unit
+  tests lie green (008's first floor-15 fight had art but no
+  lore/traits for exactly this reason). Kill FX + migration both live
+  engine-side — same trap. Dojo mechanics that carry over: the
+  teleport helper (`plans/.../008-.../dojo/teleport.py`) drops the
+  reference player on any floor as any class — use it to reach each
+  class's kill quickly; energy is `energy_val`/`energy_ts` (a regen
+  pair, not a counter) when a refill is needed.
 
 Exit: all green, published, worldd synced, `execution_summary.md`.

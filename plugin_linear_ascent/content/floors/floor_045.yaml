@@ -12,25 +12,48 @@ arrival: >-
 encounters:
   - id: step_warden_ogre
     name: Terrace ogre
-    weight: 3
+    lore: >-
+      The terrace is its charge and the kiln is its clock. It does not
+      tire, it does not move fast, and it does not need to — the fire does
+      the waiting.
+    weight: 1
+    traits: [bulwark, slow]
     prose: >-
       The ogre who keeps this terrace comes to the edge of its kiln
       light, a rake of welded rebar over one shoulder. It points at
       you, then at the fire, and lets you do the arithmetic.
   - id: kiln_salamander
     name: Kiln salamander
+    lore: >-
+      Somebody's prize mouser, collared in copper, sleek with heat, and
+      off its rope. Spells break on it like spray on a kiln door.
     weight: 3
+    traits: [resist_med]
     prose: >-
       The ogres keep salamanders the way farmers keep barn cats, and
       this one is somebody's prize mouser — collared in copper, sleek
       with heat, and off its rope.
   - id: firebreak_vulture
     name: Kiln vulture
+    lore: >-
+      It is working out why the fire died and whether the answer is
+      edible. Its head keeps you in view all the way around.
     weight: 2
+    traits: [flying]
     prose: >-
       A cinder vulture squats on a cold kiln, working out why the fire
       died and whether the answer is edible. It turns its scorched
       head all the way around to keep you in view.
+  - id: kiln_goat
+    name: Kiln goat
+    lore: >-
+      The clans keep goats on the terraces for milk and temper. Mostly
+      temper.
+    weight: 4
+    prose: >-
+      A goat with singed horns and a chewed copper collar takes the
+      terrace steps in two jumps and lowers its head — the clans breed
+      them mean, and this one is off the tether.
 warden:
   name: Warden Kilnfist
   prose: >-

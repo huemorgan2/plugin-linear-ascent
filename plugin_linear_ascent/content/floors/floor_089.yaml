@@ -12,7 +12,11 @@ arrival: >-
 encounters:
   - id: honor_knight
     name: Honor guard knight
+    lore: >-
+      Nine climbers' names recited as introduction and warning. The
+      speech-runed plate has turned everything they tried.
     weight: 3
+    traits: [armor_high]
     prose: >-
       A hellknight of the Herald's own guard steps into the road,
       armor chased in speech-runes that mutter as it moves. It has
@@ -20,6 +24,9 @@ encounters:
       at you, as introduction and as warning.
   - id: banner_imp
     name: Banner-bearer imp
+    lore: >-
+      It refuses, absolutely, to set the banner down — the banner is the
+      post.
     weight: 3
     prose: >-
       An imp staggers under a procession banner three times its
@@ -28,12 +35,27 @@ encounters:
       a sail in a gale.
   - id: voice_hulk
     name: Proclamation hulk
+    lore: >-
+      The proclamation is your death notice, read in advance, at a volume
+      that loosens rivets.
     weight: 2
+    traits: [slow]
     prose: >-
       A welded hulk built as a walking loudspeaker wheels onto the
       road and opens every horn on its chassis. The proclamation is
       your death notice, read in advance, at a volume that loosens
       rivets.
+  - id: horn_bat
+    name: Horn bat
+    lore: >-
+      It roosts in the proclamation horns between readings. The readings
+      have made it deaf and fearless.
+    weight: 2
+    traits: [flying]
+    prose: >-
+      When the horns fall silent a bat spills out of the largest bell-
+      mouth, flying by memory instead of ear, and its memory says the road
+      belongs to the horns.
 warden:
   name: Warden Trumpetsteel
   prose: >-

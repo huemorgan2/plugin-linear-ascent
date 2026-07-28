@@ -12,25 +12,47 @@ arrival: >-
 encounters:
   - id: pale_stag
     name: Pale stag
+    lore: >-
+      The elves bred it to carry the forest light through the deep woods.
+      It remembers the weight of it, and hates you fresh.
     weight: 3
+    traits: [fast]
     prose: >-
       A stag comes through the dead lights, white as root-flesh, antlers
       hung with dark lamp-vines. The elves bred them to carry the forest
       light. It remembers the weight of it, and hates you fresh.
   - id: glade_wight
     name: Glade-wight
+    lore: >-
+      She stayed when the lights died, and the garden kept her. Spells
+      slide off what is left like rain off wax leaves.
     weight: 3
+    traits: [resist_med]
     prose: >-
       An elf did not leave when the lights died. What is left of her
       tends a dark lamp-tree, and turns at your step with pruning-hook
       raised — the garden does not take visitors now.
   - id: lamp_ghoul
     name: Lamp-eater
+    lore: >-
+      It cracks the dead bio-lamps for the marrow of light inside, and its
+      belly glows faint through the skin.
     weight: 2
     prose: >-
       A ghoul has learned to crack the dead bio-lamps for the marrow of
       light left in them, and its belly glows faint through the skin. It
       drops the husk it was working on.
+  - id: lamp_moth
+    name: Lamp moth
+    lore: >-
+      When the bio-lights went dark the moths did not leave. They just got
+      hungrier about what light remains.
+    weight: 2
+    traits: [flying]
+    prose: >-
+      Wings the grey of dead leaves open on a bough above you — a moth
+      grown huge on lamp-marrow, drawn off its dark tree by the smallest
+      light you carry.
 warden:
   name: Warden Palegleam
   prose: >-

@@ -12,25 +12,47 @@ arrival: >-
 encounters:
   - id: spray_wolf
     name: Glass-coat wolf
+    lore: >-
+      Its coat of frozen coolant is white armor. It shatters its own
+      casing to charge, and arrives in a burst of glass.
     weight: 3
+    traits: [armor_med]
     prose: >-
       A wolf that hunts the spray-line wears a coat of frozen
       coolant like white armor. It shatters its own casing to charge,
       and arrives in a burst of glass.
   - id: falls_troll
     name: Falls troll
-    weight: 3
+    lore: >-
+      It stands under the cataract for pleasure, growing a second hide.
+      The silhouette under-promises.
+    weight: 2
+    traits: [bulwark, slow]
     prose: >-
       An ice troll stands under the cataract for pleasure, growing a
       second hide. It steps out of the white curtain at you, steaming
       cold, twice the size the silhouette promised.
   - id: frozen_pilgrim
     name: White pilgrim
-    weight: 2
+    lore: >-
+      People come to see the Falls, and some stand too long in the spray.
+      This one is still patient under a finger of glass.
+    weight: 1
+    traits: [slow, resist_low]
     prose: >-
       People come to see the Falls, and some stand too long in the
       spray. One of the white statues along the viewing path turns
       its head as you pass, patient under a finger of glass.
+  - id: ice_marten
+    name: Ice marten
+    lore: >-
+      It dens in the dry pocket behind the cataract and robs the viewing
+      path at its leisure.
+    weight: 2
+    prose: >-
+      A marten flows out from behind the white curtain, coat beaded with
+      frozen spray, and cuts across the path with its eyes already on the
+      food in your pack.
 warden:
   name: Warden Whitefall
   prose: >-

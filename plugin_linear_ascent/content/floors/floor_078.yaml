@@ -12,13 +12,19 @@ arrival: >-
 encounters:
   - id: snare_shade
     name: Snare-setter
+    lore: >-
+      It weaves shadow through wire with a craftsman's absorption. You are
+      the test of the workmanship.
     weight: 3
+    traits: [resist_med]
     prose: >-
       A shade works a new snare into the path ahead, weaving shadow
       through wire with a craftsman's absorption. It does not stop
       when it sees you. You are the test of the workmanship.
   - id: caught_thing
     name: The caught thing
+    lore: >-
+      Cutting it down is mercy. Mercy, out here, has a survival rate.
     weight: 3
     prose: >-
       Something big hangs in a canopy snare, wrapped and furious,
@@ -26,11 +32,26 @@ encounters:
       here, has a survival rate.
   - id: funnel_hound
     name: Funnel hound
+    lore: >-
+      Never closing, only steering. Ahead the trees narrow. You are being
+      delivered, on schedule.
     weight: 2
+    traits: [fast]
     prose: >-
       A gloom hound appears behind you on the lane, then another on
       the left, then the right — never closing, only steering. Ahead
       the trees narrow. You are being delivered, on schedule.
+  - id: wire_beetle
+    name: Wire beetle
+    lore: >-
+      It eats the Huntsman's snare-wire and armors itself with the
+      leavings. The snare-setters bill it as an occupational hazard.
+    weight: 2
+    traits: [armor_high, slow]
+    prose: >-
+      A beetle in a shell of wound wire works along a dressed lane,
+      stripping a snare with its jaws, and rounds on you with the loyalty
+      of a thing defending its larder.
 warden:
   name: Warden Springtrap
   prose: >-

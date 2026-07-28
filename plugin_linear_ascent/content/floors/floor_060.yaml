@@ -12,13 +12,19 @@ arrival: >-
 encounters:
   - id: hall_thane
     name: Hall-thane
+    lore: >-
+      It asked the room's leave to answer the horn, formally, and the room
+      granted it like an avalanche starting.
     weight: 3
+    traits: [armor_med]
     prose: >-
       A thane of the Jarl's table stands from the bench, formally,
       and asks the room's leave to answer the horn. The room grants
       it with a sound like an avalanche starting.
   - id: mead_troll
     name: Mead-bearer troll
+    lore: >-
+      The barrel it set down was for you. It is not, now.
     weight: 3
     prose: >-
       The troll that carries the hall's mead barrels has been given
@@ -27,11 +33,26 @@ encounters:
       now.
   - id: hearth_wolf
     name: Hearth-wolf
+    lore: >-
+      The Jarl's own, with first claim on challengers by right of
+      seniority. No thane disputes it.
     weight: 2
+    traits: [fast]
     prose: >-
       The Jarl's own wolf uncurls from beside the cold fire, white
       as the hall and nearly as large. It has first claim on
       challengers by right of seniority, and no thane disputes it.
+  - id: ice_skald
+    name: Ice skald
+    lore: >-
+      It sings the hall's cold fire brighter, and verses this old shrug
+      off newer magic.
+    weight: 2
+    traits: [resist_med]
+    prose: >-
+      A skald rises from the bench nearest the cold fire, beard hung with
+      hoarfrost bells, and begins the verse that turns the fire-trench
+      white — your name is already in the second line.
 warden:
   name: Jarl Hrimgar
   prose: >-

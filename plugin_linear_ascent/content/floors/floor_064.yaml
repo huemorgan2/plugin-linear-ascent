@@ -12,6 +12,9 @@ arrival: >-
 encounters:
   - id: chain_harpy
     name: Chain-walker harpy
+    lore: >-
+      Flying here is for amateurs, she explains, kicking your handhold
+      loose to illustrate the point.
     weight: 3
     prose: >-
       A harpy patrols the great link you are crossing, wings folded,
@@ -20,7 +23,11 @@ encounters:
       point.
   - id: link_drake
     name: Link-coiled drake
+    lore: >-
+      Your footsteps carry up the chain like a knock. It pours down
+      through the links, and it has never needed a floor.
     weight: 3
+    traits: [flying, resist_low]
     prose: >-
       A storm drake has coiled through three links overhead to
       sleep, and your footsteps carry up the chain like a knock. It
@@ -28,12 +35,27 @@ encounters:
       has never needed a floor.
   - id: moss_ghast
     name: Moss-farmer's remnant
+    lore: >-
+      It missed a handhold years ago and still works its ledge,
+      weightless-thin. The net it waves you toward is for you.
     weight: 2
+    traits: [slow]
     prose: >-
       A chain-farmer who missed a handhold years ago still works a
       link ledge, grey and weightless-thin, harvesting moss nobody
       collects. It gestures you over to help with the netting. The
       net is for you.
+  - id: chain_tick
+    name: Chain tick
+    lore: >-
+      It clamps to the great links and drinks the hum of the load. Its
+      shell is chain-grade by adoption.
+    weight: 2
+    traits: [armor_high, slow]
+    prose: >-
+      What you took for a rivet head the size of a shield unclamps from
+      the link, legs unfolding from under an iron-grey shell, and crabs
+      down the chain's curve toward the warm thing crossing its metal.
 warden:
   name: Warden Shacklewise
   prose: >-

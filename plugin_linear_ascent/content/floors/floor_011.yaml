@@ -12,6 +12,9 @@ arrival: >-
 encounters:
   - id: kobold_scavenger
     name: Kobold scavenger
+    lore: >-
+      It has survived every collapse this mine has offered by being the
+      first thing out. The pry-bar is for slower questions.
     weight: 3
     prose: >-
       A kobold backs out of a side-shaft dragging a sack of stripped
@@ -19,18 +22,37 @@ encounters:
       and picks up a pry-bar.
   - id: rust_hound
     name: Rust hound
+    lore: >-
+      Bred to run down thieves in the galleries. The rust never reached
+      the part that wants your heels.
     weight: 3
+    traits: [fast]
     prose: >-
       Something bred to guard this mine still guards it — a hound of
       wire and hide, joints weeping orange, nose down to the rust-water
       as it comes.
   - id: orc_outrider
     name: Red Orc outrider
+    lore: >-
+      Half a warframe still turns half the blows. The ledger it keeps is
+      short on mercy.
     weight: 2
+    traits: [armor_low]
     prose: >-
       An orc in half a warframe rounds the tailings heap, one arm bare
       and one arm hydraulic. It marks you down for the warband's ledger
       and doesn't wait for an answer.
+  - id: adit_bat
+    name: Adit bat
+    lore: >-
+      It roosts in the lamp-warmth over the mine mouth and takes its meals
+      off whatever the lamps draw in.
+    weight: 2
+    traits: [flying]
+    prose: >-
+      The dwarf lamps flicker as something drops from the adit's arch — a
+      bat broad as a cloak, wings papering the cold updraft, circling your
+      light once before it commits.
 warden:
   name: Warden Rustmaw
   prose: >-

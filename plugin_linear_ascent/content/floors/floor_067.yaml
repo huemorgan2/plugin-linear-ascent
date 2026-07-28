@@ -12,7 +12,12 @@ arrival: >-
 encounters:
   - id: charge_harpy
     name: Charge-thief harpy
+    lore: >-
+      She takes the strike across her banded feathers like applause.
+      Spark-drunk, several strikes in, and spells just read as more
+      applause.
     weight: 3
+    traits: [flying, resist_med]
     prose: >-
       A harpy lands on a live pole, takes the strike across her
       banded feathers like applause, and comes down at you glowing
@@ -20,6 +25,9 @@ encounters:
       several strikes in.
   - id: field_drake
     name: Fieldborn drake
+    lore: >-
+      Hatched on this moor and never left — why would it. Every pole it
+      passes fires in salute.
     weight: 3
     prose: >-
       A storm drake hatched on this moor and never left — why would
@@ -27,12 +35,26 @@ encounters:
       and every pole it passes fires in salute.
   - id: stone_mover
     name: Lane-stone mover
+    lore: >-
+      The thing that moves the white lane-stones. Under the hood is old
+      lightning, coiled and patient. It has been farming climbers.
     weight: 2
+    traits: [slow, resist_med]
     prose: >-
       You find the thing that moves the white stones: a bent figure
       in a farmer's storm coat, rearranging the safe lane with slow
       care. It turns, and under the hood is old lightning, coiled
       and patient. It has been farming climbers.
+  - id: copper_rat
+    name: Copper rat
+    lore: >-
+      It gnaws the pole-farm's wiring for the taste and has been struck
+      more times than the poles.
+    weight: 2
+    prose: >-
+      A rat with a coat gone verdigris-green works the base of a singing
+      pole, whiskers smoking faintly, and breaks off its meal to defend
+      the whole grid from you.
 warden:
   name: Warden Groundstrike
   prose: >-

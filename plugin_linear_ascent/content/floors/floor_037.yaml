@@ -12,13 +12,20 @@ arrival: >-
 encounters:
   - id: trapdoor_spider
     name: Trapdoor spider
+    lore: >-
+      Mostly forelegs, faster than an apology. The hole it drags toward is
+      exactly your size.
     weight: 3
+    traits: [fast]
     prose: >-
       The stone in front of you is a lid, and the lid is already open.
       What comes out is mostly forelegs, faster than an apology,
       dragging you toward a hole exactly your size.
   - id: sprung_husk
     name: Sprung trap
+    lore: >-
+      A trap that fired and lost, still fighting the fight it remembers.
+      It gets up when you edge past.
     weight: 3
     prose: >-
       A husk lies beside an open trapdoor, one boot still down the
@@ -26,11 +33,26 @@ encounters:
       gets up, still fighting the fight it remembers.
   - id: field_troll
     name: Field-wise troll
+    lore: >-
+      It crosses the fields by memory, sure as a dancer, and it does not
+      like sharing the route map.
     weight: 2
+    traits: [armor_low]
     prose: >-
       A deep troll crosses the fields by memory, stepping sure as a
       dancer, and it has noticed that you are watching its feet. It
       does not like sharing the route map.
+  - id: dust_moth
+    name: Dust moth
+    lore: >-
+      It powders the trapdoor lids to match the stone. The spiders
+      tolerate it the way farmers tolerate crows.
+    weight: 2
+    traits: [flying]
+    prose: >-
+      A moth works low over the field ahead of you, dusting each silk
+      hinge grey — then rises at your lamp, wings shedding the same dust
+      across your eyes.
 warden:
   name: Warden Latchjaw
   prose: >-

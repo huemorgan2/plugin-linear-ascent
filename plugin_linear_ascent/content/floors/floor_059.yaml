@@ -12,25 +12,47 @@ arrival: >-
 encounters:
   - id: road_thane
     name: Thane of the road
+    lore: >-
+      Custom entitles you to give your name and have it spoken at your
+      defeat. The custom is observed; so is the plate.
     weight: 3
+    traits: [armor_med]
     prose: >-
       A frost giant in the Jarl's colors bars the road with a
       halberd of ice and iron. Custom entitles you to give your name
       and have it spoken at your defeat. The custom is observed.
   - id: herald_wolf
     name: Jarl's herald-wolf
+    lore: >-
+      Whatever it reports back decides how much of the garrison you meet.
+      It circles once, taking notes.
     weight: 3
+    traits: [fast]
     prose: >-
       A white wolf in a silver road-collar has been sent down to
       look at you. Whatever it reports back will decide how much of
       the garrison you meet. It circles once, taking notes.
   - id: lamp_troll
     name: Lamplighter troll
+    lore: >-
+      Nine generations of trolls have held the lamp post, all of them it.
+      Brawling on the road is its second duty.
     weight: 2
     prose: >-
       The troll that tends the road-lamps has held the post for nine
       generations of trolls, all of them it. It sets down the oil
       pail with ceremony. Brawling on the road is its second duty.
+  - id: post_raven
+    name: Post raven
+    lore: >-
+      The Jarl's road-post flies ahead of every traveler. Interfering with
+      the mail is a listed offense.
+    weight: 2
+    traits: [flying]
+    prose: >-
+      A raven in a small silver road-band drops from lamp to lamp ahead of
+      you, keeping exact pace, and finally lands in your path with the
+      unhurried authority of the postal service.
 warden:
   name: Warden Hallmarch
   prose: >-
