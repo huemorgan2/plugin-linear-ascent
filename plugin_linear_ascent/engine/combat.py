@@ -382,6 +382,12 @@ def fight_scene(p: dict, floor, opener: bool = False, note: str = "") -> Scene:
     fx_note = e.pop("_fx_note", "")
     if fx_note:
         body.append(fx_note)
+    # 022/003: the number breathes — every round re-reads who is hot on
+    # this floor, and changes fold in as story lines.
+    hot, _camped = state.presence_counts(p, floor.floor)
+    if hot > 1:
+        body.append(f"{hot} blades hot on this floor.")
+    body += state.presence_delta_lines(p, floor.floor)
     return Scene(
         eyebrow=_eyebrow(p, floor),
         # 003: the headline keeps ATK/DEF; HP lives in the always-on

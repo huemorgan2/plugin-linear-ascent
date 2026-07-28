@@ -50,3 +50,11 @@ phase cuts a corner; strike items through when they land.
   its comment. Any future phase that touches combat math should re-run
   the measured win-rate gates, not trust derivations (the gates exist
   now; keep them in the loop).
+- Presence (003) is single-process cached on both ends (worldd 30s,
+  plugin peek 60s). If worldd ever runs more than one worker, the
+  cache becomes per-worker — fine for counts, but revisit before
+  building anything that needs cross-worker agreement.
+- The torch status line reads the SAVED doc, so a climber who closed
+  the app mid-fight shows "hunting" for up to 3 minutes. Harmless
+  today; revisit if statuses ever gate mechanics (008 flares target
+  hot players — the flare must tolerate a stale "hunting").

@@ -406,3 +406,49 @@ def bank_interest_due(p: dict) -> int:
         return 0
     new_total = round(p["bank"] * (1 + economy.BANK_INTEREST_RATE) ** days)
     return new_total - p["bank"]
+
+
+# ── Presence (022 §003) — reads of the injected `_world["presence"]` ─────
+# hot = acted on the floor within 3 min (the only tier that counts as
+# "with you"); camped = within the hour. Shared by core (town cards)
+# and combat (the fight refreshes it every round); all of it degrades
+# to silence when no world is attached.
+
+def presence_counts(p: dict, floor: int) -> tuple[int, int]:
+    """(hot, camped) on `floor` — (0, 0) without a world."""
+    w = p.get("_world") or {}
+    by = (w.get("presence") or {}).get("by_floor") or {}
+    slot = by.get(floor) or by.get(str(floor)) or {}
+    return int(slot.get("hot", 0)), int(slot.get("camped", 0))
+
+
+def presence_torches(p: dict, floor: int) -> list[dict]:
+    """Named hot climbers on `floor`, your own torch filtered out."""
+    w = p.get("_world") or {}
+    t = (w.get("presence") or {}).get("torches") or {}
+    torches = t.get(floor) or t.get(str(floor)) or []
+    me = p.get("name") or ""
+    return [x for x in torches if x.get("name") != me]
+
+
+def presence_delta_lines(p: dict, floor: int) -> list[str]:
+    """Presence changes since the player's LAST card on this floor,
+    folded in as story — never a widget. Updates the watermark."""
+    if "presence" not in (p.get("_world") or {}):
+        return []
+    hot, _ = presence_counts(p, floor)
+    seen = p.get("presence_seen") or {}
+    lines: list[str] = []
+    if int(seen.get("floor", -1)) == floor:
+        delta = hot - int(seen.get("hot", 0))
+        if delta >= 2:
+            lines.append(f"{delta} more torches on the ridge since you "
+                         "last looked.")
+        elif delta == 1:
+            lines.append("Another torch on the ridge since you last "
+                         "looked.")
+        elif delta <= -1:
+            lines.append("A torch has guttered out since you last "
+                         "looked.")
+    p["presence_seen"] = {"floor": floor, "hot": hot}
+    return lines

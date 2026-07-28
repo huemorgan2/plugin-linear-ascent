@@ -265,8 +265,12 @@ def register_routes(app, ctx: PluginContext) -> None:
     @router.get("/pane/peek")
     async def pane_peek(user=Depends(get_current_user)) -> dict:
         """Freshness probe: the last scene id this process produced for the
-        player (chat-driven acts update it too). No world round trip."""
-        return {"scene_id": runtime.last_scene_id(runtime.player_key())}
+        player (chat-driven acts update it too). No world round trip on
+        the hot path — 022/003 adds `floor_presence` (hot blades on the
+        player's floor) from a cache refreshed at most once a minute."""
+        key = runtime.player_key()
+        return {"scene_id": runtime.last_scene_id(key),
+                "floor_presence": await runtime.floor_presence(key)}
 
     # ── 010: score & community (worldd proxies with the host's auth) ────
 

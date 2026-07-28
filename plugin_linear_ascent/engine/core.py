@@ -200,6 +200,41 @@ def _quorum(p: dict, floor: int) -> int:
     return economy.milestone_quorum(floor, active)
 
 
+# ── Presence (022 §003) — who is on the floor RIGHT NOW ──────────────────
+# Data helpers live in state.py (combat needs them too); the prose
+# assemblies below are the town-side surfaces.
+
+def _presence_gate_hint(p: dict, floor: int) -> str:
+    """' · 3 hot · 2 camps' for the gate list; '' when the floor is
+    empty or the world is dark."""
+    hot, camped = state.presence_counts(p, floor)
+    parts = []
+    if hot:
+        parts.append(f"{hot} hot")
+    if camped:
+        parts.append(f"{camped} camp{'s' if camped != 1 else ''}")
+    return (" · " + " · ".join(parts)) if parts else ""
+
+
+def _presence_floor_lines(p: dict, floor: int) -> list[str]:
+    """The floor card's presence block: the headline count, the named
+    torches, and the deltas since last look."""
+    if "presence" not in (p.get("_world") or {}):
+        return []
+    hot, camped = state.presence_counts(p, floor)
+    lines: list[str] = []
+    if hot > 1:
+        lines.append(f"{hot} blades hot on this floor.")
+    elif camped:
+        lines.append(f"{camped} camp{'s' if camped != 1 else ''} "
+                     "within the hour — embers, not company.")
+    for t in state.presence_torches(p, floor)[:6]:
+        lines.append(f"· {t.get('name', 'a climber')}'s torch — "
+                     f"{t.get('status', 'on the move')}")
+    lines += state.presence_delta_lines(p, floor)
+    return lines
+
+
 def _news_advice(p: dict, w: dict, frontier: int, wd: dict | None) -> str:
     """Where to work today for the fastest climb — honest engine math."""
     req = economy.floor_entry_player_level(frontier)
@@ -1481,6 +1516,8 @@ def _gate_scene(p: dict) -> Scene:
             hint = fl.gate_town
         if m is not None:
             hint += f" · war party of {_quorum(p, n)}"
+        # 022/003: who is up there right now — "Floor 12 · 3 hot · 2 camps"
+        hint += _presence_gate_hint(p, n)
         opts.append(Option(f"floor_{n}", f"Floor {n} — {fl.zone}",
                            hint, locked=p["level"] < req))
     opts.append(Option("back", "Back to the square"))
@@ -1513,6 +1550,7 @@ def _gate_pick(p: dict, oid: str) -> Scene:
     p["location"] = "gate_town"
     fl = schema.get_floor(n)
     lines = [fl.arrival]
+    lines += _presence_floor_lines(p, n)
     # 020: the floor BELOW a milestone warns at the gate, before the
     # ⚡ is spent — this floor's own Warden is one thing, the next is a
     # war party's work.
@@ -1560,6 +1598,7 @@ def _gate_town_scene(p: dict) -> Scene:
         eyebrow=f"FLOOR {fl.floor} · {fl.biome.upper()} · {fl.gate_town.upper()}",
         headline=f"{fl.gate_town}",
         support="The fire is small but honest. Beyond the wire, the wilds.",
+        body_lines=_presence_floor_lines(p, fl.floor),
         options=_gate_town_options(p, fl),
         meters=combat.meters(p),
     )

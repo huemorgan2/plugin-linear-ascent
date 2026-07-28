@@ -37,7 +37,33 @@ state: dict = {
     "last_scene": {},     # 009: user -> last scene_id, for /pane/peek —
                           # chat-driven acts update it, so the pane can poll
                           # freshness without a world round trip
+    "presence": {},       # 022/003: user -> {"at", "hot"} — grade-2
+                          # liveness for /pane/peek, refreshed ≤ once/min
 }
+
+PRESENCE_REFRESH_S = 60
+
+
+async def floor_presence(user: str) -> int:
+    """Hot count on the player's floor for the pane peek. The hot path
+    is the in-process cache — a world round trip happens at most once a
+    minute, and a failed refresh keeps the last honest number."""
+    remote = state["remote"]
+    if remote is None:
+        return 0
+    now = time.monotonic()
+    slot = state["presence"].get(user)
+    if slot is not None and now - slot["at"] < PRESENCE_REFRESH_S:
+        return slot["hot"]
+    # claim the window before the fetch so concurrent peeks don't stampede
+    slot = {"at": now, "hot": (slot or {}).get("hot", 0)}
+    state["presence"][user] = slot
+    try:
+        d = await remote.presence(user)
+        slot["hot"] = int(d.get("hot", 0))
+    except Exception:
+        pass
+    return slot["hot"]
 
 
 def remember_scene(user: str, scene) -> None:

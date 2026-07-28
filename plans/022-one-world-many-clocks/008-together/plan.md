@@ -11,6 +11,11 @@ shared-round parties (guard/flank/mark) remain their own future plan.
    Answer the flare" on their next card. The dying player's death timer
    stretches while an answerer is en route. Rescue possible, never
    guaranteed.
+   **003 learnings:** the hot tier is served by `social._presence`
+   (30s cache, field locations only) — target the flare from the same
+   snapshot, don't re-derive; and a torch's status can be ~3 min stale
+   (a closed app still reads "hunting"), so the flare must tolerate
+   answerers who are already gone.
 2. Answering: pays gold + aether and writes a permanent Stone line
    ("Brakka answered a flare on floor 12"). The answerer lands in the
    fight as a rescuer round — monster turns, the flared player gets one
