@@ -68,27 +68,42 @@ def registry() -> tuple[Unlock, ...]:
                "ambush immunity ends", "the fields",
                "other climbers can ambush you back — the Lodge is the shield"),
     ]
-    # ── level, opens: gear tiers (the buy gate is a player level) ──
+    # ── gear tiers: a level gate up to the cap, the WORLD's floor past
+    # it (022/002 — the cap can never strand a tier) ──
     for t in range(2, 11):
-        out.append(Unlock(
-            f"gear_tier_{t}", "level", economy.gear_player_level_req(t),
-            "opens", f"tier-{t} steel", "forge",
-            f"the tier-{t} rack at the Forge answers to your hand"))
-    # ── level, opens: the shoes ladder's explicit gates ──
+        freq = economy.gear_floor_req(t)
+        if freq:
+            out.append(Unlock(
+                f"gear_tier_{t}", "floor", freq, "opens",
+                f"tier-{t} steel", "forge",
+                f"when the war opens floor {freq}, the tier-{t} rack "
+                "answers to any capped hand"))
+        else:
+            out.append(Unlock(
+                f"gear_tier_{t}", "level", economy.gear_player_level_req(t),
+                "opens", f"tier-{t} steel", "forge",
+                f"the tier-{t} rack at the Forge answers to your hand"))
+    # ── the shoes ladder's explicit gates (level to the cap, floor past) ──
     for g in sorted((g for g in economy.FORGE.values()
                      if g.slot == "shoes" and g.level),
                     key=lambda g: g.level):
+        freq = economy.rung_floor_req(g)
         out.append(Unlock(
-            f"shoes_{g.slug}", "level", g.level, "opens",
+            f"shoes_{g.slug}", "floor" if freq else "level",
+            freq or g.level, "opens",
             g.name, "forge",
             f"+{g.speed} speed — the chase, the getaway and the small dodge",
             f"◈ {g.price:,}"))
-    # ── level, changes: the energy cap ──
-    for lv in range(10, 51, 10):
+    # ── the energy cap rides the gear band now (022/002), so its
+    # announcements sit on the same gates as the tiers themselves ──
+    for t in range(2, 11):
+        freq = economy.gear_floor_req(t)
         out.append(Unlock(
-            f"energy_cap_{lv}", "level", lv, "changes",
-            "the energy cap grows", "the climb",
-            f"⚡ cap rises to {economy.energy_cap(lv)} — one more hunt a day"))
+            f"energy_cap_tier_{t}", "floor" if freq else "level",
+            freq or economy.gear_player_level_req(t), "changes",
+            "the energy cap grows", "forge",
+            f"⚡ cap rises to {economy.energy_cap(t)} with tier-{t} steel "
+            "on your back — one more hunt a day"))
     # ── floor, opens: the relic shelves (bands only, never named loot) ──
     shelf: dict[int, int] = {}
     for r in economy.RELICS.values():
@@ -108,12 +123,14 @@ def registry() -> tuple[Unlock, ...]:
             f"hone_reset_{t}", "floor", fl, "changes",
             "the honing cap resets", "forge",
             f"band {t} opens a fresh bench — honing counts from floor {fl}"))
-    # ── floor, changes: milestone Wardens with their quorum ──
+    # ── floor, changes: milestone Wardens with their quorum (022/002:
+    # the N(F) curve can raise the war party above the table's floor) ──
     for m in economy.MILESTONES.values():
         out.append(Unlock(
             f"milestone_{m.floor}", "floor", m.floor, "changes",
             f"{m.name} holds floor {m.floor}", "the keep",
-            f"no solo kill — a war party of {m.quorum} pledges "
+            f"no solo kill — a war party of "
+            f"{economy.milestone_quorum(m.floor)} pledges "
             f"{economy.COST_BOSS_COMMIT} ⚡ each at the Guildhall"))
     return tuple(out)
 

@@ -110,8 +110,11 @@ def _floor_metrics(clazz, floor):
         weight_w += enc.weight
     assert weight_w > 0, f"floor {floor}: no intended target for {clazz}"
     rounds = rounds_w / weight_w
+    # 022/002: the at-level pool is reference_player_hp (level capped,
+    # armor feeds HP) — player_max_hp(floor) would read a floor as a
+    # level and freeze the denominator at the cap.
     risk = (risk_w / weight_w) * _expected_monster_damage(floor) \
-        / economy.player_max_hp(floor)
+        / economy.reference_player_hp(floor)
     income = economy.gold_per_kill(floor) * (gold_w / gold_weight)
     return rounds, risk, income
 
@@ -127,9 +130,13 @@ def _series(clazz):
 
 
 def _max_step(values, floor=0.2):
+    """Worst adjacent move, measured against the rolling max of the two
+    previous floors (022/002): a recovery from a single easy-floor DIP
+    (a slow, kiteable spawn table) is not a wall — a true wall exceeds
+    both neighbours' baseline and still fails."""
     worst, where = 0.0, 0
     for i, (a, b) in enumerate(zip(values, values[1:])):
-        base = max(a, floor)                      # damp tiny-value noise
+        base = max(max(values[max(0, i - 1):i + 1]), floor)
         step = abs(b - a) / base
         if step > worst:
             worst, where = step, i + 1

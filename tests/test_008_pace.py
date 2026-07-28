@@ -48,20 +48,27 @@ def test_wilds_hp_derived_from_rounds_budget():
     atk, dfs, hp = economy.monster_stats(1)
     assert (atk, dfs) == (5, 3)               # ATK/DEF curve untouched
     assert hp == 18                            # was 37 pre-008
-    # HP grows monotonically and the rounds budget caps at 7
+    # HP grows with the floor — 022/002 exception: the reference player
+    # re-hones from zero on fresh steel at each deep band start, so the
+    # two floors after a band boundary may dip ≤ ~2.2% before the climb
+    # resumes; anything steeper is a real regression
     hps = [economy.monster_stats(f)[2] for f in range(1, 101)]
-    assert all(b >= a for a, b in zip(hps, hps[1:]))
+    assert all(b >= a * 0.977 for a, b in zip(hps, hps[1:]))
+    assert hps[-1] == max(hps)                 # the climb still wins
     assert economy.wilds_rounds(1) == 2.5
     assert economy.wilds_rounds(50) == 7.0
 
 
 def test_warden_baseline_unchanged_by_008():
     # 017: floors ≥ 21 wardens carry low/low defense tiers, so the
-    # reference damage (and thus the ATK budget) re-tunes: ATK dips a
-    # touch, HP identical. Floors < 21 untouched.
-    baseline = {1: (14, 3, 70), 5: (28, 15, 162), 10: (47, 30, 276),
-                15: (60, 45, 390), 30: (101, 90, 732), 50: (174, 150, 1782),
-                75: (284, 225, 3736), 100: (428, 300, 6402)}
+    # reference damage (and thus the ATK budget) re-tunes.  022/002:
+    # the reference player is gear-carried and armor feeds HP, so ATK
+    # re-derives once more — the HP column is pinned UNCHANGED from the
+    # pre-022 curve: the retune moved who the warden is tuned against,
+    # never how big a boss is.
+    baseline = {1: (15, 3, 70), 5: (36, 15, 162), 10: (70, 30, 276),
+                15: (95, 45, 390), 30: (168, 90, 732), 50: (208, 150, 1782),
+                75: (289, 225, 3736), 100: (411, 300, 6402)}
     for f, want in baseline.items():
         assert economy.warden_stats(f) == want
 

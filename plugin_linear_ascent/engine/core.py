@@ -192,6 +192,14 @@ def _news_scene(p: dict, w: dict, day: int) -> Scene:
     )
 
 
+def _quorum(p: dict, floor: int) -> int:
+    """022/002: the milestone war party rides the N(F) curve, sized to
+    the live census when a world is attached."""
+    w = p.get("_world") or {}
+    active = int((w.get("census") or {}).get("total", 0)) or None
+    return economy.milestone_quorum(floor, active)
+
+
 def _news_advice(p: dict, w: dict, frontier: int, wd: dict | None) -> str:
     """Where to work today for the fastest climb — honest engine math."""
     req = economy.floor_entry_player_level(frontier)
@@ -212,8 +220,8 @@ def _news_advice(p: dict, w: dict, frontier: int, wd: dict | None) -> str:
     if frontier in economy.MILESTONES:
         ms = economy.MILESTONES[frontier]
         return (f"Floor {frontier} is a milestone keep — {ms.name} falls "
-                f"to a war party of {ms.quorum}. Pledge your blade and "
-                "rally others.")
+                f"to a war party of {_quorum(p, frontier)}. Pledge your "
+                "blade and rally others.")
     return (f"Hunt near the frontier (floor {frontier}) — that is where "
             "the pay and the progress are.")
 
@@ -648,9 +656,14 @@ def _rack(p: dict, items: list, opts: list, lines: list) -> None:
     answers 'what am I saving for' by itself (004 §3.1, 019 rows).
     019: the worn rung stays on the rack — spares exist to be donated to
     the faction armory, so owning a piece never hides it from the shop."""
-    lvl = p["level"]
-    buyable = [g for g in items if economy.rung_player_level_req(g) <= lvl]
-    nxt = next((g for g in items if economy.rung_player_level_req(g) > lvl), None)
+    lvl, ufl = p["level"], p["unlocked_floor"]
+
+    def _open(g):
+        return (economy.rung_player_level_req(g) <= lvl
+                and economy.rung_floor_req(g) <= ufl)
+
+    buyable = [g for g in items if _open(g)]
+    nxt = next((g for g in items if not _open(g)), None)
     worn = p["gear"].get(items[0].slot) if items else None
     # the two newest steps stay, and the worn rung keeps its row even
     # when it sits below them — a spare is always on sale
@@ -671,10 +684,14 @@ def _rack(p: dict, items: list, opts: list, lines: list) -> None:
     if nxt is not None:
         stat = (f"+{nxt.speed} spd" if nxt.slot == "shoes"
                 else f"+{nxt.bonus}")
+        # 022/002: past the level cap the gate is the WORLD's floor,
+        # not your level — the locked row says which one bars it.
+        freq = economy.rung_floor_req(nxt)
+        gate = (f"floor {freq}" if freq > p["unlocked_floor"]
+                else f"level {economy.rung_player_level_req(nxt)}")
         opts.append(Option(
             f"buy_{nxt.slug}", nxt.name,
-            f"🔒 level {economy.rung_player_level_req(nxt)} · ◈ {nxt.price:,}",
-            locked=True))
+            f"🔒 {gate} · ◈ {nxt.price:,}", locked=True))
         lines.append(f"{nxt.name} — {stat}, the rung you're saving for")
 
 
@@ -765,7 +782,7 @@ def _forge_scene(p: dict) -> Scene:
     off_lines = {"warrior": ("archer",), "archer": ("warrior",),
                  "sorcerer": ("warrior", "archer")}.get(clazz, ())
     for line in off_lines:
-        g = economy.off_class_offer(line, p["level"])
+        g = economy.off_class_offer(line, p["level"], p["unlocked_floor"])
         if g:
             price = economy.off_class_price(g)
             opts.append(Option(f"buy_{g.slug}", g.name,
@@ -909,6 +926,14 @@ def _gear_purchase(p: dict, g, scene_fn) -> Scene:
                         f"level {p['level']}. The Guildhall trains climbers "
                         "with a full XP bar and the fee in gold.")
         return s
+    freq = economy.rung_floor_req(g)
+    if freq > p["unlocked_floor"]:
+        # 022/002: deep steel waits for the WORLD to climb there
+        s = scene_fn(p)
+        s.shard_note = (f"{g.name} is floor-{freq} work — the war has "
+                        f"only opened floor {p['unlocked_floor']}. The "
+                        "smith won't sell steel the tower hasn't earned.")
+        return s
     if p["gold"] < price:
         s = scene_fn(p)
         s.shard_note = f"{g.name} wants ◈ {price:,}; you carry ◈ {p['gold']:,}. " \
@@ -1049,7 +1074,8 @@ def _arcanum_scene(p: dict) -> Scene:
     else:
         # 004 §3.2: staves off the rack, one rung back, triple coin —
         # focuses answer only to a caster's hand.
-        g = economy.off_class_offer("sorcerer", p["level"])
+        g = economy.off_class_offer("sorcerer", p["level"],
+                                    p["unlocked_floor"])
         if g:
             opts.append(Option(f"buy_{g.slug}", g.name,
                                f"◈ {economy.off_class_price(g):,} · "
@@ -1454,7 +1480,7 @@ def _gate_scene(p: dict) -> Scene:
         else:
             hint = fl.gate_town
         if m is not None:
-            hint += f" · war party of {m.quorum}"
+            hint += f" · war party of {_quorum(p, n)}"
         opts.append(Option(f"floor_{n}", f"Floor {n} — {fl.zone}",
                            hint, locked=p["level"] < req))
     opts.append(Option("back", "Back to the square"))
@@ -1493,8 +1519,9 @@ def _gate_pick(p: dict, oid: str) -> Scene:
     m = economy.MILESTONES.get(n + 1)
     if m is not None:
         lines.append(f"▲ Word from above: {m.name} holds floor {n + 1}. "
-                     f"No solo kill — a war party of {m.quorum} pledges "
-                     f"{economy.COST_BOSS_COMMIT} ⚡ each at the Guildhall.")
+                     f"No solo kill — a war party of {_quorum(p, n + 1)} "
+                     f"pledges {economy.COST_BOSS_COMMIT} ⚡ each at the "
+                     "Guildhall.")
     return Scene(
         eyebrow=f"FLOOR {n} · {fl.biome.upper()} · {fl.gate_town.upper()}",
         headline=f"{fl.gate_town} — the floor's last safe fire",

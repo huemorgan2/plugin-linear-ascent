@@ -5,12 +5,13 @@ from plugin_linear_ascent import economy
 
 def test_monster_stats_match_design_table():
     # 004 retune: ATK slope 3.3; 008: HP derived from the at-level
-    # player's damage × a rounds budget (2.5 at floor 1, +0.5/floor,
-    # capped at 7) — quick kills early, never a slog
-    assert economy.monster_stats(5) == (18, 15, 54)
-    assert economy.monster_stats(25) == (84, 75, 273)
-    assert economy.monster_stats(55) == (184, 165, 553)
-    assert economy.monster_stats(95) == (316, 285, 931)
+    # player's damage × a rounds budget — quick kills early, never a
+    # slog.  022/002 retune: the at-level player now carries gear-first
+    # power (weapon 30T−22, weighted hone), so wilds HP re-derived.
+    assert economy.monster_stats(5) == (18, 15, 68)
+    assert economy.monster_stats(25) == (84, 75, 525)
+    assert economy.monster_stats(55) == (184, 165, 756)
+    assert economy.monster_stats(95) == (316, 285, 966)
     for f in (1, 5, 25, 95):
         atk, dfs, hp = economy.monster_stats(f)
         p_atk, _ = economy._at_level_loadout(f)
@@ -28,9 +29,11 @@ def test_kill_rewards_jump_per_band():
 
 
 def test_xp_need_curve():
-    assert economy.xp_need(1) == 60
-    assert economy.xp_need(10) == 1897        # table shows ~1,900
-    assert economy.xp_need(50) == 21213       # ~21,200
+    # 022/002: base 24 (was 60) — levels are the early game now, the
+    # cap (30) lands in ~2-3 weeks and gear carries growth after
+    assert economy.xp_need(1) == 24
+    assert economy.xp_need(10) == 759
+    assert economy.xp_need(economy.LEVEL_CAP) == 3944   # the last climb
 
 
 def test_fade_rule_keys_on_floor_progress():
@@ -68,9 +71,10 @@ def test_forge_catalog_shape():
     assert {g.slot for g in t1} == {"weapon", "shield", "armor", "shoes"}
     pig = economy.FORGE["pigsticker"]
     assert (pig.bonus, pig.price) == (8, 250)
-    # 004 §4.4: late tiers repriced from exponential to quadratic
+    # 004 §4.4: late tiers repriced from exponential to quadratic;
+    # 022/002: bonuses rescaled to carry growth past the cap (30T−22)
     dawn = economy.FORGE["dawnbreaker"]
-    assert (dawn.bonus, dawn.price) == (80, 685_000)
+    assert (dawn.bonus, dawn.price) == (278, 685_000)
 
 
 def test_honing_shape():
@@ -86,8 +90,11 @@ def test_honing_shape():
 
 
 def test_caps_and_race_nudges():
+    # 022/002: the meter grows with GEAR (one point per tier past the
+    # first), not with level — steel is the long game
     assert economy.energy_cap(1) == 24
-    assert economy.energy_cap(30) == 27
+    assert economy.energy_cap(5) == 28
+    assert economy.energy_cap(10) == 33
     assert economy.energy_cap(1, "human") == 25
     # 006: the mana meter is gone — elves learn faster instead
     assert not hasattr(economy, "mana_cap")
@@ -103,10 +110,16 @@ def test_xp_pool_costs_scale_with_floor():
 
 
 def test_level_gates():
-    # tier T answers to the band's first floor; floors want level F−10
+    # tier T answers to the band's first floor — as a LEVEL up to the
+    # cap, as a FLOOR gate past it (022/002: the tower vouches for you
+    # once the drillmaster can't)
     assert economy.gear_player_level_req(1) == 1
     assert economy.gear_player_level_req(2) == 11
-    assert economy.gear_player_level_req(10) == 91
+    assert economy.gear_player_level_req(10) == economy.LEVEL_CAP
+    assert economy.gear_floor_req(3) == 0            # pre-cap: level only
+    assert economy.gear_floor_req(4) == 31
+    assert economy.gear_floor_req(10) == 91
     assert economy.floor_entry_player_level(1) == 1
     assert economy.floor_entry_player_level(11) == 1
     assert economy.floor_entry_player_level(40) == 30
+    assert economy.floor_entry_player_level(100) == economy.LEVEL_CAP

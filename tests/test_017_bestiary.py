@@ -20,7 +20,10 @@ from tests.test_017_damage_types import (_class_mult, _sim_fight,
                                          _speed_counters, reference_player)
 
 FLOORS = range(11, 101)
-N_SIM = 20
+# 022/002: 20 sims put ±10% noise on an 80% gate — floor 95's curator
+# read 75% on one seed set while its true rate is 87%. 40 matches the
+# floors-1-10 gate and keeps the pass/fail about design, not dice.
+N_SIM = 40
 
 
 def _floor_results(clazz, floor_no):

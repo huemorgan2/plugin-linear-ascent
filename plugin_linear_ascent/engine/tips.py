@@ -231,16 +231,18 @@ for _c, _t in _CLASS_ANGLE.items():
 def _buy_tip(slug: str) -> str:
     g = economy.FORGE.get(slug)
     if g:
-        req = economy.rung_player_level_req(g)
+        freq = economy.rung_floor_req(g)
+        gate = (f"floor {freq} open" if freq
+                else f"level {economy.rung_player_level_req(g)}")
         if g.slot == "shoes":
             return (f"{g.name} — footwear, +{g.speed} speed (wants "
-                    f"level {req}). {g.flavor.capitalize()}. Speed "
+                    f"{gate}). {g.flavor.capitalize()}. Speed "
                     "decides the chase: kiting, fleeing, and the small "
                     "dodge. Expensive on purpose — it buys out of a "
                     "lot of bad matchups.")
         stat = "ATK" if g.slot == "weapon" else "DEF"
         return (f"{g.name} — {g.slot}, {stat} +{g.bonus}, rung {g.rung:g} "
-                f"(wants level {req}). {g.flavor.capitalize()}. Better "
+                f"(wants {gate}). {g.flavor.capitalize()}. Better "
                 f"{stat} is what turns deeper, richer floors from deadly "
                 "into farmable; your replaced piece goes to your pack "
                 "for the pawn shop.")

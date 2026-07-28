@@ -235,7 +235,7 @@ def reference_player(clazz, floor):
     doc: level = floor, current-tier set, honing 2 floors behind."""
     p = fresh(f"ref-{clazz}-{floor}")
     p.update(stage="playing", race="human", clazz=clazz, name="Ref",
-             level=floor, unlocked_floor=floor)
+             level=economy.reference_level(floor), unlocked_floor=floor)
     tier = economy.gear_tier_for_floor(floor)
     # 004: three weapon lines mirror each other's numbers — equip the
     # CLASS line's whole-tier rung so the damage type stays in-class.
@@ -247,7 +247,9 @@ def reference_player(clazz, floor):
         g for g in economy.gear_rungs("armor") if g.rung == tier).slug
     hone = economy.reference_hone(floor)
     p["hone"] = {s: hone for s in economy.HONE_SLOTS}
-    p["hp"] = economy.player_max_hp(floor)
+    # 022/002: armor feeds max HP — read the live pool, never a bare
+    # player_max_hp(floor) (that reads a floor as a level)
+    p["hp"] = state.max_hp(p)
     return p
 
 

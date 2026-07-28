@@ -172,7 +172,8 @@ def test_honing_buy_flow_and_reset_on_purchase():
     s = choose(p, "hone_weapon")
     assert p["hone"]["weapon"] == 1
     assert p["xp"] == 50 - hone_xp           # ✦ charged alongside gold
-    assert state.gear_bonus(p, "weapon") == 8 + 1
+    # 022/002: a hone level is worth its slot's weight, not a flat +1
+    assert state.gear_bonus(p, "weapon") == 8 + economy.HONE_WEIGHT["weapon"]
     choose(p, "hone_weapon")
     assert p["hone"]["weapon"] == 2
     s = choose(p, "hone_weapon")             # at cap — refused

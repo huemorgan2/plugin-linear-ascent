@@ -11,6 +11,12 @@ so close, get in here."
 2. The silence window mechanics from 002 wired to UX: wounds persist only
    while strikes land inside `W(F)`; full close on silence; pity ramp
    line when it happens ("the Warden heals — but slower than before").
+   **002 learning:** the mechanics already run server-side in
+   `worldd/app/social.py::_warden_now` (lazy read: regen, silence close
+   for F > 30, pity increment on close, frozen pre-pity `hp_max` in the
+   row) — this task is UX wiring only, don't re-implement the clock.
+   Constants to read, not restate: `warden_silence_hours(F)` (6→30h over
+   floors 31–90, None ≤ 30), `WARDEN_PITY_PCT = 0.03`.
 3. `Sound the horn` — one tap letters every guildmate with the floor and
    the countdown; Crier lines at wound thresholds (75/50/25%) tower-wide.
 4. Presence integration (003): the keep shows hot strikers; the gate

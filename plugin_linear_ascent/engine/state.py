@@ -69,17 +69,30 @@ def _regen(val: float, ts_iso: str, cap: int, minutes_per_point: int,
     return min(float(cap), val + elapsed_min / minutes_per_point)
 
 
+def gear_band(p: dict) -> int:
+    """022/002: the player's gear band — the highest tier worn on any
+    paid slot. Keys the energy cap now that the level stops at 30."""
+    best = 0
+    for slot in ("weapon", "shield", "armor", "shoes"):
+        g = economy.FORGE.get(p["gear"].get(slot) or "")
+        if g and g.price > 0:
+            best = max(best, g.tier)
+    return max(1, best)
+
+
+def energy_cap_of(p: dict) -> int:
+    return economy.energy_cap(gear_band(p), p.get("race") or "")
+
+
 def energy_now(p: dict, at: dt.datetime | None = None) -> int:
     at = at or now()
-    cap = economy.energy_cap(p["level"], p.get("race") or "")
-    return int(_regen(p["energy_val"], p["energy_ts"], cap,
+    return int(_regen(p["energy_val"], p["energy_ts"], energy_cap_of(p),
                       economy.ENERGY_REGEN_MIN, at))
 
 
 def spend_energy(p: dict, amount: int, at: dt.datetime | None = None) -> bool:
     at = at or now()
-    cap = economy.energy_cap(p["level"], p.get("race") or "")
-    cur = _regen(p["energy_val"], p["energy_ts"], cap,
+    cur = _regen(p["energy_val"], p["energy_ts"], energy_cap_of(p),
                  economy.ENERGY_REGEN_MIN, at)
     if cur < amount:
         return False
@@ -90,7 +103,7 @@ def spend_energy(p: dict, amount: int, at: dt.datetime | None = None) -> bool:
 
 def gain_energy(p: dict, amount: int, at: dt.datetime | None = None) -> None:
     at = at or now()
-    cap = economy.energy_cap(p["level"], p.get("race") or "")
+    cap = energy_cap_of(p)
     cur = _regen(p["energy_val"], p["energy_ts"], cap,
                  economy.ENERGY_REGEN_MIN, at)
     p["energy_val"] = min(float(cap), cur + amount)
@@ -306,7 +319,9 @@ def gear_bonus(p: dict, slot: str) -> int:
         return economy.STARTER_WEAPON.bonus if slot == "weapon" else 0
     item = economy.FORGE.get(slug)
     base = item.bonus if item else 0
-    total = base + hone_level(p, slot)
+    # 022/002: honing weight per slot — gear, not the capped level,
+    # carries the within-band growth.
+    total = base + economy.HONE_WEIGHT.get(slot, 1) * hone_level(p, slot)
     if is_broken(p, slot):
         total //= 2                    # 005: broken, never gone
     return total
@@ -332,7 +347,9 @@ def faction_buff_pct(p: dict, kind: str) -> int:
 
 
 def max_hp(p: dict) -> int:
-    base = economy.player_max_hp(p["level"])
+    # 022/002: the armor on your back feeds the pool — HP keeps growing
+    # past the level cap the same way ATK/DEF do.
+    base = economy.player_max_hp(p["level"], gear_bonus(p, "armor"))
     pct = faction_buff_pct(p, "hp")
     return round(base * (1 + pct / 100)) if pct else base
 

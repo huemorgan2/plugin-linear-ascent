@@ -74,7 +74,7 @@ def meters(p: dict) -> Meters:
     return Meters(
         hp=p["hp"], hp_max=state.max_hp(p),
         energy=state.energy_now(p),
-        energy_max=economy.energy_cap(p["level"], p.get("race") or ""),
+        energy_max=state.energy_cap_of(p),
         xp=p["xp"],
         xp_need=economy.xp_need(p["level"]),
         gold=p["gold"],

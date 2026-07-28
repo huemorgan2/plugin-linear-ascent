@@ -27,9 +27,17 @@ COST_WARDEN_ATTEMPT = 3
 COST_BOSS_COMMIT = 5
 COST_PVP_ATTACK = 3
 
+# 022/002: the level cap. Levels carry the first weeks; gear carries the
+# climb. Everything priced "per level" beyond 30 is priced per gear band
+# or per floor instead.
+LEVEL_CAP = 30
 
-def energy_cap(level: int, race: str = "") -> int:
-    cap = ENERGY_BASE_CAP + level // 10
+
+def energy_cap(gear_tier: int, race: str = "") -> int:
+    """022/002: the cap is keyed off the GEAR BAND (tier of the best
+    equipped paid piece), never the level — the level stops at 30, the
+    steel does not."""
+    cap = ENERGY_BASE_CAP + max(0, min(10, gear_tier) - 1)
     if race == "human":
         cap += 1
     return cap
@@ -60,22 +68,42 @@ def scan_xp_cost(floor: int) -> int:
 
 
 def gear_player_level_req(tier: int) -> int:
-    """PLAYER LEVEL required to buy tier-T gear. Converts from a floor:
-    the band's first floor, read as a level via the reference identity."""
-    return band_start(tier)
+    """PLAYER LEVEL required to buy tier-T gear — capped: the level cap
+    can never strand a tier. Tiers whose band starts past the cap add a
+    FLOOR gate instead (gear_floor_req)."""
+    return min(band_start(tier), LEVEL_CAP)
+
+
+def gear_floor_req(tier: int) -> int:
+    """UNLOCKED FLOOR required for tiers whose band starts past the
+    level cap (4–10): the world must have climbed there. 0 = no floor
+    gate (the level gate suffices)."""
+    fl = band_start(tier)
+    return fl if fl > LEVEL_CAP else 0
 
 
 def floor_entry_player_level(floor: int) -> int:
     """PLAYER LEVEL required to enter a floor. Converts from a floor:
     loose leash (level ≈ floor − 10) so a fresh climber can't ride an
-    open frontier to floor 40."""
-    return max(1, floor - 10)
+    open frontier to floor 40 — capped so the cap never seals the
+    tower (a level-30 body passes every leash)."""
+    return max(1, min(floor - 10, LEVEL_CAP))
 
 
 # ── §2 Player baseline ───────────────────────────────────────────────────
+# 022/002: the level's share stops at the cap; gear carries the rest.
+# The armor piece feeds max HP (GEAR_HP_PER_ARMOR × its bonus) so the
+# health pool keeps climbing past level 30 the same way ATK/DEF do.
+
+# 4 is measured, not guessed: monster chip damage (raw/4) ignores DEF,
+# so deep-floor survival is bought with HP alone — at 3 the true prey
+# win rate for warriors sags to 78% by floor 93; at 4 the whole 80-100
+# band holds 86-95% and the first hour barely moves (+7 max HP at T1).
+GEAR_HP_PER_ARMOR = 4          # max-HP points per point of armor bonus
+
 
 def player_atk(level: int, weapon_bonus: int) -> int:
-    return 3 * level + weapon_bonus
+    return 3 * min(level, LEVEL_CAP) + weapon_bonus
 
 
 def player_def(level: int, shield_bonus: int, armor_bonus: int,
@@ -83,11 +111,11 @@ def player_def(level: int, shield_bonus: int, armor_bonus: int,
     armor = armor_bonus
     if race == "dwarf":
         armor = round(armor * 1.05)
-    return 2 * level + shield_bonus + armor
+    return 2 * min(level, LEVEL_CAP) + shield_bonus + armor
 
 
-def player_max_hp(level: int) -> int:
-    return 40 + 12 * level
+def player_max_hp(level: int, armor_bonus: int = 0) -> int:
+    return 40 + 12 * min(level, LEVEL_CAP) + GEAR_HP_PER_ARMOR * armor_bonus
 
 
 # ── §3 Monsters, XP, gold ────────────────────────────────────────────────
@@ -306,9 +334,15 @@ def daily_income(floor: int) -> int:
                  * 30)
 
 
+XP_NEED_BASE = 24              # 022/002: was 60 — the cap arrives in the
+                               # first weeks, then XP is pure currency
+
+
 def xp_need(level: int) -> int:
-    """XP to go from `level` to `level+1`: 60 · L^1.5."""
-    return round(60 * level ** 1.5)
+    """XP to go from `level` to `level+1`: 24 · L^1.5. At LEVEL_CAP the
+    Guildhall refuses training and the ✦ pool becomes pure currency
+    (honing, spells, scans — the sinks that already exist)."""
+    return round(XP_NEED_BASE * level ** 1.5)
 
 
 # ── §4b Guild training (012) ─────────────────────────────────────────────
@@ -341,7 +375,12 @@ def fade_multiplier(unlocked_floor: int, floor: int) -> float:
 # toward "bring friends" (<10% well before floor 50).
 
 WARDEN_HP_MULT = 1.9           # × monster HP → a real boss fight (~12 rounds)
-WARDEN_DMG_BUDGET = 1.07       # expected damage dealt ÷ player pool
+# 022/002: 0.82 is MEASURED against the real fight sim, not derived on
+# paper — at the old 1.07 the mean fight dealt 107% of the player's
+# pool and the true at-level win rate had drifted to 0–36% (nothing
+# gated it; the chip rule and range crossing moved reality away from
+# the formula). 0.82 lands floors 5–29 at 59–88% wins, averaging 76%.
+WARDEN_DMG_BUDGET = 0.82       # expected damage dealt ÷ player pool
 WARDEN_SOFT_FLOOR = 30         # last floor tuned for solo play
 WARDEN_HP_RAMP = 40            # HP ×(1+(F−30)/40) past the soft floor
 WARDEN_ATK_RAMP = 100          # ATK ×(1+(F−30)/100) past the soft floor
@@ -349,17 +388,30 @@ WARDEN_ATK_RAMP = 100          # ATK ×(1+(F−30)/100) past the soft floor
 
 REFERENCE_HONE_LAG = 2         # honing trails the climb by ~2 floors
 
+# 022/002: honing weight per step, per slot — raised so gear (not the
+# capped level) carries the within-band growth. gear_bonus() applies it.
+HONE_WEIGHT = {"weapon": 3, "shield": 2, "armor": 2}
+
 
 def reference_level(floor: int) -> int:
-    """The design's at-level player is level == floor (see
-    _at_level_loadout). The ONLY place that identity is asserted."""
-    return floor
+    """The design's at-level player is level == floor UP TO THE CAP
+    (see _at_level_loadout). The ONLY place that identity is asserted;
+    past floor 30 the reference body is a capped body in deeper steel."""
+    return min(floor, LEVEL_CAP)
+
+
+def reference_armor_bonus(floor: int) -> int:
+    """Armor bonus of the at-level player (base + weighted hone) — the
+    piece that also feeds max HP."""
+    tier = gear_tier_for_floor(floor)
+    hone = reference_hone(floor)
+    return _ARMOR_DEF_BY_TIER[tier] + HONE_WEIGHT["armor"] * hone
 
 
 def reference_player_hp(floor: int) -> int:
     """HP of the at-level player used to tune wardens. Deliberately
     NOT player_max_hp(floor) — that reads a floor as a level."""
-    return player_max_hp(reference_level(floor))
+    return player_max_hp(reference_level(floor), reference_armor_bonus(floor))
 
 
 def reference_hone(floor: int) -> int:
@@ -371,13 +423,18 @@ def reference_hone(floor: int) -> int:
 
 
 def _at_level_loadout(floor: int) -> tuple[int, int]:
-    """(ATK, DEF) of the design's at-level player: level = floor, current
-    tier set, honing 2 floors behind. The reference all tuning points at."""
+    """(ATK, DEF) of the design's at-level player: level = min(floor,
+    cap), current tier set, honing 2 floors behind. The reference all
+    tuning points at."""
     tier = gear_tier_for_floor(floor)
     hone = reference_hone(floor)
     lvl = reference_level(floor)
-    return (player_atk(lvl, 8 * tier + hone),
-            player_def(lvl, 5 * tier, 7 * tier + 2 * hone))
+    return (player_atk(lvl, _WEAPON_ATK_BY_TIER[tier]
+                       + HONE_WEIGHT["weapon"] * hone),
+            player_def(lvl,
+                       _SHIELD_DEF_BY_TIER[tier]
+                       + HONE_WEIGHT["shield"] * hone,
+                       reference_armor_bonus(floor)))
 
 
 def _boss_hp_base(floor: int) -> int:
@@ -420,39 +477,105 @@ def warden_gold(floor: int) -> int:
     return 80 * floor
 
 
-# ── §5b The shared Warden (007 §3, rebuilt by 022 §001) ──────────────────
+# ── §5b The shared Warden — the coordination curve (022 §002) ────────────
 # ALL 100 Wardens are shared — one list of bosses for the whole world.
 # The keep fight is a REAL fight: every wound you leave persists in the
-# world HP pool; pool at zero opens the floor for everyone. Floors 1–30
-# are tuned so one strong at-level player can finish the job alone
-# (small pool, regen below one blade's output); deeper floors take a
-# rally. 022/002 re-derives both curves from the coordination model —
-# the two functions below are the 001 stopgap.
+# world HP pool; pool at zero opens the floor for everyone.
+#
+# The curve, from research/one-tower-for-everyone.md §4:
+#   A     = active players (the census; REFERENCE_ACTIVE when dark)
+#   R100  = max(min(50, 0.5·A), 0.10·A)      # strikers the finale needs
+#   N(F)  = 1 for F ≤ 30, else ceil(R100^((F−30)/70))
+#   pool  = N(F) × 8 strike-fights            # one full bar per striker
+#   regen = breakeven at N(F)/2 sustained strikers — a constant fraction
+#           of the pool by algebra, every floor
+#   W(F)  = the silence window (F > 30): no strike for W hours and the
+#           wound closes fully — "coordinated" means same DAY, not same
+#           minute
+#   pity  = each fully-closed wound takes 3% off the max, forever — a
+#           world can always eventually win; a siege can still fail.
+#
+# The unit everything is measured in: one honest strike-fight — the
+# at-level player fights the pool until one round from death, then
+# withdraws. Sizing pools in this unit closes the banked-bar burst
+# (one bar ≈ 9 fights can never out-damage an N ≥ 2 pool of 16+).
 
-WARDEN_WORLD_HP_MULT = 4            # pool = solo-fight HP × this (F > 30)
-WARDEN_WORLD_HP_MULT_SOLO = 1.5     # …× this inside the solo band (F ≤ 30)
-WARDEN_WORLD_REGEN_HOURLY = 0.08    # of max HP, back per hour (F > 30)
-WARDEN_WORLD_REGEN_SOLO = 0.03      # …inside the solo band (F ≤ 30)
+REFERENCE_ACTIVE = 200         # sizing fallback when no census exists
+WARDEN_POOL_FIGHTS = 8         # pool per required striker ≈ one full bar
+WARDEN_SILENCE_MIN_H = 6.0     # silence window at floor 31…
+WARDEN_SILENCE_MAX_H = 30.0    # …stretching to this by floor 90+
+WARDEN_PITY_PCT = 0.03         # off max HP per fully-closed wound, forever
+
+# a player spending every ⚡ on the keep: fights per hour, sustained
+SUSTAINED_FIGHTS_PER_HOUR = (60 / ENERGY_REGEN_MIN) / COST_WARDEN_ATTEMPT
 
 
-def world_warden_hp_mult(floor: int) -> float:
-    return (WARDEN_WORLD_HP_MULT_SOLO if floor <= WARDEN_SOFT_FLOOR
-            else WARDEN_WORLD_HP_MULT)
+def required_strikers_100(active: int) -> float:
+    """R100 — the scaled-minimum small-world rule."""
+    a = max(1, int(active))
+    return max(min(50.0, 0.5 * a), 0.10 * a)
+
+
+def required_strikers(floor: int, active: int | None = None) -> int:
+    """N(F): 1 inside the solo band, exponential to R100 at the top."""
+    if floor <= WARDEN_SOFT_FLOOR:
+        return 1
+    r100 = required_strikers_100(
+        REFERENCE_ACTIVE if active is None else active)
+    return max(2, math.ceil(r100 ** ((min(floor, 100) - 30) / 70)))
+
+
+def strike_fight_damage(floor: int) -> int:
+    """Damage ONE at-level strike-fight leaves in the pool: fight until
+    one round from death, then withdraw. The pool's measuring unit."""
+    p_atk, p_def = _at_level_loadout(floor)
+    w_atk, w_def, _hp = warden_stats(floor)
+    p_dmg = max(1, round(0.75 * p_atk) - w_def // 2)
+    if floor >= WARDEN_PROFILE_FLOOR:
+        p_dmg = max(1, round(p_dmg * TIER_MULT["low"]))
+    w_dmg = max(1, round(0.75 * w_atk) - p_def // 2)
+    rounds = max(1, (reference_player_hp(floor) - 1) // w_dmg)
+    return max(1, rounds * p_dmg)
+
+
+def world_warden_hp(floor: int, active: int | None = None) -> int:
+    """The world pool: N(F) × 8 honest strike-fights."""
+    return max(1, round(required_strikers(floor, active)
+                        * WARDEN_POOL_FIGHTS * strike_fight_damage(floor)))
 
 
 def world_warden_regen_hourly(floor: int) -> float:
-    return (WARDEN_WORLD_REGEN_SOLO if floor <= WARDEN_SOFT_FLOOR
-            else WARDEN_WORLD_REGEN_HOURLY)
+    """Fraction of max HP healed per hour. Derived so exactly N(F)/2
+    sustained strikers break even — fewer visibly lose ground, and in
+    the solo band (N=1) a single sustained blade always gains."""
+    return SUSTAINED_FIGHTS_PER_HOUR / (2 * WARDEN_POOL_FIGHTS)
 
 
-def world_warden_hp(floor: int) -> int:
-    return round(warden_stats(floor)[2] * world_warden_hp_mult(floor))
+def warden_silence_hours(floor: int) -> float | None:
+    """W(F): hours of silence that close the wound fully. None inside
+    the solo band — there, the slow regen is the only healer, so a solo
+    campaign can span sessions."""
+    if floor <= WARDEN_SOFT_FLOOR:
+        return None
+    t = min(1.0, max(0.0, (floor - 31) / 59))    # 31 → 90+
+    return WARDEN_SILENCE_MIN_H + t * (WARDEN_SILENCE_MAX_H
+                                       - WARDEN_SILENCE_MIN_H)
 
 
-# the reward pool scales with the HP pool and splits by damage dealt,
-# so the payout per energy matches the solo-tuned warden.
-def world_warden_reward_mult(floor: int) -> float:
-    return world_warden_hp_mult(floor)
+def world_warden_reward_mult(floor: int, active: int | None = None) -> float:
+    """The reward pool in units of warden_xp/warden_gold. One pool =
+    N × 8 fight-equivalents of damage, and one solo warden fight pays
+    warden_gold for the same 3⚡ — so paying N × 8 pools keeps the
+    payout per energy at parity with the solo-tuned warden."""
+    return float(required_strikers(floor, active) * WARDEN_POOL_FIGHTS)
+
+
+def milestone_quorum(floor: int, active: int | None = None) -> int:
+    """022/002: milestone war parties sit on the same N(F) curve —
+    never below the hand-set floor from the table."""
+    ms = MILESTONES.get(floor)
+    base = ms.quorum if ms else 2
+    return max(base, required_strikers(floor, active))
 
 
 # 022/001: a fallen Warden can be re-fought at its keep as an ECHO —
@@ -513,39 +636,47 @@ class GearItem:
 # 004 §4.4 reprice: tiers 3–10 follow the quadratic ladder
 # set(T) ≈ 2·(T−1) days of mid-band tier-(T−1) income, so days-in-tier
 # (set + honing) lands on the 6→24 line without requiring the bank meta.
+# 022/002 rescale: gear carries the growth past the level cap. Bonus
+# ladders (anchored at the old tier-1 values so the first hour is
+# untouched): weapon 30·T − 22, shield 10·T − 5, armor 16·T − 9.
 _FORGE_ROWS = [
     # tier, weapon(name, flavor, +ATK), shield, armor, prices (w, s, a)
     (1, ("Pigsticker", "scrap-steel shiv", 8),
         ("Scrapwood Buckler", "", 5), ("Padded Jerkin", "", 7),
         (250, 100, 200)),
-    (2, ("Wolfbite", "shock-tip hunting spear", 16),
-        ("Ironbound Targe", "", 10), ("Riveted Leather", "", 14),
+    (2, ("Wolfbite", "shock-tip hunting spear", 38),
+        ("Ironbound Targe", "", 15), ("Riveted Leather", "", 23),
         (800, 320, 640)),
-    (3, ("Emberfang", "dwarf-forged plasma axe", 24),
-        ("Dwarven Wall", "powered tower shield", 15), ("Chain Hauberk", "", 21),
+    (3, ("Emberfang", "dwarf-forged plasma axe", 68),
+        ("Dwarven Wall", "powered tower shield", 25), ("Chain Hauberk", "", 39),
         (6_500, 2_600, 5_200)),
-    (4, ("Thornsong", "elven mono-edge blade", 32),
-        ("Elfmirror", "light-bending", 20), ("Silverthread Mail", "", 28),
+    (4, ("Thornsong", "elven mono-edge blade", 98),
+        ("Elfmirror", "light-bending", 35), ("Silverthread Mail", "", 55),
         (20_000, 8_000, 16_500)),
-    (5, ("Oathkeeper", "knight's arc-blade", 40),
-        ("Drakescale Barrier", "", 25), ("Wyrmhide Coat", "", 35),
+    (5, ("Oathkeeper", "knight's arc-blade", 128),
+        ("Drakescale Barrier", "", 45), ("Wyrmhide Coat", "", 71),
         (47_000, 18_500, 37_500)),
-    (6, ("Grimcleaver", "giant-slaying thunder maul", 48),
-        ("Frostguard", "cold-field emitter", 30), ("Dwarven Powerplate", "", 42),
+    (6, ("Grimcleaver", "giant-slaying thunder maul", 158),
+        ("Frostguard", "cold-field emitter", 55), ("Dwarven Powerplate", "", 87),
         (92_000, 36_500, 74_000)),
-    (7, ("Starfall", "storm-cell saber", 56),
-        ("Stormwarden's Aegis", "deflector", 35), ("Stormforged Plate", "", 49),
+    (7, ("Starfall", "storm-cell saber", 188),
+        ("Stormwarden's Aegis", "deflector", 65), ("Stormforged Plate", "", 103),
         (165_000, 65_000, 132_000)),
-    (8, ("Duskrender", "phase-etched glaive", 64),
-        ("Gloomturner", "cloak-field", 40), ("Nightweave Harness", "", 56),
+    (8, ("Duskrender", "phase-etched glaive", 218),
+        ("Gloomturner", "cloak-field", 75), ("Nightweave Harness", "", 119),
         (277_000, 110_000, 222_000)),
-    (9, ("Kingsbane", "demon-steel railblade", 72),
-        ("Hellgate Bulwark", "", 45), ("Demonbone Panoply", "", 63),
+    (9, ("Kingsbane", "demon-steel railblade", 248),
+        ("Hellgate Bulwark", "", 85), ("Demonbone Panoply", "", 135),
         (443_000, 175_000, 356_000)),
-    (10, ("Dawnbreaker", "fusion-core blade — the last light of Aldervale", 80),
-         ("The Unbroken", "", 50), ("Aegis of the Vale", "", 70),
+    (10, ("Dawnbreaker", "fusion-core blade — the last light of Aldervale", 278),
+         ("The Unbroken", "", 95), ("Aegis of the Vale", "", 151),
          (685_000, 271_000, 550_000)),
 ]
+
+# tier → bonus lookups for the reference model (single source: the rows)
+_WEAPON_ATK_BY_TIER = {t: w[2] for t, w, _s, _a, _p in _FORGE_ROWS}
+_SHIELD_DEF_BY_TIER = {t: s[2] for t, _w, s, _a, _p in _FORGE_ROWS}
+_ARMOR_DEF_BY_TIER = {t: a[2] for t, _w, _s, a, _p in _FORGE_ROWS}
 
 
 # ── 004 §3.1: the mid rungs and the three weapon lines ──────────────────
@@ -785,14 +916,27 @@ def weapon_line(line: str) -> list[GearItem]:
     return gear_rungs("weapon", line)
 
 
-def rung_player_level_req(g: GearItem) -> int:
-    """PLAYER LEVEL gate for a forge rung. Converts from a floor:
-    rung T at band_start(T), T.5 at band_start(T)+5 — the shoes ladder
-    carries explicit gates instead."""
+def _rung_gate_raw(g: GearItem) -> int:
+    """The rung's natural threshold (a floor number): rung T at
+    band_start(T), T.5 at band_start(T)+5 — the shoes ladder carries
+    explicit gates instead."""
     if g.level:
         return g.level
     t = int(g.rung)
     return band_start(t) + (5 if g.rung != t else 0)
+
+
+def rung_player_level_req(g: GearItem) -> int:
+    """PLAYER LEVEL gate for a forge rung — capped: past the cap the
+    gate converts to a floor (rung_floor_req)."""
+    return min(_rung_gate_raw(g), LEVEL_CAP)
+
+
+def rung_floor_req(g: GearItem) -> int:
+    """UNLOCKED FLOOR gate for rungs whose threshold sits past the
+    level cap. 0 = level gate suffices."""
+    r = _rung_gate_raw(g)
+    return r if r > LEVEL_CAP else 0
 
 
 # ── 004 §3.2: off-class stopgap gear ─────────────────────────────────────
@@ -832,10 +976,14 @@ def line_twin(g: GearItem, line: str) -> GearItem | None:
     return None
 
 
-def off_class_offer(line: str, level: int) -> GearItem | None:
+def off_class_offer(line: str, level: int,
+                    unlocked_floor: int = 0) -> GearItem | None:
     """The one off-class weapon on the rack: the rung BELOW the highest
-    this level unlocks in `line` (the first rung when nothing is below)."""
-    unlocked = [g for g in weapon_line(line) if rung_player_level_req(g) <= level]
+    this level (and, past the cap, this floor) unlocks in `line` (the
+    first rung when nothing is below)."""
+    unlocked = [g for g in weapon_line(line)
+                if rung_player_level_req(g) <= level
+                and rung_floor_req(g) <= unlocked_floor]
     if not unlocked:
         return None
     return unlocked[-2] if len(unlocked) >= 2 else unlocked[0]

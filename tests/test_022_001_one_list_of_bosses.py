@@ -42,19 +42,19 @@ def join_fight(p):
     return core.apply_choice(p, "strike")
 
 
-# ── the solo band stopgap tuning ─────────────────────────────────────────
+# ── the solo band (curve law — constants live in 022/002) ────────────────
 
-def test_solo_band_pool_is_small_and_slow_to_heal():
+def test_solo_band_is_one_blade_deep_floors_take_a_rally():
     for f in (1, 12, 30):
-        assert economy.world_warden_hp_mult(f) == \
-            economy.WARDEN_WORLD_HP_MULT_SOLO
-        assert economy.world_warden_regen_hourly(f) == \
-            economy.WARDEN_WORLD_REGEN_SOLO
+        assert economy.required_strikers(f) == 1
+        # a lone sustained blade beats the regen inside the solo band
+        out = economy.SUSTAINED_FIGHTS_PER_HOUR \
+            * economy.strike_fight_damage(f)
+        regen = economy.world_warden_regen_hourly(f) \
+            * economy.world_warden_hp(f)
+        assert out > regen
     for f in (31, 55, 99):
-        assert economy.world_warden_hp_mult(f) == \
-            economy.WARDEN_WORLD_HP_MULT
-        assert economy.world_warden_regen_hourly(f) == \
-            economy.WARDEN_WORLD_REGEN_HOURLY
+        assert economy.required_strikers(f) >= 2
 
 
 def _solo_sim(floor):
@@ -70,7 +70,8 @@ def _solo_sim(floor):
     rounds = max(1, (economy.reference_player_hp(floor) - 1) // w_dmg)
     per_fight = rounds * p_dmg
     pool = economy.world_warden_hp(floor)
-    bar = economy.energy_cap(economy.reference_level(floor)) \
+    # 022/002: the cap rides the gear band, not the level
+    bar = economy.energy_cap(economy.gear_tier_for_floor(floor)) \
         // economy.COST_WARDEN_ATTEMPT
     bars_to_finish = math.ceil(pool / per_fight) / bar
     out_hourly = (60 / economy.ENERGY_REGEN_MIN) \

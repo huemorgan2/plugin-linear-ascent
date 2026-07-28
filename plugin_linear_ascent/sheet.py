@@ -24,15 +24,17 @@ def character_sheet(p: dict) -> dict:
         return name
 
     gear = {slot: _piece(slot, slug) for slot, slug in p["gear"].items()}
-    race = p.get("race") or ""
+    at_cap = p["level"] >= economy.LEVEL_CAP
     return {
         "name": p["name"], "race": p["race"], "class": p["clazz"],
         "level": p["level"], "xp": p["xp"],
-        "xp_to_next": max(0, economy.xp_need(p["level"]) - p["xp"]),
-        "levelup_fee_gold": economy.levelup_gold(p["level"]),
+        "xp_to_next": (0 if at_cap
+                       else max(0, economy.xp_need(p["level"]) - p["xp"])),
+        "levelup_fee_gold": (0 if at_cap
+                             else economy.levelup_gold(p["level"])),
         "hp": f"{p['hp']}/{pstate.max_hp(p)}",
         "atk": pstate.atk(p), "def": pstate.dfs(p),
-        "energy": f"{pstate.energy_now(p)}/{economy.energy_cap(p['level'], race)}",
+        "energy": f"{pstate.energy_now(p)}/{pstate.energy_cap_of(p)}",
         "carried_gold": p["gold"], "banked_gold": p["bank"],
         "floor_frontier": p["unlocked_floor"], "gear": gear,
         "inventory": p["inventory"],

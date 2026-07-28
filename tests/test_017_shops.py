@@ -58,15 +58,16 @@ def test_mid_rungs_are_midpoint_bonus_and_geometric_price():
 
 
 def test_plan_table_spot_checks():
-    # the §3.1 example rows, verbatim
+    # the §3.1 example rows — bonuses re-anchored by the 022/002 retune
+    # (weapon whole rungs 30T−22, mids the midpoint; prices unchanged)
     for slug, bonus, price in (("pigsticker", 8, 250),
-                               ("iron_sword", 12, 450),
-                               ("wolfbite", 16, 800),
-                               ("bloodgroove_falchion", 20, 2_280),
+                               ("iron_sword", 23, 450),
+                               ("wolfbite", 38, 800),
+                               ("bloodgroove_falchion", 53, 2_280),
                                ("ashwood_bow", 8, 250),
-                               ("sinew_backed_bow", 12, 450),
+                               ("sinew_backed_bow", 23, 450),
                                ("tallowwood_staff", 8, 250),
-                               ("coalglass_staff", 12, 450)):
+                               ("coalglass_staff", 23, 450)):
         g = economy.FORGE[slug]
         assert (g.bonus, g.price) == (bonus, price), slug
 
@@ -87,25 +88,36 @@ def test_focuses_are_ten_whole_rungs_mirroring_shields():
 
 
 def test_shoes_ladder_matches_the_plan_table():
-    rows = [(g.name, g.speed, g.price, economy.rung_player_level_req(g))
+    # 022/002: gates past the cap become FLOOR gates — the last two
+    # pairs ask for level 30 plus a frontier the tower has to earn
+    rows = [(g.name, g.speed, g.price, economy.rung_player_level_req(g),
+             economy.rung_floor_req(g))
             for g in economy.gear_rungs("shoes")]
     assert rows == [
-        ("Cobbled Boots", 1, 500, 3),
-        ("Wayfarer's Treads", 2, 3_500, 11),
-        ("Chasewind Boots", 3, 24_000, 21),
-        ("Skyline Striders", 4, 120_000, 41),
-        ("Stormstep Greaves", 5, 400_000, 61),
+        ("Cobbled Boots", 1, 500, 3, 0),
+        ("Wayfarer's Treads", 2, 3_500, 11, 0),
+        ("Chasewind Boots", 3, 24_000, 21, 0),
+        ("Skyline Striders", 4, 120_000, 30, 41),
+        ("Stormstep Greaves", 5, 400_000, 30, 61),
     ]
 
 
 def test_level_gates_whole_at_band_start_mids_five_later():
+    # 022/002: the raw gate (band start / band start + 5) is a LEVEL up
+    # to the cap and a FLOOR past it — one law, split across two axes
     war = {g.rung: g for g in economy.weapon_line("warrior")}
     for t in range(1, 11):
+        raw = economy.band_start(t)
         assert economy.rung_player_level_req(war[float(t)]) == \
-            economy.band_start(t)
+            min(raw, economy.LEVEL_CAP)
+        assert economy.rung_floor_req(war[float(t)]) == \
+            (raw if raw > economy.LEVEL_CAP else 0)
         if t < 10:
+            raw_mid = economy.band_start(t) + 5
             assert economy.rung_player_level_req(war[t + 0.5]) == \
-                economy.band_start(t) + 5
+                min(raw_mid, economy.LEVEL_CAP)
+            assert economy.rung_floor_req(war[t + 0.5]) == \
+                (raw_mid if raw_mid > economy.LEVEL_CAP else 0)
 
 
 def test_shoe_speed_hook_is_filled():

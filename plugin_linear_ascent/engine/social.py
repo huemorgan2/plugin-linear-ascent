@@ -256,14 +256,23 @@ def guildhall_scene(p: dict, note: str = "") -> Scene:
     lines = note.split("\n") if note else []
     opts = []
     # 012: training — levels are bought here, never granted in the field.
-    fee = economy.levelup_gold(p["level"])
-    need = economy.xp_need(p["level"])
-    opts.append(Option("guild_train", f"Train to LEVEL {p['level'] + 1}",
-                       f"◈ {fee:,}"))
-    if p["xp"] < need and not note:
-        lines.append(f"The drillmaster sizes you up: XP {p['xp']:,}/{need:,}."
-                     " Come back with a full bar — the fee is "
-                     f"◈ {fee:,}.")
+    # 022/002: the drill ends at the cap; from there gear and the war
+    # carry the climb, and ✦ is pure currency.
+    if p["level"] >= economy.LEVEL_CAP:
+        if not note:
+            lines.append(f"LEVEL {economy.LEVEL_CAP} — the drillmaster "
+                         "has nothing left to teach you. From here the "
+                         "steel, the honing bench and the war carry you; "
+                         "your ✦ buys spells, scans and edges now.")
+    else:
+        fee = economy.levelup_gold(p["level"])
+        need = economy.xp_need(p["level"])
+        opts.append(Option("guild_train", f"Train to LEVEL {p['level'] + 1}",
+                           f"◈ {fee:,}"))
+        if p["xp"] < need and not note:
+            lines.append(f"The drillmaster sizes you up: XP "
+                         f"{p['xp']:,}/{need:,}. Come back with a full "
+                         f"bar — the fee is ◈ {fee:,}.")
     if fac:
         _member_panel(p, fac, lines, opts)
         headline = f"The {fac['name']} table"
@@ -402,7 +411,15 @@ def _hall_list(p: dict, factions: list, lines: list, opts: list) -> None:
 
 def guild_train(p: dict) -> Scene:
     """012: buy the level — full XP bar is the license, gold is the fee.
-    XP banked past the cap carries over; wounds close on the level."""
+    XP banked past the cap carries over; wounds close on the level.
+    022/002: LEVEL_CAP ends the drill — a refusal worth reading."""
+    if p["level"] >= economy.LEVEL_CAP:
+        return guildhall_scene(
+            p, note=f"The drillmaster looks you over and laughs once: "
+                    f"LEVEL {economy.LEVEL_CAP} is the whole drill. "
+                    "There is no level after — only better steel, a "
+                    "keener edge, and the war upstairs. Your ✦ spends "
+                    "at the bench and in the field now.")
     need = economy.xp_need(p["level"])
     fee = economy.levelup_gold(p["level"])
     if p["xp"] < need:
@@ -860,7 +877,8 @@ def boss_scene(p: dict, floor, note: str = "") -> Scene:
     b = w.get("boss") or {}
     ms = floor.milestone
     committed = b.get("committed", [])
-    quorum = b.get("quorum", ms.quorum if ms else 2)
+    quorum = b.get("quorum",
+                   economy.milestone_quorum(floor.floor) if ms else 2)
     dots = "■" * len(committed) + "□" * max(0, quorum - len(committed))
     lines = [floor.warden_prose]
     if note:
