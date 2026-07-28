@@ -1599,13 +1599,20 @@ def _gate_town_action(p: dict, oid: str) -> Scene:
             from . import social
             p["location"] = "warden_keep"
             return social.warden_scene(p, fl)
-        # below the frontier (or local dev play): the per-player echo bout
+        # below the frontier: the ECHO bout — a monument that still
+        # bites, half pay, no world effect (022/001). Local dev play
+        # (no world) keeps the real bout: a world of one.
         if not state.spend_energy(p, economy.COST_WARDEN_ATTEMPT):
             s = _gate_town_scene(p)
             s.shard_note = "A Warden takes 3 ⚡ you don't have. The wilds " \
                            "cost less."
             return s
-        return combat.start_encounter(p, fl, None, "warden")
+        s = combat.start_encounter(p, fl, None, "warden")
+        if w:
+            p["encounter"]["echo"] = True
+            s.support = ("An echo of a fallen Warden — half pay, no "
+                         "world effect. The real one died long ago.")
+        return s
     if oid == "gate":
         p["location"] = "gate"
         return _gate_scene(p)

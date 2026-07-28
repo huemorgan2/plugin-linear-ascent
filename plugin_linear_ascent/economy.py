@@ -420,20 +420,44 @@ def warden_gold(floor: int) -> int:
     return 80 * floor
 
 
-# ── §5b The shared frontier Warden (007 §3) ──────────────────────────────
-# The live Warden at the world frontier is ONE monster for everyone: a
-# world HP pool that any climber strikes for 3⚡. Slow regen makes solo
-# chipping possible but a handful of blades far faster. The reward pool
-# scales with the HP pool and splits by damage dealt, so the payout per
-# energy matches the solo-tuned warden.
+# ── §5b The shared Warden (007 §3, rebuilt by 022 §001) ──────────────────
+# ALL 100 Wardens are shared — one list of bosses for the whole world.
+# The keep fight is a REAL fight: every wound you leave persists in the
+# world HP pool; pool at zero opens the floor for everyone. Floors 1–30
+# are tuned so one strong at-level player can finish the job alone
+# (small pool, regen below one blade's output); deeper floors take a
+# rally. 022/002 re-derives both curves from the coordination model —
+# the two functions below are the 001 stopgap.
 
-WARDEN_WORLD_HP_MULT = 4
-WARDEN_WORLD_REGEN_HOURLY = 0.08    # of max HP, back per hour
-WARDEN_WORLD_REWARD_MULT = WARDEN_WORLD_HP_MULT
+WARDEN_WORLD_HP_MULT = 4            # pool = solo-fight HP × this (F > 30)
+WARDEN_WORLD_HP_MULT_SOLO = 1.5     # …× this inside the solo band (F ≤ 30)
+WARDEN_WORLD_REGEN_HOURLY = 0.08    # of max HP, back per hour (F > 30)
+WARDEN_WORLD_REGEN_SOLO = 0.03      # …inside the solo band (F ≤ 30)
+
+
+def world_warden_hp_mult(floor: int) -> float:
+    return (WARDEN_WORLD_HP_MULT_SOLO if floor <= WARDEN_SOFT_FLOOR
+            else WARDEN_WORLD_HP_MULT)
+
+
+def world_warden_regen_hourly(floor: int) -> float:
+    return (WARDEN_WORLD_REGEN_SOLO if floor <= WARDEN_SOFT_FLOOR
+            else WARDEN_WORLD_REGEN_HOURLY)
 
 
 def world_warden_hp(floor: int) -> int:
-    return warden_stats(floor)[2] * WARDEN_WORLD_HP_MULT
+    return round(warden_stats(floor)[2] * world_warden_hp_mult(floor))
+
+
+# the reward pool scales with the HP pool and splits by damage dealt,
+# so the payout per energy matches the solo-tuned warden.
+def world_warden_reward_mult(floor: int) -> float:
+    return world_warden_hp_mult(floor)
+
+
+# 022/001: a fallen Warden can be re-fought at its keep as an ECHO —
+# half pay, no world effect, pure training and story.
+WARDEN_ECHO_MULT = 0.5
 
 
 @dataclass(frozen=True)

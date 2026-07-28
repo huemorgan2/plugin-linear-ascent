@@ -22,6 +22,18 @@ over the same constants — never three.
    `regen(F)` such that `< N(F)/2` sustained strikers lose ground, and
    the silence window `W(F)` ~6h at 31 → 24h+ at 90. Pity ramp: each
    fully-closed wound −3% max HP, permanent.
+
+   **001 finding — close the banked-bar burst.** Under 001's stopgap a
+   keep fight lasts until death or flee, so one at-level fight deals
+   ~1.6–1.9× the SOLO warden's HP (the player survives
+   `rounds / WARDEN_DMG_BUDGET` rounds). With pool = 4× solo HP and a
+   full bar (~9 fights ≈ 7,200 damage at F45 vs a 5,908 pool), a single
+   player BURSTS any deep warden down before regen matters — the
+   hourly-regen gate only stops slow grinding. When deriving `HP(F)`,
+   size the pool against a banked bar per required striker, not against
+   sustained output alone: `HP(F) > N(F) × one-bar burst` (or cap
+   per-player damage credit per day). Verify with a burst sim, not just
+   the sustained-rate inequality.
 5. Monster/warden re-derivation rides `reference_level()` from 021 — the
    reference player caps at 30; verify `warden_stats` follows.
 6. Milestone quorums re-seated on the same N(F) curve.

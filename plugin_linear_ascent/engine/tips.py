@@ -93,11 +93,11 @@ _TIPS: dict[str, str] = {
              "carried gold and breaks your armor and shield."),
     "stew": ("Hunter's stew: ◈ 2 for +5 HP, repeatable. The cheap "
              "top-up when a full heal would waste coin."),
-    "keep": ("The floor's Warden — 3 energy a strike. Bring it down and the "
-             "next floor opens for EVERY climber, your name goes on the "
-             "Stone, and the reward is a multiple of a wild kill. At the "
-             "frontier all climbers cut at one shared Warden: every "
-             "strike counts, and the spoils split by damage dealt."),
+    "keep": ("The floor's Warden — one shared body for the whole world. "
+             "3 energy joins a real fight; every wound you leave stays in "
+             "it for the next blade. When its pool empties the floor "
+             "opens for EVERYONE and the spoils split by damage dealt. "
+             "Fallen Wardens re-fight as echoes at half pay."),
     "sleep": ("◈ 10 × your level for the night: ambush-proof sleep and "
               "+20 HP by dawn. Skip it carrying gold and the fields may "
               "find you."),
@@ -160,10 +160,12 @@ _TIPS: dict[str, str] = {
                       "saved."),
 
     # ── keeps ──
-    "strike": ("Spend 3 energy to cut the shared Warden's HP — every "
-               "climber's strikes stack on the same body. When it falls "
-               "the floor opens for ALL, and the prize splits by damage "
-               "dealt: strike daily, even a little claims a share."),
+    "strike": ("Join the fight — 3 energy for a FULL fight against the "
+               "shared Warden. Kill, flee or fall, everything you cut "
+               "away stays cut: every climber's wounds stack on the "
+               "same body. When it empties the floor opens for ALL and "
+               "the prize splits by damage dealt — fight daily, even a "
+               "little claims a share."),
     "boss_commit": ("Pledge your blade to the milestone push — 5 energy. "
                     "When enough blades stand pledged the gate falls "
                     "for everyone, and the pledged split the prize. The "

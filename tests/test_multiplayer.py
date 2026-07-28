@@ -40,25 +40,33 @@ def test_frontier_keep_is_the_shared_warden():
     assert s.headline.startswith(schema.get_floor(1).warden_name)
 
 
-def test_strike_pays_energy_and_emits_damage_effect():
+def test_strike_joins_a_full_fight_whose_wounds_persist():
+    """022/001: the single swing is retired — 3 ⚡ buys a real fight
+    against the world's body; the exit emits ONE effect with the total."""
     p = playing(world=warden_world(1))
     core.apply_choice(p, "gate")
     core.apply_choice(p, "floor_1")
     core.apply_choice(p, "keep")
     e_before = state.energy_now(p)
     hp_before = p["_world"]["warden"]["hp"]
-    s = core.apply_choice(p, "strike")
+    core.apply_choice(p, "strike")
     assert state.energy_now(p) == e_before - economy.COST_WARDEN_ATTEMPT
-    fx = [e for e in p["_effects"] if e["kind"] == "warden_strike"]
-    assert fx and fx[0]["floor"] == 1 and fx[0]["damage"] >= 1
-    # optimistic display: shown HP dropped by exactly the strike damage
-    assert p["_world"]["warden"]["hp"] == hp_before - fx[0]["damage"]
-    body = " ".join(s.body_lines)
-    assert "your blow lands" in body
-    # optimistic display: the striker sees their own name at once, never
-    # "no blade has touched it yet" right after their blow landed
-    assert p["name"] in body
-    assert "no blade has touched it" not in body
+    e = p["encounter"]
+    assert e and e.get("shared")
+    assert e["hp_max"] == economy.world_warden_hp(1)
+    # wounds land (unit shortcut), then the player breaks away — the
+    # fight's total persists as exactly one warden_strike effect
+    e["hp"] -= 37
+    for _ in range(40):
+        p["hp"] = 999                    # never die in this test
+        core.apply_choice(p, "run")
+        if p["encounter"] is None:
+            break
+    assert p["encounter"] is None, "the getaway must eventually work"
+    fx = [x for x in p["_effects"] if x["kind"] == "warden_strike"]
+    assert fx == [{"kind": "warden_strike", "floor": 1, "damage": 37}]
+    # optimistic display: the pool the next card reads already dropped
+    assert p["_world"]["warden"]["hp"] == hp_before - 37
 
 
 def test_strike_without_energy_is_refused():

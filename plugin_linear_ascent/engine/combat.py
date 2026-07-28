@@ -675,8 +675,60 @@ def _train_nudge(p: dict) -> list[str]:
             f"LEVEL {p['level'] + 1} — the fee is ◈ {fee:,}."]
 
 
+def _report_shared_strike(p: dict) -> int:
+    """022/001: a shared Warden fight is over (kill, death, or flight) —
+    everything it cut away persists in the world pool. One warden_strike
+    effect carries the fight's total; the server clamps and resolves."""
+    e = p.get("encounter") or {}
+    if not e.get("shared") or e.get("strike_sent"):
+        return 0
+    dealt = max(0, int(e.get("hp_max", 0)) - max(0, int(e.get("hp", 0))))
+    if dealt <= 0:
+        return 0
+    e["strike_sent"] = True
+    p.setdefault("_effects", []).append({
+        "kind": "warden_strike", "floor": int(e.get("floor", 0)),
+        "damage": dealt})
+    _ledger(p, "warden_strike", note=f"floor {e.get('floor')} · {dealt}")
+    # optimistic pool update so the next keep card reads right
+    w = p.get("_world") or {}
+    wd = w.get("warden") or {}
+    if wd.get("floor") == e.get("floor"):
+        wd["hp"] = max(0, int(wd.get("hp", 0)) - dealt)
+    return dealt
+
+
+def _shared_warden_victory(p: dict, floor) -> Scene:
+    """The pool hit zero under YOUR blade. The server settles the fall —
+    frontier raise, reward split by damage, letters to every striker —
+    so this card promises nothing it doesn't know."""
+    e = p["encounter"]
+    dealt = _report_shared_strike(p)
+    p["encounter"] = None
+    p["location"] = "gate_town"
+    return Scene(
+        eyebrow=_eyebrow(p, floor),
+        headline=f"{e['name']} collapses",
+        support="The Warden's frame ticks as it cools. The whole tower "
+                "heard that.",
+        body_lines=[
+            f"Your blade took the last {dealt:,} of it.",
+            "The fall pays every striker by damage dealt — your share "
+            "arrives with the word of it.",
+            f"FLOOR {floor.floor + 1} opens for everyone the moment the "
+            "tower counts the body.",
+        ],
+        options=_after_fight_options(p, floor),
+        meters=meters(p),
+        event_kind="boss",
+        fx=_kill_fx(e, e["name"], True, _damage_type(p)),
+    )
+
+
 def _victory(p: dict, floor) -> Scene:
     e = p["encounter"]
+    if e["kind"] == "warden" and e.get("shared"):
+        return _shared_warden_victory(p, floor)
     fade = economy.fade_multiplier(p["unlocked_floor"], floor.floor)
     if e["kind"] == "warden":
         xp = round(economy.warden_xp(floor.floor) * fade)
@@ -684,6 +736,11 @@ def _victory(p: dict, floor) -> Scene:
         if floor.milestone:
             xp = round(floor.milestone.xp / 2 * fade)
             gold = round(floor.milestone.gold / 2 * fade)
+        if e.get("echo"):
+            # 022/001: a fallen Warden re-fought is an ECHO — half pay,
+            # no world effect. Training and story, not progress.
+            xp = round(xp * economy.WARDEN_ECHO_MULT)
+            gold = round(gold * economy.WARDEN_ECHO_MULT)
     else:
         xp = round(state.rng_jitter(p, economy.xp_per_kill(floor.floor), 0.25) * fade)
         # 009: luck is a DAY now — the halfling racial bonus is retired.
@@ -718,8 +775,14 @@ def _victory(p: dict, floor) -> Scene:
 
     first_clear = False
     if e["kind"] == "warden":
+        # 022/001: the personal unlock is DELETED in the shared world —
+        # the frontier moves only when the world Warden's pool empties.
+        # Local dev play is a world of one: ITS frontier is personal.
         nxt = floor.floor + 1
-        if p["unlocked_floor"] < nxt:
+        if e.get("echo"):
+            lines.append("▪ an echo of a fallen Warden — half pay, and "
+                         "the tower doesn't so much as creak")
+        elif p.get("_world") is None and p["unlocked_floor"] < nxt:
             old_floor = p["unlocked_floor"]
             p["unlocked_floor"] = nxt
             first_clear = True
@@ -729,11 +792,6 @@ def _victory(p: dict, floor) -> Scene:
             from .. import unlocks
             for u in unlocks.just_reached(p, p["level"], old_floor)[:3]:
                 lines.append(f"{unlocks.glyph(u)} {u.title} — {u.why}")
-            if p.get("_world") is not None:
-                p.setdefault("_effects", []).append({
-                    "kind": "happening", "floor": floor.floor,
-                    "line": (f"{p.get('name') or 'A climber'} cast down "
-                             f"{e['name']} — floor {nxt} opens for them")})
         # guaranteed rare-loot roll (006 §3.8: charm 40% → 12% — the
         # gate is ≤ 1/3 of the old rate, and 15 missed it by a hair)
         loot = state.rng_pick(
@@ -800,6 +858,7 @@ def _death(p: dict, floor) -> Scene:
     daily = p["daily"]
     if not daily.get("death_save"):
         daily["death_save"] = True
+        _report_shared_strike(p)   # 022/001: the wounds you left persist
         p["hp"] = 1
         p["encounter"] = None
         p["location"] = "gate_town"
@@ -829,6 +888,7 @@ def _death(p: dict, floor) -> Scene:
         return fight_scene(p, floor, note=(
             "The Stone of Undying burns to sand in your pocket — and "
             f"you stand back up at {p['hp']} HP. It is still here."))
+    _report_shared_strike(p)       # 022/001: the wounds you left persist
     mercy = p["level"] <= economy.BEGINNER_MERCY_MAX_LEVEL
     lines = [f"Killed by the {e['name']}."]
     if mercy:
@@ -1187,14 +1247,19 @@ def resolve_fight_action(p: dict, floor, option_id: str) -> Scene:
         snap = _wear(p, "shoes")       # 005: the sprint spends shoe tread
         if state.roll_ok(p, economy.p_flee(economy.player_speed(p),
                                            _mspd(p))):
+            dealt = _report_shared_strike(p)   # 022/001: wounds persist
             p["encounter"] = None
             p["location"] = "gate_town"
+            lines = ["You put fence and dark between you and it."]
+            if dealt:
+                lines.append(f"▪ the {dealt:,} you cut away stays cut — "
+                             "the Warden holds your wounds for the next "
+                             "blade")
             return Scene(
                 eyebrow=_eyebrow(p, floor),
                 headline="You break away",
                 support="No shame the grass will remember.",
-                body_lines=(["You put fence and dark between you and it."]
-                            + ([snap] if snap else [])),
+                body_lines=lines + ([snap] if snap else []),
                 options=_after_fight_options(p, floor),
                 meters=meters(p))
         hit = _monster_hit(p)
@@ -1248,6 +1313,12 @@ def resolve_fight_action(p: dict, floor, option_id: str) -> Scene:
             f"Shield up — nothing gets through. Your counter takes {counter}."))
 
     if option_id == "sleep_spell" and p.get("clazz") == "sorcerer":
+        # 022/001: the shared Warden never sleeps — there is nothing to
+        # walk past; the floor opens when its pool empties, not before.
+        if e.get("shared"):
+            return fight_scene(p, floor, note=(
+                "You shape the lullaby and it dies against the Warden's "
+                "hull. A war-machine wearing a body does not sleep."))
         # 017: a High spellguard shrugs the lullaby off entirely —
         # refused BEFORE the XP is spent, so probing costs nothing.
         if _profile(p).get("resist") == "high":

@@ -811,11 +811,12 @@ def warden_scene(p: dict, fl, note: str = "") -> Scene:
         eyebrow=f"FLOOR {fl.floor} · {fl.biome.upper()} · THE KEEP",
         headline=f"{fl.warden_name} — ATK {atk_w} / DEF {def_w} / "
                  f"HP {hp:,}/{hp_max:,}",
-        support="One Warden for the whole world. Whoever lands the last "
-                "blow opens this floor for everyone.",
+        support="One Warden for the whole world. Every wound you leave "
+                "stays in its body — the last blow opens this floor for "
+                "everyone.",
         body_lines=lines,
-        options=[Option("strike", "Strike the Warden",
-                        f"{economy.COST_WARDEN_ATTEMPT} ⚡"),
+        options=[Option("strike", "Join the fight",
+                        f"{economy.COST_WARDEN_ATTEMPT} ⚡ · a full fight"),
                  Option("town", "Withdraw to Roothollow")],
         meters=meters(p),
         event_kind="boss",
@@ -824,6 +825,10 @@ def warden_scene(p: dict, fl, note: str = "") -> Scene:
 
 
 def warden_action(p: dict, fl, oid: str) -> Scene:
+    """022/001: the single-swing strike is retired — joining the shared
+    Warden is a FULL keep fight. Damage dealt persists to the world pool
+    (emitted as one warden_strike when the fight ends, however it ends);
+    the pool at zero opens the floor for everyone."""
     if oid != "strike":
         return warden_scene(p, fl)
     w = world(p) or {}
@@ -831,44 +836,21 @@ def warden_action(p: dict, fl, oid: str) -> Scene:
     if wd.get("floor") != fl.floor:
         return _warden_fallen_scene(p, fl)
     if not state.spend_energy(p, economy.COST_WARDEN_ATTEMPT):
-        return warden_scene(p, fl, note="A strike takes 3 ⚡ you don't "
-                                        "have. The wilds cost less.")
-    atk_w, def_w, _ = economy.warden_stats(fl.floor)
-    raw = state.rng_int(p, state.atk(p) // 2, state.atk(p))
-    dmg = max(1, raw - def_w // 2)
-    _effect(p, "warden_strike", floor=fl.floor, damage=dmg)
-    _ledger(p, "warden_strike", note=f"floor {fl.floor} · {dmg}")
-    # the Warden answers — one counter-swing per strike. 013: same chip
-    # rule as the wilds — armor blunts, it never nullifies.
-    back_raw = state.rng_int(p, atk_w // 2, atk_w)
-    chip = max(1, -(-back_raw // economy.CHIP_DIVISOR))
-    back = max(chip, back_raw - state.dfs(p) // 2)
-    back_blocked = back_raw - back
-    p["hp"] -= back
-    if p["hp"] <= 0:
-        # the dying blow still lands (the effect above is already queued)
-        from .combat import _death
-        p["encounter"] = {"kind": "warden", "name": fl.warden_name,
-                          "prose": "", "id": "", "atk": atk_w, "def": def_w,
-                          "hp": 1, "hp_max": 1, "floor": fl.floor,
-                          "shot_used": False}
-        return _death(p, fl)
-    # optimistic display — the authoritative write is the effect above
-    wd["hp"] = max(0, int(wd.get("hp", 0)) - dmg)
-    strikers = wd.setdefault("strikers", [])
-    mine = next((s for s in strikers if s.get("name") == p.get("name")),
-                None)
-    if mine is None:
-        strikers.append({"name": p.get("name") or "?", "dmg": dmg})
-    else:
-        mine["dmg"] = int(mine.get("dmg", 0)) + dmg
-    note = f"your blow lands for {dmg:,} — it answers for {back}"
-    if back_blocked > 0:
-        note += f" (your armor blunted {back_blocked})"
-    if wd["hp"] <= 0:
-        note += (". It staggers. If it fell, word reaches Roothollow "
-                 "with your name on it")
-    return warden_scene(p, fl, note=note)
+        return warden_scene(p, fl, note="Joining the fight takes 3 ⚡ you "
+                                        "don't have. The wilds cost less.")
+    from . import combat
+    s = combat.start_encounter(p, fl, None, "warden")
+    e = p["encounter"]
+    e["shared"] = True
+    # the fight is against the WORLD's body: pick up the pool where the
+    # last blade left it (optimistic — the server clamps on the effect).
+    e["hp"] = max(1, int(wd.get("hp", e["hp"])))
+    e["hp_max"] = max(e["hp"], int(wd.get("hp_max", e["hp"])))
+    s2 = combat.fight_scene(p, fl, opener=True)
+    s2.event_kind = s.event_kind or "boss"
+    s2.support = ("Its wounds are the world's wounds — whatever you cut "
+                  "away stays cut.")
+    return s2
 
 
 # ── Milestone boss quorum ────────────────────────────────────────────────
