@@ -37,6 +37,12 @@ the damage-type kill hooks only).
    (`test_017_shops.py::test_weapon_icons_follow_the_line` is the
    pattern to extend), and that no new item kind ships wearing the
    pack crate.
+   006 retro: 11 relic glyphs live in `icons.py` (`_RELIC_ICON` maps
+   the four quivers onto one shared grid; strip potion borrows the
+   draught glass) — the audit must cover BOTH icon surfaces: pack
+   strip (`icon_key`) AND shop option rows (`render._opt_gear_icon`),
+   which resolve independently. Assert every `economy.RELICS` slug
+   returns a non-"pack" key through each path.
 6. Vendor sync + deploy; version bump + publish.
 
 ## Tests / acceptance

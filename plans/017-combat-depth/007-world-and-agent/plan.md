@@ -10,6 +10,12 @@ Goal: the shared-world and sidekick pieces — faction armory donations
      durability fraction, deposited_at).
    - Endpoints (HMAC, idempotent like the ledger): deposit, list, take
      (member-only, admin can purge); caps (e.g. 50 items/faction).
+   - 006 retro (EV first): write the armory's exploit inequality in
+     this plan BEFORE coding — a donate/take round-trip must never
+     beat the pawn shop (donate full, take, pawn at a good
+     `pawn_rate` day = free arbitrage unless takes are member-gated
+     with a cooldown or the fraction rides through untouched). State
+     the inequality, then pick the caps.
    - Plugin: pawn scene gains "donate to the armory" for faction
      members; 015 desk gets an ARMORY section (list + take).
    - 005 retro: the "durability fraction" column is live now —
@@ -29,6 +35,11 @@ Goal: the shared-world and sidekick pieces — faction armory donations
    004 note: the Arcanum row + refusal line already shipped in 0.21.0
    — this task is now only Relay/Fields/other locked rows + the gate
    reorder.
+   006 retro: the Forge page is LONG now (gear prose + locked rung +
+   six relic-shelf rows before the options). While reordering town,
+   collapse any shop shelf past ~8 prose rows into a `<details>`
+   block (the [i]-dossier pattern, zero JS) — readability is this
+   task's charter, and the shops are where it strains first.
 4. **Shop owned-state (004 dojo carryover):** a rung you already own
    stays fully buyable — mark it ("✓ worn") or drop it from the rack
    so the two buyable rows are always NEW steps. Same `_rack` helper,
@@ -49,6 +60,12 @@ Goal: the shared-world and sidekick pieces — faction armory donations
   the doc — after any DB edit, drive one navigation click before
   reading the screen; after any plugin render change, restart Luna by
   port-kill (8765) the same way worldd is killed by 8600.
+  006 retro: drive rare paths by `jsonb_set` on the live doc
+  (encounter atk 999 / hp 1 / flags) instead of long natural fights —
+  006 covered the whole death matrix in minutes this way. And check
+  option ICONS in every dojo screenshot: new item families need the
+  `_opt_gear_icon` hook wired separately from the pack strip (006's
+  relic rows shipped naked until the screenshot caught it).
 
 Exit: all green, published, worldd migrated + deployed,
 `execution_summary.md`.

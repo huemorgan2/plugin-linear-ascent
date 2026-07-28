@@ -276,12 +276,17 @@ def test_pawn_pays_by_the_wear():
     p["durability_pack"]["pigsticker"] = economy.durability_pool(1) // 2
     p["location"] = "pawn"
     s = core.current_scene(p)
-    full = int(g.price * economy.PAWN_BUYBACK)
+    # 006: the broker's rate moves day to day (25–55%) — wear still
+    # halves whatever today's rate pays.
+    rate = economy.pawn_rate(state.world_day())
+    offer = int(g.price * rate * 0.5)
+    full = int(g.price * rate)
+    assert offer < full
     row = next(o for o in s.options if o.id == "sell_pigsticker")
-    assert f"◈ {full // 2:,}" in row.hint
+    assert f"◈ {offer:,}" in row.hint
     gold0 = p["gold"]
     choose(p, "sell_pigsticker")
-    assert p["gold"] == gold0 + full // 2
+    assert p["gold"] == gold0 + offer
     assert "pigsticker" not in p["durability_pack"]
 
 

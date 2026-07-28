@@ -58,6 +58,8 @@ def _pack_strip(p: dict) -> list[dict]:
             continue
         if slug in economy.APOTHECARY:
             name, kind = economy.APOTHECARY[slug].name, "item"
+        elif slug in economy.RELICS:
+            name, kind = economy.RELICS[slug].name, "relic"
         elif slug in economy.FORGE:
             g = economy.FORGE[slug]
             name, kind = g.name, g.slot
@@ -647,6 +649,55 @@ def _wearable_pack(p: dict) -> list:
     return sorted(out, key=lambda g: (g.slot, g.rung))
 
 
+def _relic_rows(p: dict, shop: str, opts: list, lines: list) -> None:
+    """006 §3.7: the shop's relic shelf — every row names the one
+    dramatic effect AND the one hard limitation (the law, out loud)."""
+    stock = economy.relic_stock(shop, p["unlocked_floor"],
+                                p.get("clazz") or "")
+    if not stock:
+        return
+    lines.append("— the relic shelf —")
+    for r in stock:
+        price = economy.relic_price(r.slug, p["unlocked_floor"])
+        owned = p["inventory"].get(r.slug, 0)
+        hint = f"◈ {price:,}" + (f" · ×{r.count}" if r.count > 1 else "")
+        opts.append(Option(f"buy_{r.slug}", r.name, hint))
+        lines.append(f"{r.name} — {r.effect}. The catch: {r.limit}."
+                     + (f" (you hold {owned})" if owned else ""))
+
+
+def _relic_buy(p: dict, slug: str, scene_fn) -> Scene:
+    r = economy.RELICS[slug]
+    if p["unlocked_floor"] < r.floor:
+        s = scene_fn(p)
+        s.shard_note = (f"The {r.name} waits behind the counter until "
+                        f"floor {r.floor} stands open to you.")
+        return s
+    if r.clazz and (p.get("clazz") or "") != r.clazz:
+        s = scene_fn(p)
+        s.shard_note = f"The {r.name} is {r.clazz}'s work — not yours."
+        return s
+    if r.hold1 and p["inventory"].get(slug, 0) >= 1:
+        s = scene_fn(p)
+        s.shard_note = (f"You hold a {r.name} already — its kind "
+                        "suffers no company. One, exactly.")
+        return s
+    price = economy.relic_price(slug, p["unlocked_floor"])
+    if p["gold"] < price:
+        s = scene_fn(p)
+        s.shard_note = (f"The {r.name} is ◈ {price:,} and you carry "
+                        f"◈ {p['gold']:,}.")
+        return s
+    p["gold"] -= price
+    p["inventory"][slug] = p["inventory"].get(slug, 0) + r.count
+    combat._ledger(p, "buy", gold=-price, note=slug)
+    s = scene_fn(p)
+    s.body_lines.insert(0, (f"+ {r.name}"
+                            + (f" ×{r.count}" if r.count > 1 else "")
+                            + f" — {r.effect}. The catch: {r.limit}."))
+    return s
+
+
 def _forge_scene(p: dict) -> Scene:
     clazz = p.get("clazz") or ""
     opts, lines = [], []
@@ -679,6 +730,7 @@ def _forge_scene(p: dict) -> Scene:
             "buy_arrow_pack", "Arrow pack",
             f"◈ {economy.ARROW_PACK_PRICE} · {economy.ARROW_PACK_SIZE} "
             "arrows"))
+    _relic_rows(p, "forge", opts, lines)      # 006: quivers and tools
     for g in _wearable_pack(p):
         if p["gear"].get(g.slot) != g.slug:
             opts.append(Option(f"wear_{g.slug}", f"Wear {g.name}",
@@ -906,6 +958,8 @@ def _forge_buy(p: dict, oid: str) -> Scene:
     if oid.startswith("wear_"):
         return _wear_from_pack(p, oid.removeprefix("wear_"), _forge_scene)
     slug = oid.removeprefix("buy_")
+    if slug in economy.RELICS and economy.RELICS[slug].shop == "forge":
+        return _relic_buy(p, slug, _forge_scene)
     g = economy.FORGE.get(slug)
     if not g:
         return _forge_scene(p)
@@ -943,6 +997,7 @@ def _arcanum_scene(p: dict) -> Scene:
                          "half the bite, and one cast in four fizzles")
         lines.append("The focuses behind the counter won't wake for "
                      "you — caster's gear, caster's hand.")
+    _relic_rows(p, "arcanum", opts, lines)    # 006: the mage relics
     opts.append(Option("back", "Back to the square"))
     return Scene(
         eyebrow="ROOTHOLLOW · THE ARCANUM",
@@ -960,6 +1015,8 @@ def _arcanum_buy(p: dict, oid: str) -> Scene:
     if oid.startswith("wear_"):
         return _wear_from_pack(p, oid.removeprefix("wear_"), _arcanum_scene)
     slug = oid.removeprefix("buy_")
+    if slug in economy.RELICS and economy.RELICS[slug].shop == "arcanum":
+        return _relic_buy(p, slug, _arcanum_scene)
     g = economy.FORGE.get(slug)
     if not g:
         return _arcanum_scene(p)
@@ -986,14 +1043,16 @@ def _medlab_scene(p: dict) -> Scene:
     opts = [Option(f"buy_{i.slug}", i.name,
                    f"◈ {i.price}" + (f" · {i.note}" if i.note else ""))
             for i in economy.APOTHECARY.values()]
-    opts.append(Option("back", "Back to the square"))
     inv = [f"{economy.APOTHECARY[k].name} ×{v}"
            for k, v in p["inventory"].items() if k in economy.APOTHECARY]
+    lines = ["you carry: " + ", ".join(inv)] if inv else []
+    _relic_rows(p, "apothecary", opts, lines)  # 006: the life-guards
+    opts.append(Option("back", "Back to the square"))
     return Scene(
         eyebrow="ROOTHOLLOW · APOTHECARY & MEDLAB",
         headline="Gels, stims, and honest odds",
         support="The lamp hums. The shelves are stocked. The prices are firm.",
-        body_lines=(["you carry: " + ", ".join(inv)] if inv else []),
+        body_lines=lines,
         options=opts,
         meters=combat.meters(p),
         banner="medlab",
@@ -1002,6 +1061,8 @@ def _medlab_scene(p: dict) -> Scene:
 
 def _medlab_buy(p: dict, oid: str) -> Scene:
     slug = oid.removeprefix("buy_")
+    if slug in economy.RELICS and economy.RELICS[slug].shop == "apothecary":
+        return _relic_buy(p, slug, _medlab_scene)
     item = economy.APOTHECARY.get(slug)
     if not item:
         return _medlab_scene(p)
@@ -1168,13 +1229,23 @@ def _pawn_frac(p: dict, g) -> float:
 
 
 def _pawn_offer(p: dict, g) -> int:
-    return int(g.price * economy.PAWN_BUYBACK * _pawn_frac(p, g))
+    # 006 §3.8: the broker's daily mood replaces the flat 40%.
+    rate = economy.pawn_rate(state.world_day())
+    return int(g.price * rate * _pawn_frac(p, g))
+
+
+def _pawn_relic_offer(p: dict, slug: str) -> int:
+    rate = economy.pawn_rate(state.world_day())
+    return int(economy.relic_price(slug, p["unlocked_floor"]) * rate)
 
 
 def _pawn_scene(p: dict) -> Scene:
+    rate = economy.pawn_rate(state.world_day())
     gear_in_pack = [k for k in p["inventory"] if k in economy.FORGE]
+    relics_in_pack = [k for k in p["inventory"] if k in economy.RELICS]
     opts = []
-    lines = []
+    lines = [f"The broker pays {round(rate * 100)}% today. Tomorrow is "
+             "another mood."]
     for slug in gear_in_pack:
         g = economy.FORGE[slug]
         offer = _pawn_offer(p, g)
@@ -1183,12 +1254,18 @@ def _pawn_scene(p: dict) -> Scene:
         opts.append(Option(f"sell_{slug}", f"Sell {g.name}", f"◈ {offer:,}"))
         lines.append(f"{g.name} ×{p['inventory'][slug]}{worn} — "
                      f"offers ◈ {offer:,}")
-    if not lines:
+    # 006 §3.8: the pawn always buys ANYTHING — relics included.
+    for slug in relics_in_pack:
+        r = economy.RELICS[slug]
+        offer = _pawn_relic_offer(p, slug)
+        opts.append(Option(f"sell_{slug}", f"Sell {r.name}", f"◈ {offer:,}"))
+        lines.append(f"{r.name} ×{p['inventory'][slug]} — offers ◈ {offer:,}")
+    if not gear_in_pack and not relics_in_pack:
         lines.append("Nothing in your pack the broker wants today.")
     opts.append(Option("back", "Back to the square"))
     return Scene(
         eyebrow="ROOTHOLLOW · PAWN SHOP",
-        headline="Forty on the hundred, no haggling",
+        headline=f"{round(rate * 100)} on the hundred, no haggling",
         support="The broker has seen everything twice and paid less for it "
                 "both times.",
         body_lines=lines,
@@ -1210,6 +1287,18 @@ def _pawn_action(p: dict, oid: str) -> Scene:
         combat._ledger(p, "pawn", gold=offer, note=slug)
         s = _pawn_scene(p)
         s.body_lines.insert(0, f"+ ◈ {offer:,} for the {g.name}")
+        return s
+    if slug in p["inventory"] and slug in economy.RELICS:
+        offer = _pawn_relic_offer(p, slug)
+        p["inventory"][slug] -= 1
+        if p["inventory"][slug] <= 0:
+            del p["inventory"][slug]
+        p["gold"] += offer
+        combat._ledger(p, "pawn", gold=offer, note=slug)
+        s = _pawn_scene(p)
+        s.body_lines.insert(0,
+                            f"+ ◈ {offer:,} for the "
+                            f"{economy.RELICS[slug].name}")
         return s
     return _pawn_scene(p)
 

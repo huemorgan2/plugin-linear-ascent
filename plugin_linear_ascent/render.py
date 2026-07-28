@@ -355,6 +355,9 @@ def _opt_gear_icon(oid: str) -> str:
     slug = oid.split("_", 1)[1]
     if slug == "arrow_pack":
         key = "arrows"
+    elif slug in economy.RELICS:
+        # 006: the relic shelf wears its own glyphs, same as the pack
+        key = icons.icon_key(slug, "relic")
     else:
         g = economy.FORGE.get(slug)
         if g is None:

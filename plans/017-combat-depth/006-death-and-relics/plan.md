@@ -25,6 +25,12 @@ so the new sinks matter.
 2. `economy.py`: relic table v1 (plan §3.7 — items, DI-anchored prices,
    band availability, exclusivity groups); faucet cuts (alpha charm
    10%, warden charm 15%); pawn variable rate 25–55% by world_day.
+   **Tuned in execution:** Reincarnation Spell 1.0 DI → **0.5 DI** —
+   at 1.0 the spell only beat the expected unprotected death cost
+   (0.60 DI at band 2, 0.83 at band 3) from band 4 on; the plan's own
+   gate says "EV-positive by band 2". Warden charm 15% → **12%** — the
+   gate is ≤ 1/3 of the old 40% and 15 missed it by a hair. Both live
+   as named constants (`ALPHA_CHARM_PCT`, `WARDEN_CHARM_PCT`).
 3. `engine/combat.py` relic effects: quiver arrow types (poison DoT
    no-stack, slowing −2 spd, piercing, fire), oils, net, sky-hook,
    strip potion, curse scroll, polymorph (skip, no loot/XP), veil,
@@ -34,8 +40,14 @@ so the new sinks matter.
 4. `engine/core.py`: shop stock wiring (Forge quiver/tools, Arcanum
    mage relics, apothecary insurance); pawn scene shows today's rate;
    hold-1 purchase refusals.
-   003 retro: relic inspection (effect + limitation) should be a
-   structured payload rendered as a `<details>` dossier, not prose —
+   **Shipped as prose, deliberately:** each shelf row is ONE line
+   (name — effect. The catch: limit.) — the [i]-card dossier pattern
+   earns its keep on stat-dense payloads, not one-liners; the law is
+   already said verbatim on the shelf, in the tooltip, and in
+   `to_text` for the agent, with zero new render surface.
+   Original note — 003 retro: relic inspection (effect + limitation)
+   should be a structured payload rendered as a `<details>` dossier,
+   not prose —
    the [i]-card pattern (zero JS, agent reads the same facts via
    `to_text`). Active relic effects in a fight must be NAMED on
    screen (002/003 lesson: unexplained number changes read as bugs).

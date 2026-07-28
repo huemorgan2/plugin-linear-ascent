@@ -15,6 +15,15 @@ shared-world migration check, end-to-end dojo playtest, release.
    bands) — the stacked-drain budget for death + relics starts from
    there, and 005's lesson stands: express every drain as a fraction
    of `daily_income` per band BEFORE touching constants.
+   006 retro: the stacked-drain gate exists now —
+   `test_017_death_relics.py::test_the_combined_drain_leaves_room_to_climb`
+   models repairs + the rational death line (min(unprotected cost,
+   spell price) / 4 days) under a 40% ceiling. The retune must extend
+   it with the relic consumable spend (quivers, oils) at each band's
+   intended usage rate, not replace it. Shipped anchors to retune
+   AROUND: spell 0.5 DI (EV-positive from band 2 by ~0.1 DI — thin on
+   purpose), death cost 0.6→2.5 DI band 2→10, charms 10%/12%,
+   pawn 25–55%.
 2. **Shared-world migration rehearsal:** export prod player docs
    (worldd, render-production skill), run `ensure_current` v2 over all
    of them locally, diff meters/gear/race outcomes, fix surprises.

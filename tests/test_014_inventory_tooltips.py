@@ -93,7 +93,7 @@ def test_prefix_tips_carry_the_numbers():
              and x.slot == "weapon")
     t = tips.option_tip(f"buy_{g.slug}")
     assert f"+{g.bonus}" in t and g.name in t
-    assert "40%" in tips.option_tip(f"sell_{g.slug}")
+    assert "25–55%" in tips.option_tip(f"sell_{g.slug}")   # 006: daily rate
     assert "◈ 10" in tips.option_tip("grantamt_100")     # the 10% burn
     assert "floor 7" in tips.option_tip("floor_7")
     for oid in ("hone_weapon", "hone_shield", "hone_armor",

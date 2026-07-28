@@ -113,10 +113,12 @@ def test_death_consequences_and_death_save():
     p["hp"] = 1
     p["encounter"]["atk"] = 999              # guaranteed lethal
     s = choose(p, "stand")
-    assert p["gold"] == 0                    # carried gold gone
-    assert p["gear"]["armor"] is None        # armor destroyed
-    assert p["gear"]["shield"] is None       # shield destroyed
-    assert p["gear"]["weapon"] == "pigsticker"   # weapon survives
+    # 006 §3.6: a random 40–60% bite of gold; guard slots take wear
+    # instead of destruction; each paid weapon rolls 20% gone.
+    assert 500 * 0.40 <= 500 - p["gold"] <= 500 * 0.60
+    assert p["gear"]["armor"] == "padded_jerkin"       # worn, not gone
+    assert p["gear"]["shield"] == "scrapwood_buckler"
+    assert p["gear"]["weapon"] in ("pigsticker", "rusted_sword")
     assert p["location"] == "town"
     assert s.event_kind == "death"
 
@@ -248,7 +250,9 @@ def test_forge_buy_equips_and_pawns_old():
     choose(p, "back")
     choose(p, "pawn")
     s = choose(p, "sell_pigsticker")
-    assert p["gold"] == 1250 - 250 + 100     # 40% buyback
+    # 006: the broker pays the day's rate (25–55%), not a flat 40%
+    offer = int(250 * economy.pawn_rate(state.world_day()))
+    assert p["gold"] == 1250 - 250 + offer
     assert "pigsticker" not in p["inventory"]
 
 

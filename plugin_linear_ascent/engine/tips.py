@@ -254,10 +254,25 @@ def _buy_tip(slug: str) -> str:
     i = economy.APOTHECARY.get(slug)
     if i:
         return item_tip(slug)
+    r = economy.RELICS.get(slug)
+    if r:
+        # 006 law, on the glass: one dramatic effect + one hard
+        # limitation, both named before the coin leaves your hand.
+        pack = f" Sold ×{r.count} to the pack." if r.count > 1 else ""
+        return f"{r.name} — {r.effect}. The catch: {r.limit}.{pack}"
     return ""
 
 
 _HONE_STAT = {"weapon": "ATK", "shield": "DEF", "armor": "DEF"}
+
+# 006: fight-option id → relic slug (the ids stay short on the card)
+_FIGHT_RELIC = {
+    "use_oil": "weapon_oil", "throw_net": "entangling_net",
+    "use_hook": "sky_hook", "use_strip": "strip_potion",
+    "use_curse": "curse_scroll", "use_polymorph": "polymorph_dust",
+    "use_veil": "veil_draught", "use_apple": "golden_apple",
+    "use_severing": "severing_word",
+}
 
 
 def option_tip(oid: str) -> str:
@@ -297,17 +312,27 @@ def option_tip(oid: str) -> str:
     if oid.startswith("sell_"):
         slug = oid.removeprefix("sell_")
         g = economy.FORGE.get(slug)
-        name = g.name if g else "it"
-        return (f"The broker pays 40% of Forge price for {name}. "
-                "Outgrown steel back into gold — gold into the next "
-                "tier.")
+        r = economy.RELICS.get(slug)
+        name = g.name if g else (r.name if r else "it")
+        return (f"The broker pays a daily rate (25–55%, same for "
+                f"everyone) for {name}, times its wear if it's gear. "
+                "Outgrown things back into gold — gold into the next "
+                "tier. A patient seller checks the rate tomorrow.")
     if oid.startswith("floor_"):
         n = oid.removeprefix("floor_")
         return (f"Ride the lift to floor {n}. Gold and XP scale with "
                 "the floor, so hunt the highest one you survive — "
                 "level ≈ floor is the safe line, and the frontier is "
                 "where Warden glory waits.")
-    if oid.startswith("use_"):
+    if oid.startswith("nock_"):
+        return item_tip(oid.removeprefix("nock_")) + \
+            " Nocking is free — the switch doesn't spend your round."
+    if oid.startswith("use_") or oid == "throw_net":
+        # 006 fight options carry short ids; map back to the relic.
+        slug = _FIGHT_RELIC.get(oid, oid.removeprefix("use_"))
+        t = item_tip(slug)
+        if t:
+            return t
         return item_tip(oid.removeprefix("use_"))
     if oid.startswith("write_"):
         who = oid.removeprefix("write_")
@@ -380,6 +405,9 @@ def item_tip(slug: str, equipped: bool = False) -> str:
     t = _ITEM_TIPS.get(slug)
     if t:
         return t
+    r = economy.RELICS.get(slug)
+    if r:
+        return f"{r.name} — {r.effect}. The catch: {r.limit}."
     g = economy.FORGE.get(slug)
     if g:
         stat = "ATK" if g.slot == "weapon" else "DEF"
@@ -390,9 +418,9 @@ def item_tip(slug: str, equipped: bool = False) -> str:
             return (f"{g.name} — your worn {g.slot}, {stat} +{g.bonus}: "
                     f"{doing}. The Forge sells the next tier; honing "
                     "pushes this one further.")
-        offer = int(g.price * economy.PAWN_BUYBACK)
         return (f"{g.name} — {g.slot}, {stat} +{g.bonus}, riding in "
                 f"your pack since you outgrew it. Dead weight: the "
-                f"pawn shop pays ◈ {offer:,} toward your next tier.")
+                "pawn shop pays the day's rate (25–55%) toward your "
+                "next tier — worth checking on a good day.")
     return ("Something the climb put in your pack. The pawn shop will "
             "tell you what it's worth.")

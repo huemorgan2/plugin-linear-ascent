@@ -714,7 +714,14 @@ for _g in CLASS_STARTERS.values():
 def class_starter(clazz: str) -> GearItem:
     return CLASS_STARTERS.get(clazz or "", STARTER_WEAPON)
 
-PAWN_BUYBACK = 0.40
+PAWN_BUYBACK = 0.40    # pre-006 flat rate; 006 makes it the band centre
+
+
+def pawn_rate(day: int) -> float:
+    """006 §3.8: the broker's mood — deterministic from the world day,
+    uniform 25–55%. Everyone sees the same rate; patience is a trade."""
+    x = (day * 2654435761) % 2 ** 32
+    return 0.25 + 0.30 * (x / 2 ** 32)
 
 
 def forge_tier(tier: int) -> list[GearItem]:
@@ -857,6 +864,143 @@ APOTHECARY: dict[str, ShopItem] = {i.slug: i for i in [
     ShopItem("scout_optics", "Scout optics", 100, "scout_3",
              "sidekick reveals enemy stats, 3 charges"),
 ]}
+
+# ── 006 §3.7: the relic catalog v1 ───────────────────────────────────────
+# Law: one dramatic effect + one hard limitation; no permanent stats.
+# Prices anchor to daily_income(player frontier) — a relic always costs
+# the same fraction of your hunting day, wherever you are on the tower.
+
+@dataclass(frozen=True)
+class Relic:
+    slug: str
+    name: str
+    effect: str            # the one dramatic thing it does (shown verbatim)
+    limit: str             # the one hard limitation (shown verbatim)
+    di: float              # price = pretty(di × daily_income(frontier))
+    floor: int             # appears in stock from this unlocked floor
+    shop: str              # "forge" | "arcanum" | "apothecary"
+    count: int = 1         # units per purchase (arrow packs, net packs)
+    clazz: str = ""        # class-locked purchase ("" = anyone)
+    hold1: bool = False    # own at most one at a time
+    group: str = ""        # per-fight exclusivity ("life")
+
+
+RELICS: dict[str, Relic] = {r.slug: r for r in [
+    Relic("poison_arrows", "Poisoned Arrows",
+          "true damage for 3 rounds — seeps past any plate",
+          "no stacking; Wardens and venomproof things shrug it off",
+          0.3, 6, "forge", count=5),
+    Relic("slowing_arrows", "Slowing Arrows",
+          "the target drops 2 speed for the fight — the kiting answer",
+          "wears off with the fight; wasted on anything already slow",
+          0.3, 8, "forge", count=5),
+    Relic("piercing_arrows", "Piercing Arrows",
+          "the shot ignores armor tiers entirely",
+          "five to a quiver, archer hands only",
+          0.5, 11, "forge", count=5, clazz="archer"),
+    Relic("fire_arrows", "Fire Arrows",
+          "+50% burst on the shot; burns regeneration out",
+          "plate still turns fire-tipped shafts like any arrow",
+          0.3, 11, "forge", count=5),
+    Relic("weapon_oil", "Weapon Oil",
+          "your next 10 strikes hit +25% — steel or string, always works",
+          "ten strikes, then the flask is gone",
+          0.2, 6, "forge"),
+    Relic("entangling_net", "Entangling Net",
+          "the monster loses its round tangled — it cannot close or flee",
+          "three to a pack; a Warden tears through it instantly",
+          0.25, 11, "forge", count=3, clazz="warrior"),
+    Relic("sky_hook", "Sky-Hook",
+          "your steel reaches the airborne for this whole fight",
+          "five uses a hook, one burned per fight",
+          0.4, 11, "forge", count=5, clazz="warrior"),
+    Relic("strip_potion", "Resistance-Strip Potion",
+          "dissolves the target's spellguard for the fight",
+          "one fight, one vial",
+          0.3, 6, "arcanum", clazz="sorcerer"),
+    Relic("curse_scroll", "Curse Scroll",
+          "halves the target's plate for the fight",
+          "one fight, one scroll",
+          0.3, 6, "arcanum", clazz="sorcerer"),
+    Relic("polymorph_dust", "Polymorph Dust",
+          "the monster becomes a harmless critter — the fight simply ends",
+          "no loot, no XP, never works on Wardens; one pinch",
+          1.2, 21, "arcanum", clazz="sorcerer"),
+    Relic("veil_draught", "Veil Draught",
+          "nothing can touch you until your first attack lands",
+          "one fight; only one life-guard works per fight",
+          0.5, 21, "apothecary", group="life"),
+    Relic("golden_apple", "Golden Apple",
+          "an overshield of twice your health, and all damage halved",
+          "one fight, the shield rots as the rounds pass; one life-guard "
+          "per fight",
+          0.8, 21, "apothecary", group="life"),
+    Relic("reincarnation_spell", "Weapon Reincarnation Spell",
+          "death takes NOTHING — and every weapon and armor piece "
+          "repairs to full",
+          "consumed by the death it cancels; each SPARE spell you hoard "
+          "rolls 50% lost",
+          # 0.5 DI: EV-positive against an unprotected death from band 2
+          # on (the intended buy) — while the spare-spell leak keeps
+          # hoarding 3+ strictly worse than banking the gold.
+          0.5, 11, "apothecary"),
+    Relic("stone_of_undying", "Stone of Undying",
+          "cancels the death itself — you stand back up mid-fight",
+          "revive at 30% health; hold exactly one; consumed",
+          1.5, 21, "apothecary", hold1=True, group="life"),
+    Relic("severing_word", "Severing Word",
+          "speak it and any non-Warden monster simply ends",
+          "one use; hold exactly one",
+          8.0, 31, "arcanum", hold1=True),
+]}
+
+QUIVER_SLUGS = ("poison_arrows", "slowing_arrows", "piercing_arrows",
+                "fire_arrows")
+LIFE_GROUP = tuple(r.slug for r in RELICS.values() if r.group == "life")
+
+OIL_STRIKES = 10
+OIL_MULT = 1.25
+FIRE_ARROW_MULT = 1.5
+POISON_ROUNDS = 3
+SLOW_ARROW_DELTA = 2
+STONE_REVIVE_PCT = 0.30
+APPLE_SHIELD_MULT = 2.0
+APPLE_DECAY = 0.20             # the overshield rots 20% of itself a round
+
+# 006 §3.6 death economy (level > BEGINNER_MERCY_MAX_LEVEL, unprotected)
+DEATH_GOLD_MIN = 0.40
+DEATH_GOLD_MAX = 0.60
+DEATH_WEAPON_LOSS = 0.20       # each paid weapon rolls: gone for good
+DEATH_DURABILITY_HIT = 0.50    # armor/shield/shoes lose half a pool
+SPARE_SPELL_LEAK = 0.50        # each spare Reincarnation Spell on a
+                               # protected death
+
+# 006 §3.8 faucet cuts — bought relics need the free charms scarce.
+# Gate: ≤ 1/3 of the pre-006 rates (alpha was 30%, warden 40%).
+ALPHA_CHARM_PCT = 10
+WARDEN_CHARM_PCT = 12
+
+
+def _pretty(n: float) -> int:
+    """Shop-window rounding: two leading digits, zeros after."""
+    n = max(1, round(n))
+    if n < 100:
+        return int(round(n / 5) * 5) or n
+    step = 10 ** (len(str(n)) - 2)
+    return int(round(n / step) * step)
+
+
+def relic_price(slug: str, frontier: int) -> int:
+    r = RELICS[slug]
+    return _pretty(r.di * daily_income(max(1, frontier)))
+
+
+def relic_stock(shop: str, frontier: int, clazz: str) -> list[Relic]:
+    """What this shop shows this player, catalog order."""
+    return [r for r in RELICS.values()
+            if r.shop == shop and frontier >= r.floor
+            and (not r.clazz or r.clazz == clazz)]
+
 
 # ── §6c Healing (008, repriced by 013) ───────────────────────────────────
 # The ladder: stew (2g, +5 HP, repeatable) → healer's tent (5×floor,

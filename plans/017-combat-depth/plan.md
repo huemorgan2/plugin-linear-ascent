@@ -174,8 +174,15 @@ and the mage relics (strip potion, curse scroll, polymorph dust).
 ### 3.5 Durability
 
 - Every **paid** weapon/shield/armor/shoe carries `uses` (int).
-  Pool by tier: `pool(T) = round(240 / (1 + 0.3·(T−1)))` → T1 240,
-  T5 109, T10 65 — **better gear wears faster**, in uses not just rate.
+  ~~Pool by tier: `pool(T) = round(240 / (1 + 0.3·(T−1)))` → T1 240,
+  T5 109, T10 65 — better gear wears faster, in uses not just rate.~~
+  **Retuned 2026-07-27 (phase 005):** the shrinking pool failed the
+  ≤20%-of-income gate by up to 14× (kit prices run 3–14 days of
+  income; pools burning inside a day price repairs off the kit, not
+  the income). Shipped: `pool(T) = round(1300 · (1 + 0.25·(T−1)))`
+  (per-item via `economy.item_pool`, rung-aware) — pools GROW with
+  tier, a piece lasts ~a week at level, and the running cost lives in
+  the rising gold-per-use; repair tax ≈8% (T1) → ≈12% (T10) of DI.
 - Wear: weapon −1 per player attack; shield/armor −1 per hit taken;
   shoes −1 per chase action (flee/open/close). Basic (tier-0) gear
   never wears.
@@ -227,7 +234,7 @@ introduced band by band (lint enforces the schedule).
 | Polymorph dust (mage) | non-Warden monster becomes a harmless critter — fight skipped | **no loot, no XP**; one use | 1.2 DI | Arcanum band 3 |
 | Veil Draught | untargetable until your first attack | one fight; timed | 0.5 DI | band 3 |
 | Golden Apple | 2× HP overshield + all damage halved | one fight; overshield decays | 0.8 DI | band 3 |
-| Weapon Reincarnation Spell | death takes nothing + full repair (§3.6) | consumed; spares leak 50% on a protected death | 1.0 DI | band 2 |
+| Weapon Reincarnation Spell | death takes nothing + full repair (§3.6) | consumed; spares leak 50% on a protected death | ~~1.0 DI~~ **0.5 DI** (retuned 2026-07-27, phase 006: at 1.0 it was only EV-positive from band 4; the gate demands band 2) | band 2 |
 | Stone of Undying | cancels the death itself — stand up mid-fight | revive at 30% HP; **hold exactly 1**; consumed | 1.5 DI | band 3 |
 | Severing Word | instakill any non-Warden monster | one use; **hold exactly 1** | 8 DI | band 4 |
 
@@ -237,7 +244,9 @@ fight. Relics live in the pack, sell at the pawn, donate to the armory.
 ### 3.8 Faucet tightening + pawn + armory
 
 - Alpha spoils: luck charm 30% → **10%** (medgel 90%).
-- Warden rare loot: charm 40% → **15%** (tonic 85%).
+- Warden rare loot: charm 40% → ~~15%~~ **12%** (tonic 88%) — retuned
+  2026-07-27, phase 006: the gate is ≤ 1/3 of the old rate and 15
+  missed it by a hair.
 - **Pawn variable rate:** deterministic from `world_day` seed, uniform
   **25–55%** (today flat 40%), shown in the shop ("the broker pays 32%
   today"); worn gear pays × its durability fraction. Pawn **always

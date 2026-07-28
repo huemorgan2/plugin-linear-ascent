@@ -53,6 +53,15 @@ for the new monsters.
   day rises with them. Re-run the 005 repair-tax gate
   (`test_017_durability.py`) after each band batch, alongside the
   days-to-afford gate; both read the same income table.
+  006 retro: relic prices and death costs ALSO read the income table
+  (`relic_price` = di × daily_income, death gold rides carried gold)
+  — after any band income retune, re-run the three 006 economy gates
+  in `test_017_death_relics.py` with the durability and shop gates;
+  they are one budget. Trait placement now has buyers: every band
+  with flyers needs sky-hooks affordable at its floor, every resist
+  band feeds strip potions — check `relic_stock` floor gates against
+  where the traits actually land (poison unlocks at 6, nets/hooks at
+  11, polymorph at 21, severing at 31).
 - Art: every encounter id with no shipped art logged and triaged (the
   renderer already skips silently — the list is the deliverable).
 - Dojo spot-checks: one floor per band — read three [i] cards, verify
