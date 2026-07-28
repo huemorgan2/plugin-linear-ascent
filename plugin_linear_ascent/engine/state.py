@@ -29,7 +29,7 @@ def world_day(at: dt.datetime | None = None) -> int:
 def new_player(luna_user: str) -> dict:
     ts = now().isoformat()
     return {
-        "version": 4,
+        "version": 5,
         "luna_user": luna_user,
         "stage": "intro",              # intro → creation_race → creation_class → creation_name → playing
         "name": None, "race": None, "clazz": None,
@@ -203,6 +203,68 @@ def ensure_current(p: dict) -> None:
                     event_kind="present",
                 ).to_dict())
         p["version"] = 4
+    if p.get("version", 1) < 5:
+        # 017 §1 follow-up: doc v2 re-issued the class basic weapon only to
+        # climbers still holding the GENERIC shiv. But every weapon the
+        # Forge had ever sold became warrior-line the day the three lines
+        # landed — so an archer or sorcerer who had BOUGHT one woke up
+        # off-class on gear they paid full price for: half the damage, one
+        # swing in four wide, no honing, triple price to replace it. That
+        # is a retroactive punishment for a fair purchase.
+        #
+        # Re-forge every such piece — worn and packed alike — into the same
+        # rung of the holder's own line. The lines mirror rung for rung, so
+        # the swap is exact: same bonus, same price, wear and hone carried
+        # over. Docs still in creation (which v2 skipped) get their class
+        # basic weapon here too.
+        clazz = p.get("clazz") or ""
+        if clazz in economy.CLASS_STARTERS:
+            reforged: list[tuple[str, str]] = []
+            worn = p["gear"].get("weapon") or ""
+            starters = {g.slug for g in economy.CLASS_STARTERS.values()}
+            starters.add(economy.STARTER_WEAPON.slug)
+            item = economy.FORGE.get(worn)
+            if worn in starters:
+                p["gear"]["weapon"] = economy.class_starter(clazz).slug
+            elif item and item.line and item.line != clazz:
+                twin = economy.line_twin(item, clazz)
+                if twin:
+                    p["gear"]["weapon"] = twin.slug
+                    reforged.append((item.name, twin.name))
+            pack = p.setdefault("inventory", {})
+            stash = p.setdefault("durability_pack", {})
+            for slug in list(pack):
+                item = economy.FORGE.get(slug)
+                if not (item and item.line and item.line != clazz):
+                    continue
+                twin = economy.line_twin(item, clazz)
+                if not twin:
+                    continue
+                pack[twin.slug] = pack.get(twin.slug, 0) + pack.pop(slug)
+                if slug in stash:
+                    stash[twin.slug] = max(stash.pop(slug),
+                                           stash.get(twin.slug, 0))
+                reforged.append((item.name, twin.name))
+            if reforged and p.get("stage") == "playing":
+                from .scene import Option, Scene
+                p.setdefault("pending_events", []).insert(0, Scene(
+                    eyebrow="ROOTHOLLOW · THE FORGE, BEFORE OPENING",
+                    headline="The smith re-forged what you paid for",
+                    support="When the Forge split its racks into three "
+                            "lines, the steel you had already bought was "
+                            "filed under somebody else's calling. You were "
+                            "being charged for a mistake in the ledger.",
+                    shard_note="Rung for rung, it is the same weapon. "
+                               "You lost nothing — you only stopped "
+                               "paying for a clerk's error.",
+                    body_lines=[
+                        f"▪ {old} → {new} — same rung, same bite, your line"
+                        for old, new in reforged
+                    ] + ["▪ its wear and its honing came across untouched"],
+                    options=[Option("town", "Take it up")],
+                    event_kind="present",
+                ).to_dict())
+        p["version"] = 5
 
 
 # ── Durability (005 §3.5) ────────────────────────────────────────────────

@@ -145,12 +145,16 @@ def test_v1_warrior_renames_silently():
     assert not p.get("pending_events")
 
 
-def test_v1_doc_with_bought_weapon_is_untouched():
+def test_v1_doc_with_bought_weapon_is_never_demoted_to_the_starter():
+    """Earned gear stays earned: v2 must not hand a paid weapon back for
+    the free staff. (v5 later trades it rung-for-rung into the sorcerer
+    line — see test_017_offclass_migration.)"""
     p = _v1_playing_doc("sorcerer")
-    p["gear"]["weapon"] = "pigsticker"       # earned gear stays
+    p["gear"]["weapon"] = "pigsticker"
     state.ensure_current(p)
-    assert p["gear"]["weapon"] == "pigsticker"
-    assert not p.get("pending_events")
+    held = economy.FORGE[p["gear"]["weapon"]]
+    assert held.rung == economy.FORGE["pigsticker"].rung
+    assert held.price == economy.FORGE["pigsticker"].price
 
 
 # ── engine edges ─────────────────────────────────────────────────────────

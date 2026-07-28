@@ -773,6 +773,18 @@ def off_class_price(g: GearItem) -> int:
     return g.price * OFF_CLASS_PRICE_MULT
 
 
+def line_twin(g: GearItem, line: str) -> GearItem | None:
+    """The same rung of another weapon line. The three lines mirror each
+    other rung for rung — same bonus, same price — so trading a piece for
+    its twin costs its holder nothing."""
+    if g.slot != "weapon" or g.rung < 1 or not line or g.line == line:
+        return None
+    for other in weapon_line(line):
+        if other.rung == g.rung:
+            return other
+    return None
+
+
 def off_class_offer(line: str, level: int) -> GearItem | None:
     """The one off-class weapon on the rack: the rung BELOW the highest
     this level unlocks in `line` (the first rung when nothing is below)."""
