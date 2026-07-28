@@ -72,23 +72,19 @@ def test_letter_compose_flow_is_free():
     assert fx and fx[0]["to_name"] == "Rilo"
 
 
-def test_muster_roll_lists_climbers():
-    p = playing(world={
-        "social": True, "frontier": 12, "roster_count": 31,
-        "roster": [
-            {"name": "Mara", "race": "elf", "clazz": "archer", "level": 21,
-             "power": 180, "floor": 21, "bank_rank": 1, "last_seen_days": 0},
-            {"name": "Rilo", "race": "dwarf", "clazz": "warrior", "level": 9,
-             "power": 70, "floor": 8, "bank_rank": 4, "last_seen_days": 3},
-        ]})
+def test_muster_roll_is_gone_from_the_square():
+    p = playing(world={"social": True, "frontier": 12, "roster_count": 31})
     s = core.current_scene(p)
-    assert any(o.id == "muster" for o in s.options)
-    s = core.apply_choice(p, "muster")
-    assert "31 climbers" in s.headline
-    assert any("Mara" in l and "floor 21" in l for l in s.body_lines)
-    assert any("Rilo" in l and "3d ago" in l for l in s.body_lines)
-    s = core.apply_choice(p, "town")
+    assert not any(o.id == "muster" for o in s.options)
+
+
+def test_stale_muster_location_lands_back_in_the_square():
+    # live docs could be standing at the retired place when it went away
+    p = playing(world={"social": True})
+    p["location"] = "muster"
+    s = core.current_scene(p)
     assert p["location"] == "town"
+    assert any(o.id == "forge" for o in s.options)
 
 
 def test_death_and_first_clear_emit_happenings_in_world_mode():
@@ -130,7 +126,7 @@ def test_guild_found_flow():
     assert p.get("founding_guild")
     core.apply_choice(p, "", "Lanternjacks")
     assert p["guild"] == "Lanternjacks"
-    assert p["gold"] == 100
+    assert p["gold"] == 300                 # 019: the charter is ◈ 300
     assert any(e["kind"] == "guild_found" for e in p["_effects"])
 
 

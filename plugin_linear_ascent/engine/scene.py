@@ -16,6 +16,9 @@ class Option:
     label: str
     hint: str = ""          # right-aligned cost/class hint, e.g. "1 ⚡"
     aether: bool = False    # class/sidekick option — aether key chip
+    locked: bool = False    # 019: a gated row — dimmed, still clickable;
+                            # choosing it returns the scene with the
+                            # refusal that explains the gate
 
 
 @dataclass
@@ -109,7 +112,8 @@ class Scene:
             "body_lines": self.body_lines,
             "options": [
                 {"id": o.id, "label": o.label, "hint": o.hint,
-                 "aether": o.aether} for o in self.options],
+                 "aether": o.aether, "locked": o.locked}
+                for o in self.options],
             "meters": vars(self.meters) if self.meters else None,
             "event_kind": self.event_kind,
             "banner": self.banner,

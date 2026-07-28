@@ -108,6 +108,8 @@ select.ti{{background:{INK};color:{TEXT};border:1px solid {BORDER};
  padding:4px 0;border-bottom:1px dashed {BORDER};align-items:baseline;
  white-space:nowrap;overflow:hidden;}}
 .lrow .r{{text-align:right;}}
+.lrow.joinable{{grid-template-columns:3ch 1fr 9ch 9ch auto;
+ align-items:center;}}
 .drow{{display:grid;grid-template-columns:1fr auto;gap:1ch;padding:5px 0;
  border-bottom:1px dashed {BORDER};align-items:center;}}
 .drow .who .sub{{color:{FAINT};}}
@@ -265,7 +267,11 @@ function wireOptions() {
   const btns = [...game.querySelectorAll('button.opt')];
   const hint = game.querySelector('.reply');
   btns.forEach(b => b.addEventListener('click', async () => {
-    if (loading) return; loading = true;
+    if (loading) return;
+    // 019: the Guildhall's "Join a banner" row IS the Community tab —
+    // no server round trip, the door just opens.
+    if (b.dataset.opt === 'hall_ledger') { switchTab('community'); return; }
+    loading = true;
     btns.forEach(x => { x.disabled = true;
       x.classList.add(x === b ? 'busy' : 'stale'); });
     if (hint) hint.textContent = '…';
@@ -348,7 +354,8 @@ async function loadCommunity() {
     const [board, ledger] = await Promise.all([
       call('/pane/community'),
       call('/pane/factions?q=' + encodeURIComponent(comm.q))]);
-    community.innerHTML = renderLedger(ledger) + renderBoard(board);
+    community.innerHTML =
+      renderCta(ledger) + renderLedger(ledger) + renderBoard(board);
     wireFind();
   } catch (err) {
     if (err.message !== 'auth')
@@ -368,16 +375,44 @@ function chipRow(name, banners, right) {
     + '<span class="dim">' + right + '</span></div>';
 }
 
+/* ── 019: the pitch to the unbannered — join here, or found there ───── */
+function renderCta(d) {
+  if (d.in_faction) return '';
+  let h = '<div class="panel"><div class="eyebrow">you climb '
+    + 'unbannered</div><div>A faction table means a shared armory, '
+    + 'weekly challenges, and people who notice when you fall. '
+    + 'Ask to join any banner below';
+  if (d.requested)
+    h += ' \u2014 you\u2019ve already knocked at ' + fac(d.requested)
+      + ', their steward decides';
+  h += '.</div><div class="faint" style="margin-top:6px">Or raise your '
+    + 'own at the Guildhall in Roothollow \u2014 \u25c8 '
+    + num(d.found_fee || 300) + ', level ' + (d.found_min_level || 4)
+    + ' and up.</div>'
+    + '<button class="btn mini" id="ctahall" style="margin-top:8px">'
+    + 'THE GUILDHALL \u2192</button></div>';
+  return h;
+}
+
 /* ── THE LEDGER: top 10 + server-side search ────────────────────────── */
 function ledgerRows(d) {
   if (!d.factions.length)
     return '<div class="faint">no banner answers to that name</div>';
-  return d.factions.map((f, i) =>
-    '<div class="lrow"><span class="faint">' + (i + 1) + '</span>'
-    + '<span>' + fac(f.name) + '</span>'
-    + '<span class="r dim">' + f.members + ' at table</span>'
-    + '<span class="r gold">\u25c8 ' + num(f.treasury) + '</span></div>'
-  ).join('');
+  const open = !d.in_faction;   // the unbannered can knock from any row
+  return d.factions.map((f, i) => {
+    let act = '';
+    if (open)
+      act = f.name === d.requested
+        ? '<span class="r tag">ASKED</span>'
+        : '<span class="r"><button class="btn mini" data-desk="request" '
+          + 'data-name="' + esc(f.name) + '">ASK TO JOIN</button></span>';
+    return '<div class="lrow' + (open ? ' joinable' : '') + '">'
+      + '<span class="faint">' + (i + 1) + '</span>'
+      + '<span>' + fac(f.name) + '</span>'
+      + '<span class="r dim">' + f.members + ' at table</span>'
+      + '<span class="r gold">\u25c8 ' + num(f.treasury) + '</span>'
+      + act + '</div>';
+  }).join('');
 }
 
 function renderLedger(d) {
@@ -523,6 +558,8 @@ function deskMsg(text, cls) {
 }
 
 community.addEventListener('click', async (e) => {
+  // 019: the CTA's founding pitch walks straight to the Guildhall card
+  if (e.target.closest('#ctahall')) { switchTab('game'); return; }
   const back = e.target.closest('#back');
   if (back) { comm.view = 'board'; comm.name = ''; loadCommunity(); return; }
   const fname = e.target.closest('[data-fac]');

@@ -249,10 +249,11 @@ def test_forge_buy_equips_and_pawns_old():
     choose(p, "buy_pigsticker")
     assert p["gear"]["weapon"] == "pigsticker"
     assert p["gold"] == 1250
-    # 007: the worn rung leaves the rack — the spare reaches the pack
-    # by outgrowing it (the next rung up sends the old paid one back)
+    # 019: the worn rung stays on the rack as a spare; outgrowing it
+    # (the next rung up) still sends the old paid one back to the pack
     s = core.current_scene(p)
-    assert not any(o.id == "buy_pigsticker" for o in s.options)
+    row = next(o for o in s.options if o.id == "buy_pigsticker")
+    assert "spare" in row.hint
     p["level"] = 6
     choose(p, "buy_iron_sword")
     assert p["inventory"].get("pigsticker") == 1
@@ -365,7 +366,9 @@ def test_forge_tier_gated_by_level():
     p["unlocked_floor"] = 11                     # tier-2 stock, level 11 req
     s = choose(p, "forge")
     assert not any(o.id == "buy_wolfbite" for o in s.options)
-    assert any("🔒" in ln and "level 6" in ln for ln in s.body_lines)
+    # 019: the lock is a dimmed ROW with the level, not prose
+    nxt = next(o for o in s.options if o.locked and o.id.startswith("buy_"))
+    assert "level 6" in nxt.hint
     s = choose(p, "buy_wolfbite")
     assert p["gear"]["weapon"] != "wolfbite"     # refused at level 1
     assert p["gold"] == 100_000                  # not charged

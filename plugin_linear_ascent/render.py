@@ -654,10 +654,14 @@ def render_scene_fragment(scene: Scene) -> str:
         rows = []
         for i, o in enumerate(scene.options, 1):
             key_cls = " aether" if o.aether else ""
+            # 019: a locked row is dimmed but stays a button — clicking
+            # it is how the player asks why the gate is shut.
+            opt_cls = " locked" if getattr(o, "locked", False) else ""
             hint = (f'<span class="hint">{_et(o.hint)}</span>'
                     if o.hint else "")
             gicon = _opt_gear_icon(o.id)
-            btn = (f'<button type="button" class="opt" data-opt="{_e(o.id)}">'
+            btn = (f'<button type="button" class="opt{opt_cls}" '
+                   f'data-opt="{_e(o.id)}">'
                    f'<span class="key{key_cls}">{i}</span>{gicon}'
                    f'<span class="lbl">{_et(o.label)}</span>{hint}</button>')
             # 014: the whisper glyph — [i] OUTSIDE the button, so tapping
@@ -750,6 +754,9 @@ SCENE_CSS = f"""
  font:inherit;color:inherit;text-align:left;border-radius:0;
  cursor:pointer;}}
 .opt:hover:not(:disabled){{border-color:{VIOLET};}}
+.opt.locked .lbl,.opt.locked .key{{color:{DIM};}}
+.opt.locked .hint{{color:{FAINT};}}
+.opt.locked:hover:not(:disabled){{border-color:{BORDER};}}
 .opt:focus-visible{{outline:1px solid {VIOLET};outline-offset:1px;}}
 .opt:disabled{{cursor:default;}}
 .opt.chosen{{border-color:{VIOLET};
@@ -766,6 +773,7 @@ SCENE_CSS = f"""
  mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;
  image-rendering:pixelated;}}
 .opt:hover .gicon{{background-color:{TEXT};}}
+.opt.locked .gicon,.opt.locked:hover .gicon{{background-color:{FAINT};}}
 .orow{{display:flex;align-items:stretch;gap:5px;}}
 .orow .opt{{flex:1;min-width:0;}}
 .info{{flex:none;display:flex;align-items:center;padding:0 .5ch;

@@ -106,7 +106,7 @@ def test_founding_flow_sets_the_purse_numbers():
     assert "dues" in s.headline.lower()
     s = core.apply_choice(p, "", "5")
     assert p["guild"] == "Night Ledger"
-    assert p["gold"] == 100
+    assert p["gold"] == 300                 # 019: the charter is ◈ 300
     e = fx(p, "guild_found")[0]
     assert e["guild"] == "Night Ledger"
     assert e["banner"] == sig.removeprefix("sig_")
