@@ -104,9 +104,9 @@ def test_xp_pool_costs_scale_with_floor():
 
 def test_level_gates():
     # tier T answers to the band's first floor; floors want level F−10
-    assert economy.gear_level_req(1) == 1
-    assert economy.gear_level_req(2) == 11
-    assert economy.gear_level_req(10) == 91
-    assert economy.floor_level_req(1) == 1
-    assert economy.floor_level_req(11) == 1
-    assert economy.floor_level_req(40) == 30
+    assert economy.gear_player_level_req(1) == 1
+    assert economy.gear_player_level_req(2) == 11
+    assert economy.gear_player_level_req(10) == 91
+    assert economy.floor_entry_player_level(1) == 1
+    assert economy.floor_entry_player_level(11) == 1
+    assert economy.floor_entry_player_level(40) == 30

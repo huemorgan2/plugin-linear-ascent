@@ -231,7 +231,7 @@ for _c, _t in _CLASS_ANGLE.items():
 def _buy_tip(slug: str) -> str:
     g = economy.FORGE.get(slug)
     if g:
-        req = economy.rung_level_req(g)
+        req = economy.rung_player_level_req(g)
         if g.slot == "shoes":
             return (f"{g.name} — footwear, +{g.speed} speed (wants "
                     f"level {req}). {g.flavor.capitalize()}. Speed "

@@ -253,20 +253,34 @@ Each waits for players to say "I've seen it all."
 
 ## 11. Order of work and verification
 
-1. **021** → golden-value tests green, vendor to worldd.
-2. **Phase 1** structure + Grand Retune → simulation script proves era-length
-   band at 200/1k/10k actives; full plugin + worldd suites; the three lying
-   strings now true.
-3. **Phase 2** presence → cache-TTL test (a hot count can never exceed its
-   window); pane peek contract test.
-4. **Phase 3** clocks → per-feature tests (contract seed determinism, rested
-   cap, strongbox pick-one, dawn heal preserves the potion sink mid-session).
-5. **Phase 4** war/era → era-reset dry run against a scratch DB; the
-   reincarnation ledger survives the wipe.
-6. **Phase 5** flare + assists.
-7. After every phase: re-vendor (`worldd/tools/vendor_game.sh`), worldd suite,
-   and a browser walkthrough per `.cursor/skills/agent-live-walkthrough` —
-   play it like a player before calling it done.
+Execution is broken into numbered phase folders (017's pattern), each with
+its own plan, tests, and release gate — each releasable on its own:
+
+1. **Plan 021** first (its own plan folder) → golden-value tests green,
+   vendor to worldd. **Plan 020** (gate registry) lands before 004.
+2. **`001-one-list-of-bosses/`** — all 100 wardens shared, personal unlock
+   deleted, keep-fight damage persists to the pool, echoes; stopgap tuning
+   keeps floors 1–30 soloable; the three lying strings now true.
+3. **`002-the-grand-retune/`** — LEVEL_CAP 30, gear carries power, the
+   N(F)/regen/window curves; simulation gate proves the era-length band at
+   200/1k/10k actives.
+4. **`003-presence/`** — hot/camped tiers (3-minute rule), torches, deltas,
+   pane-peek integer; cache-TTL test (a hot count can never outlive its
+   window). Independent — may ship any time.
+5. **`004-dawn-and-contracts/`** — nightly rejuvenation + the contract
+   board; dawn heal preserves the potion sink; contract seed determinism.
+6. **`005-nights-and-weeks/`** — night slot (rest/work) + weekly strongbox;
+   rested cap, strongbox pick-one.
+7. **`006-the-wars-face/`** — siege card, silence countdown, the horn,
+   Crier thresholds.
+8. **`007-the-era/`** — grand siege, era end, Stone of Eras, reincarnation
+   ledger + perks; era-reset dry run against a scratch DB — the permanent
+   tables survive the wipe.
+9. **`008-together/`** — shard flare + assist strikes + the long fire.
+10. After every phase: re-vendor (`worldd/tools/vendor_game.sh`), worldd
+   suite, and a browser walkthrough per
+   `.cursor/skills/agent-live-walkthrough` — play it like a player before
+   calling it done.
 
 Commit to `main` in both repos as work lands (`.cursor/rules/no-branches.mdc`
 — no branches, ever). Each phase is releasable on its own; the order is

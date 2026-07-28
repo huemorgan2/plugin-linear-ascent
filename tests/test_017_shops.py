@@ -87,7 +87,7 @@ def test_focuses_are_ten_whole_rungs_mirroring_shields():
 
 
 def test_shoes_ladder_matches_the_plan_table():
-    rows = [(g.name, g.speed, g.price, economy.rung_level_req(g))
+    rows = [(g.name, g.speed, g.price, economy.rung_player_level_req(g))
             for g in economy.gear_rungs("shoes")]
     assert rows == [
         ("Cobbled Boots", 1, 500, 3),
@@ -101,10 +101,10 @@ def test_shoes_ladder_matches_the_plan_table():
 def test_level_gates_whole_at_band_start_mids_five_later():
     war = {g.rung: g for g in economy.weapon_line("warrior")}
     for t in range(1, 11):
-        assert economy.rung_level_req(war[float(t)]) == \
+        assert economy.rung_player_level_req(war[float(t)]) == \
             economy.band_start(t)
         if t < 10:
-            assert economy.rung_level_req(war[t + 0.5]) == \
+            assert economy.rung_player_level_req(war[t + 0.5]) == \
                 economy.band_start(t) + 5
 
 

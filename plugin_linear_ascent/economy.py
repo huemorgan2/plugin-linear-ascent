@@ -2,6 +2,13 @@
 
 Pure functions and data tables only. Content files never carry these
 numbers; the loader and engine compute them. Keep the SHAPES when tuning.
+
+VOCABULARY — two words, never interchangeable:
+  floor  = the tower, 1-100, shared by every climber.
+  level  = the player, personal, its own XP curve.
+They are equated in exactly one place — `reference_level()` — which
+asserts the tuning convention "the at-level player is level == floor".
+Nothing else may hand a floor to a level-typed function.
 """
 
 from __future__ import annotations
@@ -52,14 +59,16 @@ def scan_xp_cost(floor: int) -> int:
     return round(0.5 * xp_per_kill(floor))
 
 
-def gear_level_req(tier: int) -> int:
-    """Level required to buy tier-T gear: the band's first floor."""
+def gear_player_level_req(tier: int) -> int:
+    """PLAYER LEVEL required to buy tier-T gear. Converts from a floor:
+    the band's first floor, read as a level via the reference identity."""
     return band_start(tier)
 
 
-def floor_level_req(floor: int) -> int:
-    """Level required to enter a floor — loose (design level ≈ floor),
-    exists so a fresh climber can't ride the world lift to floor 40."""
+def floor_entry_player_level(floor: int) -> int:
+    """PLAYER LEVEL required to enter a floor. Converts from a floor:
+    loose leash (level ≈ floor − 10) so a fresh climber can't ride an
+    open frontier to floor 40."""
     return max(1, floor - 10)
 
 
@@ -341,6 +350,18 @@ WARDEN_ATK_RAMP = 100          # ATK ×(1+(F−30)/100) past the soft floor
 REFERENCE_HONE_LAG = 2         # honing trails the climb by ~2 floors
 
 
+def reference_level(floor: int) -> int:
+    """The design's at-level player is level == floor (see
+    _at_level_loadout). The ONLY place that identity is asserted."""
+    return floor
+
+
+def reference_player_hp(floor: int) -> int:
+    """HP of the at-level player used to tune wardens. Deliberately
+    NOT player_max_hp(floor) — that reads a floor as a level."""
+    return player_max_hp(reference_level(floor))
+
+
 def reference_hone(floor: int) -> int:
     """Hone level of the design's at-level player: honing trails the
     climb slightly (income funds it with a lag, and fresh climbers in
@@ -354,8 +375,9 @@ def _at_level_loadout(floor: int) -> tuple[int, int]:
     tier set, honing 2 floors behind. The reference all tuning points at."""
     tier = gear_tier_for_floor(floor)
     hone = reference_hone(floor)
-    return (3 * floor + 8 * tier + hone,
-            2 * floor + 5 * tier + 7 * tier + 2 * hone)
+    lvl = reference_level(floor)
+    return (player_atk(lvl, 8 * tier + hone),
+            player_def(lvl, 5 * tier, 7 * tier + 2 * hone))
 
 
 def _boss_hp_base(floor: int) -> int:
@@ -383,7 +405,7 @@ def warden_stats(floor: int) -> tuple[int, int, int]:
     # partial kits (the first with the bare shiv), and the first hour
     # must never be a coin flip.
     budget = WARDEN_DMG_BUDGET * min(1.0, 0.5 + 0.1 * floor)
-    per_round = budget * player_max_hp(floor) / rounds
+    per_round = budget * reference_player_hp(floor) / rounds
     atk = round((per_round + p_def // 2) / 0.75)
     if floor > WARDEN_SOFT_FLOOR:
         atk = round(atk * (1 + (floor - WARDEN_SOFT_FLOOR) / WARDEN_ATK_RAMP))
@@ -739,9 +761,10 @@ def weapon_line(line: str) -> list[GearItem]:
     return gear_rungs("weapon", line)
 
 
-def rung_level_req(g: GearItem) -> int:
-    """Level gate: rung T at band_start(T), T.5 at band_start(T)+5 —
-    the shoes ladder carries explicit gates instead."""
+def rung_player_level_req(g: GearItem) -> int:
+    """PLAYER LEVEL gate for a forge rung. Converts from a floor:
+    rung T at band_start(T), T.5 at band_start(T)+5 — the shoes ladder
+    carries explicit gates instead."""
     if g.level:
         return g.level
     t = int(g.rung)
@@ -788,7 +811,7 @@ def line_twin(g: GearItem, line: str) -> GearItem | None:
 def off_class_offer(line: str, level: int) -> GearItem | None:
     """The one off-class weapon on the rack: the rung BELOW the highest
     this level unlocks in `line` (the first rung when nothing is below)."""
-    unlocked = [g for g in weapon_line(line) if rung_level_req(g) <= level]
+    unlocked = [g for g in weapon_line(line) if rung_player_level_req(g) <= level]
     if not unlocked:
         return None
     return unlocked[-2] if len(unlocked) >= 2 else unlocked[0]

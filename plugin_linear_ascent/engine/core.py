@@ -194,7 +194,7 @@ def _news_scene(p: dict, w: dict, day: int) -> Scene:
 
 def _news_advice(p: dict, w: dict, frontier: int, wd: dict | None) -> str:
     """Where to work today for the fastest climb — honest engine math."""
-    req = economy.floor_level_req(frontier)
+    req = economy.floor_entry_player_level(frontier)
     if p["level"] < req:
         best = max(1, min(p["unlocked_floor"], p["level"] + 10))
         return (f"Floor {frontier} wants level {req} legs — you are "
@@ -641,8 +641,8 @@ def _rack(p: dict, items: list, opts: list, lines: list) -> None:
     019: the worn rung stays on the rack — spares exist to be donated to
     the faction armory, so owning a piece never hides it from the shop."""
     lvl = p["level"]
-    buyable = [g for g in items if economy.rung_level_req(g) <= lvl]
-    nxt = next((g for g in items if economy.rung_level_req(g) > lvl), None)
+    buyable = [g for g in items if economy.rung_player_level_req(g) <= lvl]
+    nxt = next((g for g in items if economy.rung_player_level_req(g) > lvl), None)
     worn = p["gear"].get(items[0].slot) if items else None
     # the two newest steps stay, and the worn rung keeps its row even
     # when it sits below them — a spare is always on sale
@@ -665,7 +665,7 @@ def _rack(p: dict, items: list, opts: list, lines: list) -> None:
                 else f"+{nxt.bonus}")
         opts.append(Option(
             f"buy_{nxt.slug}", nxt.name,
-            f"🔒 level {economy.rung_level_req(nxt)} · ◈ {nxt.price:,}",
+            f"🔒 level {economy.rung_player_level_req(nxt)} · ◈ {nxt.price:,}",
             locked=True))
         lines.append(f"{nxt.name} — {stat}, the rung you're saving for")
 
@@ -893,7 +893,7 @@ def _gear_purchase(p: dict, g, scene_fn) -> Scene:
     off-class ×3 pricing, equip + old piece to the pack."""
     clazz = p.get("clazz") or ""
     off = bool(g.line) and clazz and g.line != clazz
-    req = economy.rung_level_req(g)
+    req = economy.rung_player_level_req(g)
     price = economy.off_class_price(g) if off else g.price
     if p["level"] < req:
         s = scene_fn(p)
@@ -1454,7 +1454,7 @@ def _gate_pick(p: dict, oid: str) -> Scene:
         s = _gate_scene(p)
         s.shard_note = f"Floor {n} is still sealed. A Warden holds every lift."
         return s
-    req = economy.floor_level_req(n)
+    req = economy.floor_entry_player_level(n)
     if p["level"] < req:
         s = _gate_scene(p)
         s.shard_note = (f"The lift is open, but floor {n} wants level {req} "
