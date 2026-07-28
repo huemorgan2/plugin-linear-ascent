@@ -43,7 +43,7 @@ _TIPS: dict[str, str] = {
                 "sorcerers."),
     "medlab": ("The shelf that keeps a hunting run going: Medgel +25 HP, "
                "Trauma kit +80 HP, Trollblood tonic full heal usable "
-               "MID-fight, Energy cell +5 ⚡ (one a day), Luck charm for "
+               "MID-fight, Energy cell +5 energy (one a day), Luck charm for "
                "better loot until tomorrow, Scout optics for 3 enemy "
                "scans. Healing on the road means more hunts per day — "
                "and hunts are where gold and XP come from."),
@@ -63,7 +63,7 @@ _TIPS: dict[str, str] = {
               "gold, coordinate Warden pushes, call for a grant when "
               "you're short. The frontier falls faster when blades "
               "arrive together."),
-    "fields": ("PvP. Ambush climbers who skipped the Lodge — 3 ⚡, twice "
+    "fields": ("PvP. Ambush climbers who skipped the Lodge — 3 energy, twice "
                "a day. Win and you take their carried gold plus an XP "
                "bounty. Fast money, real risk: your banked gold stays "
                "safe either way, and a paid bunk keeps YOU off this "
@@ -88,7 +88,7 @@ _TIPS: dict[str, str] = {
                "meeting in the fields."),
 
     # ── gate towns ──
-    "hunt": ("Fight a wild creature of this floor — 1 ⚡. The bread and "
+    "hunt": ("Fight a wild creature of this floor — 1 energy. The bread and "
              "butter of the climb: every kill pays gold and XP, and "
              "deeper floors pay more. This is the steady engine that "
              "buys everything else."),
@@ -97,7 +97,7 @@ _TIPS: dict[str, str] = {
              "carried gold and breaks your armor and shield."),
     "stew": ("Hunter's stew: ◈ 2 for +5 HP, repeatable. The cheap "
              "top-up when a full heal would waste coin."),
-    "keep": ("The floor's Warden — 3 ⚡ a strike. Bring it down and the "
+    "keep": ("The floor's Warden — 3 energy a strike. Bring it down and the "
              "next floor opens for EVERY climber, your name goes on the "
              "Stone, and the reward is a multiple of a wild kill. At the "
              "frontier all climbers cut at one shared Warden: every "
@@ -164,11 +164,11 @@ _TIPS: dict[str, str] = {
                       "saved."),
 
     # ── keeps ──
-    "strike": ("Spend 3 ⚡ to cut the shared Warden's HP — every "
+    "strike": ("Spend 3 energy to cut the shared Warden's HP — every "
                "climber's strikes stack on the same body. When it falls "
                "the floor opens for ALL, and the prize splits by damage "
                "dealt: strike daily, even a little claims a share."),
-    "boss_commit": ("Pledge your blade to the milestone push — 5 ⚡. "
+    "boss_commit": ("Pledge your blade to the milestone push — 5 energy. "
                     "When enough blades stand pledged the gate falls "
                     "for everyone, and the pledged split the prize. The "
                     "tower is not climbed alone."),
@@ -206,7 +206,7 @@ _TIPS: dict[str, str] = {
 
 # race / class picks read their economy line plus the climb angle.
 _RACE_ANGLE = {
-    "human": ("+1 energy cap. Energy is the game's clock — one more ⚡ "
+    "human": ("+1 energy cap. Energy is the game's clock — one more point "
               "is one more hunt, strike or ambush every single day."),
     "elf": ("+5% XP from kills. Levels come faster, and levels are "
             "gear, floors and power — the compounding pick."),
@@ -376,7 +376,7 @@ def option_tip(oid: str) -> str:
                 "their share of any prize.")
     if oid.startswith("attack_"):
         who = oid.removeprefix("attack_")
-        return (f"Ambush {who} in the fields — 3 ⚡, two a day. Win and "
+        return (f"Ambush {who} in the fields — 3 energy, two a day. Win and "
                 "you take their carried gold plus an XP bounty; lose "
                 "and you limp home lighter. Banked gold is safe on "
                 "both sides.")
@@ -395,7 +395,7 @@ _ITEM_TIPS: dict[str, str] = {
     "trollblood_tonic": ("Trollblood tonic — full heal, drinkable "
                          "MID-fight, the only one that is. Carried for "
                          "the round a Warden has you at the edge."),
-    "energy_cell": ("Energy cell — +5 ⚡ on the spot, one a day. Energy "
+    "energy_cell": ("Energy cell — +5 energy on the spot, one a day. Energy "
                     "is the day's clock: a cell is five extra hunts' "
                     "worth of climbing."),
     "luck_charm": ("Luck charm — fortune leans your way until "

@@ -74,7 +74,7 @@ def _state_line(scene) -> str:
     bits = [scene.eyebrow, scene.headline]
     m = scene.meters
     if m:
-        bits.append(f"HP {m.hp}/{m.hp_max} · ⚡{m.energy}/{m.energy_max} "
+        bits.append(f"HP {m.hp}/{m.hp_max} · EN {m.energy}/{m.energy_max} "
                     f"· XP {m.xp}/{m.xp_need} · LV {m.level} · ◈{m.gold}")
     if scene.options:
         bits.append("options: " + ", ".join(o.label for o in scene.options))

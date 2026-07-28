@@ -244,7 +244,7 @@ def _maybe_present(p: dict) -> Scene | None:
         lines.append("▪ a medgel, still sealed")
     elif kind == "full_energy":
         state.gain_energy(p, 99)
-        lines.append("⚡ your limbs hum — energy restored")
+        lines.append("▪ your limbs hum — energy restored")
     elif kind == "rumor":
         p["flags"]["rumor_day"] = state.world_day()
         lines.append("▪ a rumor: your next fight starts in your favor")

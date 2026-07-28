@@ -171,6 +171,34 @@ def _e(s: str) -> str:
     return html.escape(s, quote=True)
 
 
+# ── 010.1: no emoji, ever ─────────────────────────────────────────────────
+# The engine emits ⚡ and 🔒 as one-character semantic markers; every HTML
+# surface swaps them for 16×16 1-bit mask glyphs (tinted by currentColor,
+# so they inherit the surrounding text color). Plain-text surfaces
+# (Scene.to_text, tooltips) carry words instead — an emoji must never
+# reach a player's screen from any path.
+_EMOJI_GLYPHS = {"⚡": "bolt", "🔒": "lock"}
+
+
+def _eglyph(key: str) -> str:
+    url = icons.icon_data_url(key)
+    return (f'<span class="eg" aria-hidden="true" '
+            f"style=\"-webkit-mask-image:url('{url}');"
+            f"mask-image:url('{url}')\"></span>")
+
+
+def _sub_glyphs(escaped: str) -> str:
+    for ch, key in _EMOJI_GLYPHS.items():
+        if ch in escaped:
+            escaped = escaped.replace(ch, _eglyph(key))
+    return escaped
+
+
+def _et(s: str) -> str:
+    """Escape + swap marker chars for 1-bit glyphs (the common path)."""
+    return _sub_glyphs(_e(s))
+
+
 # Combat numbers, colored in place: damage the player deals reads orange,
 # HP the player loses reads red. Scene content stays plain text (the
 # renderer contract) — these match the battle-text phrasings from
@@ -188,7 +216,7 @@ def _combat_html(line: str) -> str:
         lambda m: f'<span style="color:{RED}">{m.group(0)}</span>', s)
     s = _HIT_DMG.sub(
         lambda m: f'<span style="color:{ORANGE}">{m.group(0)}</span>', s)
-    return s
+    return _sub_glyphs(s)
 
 
 def _blocks(cur: int, cap: int, cells: int = 10) -> str:
@@ -203,7 +231,7 @@ def _blocks(cur: int, cap: int, cells: int = 10) -> str:
 # browser's 500ms+ delay made them undiscoverable).
 _TIP_HP = ("HP — health. At 0 you die: all carried gold is lost and armor "
            "and shield break. Heal at the healer's tent or the Apothecary.")
-_TIP_EN = ("⚡ Energy — actions spend it: wilds hunt 1, Warden attempt 3, "
+_TIP_EN = ("Energy — actions spend it: wilds hunt 1, Warden attempt 3, "
            "milestone boss 5, PvP attack 3. Regenerates 1 every 45 minutes.")
 _TIP_XP = ("XP — experience. Fills as you fight and banks past the cap. "
            "A full bar is your license to train: buy the next level with "
@@ -224,7 +252,7 @@ def _meters_html(m: Meters) -> str:
         f'<span class="blocks" aria-hidden="true">'
         f"{_blocks(m.hp, m.hp_max)}</span></span>"
         f'<span class="meter en" data-tip="{_e(_TIP_EN)}">'
-        f"<span>⚡ {m.energy}/{m.energy_max}</span>"
+        f"<span>{_eglyph('bolt')} {m.energy}/{m.energy_max}</span>"
         f'<span class="blocks" aria-hidden="true">'
         f"{_blocks(m.energy, m.energy_max)}</span></span>"
         f'<span class="meter ae" data-tip="{_e(_TIP_XP)}">'
@@ -593,17 +621,17 @@ def render_scene_fragment(scene: Scene) -> str:
         parts.append(_enemy_head_html(scene.enemy))
         parts.append(_dossier_html(scene.enemy))
     if scene.support:
-        parts.append(f'<div class="support type">{_e(scene.support)}</div>')
+        parts.append(f'<div class="support type">{_et(scene.support)}</div>')
     if scene.shard_note:
         parts.append(f'<div class="shard type"><span class="glyph">◆</span>'
-                     f"<span>{_e(scene.shard_note)}</span></div>")
+                     f"<span>{_et(scene.shard_note)}</span></div>")
     in_fold = False
     for line in scene.body_lines:
         # 007: ▣ fold markers — long shop shelves collapse into a
         # <details> block (the [i]-dossier pattern, zero JS).
         if line.startswith("▣ "):
             parts.append(f'<details class="fold"><summary class="type">'
-                         f"{_e(line[2:])}</summary>")
+                         f"{_et(line[2:])}</summary>")
             in_fold = True
             continue
         if line == "▣.":
@@ -613,10 +641,10 @@ def render_scene_fragment(scene: Scene) -> str:
             continue
         if line.startswith("+"):
             parts.append(f'<div class="body type" style="color:{OK}">'
-                         f"{_e(line)}</div>")
+                         f"{_et(line)}</div>")
         elif line.startswith("−") or line.startswith("-"):
             parts.append(f'<div class="body type" style="color:{RED}">'
-                         f"{_e(line)}</div>")
+                         f"{_et(line)}</div>")
         else:
             parts.append(f'<div class="body type">{_combat_html(line)}</div>')
     if in_fold:
@@ -626,12 +654,12 @@ def render_scene_fragment(scene: Scene) -> str:
         rows = []
         for i, o in enumerate(scene.options, 1):
             key_cls = " aether" if o.aether else ""
-            hint = (f'<span class="hint">{_e(o.hint)}</span>'
+            hint = (f'<span class="hint">{_et(o.hint)}</span>'
                     if o.hint else "")
             gicon = _opt_gear_icon(o.id)
             btn = (f'<button type="button" class="opt" data-opt="{_e(o.id)}">'
                    f'<span class="key{key_cls}">{i}</span>{gicon}'
-                   f'<span class="lbl">{_e(o.label)}</span>{hint}</button>')
+                   f'<span class="lbl">{_et(o.label)}</span>{hint}</button>')
             # 014: the whisper glyph — [i] OUTSIDE the button, so tapping
             # it never fires the option; tip resolves by option id.
             tip = tips.option_tip(o.id)
@@ -687,6 +715,12 @@ SCENE_CSS = f"""
  margin-top:3px;mask-size:100% 100%;-webkit-mask-size:100% 100%;
  mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;
  image-rendering:pixelated;}}
+/* 010.1: inline 1-bit glyphs where the engine marks bolt/lock — tinted
+   by currentColor so they read as text, never as emoji. */
+.eg{{width:16px;height:16px;display:inline-block;vertical-align:-3px;
+ background-color:currentColor;mask-size:100% 100%;
+ -webkit-mask-size:100% 100%;mask-repeat:no-repeat;
+ -webkit-mask-repeat:no-repeat;image-rendering:pixelated;}}
 .dlore{{color:{FAINT};font-style:italic;margin-top:6px;
  border-top:1px dashed {BORDER};padding-top:6px;}}
 .banner{{display:block;width:calc(100% + 4ch);margin:-12px -2ch 10px;

@@ -94,7 +94,11 @@ class Scene:
             lines.append(
                 f"HP {m.hp}/{m.hp_max}   ⚡ {m.energy}/{m.energy_max}   "
                 f"XP {m.xp}/{m.xp_need}   LV {m.level}   gold {m.gold}")
-        return "\n".join(lines)
+        # 010.1: ⚡/🔒 are one-character markers for the HTML renderer's
+        # 1-bit glyphs; the text surface (the agent reads this) speaks in
+        # words so no emoji ever leaks into a chat reply.
+        return ("\n".join(lines)
+                .replace("⚡", "energy").replace("🔒", "locked"))
 
     def to_dict(self) -> dict:
         return {
