@@ -28,7 +28,7 @@ def _event_art(slug: str) -> bool:
     return os.path.exists(os.path.join(_EVENTS, f"{slug}_320x112.gif"))
 
 
-def _opener_banner(e: dict, floor) -> str:
+def _fight_banner(e: dict, floor) -> str:
     """Creature's own art if shipped (plan 005), else the old behavior."""
     if e["kind"] == "warden":
         if floor.floor % 10 == 0:  # milestone boss banners ship in banners/
@@ -392,7 +392,10 @@ def fight_scene(p: dict, floor, opener: bool = False, note: str = "") -> Scene:
         body_lines=body,
         options=opts,
         meters=meters(p),
-        banner=_opener_banner(e, floor) if opener else "",
+        # The creature stays on screen for every round of the fight: it is
+        # the same enemy, and dropping the art after the opener read as
+        # "this monster has no picture".
+        banner=_fight_banner(e, floor),
         banner_variant=(e.get("specimen", "")
                         if e["kind"] == "wilds"
                         and e.get("specimen") != "common" else ""),

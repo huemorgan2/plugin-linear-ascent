@@ -17,9 +17,18 @@ extended in time:
      (kills) play ONCE and hold the final still frame; ambient scenes
      (the opening tower) loop forever with a crossfaded seam.
 
+Two video backends:
+  fal (default) — Kling 2.5 Turbo Pro via fal.ai; much better action
+      coherence (bodies, impacts, falls) than Veo. Key: $FAL_KEY or
+      FAL_KEY= in ../luna/.env. Text-to-video only.
+  veo — Gemini API Veo 3.1; still used automatically for events with an
+      `image` first-frame reference (fal path here has no image-to-video).
+      Key: $LUNA_GEMINI_API_KEY.
+
 Usage:
-  LUNA_GEMINI_API_KEY=... python tools/generate_event_gifs.py [slug ...]
-  python tools/generate_event_gifs.py boar_kill --from-video path.mp4   # skip Veo, reuse a clip
+  python tools/generate_event_gifs.py [slug ...]
+  python tools/generate_event_gifs.py boar_kill --backend veo           # force the old backend
+  python tools/generate_event_gifs.py boar_kill --from-video path.mp4   # skip generation, reuse a clip
   python tools/generate_event_gifs.py boar_kill --force                 # re-shoot even if the mp4 exists
 
 Outputs: content/art/events/<slug>_320x112.gif        (white ink, alpha)
@@ -33,6 +42,7 @@ import json
 import os
 import sys
 import time
+import urllib.error
 import urllib.request
 
 from PIL import Image
@@ -49,6 +59,10 @@ FPS = 12         # GIF playback rate; Veo footage is resampled down to this
 
 API_ROOT = "https://generativelanguage.googleapis.com/v1beta"
 VIDEO_MODEL = "veo-3.1-generate-preview"
+
+FAL_QUEUE = "https://queue.fal.run"
+FAL_MODEL = "fal-ai/kling-video/v2.5-turbo/pro/text-to-video"
+NEGATIVE = "color, text, captions, watermark, camera shake, zoom, pan"
 
 BAYER = [
     [0, 32, 8, 40, 2, 34, 10, 42], [48, 16, 56, 24, 50, 18, 58, 26],
@@ -411,14 +425,20 @@ _KILL_BEATS = {
               "dead {noun}, sword lowered, absolutely nothing moving — "
               "a frozen closing frame."),
     "arrow": (CAST_ARCHER,
-              "The {noun} charges across the open ground; the archer "
-              "draws and looses a single arrow in one smooth motion; "
-              "the shot takes the {noun} clean and it crashes down "
-              "mid-stride and lies completely still. The FINAL TWO "
-              "SECONDS are a perfectly still tableau: the archer "
-              "standing motionless, bow lowered, the dead {noun} on "
-              "the ground before him, absolutely nothing moving — a "
-              "frozen closing frame."),
+              "The shot opens MID-ACTION with zero build-up: from the "
+              "very first frame the {noun} is already at a full "
+              "furious sprint, charging straight at the archer, and "
+              "the archer's bow is already drawn to full anchor. He "
+              "looses INSTANTLY — within the first second the arrow "
+              "strikes the charging {noun} hard mid-stride; its "
+              "momentum carries it crashing and skidding through the "
+              "grass, and it lies completely still. No waiting, no "
+              "hesitation, no slow approach — charge, shot and impact "
+              "are one continuous fast beat. The FINAL TWO SECONDS "
+              "are a perfectly still tableau: the archer standing "
+              "motionless, bow lowered, the dead {noun} on the ground "
+              "before him, absolutely nothing moving — a frozen "
+              "closing frame."),
     "magic": (CAST_WIZARD,
               "The {noun} closes in; the giant wizard plants his staff "
               "and one brilliant bolt of light leaps from its glowing "
@@ -438,6 +458,10 @@ for _fam, (_scene, _noun) in _KILL_MONSTERS.items():
             "tint": DIM, "seconds": 8, "loop": False, "hold_ms": 2000,
             "trim": (0.0, 5.5),
         }
+
+# Per-clip recuts of specific Kling takes — cut the tail before any
+# stray post-tableau motion (e.g. the archer re-nocking an arrow).
+EVENTS["wolf_kill_arrow"]["trim"] = (0.0, 4.6)
 
 PANEL = (0x11, 0x15, 0x1F)
 
@@ -506,8 +530,7 @@ def veo_generate(prompt: str, seconds: int, api_key: str, out_mp4: str,
             "aspectRatio": "16:9",
             "resolution": "720p",
             "durationSeconds": seconds,
-            "negativePrompt": "color, text, captions, watermark, "
-                              "camera shake, zoom, pan",
+            "negativePrompt": NEGATIVE,
         },
     }
     req = urllib.request.Request(
@@ -535,6 +558,81 @@ def veo_generate(prompt: str, seconds: int, api_key: str, out_mp4: str,
     with urllib.request.urlopen(dl) as r, open(out_mp4, "wb") as f:
         f.write(r.read())
     print(f"  saved {out_mp4} ({os.path.getsize(out_mp4) // 1024} KB)", flush=True)
+
+
+# ── fal.ai (Kling 2.5 Turbo Pro) ─────────────────────────────────────────
+
+def _fal_key() -> str:
+    key = os.environ.get("FAL_KEY", "").strip()
+    if key:
+        return key
+    env = os.path.join(_HERE, "..", "..", "luna", ".env")
+    if os.path.isfile(env):
+        with open(env) as f:
+            for line in f:
+                line = line.strip()
+                if line.startswith("FAL_KEY="):
+                    return line.split("=", 1)[1].strip().strip("'\"")
+    sys.exit("FAL_KEY not set (env var or luna/.env)")
+
+
+def _fal_json(url: str, key: str, body: dict | None = None) -> dict:
+    req = urllib.request.Request(
+        url,
+        data=json.dumps(body).encode() if body is not None else None,
+        headers={"Content-Type": "application/json",
+                 "Authorization": f"Key {key}"},
+    )
+    for attempt in range(5):
+        try:
+            return json.load(urllib.request.urlopen(req, timeout=60))
+        except urllib.error.HTTPError as e:
+            raise RuntimeError(f"fal {e.code} at {url}: "
+                               f"{e.read().decode()[:500]}") from e
+        except (urllib.error.URLError, TimeoutError, OSError) as e:
+            if attempt == 4:
+                raise
+            print(f"  network error ({e}), retrying...", flush=True)
+            time.sleep(10 * (attempt + 1))
+
+
+def fal_generate(prompt: str, seconds: int, key: str, out_mp4: str) -> None:
+    # Kling durations are 5 or 10. Kills (configured 8s for Veo) fit a 5s
+    # Kling clip — its action pacing is denser — and the freeze frame
+    # comes from the prompt's closing tableau + hold_ms, not clip length.
+    body = {
+        "prompt": prompt,
+        "duration": "5" if seconds <= 8 else "10",
+        "aspect_ratio": "16:9",
+        "negative_prompt": NEGATIVE,
+    }
+    sub = _fal_json(f"{FAL_QUEUE}/{FAL_MODEL}", key, body)
+    print(f"  fal request {sub['request_id']}", flush=True)
+    status = sub["status_url"]
+    while True:
+        time.sleep(8)
+        st = _fal_json(status, key)
+        s = st.get("status")
+        print(f"  ...{s}", flush=True)
+        if s == "COMPLETED":
+            break
+        if s not in ("IN_QUEUE", "IN_PROGRESS"):
+            raise RuntimeError(f"fal status: {json.dumps(st)[:500]}")
+    resp = _fal_json(sub["response_url"], key)
+    uri = resp["video"]["url"]
+    for attempt in range(5):
+        try:
+            with urllib.request.urlopen(uri, timeout=120) as r, \
+                    open(out_mp4, "wb") as f:
+                f.write(r.read())
+            break
+        except (urllib.error.URLError, TimeoutError, OSError) as e:
+            if attempt == 4:
+                raise
+            print(f"  download error ({e}), retrying...", flush=True)
+            time.sleep(10 * (attempt + 1))
+    print(f"  saved {out_mp4} ({os.path.getsize(out_mp4) // 1024} KB)",
+          flush=True)
 
 
 # ── 1-bit pipeline (banner post-process, temporally stable) ──────────────
@@ -751,9 +849,16 @@ def process(slug: str, mp4: str) -> str:
 def main() -> None:
     args = sys.argv[1:]
     from_video = None
+    backend = "fal"
     force = "--force" in args
     if force:
         args.remove("--force")
+    if "--backend" in args:
+        i = args.index("--backend")
+        backend = args[i + 1]
+        args = args[:i] + args[i + 2:]
+    if backend not in ("fal", "veo"):
+        sys.exit(f"unknown backend: {backend}")
     if "--from-video" in args:
         i = args.index("--from-video")
         from_video = args[i + 1]
@@ -767,17 +872,23 @@ def main() -> None:
     for slug in slugs:
         mp4 = from_video or os.path.join(RAW, f"{slug}.mp4")
         if not from_video and (force or not os.path.isfile(mp4)):
-            api_key = os.environ.get("LUNA_GEMINI_API_KEY", "").strip()
-            if not api_key:
-                sys.exit("LUNA_GEMINI_API_KEY not set")
             cfg = EVENTS[slug]
             _set_size(cfg)
             image = cfg.get("image")
             if image:
                 image = os.path.join(_HERE, "..", image)
-            print(f"gen  {slug}...", flush=True)
-            veo_generate(STYLE + cfg["prompt"], cfg["seconds"], api_key,
-                         mp4, image)
+            # image-conditioned events stay on Veo (image-to-video)
+            use = "veo" if image else backend
+            print(f"gen  {slug} [{use}]...", flush=True)
+            if use == "fal":
+                fal_generate(STYLE + cfg["prompt"], cfg["seconds"],
+                             _fal_key(), mp4)
+            else:
+                api_key = os.environ.get("LUNA_GEMINI_API_KEY", "").strip()
+                if not api_key:
+                    sys.exit("LUNA_GEMINI_API_KEY not set")
+                veo_generate(STYLE + cfg["prompt"], cfg["seconds"], api_key,
+                             mp4, image)
         print(process(slug, mp4), flush=True)
 
 

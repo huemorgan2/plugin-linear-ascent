@@ -65,6 +65,19 @@ def _fight_scene_with_specimen(specimen: str):
     return combat.fight_scene(p, floor, opener=True)
 
 
+def test_creature_art_stays_up_for_every_round():
+    # regression: the banner used to be opener-only, so every round after
+    # the first showed no creature and monsters read as art-less.
+    p = state.new_player("t")
+    p.update(race="human", clazz="warrior", name="T", status="playing")
+    floor = schema.get_floor(1)
+    opener = combat.start_encounter(p, floor, floor.encounters[0])
+    later = combat.fight_scene(p, floor, note="you swing again")
+    assert opener.banner == p["encounter"]["id"]
+    assert later.banner == opener.banner
+    assert 'class="banner"' in render.render_scene_fragment(later)
+
+
 def test_fight_scene_carries_specimen_variant():
     assert _fight_scene_with_specimen("alpha").banner_variant == "alpha"
     assert _fight_scene_with_specimen("common").banner_variant == ""
