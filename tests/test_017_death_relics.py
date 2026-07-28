@@ -576,23 +576,55 @@ def test_one_spell_is_the_buy_and_three_is_a_leak():
         assert expected_leak >= 0.4 * di, (tier, expected_leak, di)
 
 
+def _daily_drain(tier):
+    """Repairs + the rational death line, per hunting day, in gold."""
+    fights, rounds = 30, 6
+    fl = economy.band_start(tier)
+    di = economy.daily_income(fl)
+    w, sh, ar = _kit(tier)
+    repair = sum(
+        economy.repair_price(g, min(1.0, fights * rounds
+                                    / economy.item_pool(g)))
+        for g in (w, sh, ar))
+    cost, _ = _death_cost(tier)
+    spell = economy.relic_price("reincarnation_spell", fl)
+    death_per_day = min(cost, spell) / 4
+    return repair + death_per_day, di, fl
+
+
 def test_the_combined_drain_leaves_room_to_climb():
     """Death + repairs + the insurance relic, summed per band, must stay
     under ~40% of a day's income — the 005 lesson, applied before
     shipping. Death rate modeled at one per four hunting days (the risk
     gate's worst honest read); the rational climber holds one spell, so
     the death line is min(unprotected, spell price)."""
-    fights, rounds = 30, 6
     for tier in range(1, 11):
-        fl = economy.band_start(tier)
-        di = economy.daily_income(fl)
-        w, sh, ar = _kit(tier)
-        repair = sum(
-            economy.repair_price(g, min(1.0, fights * rounds
-                                        / economy.item_pool(g)))
-            for g in (w, sh, ar))
-        cost, _ = _death_cost(tier)
-        spell = economy.relic_price("reincarnation_spell", fl)
-        death_per_day = min(cost, spell) / 4
-        drain = (repair + death_per_day) / di
-        assert drain <= 0.40, (tier, drain)
+        base, di, _ = _daily_drain(tier)
+        assert base / di <= 0.40, (tier, base / di)
+
+
+def test_the_drain_with_a_daily_wall_push_still_leaves_room():
+    """010: the 006 gate extended with the relic consumable spend at the
+    intended usage rate — one wall-push per hunting day, each class
+    burning its cheapest wall-breaker (kill bounty is ~DI/30, so
+    consumables are never farming tools; a push is a progression
+    moment, and one a day is the aggressive honest read).
+
+    Per push: warrior one net use (a third of a pack; half an oil flask
+    before the net unlocks at 11), archer ~3 special arrows off the
+    cheapest quiver, sorcerer one vial. The whole stack — repairs +
+    death line + the push — stays under the same 40% ceiling for every
+    class at every band. This gate is what repriced the quivers
+    0.3→0.2 DI and the mage vials 0.3→0.1 DI (2026-07-28)."""
+    for tier in range(1, 11):
+        base, di, fl = _daily_drain(tier)
+        push = {
+            "warrior": (economy.relic_price("entangling_net", fl) / 3
+                        if fl >= economy.RELICS["entangling_net"].floor
+                        else economy.relic_price("weapon_oil", fl) / 2),
+            "archer": 3 * economy.relic_price("poison_arrows", fl) / 5,
+            "sorcerer": economy.relic_price("strip_potion", fl),
+        }
+        for clazz, cost in push.items():
+            drain = (base + cost) / di
+            assert drain <= 0.40, (tier, clazz, drain)

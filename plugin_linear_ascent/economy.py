@@ -892,22 +892,26 @@ class Relic:
 
 
 RELICS: dict[str, Relic] = {r.slug: r for r in [
+    # 010 retune (2026-07-28): quivers 0.3→0.2 DI, piercing 0.5→0.35.
+    # The stacked-drain gate charges each class one wall-push a day
+    # (~3 special arrows); at the old prices the push stacked repairs
+    # + the death line past the 40%-of-daily-income ceiling.
     Relic("poison_arrows", "Poisoned Arrows",
           "true damage for 3 rounds — seeps past any plate",
           "no stacking; Wardens and venomproof things shrug it off",
-          0.3, 6, "forge", count=5),
+          0.2, 6, "forge", count=5),
     Relic("slowing_arrows", "Slowing Arrows",
           "the target drops 2 speed for the fight — the kiting answer",
           "wears off with the fight; wasted on anything already slow",
-          0.3, 8, "forge", count=5),
+          0.2, 8, "forge", count=5),
     Relic("piercing_arrows", "Piercing Arrows",
           "the shot ignores armor tiers entirely",
           "five to a quiver, archer hands only",
-          0.5, 11, "forge", count=5, clazz="archer"),
+          0.35, 11, "forge", count=5, clazz="archer"),
     Relic("fire_arrows", "Fire Arrows",
           "+50% burst on the shot; burns regeneration out",
           "plate still turns fire-tipped shafts like any arrow",
-          0.3, 11, "forge", count=5),
+          0.2, 11, "forge", count=5),
     Relic("weapon_oil", "Weapon Oil",
           "your next 10 strikes hit +25% — steel or string, always works",
           "ten strikes, then the flask is gone",
@@ -920,14 +924,18 @@ RELICS: dict[str, Relic] = {r.slug: r for r in [
           "your steel reaches the airborne for this whole fight",
           "five uses a hook, one burned per fight",
           0.4, 11, "forge", count=5, clazz="warrior"),
+    # 010 retune (2026-07-28): vials 0.3→0.1 DI. One vial is one FIGHT,
+    # so at 0.3 the mage's wall-push cost 3.6× the warrior's net and
+    # broke the stacked-drain ceiling at every band; 0.1 puts all three
+    # classes' per-push cost in the same 0.08–0.12 DI lane.
     Relic("strip_potion", "Resistance-Strip Potion",
           "dissolves the target's spellguard for the fight",
           "one fight, one vial",
-          0.3, 6, "arcanum", clazz="sorcerer"),
+          0.1, 6, "arcanum", clazz="sorcerer"),
     Relic("curse_scroll", "Curse Scroll",
           "halves the target's plate for the fight",
           "one fight, one scroll",
-          0.3, 6, "arcanum", clazz="sorcerer"),
+          0.1, 6, "arcanum", clazz="sorcerer"),
     Relic("polymorph_dust", "Polymorph Dust",
           "the monster becomes a harmless critter — the fight simply ends",
           "no loot, no XP, never works on Wardens; one pinch",

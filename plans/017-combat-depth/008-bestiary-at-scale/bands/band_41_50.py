@@ -200,7 +200,7 @@ SPEC = {
                 "come out."),
         },
         "traits": {
-            "scar_salamander": ["resist_med"],
+            "scar_salamander": ["resist_high"],  # 010: was resist_med — felt by 0.05x drag only
             "canyon_ogre": ["armor_med"],
             "pale_fire": ["resist_high"],
         },

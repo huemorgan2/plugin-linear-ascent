@@ -15,8 +15,8 @@ encounters:
     lore: >-
       The canyon nests come out changed — translucent, bright inside,
       wrong in the joints. Its shadow runs a half-second behind.
-    weight: 3
-    traits: [resist_med]
+    weight: 2
+    traits: [resist_high]
     prose: >-
       The salamanders that nest in the canyon come out changed —
       translucent, bright inside, wrong in the joints. This one moves
@@ -37,7 +37,7 @@ encounters:
     lore: >-
       A flame with no color and no fuel, casting shadows in the wrong
       directions. Spells go into it and do not come out.
-    weight: 2
+    weight: 1
     traits: [resist_high]
     prose: >-
       A flame the color of nothing walks up the canyon path, burning

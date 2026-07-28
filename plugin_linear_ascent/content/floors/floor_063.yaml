@@ -39,7 +39,7 @@ encounters:
       Penned like a town bull, resented, and prayed to. The prayers soaked
       in; spells break against them.
     weight: 3
-    traits: [resist_med]
+    traits: [resist_high]
     prose: >-
       The harpies keep a storm drake the way a town keeps a bull —
       penned, resented, and prayed to. The pen is rigging. The

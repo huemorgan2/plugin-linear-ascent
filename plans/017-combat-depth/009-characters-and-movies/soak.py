@@ -36,11 +36,27 @@ def _docs_local() -> list[dict]:
 
 
 def _docs_url(url: str) -> list[dict]:
-    import psycopg
-    with psycopg.connect(url) as conn:
-        rows = conn.execute("SELECT doc FROM ascent_players").fetchall()
-    return [r[0] if isinstance(r[0], dict) else json.loads(r[0])
-            for r in rows]
+    try:
+        import psycopg
+        with psycopg.connect(url) as conn:
+            rows = conn.execute(
+                "SELECT doc FROM ascent_players").fetchall()
+        rows = [r[0] for r in rows]
+    except ModuleNotFoundError:      # worldd's venv ships asyncpg only
+        import asyncio
+
+        import asyncpg
+
+        async def fetch():
+            conn = await asyncpg.connect(url)
+            try:
+                return [r["doc"] for r in await conn.fetch(
+                    "SELECT doc FROM ascent_players")]
+            finally:
+                await conn.close()
+
+        rows = asyncio.run(fetch())
+    return [r if isinstance(r, dict) else json.loads(r) for r in rows]
 
 
 def main() -> int:

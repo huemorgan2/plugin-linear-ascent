@@ -222,15 +222,15 @@ introduced band by band (lint enforces the schedule).
 
 | Relic | Effect | Limitation | Price | From |
 |---|---|---|---|---|
-| Quiver: Poisoned arrows ×5 | true damage over 3 rounds, ignores armor tiers | no-stack; some monsters immune | 0.3 DI | floor 6 |
-| Quiver: Slowing arrows ×5 | target −2 speed for the fight | wears off; useless vs `slow` | 0.3 DI | floor 8 |
-| Quiver: Piercing arrows ×5 | ignore armor tier on the shot | tiny count, archer-only | 0.5 DI | band 2 |
-| Quiver: Fire arrows ×5 | +50% burst; ends regen effects | weak vs armor tiers (physical) | 0.3 DI | band 2 |
+| Quiver: Poisoned arrows ×5 | true damage over 3 rounds, ignores armor tiers | no-stack; some monsters immune | ~~0.3~~ **0.2 DI** (retuned 2026-07-28, phase 010: the stacked-drain gate now charges each class one wall-push a day — at 0.3 an archer's push (~3 arrows) stacked repairs + the death line past the 40% ceiling from band 6) | floor 6 |
+| Quiver: Slowing arrows ×5 | target −2 speed for the fight | wears off; useless vs `slow` | ~~0.3~~ **0.2 DI** (2026-07-28, phase 010: same push math as poison) | floor 8 |
+| Quiver: Piercing arrows ×5 | ignore armor tier on the shot | tiny count, archer-only | ~~0.5~~ **0.35 DI** (2026-07-28, phase 010: premium kept at ~1.75× the budget quivers) | band 2 |
+| Quiver: Fire arrows ×5 | +50% burst; ends regen effects | weak vs armor tiers (physical) | ~~0.3~~ **0.2 DI** (2026-07-28, phase 010: same push math as poison) | band 2 |
 | Weapon oil | next 10 strikes +25% (physical weapons, any class, 100% reliable) | 10 strikes, then gone | 0.2 DI | floor 6 |
 | Entangling net (warrior) | monster loses its round; can't close or flee through it | 3 per pack; never on Wardens | 0.25 DI | band 2 |
 | Sky-hook (warrior) | melee can hit `flying` | −1 use per fight, 5 uses | 0.4 DI | band 2 (first flyer band) |
-| Resistance-strip potion (mage) | removes resist tier for the fight | one fight | 0.3 DI | Arcanum |
-| Curse scroll (mage) | halves armor tier for the fight (KR Sorcerer curse) | one fight | 0.3 DI | Arcanum |
+| Resistance-strip potion (mage) | removes resist tier for the fight | one fight | ~~0.3~~ **0.1 DI** (retuned 2026-07-28, phase 010: one vial = one FIGHT, so per-push the mage paid 3.6× the warrior's net — the stacked drain broke 40% at every band; 0.1 puts all three classes' per-push cost in the same 0.08–0.12 DI lane) | Arcanum |
+| Curse scroll (mage) | halves armor tier for the fight (KR Sorcerer curse) | one fight | ~~0.3~~ **0.1 DI** (2026-07-28, phase 010: same per-fight math as the strip potion) | Arcanum |
 | Polymorph dust (mage) | non-Warden monster becomes a harmless critter — fight skipped | **no loot, no XP**; one use | 1.2 DI | Arcanum band 3 |
 | Veil Draught | untargetable until your first attack | one fight; timed | 0.5 DI | band 3 |
 | Golden Apple | 2× HP overshield + all damage halved | one fight; overshield decays | 0.8 DI | band 3 |

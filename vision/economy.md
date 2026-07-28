@@ -101,7 +101,7 @@ One named item per slot per tier; owning the tier's set is the visible badge of 
 | 10 | **Dawnbreaker**, fusion-core blade — the last light of Aldervale (+80) | The Unbroken (+50) | Aegis of the Vale (+70) | 2,800,000 / 1,100,000 / 2,200,000 |
 
 - Early tiers cost ~2–3 days of income; **tiers 8–10 are affordable only through compound bank interest, milestone payouts, and guild perks** — deliberately, like LORD's endgame weapons. Saving *is* the endgame meta.
-- The pawn shop buys gear back at 40% and stocks one rotating rare (off-tier bonus stats, luck-priced).
+- The pawn shop buys anything back at a **daily variable rate, 25–55%** (seeded from the world day and said out loud in the shop), scaled by worn durability. (017 §3.8 replaced the flat 40%.)
 
 ### Apothecary & Medlab
 
@@ -117,9 +117,9 @@ One named item per slot per tier; owning the tier's set is the visible badge of 
 ## 7. Bank, death, lodge, presents
 
 - **Bank:** deposits free, withdraw anytime, **5%/day compound interest**, credited when you visit the teller. Banked gold survives death and theft — "a lodge for your money."
-- **Death** (monster or player): lose **all carried gold**; **armor and shield are destroyed** (weapon and sidekick-carried items survive); respawn at Roothollow. No XP loss in v1.
+- **Death** (monster or player, 017 §3.6): lose **40–60% of carried gold**; each paid weapon rolls **20% gone for good**; armor, shield, and shoes lose **half a durability pool** (the guards drag you home and the menders bill you). A held **Weapon Reincarnation Spell** (0.5 DI) cancels all of it and repairs everything — but each *spare* spell you hoard rolls 50% lost on the death it didn't cancel. Respawn at Roothollow. No XP loss.
 - **Lodge:** sleeping there makes you unattackable offline. Price 10 × level gold/night. Skipping it puts you "in the fields" — attackable by anyone (2 PvP attacks/day allotment per attacker; winner takes carried gold + a 5%-of-your-level XP bounty; every kill is published in Daily Happenings). Levels 1–5 get beginner protection: never attackable.
-- **Presents:** return after ≥20 hours away → one roll: 40% gold (50 × level) · 25% potion · 15% full energy · 10% rumor (advantage in next fight) · 8% armor-repair token · 2% jackpot (rare item, or bank doubling capped at 1,000 × level). Luck charm and Halfling race improve the roll. A missed day never drops you below baseline — breaks are supposed to feel fine.
+- **Presents:** return after ≥20 hours away → one roll: 40% gold (50 × level) · 25% potion · 15% full energy · 10% rumor (advantage in next fight) · 8% armor-repair token · 2% jackpot (rare item, or bank doubling capped at 1,000 × level). A luck charm improves the roll (the halfling race was retired in 017 phase 009 — doc v4 re-registers those lines as human). A missed day never drops you below baseline — breaks are supposed to feel fine.
 
 ## 8. Social economy
 
@@ -132,7 +132,45 @@ One named item per slot per tier; owning the tier's set is the visible badge of 
 
 Faucets: monster gold, boss payouts, presents, interest. Sinks: gear ladder, lodge nights, potions, letters/boards, grant fee, pawn-shop margin, armor lost on death. Interest is the only exponential faucet — it's balanced by the exponential gear ladder pointing at it.
 
-## 9. Tuning notes (open)
+## 9. Combat depth & the counter economy — 017
+
+The 017 overhaul made fights a matchup language and hung four new
+drains off the same daily income. `plans/017-combat-depth/plan.md`
+§2–3 is the constants ledger (amended in place, dated); this section
+is the shape.
+
+- **Damage types & counters:** every class deals one type (warrior
+  melee · archer arrow · sorcerer magic); monsters carry
+  armor/resist/flying/speed/bulwark traits. Tier rule learned at
+  scale: **med tiers barely register at reference gear** — a wall the
+  player should FEEL wants the high tier. A hard counter must be
+  *risky* (win ≤75%) or a *drag* (≥1.6× easy-prey rounds), never safe
+  and quick; the gates (`tests/test_017_bestiary.py`) enforce it on
+  every floor 11–100, day-pinned.
+- **Speed & chase:** speed tiers decide who closes and who kites;
+  ranged-vs-fast is an intended counter, and slow+armor_med is
+  prey-grade for archers (so slow armored monsters carry armor_high).
+- **Durability & repair:** gear wears per round; the repair bill runs
+  **~8–12% of daily income** per band (gate ≤20%).
+- **Death economy:** see §7 — the rational death line is
+  min(unprotected cost, spell price)/4 days ≈ **12.5% of DI**.
+- **Relics:** one dramatic effect + one hard limitation, no permanent
+  stats, priced in DI. Consumables are **progression tools, not
+  farming tools** (a kill pays ~DI/30; every breaker costs more), and
+  each class's wall-push costs the same **0.08–0.12 DI** lane
+  (2026-07-28 retune: quivers 0.3→0.2, piercing 0.5→0.35, mage vials
+  0.3→0.1).
+- **The stacked-drain ceiling:** repairs + the death line + one
+  wall-push a day stays **≤40% of daily income** for every class at
+  every band (`tests/test_017_death_relics.py`) — the climb always
+  nets ≥60%.
+- **Faucet cuts:** free luck charms are scarce so bought relics
+  matter — alpha spoils 10%, warden rare loot 12%.
+- **Faction armory:** economically neutral by construction — no gold
+  crosses its boundary, wear rides through; capped at 50 rows, one
+  take/day.
+
+## 10. Tuning notes (open)
 
 - Interest 5%/day vs. gear curve is the tightest coupling — tune together or not at all.
 - Milestone quorums assume a small early population; make them config so a 10-player world and a 500-player world both work.
