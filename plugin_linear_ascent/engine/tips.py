@@ -82,10 +82,6 @@ _TIPS: dict[str, str] = {
              "hunt it — gold and XP scale with the floor, so work the "
              "highest one you survive. A Warden holds every lift up; "
              "when one falls, the next floor opens for EVERYONE."),
-    "muster": ("The roll of every climber on the Ascent: level, floor, "
-               "carried and banked gold, faction. See who is ahead, who "
-               "climbs beside you — and who carries enough to be worth "
-               "meeting in the fields."),
 
     # ── gate towns ──
     "hunt": ("Fight a wild creature of this floor — 1 energy. The bread and "
