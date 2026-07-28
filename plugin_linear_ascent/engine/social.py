@@ -177,7 +177,9 @@ def grant_scene(p: dict, note: str = "") -> Scene:
     return Scene(
         eyebrow="ROOTHOLLOW · THE VAULT · GRANTS DESK",
         headline="Move money, lose a tithe",
-        support="Receivers must be level 5+ — the Vault doesn't fund cradles.",
+        support=f"Receivers must be level "
+                f"{economy.GRANT_MIN_RECEIVER_LEVEL}+ — the Vault "
+                "doesn't fund cradles.",
         body_lines=lines,
         options=opts,
         meters=meters(p),
@@ -250,7 +252,8 @@ def guildhall_scene(p: dict, note: str = "") -> Scene:
         return _kick_prompt(p, note)
     w = world(p) or {}
     fac = w.get("faction")
-    lines = [note] if note else []
+    # 020: a note may carry several announcement lines (level-up card)
+    lines = note.split("\n") if note else []
     opts = []
     # 012: training — levels are bought here, never granted in the field.
     fee = economy.levelup_gold(p["level"])
@@ -368,8 +371,13 @@ def _hall_list(p: dict, factions: list, lines: list, opts: list) -> None:
     rank, and the full ledger has its own row into the Community tab."""
     w = world(p) or {}
     requested = w.get("faction_requested", "")
+    # 020: a non-member learns what the feature IS before the price.
+    lines.append("A banner pools coin, fields a war party, racks shared "
+                 "gear and enters the world's weekly challenges — its "
+                 "prize is minted, not taken.")
     if not factions:
-        lines.append("No banners fly yet. Yours could be the first.")
+        lines.append(f"No banners fly yet. Yours could be the first — "
+                     f"level {FOUND_MIN_LEVEL}, ◈ {GUILD_FOUND_FEE}.")
     for f in factions[:5]:
         n = f.get("members", 0)
         lines.append(f"{f['name']} — {n} at the table")
@@ -408,12 +416,19 @@ def guild_train(p: dict) -> Scene:
                     f"— you carry ◈ {p['gold']:,}. Come back heavier.")
     p["gold"] -= fee
     p["xp"] -= need
+    old_level = p["level"]
     p["level"] += 1
     p["hp"] = state.max_hp(p)
     _ledger(p, "levelup", gold=-fee, note=f"level {p['level']}")
-    return guildhall_scene(
-        p, note=f"+ LEVEL {p['level']} — the drill burns it into your "
-                "frame. Wounds close.")
+    # 020: levels are BOUGHT, so this card is guaranteed to be read —
+    # it announces everything the new level opens and closes.
+    from .. import unlocks
+    note = (f"+ LEVEL {p['level']} — the drill burns it into your "
+            "frame. Wounds close.")
+    for u in unlocks.just_reached(p, old_level, p["unlocked_floor"])[:4]:
+        cost = f" ({u.cost})" if u.cost else ""
+        note += f"\n{unlocks.glyph(u)} {u.title}{cost} — {u.why}"
+    return guildhall_scene(p, note=note)
 
 
 def _founding_scene(p: dict, st: dict, note: str = "") -> Scene:

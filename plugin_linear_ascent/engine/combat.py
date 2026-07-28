@@ -720,9 +720,15 @@ def _victory(p: dict, floor) -> Scene:
     if e["kind"] == "warden":
         nxt = floor.floor + 1
         if p["unlocked_floor"] < nxt:
+            old_floor = p["unlocked_floor"]
             p["unlocked_floor"] = nxt
             first_clear = True
             lines.append(f"The lift grinds open. FLOOR {nxt} is yours to enter.")
+            # 020: a first clear names what the new frontier opened —
+            # relic shelves, gear bands, the honing cap reset.
+            from .. import unlocks
+            for u in unlocks.just_reached(p, p["level"], old_floor)[:3]:
+                lines.append(f"{unlocks.glyph(u)} {u.title} — {u.why}")
             if p.get("_world") is not None:
                 p.setdefault("_effects", []).append({
                     "kind": "happening", "floor": floor.floor,
@@ -857,6 +863,12 @@ def _death(p: dict, floor) -> Scene:
     else:
         # 006 §3.6 unprotected: a random bite of gold, every paid weapon
         # rolls the void, the guard slots take wear instead of death.
+        # 020: the FIRST unprotected death names the change once, so the
+        # loss is legible even if the level-up card went unread.
+        if not p["flags"].get("mercy_end_named"):
+            p["flags"]["mercy_end_named"] = True
+            lines.append("▪ the tower is no longer gentle with you — "
+                         "from here, deaths cost gear and gold")
         frac = state.rng_int(p, round(economy.DEATH_GOLD_MIN * 100),
                              round(economy.DEATH_GOLD_MAX * 100)) / 100
         lost_gold = round(p["gold"] * frac)

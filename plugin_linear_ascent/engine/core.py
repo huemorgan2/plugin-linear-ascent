@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import datetime as dt
 
-from .. import economy
+from .. import economy, unlocks
 from ..content import schema
 from . import combat, state
 from .scene import Meters, Option, Scene
@@ -511,6 +511,11 @@ def _town_scene(p: dict) -> Scene:
     lines = []
     for h in (w.get("happenings") or [])[:5]:
         lines.append(f"· {h}")
+    # 020: the nearest unlock — and any protection that dies with it —
+    # always readable from the square. The full ladder is at the Stone.
+    nxt = unlocks.next_line(p)
+    if nxt:
+        lines.append(nxt)
     # 007 town readability: the gate leads — leaving town is THE verb —
     # and every not-yet area reads its unlock level from the square
     # (the Arcanum set the pattern in 004).
@@ -519,7 +524,8 @@ def _town_scene(p: dict) -> Scene:
         Option("forge", "The Forge", "gear"),
         Option("arcanum", "The Arcanum",
                "mage gear" if p["level"] >= economy.ARCANUM_LEVEL
-               else f"🔒 level {economy.ARCANUM_LEVEL}"),
+               else f"🔒 level {economy.ARCANUM_LEVEL}",
+               locked=p["level"] < economy.ARCANUM_LEVEL),
         Option("medlab", "Apothecary & Medlab", "potions"),
         Option("lodge", "The Lodge",
                f"◈ {economy.LODGE_PRICE_PER_LEVEL * p['level']}/night"),
@@ -537,11 +543,13 @@ def _town_scene(p: dict) -> Scene:
             "relay", "The Relay Office",
             (f"{inbox} letter{'s' if inbox != 1 else ''}" if inbox
              else "post") if p["level"] >= economy.RELAY_LEVEL
-            else f"🔒 level {economy.RELAY_LEVEL}"))
+            else f"🔒 level {economy.RELAY_LEVEL}",
+            locked=p["level"] < economy.RELAY_LEVEL))
         opts.append(Option(
             "fields", "The fields",
             "pvp" if p["level"] >= economy.FIELDS_LEVEL
-            else f"🔒 level {economy.FIELDS_LEVEL}"))
+            else f"🔒 level {economy.FIELDS_LEVEL}",
+            locked=p["level"] < economy.FIELDS_LEVEL))
     return Scene(
         eyebrow="ROOTHOLLOW · THE SQUARE",
         headline=f"Roothollow — floor {max(1, p['unlocked_floor'])} is the "
@@ -1415,6 +1423,10 @@ def _stone_scene(p: dict) -> Scene:
     for s in (w.get("stone") or [])[:8]:
         lines.append(f"✦ {s}")
     lines.append("The lift opens for everyone when a Warden falls.")
+    # 020: the personal ladder — the whole climb ahead, grouped by
+    # threshold. + opens, − closes, ▲ changes the rules.
+    lines.append("▣ THE CLIMB AHEAD")
+    lines.extend(unlocks.climb_ahead_lines(p, limit=8))
     return Scene(
         eyebrow="ROOTHOLLOW · STONE OF THE CLIMB",
         headline=f"The frontier stands at floor {frontier}",
@@ -1433,8 +1445,18 @@ def _gate_scene(p: dict) -> Scene:
     opts = []
     for n in range(1, top + 1):
         fl = schema.get_floor(n)
+        # 020: an open floor above your legs is a LOCKED row that names
+        # its level — not a live row that refuses after the click.
+        req = economy.floor_entry_player_level(n)
+        m = economy.MILESTONES.get(n)
+        if p["level"] < req:
+            hint = f"🔒 level {req} legs"
+        else:
+            hint = fl.gate_town
+        if m is not None:
+            hint += f" · war party of {m.quorum}"
         opts.append(Option(f"floor_{n}", f"Floor {n} — {fl.zone}",
-                           fl.gate_town))
+                           hint, locked=p["level"] < req))
     opts.append(Option("back", "Back to the square"))
     return Scene(
         eyebrow="ROOTHOLLOW · THE TOWER GATE",
@@ -1464,11 +1486,20 @@ def _gate_pick(p: dict, oid: str) -> Scene:
     p["floor"] = n
     p["location"] = "gate_town"
     fl = schema.get_floor(n)
+    lines = [fl.arrival]
+    # 020: the floor BELOW a milestone warns at the gate, before the
+    # ⚡ is spent — this floor's own Warden is one thing, the next is a
+    # war party's work.
+    m = economy.MILESTONES.get(n + 1)
+    if m is not None:
+        lines.append(f"▲ Word from above: {m.name} holds floor {n + 1}. "
+                     f"No solo kill — a war party of {m.quorum} pledges "
+                     f"{economy.COST_BOSS_COMMIT} ⚡ each at the Guildhall.")
     return Scene(
         eyebrow=f"FLOOR {n} · {fl.biome.upper()} · {fl.gate_town.upper()}",
         headline=f"{fl.gate_town} — the floor's last safe fire",
         support="A healer, a rumor bench, and the wilds beyond the wire.",
-        body_lines=[fl.arrival],
+        body_lines=lines,
         options=_gate_town_options(p, fl),
         meters=combat.meters(p),
         banner=fl.banner,

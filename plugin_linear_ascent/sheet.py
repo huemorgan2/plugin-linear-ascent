@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from . import economy
+from . import economy, unlocks
 from .engine import state as pstate
 
 
@@ -36,4 +36,12 @@ def character_sheet(p: dict) -> dict:
         "carried_gold": p["gold"], "banked_gold": p["bank"],
         "floor_frontier": p["unlocked_floor"], "gear": gear,
         "inventory": p["inventory"],
+        # 020: the ladder as data — Luna answers "what's next for me"
+        # and "what do I lose at level N" from this, never by guessing.
+        "next_unlocks": [
+            {"at": f"{u.gate} {u.at}", "effect": u.effect,
+             "title": u.title, "why": u.why, "cost": u.cost,
+             "where": u.where}
+            for u in unlocks.ahead(p, limit=6)],
+        "protections_active": unlocks.protections_active(p),
     }

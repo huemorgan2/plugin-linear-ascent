@@ -174,10 +174,8 @@ _TIPS: dict[str, str] = {
                     "gold. Levels raise ATK, DEF and max HP and unlock "
                     "the next gear tier and deeper floors — the single "
                     "strongest advancement in the game."),
-    "found_guild": ("Raise your own banner — ◈ 500. You set the join "
-                    "fee and the weekly dues, steward the store, enter "
-                    "the world's weekly challenges and share their "
-                    "minted prizes with your members."),
+    # found_guild is resolved dynamically in option_tip (020) so the
+    # level and fee always read the live constants.
     "donate": ("Move carried gold into the faction store. The store "
                "pays weekly challenge entries — and won challenges pay "
                "minted prizes back to attending members. Gold in the "
@@ -273,6 +271,13 @@ def option_tip(oid: str) -> str:
     t = _TIPS.get(oid)
     if t:
         return t
+    if oid == "found_guild":
+        from . import social
+        return (f"Raise your own banner — level {social.FOUND_MIN_LEVEL} "
+                f"and ◈ {social.GUILD_FOUND_FEE}. You set the join fee "
+                "and the weekly dues, steward the store, enter the "
+                "world's weekly challenges and share their minted "
+                "prizes with your members.")
     if oid == "buy_arrow_pack":
         return (f"A pack of {economy.ARROW_PACK_SIZE} arrows for a bow "
                 "in off-class hands — an archer's basic quiver never "
@@ -376,6 +381,16 @@ def option_tip(oid: str) -> str:
                 "you take their carried gold plus an XP bounty; lose "
                 "and you limp home lighter. Banked gold is safe on "
                 "both sides.")
+    # 020: any registry-backed row gets its tip from the registry, so a
+    # locked row and the ladder can never disagree — and coverage of
+    # new gates is automatic.
+    from .. import unlocks
+    u = unlocks.for_option(oid)
+    if u is not None:
+        gate = "level" if u.gate == "level" else "floor"
+        cost = f" Costs {u.cost}." if u.cost else ""
+        return (f"{u.title.capitalize()} — {u.why}."
+                f"{cost} Opens at {gate} {u.at}.")
     return ""
 
 

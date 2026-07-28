@@ -135,7 +135,13 @@ _GUIDE_RULES = (
     "gold and breaks armor and shield, so deposit spare gold at the "
     "Vault (safe forever, +5%/day interest). In the shared world, sleep "
     "at the Lodge before logging off or you lie in the fields where "
-    "other climbers can rob you."
+    "other climbers can rob you. THE LADDER: the character sheet "
+    "(ascent_character) carries next_unlocks and protections_active — "
+    "answer 'what should I do next' and 'what changes at level N' from "
+    "that data, never from memory. Level 4 is double-edged and worth "
+    "naming when it nears: it opens founding a banner at the Guildhall "
+    "AND ends beginner's mercy — deaths start costing gear and gold. "
+    "The Stone of the Climb shows the player their whole ladder."
 )
 
 _VOICE_RULES = (
