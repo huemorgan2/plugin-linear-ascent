@@ -51,6 +51,47 @@ def test_icon_urls_render_and_cache():
     assert icons.icon_data_url("no_such_icon") == icons.icon_data_url("pack")
 
 
+# ── 018: the shading is a dither, and it is derived, so nothing below
+# authors it. Two properties hold the style up.
+
+def test_shading_never_paints_outside_the_silhouette():
+    """A dither may only turn ink off, never invent it — otherwise the
+    tint bleeds outside the shape it is masking."""
+    for key in icons.ICON_KEYS:
+        grid = icons._GRIDS[key]
+        for y, row in enumerate(icons._painted(grid)):
+            for x, lit in enumerate(row):
+                assert not lit or grid[y][x] == "#", (key, x, y)
+
+
+def test_a_hole_keeps_its_rim_and_a_thin_glyph_is_untouched():
+    """The rim is what makes a two-pixel detail survive the dither: a
+    ring of solid ink around every hole. Its corollary is that a glyph
+    with no interior — all of the line art — comes out exactly as it
+    did before 018."""
+    solid = ["#" * 16] * 16
+    assert sum(sum(r) for r in icons._painted(solid)) < 16 * 16
+
+    # a solid block with a two-pixel hole punched in the middle
+    holed = ["#" * 7 + ".." + "#" * 7 if y in (8, 9) else "#" * 16
+             for y in range(16)]
+    painted = icons._painted(holed)
+    for x, y in ((6, 8), (9, 8), (6, 9), (9, 9),
+                 (7, 7), (8, 7), (7, 10), (8, 10)):
+        assert painted[y][x], (x, y)
+    # (9, 8) is in the dithered band on the parity the checker drops,
+    # so the rim above is doing real work — and away from the hole the
+    # checker still bites.
+    assert not painted[12][13]
+
+    for key in ("focus", "entangling_net", "curse_scroll"):
+        grid = icons._GRIDS[key]
+        painted = icons._painted(grid)
+        assert all(painted[y][x] == (c == "#")
+                   for y, row in enumerate(grid)
+                   for x, c in enumerate(row)), key
+
+
 def test_icon_key_resolution():
     assert icons.icon_key("medgel") == "medgel"
     assert icons.icon_key("pigsticker", "weapon") == "weapon"
@@ -66,7 +107,7 @@ STATIC_IDS = [
     "warrior", "sorcerer", "archer",
     # town buildings
     "forge", "medlab", "lodge", "vault", "pawn", "relay", "fields",
-    "guildhall", "stone", "gate", "muster",
+    "guildhall", "stone", "gate",
     # gate town + lodge + vault
     "hunt", "heal", "stew", "keep", "sleep",
     "deposit_all", "deposit_half", "withdraw_all", "grants",

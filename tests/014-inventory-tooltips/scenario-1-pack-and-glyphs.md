@@ -20,7 +20,7 @@ achieves and how it advances the climb — town places most thoroughly.
    climb (e.g. Medgel: +25 HP, keeps a hunt going without walking back).
 4. **Expect (glyphs):** every option row in the square — Forge,
    Apothecary, Lodge, Vault, Pawn, Relay, fields, Guildhall, Stone,
-   gate, Muster — has an `[i]` at its right edge.
+   gate — has an `[i]` at its right edge.
 5. Hover the Forge's [i]. **Expect (instantly):** what the Forge sells,
    that better ATK/DEF is what opens higher floors, and that higher
    floors pay more gold/XP. Repeat for the Vault (banked gold survives

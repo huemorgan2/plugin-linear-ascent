@@ -7,6 +7,12 @@ single color, true 1-bit, zero files, zero network.
 
 Keys: the three gear slots (weapon / shield / armor), the six Apothecary
 items by slug, and 'pack' as the fallback for anything else.
+
+018 — the flat masks read as wireframes at 32 px, so the body is now
+shaded. One bit still means one bit: shading is a dither, not a second
+tone (see `plans/018-better-looking-icons/`). `_painted` derives the
+whole thing from the silhouette, so the grids below stay plain on/off
+ink and a glyph thin enough to be all edge comes out unchanged.
 """
 
 from __future__ import annotations
@@ -14,41 +20,48 @@ from __future__ import annotations
 from functools import lru_cache
 from urllib.parse import quote
 
+_N = 16
+
+# How much of the shape, measured along the top-left → bottom-right
+# diagonal, stays solid ink before the checker starts. Two bands only —
+# a third eats the shape at 32 px.
+_LIT_SHARE = 0.48
+
 _GRIDS: dict[str, list[str]] = {
-    # a straight blade, crossguard and pommel
+    # a straight blade with a fuller carved down it, crossguard, pommel
     "weapon": [
         "................",
         ".......##.......",
-        ".......##.......",
-        ".......##.......",
-        ".......##.......",
-        ".......##.......",
-        ".......##.......",
-        ".......##.......",
-        ".......##.......",
-        "...##########...",
-        "...##########...",
+        "......####......",
+        "......#.##......",
+        "......#.##......",
+        "......#.##......",
+        "......#.##......",
+        "......#.##......",
+        "......####......",
+        "..############..",
+        "..############..",
         ".......##.......",
         ".......##.......",
         "......####......",
         "......####......",
         "................",
     ],
-    # heater shield, boss stud in the chief
+    # heater shield, solid, the boss a hole punched in the chief
     "shield": [
         "................",
+        ".##############.",
+        ".##############.",
+        ".##############.",
+        ".######..######.",
+        ".######..######.",
+        ".##############.",
         "..############..",
         "..############..",
-        "..##........##..",
-        "..##...##...##..",
-        "..##...##...##..",
-        "..##........##..",
-        "..##........##..",
-        "...##......##...",
-        "...##......##...",
-        "....##....##....",
-        "....##....##....",
-        ".....##..##.....",
+        "...##########...",
+        "...##########...",
+        "....########....",
+        ".....######.....",
         "......####......",
         ".......##.......",
         "................",
@@ -72,23 +85,23 @@ _GRIDS: dict[str, list[str]] = {
         "................",
         "................",
     ],
-    # a boot in profile — heel, laces, sole (004: the shoes ladder)
+    # a boot in profile — solid shaft, lace holes, sole (004: the ladder)
     "shoes": [
         "................",
-        "....######......",
-        "....######......",
-        "....##..##......",
-        "....##..##......",
-        "....##..##......",
-        "....##..##......",
-        "....##..####....",
-        "....##....####..",
-        "....##......##..",
-        "..####......##..",
-        ".##..........##.",
-        ".##############.",
-        ".##############.",
-        "................",
+        "...######.......",
+        "...######.......",
+        "...######.......",
+        "...##..##.......",
+        "...######.......",
+        "...######.......",
+        "...##..##.......",
+        "...######.......",
+        "...######.......",
+        "...########.....",
+        "...##########...",
+        "..############..",
+        "..#############.",
+        "..#############.",
         "................",
     ],
     # a fletched arrow, point down (004: the off-class quiver)
@@ -153,20 +166,20 @@ _GRIDS: dict[str, list[str]] = {
     # strung bow, arrow nocked and pointing right (004: the archer line)
     "bow": [
         "................",
-        "................",
-        "..........##....",
-        "........##.#....",
-        ".......#...#....",
-        "......#....#....",
-        ".....#.....#.#..",
-        "...############.",
-        ".....#.....#.#..",
-        "......#....#....",
-        ".......#...#....",
-        "........##.#....",
-        "..........##....",
-        "................",
-        "................",
+        "....###.........",
+        "...##.#.........",
+        "..##..#.........",
+        "..#...#.........",
+        ".##...#.........",
+        ".##...#....##...",
+        ".##...########..",
+        ".##...########..",
+        ".##...#....##...",
+        ".##...#.........",
+        "..#...#.........",
+        "..##..#.........",
+        "...##.#.........",
+        "....###.........",
         "................",
     ],
     # orb-topped rod, banded near the foot (004: the sorcerer line)
@@ -207,21 +220,21 @@ _GRIDS: dict[str, list[str]] = {
         "................",
         "................",
     ],
-    # sealed gel vial, carved cross
+    # sealed gel vial — cap, neck, carved cross
     "medgel": [
         "................",
-        ".....######.....",
-        ".....######.....",
         "......####......",
+        "......####......",
+        ".......##.......",
+        ".....######.....",
         "....########....",
-        "...##########...",
         "...####..####...",
         "...####..####...",
         "...##......##...",
+        "...##......##...",
         "...####..####...",
-        "...####..####...",
-        "...##########...",
         "....########....",
+        ".....######.....",
         "................",
         "................",
         "................",
@@ -283,23 +296,25 @@ _GRIDS: dict[str, list[str]] = {
         "................",
         "................",
     ],
-    # a lucky star on its cord
+    # a five-pointed lucky star. 018: the old one led with a two-pixel
+    # stem four rows tall into a full-width bar, which read as an anvil.
+    # The point tapers now, and the legs come to points of their own.
     "luck_charm": [
         ".......##.......",
-        "........#.......",
-        ".......##.......",
-        ".......##.......",
         "......####......",
         "......####......",
+        ".....######.....",
+        ".....######.....",
+        "...##########...",
+        "################",
         ".##############.",
         "..############..",
         "...##########...",
-        "....########....",
-        ".....######.....",
-        "....###..###....",
-        "...###....###...",
+        "...####..####...",
+        "..####....####..",
         "..###......###..",
-        "..##........##..",
+        ".###........###.",
+        ".##..........##.",
         "................",
     ],
     # the shard's lens pair
@@ -647,21 +662,21 @@ _GRIDS: dict[str, list[str]] = {
         "................",
         "................",
     ],
-    # strapped crate — the fallback
+    # strapped crate, cross-braced — the fallback
     "pack": [
         "................",
         "................",
         "..############..",
+        "..#.########.#..",
+        "..##.######.##..",
+        "..###.####.###..",
+        "..####.##.####..",
+        "..#####..#####..",
+        "..####.##.####..",
+        "..###.####.###..",
+        "..##.######.##..",
+        "..#.########.#..",
         "..############..",
-        "..##...##...##..",
-        "..##...##...##..",
-        "..############..",
-        "..############..",
-        "..##...##...##..",
-        "..##...##...##..",
-        "..############..",
-        "..############..",
-        "................",
         "................",
         "................",
         "................",
@@ -701,18 +716,58 @@ def icon_key(slug: str, kind: str = "") -> str:
     return "pack"
 
 
+def _painted(grid: list[str]) -> list[list[bool]]:
+    """Which pixels the mask paints: a solid rim around the silhouette
+    and around every hole in it, plus a body that stays solid on the
+    lit side of the diagonal and breaks into a checker on the side
+    turned away.
+
+    Only ink sitting on a full 3×3 of ink is treated as body. Two
+    reasons, both learned by looking at it. A hole needs a ring of
+    solid ink or the dither swallows it — two pixels of detail vanish
+    outright. And the checker runs along the same diagonal the light
+    does, so a *stroke* running that way gets chewed lengthwise into
+    dashes: shading the bolt or the wrench by area made them look
+    broken rather than lit. Anything thin is therefore all rim, and
+    comes out exactly as it did before 018.
+    """
+    ink = [[c == "#" for c in row] for row in grid]
+
+    def hole(x: int, y: int) -> bool:
+        return not (0 <= x < _N and 0 <= y < _N) or not ink[y][x]
+
+    def rim(x: int, y: int) -> bool:
+        return any(hole(x + dx, y + dy)
+                   for dy in (-1, 0, 1) for dx in (-1, 0, 1) if dx or dy)
+
+    diags = [x + y for y in range(_N) for x in range(_N) if ink[y][x]]
+    if not diags:
+        return ink
+    lit = min(diags) + _LIT_SHARE * max(1, max(diags) - min(diags))
+
+    out: list[list[bool]] = []
+    for y in range(_N):
+        out.append([])
+        for x in range(_N):
+            if not ink[y][x]:
+                out[y].append(False)
+                continue
+            out[y].append(rim(x, y) or x + y < lit or (x + y) % 2 == 0)
+    return out
+
+
 @lru_cache(maxsize=None)
 def icon_data_url(key: str) -> str:
     """Inline SVG data URL for the 16×16 mask — white ink, crisp edges.
     Unknown keys draw the pack crate (never a broken cell)."""
     grid = _GRIDS.get(key) or _GRIDS["pack"]
     rects = []
-    for y, row in enumerate(grid):
+    for y, row in enumerate(_painted(grid)):
         x = 0
-        while x < 16:
-            if row[x] == "#":
+        while x < _N:
+            if row[x]:
                 run = x
-                while run < 16 and row[run] == "#":
+                while run < _N and row[run]:
                     run += 1
                 rects.append(f'<rect x="{x}" y="{y}" '
                              f'width="{run - x}" height="1"/>')
