@@ -922,6 +922,9 @@ def _forge_scene(p: dict) -> Scene:
                                f"◈ {price:,} + {hone_xp} XP"))
     # 005: the repair bench — every worn PAID piece on the body gets a
     # row; price scales with the missing fraction, XP mirrors honing.
+    # 0.29.4: a held repair token adds a FREE row per worn piece — the
+    # token finally spends where its name promised.
+    tokens = p["inventory"].get("repair_token", 0)
     for slot in economy.DURABILITY_SLOTS:
         g = economy.FORGE.get(p["gear"].get(slot) or "")
         left = (p.get("durability") or {}).get(slot)
@@ -935,6 +938,11 @@ def _forge_scene(p: dict) -> Scene:
             f"repair_{slot}",
             f"Repair {g.name}" + (" — broken" if left <= 0 else ""),
             f"◈ {rprice:,} + {hone_xp} XP"))
+        if tokens > 0:
+            opts.append(Option(
+                f"token_{slot}",
+                f"Mend {g.name} with a token",
+                f"free — {tokens} held"))
     if cap > 0:
         honed = ", ".join(
             f"{slot} +{state.hone_level(p, slot)}"
@@ -983,6 +991,28 @@ def _forge_hone(p: dict, slot: str) -> Scene:
     s.body_lines.insert(0, (f"+ {economy.FORGE[slug].name} honed to "
                             f"+{lvl + 1} — the edge sings on the stone "
                             f"(− {xp_cost} XP)"))
+    return s
+
+
+def _forge_token_mend(p: dict, slot: str) -> Scene:
+    """0.29.4: spend an armor-repair token — one worn piece made whole,
+    no gold, no XP. The token's whole identity."""
+    g = economy.FORGE.get(p["gear"].get(slot) or "")
+    left = (p.get("durability") or {}).get(slot)
+    if (not g or g.price <= 0 or left is None
+            or p["inventory"].get("repair_token", 0) <= 0):
+        return _forge_scene(p)
+    pool = economy.item_pool(g)
+    if left >= pool:
+        return _forge_scene(p)
+    p["inventory"]["repair_token"] -= 1
+    if p["inventory"]["repair_token"] <= 0:
+        del p["inventory"]["repair_token"]
+    p["durability"][slot] = pool
+    combat._ledger(p, "repair", note=f"{slot} (token)")
+    s = _forge_scene(p)
+    s.body_lines.insert(0, f"+ {g.name} made whole — the smith takes "
+                        "the token and asks nothing else")
     return s
 
 
@@ -1131,6 +1161,9 @@ def _forge_buy(p: dict, oid: str) -> Scene:
     if oid.startswith("repair_") and oid.removeprefix("repair_") in \
             economy.DURABILITY_SLOTS:
         return _forge_repair(p, oid.removeprefix("repair_"))
+    if oid.startswith("token_") and oid.removeprefix("token_") in \
+            economy.DURABILITY_SLOTS:
+        return _forge_token_mend(p, oid.removeprefix("token_"))
     if oid == "buy_arrow_pack":
         if p["gold"] < economy.ARROW_PACK_PRICE:
             s = _forge_scene(p)
@@ -1640,10 +1673,26 @@ def _pawn_relic_offer(p: dict, slug: str) -> int:
     return int(economy.relic_price(slug, p["unlocked_floor"]) * rate)
 
 
+def _pawn_sundry(p: dict, slug: str) -> tuple[str, int]:
+    """Name and offer for the pack's small stuff — potions off their
+    shop price, the repair token off its fixed worth."""
+    rate = economy.pawn_rate(state.world_day())
+    if slug == "repair_token":
+        return ("repair token",
+                max(1, int(economy.REPAIR_TOKEN_VALUE * rate)))
+    it = economy.APOTHECARY[slug]
+    return (it.name, max(1, int(it.price * rate)))
+
+
 def _pawn_scene(p: dict) -> Scene:
     rate = economy.pawn_rate(state.world_day())
     gear_in_pack = [k for k in p["inventory"] if k in economy.FORGE]
     relics_in_pack = [k for k in p["inventory"] if k in economy.RELICS]
+    # 006 §3.8: the pawn always buys ANYTHING — so potions and tokens
+    # get a row too (0.29.4: they used to be invisible here, which read
+    # as the broker refusing).
+    sundries = [k for k in p["inventory"]
+                if k in economy.APOTHECARY or k == "repair_token"]
     opts = []
     lines = [f"The broker pays {round(rate * 100)}% today. Tomorrow is "
              "another mood."]
@@ -1655,14 +1704,18 @@ def _pawn_scene(p: dict) -> Scene:
         opts.append(Option(f"sell_{slug}", f"Sell {g.name}", f"◈ {offer:,}"))
         lines.append(f"{g.name} ×{p['inventory'][slug]}{worn} — "
                      f"offers ◈ {offer:,}")
-    # 006 §3.8: the pawn always buys ANYTHING — relics included.
     for slug in relics_in_pack:
         r = economy.RELICS[slug]
         offer = _pawn_relic_offer(p, slug)
         opts.append(Option(f"sell_{slug}", f"Sell {r.name}", f"◈ {offer:,}"))
         lines.append(f"{r.name} ×{p['inventory'][slug]} — offers ◈ {offer:,}")
-    if not gear_in_pack and not relics_in_pack:
-        lines.append("Nothing in your pack the broker wants today.")
+    for slug in sundries:
+        name, offer = _pawn_sundry(p, slug)
+        opts.append(Option(f"sell_{slug}", f"Sell {name}", f"◈ {offer:,}"))
+        lines.append(f"{name} ×{p['inventory'][slug]} — offers ◈ {offer:,}")
+    if not gear_in_pack and not relics_in_pack and not sundries:
+        lines.append("Empty pack. The broker buys ANYTHING you carry — "
+                     "gear, relics, potions, tokens. Come back heavier.")
     # 007: members can route a piece PAST the broker to the faction
     # racks — no gold moves, the wear rides with it (the EV law).
     w = p.get("_world") or {}
@@ -1719,6 +1772,17 @@ def _pawn_action(p: dict, oid: str) -> Scene:
         s.body_lines.insert(0,
                             f"+ ◈ {offer:,} for the "
                             f"{economy.RELICS[slug].name}")
+        return s
+    if slug in p["inventory"] and (slug in economy.APOTHECARY
+                                   or slug == "repair_token"):
+        name, offer = _pawn_sundry(p, slug)
+        p["inventory"][slug] -= 1
+        if p["inventory"][slug] <= 0:
+            del p["inventory"][slug]
+        p["gold"] += offer
+        combat._ledger(p, "pawn", gold=offer, note=slug)
+        s = _pawn_scene(p)
+        s.body_lines.insert(0, f"+ ◈ {offer:,} for the {name}")
         return s
     return _pawn_scene(p)
 

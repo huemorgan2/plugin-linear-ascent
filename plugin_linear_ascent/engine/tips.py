@@ -423,6 +423,10 @@ _ITEM_TIPS: dict[str, str] = {
                "When they run out mid-fight your own weapon comes "
                "back out. Archers never need these; their basic "
                "quiver refills itself."),
+    "repair_token": ("Armor-repair token — the Forge honors it as one "
+                     "FREE mend, any worn piece, no gold, no XP. Best "
+                     "spent on your priciest steel; the pawn shop buys "
+                     "it if you'd rather have coin."),
 }
 
 

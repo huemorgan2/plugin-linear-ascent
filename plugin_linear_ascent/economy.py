@@ -1240,6 +1240,8 @@ HEALER_TENT_PER_FLOOR = 5      # full heal: ◈ 5 × floor (was 2 pre-013)
 
 # ── §7 Bank, death, lodge, presents ──────────────────────────────────────
 
+REPAIR_TOKEN_VALUE = 60             # the broker's basis for a repair
+                                    # token — roughly one mid-band mend
 BANK_INTEREST_RATE = 0.05           # 5%/day, landing as daily STUBS (023)
 INTEREST_STUB_CAP = 30              # the clerk keeps a month, no more —
                                     # no infinite rewards for the absent
@@ -1257,7 +1259,8 @@ PRESENT_TABLE = [
     (25, "potion"),
     (15, "full_energy"),
     (10, "rumor"),
-    (8, "repair_token"),
+    (8, "repair_token"),   # redeemed at the Forge (one free mend) or
+                           # pawned at REPAIR_TOKEN_VALUE × the day's rate
     (2, "jackpot"),        # rare item or bank doubling capped 1000×level
 ]
 
