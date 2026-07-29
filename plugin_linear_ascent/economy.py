@@ -1280,6 +1280,56 @@ CONTRACT_CLASS_XP_MULT = 0.5
 CONTRACT_WARDEN_MULT = 0.5       # × warden pay at the frontier
 CONTRACT_TOKEN_CHANCE = 0.25     # a job carries a repair token sometimes
 
+# ── §8c Nights & weeks (022 §005) ────────────────────────────────────────
+# The night slot: ONE action per night at the Lodge — rest (bank rested
+# aether, paid out as bonus XP on kills only) or work (gold at dawn).
+# Deliberately shallow; professions with ranks stay deferred and this
+# slot is their future socket. Rested is modest ON PURPOSE — XP is the
+# scarce resource (012) and the climb is the game, so a night banks 4%
+# of the current level bar, capped at 3 nights' accrual, drawn down at
+# +25% per kill. Work pays 20% of a hunting day and never touches the
+# Energy cell's 1/day ceiling (the cell cap is the whole safety
+# mechanism for offline gold).
+
+NIGHT_SLOT_LEVEL = 6
+NIGHT_WORK_INCOME_PCT = 0.20
+NIGHT_REST_PCT_OF_BAR = 0.04
+RESTED_XP_BONUS_PCT = 0.25
+RESTED_POOL_CAP_NIGHTS = 3
+NIGHT_SHIFTS = ("the forge shift", "the bar shift", "the palisade watch")
+
+
+def night_work_gold(floor: int) -> int:
+    return max(1, round(NIGHT_WORK_INCOME_PCT * daily_income(floor)))
+
+
+def night_rest_aether(level: int) -> int:
+    return max(1, round(NIGHT_REST_PCT_OF_BAR * xp_need(level)))
+
+
+def rested_pool_cap(level: int) -> int:
+    return RESTED_POOL_CAP_NIGHTS * night_rest_aether(level)
+
+
+# The weekly strongbox (Vault, level 10): three counters the game
+# already tracks — kills, warden engagements, floors gained — sum to
+# activity points; thresholds open 1/2/3 reward slots; at the weekly
+# tick the player picks EXACTLY ONE reward. Unpicked weeks fall back
+# to the lowest slot, never to nothing.
+
+STRONGBOX_LEVEL = 10
+STRONGBOX_THRESHOLDS = (2, 4, 6)      # points → slots 1 / 2 / 3
+STRONGBOX_GOLD_PCT_OF_DAY = 0.5       # slot 1: half a hunting day
+STRONGBOX_AETHER_PCT_OF_BAR = 0.10    # slot 2: a tenth of the level bar
+
+
+def strongbox_gold(floor: int) -> int:
+    return max(1, round(STRONGBOX_GOLD_PCT_OF_DAY * daily_income(floor)))
+
+
+def strongbox_aether(level: int) -> int:
+    return max(1, round(STRONGBOX_AETHER_PCT_OF_BAR * xp_need(level)))
+
 
 # ── Races & classes ──────────────────────────────────────────────────────
 

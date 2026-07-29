@@ -10,7 +10,7 @@ from __future__ import annotations
 import os
 
 from .. import economy
-from . import contracts, state
+from . import contracts, state, weekly
 from .scene import Meters, Option, Scene
 
 _CREATURES = os.path.join(os.path.dirname(os.path.abspath(__file__)),
@@ -138,8 +138,10 @@ def start_encounter(p: dict, floor, enc, kind: str = "wilds") -> Scene:
     }
     if kind == "warden":
         # 022/004: "answer a keep's horn" counts at the OPEN — showing
-        # up is the engagement, win or bleed.
+        # up is the engagement, win or bleed. 005's strongbox counts
+        # the same moment — one definition of "engagement".
         contracts.note_warden(p)
+        weekly.note(p, "wardens")
     s = fight_scene(p, floor, opener=True)
     # 007: first fight per type that hard-counters the class — the one
     # agent beat besides death and boss. A warden keeps "boss".
@@ -767,17 +769,24 @@ def _victory(p: dict, floor) -> Scene:
     buff = state.faction_buff_pct(p, "xp")
     if buff:
         xp = round(xp * (1 + buff / 100))     # 010: CLIMB week blessing
-    p["xp"] += xp
+    # 022/005: rested aether pays out here and ONLY here — on a kill's
+    # XP, never on contract or strongbox payouts.
+    rested = state.rested_bonus(p, xp)
+    p["xp"] += xp + rested
     p["gold"] += gold
-    _ledger(p, "kill", gold=gold, xp=xp, note=e["name"])
+    _ledger(p, "kill", gold=gold, xp=xp + rested, note=e["name"])
     if e["kind"] == "wilds":
         # 022/004: the kill the engine just scored is the contract
         # board's only bookkeeping.
         contracts.note_kill(p, e, _damage_type(p))
+    weekly.note(p, "kills")     # 022/005: the strongbox counts the week
     downed = (f"The {e['name']} goes down — no match for your "
               f"{weapon_name(p)}."
               if e["kind"] == "wilds" else f"The {e['name']} goes down.")
     lines = [downed, f"+ {xp} XP", f"+ ◈ {gold} carried gold"]
+    if rested:
+        lines.insert(2, f"+ {rested} XP rested — ✦ {p['rested']} left "
+                        "in the pool")
     if e.get("specimen") == "alpha":
         # 006 §3.8 faucet cut: charms drop 30% → 10% — bought relics
         # need the free ones scarce.

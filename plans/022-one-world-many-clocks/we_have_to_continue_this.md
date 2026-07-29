@@ -79,3 +79,18 @@ phase cuts a corner; strike items through when they land.
   the world day ticks while a fight is open the player heals to full
   between rounds. Rare and reads as "dawn breaks" — but it's a free
   potion for whoever times the boundary. Watch for abuse at the tick.
+- **Strongbox thresholds are summed points, my ruling (005).** "2/4/6
+  open slots" was read as kills + keeps + floors, one point each — an
+  active week opens all three slots trivially (6 kills is one session).
+  The thresholds gate the CHOICE, not the size; if telemetry says that
+  is too generous, weight the counters (floors > keeps > kills), don't
+  move the thresholds.
+- **Night work is offline gold with zero risk (005).** 20% of a
+  hunting day, every night, for picking a menu option. It never beats
+  playing (a hunting day is 5× that) and can't compound (carried gold
+  is lootable, the cell cap holds) — but nobody has measured what 30
+  worked nights do to the gear ladder at the 1–20 band. Measure when
+  telemetry exists.
+- **The "relic" strongbox slot pays a luck charm (005).** Placeholder
+  kin of the gear-tier-token TODO — the real relic table (caster
+  relics? armory pieces?) is undesigned.

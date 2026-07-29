@@ -11,7 +11,7 @@ import datetime as dt
 
 from .. import economy, unlocks
 from ..content import schema
-from . import combat, contracts, state
+from . import combat, contracts, state, weekly
 from .scene import Meters, Option, Scene
 
 
@@ -161,6 +161,14 @@ def _news_scene(p: dict, w: dict, day: int) -> Scene:
     # touch_daily; the Crier only says what the body already knows.
     if p.get("daily", {}).get("dawn_healed"):
         lines.append("· dawn — your wounds have closed.")
+    # 022/005: the night slot settled at the same boundary.
+    ny = p.get("daily", {}).get("night_yield")
+    if ny and ny.get("kind") == "work":
+        lines.append(f"· the night shift paid ◈ {ny['gold']} while "
+                     "you slept.")
+    elif ny and ny.get("kind") == "rest":
+        lines.append(f"· you wake rested — ✦ {ny['aether']} banked "
+                     "toward your next kills.")
     lines.append(
         f"· {total} climber{'s' if total != 1 else ''} on the "
         f"Ascent — {by_floor.get(frontier, 0)} at the frontier "
@@ -1257,6 +1265,11 @@ def _eat_stew(p: dict, scene_fn) -> Scene:
     return s
 
 
+def _night_shift(day: int) -> str:
+    """The night's work site — deterministic flavor, same for everyone."""
+    return economy.NIGHT_SHIFTS[day % len(economy.NIGHT_SHIFTS)]
+
+
 def _lodge_scene(p: dict) -> Scene:
     price = economy.LODGE_PRICE_PER_LEVEL * p["level"]
     lodged = p["lodged_until_day"] >= state.world_day() + 1
@@ -1266,6 +1279,37 @@ def _lodge_scene(p: dict) -> Scene:
     if p["hp"] < state.max_hp(p):
         opts.append(Option("stew", "Hunter's stew",
                            f"◈ {economy.STEW_PRICE} · +{economy.STEW_HEAL_HP} HP"))
+    body = [f"A night costs ◈ {price}. Banked gold can't buy it — "
+            "carry coin.",
+            # 022/004: dawn heals everyone everywhere — the Lodge
+            # sells the one thing dawn doesn't: not being found.
+            "Dawn closes wounds wherever you lie. The palisade "
+            "is about who can FIND you before it does."]
+    # 022/005: the night slot — one action per night, resolved at dawn.
+    # Below the level it doesn't exist here at all; the square's NEXT
+    # line carries it (020's machinery).
+    if p["level"] >= economy.NIGHT_SLOT_LEVEL:
+        day = state.world_day()
+        shift = _night_shift(day)
+        night = p.get("night") or {}
+        plan = night.get("choice") if night.get("day") == day else None
+        if plan == "rest":
+            body.append("Tonight: rest by the fire — the pool banks at "
+                        "dawn.")
+        elif plan == "work":
+            body.append(f"Tonight: {shift} — coin at dawn.")
+        else:
+            body.append("No plan for tonight yet. One action a night — "
+                        "rest it or work it.")
+        if plan != "rest":
+            opts.append(Option(
+                "night_rest", "Tonight: rest",
+                f"✦ {economy.night_rest_aether(p['level'])} banked at dawn"))
+        if plan != "work":
+            opts.append(Option(
+                "night_work", f"Tonight: {shift}",
+                f"◈ {economy.night_work_gold(max(1, p['unlocked_floor']))} "
+                "at dawn"))
     opts.append(Option("back", "Back to the square"))
     return Scene(
         eyebrow="ROOTHOLLOW · THE LODGE",
@@ -1273,12 +1317,7 @@ def _lodge_scene(p: dict) -> Scene:
                  else "Your bunk is paid through tonight",
         support="Skip the lodge and you sleep in the fields — where anyone "
                 "may find you.",
-        body_lines=[f"A night costs ◈ {price}. Banked gold can't buy it — "
-                    "carry coin.",
-                    # 022/004: dawn heals everyone everywhere — the Lodge
-                    # sells the one thing dawn doesn't: not being found.
-                    "Dawn closes wounds wherever you lie. The palisade "
-                    "is about who can FIND you before it does."],
+        body_lines=body,
         options=opts,
         meters=combat.meters(p),
         banner="lodge",
@@ -1288,6 +1327,15 @@ def _lodge_scene(p: dict) -> Scene:
 def _lodge_action(p: dict, oid: str) -> Scene:
     if oid == "stew":
         return _eat_stew(p, _lodge_scene)
+    if oid in ("night_rest", "night_work"):
+        if p["level"] < economy.NIGHT_SLOT_LEVEL:
+            return _lodge_scene(p)
+        p["night"] = {"day": state.world_day(),
+                      "choice": "rest" if oid == "night_rest" else "work"}
+        s = _lodge_scene(p)
+        s.shard_note = ("The night is planned. Dawn settles it — one "
+                        "action a night, no more.")
+        return s
     if oid != "sleep":
         return _lodge_scene(p)
     price = economy.LODGE_PRICE_PER_LEVEL * p["level"]
@@ -1377,6 +1425,26 @@ def _vault_scene(p: dict) -> Scene:
     p["bank_day"] = state.world_day()
     lines.append(f"banked ◈ {p['bank']:,} · carried ◈ {p['gold']:,}")
     opts = []
+    # 022/005: the weekly strongbox. Below the level it doesn't exist
+    # here at all; the square's NEXT line carries it.
+    if p["level"] >= economy.STRONGBOX_LEVEL:
+        box = weekly.sync(p)
+        note = p.pop("strongbox_note", None)
+        if note:
+            lines.append(note)
+        pts = weekly.points(p, box)
+        n = weekly.slots(p)
+        lines.append(f"strongbox — this week: {box['kills']} kills · "
+                     f"{box['wardens']} keeps · "
+                     f"{max(0, p['unlocked_floor'] - box['floor0'])} floors "
+                     f"= {pts} points, {n} slot{'s' if n != 1 else ''} open "
+                     f"(thresholds {'/'.join(map(str, economy.STRONGBOX_THRESHOLDS))}).")
+        pending = box.get("pending")
+        if pending:
+            lines.append(f"last week's box is OPEN — {pending['slots']} "
+                         "slot(s). Pick exactly one.")
+            for o, label, hint in weekly.rewards(p, pending["slots"]):
+                opts.append(Option(o, label, hint))
     if p["gold"] > 0:
         opts += [Option("deposit_all", "Deposit everything", f"◈ {p['gold']:,}"),
                  Option("deposit_half", "Deposit half", f"◈ {p['gold'] // 2:,}")]
@@ -1399,6 +1467,12 @@ def _vault_scene(p: dict) -> Scene:
 
 
 def _vault_action(p: dict, oid: str) -> Scene:
+    if oid.startswith("pick_") and p["level"] >= economy.STRONGBOX_LEVEL:
+        line = weekly.pick(p, oid)
+        s = _vault_scene(p)
+        if line:
+            s.body_lines.insert(0, line + ". The box shuts for the week.")
+        return s
     if oid == "deposit_all" and p["gold"] > 0:
         combat._ledger(p, "deposit", gold=-p["gold"])
         p["bank"] += p["gold"]

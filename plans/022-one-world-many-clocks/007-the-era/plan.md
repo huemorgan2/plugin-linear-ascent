@@ -21,6 +21,11 @@ Goal: the game ends, together, on purpose — and the Tower remembers.
 5. Perks — **prestige buys time, never power**: Relay + Arcanum open from
    day 1, a pre-filled rested pool, echoes from day 1. No stats, no gear,
    nothing that compounds across eras.
+   **005 learning:** the rested pool is live — `p["rested"]`, capped by
+   `economy.rested_pool_cap(level)` (3 nights × 4% of the bar), paid out
+   only via `state.rested_bonus` on kill XP. The perk should seed it at
+   the level-1 cap; decide whether prestige may exceed the cap or the
+   cap law holds for everyone (recommend: the law holds).
 6. Reset tooling: wipe `ascent_players` / `ascent_world` / factions /
    letters / bank; the two permanent tables survive; a dry-run mode
    against a scratch DB, rehearsed before the real one. PvP history wipes

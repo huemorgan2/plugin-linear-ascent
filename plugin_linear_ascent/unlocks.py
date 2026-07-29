@@ -62,6 +62,14 @@ def registry() -> tuple[Unlock, ...]:
                "the contract board", "the square",
                f"{economy.BOARD_JOBS_PER_DAY} world jobs a day — the same "
                "three for every climber, paid in gold and XP"),
+        Unlock("night_slot", "level", economy.NIGHT_SLOT_LEVEL, "opens",
+               "the night slot", "the lodge",
+               "one action a night — rest toward your next kills, or "
+               "work a shift for coin at dawn"),
+        Unlock("strongbox", "level", economy.STRONGBOX_LEVEL, "opens",
+               "the weekly strongbox", "the vault",
+               "a week of kills, keeps and floors opens slots — pick "
+               "ONE reward at the tick"),
         # ── level, closes — the protections that expire ──
         Unlock("mercy_ends", "level",
                economy.BEGINNER_MERCY_MAX_LEVEL + 1, "closes",

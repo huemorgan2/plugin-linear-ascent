@@ -44,5 +44,9 @@ shared-round parties (guard/flank/mark) remain their own future plan.
   and the Stone line write once.
 - Assist math: bonus over two solo kills; contract credit to both; no
   double-dip with rested aether on the same kill.
+  **005 learning:** rested aether pays out in exactly one place —
+  inside `combat._victory` via `state.rested_bonus`. If the assist
+  bonus is paid outside `_victory` (its own ledger line), the
+  no-double-dip property is structural; test it, don't re-implement it.
 - Browser walkthrough with two accounts: die without a flare, then be
   saved by one — the second story should feel different.

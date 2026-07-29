@@ -399,8 +399,43 @@ def touch_daily(p: dict) -> None:
         if p.get("stage") == "playing" and p.get("hp", 0) < max_hp(p):
             p["hp"] = max_hp(p)
             healed = True
+        # 022/005 night slot: ONE action per night, resolved at dawn.
+        # Away nights don't stack — the plan covered one night.
+        night_yield = None
+        night = p.get("night")
+        if (night and night.get("day", -1) < day
+                and p.get("stage") == "playing"):
+            fl = max(1, p.get("unlocked_floor", 1))
+            if night.get("choice") == "work":
+                g = economy.night_work_gold(fl)
+                p["gold"] = p.get("gold", 0) + g
+                p.setdefault("_ledger", []).append(
+                    {"kind": "night_work", "gold": g, "xp": 0,
+                     "note": "the night shift"})
+                night_yield = {"kind": "work", "gold": g}
+            else:
+                amt = economy.night_rest_aether(p["level"])
+                cap = economy.rested_pool_cap(p["level"])
+                before = int(p.get("rested", 0))
+                p["rested"] = min(cap, before + amt)
+                night_yield = {"kind": "rest",
+                               "aether": p["rested"] - before}
+            p["night"] = None
         p["daily"] = {"day": day, "pvp_used": 0, "energy_cell": False,
-                      "death_save": False, "dawn_healed": healed}
+                      "death_save": False, "dawn_healed": healed,
+                      "night_yield": night_yield}
+
+
+def rested_bonus(p: dict, kill_xp: int) -> int:
+    """022/005: draw the rested pool down against a KILL's XP — the only
+    place rested aether pays out (never contracts, never the strongbox).
+    Mutates the pool; returns the bonus XP."""
+    pool = int(p.get("rested", 0))
+    if pool <= 0 or kill_xp <= 0:
+        return 0
+    bonus = min(pool, max(1, round(kill_xp * economy.RESTED_XP_BONUS_PCT)))
+    p["rested"] = pool - bonus
+    return bonus
 
 
 def bank_interest_due(p: dict) -> int:
