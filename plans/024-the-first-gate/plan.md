@@ -48,14 +48,34 @@ Three changes in `economy.py` §5b, one in worldd, one in the keep card.
 ### A. Ramp the pool across the solo band
 
 ```
-warden_pool_fights(F) = 8                                for F ≥ 30
-                      = max(2, round(8 · F / 30))        below
+warden_pool_fights(F) = 8                        for F ≥ 30
+                      = 2 + 6·(F−1)/29           below      (fractional)
+pool_unit(F)          = max(strike_fight_damage(g) for g ≤ F)  for F ≤ 30
+                      = strike_fight_damage(F)                 above
 ```
 
-Floor 1 → 2 fights (**266 HP**), ramping to 8 by floor 30. Two at the
-bottom, not one, on purpose: you must come back to finish it, which is
-how the shared-Warden mechanic teaches itself — you return and find your
-own wound still open.
+Floor 1 → 2 fights (**266 HP**), a straight line to 8 by floor 30. Two at
+the bottom, not one, on purpose: you must come back to finish it, which
+is how the shared-Warden mechanic teaches itself — you return and find
+your own wound still open.
+
+**Both pieces earn their shape** (found by auditing all 30 floors, not by
+design):
+
+- *Fractional, not whole, fights.* Rounding the ramp to integers put
+  **+35–40% cliffs on floors 14, 17, 21 and 25** — a climber crossing
+  one of those floors met a Warden nearly half again as deep as the last
+  for no reason he could see. The effort curve is what he feels, and it
+  must rise one honest step per floor.
+- *A monotone unit.* `strike_fight_damage` rides integer round counts, so
+  it can dip a floor: floor 3's pool came out **under** floor 2's (306 vs
+  308), and floor 27 under floor 26. A tower may not step backwards on
+  the way up. Deep floors keep the raw unit, where neighbouring pools are
+  an order of magnitude apart and a dip cannot show.
+
+The one large step left — **+40% at floor 8** — is the at-level reference
+kit changing gear band, not the ramp. The effort curve runs straight
+through it (3.24 → 3.45 fights), which is the number that matters.
 
 Floors 30–100 are **numerically unchanged**: every acceptance gate in
 022/002 (deep-band solo impossibility, the banked-bar burst, the era
@@ -99,6 +119,8 @@ closes if the tower forgets it.
 - Floor 1's pool is 266 HP: two at-level fights, 6⚡, and ≤ one energy bar.
 - The ramp is monotonic, reaches 8 at floor 30, and floors 31–100 keep
   today's exact numbers (asserted against the old formula).
+- **No floor in 1–30 is weaker than the floor below it**, and the effort
+  curve is a straight 2 → 8 fights with no step worth a whole fight.
 - Solo band: regen is 0, silence > 24h — a wound survives the dawn a
   climber needs.
 - Reward per energy at floor 1 matches the solo-tuned Warden.

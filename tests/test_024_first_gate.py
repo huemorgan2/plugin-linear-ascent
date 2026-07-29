@@ -46,6 +46,46 @@ def test_the_ramp_climbs_to_the_coordination_band():
         assert economy.warden_pool_fights(fno) == economy.WARDEN_POOL_FIGHTS
 
 
+# ── the climb 1–30 is a climb: monotone, and linear in EFFORT ────────────
+
+def test_no_floor_in_the_band_is_weaker_than_the_floor_below():
+    """The dip 024 found: floor 3's pool came out UNDER floor 2's (306 vs
+    308) because the fight unit rides integer round counts, and floor 27
+    under floor 26. A tower may not step backwards on the way up."""
+    pools = [economy.world_warden_hp(f) for f in range(1, 31)]
+    assert pools == sorted(pools), pools
+
+
+def test_the_effort_curve_is_a_straight_line_two_to_eight():
+    """What the climber actually feels is FIGHTS, not HP. One honest step
+    per floor, 2 at the first gate to 8 at the soft floor — no cliffs
+    (rounding the ramp to whole fights put +35–40% steps on 14, 17, 21
+    and 25) and no plateaus."""
+    effort = [economy.world_warden_hp(f) / economy.strike_fight_damage(f)
+              for f in range(1, 31)]
+    assert effort[0] == 2.0
+    assert abs(effort[-1] - 8.0) < 0.25
+    step = (8.0 - 2.0) / 29
+    for fno, (a, b) in enumerate(zip(effort, effort[1:]), start=1):
+        # the raw unit rides integer round counts and can wobble a
+        # fraction of a fight between neighbours; what must never happen
+        # is a backslide a climber could feel
+        assert -0.1 < b - a < 3 * step, (fno, a, b)
+    for fno, want in enumerate(effort, start=1):
+        expected = 2.0 + step * (fno - 1)
+        assert abs(want - expected) < 0.5, (fno, want, expected)
+
+
+def test_the_pool_itself_never_cliffs_beyond_the_gear_ladder():
+    """Pool jumps track the reference kit: the one big step left (+40% at
+    floor 8) is the at-level loadout changing gear band, not the ramp —
+    and the effort curve stays smooth straight through it."""
+    for fno in range(2, 31):
+        prev = economy.world_warden_hp(fno - 1)
+        jump = (economy.world_warden_hp(fno) - prev) / prev
+        assert jump <= 0.40, (fno, jump)
+
+
 def test_floors_31_plus_are_numerically_untouched():
     """Every 022/002 acceptance gate reads floors 31+. The retune must
     not have moved a single one of those numbers."""

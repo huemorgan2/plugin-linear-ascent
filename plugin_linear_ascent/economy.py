@@ -541,25 +541,43 @@ def strike_fight_damage(floor: int) -> int:
     return max(1, rounds * p_dmg)
 
 
-def warden_pool_fights(floor: int) -> int:
+def warden_pool_fights(floor: int) -> float:
     """024: strike-fights one striker's share of the pool is worth. The
     flat 8 was written for the coordination floors and then applied to
     the whole tower, so floor 1 — the first gate anyone meets, and one a
     lone climber has to open alone — asked the same eight near-death
     fights as floor 30. Ramp it: two at the bottom (two, not one, so the
     mechanic teaches itself — you come back and find your own wound
-    still open), reaching the coordination band's 8 by the soft floor."""
+    still open), a straight line to the coordination band's 8 at the
+    soft floor.
+
+    Fractional on purpose. Rounding this to whole fights put +35–40%
+    cliffs on floors 14, 17, 21 and 25 — the effort curve is what the
+    climber feels, and it must rise one honest step per floor."""
     if floor >= WARDEN_SOFT_FLOOR:
-        return WARDEN_POOL_FIGHTS
-    return max(WARDEN_POOL_FIGHTS_MIN,
-               round(WARDEN_POOL_FIGHTS * floor / WARDEN_SOFT_FLOOR))
+        return float(WARDEN_POOL_FIGHTS)
+    return WARDEN_POOL_FIGHTS_MIN + (
+        WARDEN_POOL_FIGHTS - WARDEN_POOL_FIGHTS_MIN) * (
+            floor - 1) / (WARDEN_SOFT_FLOOR - 1)
+
+
+def pool_unit(floor: int) -> int:
+    """The fight-unit pools are measured in, made monotone inside the
+    solo band. 024: strike_fight_damage rides integer round counts, so
+    it can DIP a floor (floor 3's unit came out under floor 2's, which
+    handed floor 3 a weaker Warden than the floor below it). A climbing
+    tower may never step backwards; deep floors keep the raw unit, where
+    every pool is an order of magnitude clear of its neighbours."""
+    if floor > WARDEN_SOFT_FLOOR:
+        return strike_fight_damage(floor)
+    return max(strike_fight_damage(f) for f in range(1, max(1, floor) + 1))
 
 
 def world_warden_hp(floor: int, active: int | None = None) -> int:
     """The world pool: N(F) × warden_pool_fights(F) honest strike-fights."""
     return max(1, round(required_strikers(floor, active)
                         * warden_pool_fights(floor)
-                        * strike_fight_damage(floor)))
+                        * pool_unit(floor)))
 
 
 def world_warden_regen_hourly(floor: int) -> float:
