@@ -502,9 +502,12 @@ def warden_gold(floor: int) -> int:
 
 REFERENCE_ACTIVE = 200         # sizing fallback when no census exists
 WARDEN_POOL_FIGHTS = 8         # pool per required striker ≈ one full bar
+WARDEN_POOL_FIGHTS_MIN = 2     # 024: …ramping up from this at floor 1
 WARDEN_SILENCE_MIN_H = 6.0     # silence window at floor 31…
 WARDEN_SILENCE_MAX_H = 30.0    # …stretching to this by floor 90+
+WARDEN_SILENCE_SOLO_H = 30.0   # 024: a day and a night, inside the band
 WARDEN_PITY_PCT = 0.03         # off max HP per fully-closed wound, forever
+WARDEN_POOL_TUNE = 2           # 024: bump to resize live pools on read
 
 # a player spending every ⚡ on the keep: fights per hour, sustained
 SUSTAINED_FIGHTS_PER_HOUR = (60 / ENERGY_REGEN_MIN) / COST_WARDEN_ATTEMPT
@@ -538,25 +541,47 @@ def strike_fight_damage(floor: int) -> int:
     return max(1, rounds * p_dmg)
 
 
+def warden_pool_fights(floor: int) -> int:
+    """024: strike-fights one striker's share of the pool is worth. The
+    flat 8 was written for the coordination floors and then applied to
+    the whole tower, so floor 1 — the first gate anyone meets, and one a
+    lone climber has to open alone — asked the same eight near-death
+    fights as floor 30. Ramp it: two at the bottom (two, not one, so the
+    mechanic teaches itself — you come back and find your own wound
+    still open), reaching the coordination band's 8 by the soft floor."""
+    if floor >= WARDEN_SOFT_FLOOR:
+        return WARDEN_POOL_FIGHTS
+    return max(WARDEN_POOL_FIGHTS_MIN,
+               round(WARDEN_POOL_FIGHTS * floor / WARDEN_SOFT_FLOOR))
+
+
 def world_warden_hp(floor: int, active: int | None = None) -> int:
-    """The world pool: N(F) × 8 honest strike-fights."""
+    """The world pool: N(F) × warden_pool_fights(F) honest strike-fights."""
     return max(1, round(required_strikers(floor, active)
-                        * WARDEN_POOL_FIGHTS * strike_fight_damage(floor)))
+                        * warden_pool_fights(floor)
+                        * strike_fight_damage(floor)))
 
 
 def world_warden_regen_hourly(floor: int) -> float:
     """Fraction of max HP healed per hour. Derived so exactly N(F)/2
-    sustained strikers break even — fewer visibly lose ground, and in
-    the solo band (N=1) a single sustained blade always gains."""
-    return SUSTAINED_FIGHTS_PER_HOUR / (2 * WARDEN_POOL_FIGHTS)
+    sustained strikers break even — fewer visibly lose ground.
 
-
-def warden_silence_hours(floor: int) -> float | None:
-    """W(F): hours of silence that close the wound fully. None inside
-    the solo band — there, the slow regen is the only healer, so a solo
-    campaign can span sessions."""
+    024: zero inside the solo band. A climber's body heals at dawn and
+    nowhere else, so his honest cadence is one strike a day — a trickle
+    of 2.78%/h restored ~25 fights' worth of body between his visits and
+    made the band unwinnable alone. There, silence is the only healer."""
     if floor <= WARDEN_SOFT_FLOOR:
-        return None
+        return 0.0
+    return SUSTAINED_FIGHTS_PER_HOUR / (2 * warden_pool_fights(floor))
+
+
+def warden_silence_hours(floor: int) -> float:
+    """W(F): hours of silence that close the wound fully. 024: the solo
+    band has one too — a day and a night, so a wound outlives the dawn
+    the climber needs, but a tower that forgets a Warden for a full day
+    finds it whole (and pays the pity for it)."""
+    if floor <= WARDEN_SOFT_FLOOR:
+        return WARDEN_SILENCE_SOLO_H
     t = min(1.0, max(0.0, (floor - 31) / 59))    # 31 → 90+
     return WARDEN_SILENCE_MIN_H + t * (WARDEN_SILENCE_MAX_H
                                        - WARDEN_SILENCE_MIN_H)
@@ -564,10 +589,13 @@ def warden_silence_hours(floor: int) -> float | None:
 
 def world_warden_reward_mult(floor: int, active: int | None = None) -> float:
     """The reward pool in units of warden_xp/warden_gold. One pool =
-    N × 8 fight-equivalents of damage, and one solo warden fight pays
-    warden_gold for the same 3⚡ — so paying N × 8 pools keeps the
-    payout per energy at parity with the solo-tuned warden."""
-    return float(required_strikers(floor, active) * WARDEN_POOL_FIGHTS)
+    N × warden_pool_fights(F) fight-equivalents of damage, and one solo
+    warden fight pays warden_gold for the same 3⚡ — so paying that many
+    pools keeps the payout per energy at parity with the solo-tuned
+    warden. 024: it reads the ramp, never the flat 8, or a two-fight
+    gate would pay for eight."""
+    return float(required_strikers(floor, active)
+                 * warden_pool_fights(floor))
 
 
 def milestone_quorum(floor: int, active: int | None = None) -> int:

@@ -211,9 +211,13 @@ _TIPS: dict[str, str] = {
     "strike": ("Join the fight — 3 energy for a FULL fight against the "
                "shared Warden. Kill, flee or fall, everything you cut "
                "away stays cut: every climber's wounds stack on the "
-               "same body. When it empties the floor opens for ALL and "
-               "the prize splits by damage dealt — fight daily, even a "
-               "little claims a share."),
+               "same body, so withdrawing alive still counts. The card "
+               "says how many full fights are left — the low gates are "
+               "two, the deep ones need a crowd. Leave a wound alone "
+               "for a day and night and it closes whole (each closing "
+               "costs it 3% of its body, forever). When it empties the "
+               "floor opens for ALL and the prize splits by damage "
+               "dealt — fight daily, even a little claims a share."),
     "boss_commit": ("Pledge your blade to the milestone push — 5 energy. "
                     "When enough blades stand pledged the gate falls "
                     "for everyone, and the pledged split the prize. The "

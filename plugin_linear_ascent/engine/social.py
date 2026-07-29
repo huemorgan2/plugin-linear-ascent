@@ -876,6 +876,16 @@ def warden_scene(p: dict, fl, note: str = "") -> Scene:
     p["war_seen"] = {"floor": fl.floor, "pity": pity}
     lines.append(fl.warden_prose)
     lines.append(f"{_war_bar(hp, hp_max)} {pct}% — {hp:,}/{hp_max:,} HP")
+    # 024: a four-digit bar reads as a wall unless the card says what the
+    # pool is MEASURED in. One full fight is the unit it was sized in.
+    unit = max(1, economy.strike_fight_damage(fl.floor))
+    left = max(1, -(-hp // unit))
+    if left == 1:
+        lines.append("≈1 full fight left to close it — the last blow is "
+                     "there for the taking")
+    else:
+        lines.append(f"≈{left} full fights left to close it — {left} of "
+                     "yours, or one each from as many blades")
     closes = wd.get("closes_in_s")
     if hp < hp_max and closes is not None:
         lines.append(f"the wound closes in {_fmt_countdown(closes)} — "
