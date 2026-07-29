@@ -265,11 +265,16 @@ class LinearAscentPlugin(LunaPlugin):
 
         async def ascent_scene() -> str:
             scene = await runtime.scene_for(_user())
+            runtime.pace_mark(_user())
             return build_payload(scene)
 
         async def ascent_choose(option: str = "", text: str = "") -> str:
-            scene = await runtime.act_for(
-                _user(), option.strip(), text.strip())
+            # 0.29.5: the player WATCHES the agent play — every screen
+            # gets its seconds on the pane before the next move lands.
+            u = _user()
+            await runtime.pace_wait(u)
+            scene = await runtime.act_for(u, option.strip(), text.strip())
+            runtime.pace_mark(u)
             return build_payload(scene)
 
         async def ascent_character() -> str:
@@ -328,7 +333,10 @@ class LinearAscentPlugin(LunaPlugin):
                     "pass the player's message as `text` and leave "
                     "`option` empty. The "
                     "engine refuses stale or unknown options with a "
-                    "steering hint — relay it. After the scene shows, "
+                    "steering hint — relay it. Moves are PACED: the game "
+                    "holds each move until the previous screen has had a "
+                    "few seconds on the player's pane — a slow tool call "
+                    "is normal, never a timeout. After the scene shows, "
                     "reply with at most one short in-character line — or "
                     "nothing at all; never restate the card. "
                     + _SHARED_RULES),

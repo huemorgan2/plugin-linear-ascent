@@ -12,6 +12,7 @@ Tools and routes both import this module and read `state` at call time.
 
 from __future__ import annotations
 
+import asyncio
 import os
 import time
 import uuid
@@ -39,9 +40,31 @@ state: dict = {
                           # freshness without a world round trip
     "presence": {},       # 022/003: user -> {"at", "hot"} — grade-2
                           # liveness for /pane/peek, refreshed ≤ once/min
+    "agent_pace": {},     # 0.29.5: user -> monotonic time of the last
+                          # agent-rendered screen — moves are paced so
+                          # the player watches the game the agent plays
 }
 
 PRESENCE_REFRESH_S = 60
+AGENT_MOVE_GAP_S = 3.0    # 0.29.5: minimum seconds a screen stays up
+                          # before the agent's NEXT move replaces it
+
+
+def pace_mark(user: str) -> None:
+    """A screen just rendered for this player (agent tool path only —
+    the pane's own clicks are the human's hand and are never paced)."""
+    state["agent_pace"][user] = time.monotonic()
+
+
+async def pace_wait(user: str) -> None:
+    """Hold the agent's move until the previous screen has had its
+    AGENT_MOVE_GAP_S on the player's display."""
+    last = state["agent_pace"].get(user)
+    if last is None:
+        return
+    wait = AGENT_MOVE_GAP_S - (time.monotonic() - last)
+    if wait > 0:
+        await asyncio.sleep(wait)
 
 
 async def floor_presence(user: str) -> int:

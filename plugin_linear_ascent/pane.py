@@ -302,7 +302,10 @@ async function peek() {
     if (d.scene_id && sceneId && d.scene_id !== sceneId) loadScene(true);
   } catch (e) {}
 }
-setInterval(peek, 15000);
+/* 0.29.5: 2s — the pane FOLLOWS the agent's play move by move (peek is
+   an in-process scene-id read; the presence number inside it is cached
+   server-side, so this cadence costs no world round trips). */
+setInterval(peek, 2000);
 document.addEventListener('visibilitychange', () => {
   if (!document.hidden) peek();
 });
