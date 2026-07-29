@@ -1331,6 +1331,31 @@ def strongbox_aether(level: int) -> int:
     return max(1, round(STRONGBOX_AETHER_PCT_OF_BAR * xp_need(level)))
 
 
+# §8d — 022/008: together — the flare, assist strikes, the long fire.
+# 80% of "fighting side by side" without synchronous combat: a dying
+# climber can call the floor, an answerer is paid and remembered, and
+# two blades on the same prey inside minutes link their logs.
+FLARE_HP_PCT = 0.25            # the flare option appears below this bar
+FLARE_AETHER = 10              # XP burned to send it — a cry costs
+FLARE_TTL_MIN = 30             # a flare gutters out after this (server law)
+FLARE_ANSWER_GOLD_MULT = 0.5   # × gold_per_kill(floor), paid to the answerer
+FLARE_ANSWER_AETHER = 10       # XP paid to the answerer
+ASSIST_WINDOW_MIN = 15         # linked-log window on the same prey
+ASSIST_BONUS_PCT = 0.25        # × the kill's gold — the finisher's bonus
+FIRE_STEW_GOLD = 5             # stand a stranger a stew at the long fire
+FIRE_WORDS = (                 # canned only — no free chat, no moderation
+    "Long day. Good fire.",
+    "The tower creaked twice tonight. Count it.",
+    "Whoever left stew in the pot — thank you.",
+    "Sharpen before you sleep. Dawn forgets nothing.",
+    "Heard a flare answered on the high floors. Good.",
+)
+
+
+def flare_answer_gold(floor: int) -> int:
+    return max(1, round(FLARE_ANSWER_GOLD_MULT * gold_per_kill(floor)))
+
+
 # ── Races & classes ──────────────────────────────────────────────────────
 
 # 009: three lines climb the Ascent — the halfling listing is retired

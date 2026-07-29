@@ -7,6 +7,7 @@ never reach these functions (core.py dispatches).
 
 from __future__ import annotations
 
+import datetime as dt
 import os
 
 from .. import economy
@@ -364,6 +365,14 @@ def fight_scene(p: dict, floor, opener: bool = False, note: str = "") -> Scene:
         opts.append(Option("treeline_shot", "Treeline shot", "class", aether=True))
     if p["inventory"].get("trollblood_tonic"):
         opts.append(Option("drink_tonic", "Drink trollblood tonic", "full heal"))
+    # 022/008: below a quarter bar, a dying climber can call the floor —
+    # once per fight, world mode only (a flare needs someone to see it).
+    if p.get("_world") is not None and not e.get("flared") \
+            and p["hp"] <= round(state.max_hp(p) * economy.FLARE_HP_PCT):
+        opts.append(Option(
+            "flare", "Send up a flare",
+            f"{economy.FLARE_AETHER} XP · every hot blade sees it",
+            aether=True))
     opts += _relic_options(p)
     charges = p["sidekick"]["scout_charges"]
     opts.append(Option(
@@ -388,6 +397,17 @@ def fight_scene(p: dict, floor, opener: bool = False, note: str = "") -> Scene:
     fx_note = e.pop("_fx_note", "")
     if fx_note:
         body.append(fx_note)
+    # 022/008: an answered flare folds into the fight as story plus one
+    # free disengage — read from the injected world row on the flared
+    # player's own act, never pushed into the doc from outside.
+    fw = (p.get("_world") or {}).get("flare") if e.get("flared") else None
+    if fw and fw.get("own") and fw.get("answered_by") \
+            and not e.get("rescue_seen"):
+        e["rescue_seen"] = True
+        e["rescued"] = True
+        body.append(f"{fw['answered_by']} answered your flare — the "
+                    f"{e['name']} wheels to face the new blade. Run now: "
+                    "it will not chase you.")
     # 022/003: the number breathes — every round re-reads who is hot on
     # this floor, and changes fold in as story lines.
     hot, _camped = state.presence_counts(p, floor.floor)
@@ -466,6 +486,10 @@ def _monster_hit(p: dict, halved: bool = False) -> dict:
     if dodge and state.roll_ok(p, dodge / 100):
         return {"dmg": 0, "raw": 0, "blocked": 0, "dodged": True}
     if _range_state(p) == "at_range":
+        halved = True
+    if e.pop("flare_guard", None):
+        # 022/008: the flare's burst buys one round — the startled
+        # monster's next blow lands half as hard.
         halved = True
     raw = state.rng_int(p, e["atk"] // 2, e["atk"])
     chip = max(1, -(-raw // economy.CHIP_DIVISOR))
@@ -737,6 +761,25 @@ def _shared_warden_victory(p: dict, floor) -> Scene:
     )
 
 
+def _assist_partner(p: dict, e: dict) -> str:
+    """022/008: the most recent OTHER blade on the same prey inside the
+    assist window, from the injected floor kill-log — or ''."""
+    kills = (p.get("_world") or {}).get("recent_kills") or []
+    now = state.now()
+    me = p.get("name") or ""
+    for k in reversed(kills):
+        if k.get("slug") != e.get("id") or not k.get("by") \
+                or k.get("by") == me:
+            continue
+        try:
+            ts = dt.datetime.fromisoformat(k["ts"])
+        except (KeyError, TypeError, ValueError):
+            continue
+        if (now - ts).total_seconds() <= economy.ASSIST_WINDOW_MIN * 60:
+            return k["by"]
+    return ""
+
+
 def _victory(p: dict, floor) -> Scene:
     e = p["encounter"]
     if e["kind"] == "warden" and e.get("shared"):
@@ -787,6 +830,23 @@ def _victory(p: dict, floor) -> Scene:
     if rested:
         lines.insert(2, f"+ {rested} XP rested — ✦ {p['rested']} left "
                         "in the pool")
+    if e["kind"] == "wilds" and p.get("_world") is not None:
+        # 022/008: assist strikes — a floor-mate on the same prey inside
+        # the window links the logs. Gold only (rested already paid on
+        # the kill's XP above — no double-dip, structurally). Contract
+        # credit stays exactly one note_kill per participant: each blade
+        # scored their own kill.
+        by = _assist_partner(p, e)
+        if by:
+            bonus = max(1, round(gold * economy.ASSIST_BONUS_PCT))
+            p["gold"] += bonus
+            _ledger(p, "assist", gold=bonus, note=f"with {by}")
+            lines.append(f"▪ {by}'s blade bit first — yours finishes it. "
+                         f"+ ◈ {bonus} assist")
+        # tell the floor about THIS kill so the next blade can link to it
+        p.setdefault("_effects", []).append({
+            "kind": "kill_note", "floor": e.get("floor"),
+            "slug": e.get("id", "")})
     if e.get("specimen") == "alpha":
         # 006 §3.8 faucet cut: charms drop 30% → 10% — bought relics
         # need the free ones scarce.
@@ -1214,6 +1274,30 @@ def resolve_fight_action(p: dict, floor, option_id: str) -> Scene:
                  + f". Your ATK {state.atk(p)} / DEF {state.dfs(p)}."
                  + intent)
 
+    if option_id == "flare":
+        # 022/008: doesn't spend the round — the burst startles the
+        # monster instead (its next blow lands halved).
+        if p.get("_world") is None or e.get("flared"):
+            return fight_scene(p, floor)
+        if not state.spend_xp(p, economy.FLARE_AETHER):
+            return fight_scene(p, floor, note=(
+                f"A flare burns {economy.FLARE_AETHER} XP of focus — "
+                "you don't have it to burn."))
+        e["flared"] = True
+        e["flare_guard"] = True
+        p.setdefault("_effects", []).append({
+            "kind": "flare", "floor": floor.floor,
+            "slug": e.get("id", ""), "monster": e["name"]})
+        _ledger(p, "flare", xp=-economy.FLARE_AETHER, note=e["name"])
+        hot, _camped = state.presence_counts(p, floor.floor)
+        seen = max(0, hot - 1)
+        return fight_scene(p, floor, note=(
+            "The flare goes up red and hangs over the wilds — "
+            + (f"{seen} hot blade{'s' if seen != 1 else ''} on this floor "
+               "will see it. " if seen else
+               "no torch burns close, but flares carry. ")
+            + f"The {e['name']} flinches from the light."))
+
     if option_id == "drink_tonic":
         p["inventory"]["trollblood_tonic"] -= 1
         if p["inventory"]["trollblood_tonic"] <= 0:
@@ -1267,9 +1351,12 @@ def resolve_fight_action(p: dict, floor, option_id: str) -> Scene:
 
     if option_id == "run":
         # §2.4: the flat 60% is gone — speed decides the getaway.
+        # 022/008: an answered flare buys ONE guaranteed disengage — the
+        # monster has a new front and does not chase.
         snap = _wear(p, "shoes")       # 005: the sprint spends shoe tread
-        if state.roll_ok(p, economy.p_flee(economy.player_speed(p),
-                                           _mspd(p))):
+        if e.pop("rescued", None) \
+                or state.roll_ok(p, economy.p_flee(economy.player_speed(p),
+                                                   _mspd(p))):
             dealt = _report_shared_strike(p)   # 022/001: wounds persist
             p["encounter"] = None
             p["location"] = "gate_town"

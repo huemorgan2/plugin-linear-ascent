@@ -133,3 +133,28 @@ phase cuts a corner; strike items through when they land.
   the full sequence (announce → freeze → reset → players log into a
   fresh world) has never been walked end to end, even on scratch.
   Rehearse the whole ceremony on a QA world before era 1 ends.
+- **The first blade of an assist gets no bonus (008).** Only the
+  finisher is paid the assist bonus — the first kill was already
+  banked and paying it retroactively means writing into a doc from
+  outside (the race we just designed around). If telemetry shows
+  players gaming the order (waiting to strike second), pay the first
+  blade through a letter-with-gold instead.
+- **Flare answerers race on stale injections (008).** The floor card's
+  flare is read at act start; two answerers can both tap before either
+  claim lands. Both fight a real fight, only the first is paid — fair,
+  but the second player's card never says why they weren't. Add a
+  "another blade got the plaque" line on the victory card when the
+  claim was lost. Needs the fx to report back — a small piece of
+  plumbing that doesn't exist yet.
+- **The flare pays no attention to WHO answered (008).** Any hot
+  climber including a level-1 on floor 1 can answer a floor-40 flare
+  if they can walk there (the floor gate limits this in practice —
+  unlocked_floor gates entry — so it's mostly theoretical; verify).
+- **The long fire is world-global, not per-floor or per-lodge (008).**
+  One `fire` row for the whole tower reads as one shared hearth in
+  Roothollow — intended for now. If gate-town lodges ever exist, key
+  the row by floor.
+- **Flare/kill/fire rows accumulate in ascent_world (008).** Stale
+  `flare:{N}` and `kills:{N}` rows are ignored by TTL but never
+  deleted; a hundred floors of rows is nothing, but a cleanup sweep in
+  the day tick would be tidy. They wipe with the era anyway.

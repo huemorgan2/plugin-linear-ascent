@@ -1323,6 +1323,23 @@ def _lodge_scene(p: dict) -> Scene:
                 "night_work", f"Tonight: {shift}",
                 f"◈ {economy.night_work_gold(max(1, p['unlocked_floor']))} "
                 "at dawn"))
+    # 022/008: the long fire — canned words only, no free chat.
+    fire = (p.get("_world") or {}).get("fire")
+    if fire is not None:
+        body.append("▣ THE LONG FIRE")
+        for f in fire[:5]:
+            body.append(f"· {f.get('name', 'a climber')} — "
+                        f"\u201c{f.get('word', '')}\u201d")
+        if not fire:
+            body.append("· embers and no company — say a word, someone "
+                        "will read it")
+        opts.append(Option("fire_word", "Sit the fire, say a word",
+                           "canned words — the fire keeps five"))
+        if any(f.get("name") and f.get("name") != p.get("name")
+               for f in fire):
+            opts.append(Option(
+                "fire_stew", "Stand a stranger a stew",
+                f"◈ {economy.FIRE_STEW_GOLD} · a letter with it"))
     opts.append(Option("back", "Back to the square"))
     return Scene(
         eyebrow="ROOTHOLLOW · THE LODGE",
@@ -1340,6 +1357,36 @@ def _lodge_scene(p: dict) -> Scene:
 def _lodge_action(p: dict, oid: str) -> Scene:
     if oid == "stew":
         return _eat_stew(p, _lodge_scene)
+    if oid == "fire_word":
+        # 022/008: pick tonight's canned line deterministically — no
+        # free text, nothing to moderate.
+        word = economy.FIRE_WORDS[
+            state.rng_int(p, 0, len(economy.FIRE_WORDS) - 1)]
+        from . import social
+        social._effect(p, "fire_word", word=word)
+        s = _lodge_scene(p)
+        s.shard_note = f"You say it to the fire: \u201c{word}\u201d"
+        return s
+    if oid == "fire_stew":
+        fire = (p.get("_world") or {}).get("fire") or []
+        other = next((f["name"] for f in fire
+                      if f.get("name") and f["name"] != p.get("name")), "")
+        if not other:
+            return _lodge_scene(p)
+        if p["gold"] < economy.FIRE_STEW_GOLD:
+            s = _lodge_scene(p)
+            s.shard_note = (f"A stranger's stew is ◈ "
+                            f"{economy.FIRE_STEW_GOLD} you don't carry.")
+            return s
+        p["gold"] -= economy.FIRE_STEW_GOLD
+        from . import social
+        social._effect(p, "fire_stew", to_name=other)
+        combat._ledger(p, "fire_stew", gold=-economy.FIRE_STEW_GOLD,
+                       note=other)
+        s = _lodge_scene(p)
+        s.shard_note = (f"A bowl goes across the fire to {other}. "
+                        "They'll find the word with their post.")
+        return s
     if oid in ("night_rest", "night_work"):
         if p["level"] < economy.NIGHT_SLOT_LEVEL:
             return _lodge_scene(p)
@@ -1751,9 +1798,21 @@ def _gate_pick(p: dict, oid: str) -> Scene:
     )
 
 
+def _live_flare(p: dict) -> dict | None:
+    """022/008: the floor's open flare, if it is someone else's and
+    still unanswered — the only state an answerer may act on."""
+    fw = (p.get("_world") or {}).get("flare")
+    if fw and not fw.get("own") and not fw.get("answered_by"):
+        return fw
+    return None
+
+
 def _gate_town_options(p: dict, fl) -> list[Option]:
     heal_price = economy.HEALER_TENT_PER_FLOOR * fl.floor
     opts = [Option("hunt", "Hunt the wilds", "1 ⚡")]
+    if _live_flare(p):
+        opts.insert(0, Option("answer_flare", "Answer the flare",
+                              "1 ⚡ · run toward the light"))
     if p["hp"] < state.max_hp(p):
         opts.append(Option("stew", "Hunter's stew",
                            f"◈ {economy.STEW_PRICE} · +{economy.STEW_HEAL_HP} HP"))
@@ -1774,11 +1833,17 @@ def _gate_town_options(p: dict, fl) -> list[Option]:
 
 def _gate_town_scene(p: dict) -> Scene:
     fl = schema.get_floor(max(1, p["floor"]))
+    body = _presence_floor_lines(p, fl.floor)
+    fw = _live_flare(p)
+    if fw:
+        body.insert(0, f"▪ a RED FLARE hangs over the wilds — "
+                       f"{fw.get('name', 'a climber')} is dying out "
+                       f"there, {fw.get('monster', 'something')} on them.")
     return Scene(
         eyebrow=f"FLOOR {fl.floor} · {fl.biome.upper()} · {fl.gate_town.upper()}",
         headline=f"{fl.gate_town}",
         support="The fire is small but honest. Beyond the wire, the wilds.",
-        body_lines=_presence_floor_lines(p, fl.floor),
+        body_lines=body,
         options=_gate_town_options(p, fl),
         meters=combat.meters(p),
     )
@@ -1786,6 +1851,33 @@ def _gate_town_scene(p: dict) -> Scene:
 
 def _gate_town_action(p: dict, oid: str) -> Scene:
     fl = schema.get_floor(max(1, p["floor"]))
+    if oid == "answer_flare":
+        fw = _live_flare(p)
+        if fw is None:
+            s = _gate_town_scene(p)
+            s.shard_note = ("The flare has guttered out — or another "
+                            "blade got there first.")
+            return s
+        if not state.spend_energy(p, economy.COST_WILDS_FIGHT):
+            s = _gate_town_scene(p)
+            s.shard_note = "Even a rescue takes ⚡ — you're spent."
+            return s
+        # the claim races other answerers server-side; first tap wins
+        # the pay and the Stone line, everyone who ran still fights.
+        from . import social
+        social._effect(p, "flare_answer", floor=fl.floor)
+        combat._ledger(p, "energy", note="flare answer")
+        enc = next((e for e in fl.encounters
+                    if e.id == fw.get("slug")), None)
+        if enc is None:
+            table = [(e.weight, e.id) for e in fl.encounters]
+            enc_id = state.rng_pick(p, table)
+            enc = next(e for e in fl.encounters if e.id == enc_id)
+        s = combat.start_encounter(p, fl, enc, "wilds")
+        s.support = (f"You run toward the light. The {enc.name} turns "
+                     f"from {fw.get('name', 'a climber')} to you — "
+                     "the rescuer's round.")
+        return s
     if oid == "hunt":
         if not state.spend_energy(p, economy.COST_WILDS_FIGHT):
             s = _gate_town_scene(p)
