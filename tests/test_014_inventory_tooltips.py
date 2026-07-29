@@ -191,6 +191,51 @@ def test_every_option_in_a_full_walk_has_a_tip():
     assert not missing, f"options without tips: {sorted(missing)}"
 
 
+def test_every_veteran_option_has_a_tip_too():
+    """0.29.5 regression: the level-1 walk never renders the doors that
+    open later — the night slot, the long fire, the strongbox picks,
+    the contract claims, the interest stubs, the token mend. Walk them
+    as a veteran so a new late-game option can't ship tipless."""
+    from plugin_linear_ascent.engine import contracts, weekly
+
+    p = create_character(fresh())
+    missing: set[str] = set()
+
+    def check(s):
+        for o in s.options:
+            if not tips.option_tip(o.id):
+                missing.add(o.id)
+
+    p["level"] = economy.STRONGBOX_LEVEL
+    p["gold"] = 5000
+    # a worn paid piece + a token → repair_ and token_ rows at the forge
+    g = economy.FORGE["pigsticker"]
+    p["gear"]["weapon"] = g.slug
+    p.setdefault("durability", {})["weapon"] = 1
+    p["inventory"]["repair_token"] = 1
+    check(choose(p, "forge"))
+    choose(p, "back")
+    # stubs + an open strongbox → collect_interest and pick_ rows
+    p["bank"] = 1000
+    p["bank_day"] = state.world_day() - 3
+    p["strongbox"] = {"week": weekly.week_no(), "kills": 0, "wardens": 0,
+                      "floor0": 1,
+                      "pending": {"week": weekly.week_no() - 1, "slots": 3}}
+    check(choose(p, "back"))                     # town (badged doors)
+    check(choose(p, "vault"))
+    choose(p, "back")
+    # the night slot and the long fire (fire needs a world blob)
+    p["_world"] = {"fire": []}
+    check(choose(p, "lodge"))
+    choose(p, "back")
+    p.pop("_world", None)
+    # a finished job → the claim_ row on the board
+    job = contracts.board_for(p)[0]
+    contracts.sync(p)["got"][job["id"]] = job["need"]
+    check(choose(p, "board"))
+    assert not missing, f"veteran options without tips: {sorted(missing)}"
+
+
 # ── the pack strip on the Scene ──────────────────────────────────────────
 
 def test_playing_scenes_carry_the_pack():

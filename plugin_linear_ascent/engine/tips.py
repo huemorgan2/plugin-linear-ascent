@@ -102,6 +102,54 @@ _TIPS: dict[str, str] = {
               "+20 HP by dawn. Skip it carrying gold and the fields may "
               "find you."),
 
+    # ── the night slot (022/005) ──
+    "night_rest": ("Tonight's ONE night action: rest, and dawn banks "
+                   "rested aether — it pays out as +25% bonus XP on "
+                   "each kill until the pool runs dry. The pool holds "
+                   "at most 3 nights' worth, so rest before hunting "
+                   "days, not before town days."),
+    "night_work": ("Tonight's ONE night action: take the shift and the "
+                   "coin arrives at dawn — about a fifth of a hunting "
+                   "day, scaled to your frontier floor. Gold without "
+                   "swinging a blade; it never touches the energy "
+                   "cell's one-a-day."),
+
+    # ── the long fire (022/008) ──
+    "fire_word": ("Say one of five canned words at the long fire — "
+                  "free. Everyone lodged tonight reads it; the fire "
+                  "keeps the last five lines. The tower's cheapest "
+                  "hello."),
+    "fire_stew": (f"◈ {economy.FIRE_STEW_GOLD} stands a stew for "
+                  "another climber at the fire — their name, your "
+                  "name, one warm line everyone sees. Generosity "
+                  "with a receipt."),
+    "answer_flare": ("Someone on this floor is bleeding and lit a "
+                     "flare. First blade to answer gets the fight — "
+                     "and the world pays the rescuer gold and aether "
+                     "for showing up. The climb remembers who came."),
+
+    # ── the interest stubs (023) ──
+    "collect_interest": ("Your banked gold earns 5% a day, each day a "
+                         "stub on the counter. This stamps the whole "
+                         "pile into the bank — collected interest "
+                         "compounds, uncollected stubs don't, and the "
+                         "clerk keeps only a month of them. Come by "
+                         "daily and the vault works for you."),
+
+    # ── the strongbox picks (022/005) ──
+    "pick_gold": ("The strongbox's sure slot: a lump of gold, about "
+                  "half a hunting day at your frontier floor. Always "
+                  "on offer — the fallback if you never pick."),
+    "pick_aether": ("The strongbox's second slot: a lump of rested "
+                    "aether — bonus XP that rides your next kills at "
+                    "+25% each. Pick it before a hunting week."),
+    "pick_token": ("The strongbox's third slot: a repair token — one "
+                   "FREE mend of any worn piece at the Forge. Worth "
+                   "the most when your steel is expensive."),
+    "pick_relic": ("The strongbox's third slot: a luck charm — better "
+                   "loot and present rolls until tomorrow. Crack it "
+                   "before a long day."),
+
     # ── vault desk ──
     "deposit_all": ("Everything into the vault. Banked gold survives "
                     "death and theft and grows 5% a day, compounded — "
@@ -328,11 +376,24 @@ def option_tip(oid: str) -> str:
         slug = oid.removeprefix("sell_")
         g = economy.FORGE.get(slug)
         r = economy.RELICS.get(slug)
-        name = g.name if g else (r.name if r else "it")
+        a = economy.APOTHECARY.get(slug)
+        name = (g.name if g else r.name if r else a.name if a
+                else "the repair token" if slug == "repair_token" else "it")
         return (f"The broker pays a daily rate (25–55%, same for "
                 f"everyone) for {name}, times its wear if it's gear. "
                 "Outgrown things back into gold — gold into the next "
                 "tier. A patient seller checks the rate tomorrow.")
+    if oid.startswith("claim_"):
+        return (f"Collect this finished job — the gold and XP land now, "
+                f"minus the broker's ◈ {economy.BOARD_PRICE} stamp. "
+                "Jobs die at dawn, collected or not: never sleep on a "
+                "finished line.")
+    if oid.startswith("token_"):
+        slot = oid.removeprefix("token_")
+        return (f"Spend an armor-repair token: this {slot} back to "
+                "full — no gold, no XP, the smith asks nothing else. "
+                "Tokens come from presents, contract bonuses and the "
+                "weekly strongbox; spend them on your priciest steel.")
     if oid.startswith("floor_"):
         n = oid.removeprefix("floor_")
         return (f"Ride the lift to floor {n}. Gold and XP scale with "
