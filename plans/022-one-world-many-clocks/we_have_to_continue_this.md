@@ -94,3 +94,17 @@ phase cuts a corner; strike items through when they land.
 - **The "relic" strongbox slot pays a luck charm (005).** Placeholder
   kin of the gear-tier-token TODO — the real relic table (caster
   relics? armory pieces?) is undesigned.
+- **The striker list caps at 40 (006).** The hour roll, the faction
+  standings, and the fall's reward split all read only the last 40
+  blades. A deep siege with more strikers silently sheds the oldest —
+  wrong standings AND wrong pay at 100-strikers scale. Before the
+  grand siege at 100 (007), move strikers to their own table or raise
+  the cap with a size check.
+- **Horn letters snapshot the roster at tap time (006).** A guildmate
+  who joins the banner after the horn gets no letter for that wound.
+  Acceptable — the fire talks — but say it in the guildhall copy if it
+  confuses anyone.
+- **The two-account browser walkthrough for 006** (open a wound, watch
+  the bar from both sides, let it close on silence) is folded into the
+  end-of-run walkthrough. The silence-close beat needs a time lever to
+  test live — plan for a QA world with shortened windows.

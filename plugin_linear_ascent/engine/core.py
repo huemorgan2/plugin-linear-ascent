@@ -179,10 +179,16 @@ def _news_scene(p: dict, w: dict, day: int) -> Scene:
         pct = max(0, round(100 * int(wd["hp"]) / int(wd["hp_max"])))
         fl = schema.get_floor(int(wd["floor"]))
         blades = len(wd.get("strikers") or [])
-        lines.append(
+        line = (
             f"· {fl.warden_name} holds floor {wd['floor']} at {pct}% — "
             + (f"{blades} blade{'s' if blades != 1 else ''} against it."
                if blades else "no blade against it yet."))
+        # 022/006: the clock rides the news when a wound is open
+        if pct < 100 and wd.get("closes_in_s") is not None:
+            from . import social as _social
+            line += (" The wound closes in "
+                     f"{_social._fmt_countdown(wd['closes_in_s'])}.")
+        lines.append(line)
     gossip = w.get("gossip") or []
     if gossip:
         lines.append(f"heard around floor {my_floor}:")
@@ -1672,10 +1678,19 @@ def _gate_scene(p: dict) -> Scene:
         opts.append(Option(f"floor_{n}", f"Floor {n} — {fl.zone}",
                            hint, locked=p["level"] < req))
     opts.append(Option("back", "Back to the square"))
+    # 022/006: an open wound is news at the gate itself — "the war is
+    # on floor 47" before anyone picks a floor.
+    lines = []
+    wd = (p.get("_world") or {}).get("warden") or {}
+    if wd and int(wd.get("hp", 0)) < int(wd.get("hp_max", 0)):
+        pct = max(0, round(100 * int(wd["hp"]) / max(1, int(wd["hp_max"]))))
+        lines.append(f"the war is on floor {wd['floor']} — the Warden "
+                     f"stands at {pct}%")
     return Scene(
         eyebrow="ROOTHOLLOW · THE TOWER GATE",
         headline=f"{top} floor{'s' if top > 1 else ''} stand open",
         support="Pick any opened floor. The grind pays best near your level.",
+        body_lines=lines,
         options=opts,
         meters=combat.meters(p),
         banner="gate",

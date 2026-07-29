@@ -9,6 +9,8 @@ host to execute in the same transaction.
 
 from __future__ import annotations
 
+import datetime as dt
+
 from .. import economy
 from . import state
 from .combat import _ledger, meters
@@ -804,6 +806,54 @@ def _warden_fallen_scene(p: dict, fl) -> Scene:
     )
 
 
+def _war_bar(hp: int, hp_max: int, cells: int = 10) -> str:
+    """022/006: the wound at a glance. Full cells only when truly full,
+    an empty bar only at zero."""
+    frac = hp / max(1, hp_max)
+    filled = round(cells * frac)
+    if hp > 0:
+        filled = max(1, filled)
+    if hp < hp_max:
+        filled = min(cells - 1, filled)
+    return "█" * filled + "·" * (cells - filled)
+
+
+def _fmt_countdown(seconds) -> str:
+    h, m = int(seconds) // 3600, (int(seconds) % 3600) // 60
+    return f"{h}h {m:02d}m" if h else f"{m}m"
+
+
+def _hour_roll(strikers: list[dict]) -> str:
+    """'Kettle, Brakka +24 struck this hour' — hot blades first."""
+    now = state.now()
+    recent = []
+    for s in strikers:
+        try:
+            ts = dt.datetime.fromisoformat(s["ts"])
+        except (KeyError, ValueError, TypeError):
+            continue
+        if (now - ts).total_seconds() <= 3600:
+            recent.append(s)
+    if not recent:
+        return ""
+    recent.sort(key=lambda s: -int(s.get("dmg", 0)))
+    names = ", ".join(s.get("name") or "?" for s in recent[:2])
+    more = len(recent) - 2
+    tail = f" +{more}" if more > 0 else ""
+    return f"{names}{tail} struck this hour"
+
+
+def _war_standings(strikers: list[dict]) -> list[str]:
+    """Faction damage standings — top banners by total cut."""
+    by: dict[str, int] = {}
+    for s in strikers:
+        g = s.get("guild") or ""
+        if g:
+            by[g] = by.get(g, 0) + int(s.get("dmg", 0))
+    top = sorted(by.items(), key=lambda kv: -kv[1])[:3]
+    return [f"· {g} — {d:,} cut" for g, d in top]
+
+
 def warden_scene(p: dict, fl, note: str = "") -> Scene:
     w = world(p) or {}
     wd = w.get("warden") or {}
@@ -812,18 +862,45 @@ def warden_scene(p: dict, fl, note: str = "") -> Scene:
     hp, hp_max = int(wd.get("hp", 0)), max(1, int(wd.get("hp_max", 1)))
     atk_w, def_w, _ = economy.warden_stats(fl.floor)
     pct = max(0, round(100 * hp / hp_max))
+    pity = int(wd.get("pity", 0))
     lines = []
     if note:
         lines.append(note)
+    # 022/006: a wound that closed since the last look — the pity line.
+    seen = p.get("war_seen") or {}
+    if seen.get("floor") == fl.floor and pity > int(seen.get("pity", 0)):
+        lines.append("The wound has CLOSED — the Warden healed whole. "
+                     "But slower than before: every closing costs it "
+                     f"{round(economy.WARDEN_PITY_PCT * 100)}% of its "
+                     "body, forever.")
+    p["war_seen"] = {"floor": fl.floor, "pity": pity}
     lines.append(fl.warden_prose)
-    lines.append(f"the Warden stands at {pct}% — {hp:,}/{hp_max:,} HP")
+    lines.append(f"{_war_bar(hp, hp_max)} {pct}% — {hp:,}/{hp_max:,} HP")
+    closes = wd.get("closes_in_s")
+    if hp < hp_max and closes is not None:
+        lines.append(f"the wound closes in {_fmt_countdown(closes)} — "
+                     "keep striking")
+    if pity > 0:
+        lines.append(f"it has healed {pity} time{'s' if pity != 1 else ''}"
+                     " — each closing left it weaker")
     strikers = wd.get("strikers") or []
+    roll = _hour_roll(strikers)
+    if roll:
+        lines.append(roll)
     if strikers:
         names = ", ".join(s.get("name") or "?" for s in strikers[:6])
         lines.append(f"blades against it: {names}")
+        lines += _war_standings(strikers)
     else:
         lines.append("no blade has touched it yet — the first strike is "
                      "yours to take")
+    opts = [Option("strike", "Join the fight",
+                   f"{economy.COST_WARDEN_ATTEMPT} ⚡ · a full fight")]
+    # 022/006: the horn — guild hands only, only while a wound is open.
+    if p.get("guild") and hp < hp_max:
+        opts.append(Option("horn", "Sound the horn",
+                           "letters every guildmate — once a wound"))
+    opts.append(Option("town", "Withdraw to Roothollow"))
     return Scene(
         eyebrow=f"FLOOR {fl.floor} · {fl.biome.upper()} · THE KEEP",
         headline=f"{fl.warden_name} — ATK {atk_w} / DEF {def_w} / "
@@ -832,9 +909,7 @@ def warden_scene(p: dict, fl, note: str = "") -> Scene:
                 "stays in its body — the last blow opens this floor for "
                 "everyone.",
         body_lines=lines,
-        options=[Option("strike", "Join the fight",
-                        f"{economy.COST_WARDEN_ATTEMPT} ⚡ · a full fight"),
-                 Option("town", "Withdraw to Roothollow")],
+        options=opts,
         meters=meters(p),
         event_kind="boss",
         banner=_warden_banner(fl),
@@ -846,6 +921,26 @@ def warden_action(p: dict, fl, oid: str) -> Scene:
     Warden is a FULL keep fight. Damage dealt persists to the world pool
     (emitted as one warden_strike when the fight ends, however it ends);
     the pool at zero opens the floor for everyone."""
+    if oid == "horn":
+        # 022/006: one tap letters the whole banner. The doc-side flag
+        # stops re-taps this wound; the server's horns slate is the law
+        # (once per BANNER per wound).
+        w = world(p) or {}
+        wd = w.get("warden") or {}
+        if not p.get("guild") or wd.get("floor") != fl.floor \
+                or int(wd.get("hp", 0)) >= int(wd.get("hp_max", 1)):
+            return warden_scene(p, fl)
+        mark = f"{fl.floor}:{int(wd.get('pity', 0))}"
+        if p.get("horn_sent") == mark:
+            return warden_scene(p, fl, note="The horn has sounded for "
+                                            "this wound — the banner "
+                                            "knows.")
+        p["horn_sent"] = mark
+        _effect(p, "horn", floor=fl.floor)
+        _ledger(p, "horn", note=f"floor {fl.floor}")
+        return warden_scene(p, fl, note="The horn rings down the tower — "
+                                        "your banner has the floor and "
+                                        "the clock.")
     if oid != "strike":
         return warden_scene(p, fl)
     w = world(p) or {}

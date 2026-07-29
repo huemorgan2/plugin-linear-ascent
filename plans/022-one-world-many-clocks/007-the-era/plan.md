@@ -9,6 +9,11 @@ Goal: the game ends, together, on purpose — and the Tower remembers.
    (Crier, Stone, letters). Kill requires `R100` strikers inside the
    window per 002's curve. Failure closes the wound, schedules the next
    siege, ticks the pity ramp. v1 ruling: eras cannot end in defeat.
+   **006 learning:** the announcement machinery exists — happenings
+   kind `war` (tower-wide Crier lines, the `called` once-per-wound
+   slate), `_fx_horn`'s roster letters, and `_fmt_countdown` on both
+   sides. Declare the siege through those, don't build a second
+   megaphone.
 2. Era-end sequence: the fall announced everywhere; the era ledger
    frozen — first clears, top strikers, faction standings, the finisher;
    a closing ceremony scene for every player's next visit.
