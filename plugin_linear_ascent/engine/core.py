@@ -575,6 +575,30 @@ def _door_open(p: dict, lvl: int) -> bool:
     return p["level"] >= lvl or state.prestige(p) > 0
 
 
+def _town_waiting(p: dict, w: dict) -> dict[str, int]:
+    """0.29.2: collect badges — how many things WAIT behind each door.
+    A (n) after a door's name means a finished claim, a held letter, an
+    open strongbox or a night still unplanned — never mere availability
+    (a badge that's always on is a badge nobody reads)."""
+    n: dict[str, int] = {}
+    if p["level"] >= economy.BOARD_LEVEL:
+        c = sum(1 for j in contracts.board_for(p)
+                if contracts.claimable(p, j))
+        if c:
+            n["board"] = c
+    if p["level"] >= economy.NIGHT_SLOT_LEVEL \
+            and (p.get("night") or {}).get("day") != state.world_day():
+        n["lodge"] = 1
+    if p["level"] >= economy.STRONGBOX_LEVEL \
+            and weekly.sync(p).get("pending"):
+        n["vault"] = 1
+    if w and _door_open(p, economy.RELAY_LEVEL):
+        c = int(w.get("inbox_count") or 0)
+        if c:
+            n["relay"] = c
+    return n
+
+
 def _town_scene(p: dict) -> Scene:
     w = p.get("_world") or {}
     lines = []
@@ -585,6 +609,11 @@ def _town_scene(p: dict) -> Scene:
     nxt = unlocks.next_line(p)
     if nxt:
         lines.append(nxt)
+    waiting = _town_waiting(p, w)
+
+    def _b(door: str) -> str:
+        return f" ({waiting[door]})" if door in waiting else ""
+
     # 007 town readability: the gate leads — leaving town is THE verb —
     # and every not-yet area reads its unlock level from the square
     # (the Arcanum set the pattern in 004).
@@ -596,13 +625,13 @@ def _town_scene(p: dict) -> Scene:
                else f"🔒 level {economy.ARCANUM_LEVEL}",
                locked=not _door_open(p, economy.ARCANUM_LEVEL)),
         Option("medlab", "Apothecary & Medlab", "potions"),
-        Option("board", "The contract board",
+        Option("board", f"The contract board{_b('board')}",
                "three jobs a day" if p["level"] >= economy.BOARD_LEVEL
                else f"🔒 level {economy.BOARD_LEVEL}",
                locked=p["level"] < economy.BOARD_LEVEL),
-        Option("lodge", "The Lodge",
+        Option("lodge", f"The Lodge{_b('lodge')}",
                f"◈ {economy.LODGE_PRICE_PER_LEVEL * p['level']}/night"),
-        Option("vault", "The Vault", "bank"),
+        Option("vault", f"The Vault{_b('vault')}", "bank"),
         Option("pawn", "Pawn shop", "sell"),
         # 012: the Guildhall is core — training (buying levels) lives
         # there, so it must exist even without a connected world.
@@ -613,7 +642,7 @@ def _town_scene(p: dict) -> Scene:
     if w:
         inbox = w.get("inbox_count", 0)
         opts.append(Option(
-            "relay", "The Relay Office",
+            "relay", f"The Relay Office{_b('relay')}",
             (f"{inbox} letter{'s' if inbox != 1 else ''}" if inbox
              else "post") if _door_open(p, economy.RELAY_LEVEL)
             else f"🔒 level {economy.RELAY_LEVEL}",
