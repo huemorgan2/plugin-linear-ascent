@@ -589,9 +589,12 @@ def _town_waiting(p: dict, w: dict) -> dict[str, int]:
     if p["level"] >= economy.NIGHT_SLOT_LEVEL \
             and (p.get("night") or {}).get("day") != state.world_day():
         n["lodge"] = 1
+    vault = len(state.interest_sync(p))
     if p["level"] >= economy.STRONGBOX_LEVEL \
             and weekly.sync(p).get("pending"):
-        n["vault"] = 1
+        vault += 1
+    if vault:
+        n["vault"] = vault
     if w and _door_open(p, economy.RELAY_LEVEL):
         c = int(w.get("inbox_count") or 0)
         if c:
@@ -1518,16 +1521,24 @@ def _board_action(p: dict, oid: str) -> Scene:
 # ── Vault ────────────────────────────────────────────────────────────────
 
 def _vault_scene(p: dict) -> Scene:
-    interest = state.bank_interest_due(p)
+    # 023: interest lands as daily STUBS you collect, never a silent
+    # credit — the pile is the reason to come back.
+    stubs = state.interest_sync(p)
     lines = []
-    if interest > 0:
-        p["bank"] += interest
-        combat._ledger(p, "interest", gold=interest)
-        lines.append(f"+ ◈ {interest:,} interest credited "
-                     f"({int(economy.BANK_INTEREST_RATE * 100)}%/day, compounded)")
-    p["bank_day"] = state.world_day()
     lines.append(f"banked ◈ {p['bank']:,} · carried ◈ {p['gold']:,}")
     opts = []
+    if stubs:
+        if len(stubs) > 5:
+            lines.append(f"…{len(stubs) - 5} older interest stubs, and:")
+        for st in stubs[-5:]:
+            lines.append(f"· day {st['day']} — ◈ {st['gold']:,} interest, "
+                         "uncollected")
+        total = sum(st["gold"] for st in stubs)
+        opts.append(Option(
+            "collect_interest",
+            f"Collect interest ({len(stubs)} "
+            f"stub{'s' if len(stubs) != 1 else ''})",
+            f"◈ {total:,} to the bank"))
     # 022/005: the weekly strongbox. 0.29.1: below the level it is
     # SHOWN and locked — the clerk polishes a box you can't open yet.
     if p["level"] < economy.STRONGBOX_LEVEL:
@@ -1566,7 +1577,8 @@ def _vault_scene(p: dict) -> Scene:
         eyebrow="ROOTHOLLOW · THE VAULT",
         headline="A lodge for your money",
         support="Deposits survive death, theft, and bad decisions. "
-                "Interest compounds daily.",
+                "Interest lands daily as stubs — collect them and it "
+                "compounds.",
         body_lines=lines,
         options=opts,
         meters=combat.meters(p),
@@ -1575,6 +1587,14 @@ def _vault_scene(p: dict) -> Scene:
 
 
 def _vault_action(p: dict, oid: str) -> Scene:
+    if oid == "collect_interest":
+        total = state.interest_collect(p)
+        s = _vault_scene(p)
+        if total > 0:
+            combat._ledger(p, "interest", gold=total)
+            s.body_lines.insert(0, f"+ ◈ {total:,} interest banked — the "
+                                "clerk stamps every stub")
+        return s
     if oid.startswith("pick_") and p["level"] >= economy.STRONGBOX_LEVEL:
         line = weekly.pick(p, oid)
         s = _vault_scene(p)

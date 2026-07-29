@@ -1240,7 +1240,9 @@ HEALER_TENT_PER_FLOOR = 5      # full heal: ◈ 5 × floor (was 2 pre-013)
 
 # ── §7 Bank, death, lodge, presents ──────────────────────────────────────
 
-BANK_INTEREST_RATE = 0.05           # 5%/day compound, credited on visit
+BANK_INTEREST_RATE = 0.05           # 5%/day, landing as daily STUBS (023)
+INTEREST_STUB_CAP = 30              # the clerk keeps a month, no more —
+                                    # no infinite rewards for the absent
 LODGE_PRICE_PER_LEVEL = 10          # gold per night
 PVP_ATTACKS_PER_DAY = 2
 PVP_XP_BOUNTY_PCT = 0.05            # of victim's level XP need

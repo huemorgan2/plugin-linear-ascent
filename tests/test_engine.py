@@ -230,17 +230,24 @@ def test_death_save_fires_once_per_day():
     assert p["gold"] > 0                     # nothing lost
 
 
-def test_vault_interest_compounds_and_credits_once():
+def test_vault_interest_lands_as_stubs_and_collects_once():
+    # 023: interest is never a silent credit — two days away leave two
+    # stubs; collecting banks the pile
     p = create_character(fresh())
     p["bank"] = 1000
     p["bank_day"] = state.world_day() - 2
-    choose(p, "vault")
-    assert p["bank"] == round(1000 * 1.05 ** 2)   # 1102, credited on visit
-    assert p["bank_day"] == state.world_day()
-    # re-entering the vault the same day credits nothing more
+    s = choose(p, "vault")
+    assert p["bank"] == 1000                       # nothing silent
+    assert len(p["interest_due"]) == 2             # 2 × ◈ 50
+    assert any("collect_interest" == o.id for o in s.options)
+    choose(p, "collect_interest")
+    assert p["bank"] == 1100
+    assert p["interest_due"] == []
+    # re-entering the vault the same day materializes nothing more
     choose(p, "back")
-    choose(p, "vault")
-    assert p["bank"] == 1102
+    s = choose(p, "vault")
+    assert p["bank"] == 1100
+    assert not any("collect_interest" == o.id for o in s.options)
 
 
 def test_forge_buy_equips_and_pawns_old():

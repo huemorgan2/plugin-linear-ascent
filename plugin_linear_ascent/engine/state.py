@@ -446,13 +446,35 @@ def prestige(p: dict) -> int:
     return int((p.get("prestige") or {}).get("points", 0))
 
 
-def bank_interest_due(p: dict) -> int:
-    """Compound 5%/day since last credit; call when visiting the Vault."""
-    days = world_day() - p["bank_day"]
-    if days <= 0 or p["bank"] <= 0:
-        return 0
-    new_total = round(p["bank"] * (1 + economy.BANK_INTEREST_RATE) ** days)
-    return new_total - p["bank"]
+def interest_sync(p: dict) -> list[dict]:
+    """023: materialize the vault's interest STUBS — one per elapsed day,
+    priced off the principal as it stood. Uncollected interest is SIMPLE;
+    collecting re-banks it, so the hand who shows up daily still
+    compounds — the compounding is the daily hook. Lazy (runs when the
+    doc loads a scene, absent players cost nothing) and bounded (the
+    clerk keeps a month of stubs, oldest dropped)."""
+    day = world_day()
+    stubs = p.setdefault("interest_due", [])
+    days = day - p.get("bank_day", day)
+    if days > 0:
+        per = round(p.get("bank", 0) * economy.BANK_INTEREST_RATE)
+        if per >= 1:
+            start = day - min(days, economy.INTEREST_STUB_CAP) + 1
+            stubs.extend({"day": d, "gold": per}
+                         for d in range(start, day + 1))
+        p["bank_day"] = day
+        del stubs[:-economy.INTEREST_STUB_CAP]
+    return stubs
+
+
+def interest_collect(p: dict) -> int:
+    """Bank the whole pile; returns the total (0 if nothing waited)."""
+    stubs = interest_sync(p)
+    total = sum(s["gold"] for s in stubs)
+    if total > 0:
+        p["bank"] += total
+        p["interest_due"] = []
+    return total
 
 
 # ── Presence (022 §003) — reads of the injected `_world["presence"]` ─────
