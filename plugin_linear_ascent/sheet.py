@@ -25,8 +25,12 @@ def character_sheet(p: dict) -> dict:
 
     gear = {slot: _piece(slot, slug) for slot, slug in p["gear"].items()}
     at_cap = p["level"] >= economy.LEVEL_CAP
+    # 022/007: the reincarnation glyph rides the name — ✦ per past era
+    # (capped at three), the only mark prestige leaves on the sheet.
+    pts = pstate.prestige(p)
+    name = (p["name"] or "") + (" " + "✦" * min(pts, 3) if pts else "")
     return {
-        "name": p["name"], "race": p["race"], "class": p["clazz"],
+        "name": name, "race": p["race"], "class": p["clazz"],
         "level": p["level"], "xp": p["xp"],
         "xp_to_next": (0 if at_cap
                        else max(0, economy.xp_need(p["level"]) - p["xp"])),

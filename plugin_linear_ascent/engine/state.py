@@ -438,6 +438,14 @@ def rested_bonus(p: dict, kill_xp: int) -> int:
     return bonus
 
 
+def prestige(p: dict) -> int:
+    """022/007: reincarnation points from past eras — 0 for first-era
+    climbers. Prestige buys TIME, never power: early doors, a rested
+    pool at boot, a glyph by the name. Written server-side at doc
+    creation; the plugin only reads it."""
+    return int((p.get("prestige") or {}).get("points", 0))
+
+
 def bank_interest_due(p: dict) -> int:
     """Compound 5%/day since last credit; call when visiting the Vault."""
     days = world_day() - p["bank_day"]

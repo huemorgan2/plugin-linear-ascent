@@ -97,9 +97,12 @@ phase cuts a corner; strike items through when they land.
 - **The striker list caps at 40 (006).** The hour roll, the faction
   standings, and the fall's reward split all read only the last 40
   blades. A deep siege with more strikers silently sheds the oldest —
-  wrong standings AND wrong pay at 100-strikers scale. Before the
-  grand siege at 100 (007), move strikers to their own table or raise
-  the cap with a size check.
+  wrong standings AND wrong pay at 100-strikers scale. 007 confirmed
+  the grand siege itself is safe (Vharuk runs on the boss-commits
+  table, unbounded — the warden pool ends at floor 99), but the deep
+  warden floors (60–99) still hit the cap. Move strikers to their own
+  table or raise the cap with a size check before the population gets
+  there.
 - **Horn letters snapshot the roster at tap time (006).** A guildmate
   who joins the banner after the horn gets no letter for that wound.
   Acceptable — the fire talks — but say it in the guildhall copy if it
@@ -108,3 +111,25 @@ phase cuts a corner; strike items through when they land.
   the bar from both sides, let it close on silence) is folded into the
   end-of-run walkthrough. The silence-close beat needs a time lever to
   test live — plan for a QA world with shortened windows.
+- **Era-close fan-out races concurrent acts (007).** `close_era`
+  rewrites every playing doc in one transaction to deliver the
+  ceremony; a climber mid-act at that moment can have their act's save
+  overwrite the ceremony (or vice versa, last-writer-wins). At today's
+  population it's a once-per-era, seconds-wide window and the loser
+  only misses a scene — but before a real era ends with hundreds
+  online, deliver the ceremony as a letter or a lazy per-doc flag
+  instead of a bulk doc rewrite.
+- **The frozen era keeps only the Stone's last 400 lines (007).** A
+  long era's early first-clears fall off the frozen ledger. If the
+  Stone matters as history, snapshot it in full (own table keyed by
+  era) instead of a jsonb tail.
+- **Reincarnation tiers are bragging rights only (007).** stood_100 /
+  struck_vharuk / final_blow are frozen and surfaced nowhere except
+  the ledger; points pay the perks, tiers pay nothing. Design what a
+  tier is worth (a title by the name? a unique ceremony line? nothing,
+  on purpose?) before era 1 actually closes.
+- **The real era reset is an unrehearsed manual op (007).** The tool
+  has a dry run, a permanent-table assertion, and a confirm gate — but
+  the full sequence (announce → freeze → reset → players log into a
+  fresh world) has never been walked end to end, even on scratch.
+  Rehearse the whole ceremony on a QA world before era 1 ends.

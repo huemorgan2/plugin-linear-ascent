@@ -568,6 +568,13 @@ def _creation_set_name(p: dict, text: str) -> Scene:
 
 # ── Roothollow ───────────────────────────────────────────────────────────
 
+def _door_open(p: dict, lvl: int) -> bool:
+    """022/007: reincarnated hands open the convenience doors (Arcanum,
+    Relay) from level 1 — prestige buys time, never power. Everything
+    else keeps its level."""
+    return p["level"] >= lvl or state.prestige(p) > 0
+
+
 def _town_scene(p: dict) -> Scene:
     w = p.get("_world") or {}
     lines = []
@@ -585,9 +592,9 @@ def _town_scene(p: dict) -> Scene:
         Option("gate", "The Tower Gate", "leave town and climb"),
         Option("forge", "The Forge", "gear"),
         Option("arcanum", "The Arcanum",
-               "mage gear" if p["level"] >= economy.ARCANUM_LEVEL
+               "mage gear" if _door_open(p, economy.ARCANUM_LEVEL)
                else f"🔒 level {economy.ARCANUM_LEVEL}",
-               locked=p["level"] < economy.ARCANUM_LEVEL),
+               locked=not _door_open(p, economy.ARCANUM_LEVEL)),
         Option("medlab", "Apothecary & Medlab", "potions"),
         Option("board", "The contract board",
                "three jobs a day" if p["level"] >= economy.BOARD_LEVEL
@@ -608,9 +615,9 @@ def _town_scene(p: dict) -> Scene:
         opts.append(Option(
             "relay", "The Relay Office",
             (f"{inbox} letter{'s' if inbox != 1 else ''}" if inbox
-             else "post") if p["level"] >= economy.RELAY_LEVEL
+             else "post") if _door_open(p, economy.RELAY_LEVEL)
             else f"🔒 level {economy.RELAY_LEVEL}",
-            locked=p["level"] < economy.RELAY_LEVEL))
+            locked=not _door_open(p, economy.RELAY_LEVEL)))
         opts.append(Option(
             "fields", "The fields",
             "pvp" if p["level"] >= economy.FIELDS_LEVEL
@@ -640,7 +647,7 @@ def _dispatch_location(p: dict, oid: str) -> Scene:
     town_menus = ("forge", "arcanum", "medlab", "lodge", "vault", "pawn",
                   "stone", "gate", "relay", "fields", "guildhall", "board")
     if loc == "town" and oid in town_menus:
-        if oid == "arcanum" and p["level"] < economy.ARCANUM_LEVEL:
+        if oid == "arcanum" and not _door_open(p, economy.ARCANUM_LEVEL):
             s = _town_scene(p)
             s.shard_note = (
                 "The Arcanum's door reads the hand on it — it wants "
@@ -649,7 +656,7 @@ def _dispatch_location(p: dict, oid: str) -> Scene:
             return s
         # 007: the other locked doors follow the Arcanum's grammar —
         # a level, a reason, no scene change.
-        if oid == "relay" and p["level"] < economy.RELAY_LEVEL:
+        if oid == "relay" and not _door_open(p, economy.RELAY_LEVEL):
             s = _town_scene(p)
             s.shard_note = (
                 "The Relay clerk sorts post for names the Stone knows — "
@@ -1127,7 +1134,7 @@ def _forge_buy(p: dict, oid: str) -> Scene:
 # ── The Arcanum (004 §3.4) ───────────────────────────────────────────────
 
 def _arcanum_scene(p: dict) -> Scene:
-    if p["level"] < economy.ARCANUM_LEVEL:
+    if not _door_open(p, economy.ARCANUM_LEVEL):
         p["location"] = "town"
         s = _town_scene(p)
         s.shard_note = (f"The Arcanum wants level {economy.ARCANUM_LEVEL} "
@@ -1641,6 +1648,13 @@ def _stone_scene(p: dict) -> Scene:
     for s in (w.get("stone") or [])[:8]:
         lines.append(f"✦ {s}")
     lines.append("The lift opens for everyone when a Warden falls.")
+    # 022/007: the Stone of Eras — the wars that already ended, kept
+    # forever, readable in every era.
+    eras = w.get("eras") or []
+    if eras:
+        lines.append("▣ THE STONE OF ERAS")
+        for e in eras[:5]:
+            lines.append(f"· {e}")
     # 020: the personal ladder — the whole climb ahead, grouped by
     # threshold. + opens, − closes, ▲ changes the rules.
     lines.append("▣ THE CLIMB AHEAD")

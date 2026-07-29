@@ -20,6 +20,15 @@ shared-round parties (guard/flank/mark) remain their own future plan.
    ("Brakka answered a flare on floor 12"). The answerer lands in the
    fight as a rescuer round — monster turns, the flared player gets one
    free disengage.
+   **007 learnings:** (a) "permanent" means within the era — the Stone
+   wipes at reset and only its last 400 lines freeze into
+   `ascent_eras`; that's fine, just don't promise forever in copy.
+   (b) Writing into ANOTHER climber's doc while they may be mid-act is
+   the race 007 documented on the era-close fan-out — the flare/answer
+   path touches a doc that is BY DEFINITION mid-fight, so it cannot use
+   the bulk doc-rewrite pattern. Put the flare state on a world/side
+   row (like the warden row) that both fights read, not inside the
+   dying player's doc from outside.
 3. Assist strikes: acting on the same creature/warden as a floor-mate
    within minutes links the logs ("Brakka's axe bit first — your blade
    finishes it"), pays a small bonus over two solo kills, and grants
