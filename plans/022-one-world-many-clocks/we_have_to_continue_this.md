@@ -58,3 +58,24 @@ phase cuts a corner; strike items through when they land.
   the app mid-fight shows "hunting" for up to 3 minutes. Harmless
   today; revisit if statuses ever gate mechanics (008 flares target
   hot players — the flare must tolerate a stale "hunting").
+- **The board turns over if the frontier moves mid-day (004).** The
+  cull's floor is a function of the LIVE frontier, so a Warden falling
+  mid-day reshuffles the board and voids half-finished culls. Rare
+  (deep frontiers move in days, not hours) and it reads as world flavor
+  — but the honest fix is worldd pinning the day's generation frontier.
+  Revisit when 006 puts the war on every surface.
+- **"Gear-tier token" shipped as a repair token (004).** The plan's
+  occasional contract bonus was a *gear-tier* token; no such item
+  exists yet, so the board hands out the repair token instead. Design
+  the real token (a rung discount? a free hone?) — 005's strongbox
+  wants the same item for its reward slot.
+- **Contract payouts are multiplier-priced, not play-measured (004).**
+  Cull ≈ 0.8× the kills' raw gold, class jobs 0.5× off the tower's
+  waist, warden 0.5× frontier warden pay, XP at half weight throughout.
+  Same trap as the old warden budget: when telemetry exists, measure
+  what fraction of daily income the board actually adds (target: a
+  bonus, never a wage).
+- **Dawn can heal mid-fight (004).** touch_daily runs on every act; if
+  the world day ticks while a fight is open the player heals to full
+  between rounds. Rare and reads as "dawn breaks" — but it's a free
+  potion for whoever times the boundary. Watch for abuse at the tick.

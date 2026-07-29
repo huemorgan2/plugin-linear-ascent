@@ -11,7 +11,7 @@ import datetime as dt
 
 from .. import economy, unlocks
 from ..content import schema
-from . import combat, state
+from . import combat, contracts, state
 from .scene import Meters, Option, Scene
 
 
@@ -156,12 +156,16 @@ def _news_scene(p: dict, w: dict, day: int) -> Scene:
                 for k, v in (census.get("by_floor") or {}).items()}
     total = int(census.get("total", 0))
     my_floor = p["floor"] if p["floor"] > 0 else frontier
-    lines = [
+    lines = []
+    # 022/004: noticed, never taught — the heal already happened in
+    # touch_daily; the Crier only says what the body already knows.
+    if p.get("daily", {}).get("dawn_healed"):
+        lines.append("· dawn — your wounds have closed.")
+    lines.append(
         f"· {total} climber{'s' if total != 1 else ''} on the "
         f"Ascent — {by_floor.get(frontier, 0)} at the frontier "
         f"(floor {frontier}), {by_floor.get(1, 0)} down at floor 1, "
-        f"{by_floor.get(my_floor, 0)} on floor {my_floor} with you.",
-    ]
+        f"{by_floor.get(my_floor, 0)} on floor {my_floor} with you.")
     wd = w.get("warden")
     if wd and wd.get("hp_max"):
         pct = max(0, round(100 * int(wd["hp"]) / int(wd["hp_max"])))
@@ -338,6 +342,7 @@ def _build_scene(p: dict) -> Scene:
         "town": _town_scene, "forge": _forge_scene,
         "arcanum": _arcanum_scene, "medlab": _medlab_scene,
         "lodge": _lodge_scene, "vault": _vault_scene, "pawn": _pawn_scene,
+        "board": _board_scene,
         "stone": _stone_scene, "gate": _gate_scene,
         "gate_town": _gate_town_scene,
         "relay": social.relay_scene, "fields": social.fields_scene,
@@ -570,6 +575,10 @@ def _town_scene(p: dict) -> Scene:
                else f"🔒 level {economy.ARCANUM_LEVEL}",
                locked=p["level"] < economy.ARCANUM_LEVEL),
         Option("medlab", "Apothecary & Medlab", "potions"),
+        Option("board", "The contract board",
+               "three jobs a day" if p["level"] >= economy.BOARD_LEVEL
+               else f"🔒 level {economy.BOARD_LEVEL}",
+               locked=p["level"] < economy.BOARD_LEVEL),
         Option("lodge", "The Lodge",
                f"◈ {economy.LODGE_PRICE_PER_LEVEL * p['level']}/night"),
         Option("vault", "The Vault", "bank"),
@@ -615,7 +624,7 @@ def _dispatch_location(p: dict, oid: str) -> Scene:
         p["floor"] = 0
         return _town_scene(p)
     town_menus = ("forge", "arcanum", "medlab", "lodge", "vault", "pawn",
-                  "stone", "gate", "relay", "fields", "guildhall")
+                  "stone", "gate", "relay", "fields", "guildhall", "board")
     if loc == "town" and oid in town_menus:
         if oid == "arcanum" and p["level"] < economy.ARCANUM_LEVEL:
             s = _town_scene(p)
@@ -638,6 +647,13 @@ def _dispatch_location(p: dict, oid: str) -> Scene:
                 "The fields take climbers who can take a hit back — "
                 f"level {economy.FIELDS_LEVEL}. The tower first.")
             return s
+        if oid == "board" and p["level"] < economy.BOARD_LEVEL:
+            s = _town_scene(p)
+            s.shard_note = (
+                "The board hangs work for names it trusts — level "
+                f"{economy.BOARD_LEVEL} first. The jobs will keep; "
+                "new ones every dawn.")
+            return s
         p["location"] = oid
         return _build_scene(p)
     if oid == "back":
@@ -659,6 +675,8 @@ def _dispatch_location(p: dict, oid: str) -> Scene:
         return _medlab_buy(p, oid)
     if loc == "lodge":
         return _lodge_action(p, oid)
+    if loc == "board":
+        return _board_action(p, oid)
     if loc == "vault":
         return _vault_action(p, oid)
     if loc == "pawn":
@@ -1257,8 +1275,10 @@ def _lodge_scene(p: dict) -> Scene:
                 "may find you.",
         body_lines=[f"A night costs ◈ {price}. Banked gold can't buy it — "
                     "carry coin.",
-                    f"A proper bed mends +{economy.LODGE_NIGHT_HEAL_HP} HP "
-                    "by dawn. The fields mend nothing."],
+                    # 022/004: dawn heals everyone everywhere — the Lodge
+                    # sells the one thing dawn doesn't: not being found.
+                    "Dawn closes wounds wherever you lie. The palisade "
+                    "is about who can FIND you before it does."],
         options=opts,
         meters=combat.meters(p),
         banner="lodge",
@@ -1281,10 +1301,67 @@ def _lodge_action(p: dict, oid: str) -> Scene:
     combat._ledger(p, "lodge", gold=-price)
     s = _lodge_scene(p)
     s.headline = "Your bunk is paid through tonight"
-    s.body_lines.insert(0, "+ one safe night. Nothing finds you here — and "
-                           f"the bed gives back {economy.LODGE_NIGHT_HEAL_HP}"
-                           " HP by dawn.")
+    s.body_lines.insert(0, "+ one safe night. Nothing finds you here "
+                           "before dawn does its work.")
     return s
+
+
+# ── The contract board (022 §004) ────────────────────────────────────────
+
+def _board_scene(p: dict) -> Scene:
+    """Three world jobs, the same three for every climber. No accept
+    step: do the work, collect before dawn."""
+    day = state.world_day()
+    jobs = contracts.board_for(p)
+    lines = []
+    opts = []
+    for job in jobs:
+        n, need = contracts.got(p, job), job["need"]
+        c = contracts.sync(p)
+        if job["id"] in c["claimed"]:
+            tail = "PAID"
+        elif n >= need:
+            tail = "done — collect below"
+        else:
+            tail = f"{n}/{need}"
+        bonus = " · +1 repair token" if job.get("token") else ""
+        lines.append(f"· {job['title']} — ◈ {job['gold']} + "
+                     f"{job['xp']} XP{bonus} · {tail}")
+        if contracts.claimable(p, job):
+            opts.append(Option(f"claim_{job['id']}", f"Collect: {job['title']}",
+                               f"◈ {max(0, job['gold'] - economy.BOARD_PRICE)}"))
+    lines.append(f"The broker's stamp is ◈ {economy.BOARD_PRICE}, off the "
+                 "top of every payout. Jobs expire at dawn — no rerolls.")
+    opts.append(Option("back", "Back to the square"))
+    return Scene(
+        eyebrow="ROOTHOLLOW · THE CONTRACT BOARD",
+        headline=f"Three jobs, day {day}",
+        support="One board for the whole tower — every climber is reading "
+                "these same three lines.",
+        body_lines=lines,
+        options=opts,
+        meters=combat.meters(p),
+        banner="roothollow",
+    )
+
+
+def _board_action(p: dict, oid: str) -> Scene:
+    if oid.startswith("claim_"):
+        jid = oid[len("claim_"):]
+        for job in contracts.board_for(p):
+            if job["id"] == jid and contracts.claimable(p, job):
+                gold, xp = contracts.claim(p, job)
+                combat._ledger(p, "contract", gold=gold, xp=xp,
+                               note=job["title"])
+                s = _board_scene(p)
+                token = job.get("token")
+                s.body_lines.insert(
+                    0, f"+ ◈ {gold} + {xp} XP — the broker stamps the "
+                       "job PAID"
+                       + (" and slides a repair token across." if token
+                          else "."))
+                return s
+    return _board_scene(p)
 
 
 # ── Vault ────────────────────────────────────────────────────────────────

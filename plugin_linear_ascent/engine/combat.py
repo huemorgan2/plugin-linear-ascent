@@ -10,7 +10,7 @@ from __future__ import annotations
 import os
 
 from .. import economy
-from . import state
+from . import contracts, state
 from .scene import Meters, Option, Scene
 
 _CREATURES = os.path.join(os.path.dirname(os.path.abspath(__file__)),
@@ -136,6 +136,10 @@ def start_encounter(p: dict, floor, enc, kind: str = "wilds") -> Scene:
         # steel must close.
         "range": "at_range",
     }
+    if kind == "warden":
+        # 022/004: "answer a keep's horn" counts at the OPEN — showing
+        # up is the engagement, win or bleed.
+        contracts.note_warden(p)
     s = fight_scene(p, floor, opener=True)
     # 007: first fight per type that hard-counters the class — the one
     # agent beat besides death and boss. A warden keeps "boss".
@@ -766,6 +770,10 @@ def _victory(p: dict, floor) -> Scene:
     p["xp"] += xp
     p["gold"] += gold
     _ledger(p, "kill", gold=gold, xp=xp, note=e["name"])
+    if e["kind"] == "wilds":
+        # 022/004: the kill the engine just scored is the contract
+        # board's only bookkeeping.
+        contracts.note_kill(p, e, _damage_type(p))
     downed = (f"The {e['name']} goes down — no match for your "
               f"{weapon_name(p)}."
               if e["kind"] == "wilds" else f"The {e['name']} goes down.")

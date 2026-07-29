@@ -24,6 +24,13 @@ shared-round parties (guard/flank/mark) remain their own future plan.
    within minutes links the logs ("Brakka's axe bit first — your blade
    finishes it"), pays a small bonus over two solo kills, and grants
    both full contract credit. No kill-stealing exists, by construction.
+   **004 learning:** contract credit has exactly one entry point —
+   `contracts.note_kill(p, enc, dtype)`, called once in
+   `combat._victory` for the killer. The assist path must call it once
+   for the ASSISTER's doc (their own board view) and must NOT re-call
+   it for the killer; `_bump` caps at `need`, but the honest contract
+   is one call per participant per kill. 004's acceptance test
+   "no double-count with assists later" lands here.
 4. Aether cost on the flare so it cannot be spammed; one flare per fight.
 5. Lodge long fire (cheap, from the sketch): who sits the fire tonight,
    canned words, stand a stranger a stew. Canned lines only — no free

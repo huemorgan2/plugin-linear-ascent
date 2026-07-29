@@ -390,13 +390,17 @@ def touch_daily(p: dict) -> None:
     """Reset per-day counters when the world day advanced."""
     day = world_day()
     if p["daily"].get("day") != day:
-        # 008: a night at the Lodge mends the sleeper. lodged_until_day
-        # covering today means last night was spent behind the palisade.
-        if (p.get("lodged_until_day", -1) >= day
-                and p.get("stage") == "playing"):
-            p["hp"] = min(max_hp(p), p["hp"] + economy.LODGE_NIGHT_HEAL_HP)
+        # 022/004 dawn law: wounds close at the world-day boundary and
+        # ONLY there — full HP, wherever you slept. No daytime trickle,
+        # so mid-session healing still costs gold (the potion sink
+        # lives). Replaces the Lodge's +20 special case; the Lodge
+        # sells a SAFE night now, never health.
+        healed = False
+        if p.get("stage") == "playing" and p.get("hp", 0) < max_hp(p):
+            p["hp"] = max_hp(p)
+            healed = True
         p["daily"] = {"day": day, "pvp_used": 0, "energy_cell": False,
-                      "death_save": False}
+                      "death_save": False, "dawn_healed": healed}
 
 
 def bank_interest_due(p: dict) -> int:

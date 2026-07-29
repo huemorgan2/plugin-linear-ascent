@@ -1223,16 +1223,16 @@ def relic_stock(shop: str, frontier: int, clazz: str) -> list[Relic]:
             and (not r.clazz or r.clazz == clazz)]
 
 
-# ── §6c Healing (008, repriced by 013) ───────────────────────────────────
-# The ladder: stew (2g, +5 HP, repeatable) → healer's tent (5×floor,
-# full — still below one kill's gold, but a real bite of it now that
-# armor chips instead of nullifying) → a Lodge night (+20 HP at dawn)
-# → potions for mid-fight emergencies. HP is meant to be the scarcer
-# currency: gold flows every kill, health only trickles back.
+# ── §6c Healing (008, repriced by 013, dawn law by 022/004) ─────────────
+# The law: dawn closes every wound — HP restores to FULL at the world-day
+# boundary and ONLY there. No daytime trickle, so mid-session healing
+# still costs gold and still buys time: stew (2g, +5 HP, repeatable) →
+# healer's tent (5×floor, full) → potions for mid-fight emergencies.
+# The Lodge's old +20-at-dawn special case is retired — the Lodge sells
+# a SAFE night (nobody finds you), never health.
 
 STEW_PRICE = 2
 STEW_HEAL_HP = 5
-LODGE_NIGHT_HEAL_HP = 20
 HEALER_TENT_PER_FLOOR = 5      # full heal: ◈ 5 × floor (was 2 pre-013)
 
 # ── §7 Bank, death, lodge, presents ──────────────────────────────────────
@@ -1262,7 +1262,23 @@ GRANT_BURN_PCT = 0.10
 GRANT_DAILY_CAP_PER_LEVEL = 150
 GRANT_MIN_RECEIVER_LEVEL = 5
 LETTER_PRICE = 0        # 004 §C.1: talking is free if collaboration is the game
-BOARD_PRICE = 10
+BOARD_PRICE = 10        # 022/004: the broker's stamp — off the top of payouts
+
+# ── §8b The contract board (022 §004) ────────────────────────────────────
+# Three jobs a world day, seeded from the DAY like the pawn broker's
+# mood — the whole tower reads one board and can talk about it. Payouts
+# are a BONUS on work you'd hunt anyway (a cull pays ~80% of the kills'
+# raw gold on top of the kills themselves), never a wage that replaces
+# the grind. XP rides at half weight — XP stays scarce (012).
+
+BOARD_LEVEL = 4                  # the board learns your name at level 4
+BOARD_JOBS_PER_DAY = 3
+CONTRACT_CULL_GOLD_MULT = 0.8    # × N kills' base gold on the named floor
+CONTRACT_CULL_XP_MULT = 0.5      # × N kills' base XP
+CONTRACT_CLASS_GOLD_MULT = 0.5   # weapon-class jobs price off mid-tower
+CONTRACT_CLASS_XP_MULT = 0.5
+CONTRACT_WARDEN_MULT = 0.5       # × warden pay at the frontier
+CONTRACT_TOKEN_CHANCE = 0.25     # a job carries a repair token sometimes
 
 
 # ── Races & classes ──────────────────────────────────────────────────────

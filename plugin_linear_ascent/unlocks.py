@@ -58,6 +58,10 @@ def registry() -> tuple[Unlock, ...]:
         Unlock("arcanum", "level", economy.ARCANUM_LEVEL, "opens",
                "the Arcanum", "the square",
                "staves, focuses and caster relics behind the reading door"),
+        Unlock("board", "level", economy.BOARD_LEVEL, "opens",
+               "the contract board", "the square",
+               f"{economy.BOARD_JOBS_PER_DAY} world jobs a day — the same "
+               "three for every climber, paid in gold and XP"),
         # ── level, closes — the protections that expire ──
         Unlock("mercy_ends", "level",
                economy.BEGINNER_MERCY_MAX_LEVEL + 1, "closes",

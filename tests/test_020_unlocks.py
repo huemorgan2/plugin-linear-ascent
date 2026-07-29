@@ -24,6 +24,7 @@ def test_every_level_gate_constant_has_a_registry_entry():
         "ARCANUM_LEVEL": economy.ARCANUM_LEVEL,
         "RELAY_LEVEL": economy.RELAY_LEVEL,
         "FIELDS_LEVEL": economy.FIELDS_LEVEL,
+        "BOARD_LEVEL": economy.BOARD_LEVEL,
         "GRANT_MIN_RECEIVER_LEVEL": economy.GRANT_MIN_RECEIVER_LEVEL,
         "FOUND_MIN_LEVEL": social.FOUND_MIN_LEVEL,
         # protections register at the level they EXPIRE
@@ -39,7 +40,7 @@ def test_no_gate_constant_was_forgotten_by_this_test():
     """The guard above lists constants by hand — this one makes sure the
     hand-list can't rot: any NEW *_LEVEL constant in economy.py must be
     either in the guard or explicitly exempted here."""
-    known = {"ARCANUM_LEVEL", "RELAY_LEVEL", "FIELDS_LEVEL",
+    known = {"ARCANUM_LEVEL", "RELAY_LEVEL", "FIELDS_LEVEL", "BOARD_LEVEL",
              "GRANT_MIN_RECEIVER_LEVEL", "BEGINNER_MERCY_MAX_LEVEL",
              "BEGINNER_PROTECTION_MAX_LEVEL"}
     exempt = {"LODGE_PRICE_PER_LEVEL", "GRANT_DAILY_CAP_PER_LEVEL"}
@@ -90,12 +91,13 @@ def test_ahead_never_leaks_the_whole_tower_to_a_fresh_player():
 
 # ── just_reached() ───────────────────────────────────────────────────────
 
-def test_level_3_to_4_is_exactly_founding_plus_mercy_ends():
+def test_level_3_to_4_is_exactly_founding_board_plus_mercy_ends():
     p = player(level=4, floor=1)
     got = unlocks.just_reached(p, old_level=3, old_floor=1)
-    assert {u.id for u in got} == {"found_guild", "mercy_ends"}
-    # opens sort before closes — the gift is read before the bill
-    assert got[0].id == "found_guild"
+    # 022/004 added the contract board to the level-4 bundle
+    assert {u.id for u in got} == {"found_guild", "board", "mercy_ends"}
+    # opens sort before closes — the gifts are read before the bill
+    assert got[-1].id == "mercy_ends"
 
 
 def test_floor_open_announces_the_band():

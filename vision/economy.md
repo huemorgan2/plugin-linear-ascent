@@ -2,6 +2,26 @@
 
 The 100-floor plan: difficulty, bosses, grind, gold, XP, gear, and the social economy. Formulas are the design; the tables are sample points. All numbers are v1 targets — tune in play, but keep the *shapes*.
 
+## 0. The law — gold buys time, never power (022/004)
+
+Every gold sink in the game buys back **time**, never a stat the grind
+can't reach. The two worked examples that set the pattern:
+
+- **The Energy cell** (1/day, medlab): it refills ⚡ — it does not raise
+  ATK, DEF, or the level. What you bought is *tonight's session back*,
+  not a stronger character. Tomorrow you and the climber who saved the
+  gold are identical.
+- **Potions and the healing ladder** (stew → tent → potion): dawn closes
+  every wound for free (022/004 — full HP at the world-day tick, and
+  only there). Paying mid-session doesn't buy HP a patient climber
+  can't have; it buys *not waiting for dawn*. The potion sink survives
+  the free heal precisely because it prices the hours, not the health.
+
+The test for any new sink: if a rich climber and a patient climber end
+the week with different character sheets, the sink is buying power —
+redesign it. (Levels come only from XP; gear gates ride levels and the
+world's floor; contract payouts are a bonus on hunting you'd do anyway.)
+
 ## 1. Energy and the XP pool (pacing) — 006
 
 | Meter | Cap | Refills | Spent on |
@@ -118,14 +138,15 @@ One named item per slot per tier; owning the tier's set is the visible badge of 
 
 - **Bank:** deposits free, withdraw anytime, **5%/day compound interest**, credited when you visit the teller. Banked gold survives death and theft — "a lodge for your money."
 - **Death** (monster or player, 017 §3.6): lose **40–60% of carried gold**; each paid weapon rolls **20% gone for good**; armor, shield, and shoes lose **half a durability pool** (the guards drag you home and the menders bill you). A held **Weapon Reincarnation Spell** (0.5 DI) cancels all of it and repairs everything — but each *spare* spell you hoard rolls 50% lost on the death it didn't cancel. Respawn at Roothollow. No XP loss.
-- **Lodge:** sleeping there makes you unattackable offline. Price 10 × level gold/night. Skipping it puts you "in the fields" — attackable by anyone (2 PvP attacks/day allotment per attacker; winner takes carried gold + a 5%-of-your-level XP bounty; every kill is published in Daily Happenings). Levels 1–5 get beginner protection: never attackable.
+- **Dawn (022/004):** HP restores to full at the world-day tick, and only there — no daytime trickle. The healing ladder (stew/tent/potions) prices the hours before dawn, per §0.
+- **Lodge:** sleeping there makes you unattackable offline — it sells safety, never health (the old +20-at-dawn special case is retired; dawn heals everyone). Price 10 × level gold/night. Skipping it puts you "in the fields" — attackable by anyone (2 PvP attacks/day allotment per attacker; winner takes carried gold + a 5%-of-your-level XP bounty; every kill is published in Daily Happenings). Levels 1–5 get beginner protection: never attackable.
 - **Presents:** return after ≥20 hours away → one roll: 40% gold (50 × level) · 25% potion · 15% full energy · 10% rumor (advantage in next fight) · 8% armor-repair token · 2% jackpot (rare item, or bank doubling capped at 1,000 × level). A luck charm improves the roll (the halfling race was retired in 017 phase 009 — doc v4 re-registers those lines as human). A missed day never drops you below baseline — breaks are supposed to feel fine.
 
 ## 8. Social economy
 
 - **Gold grants (player → player):** at the bank — send a purse to any player. **10% fee is burned** (gold sink), daily send cap 150 × your level, receiver must be level 5+ or a guildmate. Keeps generosity real and twinking/RMT funnels dull.
 - **Letters:** courier post, 5 gold per letter to any player, delivered to their next session. A letter can carry a purse (grant rules apply) or one item (item tier ≤ receiver's tier + 1).
-- **Town notice board:** 25 gold, public for one world day. Guild board: free.
+- **The contract board (022/004):** three world jobs a day, seeded from the world day like the pawn rate — the same three lines for every climber. Shapes v1: cull N of a named creature on a named floor · N kills by a weapon class · answer a Warden's horn. Progress counts off kills the engine already scores (no accept step); pays gold + XP as a *bonus on hunting you'd do anyway*, broker's stamp ◈ 10 off the top, occasional repair token; jobs expire at dawn, no rerolls.
 - **Taunts:** attaching a one-line message to a PvP kill is free and encouraged — it's LORD's gossip engine.
 
 ### Sinks vs. faucets (keep the gold honest)

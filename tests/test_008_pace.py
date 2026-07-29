@@ -1,5 +1,5 @@
 """008 — combat pace & variance: derived wilds HP, specimens, stew,
-lodge night heal, wardens untouched."""
+the dawn heal law (022/004), wardens untouched."""
 
 from plugin_linear_ascent import economy
 from plugin_linear_ascent.content import schema
@@ -170,37 +170,37 @@ def test_stew_available_at_the_lodge():
     assert p["gold"] == gold - economy.STEW_PRICE
 
 
-# ── Lodge night heal ─────────────────────────────────────────────────────
+# ── The dawn law (022/004 — replaced the Lodge's +20 special case) ───────
 
-def test_lodge_night_heals_20_at_rollover():
+def test_dawn_heals_to_full_wherever_you_slept():
+    p = create_character(fresh())
+    p["hp"] = 10
+    p["lodged_until_day"] = state.world_day() - 3   # rough sleep
+    p["daily"]["day"] = state.world_day() - 1
+    state.touch_daily(p)
+    assert p["hp"] == state.max_hp(p)
+    assert p["daily"]["dawn_healed"] is True
+
+
+def test_lodge_adds_no_extra_healing_over_dawn():
     p = create_character(fresh())
     p["hp"] = 10
     p["lodged_until_day"] = state.world_day()  # slept inside last night
     p["daily"]["day"] = state.world_day() - 1
     state.touch_daily(p)
-    assert p["hp"] == 10 + economy.LODGE_NIGHT_HEAL_HP
+    assert p["hp"] == state.max_hp(p)          # same as the fields
 
 
-def test_rough_sleep_heals_nothing():
+def test_mid_day_hp_holds_until_dawn():
     p = create_character(fresh())
-    p["hp"] = 10
-    p["lodged_until_day"] = state.world_day() - 3
-    p["daily"]["day"] = state.world_day() - 1
-    state.touch_daily(p)
-    assert p["hp"] == 10
+    p["hp"] = 6
+    state.touch_daily(p)                       # same day — no boundary
+    assert p["hp"] == 6
 
 
-def test_lodge_night_heal_caps_at_max():
-    p = create_character(fresh())
-    p["hp"] = state.max_hp(p) - 5
-    p["lodged_until_day"] = state.world_day()
-    p["daily"]["day"] = state.world_day() - 1
-    state.touch_daily(p)
-    assert p["hp"] == state.max_hp(p)
-
-
-def test_lodge_copy_mentions_the_night_heal():
+def test_lodge_copy_sells_safety_not_health():
     p = create_character(fresh())
     s = choose(p, "lodge")
-    assert any(str(economy.LODGE_NIGHT_HEAL_HP) in line
-               for line in s.body_lines)
+    body = " ".join(s.body_lines)
+    assert "Dawn closes wounds" in body
+    assert "+20" not in body
