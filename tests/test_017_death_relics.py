@@ -45,6 +45,11 @@ def _fight(clazz="warrior", floor_no=1, enc_id="feral_boar",
     for slug, n in inv.items():
         p["inventory"][slug] = n
     combat.start_encounter(p, fl, enc)
+    # relic mechanics, not the specimen lottery: the roll is seeded off
+    # the world day, so an alpha's +speed would make these day-flaky.
+    if p["encounter"]["specimen"] == "alpha":
+        p["encounter"]["profile"]["speed"] -= economy.ALPHA_SPEED_BONUS
+    p["encounter"]["specimen"] = "common"
     p["encounter"]["range"] = rng
     return p, fl
 

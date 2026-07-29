@@ -162,8 +162,49 @@ def test_board_locked_below_level_4():
     assert row.locked
 
 
-def test_next_line_carries_the_board_before_level_4():
-    line = unlocks.next_line({"level": 3, "unlocked_floor": 1})
+def test_class_job_pay_is_capped_at_the_hands_reach():
+    # 0.29.1: one board, honest pay — a floor-1 hand never collects the
+    # tower's-waist price the job was posted at.
+    jobs = contracts.board(day=100, frontier=15)
+    job = next(j for j in jobs if j["kind"] == "class")
+    assert job["floor"] == 9                      # 0.6 × 15
+    low = {"unlocked_floor": 1}
+    gold, xp = contracts.pay_for(low, job)
+    cap_gold = max(1, round(economy.gold_per_kill(3) * job["need"]
+                            * economy.CONTRACT_CLASS_GOLD_MULT))
+    assert gold == cap_gold and gold < job["gold"]
+    assert xp < job["xp"]
+    # a hand whose reach covers the job's floor collects the posted price
+    tall = {"unlocked_floor": 9}
+    assert contracts.pay_for(tall, job) == (job["gold"], job["xp"])
+
+
+def test_warden_bounty_is_capped_at_the_hands_reach():
+    jobs = contracts.board(day=100, frontier=15)
+    job = next(j for j in jobs if j["kind"] == "warden")
+    gold, xp = contracts.pay_for({"unlocked_floor": 1}, job)
+    assert gold < job["gold"] and xp < job["xp"]
+    assert gold == max(1, round(economy.warden_gold(3)
+                                * economy.CONTRACT_WARDEN_MULT))
+
+
+def test_claim_pays_the_reach_capped_price():
+    p = create_character(fresh())
+    p["level"] = economy.BOARD_LEVEL
+    p["_world"] = {"frontier": 15}
+    job = next(j for j in contracts.board_for(p) if j["kind"] == "warden")
+    c = contracts.sync(p)
+    c["got"][job["id"]] = job["need"]
+    gold0 = p["gold"]
+    gold, _xp = contracts.claim(p, job)
+    capped, _ = contracts.pay_for(p, job)
+    assert gold == max(0, capped - economy.BOARD_PRICE)
+    assert p["gold"] - gold0 == gold
+
+
+def test_next_line_carries_the_board_before_its_level():
+    line = unlocks.next_line({"level": economy.BOARD_LEVEL - 1,
+                              "unlocked_floor": 1})
     assert "contract board" in line
 
 

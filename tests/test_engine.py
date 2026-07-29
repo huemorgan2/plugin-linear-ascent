@@ -299,13 +299,16 @@ def test_scene_is_idempotent():
 
 
 def test_encounter_carries_id_for_creature_art():
-    # regression: _opener_banner keys creature art off encounter id
+    # regression: _opener_banner keys creature art off encounter id.
+    # The pick is seeded off the world day, so pin to the floor's own
+    # roster instead of a hand-typed set that drifts.
+    from plugin_linear_ascent.content import schema
     p = create_character(fresh())
     choose(p, "gate")
     choose(p, "floor_1")
     s = choose(p, "hunt")
-    assert p["encounter"]["id"] in {"grey_wolf", "feral_boar",
-                                    "goblin_straggler"}
+    assert p["encounter"]["id"] in {e.id for e in
+                                    schema.get_floor(1).encounters}
     assert s.banner == p["encounter"]["id"]      # floor-1 art is shipped
 
 

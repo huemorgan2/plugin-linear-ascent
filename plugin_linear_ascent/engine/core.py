@@ -1299,8 +1299,14 @@ def _lodge_scene(p: dict) -> Scene:
             "Dawn closes wounds wherever you lie. The palisade "
             "is about who can FIND you before it does."]
     # 022/005: the night slot — one action per night, resolved at dawn.
-    # Below the level it doesn't exist here at all; the square's NEXT
-    # line carries it (020's machinery).
+    # 0.29.1: below the level it is SHOWN and locked — a visible door is
+    # a reason to climb; an invisible one is nothing.
+    if p["level"] < economy.NIGHT_SLOT_LEVEL:
+        body.append("The night slot — one action a night: rest by the "
+                    "fire or take a shift for coin at dawn.")
+        opts.append(Option("night_slot", "The night slot",
+                           f"🔒 level {economy.NIGHT_SLOT_LEVEL}",
+                           locked=True))
     if p["level"] >= economy.NIGHT_SLOT_LEVEL:
         day = state.world_day()
         shift = _night_shift(day)
@@ -1387,9 +1393,14 @@ def _lodge_action(p: dict, oid: str) -> Scene:
         s.shard_note = (f"A bowl goes across the fire to {other}. "
                         "They'll find the word with their post.")
         return s
+    if oid == "night_slot" or (oid in ("night_rest", "night_work")
+                               and p["level"] < economy.NIGHT_SLOT_LEVEL):
+        s = _lodge_scene(p)
+        s.shard_note = (f"The keeper plans nights for level "
+                        f"{economy.NIGHT_SLOT_LEVEL} names. Climb — "
+                        "the fire will still be here.")
+        return s
     if oid in ("night_rest", "night_work"):
-        if p["level"] < economy.NIGHT_SLOT_LEVEL:
-            return _lodge_scene(p)
         p["night"] = {"day": state.world_day(),
                       "choice": "rest" if oid == "night_rest" else "work"}
         s = _lodge_scene(p)
@@ -1433,11 +1444,14 @@ def _board_scene(p: dict) -> Scene:
         else:
             tail = f"{n}/{need}"
         bonus = " · +1 repair token" if job.get("token") else ""
-        lines.append(f"· {job['title']} — ◈ {job['gold']} + "
-                     f"{job['xp']} XP{bonus} · {tail}")
+        # 0.29.1: the card shows what THIS hand collects (reach-capped),
+        # never a frontier price a level-2 climber won't be paid.
+        gold, xp = contracts.pay_for(p, job)
+        lines.append(f"· {job['title']} — ◈ {gold} + "
+                     f"{xp} XP{bonus} · {tail}")
         if contracts.claimable(p, job):
             opts.append(Option(f"claim_{job['id']}", f"Collect: {job['title']}",
-                               f"◈ {max(0, job['gold'] - economy.BOARD_PRICE)}"))
+                               f"◈ {max(0, gold - economy.BOARD_PRICE)}"))
     lines.append(f"The broker's stamp is ◈ {economy.BOARD_PRICE}, off the "
                  "top of every payout. Jobs expire at dawn — no rerolls.")
     opts.append(Option("back", "Back to the square"))
@@ -1485,8 +1499,13 @@ def _vault_scene(p: dict) -> Scene:
     p["bank_day"] = state.world_day()
     lines.append(f"banked ◈ {p['bank']:,} · carried ◈ {p['gold']:,}")
     opts = []
-    # 022/005: the weekly strongbox. Below the level it doesn't exist
-    # here at all; the square's NEXT line carries it.
+    # 022/005: the weekly strongbox. 0.29.1: below the level it is
+    # SHOWN and locked — the clerk polishes a box you can't open yet.
+    if p["level"] < economy.STRONGBOX_LEVEL:
+        lines.append(f"the weekly strongbox — 🔒 level "
+                     f"{economy.STRONGBOX_LEVEL}. Kills, keeps and "
+                     "floors gained fill it; every week you pick one "
+                     "reward from what you earned.")
     if p["level"] >= economy.STRONGBOX_LEVEL:
         box = weekly.sync(p)
         note = p.pop("strongbox_note", None)

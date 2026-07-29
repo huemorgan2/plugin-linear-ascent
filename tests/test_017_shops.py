@@ -259,10 +259,10 @@ def test_town_shows_the_locked_arcanum_row():
     p = create_character(fresh("town-row"))
     s = core.current_scene(p)
     row = next(o for o in s.options if o.id == "arcanum")
-    assert "🔒" in row.hint and "6" in row.hint
+    assert "🔒" in row.hint and str(economy.ARCANUM_LEVEL) in row.hint
     s = choose(p, "arcanum")
     assert p["location"] == "town"             # the door held
-    assert "level 6" in s.shard_note
+    assert f"level {economy.ARCANUM_LEVEL}" in s.shard_note
 
 
 def test_arcanum_opens_at_level_six():

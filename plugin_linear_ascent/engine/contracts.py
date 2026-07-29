@@ -45,14 +45,15 @@ def board(day: int, frontier: int) -> list[dict]:
 
     # B — steelwork: N kills with a weapon class, any floor. Priced off
     # the tower's waist so it pays the mid-climb without minting gold
-    # for frontier hands doing what they'd do anyway.
+    # for frontier hands doing what they'd do anyway. The job carries
+    # its pricing floor: pay_for caps it at each hand's reach (0.29.1).
     dtype = rng.choice(("melee", "ranged", "magic"))
     n2 = rng.randrange(5, 9)
     fb = max(1, round(fr * 0.6))
     word = {"melee": "steel", "ranged": "arrows", "magic": "spellwork"}
     jobs.append({
         "id": f"d{day}-class-{dtype}",
-        "kind": "class", "dtype": dtype, "need": n2,
+        "kind": "class", "dtype": dtype, "need": n2, "floor": fb,
         "title": f"{n2} kills by {word[dtype]}, any floor",
         "gold": max(1, round(economy.gold_per_kill(fb) * n2
                              * economy.CONTRACT_CLASS_GOLD_MULT)),
@@ -64,7 +65,7 @@ def board(day: int, frontier: int) -> list[dict]:
     # front, an echo, it all counts as showing up).
     jobs.append({
         "id": f"d{day}-warden",
-        "kind": "warden", "need": 1,
+        "kind": "warden", "need": 1, "floor": fr,
         "title": "Answer a keep's horn — fight any Warden",
         "gold": max(1, round(economy.warden_gold(fr)
                              * economy.CONTRACT_WARDEN_MULT)),
@@ -127,6 +128,31 @@ def note_warden(p: dict) -> None:
             _bump(p, job)
 
 
+def pay_for(p: dict, job: dict) -> tuple[int, int]:
+    """What THIS hand collects for a job. One board for the whole tower,
+    but jobs priced off floors a climber cannot reach yet (the class job
+    at the tower's waist, the warden bounty at the frontier) pay at the
+    hand's own reach + 2 instead — a bonus, never frontier gold
+    teleported down to floor 1. This is the guard that let the board
+    open at level 2 (0.29.1); culls need no cap (the kill must happen ON
+    the named floor, and the entry leash gates that)."""
+    reach = max(1, int(p.get("unlocked_floor", 1))) + 2
+    fj = int(job.get("floor", 0))
+    if not fj or fj <= reach:
+        return (job["gold"], job["xp"])
+    if job["kind"] == "class":
+        return (max(1, round(economy.gold_per_kill(reach) * job["need"]
+                             * economy.CONTRACT_CLASS_GOLD_MULT)),
+                max(1, round(economy.xp_per_kill(reach) * job["need"]
+                             * economy.CONTRACT_CLASS_XP_MULT)))
+    if job["kind"] == "warden":
+        return (max(1, round(economy.warden_gold(reach)
+                             * economy.CONTRACT_WARDEN_MULT)),
+                max(1, round(economy.warden_xp(reach)
+                             * economy.CONTRACT_WARDEN_MULT)))
+    return (job["gold"], job["xp"])
+
+
 def got(p: dict, job: dict) -> int:
     c = sync(p)
     return min(int(c["got"].get(job["id"], 0)), job["need"])
@@ -138,16 +164,18 @@ def claimable(p: dict, job: dict) -> bool:
 
 
 def claim(p: dict, job: dict) -> tuple[int, int]:
-    """Pay the job out (broker's stamp off the top); returns (gold, xp)
-    actually paid. Caller writes the ledger line and the scene."""
+    """Pay the job out (reach-capped, broker's stamp off the top);
+    returns (gold, xp) actually paid. Caller writes the ledger line and
+    the scene."""
     c = sync(p)
     if not claimable(p, job):
         return (0, 0)
     c["claimed"].append(job["id"])
-    gold = max(0, job["gold"] - economy.BOARD_PRICE)
+    pay_gold, pay_xp = pay_for(p, job)
+    gold = max(0, pay_gold - economy.BOARD_PRICE)
     p["gold"] += gold
-    p["xp"] += job["xp"]
+    p["xp"] += pay_xp
     if job.get("token"):
         inv = p.setdefault("inventory", {})
         inv[job["token"]] = inv.get(job["token"], 0) + 1
-    return (gold, job["xp"])
+    return (gold, pay_xp)

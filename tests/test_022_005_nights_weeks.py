@@ -51,22 +51,33 @@ def _win_a_fight(p, floor_no=1, enc=None):
 
 # ── The ladder: below the level, only the NEXT line ──────────────────────
 
-def test_level_5_sees_the_night_slot_only_as_a_next_line():
+def test_below_level_lodge_shows_the_night_slot_locked():
+    # 0.29.1: shown and locked — a visible door is a reason to climb
     p = create_character(fresh())
     p["level"] = economy.NIGHT_SLOT_LEVEL - 1
     s = choose(p, "lodge")
-    assert not any(o.id.startswith("night_") for o in s.options)
+    row = next(o for o in s.options if o.id == "night_slot")
+    assert row.locked and "🔒" in row.hint
+    assert str(economy.NIGHT_SLOT_LEVEL) in row.hint
+    assert not any(o.id in ("night_rest", "night_work") for o in s.options)
     assert not any("Tonight" in ln for ln in s.body_lines)
+    s = choose(p, "night_slot")                # the door holds
+    assert p["location"] == "lodge"
+    assert str(economy.NIGHT_SLOT_LEVEL) in s.shard_note
     line = unlocks.next_line({"level": economy.NIGHT_SLOT_LEVEL - 1,
                               "unlocked_floor": 1})
     assert "night slot" in line
 
 
-def test_level_9_vault_has_no_strongbox():
+def test_below_level_vault_shows_the_strongbox_locked():
+    # 0.29.1: shown and locked — the clerk polishes a box you can't open
     p = create_character(fresh())
     p["level"] = economy.STRONGBOX_LEVEL - 1
     s = choose(p, "vault")
-    assert not any("strongbox" in ln for ln in s.body_lines)
+    locked = [ln for ln in s.body_lines if "strongbox" in ln]
+    assert locked and "🔒" in locked[0]
+    assert str(economy.STRONGBOX_LEVEL) in locked[0]
+    assert not any("this week" in ln for ln in s.body_lines)
     assert not any(o.id.startswith("pick_") for o in s.options)
 
 

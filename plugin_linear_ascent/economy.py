@@ -951,12 +951,15 @@ OFF_CLASS_MISS = 0.25
 ARROW_PACK_SIZE = 10
 ARROW_PACK_PRICE = 120
 
-ARCANUM_LEVEL = 6              # 004 §3.4: the mage shop's unlock level
+ARCANUM_LEVEL = 3              # 0.29.1: was 6 — the shop arrives when
+                               # class identity lands, not four levels on
 
 # 007 town readability: every not-day-1 door reads its level from the
-# square. Relay opens once a name means something (letters, grants at
-# 5 anyway); the fields once a climber can afford to lose a scrap.
-RELAY_LEVEL = 3
+# square. 0.29.1 re-gate: gates exist for PROTECTION (mercy, pvp) or
+# pacing a confusing system — never as a reward for persistence. The
+# daily-texture doors (relay, board, night slot) open at 2 in one
+# "the town wakes up for you" beat; the fields stay post-mercy.
+RELAY_LEVEL = 2                # was 3
 FIELDS_LEVEL = 5
 
 
@@ -1271,7 +1274,9 @@ BOARD_PRICE = 10        # 022/004: the broker's stamp — off the top of payouts
 # raw gold on top of the kills themselves), never a wage that replaces
 # the grind. XP rides at half weight — XP stays scarce (012).
 
-BOARD_LEVEL = 4                  # the board learns your name at level 4
+BOARD_LEVEL = 2                  # 0.29.1: was 4 — the board is the day's
+                                 # texture; pay is reach-capped (contracts
+                                 # .pay_for), so early hands earn early gold
 BOARD_JOBS_PER_DAY = 3
 CONTRACT_CULL_GOLD_MULT = 0.8    # × N kills' base gold on the named floor
 CONTRACT_CULL_XP_MULT = 0.5      # × N kills' base XP
@@ -1291,7 +1296,9 @@ CONTRACT_TOKEN_CHANCE = 0.25     # a job carries a repair token sometimes
 # Energy cell's 1/day ceiling (the cell cap is the whole safety
 # mechanism for offline gold).
 
-NIGHT_SLOT_LEVEL = 6
+NIGHT_SLOT_LEVEL = 2           # 0.29.1: was 6 — going to bed with a plan
+                               # IS the early hook; income scales with
+                               # floor, not level, so it can't be abused
 NIGHT_WORK_INCOME_PCT = 0.20
 NIGHT_REST_PCT_OF_BAR = 0.04
 RESTED_XP_BONUS_PCT = 0.25
@@ -1317,7 +1324,8 @@ def rested_pool_cap(level: int) -> int:
 # tick the player picks EXACTLY ONE reward. Unpicked weeks fall back
 # to the lowest slot, never to nothing.
 
-STRONGBOX_LEVEL = 10
+STRONGBOX_LEVEL = 6            # 0.29.1: was 10 — the weekly rhythm
+                               # arrives once the daily one is habit
 STRONGBOX_THRESHOLDS = (2, 4, 6)      # points → slots 1 / 2 / 3
 STRONGBOX_GOLD_PCT_OF_DAY = 0.5       # slot 1: half a hunting day
 STRONGBOX_AETHER_PCT_OF_BAR = 0.10    # slot 2: a tenth of the level bar

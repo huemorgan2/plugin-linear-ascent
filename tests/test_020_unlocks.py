@@ -94,11 +94,18 @@ def test_ahead_never_leaks_the_whole_tower_to_a_fresh_player():
 
 # ── just_reached() ───────────────────────────────────────────────────────
 
-def test_level_3_to_4_is_exactly_founding_board_plus_mercy_ends():
+def test_level_1_to_2_wakes_the_town():
+    # 0.29.1 re-gate: the daily-texture doors (relay, board, night slot)
+    # all open in one "the town wakes up for you" beat
+    p = player(level=2, floor=1)
+    got = unlocks.just_reached(p, old_level=1, old_floor=1)
+    assert {"relay", "board", "night_slot"} <= {u.id for u in got}
+
+
+def test_level_3_to_4_is_exactly_founding_plus_mercy_ends():
     p = player(level=4, floor=1)
     got = unlocks.just_reached(p, old_level=3, old_floor=1)
-    # 022/004 added the contract board to the level-4 bundle
-    assert {u.id for u in got} == {"found_guild", "board", "mercy_ends"}
+    assert {u.id for u in got} == {"found_guild", "mercy_ends"}
     # opens sort before closes — the gifts are read before the bill
     assert got[-1].id == "mercy_ends"
 
