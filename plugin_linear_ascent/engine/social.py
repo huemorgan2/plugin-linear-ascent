@@ -916,6 +916,12 @@ def warden_scene(p: dict, fl, note: str = "") -> Scene:
     else:
         lines.append("no blade has touched it yet — the first strike is "
                      "yours to take")
+    # 026: say what a charge actually buys, in rounds, and that walking
+    # out of a keep is a gamble rather than a button.
+    lines.append(f"one charge buys an exchange of about "
+                 f"{economy.warden_exchange_rounds(fl.floor)} rounds — "
+                 "then its guard closes and drives you back. Turning your "
+                 "back on it early is a gamble; it can follow you out.")
     opts = [Option("strike", "Join the fight",
                    f"{economy.COST_WARDEN_ATTEMPT} ⚡ · a full fight")]
     # 022/006: the horn — guild hands only, only while a wound is open.
@@ -980,6 +986,12 @@ def warden_action(p: dict, fl, oid: str) -> Scene:
     # last blade left it (optimistic — the server clamps on the effect).
     e["hp"] = max(1, int(wd.get("hp", e["hp"])))
     e["hp_max"] = max(e["hp"], int(wd.get("hp_max", e["hp"])))
+    # 026: where THIS blade found the body. hp_max is the body's size (the
+    # war bar, the scan, "bites deep" all read it); the strike this fight
+    # reports has to be measured from the join, or a climber who walks
+    # into a half-cut gate is credited with everyone else's work and the
+    # pool collapses on his first swing.
+    e["hp_join"] = e["hp"]
     s2 = combat.fight_scene(p, fl, opener=True)
     s2.event_kind = s.event_kind or "boss"
     s2.support = ("Its wounds are the world's wounds — whatever you cut "

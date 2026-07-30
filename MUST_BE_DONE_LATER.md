@@ -72,6 +72,20 @@ with no cliff at floor 11 (floor 1 is 3.2 fights, floor 30 is 8.0).
   re-run `test_024_first_gate.py` in BOTH repos: worldd resizes live
   pools lazily off `WARDEN_POOL_TUNE`, which has to be bumped in the same
   commit or existing worlds keep the old wall.
+- **026 bounded the exchange** (a charge buys `warden_exchange_rounds(F)`
+  rounds *or* one `pool_unit(F)` of damage, whichever comes first), so
+  "3.2 fights" is now enforced for every striker rather than assumed of an
+  at-level one. Two consequences for later bands: the damage budget makes
+  a gate cost ≥3 charges from ANY blade, so deep pools can no longer be
+  short-circuited by an over-levelled climber; and the round budget is
+  derived from the reference kit, so any change to `_at_level_loadout`
+  silently changes how long a charge lasts. If a band's reference kit is
+  re-anchored, re-read `warden_exchange_rounds` for that band and keep
+  `>= 5` rounds — below that, 3 ⚡ is a swindle.
+- 026 also fixed a live over-credit bug (`hp_max − hp` instead of
+  `hp_join − hp`) that let any wounded gate fall in one or two charges to
+  whoever turned up. If shared-body fights are ever added for anything
+  other than Wardens, stamp `hp_join` on those encounters too.
 
 ## 4. The buy ladder — bands 2 through 10
 

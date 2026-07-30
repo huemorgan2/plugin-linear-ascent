@@ -706,6 +706,47 @@ WARDEN_SIEGE_FLOOR = 10
 # a player spending every ⚡ on the keep: fights per hour, sustained
 SUSTAINED_FIGHTS_PER_HOUR = (60 / ENERGY_REGEN_MIN) / COST_WARDEN_ATTEMPT
 
+# ── 026: a Warden is a war machine, not a rat ────────────────────────────
+# The keep fight has exactly one end condition — you withdraw or you die —
+# and 3 ⚡ is charged once, when you join. That is only a limit while the
+# Warden can actually hurt you. A climber whose DEF had outgrown the gate
+# took the 1-POINT chip every round, so the fight had no end at all: one
+# charge bought unlimited swings, and a failed getaway cost nothing worth
+# the word "chase".
+#
+# Two laws close it, and neither touches the damage arithmetic — measured
+# attempts to fix this by making a Warden's blow heavier (a per-round
+# floor at the mean bite; halving the chip divisor) either deleted the
+# lower half of the roll distribution or, at depth where Warden ATK is
+# huge, collapsed the whole coordination band from ~60% at-level wins to
+# ~20%. The damage table is load-bearing; the EXCHANGE was not bounded.
+#
+# 1. One charge buys one exchange. 3 ⚡ was always sold as "a full
+#    fight", and the pool is literally measured in those fights
+#    (strike_fight_damage: "fight until one round from death, then
+#    withdraw"). Now the Warden's guard closes when that many rounds are
+#    spent and drives you back — wounds kept, ⚡ spent, come again.
+# 2. A gate never lets you walk. The getaway roll is capped, and the
+#    blow that catches you cannot be filed down to the chip.
+WARDEN_FLEE_MAX = 0.75         # a Warden always has a chance to follow
+WARDEN_GRAB_SHARE = 0.06       # the least a caught getaway costs you
+
+
+def warden_exchange_rounds(floor: int) -> int:
+    """Rounds ONE 3 ⚡ charge buys against a shared Warden — the same
+    near-death fight the pool is measured in (see strike_fight_damage).
+    Nothing enforced this before, so a climber whose DEF had outgrown the
+    gate could stand in the keep and swing until the pool was empty."""
+    _p_atk, p_def = _at_level_loadout(floor)
+    w_atk, _w_def, _w_hp = warden_stats(floor)
+    w_dmg = max(1, round(0.75 * w_atk) - p_def // 2)
+    return max(1, (reference_player_hp(floor) - 1) // w_dmg)
+
+
+def warden_grab_damage(pool: int) -> int:
+    """A Warden that cuts off your line lands a real blow, not a chip."""
+    return max(1, round(WARDEN_GRAB_SHARE * max(1, int(pool))))
+
 
 def required_strikers_100(active: int) -> float:
     """R100 — the scaled-minimum small-world rule."""
@@ -730,9 +771,10 @@ def strike_fight_damage(floor: int) -> int:
     p_dmg = max(1, round(0.75 * p_atk) - w_def // 2)
     if floor >= WARDEN_PROFILE_FLOOR:
         p_dmg = max(1, round(p_dmg * TIER_MULT["low"]))
-    w_dmg = max(1, round(0.75 * w_atk) - p_def // 2)
-    rounds = max(1, (reference_player_hp(floor) - 1) // w_dmg)
-    return max(1, rounds * p_dmg)
+    # 026: the round count is the exchange the keep now actually grants
+    # (warden_exchange_rounds) — one function, so the unit the pool is
+    # measured in and the fight the player is sold can never drift.
+    return max(1, warden_exchange_rounds(floor) * p_dmg)
 
 
 def warden_pool_fights(floor: int) -> float:

@@ -501,7 +501,7 @@ def _wear(p: dict, slot: str, n: int = 1) -> str:
             "strength until the Forge repairs it.")
 
 
-def _monster_hit(p: dict, halved: bool = False) -> dict:
+def _monster_hit(p: dict, halved: bool = False, least: int = 0) -> dict:
     """013: armor blunts, it never nullifies — every landed hit chips at
     least ⌈raw/4⌉ (min 1) through any DEF. Returns the breakdown so the
     card can SAY what the armor did instead of silently eating hits.
@@ -532,6 +532,9 @@ def _monster_hit(p: dict, halved: bool = False) -> dict:
     dmg = max(chip, raw - state.dfs(p) // 2)
     if halved:
         dmg //= 2
+    # 026: some blows are not the damage table's business — a Warden that
+    # catches you turning your back lands its grip, not a chip.
+    dmg = max(dmg, int(least))
     soaked = 0
     if e.get("apple_hp", 0) > 0:
         dmg //= 2                          # the apple halves everything
@@ -747,6 +750,13 @@ def _train_nudge(p: dict) -> list[str]:
             f"LEVEL {p['level'] + 1} — the fee is ◈ {fee:,}."]
 
 
+def _cut_this_fight(e: dict) -> int:
+    """What THIS fight took out of the shared body — measured from where
+    the blade joined it, not from the body's full size."""
+    base = int(e.get("hp_join", e.get("hp_max", 0)))
+    return max(0, base - max(0, int(e.get("hp", 0))))
+
+
 def _report_shared_strike(p: dict) -> int:
     """022/001: a shared Warden fight is over (kill, death, or flight) —
     everything it cut away persists in the world pool. One warden_strike
@@ -754,7 +764,7 @@ def _report_shared_strike(p: dict) -> int:
     e = p.get("encounter") or {}
     if not e.get("shared") or e.get("strike_sent"):
         return 0
-    dealt = max(0, int(e.get("hp_max", 0)) - max(0, int(e.get("hp", 0))))
+    dealt = _cut_this_fight(e)
     if dealt <= 0:
         return 0
     e["strike_sent"] = True
@@ -1126,7 +1136,65 @@ def _death(p: dict, floor) -> Scene:
     )
 
 
+def _driven_back(p: dict, floor, spent: str = "guard") -> Scene:
+    """026: the exchange one 3 ⚡ charge buys is spent. The Warden's guard
+    closes and puts the keep's length between you — everything you cut
+    stays cut, and the ⚡ was the price of the exchange, not of a swing.
+    Without this the keep fight had no end but death: a climber whose DEF
+    had outgrown the gate swung free until the pool was empty."""
+    e = p["encounter"]
+    name = e["name"]
+    dealt = _report_shared_strike(p)
+    p["encounter"] = None
+    p["location"] = "gate_town"
+    if spent == "unit":
+        lines = [f"A full fight's worth is out of {name} — it gives ground, "
+                 "hauls the keep doors between you and shuts them. Nobody "
+                 "takes a gate in one standing."]
+    else:
+        lines = [f"{name}'s guard closes and it drives you the length of "
+                 "the keep. The exchange is over — you are still standing."]
+    if dealt:
+        lines.append(f"▪ the {dealt:,} you cut away stays cut — it holds "
+                     "your wounds for the next blade")
+    lines.append(f"▪ another {economy.COST_WARDEN_ATTEMPT} ⚡ buys another "
+                 "exchange, and the wound will be exactly where you left it")
+    return Scene(
+        eyebrow=_eyebrow(p, floor),
+        headline="Driven back from the keep",
+        support="A gate is not worn down in one standing. That is what "
+                "makes it a gate.",
+        body_lines=lines,
+        options=_after_fight_options(p, floor),
+        meters=meters(p),
+        event_kind="boss")
+
+
 def resolve_fight_action(p: dict, floor, option_id: str) -> Scene:
+    """026: one charge buys ONE exchange against a shared Warden — the
+    same fight-unit the pool is measured in, whichever way you spend it:
+    the rounds an at-level climber survives, or a full unit of damage cut
+    out of the body, whichever comes first. Both ends matter. The round
+    budget stops the over-armoured climber standing in the keep forever;
+    the damage budget stops the over-levelled one, whose blows are worth
+    three at-level fights, ending a 3-fight gate in a single charge.
+    Everything else about the fight is untouched."""
+    e = p.get("encounter") or {}
+    spends = option_id in _ROUND_ACTIONS or option_id.startswith("use_")
+    keep = spends and e.get("shared") and e.get("kind") == "warden"
+    s = _resolve_round(p, floor, option_id)
+    e = p.get("encounter")
+    if not (keep and e):
+        return s
+    e["rounds"] = int(e.get("rounds", 0)) + 1
+    if _cut_this_fight(e) >= economy.pool_unit(floor.floor):
+        return _driven_back(p, floor, spent="unit")
+    if e["rounds"] >= economy.warden_exchange_rounds(floor.floor):
+        return _driven_back(p, floor)
+    return s
+
+
+def _resolve_round(p: dict, floor, option_id: str) -> Scene:
     e = p["encounter"]
     notes: list[str] = []
 
@@ -1402,9 +1470,12 @@ def resolve_fight_action(p: dict, floor, option_id: str) -> Scene:
         # 022/008: an answered flare buys ONE guaranteed disengage — the
         # monster has a new front and does not chase.
         snap = _wear(p, "shoes")       # 005: the sprint spends shoe tread
-        if e.pop("rescued", None) \
-                or state.roll_ok(p, economy.p_flee(economy.player_speed(p),
-                                                   _mspd(p))):
+        chance = economy.p_flee(economy.player_speed(p), _mspd(p))
+        if e["kind"] == "warden":
+            # 026: a Warden always has a chance to follow you out of the
+            # keep — turning your back on a gate is a price, not a button.
+            chance = min(chance, economy.WARDEN_FLEE_MAX)
+        if e.pop("rescued", None) or state.roll_ok(p, chance):
             dealt = _report_shared_strike(p)   # 022/001: wounds persist
             p["encounter"] = None
             p["location"] = "gate_town"
@@ -1420,7 +1491,11 @@ def resolve_fight_action(p: dict, floor, option_id: str) -> Scene:
                 body_lines=lines + ([snap] if snap else []),
                 options=_after_fight_options(p, floor),
                 meters=meters(p))
-        hit = _monster_hit(p)
+        # 026: the price of the attempt. A gate's grip is not a chip —
+        # this is the "sometimes it follows you" the keep had lost.
+        least = (economy.warden_grab_damage(state.max_hp(p))
+                 if e["kind"] == "warden" else 0)
+        hit = _monster_hit(p, least=least)
         if p["hp"] <= 0:
             return _death(p, floor)
         chase = _advance_chase(p)
