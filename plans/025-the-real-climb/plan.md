@@ -107,26 +107,39 @@ alongside the existing defense axis, and map it to multipliers in
 `economy.py`:
 
 ```python
-CREATURE_HP  = {"frail": 0.45, "lean": 0.7, "sturdy": 1.8,
-                "hulking": 3.0}          # absent = 1.0
-CREATURE_ATK = {"feeble": 0.6, "fierce": 2.4, "savage": 4.0}
+BODY_ROUNDS = {"frail": 0.45, "lean": 0.75, "sturdy": 1.8, "hulking": 2.4}
+BITE_COST   = {"feeble": 0.05, "fierce": 0.50, "savage": 1.00}
 ```
 
-`fierce`/`savage` are deliberately steep because of the chip-floor
-arithmetic in §2: on floor 1, ATK 5 → 12 (fierce) or 20 (savage) is what
-it takes for a bite to be felt at all. A savage floor-1 animal deals
-3–13 per round instead of 1.
+The two axes are stated in the units the player feels, not as raw stat
+multipliers, because §2 showed a multiplier cannot survive the chip
+floor. **Body** is how many rounds the animal lives relative to the
+calibrated peer; HP is derived from it. **Bite** is the share of the
+at-level HP pool the whole fight should cost you, and the ATK that
+produces it is inverted back through `max(chip, raw − DEF/2)` — so a
+`savage` animal is guaranteed to beat the chip floor at every floor
+instead of hoping to. Two safety rails: no body runs longer than
+`WILDS_ROUNDS_HARD_MAX = 11` rounds (no slogs) and no single round may
+take more than `WILDS_ROUND_CAP = 0.45` of the pool, so death is always
+preceded by a round you could have run in.
+
+The 0.50 / 1.00 figures were **measured against the 017 fight sim, not
+derived on paper**. The paper numbers (0.35 / 0.70) read lethal and
+played harmless: fights open *at range*, where a closing monster strikes
+at −50%, so a short fight lands one halved blow and the killer still won
+88% of the time. At 0.50/1.00 brutes win 92% and killers 74% — fight a
+killer to the end and one time in four it buries you.
 
 **The floor 1–10 spread** (a `prey / peer / brute / killer` shape per
 floor, assigned to the four existing encounter ids so no new art is
-needed). Floor 1 becomes:
+needed). Floor 1 as shipped:
 
 | creature | traits | HP | ATK | fight |
 |---|---|---|---|---|
-| Hedgerow rat | `frail`, `feeble` | 8 | 3 | one hit, thin pay |
+| Hedgerow rat | `frail`, `feeble` | 8 | 5 | one hit, thin pay |
 | Grey wolf | — | 18 | 5 | the baseline |
-| Feral boar | `sturdy`, `fierce` | 32 | 12 | a real trade |
-| Goblin straggler | `lean`, `savage` | 13 | 20 | glass cannon — it can kill you |
+| Feral boar | `sturdy`, `fierce` | 32 | 21 | a real trade |
+| Goblin straggler | `lean`, `savage` | 14 | 57 | glass cannon — it can kill you |
 
 `TRAIT_INTRO_FLOOR` keeps gating the **defense** axis (armor from 2,
 resist from 3, flying from 4, bulwark from 6). The archetype axis is
@@ -139,14 +152,17 @@ Speed joins the spread: `fast` and `slow` also become legal from floor 1
 ## Phase 2 — Danger pays (rewards follow the fight)
 
 ```python
-def kill_reward_mult(traits) -> float      # hp_mult × (0.5 + 0.5·atk_mult)
+def kill_reward_mult(traits) -> float
+    # min(6.0, BODY_ROUNDS[body] × BITE_PAY[bite])
+    # BITE_PAY = {"feeble": 0.6, "fierce": 2.0, "savage": 3.0}
 ```
 
-Applied to **XP and gold both** (XP has never had a threat modifier),
-composed with the existing specimen and profile multipliers, and capped
-so a single kill can't outpay a Warden. Floor 1 becomes: rat ≈ 0.3×,
-wolf 1.0×, boar ≈ 2.7×, goblin ≈ 1.6× — visible, and worth choosing
-between.
+The rounds an animal costs you times what it charges for them. Applied to
+**XP and gold both** (XP has never had a threat modifier), composed with
+the existing specimen and profile multipliers, and capped at 6× so a
+single lucky draw can't outpay a Warden. Floor 1 as shipped: rat 0.27×
+(1 xp / ◈2), wolf 1.0× (4 / ◈8), straggler 2.25× (9 / ◈18), boar 3.6×
+(14 / ◈29) — a 13× spread within one floor, visible on the card.
 
 ## Phase 3 — The Wardens of 1–10 do not heal
 
@@ -154,11 +170,17 @@ between.
   after 024) **and** `warden_silence_hours(F) = None` for F ≤ 10 — no
   silence close, no pity, no forgetting. A wound in the first ten floors
   is permanent until the floor falls.
-- In exchange the first ten gates get **teeth**: pool ×1.6 and Warden ATK
-  raised so a floor-1 Warden can actually kill a careless climber. The
-  fight is a siege you chip at across days, exactly as asked — "they can
-  have a large energy but even a single player can have at them over
-  time."
+- In exchange the gates get **teeth**, but not with a multiplier on the
+  first ten pools — that would build a cliff at floor 11. Instead the
+  base of the whole 1→30 effort ramp rose: `WARDEN_POOL_FIGHTS_MIN`
+  2.0 → 3.2. The curve stays one straight line (floor 1 = 3.2 solo
+  fights, floor 10 = 4.7, floor 30 = 8.0) and the floor-1 pool is 426 HP
+  at ~133 per strike-fight. A siege you chip at across days, exactly as
+  asked — "they can have a large energy but even a single player can have
+  at them over time."
+- Warden ATK on floors 2–10 rose as a side-effect of the Phase-4
+  reference re-anchor, which is the half that lets a Warden kill a
+  careless climber.
 - The keep card states the law: *"It does not heal. Every blow you land
   here is permanent."*
 
