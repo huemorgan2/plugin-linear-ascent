@@ -78,10 +78,13 @@ def test_prices_anchor_to_the_frontier_and_stay_pretty():
 
 
 def test_stock_filters_by_shop_floor_and_class():
-    # floor 6 forge: quivers and oil, not the floor-11 tools
+    # 025 §4: the tactical shelf now starts in band 1 — floor 2 sells oil
+    # and nothing else, and each counter arrives just after its trait
+    slugs = {r.slug for r in economy.relic_stock("forge", 2, "warrior")}
+    assert slugs == {"weapon_oil"}
     slugs = {r.slug for r in economy.relic_stock("forge", 6, "warrior")}
     assert "poison_arrows" in slugs and "weapon_oil" in slugs
-    assert "entangling_net" not in slugs
+    assert "fire_arrows" not in slugs             # floor 8
     # floor 11 forge, warrior: nets yes, archer-only piercing no
     slugs = {r.slug for r in economy.relic_stock("forge", 11, "warrior")}
     assert "entangling_net" in slugs and "piercing_arrows" not in slugs
@@ -236,8 +239,11 @@ def test_slowing_arrow_wasted_on_the_already_slow():
 
 def test_piercing_arrow_ignores_the_plate():
     def _dmg(nock):
+        # AT RANGE on purpose: in close quarters the bow's ×0.6 drops the
+        # roll under DEF/2, both shafts bottom out on the ≥1 chip, and the
+        # plate this test is about stops being the difference at all.
         p, fl = _fight("archer", floor_no=10, enc_id="kings_guard",
-                       user="r6-pierce", piercing_arrows=5)
+                       user="r6-pierce", rng="at_range", piercing_arrows=5)
         if nock:
             act(p, fl, "nock_piercing_arrows")
         hp0 = p["encounter"]["hp"]

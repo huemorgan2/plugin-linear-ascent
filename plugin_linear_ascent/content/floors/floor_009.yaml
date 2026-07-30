@@ -15,6 +15,7 @@ encounters:
       It still works the crowd, though the crowd is gone. The pitch
       ends with a knife every time.
     weight: 3
+    traits: [frail, feeble]
     prose: >-
       A goblin barker spreads its arms in welcome from a stall of
       stolen boots. The two behind it with scrap-rifles aren't smiling.
@@ -24,6 +25,7 @@ encounters:
       It circles by habit, sun-wise, always. Break the circle and you
       break the wolf.
     weight: 3
+    traits: [lean, savage]
     prose: >-
       Among the painted horses one shape isn't painted. The wolf steps
       down off the carousel deck with terrible patience.
@@ -33,6 +35,7 @@ encounters:
       Blue rosette still stapled to one ear. It won its class by
       weight, and the weight is all muscle now.
     weight: 2
+    traits: [hulking, fierce]
     prose: >-
       The pen says GRAND CHAMPION in old letters. The bar is bent. The
       champion has opinions about being looked at.
@@ -42,7 +45,7 @@ encounters:
       It nests in the flag-lines above the stalls and stoops on
       whatever glitters. Your buckles glitter.
     weight: 2
-    traits: [flying]
+    traits: [flying, frail]
     prose: >-
       Something has been living in the flag-lines above the fair — a
       kite-bird stitched with stolen bunting, wheeling down between

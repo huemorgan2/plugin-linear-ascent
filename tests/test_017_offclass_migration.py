@@ -114,10 +114,11 @@ def test_deliberate_off_class_buys_are_left_alone_after_v5():
     p = create_character(fresh("buys-off-class"), clazz="archer")
     p["level"], p["gold"] = 3, 10_000
     core.apply_choice(p, "forge")
-    core.apply_choice(p, "buy_pigsticker")
-    assert p["gear"]["weapon"] == "pigsticker"
+    blade = economy.off_class_offer("warrior", p["level"]).slug
+    core.apply_choice(p, f"buy_{blade}")
+    assert p["gear"]["weapon"] == blade
     state.ensure_current(p)
-    assert p["gear"]["weapon"] == "pigsticker"
+    assert p["gear"]["weapon"] == blade
 
 
 # ── the pack ─────────────────────────────────────────────────────────────

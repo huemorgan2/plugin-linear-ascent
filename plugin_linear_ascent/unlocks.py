@@ -16,6 +16,7 @@ from dataclasses import dataclass
 from functools import lru_cache
 
 from . import economy
+from .economy import rung_player_level_req
 
 
 @dataclass(frozen=True)
@@ -95,6 +96,24 @@ def registry() -> tuple[Unlock, ...]:
                 f"gear_tier_{t}", "level", economy.gear_player_level_req(t),
                 "opens", f"tier-{t} steel", "forge",
                 f"the tier-{t} rack at the Forge answers to your hand"))
+    # ── 025 §4: band 1's per-level rungs. One entry a level, not one per
+    # slot — the ladder answers "what does level 4 sell me" without
+    # becoming a catalogue. This is the complaint that opened 025, so it
+    # belongs on the Stone and in the level-up announcement. ──
+    band1: dict[int, list] = {}
+    for g in economy.FORGE.values():
+        if g.style or g.slot == "shoes" or not 1 < g.rung < 2:
+            continue
+        band1.setdefault(rung_player_level_req(g), []).append(g)
+    for lvl, items in sorted(band1.items()):
+        lo = min(g.price for g in items)
+        hi = max(g.price for g in items)
+        out.append(Unlock(
+            f"band1_rung_{lvl}", "level", lvl, "opens",
+            "new steel on the racks", "forge",
+            f"the next rung of blade, guard and coat — and each cut keen "
+            f"or warded if you'd rather trade upkeep for bite",
+            f"◈ {lo:,}–{hi:,}"))
     # ── the shoes ladder's explicit gates (level to the cap, floor past) ──
     for g in sorted((g for g in economy.FORGE.values()
                      if g.slot == "shoes" and g.level),
@@ -160,12 +179,14 @@ def _distance(p: dict, u: Unlock) -> int:
 
 def ahead(p: dict, limit: int = 0) -> list[Unlock]:
     """Unmet gates, nearest first, level before floor at equal distance,
-    stably grouped by (gate, at) for rendering."""
+    stably grouped by (gate, at) for rendering. A threshold that CLOSES
+    something reads first inside its group: the racks arriving are the
+    pleasant news, and the fold is capped."""
     todo = [u for u in registry() if not met(p, u)]
     todo.sort(key=lambda u: (_distance(p, u),
                              0 if u.gate == "level" else 1,
                              u.at,
-                             {"opens": 0, "closes": 1, "changes": 2}[u.effect]))
+                             {"closes": 0, "opens": 1, "changes": 2}[u.effect]))
     return todo[:limit] if limit else todo
 
 

@@ -76,10 +76,11 @@ def test_clicking_a_locked_row_explains_the_gate():
     p = create_character("locked-click")
     p["gold"] = 10_000
     core.apply_choice(p, "forge")
-    s = core.apply_choice(p, "buy_iron_sword")
-    assert p["gear"]["weapon"] != "iron_sword"
+    # 025: at level 1 the locked row is band 1's next rung, one level up
+    s = core.apply_choice(p, "buy_notched_cleaver")
+    assert p["gear"]["weapon"] != "notched_cleaver"
     assert p["gold"] == 10_000                 # nothing charged
-    assert "level 6" in s.shard_note
+    assert "level 2" in s.shard_note
 
 
 # ── the wire format ──────────────────────────────────────────────────────

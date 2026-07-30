@@ -63,8 +63,10 @@ def keep_scene(p, floor=1):
 # ── The card ─────────────────────────────────────────────────────────────
 
 def test_card_shows_bar_countdown_roll_and_standings():
-    p = wounded_warden(create_character(fresh()))
-    s = keep_scene(p)
+    # 025 §3: floors 1-10 are siege floors with no silence window at all,
+    # so the countdown line lives above the siege band now.
+    p = wounded_warden(create_character(fresh()), floor=12)
+    s = keep_scene(p, floor=12)
     body = "\n".join(s.body_lines)
     assert "43%" in body and "430" in body
     assert "█" in body and "·" in body

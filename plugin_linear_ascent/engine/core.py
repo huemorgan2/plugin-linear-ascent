@@ -778,15 +778,26 @@ def _rack(p: dict, items: list, opts: list, lines: list) -> None:
             and all(g.slug != worn for g in show):
         show.append(next(g for g in buyable if g.slug == worn))
         show.sort(key=lambda g: g.rung)
-    for g in show:
-        stat = ("+{} spd".format(g.speed) if g.slot == "shoes"
+    def _stat(g):
+        return ("+{} spd".format(g.speed) if g.slot == "shoes"
                 else ("+{} ATK".format(g.bonus) if g.slot == "weapon"
                       else "+{} DEF".format(g.bonus)))
+
+    for g in show:
         hint = (f"◈ {g.price:,} · worn — buy a spare"
                 if g.slug == worn else f"◈ {g.price:,}")
         opts.append(Option(f"buy_{g.slug}", g.name, hint))
         flavor = f", {g.flavor}" if g.flavor else ""
-        lines.append(f"{g.name}{flavor} — {stat}")
+        lines.append(f"{g.name}{flavor} — {_stat(g)}")
+        # 025 §4: the newest rung is also a CHOICE — the same steel cut
+        # keen (sharper, spends itself) or warded (patient). Older rungs
+        # stay one row so the rack never becomes a catalogue.
+        if g is show[-1]:
+            for v in economy.gear_styles(g):
+                opts.append(Option(f"buy_{v.slug}", v.name,
+                                   f"{economy.STYLE_WORD[v.style]} · "
+                                   f"◈ {v.price:,}"))
+                lines.append(f"{v.name} — {_stat(v)}, {v.flavor}")
     if nxt is not None:
         stat = (f"+{nxt.speed} spd" if nxt.slot == "shoes"
                 else f"+{nxt.bonus}")
@@ -1837,7 +1848,9 @@ def _stone_scene(p: dict) -> Scene:
     # 020: the personal ladder — the whole climb ahead, grouped by
     # threshold. + opens, − closes, ▲ changes the rules.
     lines.append("▣ THE CLIMB AHEAD")
-    lines.extend(unlocks.climb_ahead_lines(p, limit=8))
+    # 025 §4: band 1 sells a rung a level now, so the fold carries a few
+    # more rungs of ladder before it says "and the tower keeps the rest".
+    lines.extend(unlocks.climb_ahead_lines(p, limit=14))
     return Scene(
         eyebrow="ROOTHOLLOW · STONE OF THE CLIMB",
         headline=f"The frontier stands at floor {frontier}",
@@ -2002,8 +2015,7 @@ def _gate_town_action(p: dict, oid: str) -> Scene:
         enc = next((e for e in fl.encounters
                     if e.id == fw.get("slug")), None)
         if enc is None:
-            table = [(e.weight, e.id) for e in fl.encounters]
-            enc_id = state.rng_pick(p, table)
+            enc_id = state.rng_pick(p, combat.hunt_table(p, fl))
             enc = next(e for e in fl.encounters if e.id == enc_id)
         s = combat.start_encounter(p, fl, enc, "wilds")
         s.support = (f"You run toward the light. The {enc.name} turns "
@@ -2016,8 +2028,8 @@ def _gate_town_action(p: dict, oid: str) -> Scene:
             s.shard_note = ("You're spent — ⚡ regenerates one point every "
                             "45 minutes. Rest, bank, or read the Stone.")
             return s
-        table = [(e.weight, e.id) for e in fl.encounters]
-        enc_id = state.rng_pick(p, table)
+        # 025 §5: the rubber band weights the roster against your sheet
+        enc_id = state.rng_pick(p, combat.hunt_table(p, fl))
         enc = next(e for e in fl.encounters if e.id == enc_id)
         combat._ledger(p, "energy", note="wilds")
         return combat.start_encounter(p, fl, enc, "wilds")

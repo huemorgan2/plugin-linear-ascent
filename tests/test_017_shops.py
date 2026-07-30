@@ -34,10 +34,16 @@ def choose(p, oid="", text=""):
 
 # ── the generated catalog (§3.1) ─────────────────────────────────────────
 
-def test_every_weapon_line_has_nineteen_rungs():
+# 025 §4: band 1 sells a rung per level (1.0 … 1.9), then the pre-025
+# ladder resumes — whole tiers with one mid between them.
+LADDER = [1 + i / 10 for i in range(10)] + [2 + 0.5 * i for i in range(17)]
+
+
+def test_every_weapon_line_climbs_the_whole_ladder():
     for line in ("warrior", "archer", "sorcerer"):
         rungs = [g.rung for g in economy.weapon_line(line)]
-        assert rungs == [1 + 0.5 * i for i in range(19)], line
+        assert [round(r, 1) for r in rungs] == [round(r, 1) for r in LADDER], \
+            line
 
 
 def test_lines_mirror_the_warrior_numbers_rung_for_rung():
@@ -49,12 +55,62 @@ def test_lines_mirror_the_warrior_numbers_rung_for_rung():
 
 
 def test_mid_rungs_are_midpoint_bonus_and_geometric_price():
-    war = {g.rung: g for g in economy.weapon_line("warrior")}
+    war = {round(g.rung, 1): g for g in economy.weapon_line("warrior")}
     for t in range(1, 10):
         lo, mid, hi = war[float(t)], war[t + 0.5], war[float(t + 1)]
         assert mid.bonus == (lo.bonus + hi.bonus) // 2, mid.slug
         assert mid.price == round((lo.price * hi.price) ** 0.5 / 10) * 10
         assert lo.price < mid.price < hi.price, mid.slug
+
+
+def test_band_ones_new_rungs_did_not_move_the_old_ones():
+    """025 §4 re-spaced band 1 by INTERPOLATING between the tier-1 and
+    tier-2 rows — the old mid was defined as exactly that midpoint and
+    that geometric mean, so every pre-025 piece keeps its numbers and the
+    new rungs climb strictly between them."""
+    for slot, line in (("weapon", "warrior"), ("shield", ""),
+                       ("armor", "")):
+        band = [g for g in economy.gear_rungs(slot, line) if g.rung < 2]
+        assert len(band) == 10
+        assert [g.bonus for g in band] == sorted({g.bonus for g in band})
+        assert [g.price for g in band] == sorted({g.price for g in band})
+        lo, hi = band[0], economy.gear_rungs(slot, line)[10]
+        assert band[5].bonus == (lo.bonus + hi.bonus) // 2
+        assert band[5].price == round((lo.price * hi.price) ** 0.5 / 10) * 10
+
+
+def test_every_level_of_the_first_ten_sells_something():
+    """The complaint, as a gate: 'I worked 3 days to advance a level only
+    to find I have no more things to buy at level 4.'"""
+    for clazz in ("warrior", "archer", "sorcerer"):
+        for lvl in range(1, 11):
+            new = [g for g in economy.FORGE.values()
+                   if g.rung >= 1 and not g.style
+                   and economy.rung_player_level_req(g) == lvl
+                   and economy.rung_floor_req(g) == 0
+                   and (not g.line or g.line == clazz)]
+            assert new, f"{clazz} level {lvl} unlocks nothing"
+            slots = {g.slot for g in new}
+            assert {"weapon", "shield", "armor"} <= slots | {"shoes"}, \
+                f"{clazz} level {lvl}: only {slots}"
+
+
+def test_a_rung_is_a_choice_of_three_temperaments():
+    plain = economy.FORGE["iron_sword"]
+    keen, warded = economy.gear_styles(plain)
+    assert (keen.style, warded.style) == ("keen", "warded")
+    # keen buys power with upkeep; warded buys upkeep with gold
+    assert keen.bonus > plain.bonus and keen.price > plain.price
+    assert economy.item_pool(keen) < economy.item_pool(plain)
+    assert warded.bonus == plain.bonus
+    assert economy.item_pool(warded) > economy.item_pool(plain)
+    # same rung, same gate — a style is never a queue
+    for v in (keen, warded):
+        assert v.rung == plain.rung and v.slot == plain.slot
+        assert economy.rung_player_level_req(v) == \
+            economy.rung_player_level_req(plain)
+    # and the deep ladder is still plain steel only (025 stops at band 1)
+    assert economy.gear_styles(economy.FORGE["dawnbreaker"]) == []
 
 
 def test_plan_table_spot_checks():
@@ -75,15 +131,20 @@ def test_plan_table_spot_checks():
 def test_shields_and_armor_carry_the_mid_rungs_too():
     for slot in ("shield", "armor"):
         rungs = [g.rung for g in economy.gear_rungs(slot)]
-        assert rungs == [1 + 0.5 * i for i in range(19)], slot
+        assert [round(r, 1) for r in rungs] == \
+            [round(r, 1) for r in LADDER], slot
 
 
-def test_focuses_are_ten_whole_rungs_mirroring_shields():
+def test_focuses_mirror_shields_rung_for_rung():
     focuses = economy.gear_rungs("shield", "sorcerer")
-    assert [g.rung for g in focuses] == [float(t) for t in range(1, 11)]
-    shields = {g.rung: g for g in economy.gear_rungs("shield")}
+    # 025 §4: band 1 sells the caster a guard per level too — above it
+    # the Arcanum still stocks whole tiers only
+    assert [round(g.rung, 1) for g in focuses] == \
+        [round(1 + i / 10, 1) for i in range(10)] + \
+        [float(t) for t in range(2, 11)]
+    shields = {round(g.rung, 1): g for g in economy.gear_rungs("shield")}
     for f in focuses:
-        ref = shields[f.rung]
+        ref = shields[round(f.rung, 1)]
         assert (f.bonus, f.price) == (ref.bonus, ref.price), f.slug
 
 
@@ -105,7 +166,7 @@ def test_shoes_ladder_matches_the_plan_table():
 def test_level_gates_whole_at_band_start_mids_five_later():
     # 022/002: the raw gate (band start / band start + 5) is a LEVEL up
     # to the cap and a FLOOR past it — one law, split across two axes
-    war = {g.rung: g for g in economy.weapon_line("warrior")}
+    war = {round(g.rung, 1): g for g in economy.weapon_line("warrior")}
     for t in range(1, 11):
         raw = economy.band_start(t)
         assert economy.rung_player_level_req(war[float(t)]) == \
@@ -129,9 +190,10 @@ def test_shoe_speed_hook_is_filled():
 
 
 def test_off_class_offer_is_the_previous_rung():
-    # level 11 unlocks rungs 1, 1.5, 2 → the rack offers 1.5
+    # 025: level 11 unlocks all of band 1 plus rung 2 — the rack offers
+    # the rung below the top, which is now band 1's last step
     g = economy.off_class_offer("archer", 11)
-    assert g.slug == "sinew_backed_bow"
+    assert g.slug == "emberflight_shortbow"
     # level 1 has only rung 1 — the rack still offers something
     assert economy.off_class_offer("archer", 1).slug == "ashwood_bow"
     assert economy.off_class_price(economy.FORGE["ashwood_bow"]) == 750
@@ -156,8 +218,9 @@ def test_next_locked_rung_is_always_visible():
     # 019: the rung you're saving for is a LOCKED ROW, not prose
     p = create_character(fresh("locked"), clazz="warrior")
     s = choose(p, "forge")
-    sword = next(o for o in s.options if o.id == "buy_iron_sword")
-    assert sword.locked and "level 6" in sword.hint and "450" in sword.hint
+    # 025: the next rung is one LEVEL away in band 1, not five
+    sword = next(o for o in s.options if o.id == "buy_notched_cleaver")
+    assert sword.locked and "level 2" in sword.hint and "280" in sword.hint
     boots = next(o for o in s.options if o.id == "buy_cobbled_boots")
     assert boots.locked and "level 3" in boots.hint
     # at level 3 the boots unlock and the NEXT pair takes the lock
@@ -187,7 +250,7 @@ def test_sorcerer_forge_points_at_the_arcanum():
     ids = {o.id for o in s.options}
     assert not any(i.startswith("buy_") and "staff" in i for i in ids)
     assert "buy_scrapwood_buckler" not in ids  # shields serve war+archer
-    assert "buy_padded_jerkin" in ids          # armor is shared
+    assert "buy_quilted_rags" in ids           # armor is shared (rung 1.2)
     assert "buy_cobbled_boots" in ids          # so are shoes
     assert any("Arcanum" in ln for ln in s.body_lines)
     # a forced staff buy at the Forge is turned away, not sold
@@ -271,20 +334,24 @@ def test_arcanum_opens_at_level_six():
     s = choose(p, "arcanum")
     assert p["location"] == "arcanum"
     ids = {o.id for o in s.options}
-    assert "buy_tallowwood_staff" in ids
-    assert "buy_coalglass_staff" in ids        # level 6 unlocks the mid
-    assert "buy_glass_bead_focus" in ids
+    # 025: level 6 racks band 1's rungs 1.4 and 1.5 — the ladder moved
+    # under this door, the door itself did not
+    assert "buy_gatewatch_baton" in ids
+    assert "buy_coalglass_staff" in ids
+    assert "buy_sootglass_bead" in ids          # the caster's guard
 
 
 def test_sorcerer_buys_staff_and_focus_at_the_arcanum():
     p = create_character(fresh("caster"), clazz="sorcerer")
-    p["level"], p["gold"] = 6, 1_000
+    p["level"], p["gold"] = economy.ARCANUM_LEVEL, 1_000
     choose(p, "arcanum")
-    choose(p, "buy_tallowwood_staff")
-    assert p["gear"]["weapon"] == "tallowwood_staff"
-    choose(p, "buy_glass_bead_focus")
-    assert p["gear"]["shield"] == "glass_bead_focus"
-    assert p["gold"] == 1_000 - 250 - 100
+    staff = economy.FORGE["ratbone_wand"]        # rung 1.2, level 3
+    focus = economy.FORGE["ratbone_charm"]
+    choose(p, f"buy_{staff.slug}")
+    assert p["gear"]["weapon"] == staff.slug
+    choose(p, f"buy_{focus.slug}")
+    assert p["gear"]["shield"] == focus.slug
+    assert p["gold"] == 1_000 - staff.price - focus.price
 
 
 def test_focus_refused_to_non_casters():
@@ -292,12 +359,13 @@ def test_focus_refused_to_non_casters():
     p["level"], p["gold"] = 6, 10_000
     s = choose(p, "arcanum")
     ids = {o.id for o in s.options}
-    assert "buy_glass_bead_focus" not in ids
-    s = choose(p, "buy_glass_bead_focus")
+    assert "buy_sootglass_bead" not in ids
+    s = choose(p, "buy_sootglass_bead")
     assert p["gear"]["shield"] is None
     # the off-class staff IS on the rack, one rung back, ×3
+    staves = {g.slug for g in economy.weapon_line("sorcerer")}
     staff = next((o for o in s.options
-                  if o.id.startswith("buy_") and "staff" in o.id), None)
+                  if o.id.removeprefix("buy_") in staves), None)
     assert staff is not None and "off-class" in staff.hint
 
 

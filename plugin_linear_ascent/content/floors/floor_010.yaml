@@ -26,6 +26,7 @@ encounters:
       It carried the king's standard until the standard burned. It
       fights like it still owes the debt.
     weight: 2
+    traits: [frail, feeble]
     prose: >-
       A wolf on a chain guards the crate-wall, banner-cloth knotted at
       its collar. It has stopped fighting the chain. It waits for you.
@@ -35,6 +36,7 @@ encounters:
       It taught a thousand goblins where to put a spear. It has no
       plans to be out-taught by you.
     weight: 3
+    traits: [sturdy, fierce]
     prose: >-
       A goblin sergeant halts its squad's drill, hands you one long
       look, and sends the recruits to lunch. This one it keeps.
@@ -44,7 +46,7 @@ encounters:
       It runs the king's word between camps and has never once been
       caught. It would rather die than be late.
     weight: 2
-    traits: [fast]
+    traits: [fast, lean, savage]
     prose: >-
       A goblin courier in cut-down harness sprints the raked paths
       with the King's dispatches — and swerves at you, because a

@@ -887,7 +887,19 @@ def warden_scene(p: dict, fl, note: str = "") -> Scene:
         lines.append(f"≈{left} full fights left to close it — {left} of "
                      "yours, or one each from as many blades")
     closes = wd.get("closes_in_s")
-    if hp < hp_max and closes is not None:
+    if economy.warden_silence_hours(fl.floor) is None:
+        # 025 §3: the siege floors. No regen, no silence window, no pity —
+        # say so plainly, because "come back tomorrow" is only a strategy
+        # if the player knows the wound will still be there.
+        if hp < hp_max:
+            lines.append("This one does not heal. Every blow landed here "
+                         "is permanent — leave and come back a day later "
+                         "and the wound is exactly as you left it.")
+        else:
+            lines.append("It stands whole, and it does not heal. From the "
+                         "first blow onward, every point you take off it "
+                         "stays off.")
+    elif hp < hp_max and closes is not None:
         lines.append(f"the wound closes in {_fmt_countdown(closes)} — "
                      "keep striking")
     if pity > 0:

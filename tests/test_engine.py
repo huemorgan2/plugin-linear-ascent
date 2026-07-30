@@ -379,7 +379,7 @@ def test_forge_tier_gated_by_level():
     assert not any(o.id == "buy_wolfbite" for o in s.options)
     # 019: the lock is a dimmed ROW with the level, not prose
     nxt = next(o for o in s.options if o.locked and o.id.startswith("buy_"))
-    assert "level 6" in nxt.hint
+    assert "level 2" in nxt.hint                 # 025: a rung per level
     s = choose(p, "buy_wolfbite")
     assert p["gear"]["weapon"] != "wolfbite"     # refused at level 1
     assert p["gold"] == 100_000                  # not charged
@@ -413,13 +413,24 @@ def test_elf_learns_faster():
 
 # ── 017: encounter traits → defense profiles ─────────────────────────────
 
-def test_floor_one_is_kindergarten():
-    """017 §2.3: floor 1 carries NO traits — every monster plain."""
+def test_floor_one_teaches_shapes_not_counters():
+    """017 §2.3 + 025 §1: floor 1 carries no COUNTER — no armor, resist,
+    flying or bulwark, because nothing has been bought to answer them
+    yet. It does carry archetypes: before 025 the whole floor shared one
+    stat line and all four animals were the same monster in costume."""
     from plugin_linear_ascent.content import schema
+    from plugin_linear_ascent import economy
     fl = schema.get_floor(1)
     assert len(fl.encounters) >= 4
+    counters = {"armored", "flying", "bulwark"}
+    shapes = set()
     for e in fl.encounters:
-        assert not e.traits, f"{e.id} carries traits on floor 1"
+        for t in e.traits:
+            assert t not in counters and not t.startswith(("armor_",
+                                                          "resist_")), \
+                f"{e.id} carries counter trait {t!r} on floor 1"
+        shapes.add(economy.creature_stats(1, e.traits))
+    assert len(shapes) >= 3, f"floor 1 has only {len(shapes)} stat lines"
 
 
 def test_profile_derived_and_stored_on_encounter():

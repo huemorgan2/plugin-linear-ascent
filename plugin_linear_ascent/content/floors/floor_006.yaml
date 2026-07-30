@@ -15,6 +15,7 @@ encounters:
       The sunken lanes bend sound. By the time you hear it, the lane
       has already chosen which of you leaves.
     weight: 3
+    traits: [lean, fierce]
     prose: >-
       Claws on packed earth, behind you, closing. In the hollow lane
       there is no room to circle — the wolf knows it too.
@@ -24,6 +25,7 @@ encounters:
       It cut shooting-slots in the hedge banks. It knows every one;
       you'll find them with your ribs.
     weight: 3
+    traits: [frail, feeble]
     prose: >-
       A goblin bursts through the hedge wall in a shower of thorn,
       scrap-rifle first, as surprised as you are and quicker to shoot.
@@ -44,6 +46,7 @@ encounters:
       It dens in the lane banks and takes what climbers drop. Quick
       teeth, quicker exits.
     weight: 2
+    traits: [lean, savage]
     prose: >-
       A marten the length of your arm flows down the hedge bank like
       spilled ink, all teeth and hunger, quick into the gap between

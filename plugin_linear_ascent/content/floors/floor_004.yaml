@@ -15,6 +15,7 @@ encounters:
       It tends the signal fires that called the horde down. It will
       die keeping one lit.
     weight: 3
+    traits: [sturdy, fierce]
     prose: >-
       A goblin sentry steps into the beam's edge, scrap-rifle raised,
       squinting past the glare at your silhouette.
@@ -24,6 +25,7 @@ encounters:
       It has learned the lamplight's edges and hunts one step
       outside them.
     weight: 3
+    traits: [lean, savage]
     prose: >-
       Along the dark edge of the beam a wolf keeps pace with you,
       appearing and vanishing at the light's border like a blade drawn
@@ -34,6 +36,7 @@ encounters:
       Half artisan, half arsonist. The lamps it hangs burn green and
       mark the paths its kin avoid.
     weight: 2
+    traits: [frail, feeble]
     prose: >-
       A goblin in a harness of stolen lenses is prying glass from the
       fallen pylon. It draws a shard like a knife, unwilling to share.
@@ -43,7 +46,7 @@ encounters:
       It rides the beacon updrafts above spear-height. Nothing on the
       ground has touched it in years.
     weight: 2
-    traits: [flying]
+    traits: [flying, frail]
     prose: >-
       Out of the beam drops a moth with a wingspan like a barn door,
       scales throwing the floodlight back in knives. It circles above

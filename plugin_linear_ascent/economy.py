@@ -155,6 +155,148 @@ def monster_stats(floor: int) -> tuple[int, int, int]:
     return atk, dfs, round(p_dmg * wilds_rounds(floor))
 
 
+# ── 025 §1: the stat archetype — a floor is a RANGE of animals ───────────
+# Before 025 every encounter on a floor shared one stat line: content may
+# author no numbers, and the only per-creature variation was the defense
+# axis (banned on floor 1 by the intro staircase) plus the specimen roll.
+# Four animals in four costumes, all two hits, all paying the same.
+#
+# So the archetype joins the trait vocabulary: qualitative words in the
+# YAML, numbers here, content still numberless. Two independent axes:
+#
+#   BODY  (frail/lean/sturdy/hulking) — how long the fight runs. A
+#         multiplier on the calibrated rounds-to-kill, hard-capped so no
+#         creature is ever a slog.
+#   BITE  (feeble/fierce/savage) — what the fight COSTS, expressed as a
+#         share of the at-level player's HP pool, exactly the way
+#         WARDEN_DMG_BUDGET is. ATK is then solved backwards out of the
+#         damage rule.
+#
+# The bite must be derived, not multiplied. The damage rule is
+# max(chip, raw − DEF/2) with chip = ceil(raw/4), so on floor 1 an ATK of
+# 5 against a kitted DEF of 14 can only ever land the 1-point chip: a
+# plain multiplier does nothing at the bottom of the tower. Multipliers
+# big enough to be felt on floor 1 (×4) then land ATK 140 on floor 10 and
+# kill an at-level player in two rounds. A pool share is right at both
+# ends by construction, and it stays right for floors 11-100 when their
+# archetypes get assigned.
+#
+# The PEER (no bite word) is left exactly as calibrated in 004/008/022 —
+# 025 adds the range around it, it does not re-tune the middle.
+
+BODY_ROUNDS = {"frail": 0.45, "lean": 0.75, "sturdy": 1.8, "hulking": 2.4}
+# MEASURED against the 017 fight sim, not derived on paper. The paper
+# figures (0.35/0.70 of the pool) read as lethal and played as harmless:
+# fights open AT RANGE, where a monster strikes at −50% while it closes,
+# so a short fight lands one halved blow and the killer archetype still
+# won 88% of the time. At 0.5/1.0 the sim gives brutes a 92% mean win and
+# killers 74% — fight a killer to the end and one time in four it buries
+# you, which is what "you will have to run from some of them" means.
+BITE_COST = {"feeble": 0.05, "fierce": 0.50, "savage": 1.00}
+
+WILDS_ROUNDS_HARD_MAX = 11.0    # the longest any wilds body may run
+# No wilds creature may take more than this share of the pool in ONE
+# round: death must always be preceded by a round you could have run in.
+WILDS_ROUND_CAP = 0.45
+
+
+def _archetype(traits) -> tuple[str, str]:
+    """(body word, bite word) — "" for either axis the content left out."""
+    body = bite = ""
+    for t in traits or ():
+        if t in BODY_ROUNDS:
+            body = t
+        elif t in BITE_COST:
+            bite = t
+    return body, bite
+
+# What the opener says about a shape you must read BEFORE committing —
+# running is only a real choice if the card tells you what walked in.
+BODY_TAG = {
+    "frail": "small and slight",
+    "lean": "lean and quick-ribbed",
+    "sturdy": "thick through the shoulders",
+    "hulking": "enormous — it fills the path",
+}
+BITE_TAG = {
+    "feeble": "half-starved and slow with it",
+    "fierce": "and it comes in hard",
+    "savage": "and something in it has gone wrong",
+}
+
+
+def archetype_note(traits) -> str:
+    """One clause naming this animal's body and bite, or "" for a peer."""
+    parts = [d[t] for d in (BODY_TAG, BITE_TAG)
+             for t in (traits or ()) if t in d]
+    return ", ".join(parts)
+
+
+def creature_rounds(floor: int, traits) -> float:
+    """Rounds-to-kill for THIS creature — the calibrated floor target
+    stretched by its body, capped so nothing is ever a slog."""
+    body, _ = _archetype(traits)
+    return min(WILDS_ROUNDS_HARD_MAX,
+               wilds_rounds(floor) * BODY_ROUNDS.get(body, 1.0))
+
+
+def creature_stats(floor: int, traits) -> tuple[int, int, int]:
+    """(ATK, DEF, HP) for THIS creature on `floor`. DEF stays flat — the
+    defense axis (armor/resist tiers) is how content varies durability;
+    the archetype varies the body and the bite."""
+    base_atk, dfs, base_hp = monster_stats(floor)
+    rounds = creature_rounds(floor, traits)
+    hp = max(1, round(base_hp * rounds / wilds_rounds(floor)))
+    _, bite = _archetype(traits)
+    if not bite:
+        return base_atk, dfs, hp
+    pool = reference_player_hp(floor)
+    _, p_def = _at_level_loadout(floor)
+    # A killer spends its whole cost inside its OWN body: a lean savage
+    # has fewer rounds to do it in, which is what makes it a glass cannon.
+    # A starved animal is budgeted over the calibrated peer length
+    # instead — otherwise a frail body (0.45× the rounds) divides the
+    # small cost by a small number and the prey bites like its peer again,
+    # which is exactly what it looked like on screen.
+    span = wilds_rounds(floor) if bite == "feeble" else rounds
+    per_round = min(BITE_COST[bite] * pool / span, WILDS_ROUND_CAP * pool)
+    # Invert the damage rule, BOTH branches: a landed blow deals
+    # max(raw/CHIP_DIVISOR, raw − DEF/2), so the raw roll that lands
+    # exactly `per_round` is the smaller of the two solutions. Solving the
+    # DEF branch alone leaves a starved animal still chipping for four —
+    # which is how a "feeble" prey ends up hitting as hard as its peer.
+    raw = min(CHIP_DIVISOR * per_round, per_round + p_def // 2)
+    atk = max(1, round(raw / 0.75))
+    # the bite word says which way from the calibrated peer it moves
+    return (min(base_atk, atk) if bite == "feeble" else max(base_atk, atk),
+            dfs, hp)
+
+
+# 025 §2: danger pays. Threat is mostly the body (the rounds it costs you)
+# and partly the bite (the HP it costs you). Before 025 XP had NO threat
+# modifier at all — a limping runt and an alpha paid identical XP — and
+# gold moved only on the specimen and profile axes.
+REWARD_MULT_CAP = 6.0
+BITE_PAY = {"feeble": 0.6, "fierce": 2.0, "savage": 3.0}
+
+# 025 §5: the rubber band. A draw the player would probably not survive
+# keeps a FIFTH of its weight — an 80% cut, never a ban. The tower must
+# still be able to put something in front of you that you have to run
+# from; that is the whole point of the archetypes, and the opener names
+# the shape before you commit.
+RUBBER_BAND_CUT = 0.20
+LETHAL_SHARE = 0.90       # a fight costing this much of your CURRENT HP
+
+
+def kill_reward_mult(traits) -> float:
+    """XP and gold multiplier for a creature's archetype: the rounds it
+    costs you times what it charges for them. Capped so one lucky draw
+    can never outpay a Warden."""
+    body, bite = _archetype(traits)
+    return min(REWARD_MULT_CAP,
+               BODY_ROUNDS.get(body, 1.0) * BITE_PAY.get(bite, 1.0))
+
+
 # 008: per-encounter specimen roll — same averages, real variance.
 # Hard specimens pay more; the tag is visible on the encounter card so
 # running from an alpha is an informed choice. Expectations of hp and
@@ -400,12 +542,38 @@ def reference_level(floor: int) -> int:
     return min(floor, LEVEL_CAP)
 
 
+def reference_rung(floor: int) -> float:
+    """The rung the at-level player is standing on. 025: band 1 sells a
+    rung per level, and the player buys them — before 025 the reference
+    read the WHOLE tier (bonus 8) while a level-6 player could already
+    own rung 1.5 (bonus 23), so floors 6–10 were tuned against a
+    climber who no longer existed. That understatement is most of why
+    the first ten floors played flat. Bands 2+ keep the whole-tier
+    reference until their sub-rungs exist (MUST_BE_DONE_LATER §4)."""
+    tier = gear_tier_for_floor(floor)
+    if tier != 1:
+        return float(tier)
+    return 1 + (min(floor, BAND1_STEPS) - 1) / BAND1_STEPS
+
+
+def _reference_bonus(floor: int, slot: str) -> int:
+    """Base bonus of the reference player's piece in `slot`, honing
+    excluded — read off the ladder the shops actually stock."""
+    by_tier = {"weapon": _WEAPON_ATK_BY_TIER, "shield": _SHIELD_DEF_BY_TIER,
+               "armor": _ARMOR_DEF_BY_TIER}[slot]
+    rung = reference_rung(floor)
+    t = int(rung)
+    if rung == t:
+        return by_tier[t]
+    k = round((rung - t) * BAND1_STEPS)
+    return _step_bonus(by_tier[t], by_tier[t + 1], k)
+
+
 def reference_armor_bonus(floor: int) -> int:
     """Armor bonus of the at-level player (base + weighted hone) — the
     piece that also feeds max HP."""
-    tier = gear_tier_for_floor(floor)
-    hone = reference_hone(floor)
-    return _ARMOR_DEF_BY_TIER[tier] + HONE_WEIGHT["armor"] * hone
+    return (_reference_bonus(floor, "armor")
+            + HONE_WEIGHT["armor"] * reference_hone(floor))
 
 
 def reference_player_hp(floor: int) -> int:
@@ -416,23 +584,31 @@ def reference_player_hp(floor: int) -> int:
 
 def reference_hone(floor: int) -> int:
     """Hone level of the design's at-level player: honing trails the
-    climb slightly (income funds it with a lag, and fresh climbers in
-    band 1 are still finding the bench)."""
-    return max(0, floor - band_start(gear_tier_for_floor(floor))
-               - REFERENCE_HONE_LAG)
+    climb slightly (income funds it with a lag).
+
+    025: zero through band 1. The within-band growth there is now the
+    rung ladder itself (a step per level), and counting both would put
+    the reference at floor 10 ABOVE the reference at floor 11 — a cliff
+    where the tower is supposed to be a straight line. Honing stays what
+    it always was in band 1: the diligent climber's edge over the
+    reference, not the reference. Bands 2+ have no sub-rungs yet, so
+    honing still carries them (MUST_BE_DONE_LATER §4)."""
+    tier = gear_tier_for_floor(floor)
+    if tier == 1:
+        return 0
+    return max(0, floor - band_start(tier) - REFERENCE_HONE_LAG)
 
 
 def _at_level_loadout(floor: int) -> tuple[int, int]:
     """(ATK, DEF) of the design's at-level player: level = min(floor,
     cap), current tier set, honing 2 floors behind. The reference all
     tuning points at."""
-    tier = gear_tier_for_floor(floor)
     hone = reference_hone(floor)
     lvl = reference_level(floor)
-    return (player_atk(lvl, _WEAPON_ATK_BY_TIER[tier]
+    return (player_atk(lvl, _reference_bonus(floor, "weapon")
                        + HONE_WEIGHT["weapon"] * hone),
             player_def(lvl,
-                       _SHIELD_DEF_BY_TIER[tier]
+                       _reference_bonus(floor, "shield")
                        + HONE_WEIGHT["shield"] * hone,
                        reference_armor_bonus(floor)))
 
@@ -502,12 +678,30 @@ def warden_gold(floor: int) -> int:
 
 REFERENCE_ACTIVE = 200         # sizing fallback when no census exists
 WARDEN_POOL_FIGHTS = 8         # pool per required striker ≈ one full bar
-WARDEN_POOL_FIGHTS_MIN = 2     # 024: …ramping up from this at floor 1
+# 024 set this to 2 to rescue a floor-1 gate that read 1,032 HP. 025
+# raises it 60%: on the siege floors the wound never closes, so the wall
+# is allowed to be a wall. Raising the ANCHOR rather than multiplying the
+# siege band keeps the ramp one straight line — a ×1.6 on floors 1-10
+# alone put a 6.2 → 4.1 cliff at floor 11, which is the exact dip 024
+# exists to prevent.
+WARDEN_POOL_FIGHTS_MIN = 3.2
 WARDEN_SILENCE_MIN_H = 6.0     # silence window at floor 31…
 WARDEN_SILENCE_MAX_H = 30.0    # …stretching to this by floor 90+
 WARDEN_SILENCE_SOLO_H = 30.0   # 024: a day and a night, inside the band
 WARDEN_PITY_PCT = 0.03         # off max HP per fully-closed wound, forever
-WARDEN_POOL_TUNE = 2           # 024: bump to resize live pools on read
+WARDEN_POOL_TUNE = 3           # 024/025: bump to resize live pools on read
+
+# ── 025 §3: the siege floors ─────────────────────────────────────────────
+# "The first bosses up to stage 10 can not rejuvenate — so they can have a
+# large energy but even a single player can have at them over time."
+#
+# 024 gave the solo band a 30-hour silence window, which is generous but
+# still a clock: forget the gate for a day and a night and the wound is
+# gone. Below the siege floor there is no clock at all. A wound never
+# closes, no regen ever runs, and no pity is ever paid — so the pool is
+# allowed to be a wall (see WARDEN_POOL_FIGHTS_MIN), because every blow
+# anyone lands on it is permanent.
+WARDEN_SIEGE_FLOOR = 10
 
 # a player spending every ⚡ on the keep: fights per hour, sustained
 SUSTAINED_FIGHTS_PER_HOUR = (60 / ENERGY_REGEN_MIN) / COST_WARDEN_ATTEMPT
@@ -593,11 +787,14 @@ def world_warden_regen_hourly(floor: int) -> float:
     return SUSTAINED_FIGHTS_PER_HOUR / (2 * warden_pool_fights(floor))
 
 
-def warden_silence_hours(floor: int) -> float:
-    """W(F): hours of silence that close the wound fully. 024: the solo
-    band has one too — a day and a night, so a wound outlives the dawn
-    the climber needs, but a tower that forgets a Warden for a full day
-    finds it whole (and pays the pity for it)."""
+def warden_silence_hours(floor: int) -> float | None:
+    """W(F): hours of silence that close the wound fully — or None on the
+    siege floors, where it never closes at all. 024 gave the solo band a
+    day and a night, so a wound outlived the dawn a climber needs; 025
+    takes the clock off the first ten gates entirely, because a wall you
+    can only chip at is only fair if the chips stay."""
+    if floor <= WARDEN_SIEGE_FLOOR:
+        return None
     if floor <= WARDEN_SOFT_FLOOR:
         return WARDEN_SILENCE_SOLO_H
     t = min(1.0, max(0.0, (floor - 31) / 59))    # 31 → 90+
@@ -677,6 +874,8 @@ class GearItem:
     rung: float = 0.0  # 1, 1.5, 2 … (0 = starter / pre-004 semantics)
     speed: int = 0     # shoes: +speed on the 1–10 scale
     level: int = 0     # explicit level gate override (shoes ladder)
+    style: str = ""    # 025: "" plain | keen | warded (same rung, a choice)
+    base: str = ""     # style variants: the plain slug they are cut from
 
 
 # 004 §4.4 reprice: tiers 3–10 follow the quadratic ladder
@@ -732,7 +931,6 @@ _ARMOR_DEF_BY_TIER = {t: a[2] for t, _w, _s, a, _p in _FORGE_ROWS}
 # names differ. Names below; numbers all derive from _FORGE_ROWS.
 
 _WARRIOR_MIDS = {
-    1.5: ("Iron Sword", "honest forge-iron, honest weight"),
     2.5: ("Bloodgroove Falchion", "the channel drinks so the edge doesn't"),
     3.5: ("Seared Cleaver", "quench-burnt edge, still warm"),
     4.5: ("Moonwake Saber", "elven mono-edge, second polish"),
@@ -745,7 +943,6 @@ _WARRIOR_MIDS = {
 
 _ARCHER_WEAPONS = {
     1: ("Ashwood Bow", "straight-grain ash, dependable"),
-    1.5: ("Sinew-Backed Bow", "backed for the longer throw"),
     2: ("Wolfsight Recurve", "shock-tip recurve, keen at distance"),
     2.5: ("Horncore Bow", "horn core under tension"),
     3: ("Emberflight Longbow", "dwarf-lathed, plasma nock"),
@@ -767,7 +964,6 @@ _ARCHER_WEAPONS = {
 
 _SORCERER_WEAPONS = {
     1: ("Tallowwood Staff", "candle-soft wood that holds a spark"),
-    1.5: ("Coalglass Staff", "coalglass core, banked heat"),
     2: ("Stormtwig Staff", "green wood that remembers lightning"),
     2.5: ("Embervein Staff", "ember veins under the bark"),
     3: ("Ashspire Staff", "dwarf-kilned, draws like a chimney"),
@@ -788,7 +984,6 @@ _SORCERER_WEAPONS = {
 }
 
 _SHIELD_MIDS = {
-    1.5: ("Banded Kite", "iron bands over ashwood"),
     2.5: ("Boarhide Aspis", "boiled hide on a boss of iron"),
     3.5: ("Kilnplate Round", "kiln-fired ceramic facing"),
     4.5: ("Moonglass Targe", "light bends around the rim"),
@@ -800,7 +995,6 @@ _SHIELD_MIDS = {
 }
 
 _ARMOR_MIDS = {
-    1.5: ("Studded Jack", "canvas and rivets, better than luck"),
     2.5: ("Boiled Cuirass", "leather boiled to plank"),
     3.5: ("Kilnforged Scale", "ceramic scale, kiln-set"),
     4.5: ("Moonthread Weave", "silverthread, double weave"),
@@ -841,6 +1035,109 @@ _SHOE_ROWS = [
 ]
 
 
+# ── 025 §4: band 1 sells something at every level ───────────────────────
+# The complaint that opened 025: "I worked 3 days to advance a level only
+# to find … I have no more things to buy at level 4." Band 1 had three
+# gate moments across ten levels (rung 1 at level 1, the shoes at 3, the
+# 1.5 mids at 6). It now has ten: rung 1.k opens at level 1+k.
+#
+# Numbers are not authored — they interpolate between the tier-1 and
+# tier-2 rows: bonus linearly, price geometrically. At k=5 that IS the
+# old mid (its bonus was the midpoint, its price the geometric mean), so
+# every pre-025 piece keeps its exact power and price and the 1.5 names
+# simply move into this table. Bands 2–10 keep the single mid until the
+# 1–10 tuning settles (MUST_BE_DONE_LATER §4).
+BAND1_STEPS = 10
+
+_BAND1_LADDER = {
+    "warrior": {
+        1: ("Notched Cleaver", "a butcher's tool that changed trades"),
+        2: ("Ratcatcher's Dirk", "thin, quick, and it knows the dark"),
+        3: ("Boarspine Shortsword", "ground from a tusk that gored its owner"),
+        4: ("Gatewatch Gladius", "surplus, stamped, sharpened by someone who "
+            "cared"),
+        5: ("Iron Sword", "honest forge-iron, honest weight"),
+        6: ("Wolfsteel Broadsword", "quenched in the hide it took"),
+        7: ("Goblin-Iron Falchion", "captured, straightened, resentful"),
+        8: ("Warden's Cast-Off", "a keep blade, rehilted for smaller hands"),
+        9: ("Emberquench Blade", "the last of the low forge's heat"),
+    },
+    "archer": {
+        1: ("Green Hazel Bow", "cut this season, still learning"),
+        2: ("Ratgut Shortbow", "the string is exactly what you fear it is"),
+        3: ("Boarhorn Shortbow", "horn-tipped and boar-stubborn"),
+        4: ("Gatewatch Shortbow", "surplus, stamped, honest"),
+        5: ("Sinew-Backed Bow", "backed for the longer throw"),
+        6: ("Wolfsinew Bow", "wolf tendon draws harder than hemp"),
+        7: ("Goblin-Notch Bow", "taken off a straggler who missed"),
+        8: ("Warden's Castbow", "a keep bow with the crest filed away"),
+        9: ("Emberflight Shortbow", "nocks scorched black at the low forge"),
+    },
+    "sorcerer": {
+        1: ("Kindling Rod", "it barely holds a spark — but it holds"),
+        2: ("Ratbone Wand", "small bones, quick current"),
+        3: ("Boarhide Stave", "wrapped in hide that took a beating first"),
+        4: ("Gatewatch Baton", "issued to whoever could read"),
+        5: ("Coalglass Staff", "coalglass core, banked heat"),
+        6: ("Wolfsong Staff", "it howls a half-beat before you do"),
+        7: ("Goblin-Fetish Staff", "someone else's god, borrowed"),
+        8: ("Warden's Broken Rod", "cracked at the keep, mended in town"),
+        9: ("Emberquench Staff", "banked low-forge heat in a walking stick"),
+    },
+    "shield": {
+        1: ("Plank Shield", "a door that lost its house"),
+        2: ("Ratskin Round", "cheap, light, faintly awful"),
+        3: ("Boarhide Buckler", "hide over a boss of iron"),
+        4: ("Gatewatch Round", "surplus, dented, dependable"),
+        5: ("Banded Kite", "iron bands over ashwood"),
+        6: ("Wolfhide Targe", "the pelt still turns a claw"),
+        7: ("Goblin-Plate Buckler", "riveted from a dozen dead things"),
+        8: ("Warden's Cast-Off Guard", "keep-issue, crest filed off"),
+        9: ("Emberband Round", "banded hot, cooled slow"),
+    },
+    "armor": {
+        1: ("Ratskin Vest", "it smells of the drain it came out of"),
+        2: ("Quilted Rags", "layers, and layers, and layers"),
+        3: ("Boarhide Jack", "thick exactly where it matters"),
+        4: ("Gatewatch Surplus", "issued, returned, reissued"),
+        5: ("Studded Jack", "canvas and rivets, better than luck"),
+        6: ("Wolfpelt Coat", "warm, and it remembers hunting"),
+        7: ("Goblin-Scrap Brigandine", "plates off a dozen dead things"),
+        8: ("Warden's Cast Mail", "keep mail, resized badly"),
+        9: ("Emberforge Scale", "scales set in the low forge"),
+    },
+    "focus": {
+        1: ("Chipped Lens", "a spectacle lens with a change of career"),
+        2: ("Ratbone Charm", "it rattles when the spell lands"),
+        3: ("Boartooth Fetish", "a tusk, a thong, a stubborn spark"),
+        4: ("Gatewatch Signet", "issued to whoever could read"),
+        5: ("Sootglass Bead", "soot trapped in glass, and it glows"),
+        6: ("Wolfeye Stone", "it looks back"),
+        7: ("Goblin Idol-Shard", "a chip of someone else's altar"),
+        8: ("Warden's Cracked Prism", "cracked, and the crack focuses"),
+        9: ("Emberglass Lens", "low-forge glass, still faintly warm"),
+    },
+}
+
+# ── 025 §4: styles — the same steel, three temperaments ─────────────────
+# "we can have the same icon in different colours". A style is a real
+# choice on the rung you can already afford, not a fourth rung: keen buys
+# power with upkeep, warded buys upkeep with nothing. Same glyph, three
+# tints (render.py), three prices.
+#   (bonus ×, price ×, durability pool ×)
+GEAR_STYLES: dict[str, tuple[float, float, float]] = {
+    "keen": (1.15, 1.40, 0.65),
+    "warded": (1.00, 1.20, 1.75),
+}
+STYLE_FLAVOR = {
+    "keen": "ember-tempered — keener than it should be, and it knows it",
+    "warded": "frost-warded — no keener, and it outlasts three of these",
+}
+STYLE_WORD = {"": "plain", "keen": "keen", "warded": "warded"}
+# 025: styles exist through band 1 while the 1–10 climb is being tuned.
+STYLE_MAX_RUNG = 2.0
+
+
 def _slugify(name: str) -> str:
     return name.lower().replace("'", "").replace(" ", "_").replace(
         "—", "").replace(",", "").replace("-", "_")
@@ -850,23 +1147,57 @@ def _gmean_price(a: int, b: int) -> int:
     return round(math.sqrt(a * b) / 10) * 10
 
 
+def _step_bonus(base: int, top: int, k: int) -> int:
+    """Bonus of sub-rung k between two whole tiers — linear, so k=5
+    lands exactly on the pre-025 mid."""
+    return base + round((top - base) * k / BAND1_STEPS)
+
+
+def _step_price(base: int, top: int, k: int) -> int:
+    """Price of sub-rung k — geometric, so days-to-afford is even and
+    k=5 lands exactly on the pre-025 mid's geometric mean."""
+    return round(base * (top / base) ** (k / BAND1_STEPS) / 10) * 10
+
+
 def _build_forge() -> dict[str, GearItem]:
     items: dict[str, GearItem] = {}
 
     def put(name: str, flavor: str, slot: str, rung: float, bonus: int,
-            price: int, line: str = "", speed: int = 0, level: int = 0):
+            price: int, line: str = "", speed: int = 0, level: int = 0,
+            style: str = "", base: str = ""):
         slug = _slugify(name)
         assert slug not in items, f"forge slug collision: {slug}"
         items[slug] = GearItem(slug, name, flavor, slot, int(rung), bonus,
                                price, line=line, rung=float(rung),
-                               speed=speed, level=level)
+                               speed=speed, level=level, style=style,
+                               base=base)
+        return items[slug]
 
     rows = {t: (w, s, a, p) for t, w, s, a, p in _FORGE_ROWS}
     for tier, (w, s, a, (pw, ps, pa)) in rows.items():
         put(w[0], w[1], "weapon", tier, w[2], pw, line="warrior")
         put(s[0], s[1], "shield", tier, s[2], ps)
         put(a[0], a[1], "armor", tier, a[2], pa)
-    for t in range(1, 10):
+
+    # band 1: a rung per level, interpolated between T1 and T2
+    (bw, bs, ba, (bpw, bps, bpa)) = rows[1]
+    (tw, ts, ta, (tpw, tps, tpa)) = rows[2]
+    for k in range(1, BAND1_STEPS):
+        r = 1 + k / BAND1_STEPS
+        n, f = _BAND1_LADDER["warrior"][k]
+        put(n, f, "weapon", r, _step_bonus(bw[2], tw[2], k),
+            _step_price(bpw, tpw, k), line="warrior")
+        n, f = _BAND1_LADDER["shield"][k]
+        put(n, f, "shield", r, _step_bonus(bs[2], ts[2], k),
+            _step_price(bps, tps, k))
+        n, f = _BAND1_LADDER["armor"][k]
+        put(n, f, "armor", r, _step_bonus(ba[2], ta[2], k),
+            _step_price(bpa, tpa, k))
+        n, f = _BAND1_LADDER["focus"][k]
+        put(n, f, "shield", r, _step_bonus(bs[2], ts[2], k),
+            _step_price(bps, tps, k), line="sorcerer")
+
+    for t in range(2, 10):
         w1, s1, a1, (pw1, ps1, pa1) = rows[t]
         w2, s2, a2, (pw2, ps2, pa2) = rows[t + 1]
         r = t + 0.5
@@ -883,18 +1214,36 @@ def _build_forge() -> dict[str, GearItem]:
                if g.slot == "weapon" and g.line == "warrior"}
     for line, table in (("archer", _ARCHER_WEAPONS),
                         ("sorcerer", _SORCERER_WEAPONS)):
-        for r, (n, f) in table.items():
+        rungs = dict(table)
+        rungs.update({1 + k / BAND1_STEPS: nf
+                      for k, nf in _BAND1_LADDER[line].items()})
+        for r, (n, f) in rungs.items():
             ref = warrior[float(r)]
             put(n, f, "weapon", float(r), ref.bonus, ref.price, line=line)
 
     shields = {g.rung: g for g in items.values()
-               if g.slot == "shield" and g.rung == int(g.rung)}
+               if g.slot == "shield" and g.rung == int(g.rung)
+               and not g.line}
     for t, (n, f) in _FOCUS_NAMES.items():
         ref = shields[float(t)]
         put(n, f, "shield", float(t), ref.bonus, ref.price, line="sorcerer")
 
     for t, n, f, spd, price, lvl in _SHOE_ROWS:
         put(n, f, "shoes", float(t), 0, price, speed=spd, level=lvl)
+
+    # 025 §4: keen and warded cuts of every band-1 rung. Same rung, same
+    # gate, same glyph in another tint — a decision at the counter rather
+    # than a queue.
+    plain = [g for g in list(items.values())
+             if g.slot in ("weapon", "shield", "armor")
+             and 1 <= g.rung < STYLE_MAX_RUNG]
+    for g in plain:
+        for style, (bm, pm, _pool) in GEAR_STYLES.items():
+            bonus = (g.bonus if bm == 1.0
+                     else max(g.bonus + 1, round(g.bonus * bm)))
+            put(f"{style.title()} {g.name}", STYLE_FLAVOR[style], g.slot,
+                g.rung, bonus, round(g.price * pm / 10) * 10,
+                line=g.line, style=style, base=g.slug)
     return items
 
 
@@ -952,10 +1301,25 @@ def forge_tier(tier: int) -> list[GearItem]:
 
 
 def gear_rungs(slot: str, line: str = "") -> list[GearItem]:
-    """All PAID rungs of a slot (and weapon/focus line), rung-sorted."""
+    """All PAID rungs of a slot (and weapon/focus line), rung-sorted —
+    025: plain steel only. Style cuts hang off their plain rung
+    (`gear_styles`) so a ladder stays a ladder."""
     return sorted((g for g in FORGE.values()
-                   if g.slot == slot and g.line == line and g.rung >= 1),
+                   if g.slot == slot and g.line == line and g.rung >= 1
+                   and not g.style),
                   key=lambda g: g.rung)
+
+
+def gear_styles(g: GearItem) -> list[GearItem]:
+    """The keen/warded cuts of a plain rung, in table order."""
+    return [FORGE[s] for s in
+            (_slugify(f"{st.title()} {g.name}") for st in GEAR_STYLES)
+            if s in FORGE]
+
+
+def style_of(slug: str) -> str:
+    g = FORGE.get(slug)
+    return g.style if g else ""
 
 
 def weapon_line(line: str) -> list[GearItem]:
@@ -963,13 +1327,14 @@ def weapon_line(line: str) -> list[GearItem]:
 
 
 def _rung_gate_raw(g: GearItem) -> int:
-    """The rung's natural threshold (a floor number): rung T at
-    band_start(T), T.5 at band_start(T)+5 — the shoes ladder carries
-    explicit gates instead."""
+    """The rung's natural threshold (a floor number): rung T.k opens k
+    steps into its band, so T at band_start(T) and T.5 at band_start+5
+    exactly as before 025 — band 1's nine sub-rungs land one per level.
+    The shoes ladder carries explicit gates instead."""
     if g.level:
         return g.level
     t = int(g.rung)
-    return band_start(t) + (5 if g.rung != t else 0)
+    return band_start(t) + round((g.rung - t) * BAND1_STEPS)
 
 
 def rung_player_level_req(g: GearItem) -> int:
@@ -1019,8 +1384,9 @@ def line_twin(g: GearItem, line: str) -> GearItem | None:
     its twin costs its holder nothing."""
     if g.slot != "weapon" or g.rung < 1 or not line or g.line == line:
         return None
-    for other in weapon_line(line):
-        if other.rung == g.rung:
+    for other in FORGE.values():
+        if (other.slot == "weapon" and other.line == line
+                and other.rung == g.rung and other.style == g.style):
             return other
     return None
 
@@ -1094,8 +1460,12 @@ def durability_pool(tier: float) -> int:
 def item_pool(item: GearItem) -> int:
     """Pool for a specific piece — mid-rungs (rung 1.5, 2.5…) wear a
     touch faster than the whole tier below them, so the rung is the
-    truth when the item carries one."""
-    return durability_pool(item.rung or item.tier)
+    truth when the item carries one. 025: the style is the other half of
+    the truth — keen steel is spent steel, warded steel is patient."""
+    pool = durability_pool(item.rung or item.tier)
+    if item.style:
+        pool = round(pool * GEAR_STYLES[item.style][2])
+    return pool
 
 
 def repair_price(item: GearItem, missing_frac: float) -> int:
@@ -1147,6 +1517,13 @@ class Relic:
     group: str = ""        # per-fight exclusivity ("life")
 
 
+# 025 §4: the tactical shelf comes down to meet the archetypes. Before
+# 025 the counters (curse, strip, hook, quivers) mostly sat at floor 11
+# while the traits they answer appear from floor 2 — so the first ten
+# floors sold a climber nothing but steel, and a walled matchup was a
+# wall rather than a shopping list. Each counter now lands one floor
+# after the trait it answers arrives (TRAIT_INTRO_FLOOR), which is also
+# the "upgrades buy access, not comfort" rule with a price tag on it.
 RELICS: dict[str, Relic] = {r.slug: r for r in [
     # 010 retune (2026-07-28): quivers 0.3→0.2 DI, piercing 0.5→0.35.
     # The stacked-drain gate charges each class one wall-push a day
@@ -1155,31 +1532,31 @@ RELICS: dict[str, Relic] = {r.slug: r for r in [
     Relic("poison_arrows", "Poisoned Arrows",
           "true damage for 3 rounds — seeps past any plate",
           "no stacking; Wardens and venomproof things shrug it off",
-          0.2, 6, "forge", count=5),
+          0.2, 4, "forge", count=5),
     Relic("slowing_arrows", "Slowing Arrows",
           "the target drops 2 speed for the fight — the kiting answer",
           "wears off with the fight; wasted on anything already slow",
-          0.2, 8, "forge", count=5),
+          0.2, 5, "forge", count=5),
     Relic("piercing_arrows", "Piercing Arrows",
           "the shot ignores armor tiers entirely",
           "five to a quiver, archer hands only",
-          0.35, 11, "forge", count=5, clazz="archer"),
+          0.35, 8, "forge", count=5, clazz="archer"),
     Relic("fire_arrows", "Fire Arrows",
           "+50% burst on the shot; burns regeneration out",
           "plate still turns fire-tipped shafts like any arrow",
-          0.2, 11, "forge", count=5),
+          0.2, 8, "forge", count=5),
     Relic("weapon_oil", "Weapon Oil",
           "your next 10 strikes hit +25% — steel or string, always works",
           "ten strikes, then the flask is gone",
-          0.2, 6, "forge"),
+          0.2, 2, "forge"),
     Relic("entangling_net", "Entangling Net",
           "the monster loses its round tangled — it cannot close or flee",
           "three to a pack; a Warden tears through it instantly",
-          0.25, 11, "forge", count=3, clazz="warrior"),
+          0.25, 5, "forge", count=3, clazz="warrior"),
     Relic("sky_hook", "Sky-Hook",
           "your steel reaches the airborne for this whole fight",
           "five uses a hook, one burned per fight",
-          0.4, 11, "forge", count=5, clazz="warrior"),
+          0.4, 6, "forge", count=5, clazz="warrior"),
     # 010 retune (2026-07-28): vials 0.3→0.1 DI. One vial is one FIGHT,
     # so at 0.3 the mage's wall-push cost 3.6× the warrior's net and
     # broke the stacked-drain ceiling at every band; 0.1 puts all three
@@ -1187,11 +1564,11 @@ RELICS: dict[str, Relic] = {r.slug: r for r in [
     Relic("strip_potion", "Resistance-Strip Potion",
           "dissolves the target's spellguard for the fight",
           "one fight, one vial",
-          0.1, 6, "arcanum", clazz="sorcerer"),
+          0.1, 4, "arcanum", clazz="sorcerer"),
     Relic("curse_scroll", "Curse Scroll",
           "halves the target's plate for the fight",
           "one fight, one scroll",
-          0.1, 6, "arcanum", clazz="sorcerer"),
+          0.1, 3, "arcanum", clazz="sorcerer"),
     Relic("polymorph_dust", "Polymorph Dust",
           "the monster becomes a harmless critter — the fight simply ends",
           "no loot, no XP, never works on Wardens; one pinch",

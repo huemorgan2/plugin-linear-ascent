@@ -8,7 +8,9 @@ def test_monster_stats_match_design_table():
     # player's damage × a rounds budget — quick kills early, never a
     # slog.  022/002 retune: the at-level player now carries gear-first
     # power (weapon 30T−22, weighted hone), so wilds HP re-derived.
-    assert economy.monster_stats(5) == (18, 15, 68)
+    # 025 §4: band 1 sells a rung per level, so the at-level player on
+    # floor 5 hits harder and the animals there carry the HP to match.
+    assert economy.monster_stats(5) == (18, 15, 86)
     assert economy.monster_stats(25) == (84, 75, 525)
     assert economy.monster_stats(55) == (184, 165, 756)
     assert economy.monster_stats(95) == (316, 285, 966)

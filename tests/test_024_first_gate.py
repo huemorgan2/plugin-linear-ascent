@@ -15,12 +15,16 @@ from tests.test_022_001_one_list_of_bosses import (playing, warden_world)
 
 # ── A. the pool ramps across the solo band ───────────────────────────────
 
-def test_first_gate_is_two_fights_not_eight():
+def test_first_gate_is_a_few_fights_not_eight():
+    """024 cut the first gate from eight near-death fights to two. 025
+    raised the anchor to 3.2 — the wound there never closes now, so the
+    wall may be thicker — but it stays a world away from the flat 8 that
+    made floor 1 the worst-tuned point in the tower."""
     pool = economy.world_warden_hp(1)
     unit = economy.strike_fight_damage(1)
-    assert economy.warden_pool_fights(1) == 2
-    assert round(pool / unit) == 2
-    # and it fits inside a single energy bar, with room to spare
+    assert economy.warden_pool_fights(1) == economy.WARDEN_POOL_FIGHTS_MIN
+    assert 3 <= pool / unit <= 4
+    # and it still fits inside a single energy bar
     bar = economy.energy_cap(economy.gear_tier_for_floor(1)) \
         // economy.COST_WARDEN_ATTEMPT
     assert pool / unit <= bar
@@ -56,23 +60,26 @@ def test_no_floor_in_the_band_is_weaker_than_the_floor_below():
     assert pools == sorted(pools), pools
 
 
-def test_the_effort_curve_is_a_straight_line_two_to_eight():
+def test_the_effort_curve_is_a_straight_line_to_eight():
     """What the climber actually feels is FIGHTS, not HP. One honest step
-    per floor, 2 at the first gate to 8 at the soft floor — no cliffs
-    (rounding the ramp to whole fights put +35–40% steps on 14, 17, 21
-    and 25) and no plateaus."""
+    per floor, from the first gate's anchor to 8 at the soft floor — no
+    cliffs (rounding the ramp to whole fights put +35–40% steps on 14,
+    17, 21 and 25) and no plateaus. 025 raised the anchor for the siege
+    floors; raising the ANCHOR rather than multiplying floors 1-10 is
+    what keeps this one line instead of two with a cliff between them."""
+    base = float(economy.WARDEN_POOL_FIGHTS_MIN)
     effort = [economy.world_warden_hp(f) / economy.strike_fight_damage(f)
               for f in range(1, 31)]
-    assert effort[0] == 2.0
+    assert abs(effort[0] - base) < 0.05
     assert abs(effort[-1] - 8.0) < 0.25
-    step = (8.0 - 2.0) / 29
+    step = (8.0 - base) / 29
     for fno, (a, b) in enumerate(zip(effort, effort[1:]), start=1):
         # the raw unit rides integer round counts and can wobble a
         # fraction of a fight between neighbours; what must never happen
         # is a backslide a climber could feel
         assert -0.1 < b - a < 3 * step, (fno, a, b)
     for fno, want in enumerate(effort, start=1):
-        expected = 2.0 + step * (fno - 1)
+        expected = base + step * (fno - 1)
         assert abs(want - expected) < 0.5, (fno, want, expected)
 
 
@@ -103,9 +110,13 @@ def test_floors_31_plus_are_numerically_untouched():
 def test_a_solo_wound_outlives_the_dawn_the_climber_needs():
     """A body heals at dawn and nowhere else, so a lone climber's honest
     cadence is one strike a day. A wound that closes faster than that is
-    a wound one player can never finish."""
+    a wound one player can never finish. 025: through the siege floor it
+    does not close at ALL."""
     for fno in (1, 12, 30):
         assert economy.world_warden_regen_hourly(fno) == 0.0
+    for fno in range(1, economy.WARDEN_SIEGE_FLOOR + 1):
+        assert economy.warden_silence_hours(fno) is None, fno
+    for fno in (11, 12, 30):
         assert economy.warden_silence_hours(fno) > 24.0
 
 
@@ -117,18 +128,18 @@ def test_deep_floors_keep_their_trickle_and_their_window():
 
 
 def test_one_climber_can_actually_close_the_first_gate():
-    """The whole point. Two full fights, six energy, and the wound is
-    still there when he comes back healed — so the gate falls to one
-    player inside two dawns."""
+    """The whole point. A handful of full fights, and the wound is still
+    exactly there whenever he comes back — 025 took the clock off it, so
+    the gate cannot outlast a lone climber no matter how slowly he goes."""
     pool = economy.world_warden_hp(1)
     per_fight = economy.strike_fight_damage(1)
     fights = -(-pool // per_fight)
-    assert fights <= 2
+    assert fights <= 4
     assert fights * economy.COST_WARDEN_ATTEMPT \
         <= economy.energy_cap(1, "human")
-    # nothing heals between his visits but a full day of neglect
-    healed_overnight = economy.world_warden_regen_hourly(1) * pool * 12
-    assert healed_overnight == 0
+    # and nothing heals it — not a trickle, not a week of neglect
+    assert economy.world_warden_regen_hourly(1) == 0
+    assert economy.warden_silence_hours(1) is None
 
 
 # ── C. pay tracks the work ───────────────────────────────────────────────

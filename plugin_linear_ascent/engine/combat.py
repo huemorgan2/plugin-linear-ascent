@@ -91,26 +91,62 @@ def _ledger(p: dict, kind: str, gold: int = 0, xp: int = 0, note: str = "") -> N
         {"kind": kind, "gold": gold, "xp": xp, "note": note})
 
 
+def would_probably_kill(p: dict, floor, enc) -> bool:
+    """025 §5: could this creature, met right now, finish you? Analytic —
+    rounds-to-kill against damage-taken-per-round, read off the player's
+    CURRENT sheet and CURRENT wounds. Deliberately blind to consumables,
+    relics and the opening round at range: it is a weighting hint, not a
+    promise (see MUST_BE_DONE_LATER.md §6)."""
+    traits = tuple(getattr(enc, "traits", ()) or ())
+    atk, dfs, hp = economy.creature_stats(floor.floor, traits)
+    prof = economy.profile_from_traits(traits)
+    if prof["bulwark"]:
+        hp = round(hp * economy.BULWARK_HP_MULT)
+    dmg = economy.typed_damage(_damage_type(p), round(0.75 * state.atk(p)),
+                              dfs, prof)
+    if dmg <= 0:
+        return True            # a blade that cannot reach it — 017's zero
+    rounds = max(1, -(-hp // dmg))
+    raw = 0.75 * atk
+    bite = max(max(1, -(-raw // economy.CHIP_DIVISOR)),
+               raw - state.dfs(p) // 2)
+    dodge = economy.dodge_pct(economy.player_speed(p), prof["speed"])
+    return rounds * bite * (1 - dodge / 100) >= (
+        economy.LETHAL_SHARE * max(1, p["hp"]))
+
+
+def hunt_table(p: dict, floor) -> list[tuple[int, str]]:
+    """The floor's roster, weighted for THIS player. Content weights are
+    scaled up first so the 80% cut still has resolution."""
+    table = []
+    for e in floor.encounters:
+        w = e.weight * 100
+        if would_probably_kill(p, floor, e):
+            w = max(1, round(w * economy.RUBBER_BAND_CUT))
+        table.append((w, e.id))
+    return table
+
+
 def start_encounter(p: dict, floor, enc, kind: str = "wilds") -> Scene:
-    if kind == "warden":
-        if floor.milestone and floor.floor == 10:
-            # Solo-tuned fallback: the real quorum fight arrives with guilds.
-            atk, dfs, hp = economy.warden_stats(floor.floor)
-            name = floor.warden_name
-        else:
-            atk, dfs, hp = economy.warden_stats(floor.floor)
-            name = floor.warden_name
-        prose = floor.warden_prose
-    else:
-        atk, dfs, hp = floor.monster_atk, floor.monster_def, floor.monster_hp
-        name, prose = enc.name, enc.prose
     # 017 §2: the defense profile — armor/resist tiers, flying, bulwark,
     # speed — derived from qualitative content traits, priced in economy.
     traits = tuple(getattr(enc, "traits", ()) or ()) if enc is not None else ()
     if kind == "warden":
+        # Milestone floors are quorum bosses; the solo-tuned line is the
+        # fallback until a war party gathers.
+        atk, dfs, hp = economy.warden_stats(floor.floor)
+        name = floor.warden_name
+        prose = floor.warden_prose
         prof = economy.warden_profile(floor.floor)
     else:
+        # 025 §1: the floor sets the baseline; the archetype says what
+        # THIS animal is. Before 025 every creature on a floor shared one
+        # stat line — four costumes, one monster.
+        atk, dfs, hp = economy.creature_stats(floor.floor, traits)
+        name, prose = enc.name, enc.prose
         prof = economy.profile_from_traits(traits)
+        if (note := economy.archetype_note(traits)):
+            prose = f"{prose} It is {note}."
     if prof["bulwark"]:
         hp = round(hp * economy.BULWARK_HP_MULT)
     specimen = "common"
@@ -807,6 +843,13 @@ def _victory(p: dict, floor) -> Scene:
             gold * economy.SPECIMENS[e.get("specimen", "common")]["gold"])
         # 017: a hard profile pays for the diagnosis it demands
         gold = round(gold * economy.profile_gold_mult(_profile(p)))
+        # 025 §2: danger pays, and it pays in BOTH currencies. Until now
+        # XP carried no threat modifier at all — a limping runt and a
+        # hulking savage were worth the same aether, which is why every
+        # kill on a floor felt identical.
+        threat = economy.kill_reward_mult(e.get("traits") or ())
+        xp = max(1, round(xp * threat))
+        gold = max(1, round(gold * threat))
     if p.get("race") == "elf":
         xp = round(xp * (1 + economy.ELF_XP_BONUS))
     buff = state.faction_buff_pct(p, "xp")
@@ -895,6 +938,11 @@ def _victory(p: dict, floor) -> Scene:
         options=_after_fight_options(p, floor),
         meters=meters(p),
         event_kind=kind,
+        # 025 §6: the haul, drawn. The lines above still SAY the numbers
+        # (the agent reads those); the card lays out one coin per gold and
+        # one shard per point of XP so a big kill looks like a big kill.
+        tally=[{"kind": "gold", "n": gold},
+               {"kind": "aether", "n": xp + rested}],
         fx=_kill_fx(e, e["name"], first_clear, _damage_type(p)),
     )
 

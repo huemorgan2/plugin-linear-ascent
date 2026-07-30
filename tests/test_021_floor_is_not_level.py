@@ -20,9 +20,13 @@ from plugin_linear_ascent import economy
 # 022/002 grand retune (level cap 30, gear-carried reference player,
 # armor→HP): ATK re-derives from the new reference, the HP column is
 # byte-identical to the pre-022 curve.
+# Regenerated again ON PURPOSE for 025 §4 — floors 2-10 only, ATK only:
+# band 1 now sells a rung per level, so the at-level climber there is
+# better armed and the gate hits back harder. Floor 1 and every floor
+# from 11 up are untouched, and the HP column is still the original curve.
 GOLDEN_WARDENS = [
-    (15, 3, 70), (16, 6, 93), (20, 9, 116), (26, 12, 139), (36, 15, 162),
-    (42, 18, 184), (50, 21, 207), (54, 24, 230), (63, 27, 253), (70, 30, 276),
+    (15, 3, 70), (21, 6, 93), (27, 9, 116), (35, 12, 139), (42, 15, 162),
+    (48, 18, 184), (54, 21, 207), (59, 24, 230), (64, 27, 253), (69, 30, 276),
     (76, 33, 298), (79, 36, 321), (82, 39, 344), (89, 42, 367), (95, 45, 390),
     (102, 48, 412), (109, 51, 435), (116, 54, 458), (122, 57, 481),
     (129, 60, 504), (120, 63, 526), (122, 66, 549), (120, 69, 572),
@@ -114,9 +118,10 @@ def test_gate_and_gear_requirements_unchanged():
         if g.rung < 1:
             continue
         t = int(g.rung)
-        raw = g.level or (economy.band_start(t)
-                          + (5 if g.rung != t else 0))
+        # 025: a rung's threshold is how far INTO its band it sits — T.5
+        # still lands at band_start+5, and band 1's new steps one apart
+        raw = g.level or (economy.band_start(t) + round((g.rung - t) * 10))
         assert economy.rung_player_level_req(g) == \
-            min(raw, economy.LEVEL_CAP), g.key
+            min(raw, economy.LEVEL_CAP), g.slug
         assert economy.rung_floor_req(g) == \
-            (raw if raw > economy.LEVEL_CAP else 0), g.key
+            (raw if raw > economy.LEVEL_CAP else 0), g.slug

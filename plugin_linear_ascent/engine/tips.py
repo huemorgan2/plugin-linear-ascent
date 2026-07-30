@@ -212,10 +212,12 @@ _TIPS: dict[str, str] = {
                "shared Warden. Kill, flee or fall, everything you cut "
                "away stays cut: every climber's wounds stack on the "
                "same body, so withdrawing alive still counts. The card "
-               "says how many full fights are left — the low gates are "
-               "two, the deep ones need a crowd. Leave a wound alone "
-               "for a day and night and it closes whole (each closing "
-               "costs it 3% of its body, forever). When it empties the "
+               "says how many full fights are left — the deep ones need "
+               "a crowd. Through FLOOR 10 a Warden never heals at all: "
+               "chip at it across as many days as you need. Above that, "
+               "leave a wound alone for a day and night and it closes "
+               "whole (each closing costs it 3% of its body, forever). "
+               "When it empties the "
                "floor opens for ALL and the prize splits by damage "
                "dealt — fight daily, even a little claims a share."),
     "boss_commit": ("Pledge your blade to the milestone push — 5 energy. "
@@ -293,11 +295,21 @@ def _buy_tip(slug: str) -> str:
                     "dodge. Expensive on purpose — it buys out of a "
                     "lot of bad matchups.")
         stat = "ATK" if g.slot == "weapon" else "DEF"
-        return (f"{g.name} — {g.slot}, {stat} +{g.bonus}, rung {g.rung:g} "
-                f"(wants {gate}). {g.flavor.capitalize()}. Better "
-                f"{stat} is what turns deeper, richer floors from deadly "
-                "into farmable; your replaced piece goes to your pack "
-                "for the pawn shop.")
+        tip = (f"{g.name} — {g.slot}, {stat} +{g.bonus}, rung {g.rung:g} "
+               f"(wants {gate}). {g.flavor.capitalize()}. Better "
+               f"{stat} is what turns deeper, richer floors from deadly "
+               "into farmable; your replaced piece goes to your pack "
+               "for the pawn shop.")
+        if g.style:
+            # 025 §4: a style is the same rung with a different bargain —
+            # say which bargain, in uses, before the coin leaves the hand.
+            plain = economy.FORGE[g.base]
+            tip += (f" Same rung as the {plain.name}: "
+                    f"{stat} +{g.bonus} against +{plain.bonus}, "
+                    f"{economy.item_pool(g):,} uses against "
+                    f"{economy.item_pool(plain):,}, "
+                    f"◈ {g.price:,} against ◈ {plain.price:,}.")
+        return tip
     i = economy.APOTHECARY.get(slug)
     if i:
         return item_tip(slug)

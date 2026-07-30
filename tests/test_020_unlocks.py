@@ -105,7 +105,9 @@ def test_level_1_to_2_wakes_the_town():
 def test_level_3_to_4_is_exactly_founding_plus_mercy_ends():
     p = player(level=4, floor=1)
     got = unlocks.just_reached(p, old_level=3, old_floor=1)
-    assert {u.id for u in got} == {"found_guild", "mercy_ends"}
+    # 025 §4: and a rung of steel — every level in band 1 sells something
+    assert {u.id for u in got} == {"found_guild", "mercy_ends",
+                                   "band1_rung_4"}
     # opens sort before closes — the gifts are read before the bill
     assert got[-1].id == "mercy_ends"
 

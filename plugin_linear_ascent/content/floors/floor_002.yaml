@@ -15,6 +15,7 @@ encounters:
       It hunts where the ground lies. Half its kills never fought
       back — they just sank.
     weight: 3
+    traits: [lean, fast]
     prose: >-
       A wolf lopes through the shallows without a sound, coat slicked
       dark, eyes catching the floodlight like two coins.
@@ -24,6 +25,7 @@ encounters:
       Wallow mud dries on it in plates. Most of the year that's
       vanity; in a fight it's luck.
     weight: 2
+    traits: [sturdy, savage]
     prose: >-
       A mud-caked boar heaves itself off a drowned hay rick, shaking
       water in sheets, and squares up in the reeds.
@@ -33,6 +35,7 @@ encounters:
       Stilt-legged and patient, it spears eels all day. You are
       slower than an eel.
     weight: 3
+    traits: [frail, feeble]
     prose: >-
       Two lamps on a pole — no, a goblin on stilts, scrap-rifle slung
       high, picking through the flood for anything worth stealing.
@@ -42,7 +45,7 @@ encounters:
       Old enough to remember the marsh as farmland. Its shell has
       turned harder arguments than yours.
     weight: 2
-    traits: [armor_low]
+    traits: [armor_low, hulking, slow]
     prose: >-
       The hay rick you took for an island stands up. A tortoise broad
       as a cart bed, shell scarred white where blades have tried it

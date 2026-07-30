@@ -24,6 +24,7 @@ encounters:
       Sty stock gone wild in two generations. It charges first and
       decides why later.
     weight: 3
+    traits: [sturdy, fierce]
     prose: >-
       A boar the size of a cart tears up the turf between you and the
       path, tusks yellowed and one ear ragged from old fights.
@@ -33,6 +34,7 @@ encounters:
       Left behind when the war-band moved up. Too proud to drop the
       sword, too small to lift it right.
     weight: 2
+    traits: [lean, savage]
     prose: >-
       A lone goblin in a stitched rag-coat drags a notched longsword
       through the grass, too heavy for it by half. It sees you, sets
@@ -43,6 +45,7 @@ encounters:
       Granary doors stood open the night the farms fell. What ate its
       fill in the dark kept growing.
     weight: 2
+    traits: [frail, feeble]
     prose: >-
       Something the size of a dog bursts from the fencerow in a spray
       of leaves — a rat grown fat on abandoned granaries, teeth first.

@@ -34,13 +34,23 @@ ALLOWED_TRAITS = {
     "resist_low", "resist_med", "resist_high",
     "flying", "bulwark", "slow", "fast",
     "armored",  # legacy — lint forbids it on floors ≤ 10
+    # 025 §1: the stat archetype — the body and the bite. Legal from floor
+    # 1: this is the variance the first floor never had, and it is the
+    # difference between four animals and one animal in four costumes.
+    "frail", "lean", "sturdy", "hulking",
+    "feeble", "fierce", "savage",
 }
 
+ARCHETYPE_TRAITS = {"frail", "lean", "sturdy", "hulking",
+                    "feeble", "fierce", "savage"}
+
 # 017 §2.3 the intro staircase: the first floor where a rule may appear.
-# Floor 1 is kindergarten — no traits at all. Lint enforces both.
+# 025: the staircase governs the DEFENSE axis only. Speed came down to
+# floor 1 with the archetypes — being outrun is chase math, not damage,
+# and "some of them you have to run from" is the point of the first floor.
 TRAIT_INTRO_FLOOR = {
-    "armor": 2, "resist": 3, "flying": 4, "fast": 5,
-    "bulwark": 6, "slow": 6,
+    "armor": 2, "resist": 3, "flying": 4,
+    "bulwark": 6,
 }
 
 
@@ -191,6 +201,44 @@ def _class_pool_errors(fl: Floor) -> list[str]:
     return errors
 
 
+def _archetype_errors(fl: Floor) -> list[str]:
+    """025 §1: a floor is a RANGE of animals. Every floor owes the player
+    prey they can farm, a peer, and something that can kill them — and no
+    creature may stack a long body on a damage-halving tier, because both
+    axes multiply fight length and the product is a slog, not a fight."""
+    errors, prey, threat = [], 0, 0
+    for e in fl.encounters:
+        body, bite = economy._archetype(e.traits)
+        prof = economy.profile_from_traits(e.traits)
+        if bite == "feeble" or body == "frail":
+            prey += 1
+        if bite in ("fierce", "savage"):
+            threat += 1
+        halves = (economy.TIER_MULT[prof["armor"]] <= 0.5
+                  or economy.TIER_MULT[prof["resist"]] <= 0.5
+                  or prof["bulwark"])
+        if body and halves:
+            errors.append(
+                f"floor {fl.floor}/{e.id}: body trait {body!r} stacked on a "
+                "damage-halving profile — both multiply fight length (025)")
+        # A blade cannot reach a flying thing (017's one legal zero), so a
+        # flyer with a real bite is an unanswerable death for a warrior —
+        # not a fight they may lose — until the shop sells the Sky-Hook.
+        # The rule reads the shelf: move the hook and this moves with it.
+        if (prof["flying"] and bite in ("fierce", "savage")
+                and fl.floor < economy.RELICS["sky_hook"].floor):
+            errors.append(
+                f"floor {fl.floor}/{e.id}: flying + {bite!r} — no melee "
+                "counter is on sale this low (025)")
+    if not prey:
+        errors.append(f"floor {fl.floor}: no prey — every floor owes one "
+                      "cheap kill (025 spread rule)")
+    if not threat:
+        errors.append(f"floor {fl.floor}: nothing here can kill an at-level "
+                      "climber (025 spread rule)")
+    return errors
+
+
 def _band_spread_errors(band: list[Floor]) -> list[str]:
     """008: each ten-floor band carries the whole vocabulary — ≥1 bad
     target per class (armor for steel and string, resist for the wand,
@@ -232,6 +280,11 @@ def lint_floors() -> list[str]:
         if fl.floor in floors:
             errors.append(f"{fname}: duplicate floor {fl.floor}")
         floors[fl.floor] = fl
+        # 025: floors 1-10 carry the archetype spread. Floors 11-100 are
+        # still on one stat line per floor — see MUST_BE_DONE_LATER.md.
+        if fl.floor <= 10:
+            errors.extend(_archetype_errors(fl))
+            errors.extend(_class_pool_errors(fl))
         # 008: floors ≥ 11 speak the full language — lore on every
         # encounter (the [i] dossier's one breath) and a 4-5 shelf.
         if fl.floor >= 11:

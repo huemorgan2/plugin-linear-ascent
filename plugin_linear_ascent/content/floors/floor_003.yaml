@@ -15,6 +15,7 @@ encounters:
       The pack splits around the apple rows and folds back in behind
       you. One wolf is never one wolf.
     weight: 3
+    traits: [lean, fast]
     prose: >-
       A wolf steps out between the rows ahead — and you hear a second one
       behind you stop moving. The pack has done this before.
@@ -24,6 +25,7 @@ encounters:
       It seeds the grass with wire and waits. The limp in its walk is
       an old lesson from its own line.
     weight: 3
+    traits: [frail, feeble]
     prose: >-
       A goblin drops from a bough, trailing the snare-wire it was laying.
       It levels a scrap-pistol with both hands and shrieks for its due.
@@ -33,6 +35,7 @@ encounters:
       It ate the fermented windfalls by the barrel. There is no plan
       in it now, only speed and spit.
     weight: 2
+    traits: [hulking, savage]
     prose: >-
       A boar reels out of the windfalls, drunk on rot and mean with it,
       foam at the tusks and no interest in going around you.
@@ -42,7 +45,7 @@ encounters:
       Rot-light over the orchard floor. Blades stir it like smoke;
       it drinks a little of every cast.
     weight: 2
-    traits: [resist_low]
+    traits: [resist_low, sturdy]
     prose: >-
       The sweet rot between two rows thickens into a shape — a haunt
       fed on spoiled harvest, wearing the orchard's shimmer like a

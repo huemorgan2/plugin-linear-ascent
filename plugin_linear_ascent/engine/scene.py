@@ -51,6 +51,14 @@ class Scene:
                                     # chat, e.g. "the banner's name" — the
                                     # sidekick forwards the player's next
                                     # message as ascent_choose text
+    tally: list[dict] = field(default_factory=list)
+                                    # 025/006: a haul the renderer DRAWS
+                                    # instead of stating. Entries:
+                                    # {kind: "gold"|"aether", n: int}.
+                                    # Under TALLY_CAP the card lays out
+                                    # one mark per point — a number can
+                                    # say 37, only 37 coins can show it.
+                                    # The text surface stays words.
     inventory: list[dict] = field(default_factory=list)
                                     # 014: the pack strip — stamped by core on
                                     # every playing scene. Entries:

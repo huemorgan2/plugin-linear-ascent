@@ -66,7 +66,11 @@ def test_warden_baseline_unchanged_by_008():
     # re-derives once more — the HP column is pinned UNCHANGED from the
     # pre-022 curve: the retune moved who the warden is tuned against,
     # never how big a boss is.
-    baseline = {1: (15, 3, 70), 5: (36, 15, 162), 10: (70, 30, 276),
+    # 025 §4: band 1 sells a rung per level, so the at-level climber on
+    # floors 2-10 is measurably better armed than the pre-025 reference
+    # and the wardens there hit harder to match. The HP column is still
+    # pinned unchanged — a boss's SIZE has never moved.
+    baseline = {1: (15, 3, 70), 5: (42, 15, 162), 10: (69, 30, 276),
                 15: (95, 45, 390), 30: (168, 90, 732), 50: (208, 150, 1782),
                 75: (289, 225, 3736), 100: (411, 300, 6402)}
     for f, want in baseline.items():
@@ -92,9 +96,12 @@ def test_alpha_specimen_visible_and_buffed(monkeypatch):
     s = choose(p, "hunt")
     e = p["encounter"]
     assert e["specimen"] == "alpha"
+    # 025: the floor's flat line is only the baseline now — the specimen
+    # multiplies THIS creature's own archetype stats.
     fl = schema.get_floor(1)
-    assert e["atk"] == round(fl.monster_atk * 1.2)
-    assert e["hp"] == round(fl.monster_hp * 2.0)
+    base_atk, _, base_hp = economy.creature_stats(fl.floor, e["traits"])
+    assert e["atk"] == round(base_atk * 1.2)
+    assert e["hp"] == round(base_hp * 2.0)
     # the tag is on the opener — fighting an alpha is an informed choice
     assert any("alpha" in line for line in s.body_lines)
 
@@ -119,9 +126,13 @@ def test_runt_pays_less_gold(monkeypatch):
     p["encounter"]["range"] = "close"         # 002: skip the crossing
     p["encounter"]["hp"] = 1
     gold_before = p["gold"]
+    traits = p["encounter"]["traits"]
     choose(p, "attack")
-    assert p["gold"] - gold_before == round(
-        economy.gold_per_kill(1) * economy.SPECIMENS["runt"]["gold"])
+    # 025: the archetype's threat multiplier rides on top of the specimen
+    expect = round(economy.gold_per_kill(1)
+                   * economy.SPECIMENS["runt"]["gold"])
+    expect = max(1, round(expect * economy.kill_reward_mult(traits)))
+    assert p["gold"] - gold_before == expect
 
 
 def test_wardens_never_roll_specimens():

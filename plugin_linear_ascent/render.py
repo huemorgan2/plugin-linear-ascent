@@ -219,6 +219,40 @@ def _combat_html(line: str) -> str:
     return _sub_glyphs(s)
 
 
+# ── 025 §6: the haul, drawn ─────────────────────────────────────────────
+# "When an animal gives coins draw the coins, don't just show the number —
+# have the coin icon repeated so it'll be visually clear you received a
+# lot. Until it reaches 100, then write just the number."
+#
+# A numeral is a fact; a heap is a feeling. Under the cap the card lays
+# out one mark per point, ten to a row, so 8 gold and 60 gold are told
+# apart before the number is read. At the cap the heap would stop scaling
+# and start costing DOM, so the numeral takes over.
+TALLY_CAP = 100
+_TALLY_MARK = {"gold": ("coin", GOLD), "aether": ("aether", AETHER)}
+_TALLY_WORD = {"gold": "gold", "aether": "XP"}
+
+
+def _tally_html(tally: list[dict]) -> str:
+    rows = []
+    for item in tally:
+        kind = str(item.get("kind", ""))
+        n = int(item.get("n", 0) or 0)
+        if n <= 0 or kind not in _TALLY_MARK:
+            continue
+        key, tint = _TALLY_MARK[kind]
+        label = f"+{n:,} {_TALLY_WORD[kind]}"
+        if n >= TALLY_CAP:
+            body = (f'<span class="tnum" style="color:{tint}">'
+                    f"{_eglyph(key)} {n:,}</span>")
+        else:
+            body = (f'<span class="tmarks" style="color:{tint}" '
+                    f'aria-hidden="true">' + _eglyph(key) * n + "</span>")
+        rows.append(f'<div class="tally" title="{_e(label)}">'
+                    f'<span class="tsr">{_e(label)}</span>{body}</div>')
+    return "".join(rows)
+
+
 def _blocks(cur: int, cap: int, cells: int = 10) -> str:
     cur = max(0, min(cur, cap))
     filled = round(cells * cur / cap) if cap else 0
@@ -271,6 +305,10 @@ def _meters_html(m: Meters) -> str:
 # payload; the header shows the always-on HP bar, the range chip and the
 # active damage modifier; the [i] badge opens the dossier — a native
 # <details>, all data inlined, no server round-trip, no model in the path.
+
+# 025 §4: a style is a palette on the same 1-bit silhouette — keen reads
+# ember, warded reads frost, and plain steel keeps the worn/packed ink.
+_STYLE_TINT = {"keen": ORANGE, "warded": AETHER}
 
 _TIER_ICON = {"armor": "t_armor", "resist": "t_resist", "flying": "t_wing",
               "bulwark": "t_bulwark", "speed": "t_speed"}
@@ -408,7 +446,10 @@ def _inventory_html(scene: Scene) -> str:
         slug = it.get("slug", "")
         equipped = bool(it.get("equipped"))
         url = icons.icon_data_url(icons.icon_key(slug, it.get("kind", "")))
-        tint = TEXT if equipped else DIM
+        # 025 §4: the same glyph in the style's ink — ember for keen steel,
+        # frost for warded. Unstyled gear keeps the worn/packed contrast.
+        tint = _STYLE_TINT.get(economy.style_of(slug)) or (
+            TEXT if equipped else DIM)
         count = int(it.get("count", 1))
         ct = (f'<span class="ct">×{count}</span>'
               if count > 1 and not equipped else "")
@@ -649,6 +690,8 @@ def render_scene_fragment(scene: Scene) -> str:
             parts.append(f'<div class="body type">{_combat_html(line)}</div>')
     if in_fold:
         parts.append("</details>")
+    if getattr(scene, "tally", None):
+        parts.append(_tally_html(scene.tally))
 
     if scene.options:
         rows = []
@@ -725,6 +768,15 @@ SCENE_CSS = f"""
  background-color:currentColor;mask-size:100% 100%;
  -webkit-mask-size:100% 100%;mask-repeat:no-repeat;
  -webkit-mask-repeat:no-repeat;image-rendering:pixelated;}}
+/* 025/006: the haul. Marks tile ten to a row and shrink a little so a
+   99-coin kill still reads as one heap instead of a wall of glyphs. */
+.tally{{margin:2px 0 0;line-height:1;}}
+.tally .tmarks{{display:inline-grid;grid-template-columns:repeat(10,14px);
+ gap:1px;}}
+.tally .tmarks .eg{{width:14px;height:14px;vertical-align:0;}}
+.tally .tnum{{font-variant-numeric:tabular-nums;}}
+.tally .tsr{{position:absolute;width:1px;height:1px;overflow:hidden;
+ clip:rect(0 0 0 0);white-space:nowrap;}}
 .dlore{{color:{FAINT};font-style:italic;margin-top:6px;
  border-top:1px dashed {BORDER};padding-top:6px;}}
 .banner{{display:block;width:calc(100% + 4ch);margin:-12px -2ch 10px;

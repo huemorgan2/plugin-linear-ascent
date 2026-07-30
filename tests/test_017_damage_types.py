@@ -236,15 +236,19 @@ def reference_player(clazz, floor):
     p = fresh(f"ref-{clazz}-{floor}")
     p.update(stage="playing", race="human", clazz=clazz, name="Ref",
              level=economy.reference_level(floor), unlocked_floor=floor)
-    tier = economy.gear_tier_for_floor(floor)
     # 004: three weapon lines mirror each other's numbers — equip the
-    # CLASS line's whole-tier rung so the damage type stays in-class.
-    p["gear"]["weapon"] = next(
-        g for g in economy.weapon_line(clazz) if g.rung == tier).slug
-    p["gear"]["shield"] = next(
-        g for g in economy.gear_rungs("shield") if g.rung == tier).slug
-    p["gear"]["armor"] = next(
-        g for g in economy.gear_rungs("armor") if g.rung == tier).slug
+    # CLASS line's rung so the damage type stays in-class. 025: the rung
+    # is the one the ladder sells at this floor (band 1 sells one per
+    # level), not the whole tier — the sim player has to BE the player
+    # every monster and warden number is derived from.
+    rung = economy.reference_rung(floor)
+
+    def _at(items):
+        return next(g for g in items if abs(g.rung - rung) < 1e-9).slug
+
+    p["gear"]["weapon"] = _at(economy.weapon_line(clazz))
+    p["gear"]["shield"] = _at(economy.gear_rungs("shield"))
+    p["gear"]["armor"] = _at(economy.gear_rungs("armor"))
     hone = economy.reference_hone(floor)
     p["hone"] = {s: hone for s in economy.HONE_SLOTS}
     # 022/002: armor feeds max HP — read the live pool, never a bare
@@ -304,38 +308,66 @@ def _speed_counters(clazz, profile):
 N_SIM = 40
 
 
+_PLAIN = schema.Encounter(id="_plain", name="Plain thing", weight=1,
+                          prose="A plain thing steps onto the path.")
+
+
 def test_matchup_gate_floors_1_to_10():
-    """Intended victims die ≥80% of the time; hard counters genuinely
-    wall (win <30%) or drag (≥2× the class's plain-target rounds)."""
+    """025: a floor is a RANGE of animals, so the gate reads per shape.
+
+    Before 025 this asserted that EVERY full-damage target dies ≥80% of
+    the time — which is exactly the flatness the rebalance removes. What
+    still has to hold:
+
+    • anything without a real bite (prey, peer, wall) stays farmable at
+      ≥80% for the class it doesn't counter;
+    • every class keeps ≥2 farmable targets on every floor (the 008 pool
+      rule, now measured and not just linted);
+    • a hard counter still walls (<30%) or drags (≥1.6× plain rounds);
+    • and every floor holds something that can genuinely bury an at-level
+      climber — the danger law. Without it we are back where we started.
+    """
     for floor_no in range(1, 11):
         fl = schema.get_floor(floor_no)
+        danger = 1.0
         for clazz in economy.DAMAGE_TYPE:
-            plain_rounds = None
-            results = {}
+            plain_rounds = sum(
+                _sim_fight(clazz, floor_no, _PLAIN, s)[1]
+                for s in range(N_SIM)) / N_SIM
+            farmable = 0
             for enc in fl.encounters:
                 profile = economy.profile_from_traits(enc.traits)
+                _, bite = economy._archetype(enc.traits)
                 wins = rounds_sum = 0
                 for seed in range(N_SIM):
                     won, r = _sim_fight(clazz, floor_no, enc, seed)
                     wins += won
                     rounds_sum += r
-                results[enc.id] = (wins / N_SIM, rounds_sum / N_SIM, profile)
-                if not enc.traits and plain_rounds is None:
-                    plain_rounds = rounds_sum / N_SIM
-            for enc_id, (winrate, avg_rounds, profile) in results.items():
+                winrate, avg_rounds = wins / N_SIM, rounds_sum / N_SIM
                 mult = _class_mult(clazz, profile)
                 speed_hard = _speed_counters(clazz, profile)
-                hard = mult <= 0.5 or profile["bulwark"] or speed_hard
-                where = f"floor {floor_no} {clazz} vs {enc_id}"
-                if mult >= 1.0 and not profile["bulwark"] and not speed_hard:
+                countered = (mult <= 0.5 or profile["bulwark"] or speed_hard)
+                full = mult >= 1.0 and not profile["bulwark"] \
+                    and not speed_hard
+                where = f"floor {floor_no} {clazz} vs {enc.id}"
+                if winrate >= 0.80:
+                    farmable += 1
+                if bite in ("fierce", "savage"):
+                    danger = min(danger, winrate)
+                elif full:
                     assert winrate >= 0.80, f"{where}: win {winrate:.0%}"
-                elif hard:
+                elif countered:
                     # overkill on the final round compresses the ratio
                     # below the naive 1/mult, so 1.6× already means a
                     # fight that visibly drags on screen
-                    dragged = (plain_rounds and
-                               avg_rounds >= 1.6 * plain_rounds)
+                    dragged = avg_rounds >= 1.6 * plain_rounds
                     assert winrate < 0.30 or dragged, (
                         f"{where}: win {winrate:.0%}, rounds "
                         f"{avg_rounds:.1f} vs plain {plain_rounds:.1f} — "
                         "neither walls nor drags")
+            assert farmable >= 2, (
+                f"floor {floor_no} {clazz}: {farmable} farmable targets — "
+                "a class must always have somewhere to earn (008 pool rule)")
+        assert danger <= 0.80, (
+            f"floor {floor_no}: the worst fight on the floor is won "
+            f"{danger:.0%} of the time — nothing here is frightening (025)")

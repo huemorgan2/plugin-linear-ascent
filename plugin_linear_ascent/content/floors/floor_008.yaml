@@ -15,6 +15,7 @@ encounters:
       It rakes the burn-lines for anything metal. The rake is taller
       than it is and sharpened on both edges.
     weight: 3
+    traits: [frail, feeble]
     prose: >-
       A goblin in a mask of soot and bottle glass straightens from its
       rake. It taps the rake twice on the ground — a signal, or a threat.
@@ -24,6 +25,7 @@ encounters:
       Its coat is singed to wire. It drives prey toward the hot
       ground and waits at the cool edge.
     weight: 3
+    traits: [lean, fast, fierce]
     prose: >-
       A wolf the color of the burnt field rises from where it was
       invisible, ash sliding from its back like grey snow.
@@ -33,6 +35,7 @@ encounters:
       It survived the burn that took the floor. What's left doesn't
       feel much, and remembers the fire's side.
     weight: 2
+    traits: [hulking, savage]
     prose: >-
       A boar blackened from rooting in the burn charges through its own
       dust cloud, tusks scorched to points.
@@ -42,7 +45,7 @@ encounters:
       Heat-ghost off the cinder beds. Spellwork feeds it a little
       before it bites.
     weight: 2
-    traits: [resist_low]
+    traits: [resist_low, lean, fierce]
     prose: >-
       The grey grass exhales, and the exhale has eyes — a shade of old
       fire that never finished going out. Spells reach it dimmed, the

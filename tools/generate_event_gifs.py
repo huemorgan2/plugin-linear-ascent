@@ -61,8 +61,13 @@ API_ROOT = "https://generativelanguage.googleapis.com/v1beta"
 VIDEO_MODEL = "veo-3.1-generate-preview"
 
 FAL_QUEUE = "https://queue.fal.run"
-FAL_MODEL = "fal-ai/kling-video/v2.5-turbo/pro/text-to-video"
-NEGATIVE = "color, text, captions, watermark, camera shake, zoom, pan"
+FAL_MODELS = {
+    "kling": "fal-ai/kling-video/v2.5-turbo/pro/text-to-video",
+    "seedance": "bytedance/seedance-2.0/text-to-video",
+    "seedance-fast": "bytedance/seedance-2.0/fast/text-to-video",
+}
+NEGATIVE = ("color, text, captions, watermark, camera shake, zoom, pan, "
+            "slow motion")
 
 BAYER = [
     [0, 32, 8, 40, 2, 34, 10, 42], [48, 16, 56, 24, 50, 18, 58, 26],
@@ -160,7 +165,9 @@ EVENTS: dict[str, dict] = {
     },
     "goblin_kill": {
         "prompt": (
-            f"{CAST_WARRIOR} faces a small long-eared goblin silhouette "
+            f"{CAST_WARRIOR} faces exactly ONE small long-eared goblin "
+            "silhouette — there is only this single goblin in the "
+            "entire scene, no other goblins or creatures ever appear — "
             "in heavy scavenged plate armor, old snapped arrows "
             "bristling from its breastplate, dragging a notched "
             "longsword beside a wooden fence rail in a dusk meadow, "
@@ -171,8 +178,9 @@ EVENTS: dict[str, dict] = {
             "goblin crashes down in its plate and lies completely "
             "still, the longsword fallen in the grass, and the dust "
             "settles quickly. The FINAL TWO SECONDS are a perfectly "
-            "still tableau: the warrior standing motionless over the "
-            "fallen armored goblin, sword lowered, absolutely nothing "
+            "still tableau: the warrior standing ALONE and motionless "
+            "over the single fallen armored goblin — just the two of "
+            "them, no one else — sword lowered, absolutely nothing "
             "moving — a frozen closing frame."),
         "tint": DIM, "seconds": 8, "loop": False, "hold_ms": 2000,
         "trim": (0.0, 5.5),
@@ -425,20 +433,40 @@ _KILL_BEATS = {
               "dead {noun}, sword lowered, absolutely nothing moving — "
               "a frozen closing frame."),
     "arrow": (CAST_ARCHER,
-              "The shot opens MID-ACTION with zero build-up: from the "
-              "very first frame the {noun} is already at a full "
-              "furious sprint, charging straight at the archer, and "
-              "the archer's bow is already drawn to full anchor. He "
-              "looses INSTANTLY — within the first second the arrow "
-              "strikes the charging {noun} hard mid-stride; its "
-              "momentum carries it crashing and skidding through the "
-              "grass, and it lies completely still. No waiting, no "
-              "hesitation, no slow approach — charge, shot and impact "
-              "are one continuous fast beat. The FINAL TWO SECONDS "
-              "are a perfectly still tableau: the archer standing "
-              "motionless, bow lowered, the dead {noun} on the ground "
-              "before him, absolutely nothing moving — a frozen "
-              "closing frame."),
+              "The whole scene plays at REAL speed — fast, snappy, "
+              "natural timing, absolutely NO slow motion. A WIDE shot "
+              "across a dusk meadow rich with detail — tall "
+              "wind-stirred grass, a split-rail fence line, dark "
+              "hedgerows and a distant watchtower in the haze — with "
+              "real distance between the two: the archer stands "
+              "at the far LEFT edge of the frame, and the {noun} is "
+              "at the far RIGHT edge, already at a full furious "
+              "sprint, kicking up dust and torn grass with every "
+              "stride, a long stretch of open ground between them — "
+              "the {noun} NEVER comes close to the archer. Both "
+              "figures are LARGE and clearly readable — the {noun} "
+              "is a BIG imposing beast with a bold silhouette, never "
+              "a tiny distant speck — and the action sits in the "
+              "MIDDLE band of the frame, horizon at mid-height, not "
+              "crammed into the bottom edge. From the "
+              "very first frame the bow is stretched to full anchor; "
+              "the archer releases INSTANTLY. The arrow is one "
+              "SINGLE SHORT normal-sized arrow — it is never "
+              "stretched, never elongated, never a streak or a line "
+              "— it crosses the field in a fraction of a second on a "
+              "flat straight path and its head BURIES itself in the "
+              "{noun}'s chest with a hard brutal thud; the short "
+              "shaft stays LODGED in the body, jutting out. The "
+              "impact hurls the {noun} into a violent tumble — it "
+              "crashes down and skids through the grass in a burst "
+              "of dust at that DISTANT spot, "
+              "dead in the middle of the field far from the archer, "
+              "the short arrow shaft still sticking out of its side, "
+              "and lies completely still. The FINAL TWO SECONDS are "
+              "a perfectly still tableau: the archer far left with "
+              "his bow lowered, the dead {noun} lying far across the "
+              "field with the short arrow planted in it, absolutely "
+              "nothing moving — a frozen closing frame."),
     "magic": (CAST_WIZARD,
               "The {noun} closes in; the giant wizard plants his staff "
               "and one brilliant bolt of light leaps from its glowing "
@@ -458,10 +486,6 @@ for _fam, (_scene, _noun) in _KILL_MONSTERS.items():
             "tint": DIM, "seconds": 8, "loop": False, "hold_ms": 2000,
             "trim": (0.0, 5.5),
         }
-
-# Per-clip recuts of specific Kling takes — cut the tail before any
-# stray post-tableau motion (e.g. the archer re-nocking an arrow).
-EVENTS["wolf_kill_arrow"]["trim"] = (0.0, 4.6)
 
 PANEL = (0x11, 0x15, 0x1F)
 
@@ -596,17 +620,27 @@ def _fal_json(url: str, key: str, body: dict | None = None) -> dict:
             time.sleep(10 * (attempt + 1))
 
 
-def fal_generate(prompt: str, seconds: int, key: str, out_mp4: str) -> None:
+def fal_generate(prompt: str, seconds: int, key: str, out_mp4: str,
+                 model: str = "kling") -> None:
     # Kling durations are 5 or 10. Kills (configured 8s for Veo) fit a 5s
-    # Kling clip — its action pacing is denser — and the freeze frame
+    # clip — fal models' action pacing is denser — and the freeze frame
     # comes from the prompt's closing tableau + hold_ms, not clip length.
-    body = {
-        "prompt": prompt,
-        "duration": "5" if seconds <= 8 else "10",
-        "aspect_ratio": "16:9",
-        "negative_prompt": NEGATIVE,
-    }
-    sub = _fal_json(f"{FAL_QUEUE}/{FAL_MODEL}", key, body)
+    if model == "kling":
+        body = {
+            "prompt": prompt,
+            "duration": "5" if seconds <= 8 else "10",
+            "aspect_ratio": "16:9",
+            "negative_prompt": NEGATIVE,
+        }
+    else:  # seedance has no negative_prompt; NEGATIVE is baked into STYLE
+        body = {
+            "prompt": prompt + " Avoid: " + NEGATIVE + ".",
+            "duration": "5" if seconds <= 8 else str(seconds),
+            "resolution": "720p",
+            "aspect_ratio": "16:9",
+            "generate_audio": False,
+        }
+    sub = _fal_json(f"{FAL_QUEUE}/{FAL_MODELS[model]}", key, body)
     print(f"  fal request {sub['request_id']}", flush=True)
     status = sub["status_url"]
     while True:
@@ -853,12 +887,19 @@ def main() -> None:
     force = "--force" in args
     if force:
         args.remove("--force")
+    fal_model = "kling"
     if "--backend" in args:
         i = args.index("--backend")
         backend = args[i + 1]
         args = args[:i] + args[i + 2:]
+    if "--fal-model" in args:
+        i = args.index("--fal-model")
+        fal_model = args[i + 1]
+        args = args[:i] + args[i + 2:]
     if backend not in ("fal", "veo"):
         sys.exit(f"unknown backend: {backend}")
+    if fal_model not in FAL_MODELS:
+        sys.exit(f"unknown fal model: {fal_model}; have {list(FAL_MODELS)}")
     if "--from-video" in args:
         i = args.index("--from-video")
         from_video = args[i + 1]
@@ -882,7 +923,7 @@ def main() -> None:
             print(f"gen  {slug} [{use}]...", flush=True)
             if use == "fal":
                 fal_generate(STYLE + cfg["prompt"], cfg["seconds"],
-                             _fal_key(), mp4)
+                             _fal_key(), mp4, fal_model)
             else:
                 api_key = os.environ.get("LUNA_GEMINI_API_KEY", "").strip()
                 if not api_key:

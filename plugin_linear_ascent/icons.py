@@ -336,6 +336,49 @@ _GRIDS: dict[str, list[str]] = {
         "................",
         "................",
     ],
+    # ── 025 §6: the pay marks. A kill's gold and aether are DRAWN, one
+    # mark per point, up to 99 — "have the coin icon repeated so it'll be
+    # visually clear you received a lot". A number cannot show a haul; a
+    # heap of coins can. Both are small and dense on purpose: they are
+    # tiled by the dozen, so a busy silhouette turns to mud.
+    # a struck coin, rim and face
+    "coin": [
+        "................",
+        "................",
+        "................",
+        "....########....",
+        "..############..",
+        "..##........##..",
+        ".##...####...##.",
+        ".##..##..##..##.",
+        ".##..##..##..##.",
+        ".##...####...##.",
+        "..##........##..",
+        "..############..",
+        "....########....",
+        "................",
+        "................",
+        "................",
+    ],
+    # an aether shard — the ✦ the meters rail already speaks in
+    "aether": [
+        "................",
+        "................",
+        ".......##.......",
+        "......####......",
+        "......####......",
+        "..##..####..##..",
+        "...##########...",
+        "....########....",
+        "....########....",
+        "...##########...",
+        "..##..####..##..",
+        "......####......",
+        "......####......",
+        ".......##.......",
+        "................",
+        "................",
+    ],
     # ── 017/003: the trait icon set — the [i] dossier and (004) shop
     # rows speak in these. 16×16 masks like everything else; the host
     # sizes them (16px dossier rows, 32px shop rows).

@@ -258,14 +258,16 @@ def test_fresh_gear_offers_no_repair_row():
 def test_swapping_gear_stashes_and_restores_the_wear():
     p = create_character(fresh("swapper"))
     p["gold"] = 10_000
+    # 025: band 1 racks a rung per level, so the two rungs on the bench
+    # at level 6 are 1.4 and 1.5 — the older steel is off the rack
     p["level"] = 6
     p["location"] = "forge"
-    choose(p, "buy_pigsticker")
+    choose(p, "buy_gatewatch_gladius")
     p["durability"]["weapon"] = 7                   # grind it down
-    choose(p, "buy_iron_sword")                     # shiv to the pack
-    assert p["durability_pack"]["pigsticker"] == 7
+    choose(p, "buy_iron_sword")                     # the old one to the pack
+    assert p["durability_pack"]["gatewatch_gladius"] == 7
     assert p["durability"]["weapon"] == economy.durability_pool(1.5)
-    choose(p, "wear_pigsticker")                    # back out of the pack
+    choose(p, "wear_gatewatch_gladius")             # back out of the pack
     assert p["durability"]["weapon"] == 7           # as worn as it left
 
 
