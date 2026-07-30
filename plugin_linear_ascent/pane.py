@@ -21,8 +21,9 @@ whenever the session changes; the pane also answers 401s by asking again
 
 from __future__ import annotations
 
-from .render import (AETHER, BORDER, DIM, FAINT, INK, PANEL, PANEL2,
-                     SCENE_CSS, SWAP_JS, TEXT, TIP_JS, VIOLET, VIOLET_SOFT)
+from .render import (AETHER, BORDER, DIM, FAINT, INK, INTERACT_JS, PANEL,
+                     PANEL2, SCENE_CSS, SWAP_JS, TEXT, TIP_JS, VIOLET,
+                     VIOLET_SOFT)
 
 _API = "/api/p/plugin-linear-ascent"
 
@@ -68,6 +69,9 @@ a{{color:{AETHER};}}
  mask-size:100% 100%;-webkit-mask-size:100% 100%;mask-repeat:no-repeat;
  -webkit-mask-repeat:no-repeat;image-rendering:pixelated;flex:none;}}
 .fbanner.big{{width:100%;max-width:320px;background-color:{VIOLET_SOFT};}}
+/* 027: the sigil rides beside a name in tight rows too. */
+.fbanner.small{{width:64px;background-color:{VIOLET_SOFT};}}
+.lrow .lname{{display:flex;align-items:center;gap:1ch;min-width:0;}}
 .frow{{display:flex;gap:2ch;align-items:center;padding:8px 0;
  border-bottom:1px dashed {BORDER};}}
 .frow .meta{{flex:1;min-width:0;}}
@@ -105,7 +109,7 @@ select.ti{{background:{INK};color:{TEXT};border:1px solid {BORDER};
 .findrow{{display:flex;gap:1ch;margin-bottom:8px;align-items:center;}}
 .findrow .k{{color:{FAINT};letter-spacing:.08em;}}
 .lrow{{display:grid;grid-template-columns:3ch 1fr 9ch 9ch;gap:1ch;
- padding:4px 0;border-bottom:1px dashed {BORDER};align-items:baseline;
+ padding:4px 0;border-bottom:1px dashed {BORDER};align-items:center;
  white-space:nowrap;overflow:hidden;}}
 .lrow .r{{text-align:right;}}
 .lrow.joinable{{grid-template-columns:3ch 1fr 9ch 9ch auto;
@@ -256,7 +260,24 @@ function showScene(d) {
   wireOptions();
   runFX(game);
   swapFX();               // 016: split banner art settles into its loop
+  // 027: the pack popup, the card's input box and the rail count-up
+  if (window.__laWire) window.__laWire(game);
 }
+/* 027: one door for everything that isn't a menu row — the pack popup's
+   actions and the card's own text/number box. */
+window.__laAct = async function (option, text) {
+  if (loading) return;
+  loading = true;
+  try {
+    showScene(await call('/act', {option: option || '', text: text || '',
+      scene_id: sceneId, mode: 'pane'}));
+  } catch (err) {
+    if (err.message !== 'auth') showErr(err.message);
+    const f = game.querySelector('form.ask');
+    if (f) { f.querySelectorAll('input,button').forEach(
+      x => { x.disabled = false; }); }
+  } finally { loading = false; }
+};
 function showErr(msg) {
   const e = document.createElement('div');
   e.className = 'err'; e.textContent = msg;
@@ -264,7 +285,10 @@ function showErr(msg) {
   setTimeout(() => e.remove(), 6000);
 }
 function wireOptions() {
-  const btns = [...game.querySelectorAll('button.opt')];
+  /* 027: everything that carries a data-opt acts the same way — menu rows,
+     notice-board shortcuts, sigil tiles and the pack popup's actions. */
+  const btns = [...game.querySelectorAll('button.opt, button.nrow, '
+    + 'button.gtile')];
   const hint = game.querySelector('.reply');
   btns.forEach(b => b.addEventListener('click', async () => {
     if (loading) return;
@@ -378,6 +402,17 @@ function chipRow(name, banners, right) {
     + '<span class="dim">' + right + '</span></div>';
 }
 
+/* 027: the same row, with the LEFT column already rendered (a rank, a
+   star, a challenge name) — the sigil rides in front of it either way. */
+function chipRow2(name, banners, left, right) {
+  const slug = banners[name] || '';
+  return '<div class="frow">'
+    + (slug ? sig(slug, 'small') : '<div class="fbanner small"></div>')
+    + '<div class="meta"><div><span class="facname" data-fac="'
+    + esc(name) + '">' + left + '</span></div></div>'
+    + '<span class="dim">' + right + '</span></div>';
+}
+
 /* ── 019: the pitch to the unbannered — join here, or found there ───── */
 function renderCta(d) {
   if (d.in_faction) return '';
@@ -411,7 +446,9 @@ function ledgerRows(d) {
           + 'data-name="' + esc(f.name) + '">ASK TO JOIN</button></span>';
     return '<div class="lrow' + (open ? ' joinable' : '') + '">'
       + '<span class="faint">' + (i + 1) + '</span>'
-      + '<span>' + fac(f.name) + '</span>'
+      + '<span class="lname">'
+      + (f.banner ? sig(f.banner, 'small') : '')
+      + fac(f.name) + '</span>'
       + '<span class="r dim">' + f.members + ' at table</span>'
       + '<span class="r gold">\u25c8 ' + num(f.treasury) + '</span>'
       + act + '</div>';
@@ -626,13 +663,14 @@ function renderBoard(d) {
     + ' a head, paid from the faction store — the steward signs up at '
     + 'the Guildhall</div>';
   if (d.last_week.length) {
+    /* 027: a banner is a picture wherever it is named. */
     h += '<div style="margin-top:8px">';
     d.last_week.forEach(wk => {
-      h += '<div class="kv"><span' + (wk.won ? '' : ' class="k"') + '>'
-        + (wk.won ? '★ ' : '') + fac(wk.faction) + ' — '
-        + esc(wk.goal_kind).toUpperCase() + '</span><span class="dim">'
-        + esc(wk.prize_note || (num(wk.progress) + '/'
-        + num(wk.goal_target))) + '</span></div>';
+      h += chipRow2(wk.faction, banners,
+        (wk.won ? '★ ' : '') + esc(wk.faction) + ' — '
+        + esc(wk.goal_kind).toUpperCase(),
+        esc(wk.prize_note || (num(wk.progress) + '/'
+        + num(wk.goal_target))));
     });
     h += '</div>';
   } else {
@@ -645,10 +683,9 @@ function renderBoard(d) {
     + 'wins all-time</div>';
   if (d.wins.length) {
     d.wins.forEach((w, i) => {
-      h += '<div class="kv"><span' + (i ? ' class="k"' : '') + '>'
-        + (i === 0 ? '#1 ' : (i + 1) + '  ') + fac(w.faction)
-        + '</span><span>' + w.wins + ' win' + (w.wins === 1 ? '' : 's')
-        + '</span></div>';
+      h += chipRow2(w.faction, banners,
+        (i === 0 ? '#1 ' : (i + 1) + '  ') + esc(w.faction),
+        w.wins + ' win' + (w.wins === 1 ? '' : 's'));
     });
   } else {
     h += '<div class="faint">no challenge has been won yet</div>';
@@ -698,5 +735,6 @@ def render_pane() -> str:
   <div id="community" class="pane"><div class="placeholder">
     <div class="eyebrow">the guildhall</div>unrolling the charters…</div></div>
 </div>
+<script>{INTERACT_JS}</script>
 <script>{_JS.replace("__API__", _API).replace("__SWAP_JS__", SWAP_JS)}</script>
 <script>{TIP_JS}</script></body></html>"""

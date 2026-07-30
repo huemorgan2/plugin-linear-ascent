@@ -19,6 +19,9 @@ class Option:
     locked: bool = False    # 019: a gated row — dimmed, still clickable;
                             # choosing it returns the scene with the
                             # refusal that explains the gate
+    badge: int = 0          # 027: things waiting behind this door — drawn
+                            # as a bright blue count chip. The text
+                            # surface writes it as "(n)" after the label.
 
 
 @dataclass
@@ -64,6 +67,22 @@ class Scene:
                                     # every playing scene. Entries:
                                     # {slug, name, count, kind, equipped?}
                                     # kind ∈ weapon|shield|armor|item
+    notices: list[dict] = field(default_factory=list)
+                                    # 027: the notice board — what WAITS for
+                                    # the player, drawn at the top of the
+                                    # card as clickable shortcuts. Entries:
+                                    # {door, opt, n, kind, text}, kind ∈
+                                    # collect|plan. A count is never left to
+                                    # be guessed at.
+    ask: dict | None = None         # 027: an input the card owns —
+                                    # {kind: "text"|"number", label,
+                                    #  placeholder, max, min, submit}.
+                                    # Rides with awaits_text: the box is the
+                                    # fast path, the chat still works.
+    gallery: list[dict] = field(default_factory=list)
+                                    # 027: clickable picture tiles —
+                                    # {opt, slug, label, sub}. Faction
+                                    # sigils are art, not filenames.
     enemy: dict | None = None       # 017/003: the fight dossier payload —
                                     # {name, hp, hp_max, atk, def, profile,
                                     #  range, lore, specimen, pspd, dtype,
@@ -76,6 +95,10 @@ class Scene:
         lines = [self.eyebrow, self.headline]
         if self.support:
             lines.append(self.support)
+        # 027: the notice board reads as words on every surface — the card
+        # draws it, the agent says it.
+        for nt in self.notices:
+            lines.append(f"! {nt.get('text', '')}")
         if self.awaits_text:
             lines.append(f"⌨ waiting for a typed chat reply: "
                          f"{self.awaits_text}")
@@ -99,7 +122,8 @@ class Scene:
             lines.append("─" * 40)
             for i, o in enumerate(self.options, 1):
                 hint = f"   ({o.hint})" if o.hint else ""
-                lines.append(f" {i}) {o.label}{hint}")
+                badge = f" ({o.badge})" if getattr(o, "badge", 0) else ""
+                lines.append(f" {i}) {o.label}{badge}{hint}")
         if self.meters:
             m = self.meters
             lines.append(
@@ -120,7 +144,7 @@ class Scene:
             "body_lines": self.body_lines,
             "options": [
                 {"id": o.id, "label": o.label, "hint": o.hint,
-                 "aether": o.aether, "locked": o.locked}
+                 "aether": o.aether, "locked": o.locked, "badge": o.badge}
                 for o in self.options],
             "meters": vars(self.meters) if self.meters else None,
             "event_kind": self.event_kind,
@@ -130,6 +154,9 @@ class Scene:
             "scene_id": self.scene_id,
             "awaits_text": self.awaits_text,
             "inventory": self.inventory,
+            "notices": self.notices,
+            "ask": self.ask,
+            "gallery": self.gallery,
             "enemy": self.enemy,
         }
 
@@ -157,5 +184,8 @@ class Scene:
             scene_id=d.get("scene_id", ""),
             awaits_text=d.get("awaits_text", ""),
             inventory=list(d.get("inventory", [])),
+            notices=list(d.get("notices", [])),
+            ask=(dict(d["ask"]) if d.get("ask") else None),
+            gallery=list(d.get("gallery", [])),
             enemy=(dict(d["enemy"]) if d.get("enemy") else None),
         )

@@ -11,19 +11,41 @@ import datetime as dt
 
 from .. import economy, unlocks
 from ..content import schema
-from . import combat, contracts, state, weekly
+from . import combat, contracts, notices, state, weekly
 from .scene import Meters, Option, Scene
 
 
 # ── Entry points ─────────────────────────────────────────────────────────
 
+# 027: the notice board rides every room in Roothollow, not just the
+# square — walking into the Forge should still tell you the Vault is
+# holding your money. The climb itself stays clean: no notices at the gate,
+# in the wilds or inside a keep, where the only thing that matters is the
+# thing trying to kill you.
+_NOTICE_ROOMS = ("town", "forge", "arcanum", "medlab", "lodge", "vault",
+                 "pawn", "stone", "guildhall", "board", "relay", "fields",
+                 "grants")
+
+
 def _stamp(p: dict, scene: Scene) -> Scene:
     """scene_id = the act counter. Every choice bumps it, reads reuse it —
     /pane/peek compares ids, so a chat-driven act refreshes the pane
     while idempotent reads never do. 014: the pack strip rides every
-    playing scene the same way."""
+    playing scene the same way. 027: so does the notice board, in town."""
     scene.scene_id = f"s{p.get('act_seq', 0)}"
     scene.inventory = _pack_strip(p)
+    if (not scene.notices and not scene.enemy
+            and p.get("location") in _NOTICE_ROOMS):
+        scene.notices = notices.pending(p)
+    # 027: every pack cell carries what it can do HERE — the strip stops
+    # being a hover-only display and becomes the place you use a thing.
+    for cell in scene.inventory:
+        acts, why = pack_actions(p, cell["slug"])
+        if acts:
+            cell["acts"] = [{"opt": o.id, "label": o.label, "hint": o.hint}
+                            for o in acts]
+        if why:
+            cell["why"] = why
     return scene
 
 
@@ -70,6 +92,106 @@ def _pack_strip(p: dict) -> list[dict]:
     return strip
 
 
+# 027: what a carried thing can do, right where you stand. The pack strip
+# was hover-text for three versions and salves piled up in it because the
+# only mouth that ate one was a menu row at the camp fire. Now every cell
+# answers two questions: what can I do with this here, and if nothing —
+# where can I?
+#
+# The law that does NOT change: the trollblood tonic is still the only heal
+# that goes down mid-fight (013). Everything else waits for the fight to
+# end, and the popup says so instead of leaving the player guessing.
+PACK_USE_IDS = ("use_medgel", "use_trauma_kit", "use_luck_charm")
+
+
+def pack_actions(p: dict, slug: str) -> tuple[list[Option], str]:
+    """(actions, why-not) for one pack slug in the player's current
+    situation. Actions are ordinary option ids — the engine gains no verb
+    it did not already validate."""
+    if p.get("stage") != "playing":
+        return [], ""
+    inv = p.get("inventory") or {}
+    have = int(inv.get(slug, 0))
+    fighting = bool(p.get("encounter"))
+    item = economy.APOTHECARY.get(slug)
+
+    if fighting:
+        # In a fight the pack offers exactly what the fight offers: the
+        # relic and quiver rows the encounter already earned.
+        from . import tips
+        opts = []
+        for o in combat._relic_options(p):
+            oslug = (o.id.removeprefix("nock_") if o.id.startswith("nock_")
+                     else tips._FIGHT_RELIC.get(o.id, ""))
+            if oslug == slug:
+                opts.append(o)
+        if slug == "trollblood_tonic" and have:
+            opts.append(Option("drink_tonic", "Drink trollblood tonic",
+                               "full heal"))
+        if opts:
+            return opts, ""
+        if item and item.effect.startswith("heal_"):
+            return [], ("Both hands are busy — only the trollblood tonic "
+                        "goes down mid-fight. This keeps until it's over.")
+        return [], "Nothing this one can do in the middle of this."
+
+    # The salves: a number in the effect string ("heal_25"). The tonic's
+    # "heal_full" is a fight item and answers below.
+    if item and item.effect.startswith("heal_") \
+            and item.effect != "heal_full" and have:
+        amount = int(item.effect.rsplit("_", 1)[1])
+        if p["hp"] >= state.max_hp(p):
+            return [], ("You're whole. Keep it sealed for when you're "
+                        "not — it heals the same at any level.")
+        return [Option(f"use_{slug}", f"Use a {item.name}",
+                       f"+{amount} HP · {have} left")], ""
+    if slug == "luck_charm" and have:
+        if p["flags"].get("luck_day") == state.world_day():
+            return [], "Fortune already leans your way today."
+        return [Option("use_luck_charm", "Break the luck charm",
+                       f"better loot till tomorrow · {have} left")], ""
+    if slug == "trollblood_tonic" and have:
+        return [], "Saved for a fight — it is the only heal that works in one."
+    if slug == "repair_token":
+        return [], "The Forge spends it: one full mend, free."
+    if slug in economy.RELICS:
+        return [], "Carried into the fight — it offers itself when it can act."
+    if slug in economy.FORGE:
+        return [], "The Forge swaps gear in and out of the pack."
+    return [], ""
+
+
+def _pack_use(p: dict, oid: str) -> Scene | None:
+    """027: a pack action taken from the strip — legal in any room, never
+    in a fight. Returns None when the id isn't a pack action."""
+    if oid not in PACK_USE_IDS or p.get("encounter"):
+        return None
+    slug = oid.removeprefix("use_")
+    acts, why = pack_actions(p, slug)
+    if not any(o.id == oid for o in acts):
+        s = _build_scene(p)
+        s.shard_note = why or "Nothing happens."
+        return s
+    if slug == "luck_charm":
+        p["flags"]["luck_day"] = state.world_day()
+        note = ("+ the charm cracks in your fist — fortune leans your way "
+                "until tomorrow")
+    else:
+        item = economy.APOTHECARY[slug]
+        amount = int(item.effect.rsplit("_", 1)[1])
+        before = p["hp"]
+        p["hp"] = min(state.max_hp(p), p["hp"] + amount)
+        note = (f"+ {p['hp'] - before} HP — the {item.name.lower()} does "
+                "its work.")
+    p["inventory"][slug] -= 1
+    if p["inventory"][slug] <= 0:
+        del p["inventory"][slug]
+    combat._ledger(p, "use", note=slug)
+    s = _build_scene(p)
+    s.body_lines.insert(0, note)
+    return s
+
+
 def current_scene(p: dict) -> Scene:
     state.ensure_current(p)
     state.touch_daily(p)
@@ -95,8 +217,26 @@ def apply_choice(p: dict, option_id: str, text: str = "") -> Scene:
     if p.get("faction_donating") and text and not option_id:
         return _stamp(p, social.guildhall_donate(p, text))
 
+    # 027: two surfaces act from OUTSIDE the menu — the pack popup and the
+    # notice board. Their ids are validated by the engine that owns them,
+    # not by the row list, so they work from any room.
+    used = _pack_use(p, option_id)
+    if used is not None:
+        return _stamp(p, used)
+
     scene = _build_scene(p)
-    valid = {o.id for o in scene.options}
+    if p.get("location") in _NOTICE_ROOMS and not scene.enemy:
+        doors = {nt["opt"] for nt in notices.pending(p)}
+        if option_id in doors and option_id not in {o.id for o in scene.options}:
+            # the notice row is a shortcut to the door: walk to the square
+            # and open it, exactly as a player would with two clicks.
+            p["location"] = "town"
+            return _stamp(p, _dispatch(p, option_id))
+
+    # 027: a picture tile is a row — the sigil grid's ids are as valid as
+    # any option's, they just look like what they choose.
+    valid = ({o.id for o in scene.options}
+             | {str(g.get("opt", "")) for g in scene.gallery})
     if option_id not in valid:
         # numbered fallback: "1".."9" resolve positionally
         if option_id.isdigit() and 1 <= int(option_id) <= len(scene.options):
@@ -538,11 +678,13 @@ def _creation_name_scene(p: dict) -> Scene:
     return Scene(
         eyebrow="THE TOWER GATE · REGISTRAR",
         headline="Your name, for the Stone",
-        support="Say it in chat — two to twenty-four letters the granite "
-                "can hold.",
+        support="Two to twenty-four letters the granite can hold.",
         shard_note="Choose one you'd want carved where everyone reads it.",
         options=[],
         awaits_text="the character's name",
+        ask={"kind": "text", "max": 24, "label": "your name",
+             "placeholder": "what the Stone should carve",
+             "submit": "CARVE IT"},
     )
 
 
@@ -576,30 +718,12 @@ def _door_open(p: dict, lvl: int) -> bool:
 
 
 def _town_waiting(p: dict, w: dict) -> dict[str, int]:
-    """0.29.2: collect badges — how many things WAIT behind each door.
-    A (n) after a door's name means a finished claim, a held letter, an
-    open strongbox or a night still unplanned — never mere availability
-    (a badge that's always on is a badge nobody reads)."""
-    n: dict[str, int] = {}
-    if p["level"] >= economy.BOARD_LEVEL:
-        c = sum(1 for j in contracts.board_for(p)
-                if contracts.claimable(p, j))
-        if c:
-            n["board"] = c
-    if p["level"] >= economy.NIGHT_SLOT_LEVEL \
-            and (p.get("night") or {}).get("day") != state.world_day():
-        n["lodge"] = 1
-    vault = len(state.interest_sync(p))
-    if p["level"] >= economy.STRONGBOX_LEVEL \
-            and weekly.sync(p).get("pending"):
-        vault += 1
-    if vault:
-        n["vault"] = vault
-    if w and _door_open(p, economy.RELAY_LEVEL):
-        c = int(w.get("inbox_count") or 0)
-        if c:
-            n["relay"] = c
-    return n
+    """0.29.2/027: collect badges — how many things WAIT behind each door.
+    One projection of engine/notices.py, so a chip and the notice board's
+    sentence can never disagree. A badge is a finished claim or an expiring
+    slot, never mere availability (a badge that's always on is a badge
+    nobody reads)."""
+    return notices.doors(p, w)
 
 
 def _town_scene(p: dict) -> Scene:
@@ -614,42 +738,45 @@ def _town_scene(p: dict) -> Scene:
         lines.append(nxt)
     waiting = _town_waiting(p, w)
 
-    def _b(door: str) -> str:
-        return f" ({waiting[door]})" if door in waiting else ""
+    def _b(door: str) -> int:
+        return int(waiting.get(door, 0))
 
     # 007 town readability: the gate leads — leaving town is THE verb —
     # and every not-yet area reads its unlock level from the square
     # (the Arcanum set the pattern in 004).
     opts = [
         Option("gate", "The Tower Gate", "leave town and climb"),
-        Option("forge", "The Forge", "gear"),
+        Option("forge", "The Forge", "gear", badge=_b("forge")),
         Option("arcanum", "The Arcanum",
                "mage gear" if _door_open(p, economy.ARCANUM_LEVEL)
                else f"🔒 level {economy.ARCANUM_LEVEL}",
                locked=not _door_open(p, economy.ARCANUM_LEVEL)),
         Option("medlab", "Apothecary & Medlab", "potions"),
-        Option("board", f"The contract board{_b('board')}",
+        Option("board", "The contract board",
                "three jobs a day" if p["level"] >= economy.BOARD_LEVEL
                else f"🔒 level {economy.BOARD_LEVEL}",
-               locked=p["level"] < economy.BOARD_LEVEL),
-        Option("lodge", f"The Lodge{_b('lodge')}",
-               f"◈ {economy.LODGE_PRICE_PER_LEVEL * p['level']}/night"),
-        Option("vault", f"The Vault{_b('vault')}", "bank"),
+               locked=p["level"] < economy.BOARD_LEVEL,
+               badge=_b("board")),
+        Option("lodge", "The Lodge",
+               f"◈ {economy.LODGE_PRICE_PER_LEVEL * p['level']}/night",
+               badge=_b("lodge")),
+        Option("vault", "The Vault", "bank", badge=_b("vault")),
         Option("pawn", "Pawn shop", "sell"),
         # 012: the Guildhall is core — training (buying levels) lives
         # there, so it must exist even without a connected world.
         Option("guildhall", "The Guildhall",
-               p.get("guild") or "training"),
+               p.get("guild") or "training", badge=_b("guildhall")),
         Option("stone", "Stone of the Climb", "news"),
     ]
     if w:
         inbox = w.get("inbox_count", 0)
         opts.append(Option(
-            "relay", f"The Relay Office{_b('relay')}",
+            "relay", "The Relay Office",
             (f"{inbox} letter{'s' if inbox != 1 else ''}" if inbox
              else "post") if _door_open(p, economy.RELAY_LEVEL)
             else f"🔒 level {economy.RELAY_LEVEL}",
-            locked=not _door_open(p, economy.RELAY_LEVEL)))
+            locked=not _door_open(p, economy.RELAY_LEVEL),
+            badge=_b("relay")))
         opts.append(Option(
             "fields", "The fields",
             "pvp" if p["level"] >= economy.FIELDS_LEVEL
@@ -2047,27 +2174,9 @@ def _gate_town_action(p: dict, oid: str) -> Scene:
         return s
     if oid == "stew":
         return _eat_stew(p, _gate_town_scene)
-    if oid.startswith("use_"):
-        slug = oid.removeprefix("use_")
-        item = economy.APOTHECARY.get(slug)
-        if not (item and item.effect.startswith("heal_")
-                and p["inventory"].get(slug, 0) > 0):
-            return _gate_town_scene(p)
-        if p["hp"] >= state.max_hp(p):
-            s = _gate_town_scene(p)
-            s.shard_note = "You're whole. Keep it sealed for when you're not."
-            return s
-        p["inventory"][slug] -= 1
-        if p["inventory"][slug] <= 0:
-            del p["inventory"][slug]
-        amount = int(item.effect.rsplit("_", 1)[1])
-        before = p["hp"]
-        p["hp"] = min(state.max_hp(p), p["hp"] + amount)
-        combat._ledger(p, "use", note=slug)
-        s = _gate_town_scene(p)
-        s.body_lines.insert(0, f"+ {p['hp'] - before} HP — the "
-                               f"{item.name.lower()} does its work.")
-        return s
+    # 027: use_* is one law in one place now (_pack_use), reachable from the
+    # pack strip in any room — the camp fire keeps its menu row, the
+    # handler moved upstream.
     if oid == "keep":
         w = p.get("_world") or {}
         # milestone keeps run the quorum flow in the shared world

@@ -24,6 +24,11 @@ def label(scene, oid):
     return next(o.label for o in scene.options if o.id == oid)
 
 
+def badge(scene, oid):
+    """027: the waiting count is a field on the row, not text in its label."""
+    return next(o.badge for o in scene.options if o.id == oid)
+
+
 def test_each_absent_day_is_one_stub_priced_off_the_principal():
     p = playing("stubs")
     p["bank"] = 200
@@ -61,12 +66,12 @@ def test_town_vault_door_badges_the_stub_count():
     p["bank"] = 200
     p["bank_day"] = state.world_day() - 10
     s = core.current_scene(p)
-    assert label(s, "vault") == "The Vault (10)"
+    assert badge(s, "vault") == 10
     core.apply_choice(p, "vault")
     s = core.apply_choice(p, "collect_interest")
     assert p["bank"] == 300
     s = core.apply_choice(p, "back")
-    assert label(s, "vault") == "The Vault"
+    assert badge(s, "vault") == 0
 
 
 def test_an_empty_bank_earns_no_stubs():
@@ -75,7 +80,7 @@ def test_an_empty_bank_earns_no_stubs():
     p["bank_day"] = state.world_day() - 30
     assert state.interest_sync(p) == []
     s = core.current_scene(p)
-    assert label(s, "vault") == "The Vault"
+    assert badge(s, "vault") == 0
 
 
 def test_vault_card_shows_the_pile_capped_at_five_lines():

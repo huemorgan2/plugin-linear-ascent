@@ -12,7 +12,7 @@ import pytest
 from plugin_linear_ascent import routes, runtime
 from plugin_linear_ascent.engine import state
 from plugin_linear_ascent.engine.scene import Option, Scene
-from plugin_linear_ascent.render import render_scene
+from plugin_linear_ascent.render import render_scene, render_scene_fragment
 
 
 def scene_with_options():
@@ -44,8 +44,11 @@ def test_card_script_posts_actions_to_the_plugin_route():
 
 
 def test_optionless_scene_has_no_action_script_targets():
-    html = render_scene(Scene(eyebrow="X", headline="No options here"))
-    assert "<button" not in html
+    # 027: the shared script carries the pack popup's own markup, so the
+    # gate is the CARD — a scene with nothing to choose offers nothing to
+    # click.
+    card = render_scene_fragment(Scene(eyebrow="X", headline="No options"))
+    assert "<button" not in card
 
 
 # ── Shared engine access (runtime) ───────────────────────────────────────

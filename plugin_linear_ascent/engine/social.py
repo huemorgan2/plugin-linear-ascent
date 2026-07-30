@@ -79,12 +79,15 @@ def relay_action(p: dict, oid: str) -> Scene:
         return Scene(
             eyebrow="ROOTHOLLOW · THE RELAY OFFICE",
             headline=f"A letter to {target}",
-            support="Say the words in chat — the clerk writes them down.",
+            support="The clerk writes down what you say.",
             shard_note="Keep it under a hundred words. The clerk charges "
                        "attitude by the page.",
             options=[],
             meters=meters(p),
             awaits_text=f"the letter's words for {target}",
+            ask={"kind": "text", "max": 200,
+                 "label": f"the letter to {target}",
+                 "placeholder": "what should it say?", "submit": "SEND"},
         )
     return relay_scene(p)
 
@@ -275,11 +278,17 @@ def guildhall_scene(p: dict, note: str = "") -> Scene:
             lines.append(f"The drillmaster sizes you up: XP "
                          f"{p['xp']:,}/{need:,}. Come back with a full "
                          f"bar — the fee is ◈ {fee:,}.")
+    gallery: list[dict] = []
+    # 027: your own colors hang over your own table — the generic hall art
+    # only shows when you have no banner of your own.
+    banner = "guildhall"
     if fac:
         _member_panel(p, fac, lines, opts)
         headline = f"The {fac['name']} table"
+        if fac.get("banner"):
+            banner = str(fac["banner"])
     elif w.get("factions") is not None:
-        _hall_list(p, w["factions"], lines, opts)
+        gallery = _hall_list(p, w["factions"], lines, opts)
         headline = "Banners for hire"
     else:
         # local dev mode — legacy doc-string guilds, no purse
@@ -309,7 +318,8 @@ def guildhall_scene(p: dict, note: str = "") -> Scene:
         body_lines=lines,
         options=opts,
         meters=meters(p),
-        banner="guildhall",
+        banner=banner,
+        gallery=gallery,
     )
 
 
@@ -376,10 +386,12 @@ def _member_panel(p: dict, fac: dict, lines: list, opts: list) -> None:
     opts.append(Option("guild_leave", "Leave the banner"))
 
 
-def _hall_list(p: dict, factions: list, lines: list, opts: list) -> None:
+def _hall_list(p: dict, factions: list, lines: list,
+               opts: list) -> list[dict]:
     """015: joining is a REQUEST an admin accepts; founding takes rank.
     019: both doors are always ROWS — founding shows locked below the
-    rank, and the full ledger has its own row into the Community tab."""
+    rank, and the full ledger has its own row into the Community tab.
+    027: every banner on offer shows its COLORS — the tile is the ask."""
     w = world(p) or {}
     requested = w.get("faction_requested", "")
     # 020: a non-member learns what the feature IS before the price.
@@ -389,10 +401,20 @@ def _hall_list(p: dict, factions: list, lines: list, opts: list) -> None:
     if not factions:
         lines.append(f"No banners fly yet. Yours could be the first — "
                      f"level {FOUND_MIN_LEVEL}, ◈ {GUILD_FOUND_FEE}.")
+    gallery: list[dict] = []
     for f in factions[:5]:
         n = f.get("members", 0)
+        asked = f["name"] == requested
+        gallery.append({
+            "opt": ("hall_ledger" if asked else f"join_{f['name']}"),
+            "slug": str(f.get("banner") or ""),
+            "label": f["name"],
+            "sub": ("your request waits at their desk" if asked else
+                    f"{n} at the table · join ◈ {f.get('join_fee', 0)} · "
+                    f"dues ◈ {f.get('weekly_dues', 0)}/wk"),
+        })
         lines.append(f"{f['name']} — {n} at the table")
-        if f["name"] == requested:
+        if asked:
             lines.append("  your request waits at their desk")
         else:
             opts.append(Option(f"join_{f['name']}", f"Ask to join {f['name']}",
@@ -409,6 +431,7 @@ def _hall_list(p: dict, factions: list, lines: list, opts: list) -> None:
     else:
         opts.append(Option("found_guild", "Raise a new banner",
                            f"◈ {GUILD_FOUND_FEE}"))
+    return gallery
 
 
 def guild_train(p: dict) -> Scene:
@@ -452,36 +475,46 @@ def guild_train(p: dict) -> Scene:
 
 def _founding_scene(p: dict, st: dict, note: str = "") -> Scene:
     """The creation flow, one scene per step: name → banner → join fee →
-    weekly dues. Typed steps take a chat reply; the banner step is an
-    option pick."""
+    weekly dues. 027: the typed steps carry their own input box (the chat
+    still works), and the sigil step shows the SIGILS instead of asking a
+    founder to pick their colors out of a list of filenames."""
     step = st.get("step", "name")
     opts = [Option("cancel_found", "Never mind")]
-    awaits = ""
+    awaits, ask, gallery = "", None, []
     if step == "name":
-        head, sup = "Name your banner", "Say it in chat — 3 to 24 letters."
+        head, sup = "Name your banner", "3 to 24 letters."
         lines = []
         awaits = "the new banner's name"
+        ask = {"kind": "text", "max": 24, "label": "the banner's name",
+               "placeholder": "the name it flies under", "submit": "RAISE IT"}
     elif step == "banner":
         head, sup = f"A sigil for {st['name']}", \
             "Pick the mark your banner flies."
         lines = []
-        for slug in _sigil_picks(st.get("name", ""), st.get("slugs") or []):
-            opts.insert(-1, Option(f"sig_{slug}",
-                                   slug.replace("_", " ").title()))
+        gallery = [{"opt": f"sig_{slug}", "slug": slug,
+                    "label": slug.replace("_", " ").title()}
+                   for slug in _sigil_picks(st.get("name", ""),
+                                            st.get("slugs") or [])]
     elif step == "fee":
         head = "Set the join fee"
-        sup = (f"Say a number in chat — ◈ 0 to {JOIN_FEE_MAX}. Every "
-               "climber who joins pays it once, into the store.")
+        sup = (f"◈ 0 to {JOIN_FEE_MAX}. Every climber who joins pays it "
+               "once, into the store.")
         lines = ["Immutable after founding — pick numbers people can "
                  "read before they join."]
         awaits = f"the join fee — a number, 0 to {JOIN_FEE_MAX}"
+        ask = {"kind": "number", "min": 0, "max": JOIN_FEE_MAX,
+               "label": "join fee, in gold", "placeholder": "0",
+               "submit": "SET"}
     else:  # dues
         head = "Set the weekly dues"
-        sup = (f"Say a number in chat — ◈ {DUES_MIN} to {DUES_MAX}, "
-               "collected from every member each week, into the store.")
+        sup = (f"◈ {DUES_MIN} to {DUES_MAX}, collected from every member "
+               "each week, into the store.")
         lines = [f"Join fee set at ◈ {st.get('fee', 0)}. You pay dues "
                  "too — the ◈ 500 founding price was your buy-in."]
         awaits = f"the weekly dues — a number, {DUES_MIN} to {DUES_MAX}"
+        ask = {"kind": "number", "min": DUES_MIN, "max": DUES_MAX,
+               "label": "weekly dues, in gold", "placeholder": str(DUES_MIN),
+               "submit": "SET"}
     if note:
         lines.insert(0, note)
     return Scene(
@@ -492,6 +525,8 @@ def _founding_scene(p: dict, st: dict, note: str = "") -> Scene:
         options=opts,
         meters=meters(p),
         awaits_text=awaits,
+        ask=ask,
+        gallery=gallery,
     )
 
 
@@ -509,12 +544,15 @@ def _donate_prompt(p: dict, note: str = "") -> Scene:
     return Scene(
         eyebrow="ROOTHOLLOW · THE GUILDHALL",
         headline="How much goes in the box?",
-        support=f"Say a number in chat — you carry ◈ {p['gold']:,}. "
-                "Carried gold only; the bank stays yours.",
+        support=f"You carry ◈ {p['gold']:,}. Carried gold only; the bank "
+                "stays yours.",
         body_lines=[note] if note else [],
         options=[Option("cancel_donate", "Never mind")],
         meters=meters(p),
         awaits_text="the donation amount — a number in carried gold",
+        ask={"kind": "number", "min": 1, "max": max(1, int(p["gold"])),
+             "label": "into the store, in carried gold",
+             "placeholder": "0", "submit": "DONATE"},
     )
 
 

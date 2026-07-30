@@ -99,7 +99,9 @@ def test_founding_flow_sets_the_purse_numbers():
     assert "Name your banner" in s.headline
     s = core.apply_choice(p, "", "Night Ledger")
     assert "sigil" in s.headline.lower()
-    sig = next(o.id for o in s.options if o.id.startswith("sig_"))
+    # 027: the sigils are PICTURES — the step ships a gallery of tiles,
+    # and a tile's id acts exactly like an option's.
+    sig = next(g["opt"] for g in s.gallery if g["opt"].startswith("sig_"))
     s = core.apply_choice(p, sig)
     assert "join fee" in s.headline.lower()
     s = core.apply_choice(p, "", "25")
@@ -121,7 +123,7 @@ def test_founding_validates_the_numbers_and_can_cancel():
     core.apply_choice(p, "found_guild")
     core.apply_choice(p, "", "Night Ledger")
     s = core.current_scene(p)
-    sig = next(o.id for o in s.options if o.id.startswith("sig_"))
+    sig = next(g["opt"] for g in s.gallery if g["opt"].startswith("sig_"))
     core.apply_choice(p, sig)
     s = core.apply_choice(p, "", "9999")          # fee over the cap
     assert "0 to 500" in " ".join(s.body_lines)

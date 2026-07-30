@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import base64
 import html
+import json as _json
 import os
 import re
 from functools import lru_cache
@@ -52,6 +53,10 @@ _ART_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)),
 _ART = os.path.join(_ART_ROOT, "banners")
 _CREATURES = os.path.join(_ART_ROOT, "creatures")
 _EVENTS = os.path.join(_ART_ROOT, "events")
+# 027: faction sigils were pane-only (served as PNGs over HTTP). A banner is
+# a picture everywhere now — cards included — so the same 1-bit art resolves
+# through the ordinary banner lookup.
+_SIGILS = os.path.join(_ART, "factions")
 
 # 011 event animations tint by their moment, not the floor mood.
 _FX_TINT = {"ascent_open": VIOLET, "ascent_title": VIOLET_SOFT,
@@ -64,11 +69,27 @@ _FX_TINT = {"ascent_open": VIOLET, "ascent_title": VIOLET_SOFT,
             "intro_muster": DIM}
 
 
+@lru_cache(maxsize=None)
+def sigil_slugs() -> frozenset:
+    """027: the faction sigils on disk — a banner's colors read as its own
+    ink (violet), never as the grey of a place."""
+    try:
+        return frozenset(f[: -len("_320x112.png")]
+                         for f in os.listdir(_SIGILS)
+                         if f.endswith("_320x112.png"))
+    except OSError:
+        return frozenset()
+
+
 def _banner_tint(slug: str, variant: str = "") -> str:
     if variant in _VARIANT_TINT:
         return _VARIANT_TINT[variant]
     if slug in _BANNER_TINT:
         return _BANNER_TINT[slug]
+    # a sigil is checked first: one of them is called warden_key, and a
+    # banner's colors are its own, not a keep's.
+    if slug in sigil_slugs():
+        return VIOLET_SOFT
     if slug in _BOSS_SLUGS or slug.startswith("warden_"):
         return VIOLET
     return DIM
@@ -82,7 +103,8 @@ def _banner_data_url(slug: str) -> tuple[str, int, int] | None:
     so milestone bosses pick up their taller 320x200 art when it exists.
     """
     for art_dir, sizes in ((_CREATURES, ("320x200", "320x112")),
-                           (_ART, ("320x112", "160x56", "320x200"))):
+                           (_ART, ("320x112", "160x56", "320x200")),
+                           (_SIGILS, ("320x112",))):
         for size in sizes:
             path = os.path.join(art_dir, f"{slug}_{size}.png")
             if os.path.exists(path):
@@ -253,6 +275,84 @@ def _tally_html(tally: list[dict]) -> str:
     return "".join(rows)
 
 
+# ── 027: the notice board ───────────────────────────────────────────────
+# A count with no sentence around it is a riddle. Every waiting thing gets
+# a row at the TOP of the card: the verb, the room, the number, the worth —
+# and the row is the shortcut. Blue is the notification ink everywhere in
+# this game now; it never means a stat.
+_NOTICE_WORD = {"collect": "COLLECT", "plan": "PLAN"}
+
+
+def _notices_html(notices: list[dict]) -> str:
+    rows = []
+    for nt in notices:
+        kind = str(nt.get("kind", "collect"))
+        word = _NOTICE_WORD.get(kind, "COLLECT")
+        n = int(nt.get("n", 0) or 0)
+        chip = f'<span class="nb">{n}</span>' if n > 0 else ""
+        opt = str(nt.get("opt", ""))
+        rows.append(
+            f'<button type="button" class="nrow" data-opt="{_e(opt)}">'
+            f'<span class="nk">{word}</span>{chip}'
+            f'<span class="ntx">{_et(str(nt.get("text", "")))}</span>'
+            f'<span class="ngo">→</span></button>')
+    if not rows:
+        return ""
+    return (f'<div class="notices"><div class="nhead">waiting for you</div>'
+            f'{"".join(rows)}</div>')
+
+
+# ── 027: the card's own input — nobody should have to type into the chat
+# to name a character. Same monospace, same border grammar as an option.
+def _ask_html(ask: dict) -> str:
+    kind = "number" if str(ask.get("kind", "")) == "number" else "text"
+    attrs = [f'type="{kind}"', 'class="ti"', 'name="ans"', 'autocomplete="off"']
+    if kind == "number":
+        attrs.append('inputmode="numeric"')
+        if ask.get("min") is not None:
+            attrs.append(f'min="{int(ask["min"])}"')
+        if ask.get("max") is not None:
+            attrs.append(f'max="{int(ask["max"])}"')
+    else:
+        attrs.append(f'maxlength="{int(ask.get("max") or 200)}"')
+    ph = str(ask.get("placeholder") or "")
+    if ph:
+        attrs.append(f'placeholder="{_e(ph)}"')
+    label = str(ask.get("label") or "")
+    submit = str(ask.get("submit") or "SEND")
+    lab = f'<span class="alab">{_et(label)}</span>' if label else ""
+    return (f'<form class="ask later" data-ask="1">{lab}'
+            f'<span class="arow"><input {" ".join(attrs)}>'
+            f'<button type="submit" class="asend">{_e(submit)}</button>'
+            f"</span></form>")
+
+
+# ── 027: picture tiles — a banner is a sigil, not a filename ────────────
+def _gallery_html(gallery: list[dict]) -> str:
+    tiles = []
+    for g in gallery:
+        slug = str(g.get("slug", ""))
+        art = _banner_data_url(slug) if slug else None
+        if art:
+            url, w, h = art
+            pic = (f'<span class="gpic" style="background-color:{AETHER};'
+                   f"aspect-ratio:{w}/{h};"
+                   f"-webkit-mask-image:url('{url}');"
+                   f"mask-image:url('{url}');\"></span>")
+        else:
+            pic = '<span class="gpic none"></span>'
+        sub = (f'<span class="gsub">{_et(str(g.get("sub", "")))}</span>'
+               if g.get("sub") else "")
+        tiles.append(
+            f'<button type="button" class="gtile" '
+            f'data-opt="{_e(str(g.get("opt", "")))}">{pic}'
+            f'<span class="glab">{_et(str(g.get("label", slug)))}</span>'
+            f"{sub}</button>")
+    if not tiles:
+        return ""
+    return f'<div class="gal later">{"".join(tiles)}</div>'
+
+
 def _blocks(cur: int, cap: int, cells: int = 10) -> str:
     cur = max(0, min(cur, cap))
     filled = round(cells * cur / cap) if cap else 0
@@ -278,25 +378,35 @@ _TIP_GOLD = ("◈ Carried gold — spendable anywhere but lost when you die. "
 
 
 def _meters_html(m: Meters) -> str:
+    """The rail. 027: every number carries data-m/data-v/data-max so the
+    pane can COUNT it to its new value instead of blinking — a 25-point
+    heal should be felt as twenty-five, not as an arithmetic result."""
     low = " low" if m.hp * 10 <= m.hp_max * 3 else ""
+
+    def val(key: str, cur: int, cap: int | None = None) -> str:
+        mx = f' data-max="{cap}"' if cap is not None else ""
+        return (f'<span class="mv" data-m="{key}" data-v="{cur}"{mx}>'
+                f"{cur:,}</span>")
+
     return (
         f'<div class="rail later">'
         f'<span class="meter hp{low}" data-tip="{_e(_TIP_HP)}">'
-        f"<span>HP {m.hp}/{m.hp_max}</span>"
-        f'<span class="blocks" aria-hidden="true">'
+        f"<span>HP {val('hp', m.hp, m.hp_max)}/{m.hp_max}</span>"
+        f'<span class="blocks" data-bar="hp" aria-hidden="true">'
         f"{_blocks(m.hp, m.hp_max)}</span></span>"
         f'<span class="meter en" data-tip="{_e(_TIP_EN)}">'
-        f"<span>{_eglyph('bolt')} {m.energy}/{m.energy_max}</span>"
-        f'<span class="blocks" aria-hidden="true">'
+        f"<span>{_eglyph('bolt')} {val('en', m.energy, m.energy_max)}/"
+        f"{m.energy_max}</span>"
+        f'<span class="blocks" data-bar="en" aria-hidden="true">'
         f"{_blocks(m.energy, m.energy_max)}</span></span>"
         f'<span class="meter ae" data-tip="{_e(_TIP_XP)}">'
-        f"<span>XP {m.xp:,}/{m.xp_need:,}</span>"
-        f'<span class="blocks" aria-hidden="true">'
+        f"<span>XP {val('xp', m.xp, m.xp_need)}/{m.xp_need:,}</span>"
+        f'<span class="blocks" data-bar="xp" aria-hidden="true">'
         f"{_blocks(m.xp, m.xp_need)}</span></span>"
         f'<span class="gold">'
         f'<span class="lvl" data-tip="{_e(_TIP_LV)}">LV {m.level}</span>'
-        f'<span data-tip="{_e(_TIP_GOLD)}">◈ {m.gold:,}</span></span>'
-        f"</div>")
+        f'<span data-tip="{_e(_TIP_GOLD)}">◈ {val("gold", m.gold)}</span>'
+        f"</span></div>")
 
 
 # ── 017/003: the enemy header + the [i] dossier ─────────────────────────
@@ -467,15 +577,26 @@ def _inventory_html(scene: Scene) -> str:
             tip = (f"{tip} · " if tip else "") + (
                 "broken — half strength until the Forge repairs it"
                 if dur <= 0 else f"{pct}% — repair at the Forge")
+        # 027: the cell is a button now — the popup lists what this thing
+        # can do HERE, or says where it can be done. `acts` come from the
+        # engine (core.pack_actions), never guessed client-side.
+        acts = it.get("acts") or []
+        act_attr = (f" data-acts=\"{_e(_json.dumps(acts))}\""
+                    if acts else "")
+        why_attr = (f' data-why="{_e(str(it.get("why")))}"'
+                    if it.get("why") else "")
         cells.append(
-            f'<span class="item{" eq" if equipped else ""}" tabindex="0" '
-            f'data-tip="{_e(tip)}">'
+            f'<button type="button" class="item act'
+            f'{" eq" if equipped else ""}" '
+            f'data-tip="{_e(tip)}" data-slug="{_e(slug)}" '
+            f'data-name="{_e(str(it.get("name", slug)))}"'
+            f"{act_attr}{why_attr}>"
             f'<span class="pico"><span class="picon" '
             f'style="background-color:{tint};'
             f"-webkit-mask-image:url('{url}');mask-image:url('{url}');\">"
             f"</span>{durbar}</span>"
             f'<span class="pname">{_e(it.get("name", slug))}{ct}</span>'
-            f"</span>")
+            f"</button>")
     return (f'<div class="inv later"><span class="invlbl">pack</span>'
             f'{"".join(cells)}</div>')
 
@@ -530,6 +651,146 @@ TIP_JS = """(function () {
   window.addEventListener('scroll', hide, true);
 })();"""
 
+# ── 027: the three new interactions, written once for both hosts ────────
+# Both the pane and the chat card define window.__laAct(option, text) — the
+# one thing that differs (a direct fetch vs the host bridge) — and then call
+# window.__laWire(root) after every scene swap. Everything below is host
+# agnostic: the pack popup, the card's own input box, and the rail count-up.
+INTERACT_JS = """(function () {
+  if (window.__laWire) return;
+  var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ── the pack popup: click a carried thing, act on it ── */
+  function closeMenu() {
+    var m = document.querySelector('.pmenu');
+    if (m) m.remove();
+  }
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest || !e.target.closest('.pmenu')) closeMenu();
+  }, true);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeMenu();
+  });
+  window.addEventListener('scroll', closeMenu, true);
+
+  function openMenu(item) {
+    closeMenu();
+    var acts = [];
+    try { acts = JSON.parse(item.dataset.acts || '[]'); } catch (err) {}
+    var box = document.createElement('div');
+    box.className = 'pmenu';
+    var name = item.dataset.name || 'this';
+    var h = '<div class="phead">' + name + '</div>';
+    acts.forEach(function (a, i) {
+      h += '<button type="button" class="pact" data-opt="' + a.opt + '">'
+        + '<span>' + a.label + '</span>'
+        + (a.hint ? '<span class="phint">' + a.hint + '</span>' : '')
+        + '</button>';
+    });
+    if (!acts.length)
+      h += '<div class="pwhy">' + (item.dataset.why
+        || 'Nothing to do with it here.') + '</div>';
+    box.innerHTML = h;
+    document.body.appendChild(box);
+    var r = item.getBoundingClientRect();
+    var x = Math.max(8, Math.min(r.left, innerWidth - box.offsetWidth - 8));
+    var y = r.top - box.offsetHeight - 6;
+    if (y < 4) y = Math.min(r.bottom + 6, innerHeight - box.offsetHeight - 4);
+    box.style.left = x + 'px';
+    box.style.top = Math.max(4, y) + 'px';
+    box.querySelectorAll('.pact').forEach(function (b) {
+      b.addEventListener('click', function () {
+        box.querySelectorAll('.pact').forEach(function (x2) {
+          x2.disabled = true; });
+        closeMenu();
+        window.__laAct(b.dataset.opt, '');
+      });
+    });
+  }
+
+  function wirePack(root) {
+    root.querySelectorAll('.inv .item').forEach(function (it) {
+      if (it.dataset.wired) return;
+      it.dataset.wired = '1';
+      it.addEventListener('click', function (e) {
+        e.stopPropagation(); openMenu(it); });
+      it.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault(); openMenu(it); }
+      });
+    });
+  }
+
+  /* ── the card's own input: nobody types a name into the chat ── */
+  function wireAsk(root) {
+    root.querySelectorAll('form.ask').forEach(function (f) {
+      if (f.dataset.wired) return;
+      f.dataset.wired = '1';
+      var input = f.querySelector('.ti');
+      var send = f.querySelector('.asend');
+      f.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var v = (input.value || '').trim();
+        if (!v) { input.focus(); return; }
+        input.disabled = true; send.disabled = true;
+        window.__laAct('', v);
+      });
+      setTimeout(function () { try { input.focus(); } catch (err) {} }, 60);
+    });
+  }
+
+  /* ── the rail count-up: a 25-point heal should be felt as 25 ── */
+  var last = {};
+  function blocks(cur, cap, cells) {
+    var f = cap > 0 ? Math.round(cells * Math.max(0, Math.min(cur, cap))
+      / cap) : 0;
+    return '\\u2588'.repeat(f) + '<span class="off">'
+      + '\\u2591'.repeat(cells - f) + '</span>';
+  }
+  function tween(el, from, to) {
+    var cap = el.dataset.max ? parseInt(el.dataset.max, 10) : 0;
+    var bar = null, meter = el.closest('.meter');
+    if (meter) bar = meter.querySelector('[data-bar]');
+    var steps = Math.min(25, Math.max(1, Math.abs(to - from)));
+    var ms = Math.max(16, Math.round(600 / steps));
+    var i = 0;
+    if (meter) meter.classList.add(to > from ? 'up' : 'down');
+    var t = setInterval(function () {
+      i++;
+      var v = i >= steps ? to
+        : Math.round(from + (to - from) * (i / steps));
+      el.textContent = v.toLocaleString('en-US');
+      if (bar && cap) bar.innerHTML = blocks(v, cap, 10);
+      if (i >= steps) {
+        clearInterval(t);
+        if (meter) setTimeout(function () {
+          meter.classList.remove('up', 'down'); }, 260);
+      }
+    }, ms);
+  }
+  function countUp(root) {
+    var seen = {};
+    root.querySelectorAll('.mv[data-m]').forEach(function (el) {
+      var k = el.dataset.m, v = parseInt(el.dataset.v, 10);
+      seen[k] = v;
+      if (reduced || !(k in last) || last[k] === v) return;
+      var from = last[k], cap = el.dataset.max
+        ? parseInt(el.dataset.max, 10) : 0;
+      el.textContent = from.toLocaleString('en-US');
+      var meter = el.closest('.meter');
+      var bar = meter ? meter.querySelector('[data-bar]') : null;
+      if (bar && cap) bar.innerHTML = blocks(from, cap, 10);
+      tween(el, from, v);
+    });
+    last = seen;
+  }
+
+  window.__laWire = function (root) {
+    root = root || document;
+    wirePack(root); wireAsk(root); countUp(root);
+  };
+})();"""
+
 # 016: split fx — the banner's action gif plays once, then the mask swaps
 # to the ambient loop. Shared by the chat card script and the pane.
 SWAP_JS = """(function () {
@@ -578,11 +839,12 @@ let d=0;for(const el of later){setTimeout(()=>el.classList.add('shown'),d);d+=90
   window.addEventListener("load", post);
   post();
 })();
-/* card actions — clicks act through the host bridge, no model in the way */
+/* card actions — clicks act through the host bridge, no model in the way.
+   027: the notice board, the sigil tiles, the pack popup and the card's own
+   input all act through the same one door (window.__laAct). */
 (function () {
-  var btns = Array.prototype.slice.call(
-    document.querySelectorAll('button.opt'));
-  if (!btns.length) return;
+  var btns = Array.prototype.slice.call(document.querySelectorAll(
+    'button.opt, button.nrow, button.gtile'));
   var acted = false;
   var hint = document.querySelector('.reply');
   function setHint(t) { if (hint) hint.textContent = t; }
@@ -592,8 +854,8 @@ let d=0;for(const el of later){setTimeout(()=>el.classList.add('shown'),d);d+=90
   function unlock() { acted = false; btns.forEach(function (b) {
     b.disabled = false; b.classList.remove('chosen', 'stale');
   }); }
-  btns.forEach(function (b) { b.addEventListener('click', function () {
-    if (acted) return; acted = true; lock(b); setHint('\\u2026');
+  window.__laAct = function (option, text, chosen) {
+    if (acted) return; acted = true; lock(chosen); setHint('\\u2026');
     var nonce = Math.random().toString(36).slice(2);
     var timer = setTimeout(function () {
       window.removeEventListener('message', onRes);
@@ -611,12 +873,18 @@ let d=0;for(const el of later){setTimeout(()=>el.classList.add('shown'),d);d+=90
     }
     window.addEventListener('message', onRes);
     parent.postMessage({type: 'luna:card:action', nonce, path: '__ACT__',
-      body: {option: b.dataset.opt,
+      body: {option: option || '', text: text || '',
              scene_id: document.body.dataset.scene || ''}}, '*');
+  };
+  btns.forEach(function (b) { b.addEventListener('click', function () {
+    window.__laAct(b.dataset.opt, '', b);
   }); });
 })();
+__INTERACT_JS__
+if (window.__laWire) window.__laWire(document);
 __TIP_JS__</script>""".replace("__ACT__", _ACT_PATH) \
                       .replace("__TIP_JS__", TIP_JS) \
+                      .replace("__INTERACT_JS__", INTERACT_JS) \
                       .replace("__SWAP_JS__", SWAP_JS)
 
 
@@ -651,6 +919,11 @@ def render_scene_fragment(scene: Scene) -> str:
             f"aspect-ratio:{w}/{h};"
             f"-webkit-mask-image:url('{url}');"
             f"mask-image:url('{url}');\"{swap_attr}></div>")
+
+    # 027: the notice board owns the top of the card — above the location,
+    # above the headline. It is not a menu row and must never look like one.
+    if getattr(scene, "notices", None):
+        parts.append(_notices_html(scene.notices))
 
     parts.append(f'<div class="eyebrow type">{_e(scene.eyebrow)}</div>')
     hl_col = _HEADLINE.get(scene.event_kind, TEXT)
@@ -692,6 +965,10 @@ def render_scene_fragment(scene: Scene) -> str:
         parts.append("</details>")
     if getattr(scene, "tally", None):
         parts.append(_tally_html(scene.tally))
+    if getattr(scene, "gallery", None):
+        parts.append(_gallery_html(scene.gallery))
+    if getattr(scene, "ask", None):
+        parts.append(_ask_html(scene.ask))
 
     if scene.options:
         rows = []
@@ -703,10 +980,15 @@ def render_scene_fragment(scene: Scene) -> str:
             hint = (f'<span class="hint">{_et(o.hint)}</span>'
                     if o.hint else "")
             gicon = _opt_gear_icon(o.id)
+            # 027: the count leaves the label and becomes a blue chip —
+            # a notification reads as a notification, at a glance.
+            bn = int(getattr(o, "badge", 0) or 0)
+            badge = f'<span class="badge">{bn}</span>' if bn else ""
             btn = (f'<button type="button" class="opt{opt_cls}" '
                    f'data-opt="{_e(o.id)}">'
                    f'<span class="key{key_cls}">{i}</span>{gicon}'
-                   f'<span class="lbl">{_et(o.label)}</span>{hint}</button>')
+                   f'<span class="lbl">{_et(o.label)}</span>{badge}'
+                   f"{hint}</button>")
             # 014: the whisper glyph — [i] OUTSIDE the button, so tapping
             # it never fires the option; tip resolves by option id.
             tip = tips.option_tip(o.id)
@@ -783,6 +1065,80 @@ SCENE_CSS = f"""
  mask-size:100% 100%;-webkit-mask-size:100% 100%;mask-repeat:no-repeat;
  -webkit-mask-repeat:no-repeat;image-rendering:pixelated;
  border-bottom:1px solid {BORDER};}}
+/* ── 027: the notice board. Blue is the notification ink — it never
+   means a stat, only "something waits for you". ── */
+.notices{{border:1px solid {AETHER};border-left:3px solid {AETHER};
+ background:color-mix(in srgb,{AETHER} 7%,{PANEL});
+ padding:8px 1.5ch 9px;margin:0 0 10px;}}
+.nhead{{color:{AETHER};text-transform:uppercase;letter-spacing:.14em;
+ font-size:11px;margin-bottom:5px;}}
+.nrow{{display:flex;align-items:center;gap:1ch;width:100%;margin-top:4px;
+ background:transparent;border:1px solid transparent;border-radius:0;
+ padding:4px .5ch;font:inherit;color:{TEXT};text-align:left;
+ cursor:pointer;}}
+.nrow:hover:not(:disabled){{border-color:{AETHER};
+ background:color-mix(in srgb,{AETHER} 10%,{PANEL});}}
+.nrow:focus-visible{{outline:1px solid {AETHER};outline-offset:1px;}}
+.nrow .nk{{flex:none;color:{AETHER};font-size:11px;letter-spacing:.12em;
+ min-width:8ch;}}
+.nrow .ntx{{flex:1;min-width:0;color:{DIM};}}
+.nrow:hover .ntx{{color:{TEXT};}}
+.nrow .ngo{{flex:none;color:{FAINT};}}
+.nrow:hover .ngo{{color:{AETHER};}}
+.nb,.badge{{flex:none;display:inline-block;min-width:2ch;padding:0 .5ch;
+ background:{AETHER};color:{INK};font-weight:700;text-align:center;
+ font-variant-numeric:tabular-nums;}}
+.badge{{margin-left:1ch;}}
+.opt:hover .badge{{background:{TEXT};}}
+/* ── 027: the card's own input ── */
+.ask{{margin:10px 0 0;padding:10px 0 0;border-top:1px dashed {BORDER};
+ display:block;}}
+.ask .alab{{display:block;color:{DIM};margin-bottom:5px;}}
+.ask .arow{{display:flex;gap:6px;align-items:stretch;}}
+.ask .ti{{flex:1;min-width:0;background:{INK};border:1px solid {AETHER};
+ color:{TEXT};padding:6px 1.5ch;font:inherit;border-radius:0;
+ font-variant-numeric:tabular-nums;}}
+.ask .ti::placeholder{{color:{FAINT};}}
+.ask .ti:focus{{outline:none;border-color:{TEXT};}}
+.ask .asend{{flex:none;background:{AETHER};border:1px solid {AETHER};
+ color:{INK};font:inherit;font-weight:700;letter-spacing:.08em;
+ padding:6px 2ch;border-radius:0;cursor:pointer;}}
+.ask .asend:hover:not(:disabled){{background:{TEXT};border-color:{TEXT};}}
+.ask .asend:disabled{{opacity:.5;cursor:default;}}
+/* ── 027: picture tiles (faction sigils) ── */
+.gal{{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+ gap:8px;margin:10px 0 0;}}
+.gtile{{display:flex;flex-direction:column;gap:4px;background:{PANEL2};
+ border:1px solid {BORDER};border-radius:0;padding:6px;font:inherit;
+ color:{TEXT};text-align:left;cursor:pointer;}}
+.gtile:hover:not(:disabled){{border-color:{AETHER};}}
+.gtile:focus-visible{{outline:1px solid {AETHER};outline-offset:1px;}}
+.gtile .gpic{{display:block;width:100%;aspect-ratio:320/112;
+ mask-size:100% 100%;-webkit-mask-size:100% 100%;mask-repeat:no-repeat;
+ -webkit-mask-repeat:no-repeat;image-rendering:pixelated;}}
+.gtile .gpic.none{{background:{BORDER};}}
+.gtile:hover .gpic{{background-color:{TEXT};}}
+.gtile .glab{{color:{TEXT};}}
+.gtile .gsub{{color:{FAINT};font-size:12px;}}
+/* ── 027: the pack popup — click an item, act on it ── */
+.pmenu{{position:fixed;z-index:98;min-width:220px;max-width:300px;
+ background:{INK};border:1px solid {AETHER};
+ box-shadow:0 4px 18px rgba(0,0,0,.55);padding:8px 1.5ch;color:{TEXT};
+ font:13px/1.55 ui-monospace,"SF Mono",Menlo,Consolas,monospace;}}
+.pmenu .phead{{color:{AETHER};text-transform:uppercase;
+ letter-spacing:.1em;font-size:11px;margin-bottom:6px;}}
+.pmenu .pact{{display:flex;gap:1ch;align-items:center;width:100%;
+ background:{PANEL2};border:1px solid {BORDER};border-radius:0;
+ color:{TEXT};font:inherit;text-align:left;padding:5px 1ch;
+ margin-top:4px;cursor:pointer;}}
+.pmenu .pact:hover:not(:disabled){{border-color:{AETHER};}}
+.pmenu .pact .phint{{margin-left:auto;color:{FAINT};}}
+.pmenu .pwhy{{color:{DIM};}}
+.inv .item{{background:none;border:0;border-radius:0;font:inherit;
+ padding:0;}}
+.inv .item.act{{cursor:pointer;}}
+.inv .item.act:hover .picon,.inv .item.act:focus-visible .picon{{
+ background-color:{AETHER} !important;}}
 .eyebrow{{color:{FAINT};text-transform:uppercase;letter-spacing:.08em;}}
 .headline{{font-weight:700;margin:4px 0 0;text-wrap:balance;}}
 .support{{color:{DIM};}}
@@ -842,6 +1198,10 @@ SCENE_CSS = f"""
  color:{DIM};}}
 .meter{{display:flex;align-items:center;gap:1ch;cursor:help;}}
 .meter .blocks{{letter-spacing:.5px;}}
+/* 027: while a number is counting, the meter says which way it went. */
+.meter .mv{{font-variant-numeric:tabular-nums;transition:color .2s ease;}}
+.meter.up .mv{{color:{OK};}}
+.meter.down .mv{{color:{RED};}}
 .meter.hp .blocks{{color:{OK};}}
 .meter.hp.low .blocks{{color:{RED};}}
 .meter.en .blocks{{color:{AETHER};}}

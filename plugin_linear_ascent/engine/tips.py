@@ -486,21 +486,25 @@ def option_tip(oid: str) -> str:
 # ── pack-strip items ─────────────────────────────────────────────────────
 
 _ITEM_TIPS: dict[str, str] = {
-    "medgel": ("Medgel — +25 HP, used at a gate camp between fights. "
-               "Keeps a hunting run going without the walk home: more "
-               "hunts per day, more gold and XP."),
-    "trauma_kit": ("Trauma kit — +80 HP at a gate camp. The deep patch "
-                   "for deep floors, where one bad round costs more "
-                   "than the kit did."),
+    # 027: where a thing COMES FROM belongs in its tip — a pack that keeps
+    # filling up with something is a question the game should answer.
+    "medgel": ("Medgel — +25 HP. Click it here to use it, anywhere out of "
+               "a fight. They pile up because nine alpha kills in ten "
+               "leave one behind (and presents carry them too): the pack "
+               "is your health bar between fights, so spend them."),
+    "trauma_kit": ("Trauma kit — +80 HP, used from the pack out of a "
+                   "fight. The deep patch for deep floors, where one bad "
+                   "round costs more than the kit did."),
     "trollblood_tonic": ("Trollblood tonic — full heal, drinkable "
                          "MID-fight, the only one that is. Carried for "
                          "the round a Warden has you at the edge."),
     "energy_cell": ("Energy cell — +5 energy on the spot, one a day. Energy "
                     "is the day's clock: a cell is five extra hunts' "
                     "worth of climbing."),
-    "luck_charm": ("Luck charm — fortune leans your way until "
-                   "tomorrow: better loot and present rolls. Crack it "
-                   "before a long hunting day."),
+    "luck_charm": ("Luck charm — fortune leans your way until tomorrow: "
+                   "better loot and present rolls. Click it to crack one "
+                   "(once a day is all it does); alphas and Wardens drop "
+                   "them about one time in ten."),
     "scout_optics": ("Scout optics — 3 shard scans: exact enemy ATK, "
                      "DEF and HP before you commit. Fights you can "
                      "read are fights you don't lose."),
