@@ -124,6 +124,33 @@ rounds. The bounded exchange delivers what he wanted (a charge no longer
 buys an unlimited fight; there is a price for standing in front of a
 boss) without making the first gate unreachable alone.
 
+## Verified in a browser, not only in pytest
+
+Played on the QA stack with a level-15 blade (ATK 89, DEF 65) against the
+standing floor-1 gate — the exact "I can attack without limit" case.
+
+- The keep card carries the new line: *"one charge buys an exchange of
+  about 19 rounds — then its guard closes and drives you back. Turning
+  your back on it early is a gamble; it can follow you out."*
+- Charge 1: 2 attack rounds, then **"Driven back from the keep" — "A full
+  fight's worth is out of Warden Brackjaw … ▪ the 144 you cut away stays
+  cut"**. Pool 426 → 282, ⚡ 7 → 4 at the join and **4 → 4 across both
+  swing rounds** (charged once, as designed).
+- Charge 2: 3 rounds, cut 195, pool 282 → 87, ≈1 fight left. The gate
+  survived two charges from the strongest blade in the world.
+- The chase is live: 6 run attempts, 5 escapes and one *"It cuts off your
+  line — no way out. It catches you turning — your Studded Jack and
+  Ironbound Targe soak almost all of it: only −17 HP gets through."* 17 of
+  a 280 pool is 6.07% — the grab floor held a blow DEF 65 would otherwise
+  have filed to nothing.
+
+**Known and accepted:** the exchange is "one unit **plus the blow that
+crossed it**", so a heavy hitter overshoots — charge 2 cut 195, or 1.47
+units, because the crossing blow was worth 78. Capping it would mean
+throwing away damage the player really dealt, which breaks the "everything
+you cut stays cut" promise. A gate still costs ≥3 charges from anyone,
+which is the law that matters; the test bounds a charge at 2 units.
+
 ## Tests
 
 `tests/test_026_the_gate_bites_back.py` — 24 gates: the keep fight always
