@@ -671,6 +671,12 @@ def _active_mods(en: dict) -> list[str]:
     return mods
 
 
+_TIP_EATK = ("Its attack — the same scale as your sword row: every 3 "
+             "points fills half a blade. Read the matchup at a glance.")
+_TIP_EDEF = ("Its defense — the same scale as your armour row: every 3 "
+             "points fills half an icon.")
+
+
 def _enemy_head_html(en: dict) -> str:
     hp, cap = int(en.get("hp", 0)), max(1, int(en.get("hp_max", 1)))
     low = " low" if hp * 10 <= cap * 3 else ""
@@ -682,7 +688,16 @@ def _enemy_head_html(en: dict) -> str:
         chip = '<span class="rchip">◇ close quarters</span>'
     mods = _active_mods(en)
     mod = (f'<span class="mchip">{_e(mods[0])}</span>' if mods else "")
-    return (f'<div class="ehead later">'
+    # 030 Phase 7: the monster wears its numbers — ATK and DEF in the
+    # player's own pip language, each chip on a solid INK plate so the
+    # white pips read over any art (the black-background rule).
+    pips = ('<span class="echip">'
+            + _pip_row("sword", "ATK", int(en.get("atk", 0)), ORANGE,
+                       _TIP_EATK)
+            + _pip_row("armor", "DEF", int(en.get("def", 0)), DIM,
+                       _TIP_EDEF)
+            + "</span>")
+    return (f'<div class="ehead later">{pips}'
             f'<span class="meter foe{low}" data-tip="The enemy\'s health — '
             f'visible from the first breath. Kill it before it kills you.">'
             f"<span>HP {hp}/{cap}</span>"
@@ -699,6 +714,11 @@ def _dossier_html(en: dict) -> str:
         rows.append(f'<div class="drw">{_ticon(icon, tint)}'
                     f'<span><b>{_e(head)}</b> {_e(text)}</span></div>')
 
+    # 030 Phase 7: the story leads — who this thing is, before what it
+    # does. "story" is the payload key; "lore" the pre-030 fallback.
+    story = en.get("story") or en.get("lore")
+    if story:
+        rows.append(f'<div class="dlore">{_e(story)}</div>')
     if prof.get("armor", "none") != "none":
         row("t_armor", f"plate — {economy.TIER_LABEL[prof['armor']]}.",
             "Turns part of every blow of steel or shot. Spellwork "
@@ -726,8 +746,17 @@ def _dossier_html(en: dict) -> str:
     for m in _active_mods(en):
         rows.append(f'<div class="drw"><span class="dmark">◇</span>'
                     f"<span>{_e(m)}</span></div>")
-    if en.get("lore"):
-        rows.append(f'<div class="dlore">{_e(en["lore"])}</div>')
+    # 030 Phase 7: the odds — coin and XP ranges from the kill math,
+    # painted per the one-coin-one-colour law.
+    drops = en.get("drops") or {}
+    if drops.get("gold"):
+        lo, hi = drops["gold"]
+        rows.append(f'<div class="drw"><span class="dmark">·</span>'
+                    f"<span>{_ep(f'coins ◈ {lo}–{hi}')}</span></div>")
+    if drops.get("xp"):
+        lo, hi = drops["xp"]
+        rows.append(f'<div class="drw"><span class="dmark">·</span>'
+                    f"<span>{_ep(f'XP ✦ {lo}–{hi}')}</span></div>")
     return (f'<details class="dx"><summary role="note" aria-label="enemy '
             f'dossier">i</summary><div class="dossier">'
             f'<div class="dhead">{_e(en.get("name", ""))} — the shard\'s '
@@ -1164,12 +1193,21 @@ def render_scene_fragment(scene: Scene) -> str:
     elif banner:
         url, w, h = banner
         tint = _banner_tint(scene.banner, scene.banner_variant)
+    plate_on_art = False
     if fx or split or banner:
-        parts.append(
+        banner_html = (
             f'<div class="banner" style="background-color:{tint};'
             f"aspect-ratio:{w}/{h};"
             f"-webkit-mask-image:url('{url}');"
             f"mask-image:url('{url}');\"{swap_attr}></div>")
+        # 030 Phase 7: the stat plate sits top-right ON the art whenever
+        # there is art to sit on — one visual language with the player's
+        # pip rows, so a matchup reads at a glance.
+        if scene.enemy:
+            banner_html = (f'<div class="bwrap">{banner_html}'
+                           f"{_enemy_head_html(scene.enemy)}</div>")
+            plate_on_art = True
+        parts.append(banner_html)
 
     # 027: the notice board owns the top of the card — above the location,
     # above the headline. It is not a menu row and must never look like one.
@@ -1186,7 +1224,8 @@ def render_scene_fragment(scene: Scene) -> str:
     if scene.enemy:
         # 003: the always-on enemy bar + range chip, and the [i] badge
         # (top-right of the card — over the banner when there is one).
-        parts.append(_enemy_head_html(scene.enemy))
+        if not plate_on_art:
+            parts.append(_enemy_head_html(scene.enemy))
         parts.append(_dossier_html(scene.enemy))
     if scene.support:
         parts.append(f'<div class="support type">{_ep(scene.support)}</div>')
@@ -1280,6 +1319,18 @@ SCENE_CSS = f"""
 /* ── 017/003: enemy header + [i] dossier ── */
 .ehead{{display:flex;flex-wrap:wrap;align-items:center;gap:1ch 2ch;
  margin-top:6px;color:{DIM};}}
+/* 030 Phase 7: the stat plate over the fight art. Ink art under white
+   pips needs solid plates to read; the [i] badge keeps the very corner,
+   so the plate starts a badge-height lower. */
+.bwrap{{position:relative;}}
+.bwrap .ehead{{position:absolute;top:34px;right:8px;margin:0;
+ flex-direction:column;align-items:flex-end;gap:4px;z-index:2;}}
+.echip{{display:flex;flex-direction:column;gap:2px;background:{INK};
+ border:1px solid {BORDER};padding:3px 6px;}}
+.bwrap .ehead .meter,.bwrap .ehead .rchip,.bwrap .ehead .mchip{{
+ background:{INK};border:1px solid {BORDER};padding:2px 6px;}}
+.echip .piprow{{margin-top:0;}}
+.echip .piprow .plab{{min-width:6.5ch;text-align:right;font-size:12px;}}
 .meter.foe .blocks{{color:{VIOLET_SOFT};}}
 .meter.foe.low .blocks{{color:{RED};}}
 .rchip{{color:{VIOLET_SOFT};letter-spacing:.04em;}}

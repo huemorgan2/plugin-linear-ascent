@@ -141,6 +141,13 @@ class Scene:
             lines.append(f"{en['name']} HP {en['hp']}/{en['hp_max']}")
             if en.get("tiers"):
                 lines.append("◈ " + " · ".join(en["tiers"]))
+            # 030 Phase 7: the odds ride the text card too
+            drops = en.get("drops") or {}
+            if drops.get("gold"):
+                lines.append(f"· coins ◈ {drops['gold'][0]}–"
+                             f"{drops['gold'][1]}")
+            if drops.get("xp"):
+                lines.append(f"· XP ✦ {drops['xp'][0]}–{drops['xp'][1]}")
             if en.get("range") == "at_range":
                 lines.append("◇ at range — it hasn't reached you yet")
             elif en.get("range") == "close":

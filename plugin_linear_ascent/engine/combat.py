@@ -284,6 +284,26 @@ def _lore(e: dict, floor) -> str:
     return ""
 
 
+def _drop_ranges(p: dict, floor) -> dict:
+    """030 Phase 7: the dossier says the odds — coin and XP ranges from
+    the SAME math _victory rolls (jitter band × fade × specimen ×
+    profile × threat), so the promise and the payout can't drift."""
+    e = p["encounter"]
+    fade = economy.fade_multiplier(p["unlocked_floor"], floor.floor)
+    threat = economy.kill_reward_mult(e.get("traits") or ())
+    g_mult = (economy.SPECIMENS[e.get("specimen", "common")]["gold"]
+              * economy.profile_gold_mult(_profile(p)) * threat * fade)
+    g = economy.gold_per_kill(floor.floor)
+    x = economy.xp_per_kill(floor.floor)
+    x_mult = threat * fade
+    return {
+        "gold": [max(1, round(g * 0.5 * g_mult)),
+                 max(1, round(g * 1.5 * g_mult))],
+        "xp": [max(1, round(x * 0.75 * x_mult)),
+               max(1, round(x * 1.25 * x_mult))],
+    }
+
+
 def _enemy_payload(p: dict, floor) -> dict:
     """003: everything the [i] card and the fight header need, in one
     dict on the Scene — the renderer never reads the player doc."""
@@ -291,6 +311,9 @@ def _enemy_payload(p: dict, floor) -> dict:
     prof = _profile(p)
     pspd = economy.player_speed(p)
     return {
+        # 030 Phase 7: additive keys — old renderers drop them (wire law)
+        "story": _lore(e, floor),
+        "drops": _drop_ranges(p, floor) if e["kind"] == "wilds" else None,
         "name": e["name"],
         "hp": max(0, e["hp"]), "hp_max": e["hp_max"],
         "atk": e["atk"], "def": e["def"],
