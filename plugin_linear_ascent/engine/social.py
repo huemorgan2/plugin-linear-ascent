@@ -791,9 +791,27 @@ def _found_finish(p: dict, name: str, banner: str, join_fee: int,
     _ledger(p, "guild_found", gold=-GUILD_FOUND_FEE, note=name)
     _effect(p, "guild_found", guild=name, banner=banner,
             join_fee=join_fee, weekly_dues=dues)
-    return guildhall_scene(p, note=f"+ the {name} banner goes up over "
-                                   f"your table — join ◈ {join_fee}, "
-                                   f"dues ◈ {dues}/week")
+    # 027: its own card, not the hall's. worldd is the single writer, so the
+    # snapshot in hand still holds no faction — rendering the hall here put
+    # "No banners fly yet. Yours could be the first" directly under the line
+    # announcing that yours had just gone up.
+    return Scene(
+        eyebrow="ROOTHOLLOW · THE GUILDHALL",
+        headline=f"The {name} banner flies",
+        support="Milestone Wardens fall to war parties, not heroes.",
+        body_lines=[
+            f"+ the charter is signed — ◈ {GUILD_FOUND_FEE} to the hall, "
+            "and the sigil goes up over your table",
+            f"join ◈ {join_fee} once · dues ◈ {dues}/week — both immutable "
+            "now, both paid into the store",
+            "The store funds the war party and the armory. Take the week's "
+            "work when the Ascent names it.",
+        ],
+        options=[Option("hall_table", "Your table"),
+                 Option("town", "Back to the square")],
+        meters=meters(p),
+        banner=banner or "guildhall",
+    )
 
 
 def guildhall_donate(p: dict, text: str) -> Scene:

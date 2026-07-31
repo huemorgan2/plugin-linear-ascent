@@ -135,6 +135,39 @@ One token, used consistently: `AETHER #5eaefc` is the notification color.
 
 ---
 
+## Played, not just tested
+
+Walked on the QA stack at level 15, in the pane, one surface at a time.
+
+- **The square** carries the board: header **"waiting for you"** in
+  `#5eaefc`, one row — *"PLAN · The Lodge — tonight is unplanned. One
+  action a night: rest it to bank aether, work it for coin. Dawn settles
+  it either way."* — and the Lodge's own chip reads `1` in ink on blue.
+  The `(1)` that meant nothing now says what it wants.
+- **The pack** answers a click: the Medgel opened its menu *above* the
+  lore bubble (`.pmenu` z-index 100, `#tipbox` hidden on open), *"Use a
+  Medgel — +25 HP · 1 left"*, and HP went 132 → 157 with *"+ 25 HP — the
+  medgel does its work."* The rail really counts: buying one walked gold
+  **3,077 → 3,052 one coin at a time**, ~24 ms a step, ~600 ms total.
+- **Typed in the card:** the Relay's letter box (`text`, max 200) sealed
+  *"the stair holds at the third landing"* with **"+ sealed and slotted
+  for Fleet"** — no chat line. Founding asked for numbers with
+  `type="number" inputmode="numeric" min/max` (fee 0–500, dues 1–50).
+- **Banners are pictures:** the sigil step showed 8 tiles of real 1-bit
+  art, blue because they are pickable; the table that came out of it flies
+  Iron Heart as its card art in violet; the Community rows carry the same
+  sigil beside the name.
+
+**One bug the walkthrough caught and this plan fixes:** the card that
+announced *"the Third Landing banner goes up over your table"* also
+carried *"No banners fly yet. Yours could be the first."* worldd is the
+single writer, so the snapshot the engine holds at that moment still has
+no faction in it. `_found_finish` now renders **its own** card — *"The
+{name} banner flies"*, the chosen sigil as its art, the fee and dues it
+just fixed forever, and a way to the table that reads the fresh snapshot.
+
+---
+
 ## Tests
 
 `tests/test_027_say_it_in_the_card.py`:
@@ -153,6 +186,11 @@ One token, used consistently: `AETHER #5eaefc` is the notification color.
 - the founding sigil step ships a gallery whose every slug resolves to real art
 - the hall list gallery carries fee and dues per tile
 - every sigil slug on disk resolves through `_banner_data_url`
+- a scene from this engine still parses on a 0.28–0.32 install (`badge` rides
+  beside the options, never inside one), a field from a newer engine is ignored
+  rather than fatal, and a drawn haul (`tally`) crosses the wire
+- the lore bubble never covers the menu it opened
+- the founding card flies the new banner instead of the empty hall
 
 Existing suites to update: `test_029_collect_badges.py`, `test_023_interest.py`
 (badge is a field now), `test_render.py` (new slots).

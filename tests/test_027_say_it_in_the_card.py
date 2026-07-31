@@ -299,6 +299,81 @@ def test_every_sigil_on_disk_resolves_as_card_art():
         assert render._banner_tint(slug) == render.VIOLET_SOFT
 
 
+def test_the_lore_bubble_never_covers_the_menu_it_opened():
+    """Live: clicking a Medgel focused the cell, the [i] bubble fired on
+    focusin, and it drew OVER the popup — the player got a paragraph of lore
+    where the Use button should have been. Hover to learn, click to act."""
+    js = render.INTERACT_JS + render.TIP_JS
+    assert "if (document.querySelector('.pmenu')) return hide();" in js
+    assert "tb.style.display = 'none'" in js
+    assert ".pmenu{position:fixed;z-index:100" in render.SCENE_CSS
+    assert "#tipbox{position:fixed;display:none;z-index:99" in render.SCENE_CSS
+
+
+# ── the wire an older install has to read ────────────────────────────────
+
+def _v032_scene_from_dict(d: dict):
+    """0.28-0.32's parser, verbatim in the part that matters: each option
+    dict is splatted into that version's Option, which has five fields and
+    no badge. This is what every installed copy runs against worldd."""
+    from dataclasses import dataclass
+
+    @dataclass
+    class OldOption:
+        id: str
+        label: str
+        hint: str = ""
+        aether: bool = False
+        locked: bool = False
+
+    return [OldOption(**o) for o in d.get("options", [])]
+
+
+def test_a_scene_from_this_engine_still_parses_on_an_older_install():
+    """worldd runs the engine; the installed plugin renders what it sends,
+    and the two are routinely different versions. 0.33.0 shipped `badge`
+    INSIDE each option dict, so every copy older than it raised TypeError on
+    every scene and read the whole world as "the signal is gone"."""
+    p = playing("wire")
+    p["bank"], p["bank_day"] = 300, state.world_day() - 2
+    d = core.current_scene(p).to_dict()
+    assert d["option_badges"]["vault"] == 2      # the count still crosses
+    assert all("badge" not in o for o in d["options"])
+    old = _v032_scene_from_dict(d)               # must not raise
+    assert any(o.id == "vault" for o in old)
+
+
+def test_the_count_survives_the_round_trip_for_a_current_install():
+    from plugin_linear_ascent.engine.scene import Scene
+    p = playing("trip")
+    p["bank"], p["bank_day"] = 300, state.world_day() - 2
+    back = Scene.from_dict(core.current_scene(p).to_dict())
+    assert door(back, "vault").badge == 2
+    assert back.notices and back.inventory
+
+
+def test_a_field_from_a_newer_engine_is_ignored_not_fatal():
+    """The next new field must cost an old client nothing."""
+    from plugin_linear_ascent.engine.scene import Scene
+    d = core.current_scene(playing("future")).to_dict()
+    d["options"][0]["sparkle"] = True
+    d["meters"]["moonstones"] = 7
+    d["a_slot_from_2027"] = {"n": 1}
+    s = Scene.from_dict(d)
+    assert s.options and s.meters
+
+
+def test_a_drawn_haul_crosses_the_wire():
+    """025 draws coins instead of stating them, but `tally` never made it
+    into to_dict — so the one surface players actually play on (worldd)
+    printed a number where the coins should be."""
+    from plugin_linear_ascent.engine.scene import Scene
+    p = playing("haul")
+    s = core.current_scene(p)
+    s.tally = [{"kind": "gold", "n": 7}, {"kind": "aether", "n": 3}]
+    assert Scene.from_dict(s.to_dict()).tally == s.tally
+
+
 # ── the badge law still holds ────────────────────────────────────────────
 
 def test_a_badge_is_never_mere_availability():

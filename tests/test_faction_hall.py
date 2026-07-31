@@ -116,6 +116,31 @@ def test_founding_flow_sets_the_purse_numbers():
     assert "founding_guild" not in p
 
 
+def test_the_founding_card_flies_the_new_banner_not_the_empty_hall():
+    """Live: the card that announced "the Night Ledger banner goes up over
+    your table" also carried "No banners fly yet. Yours could be the first."
+    worldd writes the faction after the turn, so the hall the engine can see
+    at that moment is still the one without you in it."""
+    p = playing(world=hall_world(factions=[]))
+    p["gold"], p["level"] = 600, 4
+    core.apply_choice(p, "guildhall")
+    core.apply_choice(p, "found_guild")
+    s = core.apply_choice(p, "", "Night Ledger")
+    sig = next(g["opt"] for g in s.gallery if g["opt"].startswith("sig_"))
+    core.apply_choice(p, sig)
+    core.apply_choice(p, "", "25")
+    s = core.apply_choice(p, "", "5")
+    body = " ".join(s.body_lines)
+    assert "Night Ledger" in s.headline
+    assert "No banners fly yet" not in body
+    assert not any(o.id == "found_guild" for o in s.options)
+    assert s.banner == sig.removeprefix("sig_")     # your sigil is the art
+    assert "join ◈ 25" in body and "dues ◈ 5/week" in body
+    # and the way back is the table itself, which reads the fresh snapshot
+    s2 = core.apply_choice(p, "hall_table")
+    assert "GUILDHALL" in s2.eyebrow
+
+
 def test_founding_validates_the_numbers_and_can_cancel():
     p = playing(world=hall_world())
     p["gold"], p["level"] = 600, 4

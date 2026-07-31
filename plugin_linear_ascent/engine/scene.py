@@ -7,7 +7,20 @@ from the same object. Content never contains markup.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, fields
+
+
+def _known(cls, raw: dict) -> dict:
+    """Only the fields THIS version knows about.
+
+    worldd runs the engine and the installed plugin renders what it sends, so
+    the two are routinely different versions. A scene from a newer engine must
+    never crash an older client: 0.33.0 put `badge` inside each option dict and
+    every 0.28-0.32 install builds `Option(**o)`, which made one new field read
+    as "the world signal is gone" for everyone who had not updated.
+    """
+    names = {f.name for f in fields(cls)}
+    return {k: v for k, v in raw.items() if k in names}
 
 
 @dataclass
@@ -144,8 +157,13 @@ class Scene:
             "body_lines": self.body_lines,
             "options": [
                 {"id": o.id, "label": o.label, "hint": o.hint,
-                 "aether": o.aether, "locked": o.locked, "badge": o.badge}
+                 "aether": o.aether, "locked": o.locked}
                 for o in self.options],
+            # A count rides BESIDE the options, never inside them: an older
+            # client splats each option dict into its Option, so a key it has
+            # never heard of costs it the whole world. Unknown TOP-LEVEL keys
+            # are dropped by every version ever shipped.
+            "option_badges": {o.id: o.badge for o in self.options if o.badge},
             "meters": vars(self.meters) if self.meters else None,
             "event_kind": self.event_kind,
             "banner": self.banner,
@@ -154,6 +172,7 @@ class Scene:
             "scene_id": self.scene_id,
             "awaits_text": self.awaits_text,
             "inventory": self.inventory,
+            "tally": self.tally,
             "notices": self.notices,
             "ask": self.ask,
             "gallery": self.gallery,
@@ -168,14 +187,21 @@ class Scene:
             # Map the keys so old docs still load; values are stale anyway.
             md["xp"] = md.pop("mana")
             md["xp_need"] = md.pop("mana_max")
-        meters = Meters(**md) if md else None
+        meters = Meters(**_known(Meters, md)) if md else None
+        badges = dict(d.get("option_badges") or {})
+        options = []
+        for raw in d.get("options", []):
+            opt = Option(**_known(Option, raw))
+            if not opt.badge:
+                opt.badge = int(badges.get(opt.id, 0) or 0)
+            options.append(opt)
         return Scene(
             eyebrow=d.get("eyebrow", ""),
             headline=d.get("headline", ""),
             support=d.get("support", ""),
             shard_note=d.get("shard_note", ""),
             body_lines=list(d.get("body_lines", [])),
-            options=[Option(**o) for o in d.get("options", [])],
+            options=options,
             meters=meters,
             event_kind=d.get("event_kind", ""),
             banner=d.get("banner", ""),
@@ -184,6 +210,7 @@ class Scene:
             scene_id=d.get("scene_id", ""),
             awaits_text=d.get("awaits_text", ""),
             inventory=list(d.get("inventory", [])),
+            tally=list(d.get("tally", [])),
             notices=list(d.get("notices", [])),
             ask=(dict(d["ask"]) if d.get("ask") else None),
             gallery=list(d.get("gallery", [])),

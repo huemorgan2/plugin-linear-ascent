@@ -625,6 +625,11 @@ TIP_JS = """(function () {
   document.body.appendChild(box);
   var cur = null;
   function show(el) {
+    // 027: a click on a pack cell focuses it, and a lore bubble on top of
+    // the menu it just opened hides the only button in there. Hovering to
+    // learn and clicking to act must not collide: while a menu is open,
+    // tips stay quiet.
+    if (document.querySelector('.pmenu')) return hide();
     cur = el;
     box.textContent = el.getAttribute('data-tip') || '';
     if (!box.textContent) return hide();
@@ -675,6 +680,8 @@ INTERACT_JS = """(function () {
 
   function openMenu(item) {
     closeMenu();
+    var tb = document.getElementById('tipbox');
+    if (tb) tb.style.display = 'none';
     var acts = [];
     try { acts = JSON.parse(item.dataset.acts || '[]'); } catch (err) {}
     var box = document.createElement('div');
@@ -1121,7 +1128,7 @@ SCENE_CSS = f"""
 .gtile .glab{{color:{TEXT};}}
 .gtile .gsub{{color:{FAINT};font-size:12px;}}
 /* ── 027: the pack popup — click an item, act on it ── */
-.pmenu{{position:fixed;z-index:98;min-width:220px;max-width:300px;
+.pmenu{{position:fixed;z-index:100;min-width:220px;max-width:300px;
  background:{INK};border:1px solid {AETHER};
  box-shadow:0 4px 18px rgba(0,0,0,.55);padding:8px 1.5ch;color:{TEXT};
  font:13px/1.55 ui-monospace,"SF Mono",Menlo,Consolas,monospace;}}
