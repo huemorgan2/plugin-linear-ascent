@@ -158,13 +158,25 @@ Walked on the QA stack at level 15, in the pane, one surface at a time.
   Iron Heart as its card art in violet; the Community rows carry the same
   sigil beside the name.
 
-**One bug the walkthrough caught and this plan fixes:** the card that
-announced *"the Third Landing banner goes up over your table"* also
-carried *"No banners fly yet. Yours could be the first."* worldd is the
-single writer, so the snapshot the engine holds at that moment still has
-no faction in it. `_found_finish` now renders **its own** card — *"The
-{name} banner flies"*, the chosen sigil as its art, the fee and dues it
-just fixed forever, and a way to the table that reads the fresh snapshot.
+### Two bugs the walkthrough caught, both fixed here
+
+**The card contradicted itself.** *"the Third Landing banner goes up over
+your table"* sat directly above *"No banners fly yet. Yours could be the
+first."* worldd is the single writer, so the snapshot the engine holds at
+that moment still has no faction in it. Founding and leaving now render
+**their own** cards — *"The Third Landing banner flies"* with the chosen
+sigil as its art and the fee and dues it just fixed forever, and *"You
+fold your colors"* instead of a roster you have already left. Both offer
+the hall, which reads the fresh snapshot on the next turn. Walked live:
+both cards, then the table, then the empty hall.
+
+**worldd 500'd on `/v1/presence` until its first scene.** `app/social.py`
+reached for the engine without putting the vendor copy on the path,
+borrowing it from whichever sibling module got imported first — and
+main.py imports the game modules lazily, inside endpoints. A freshly
+booted worldd asked for presence before a scene answered
+`ModuleNotFoundError`. `worldd/tests/test_gamepath.py` now imports each
+game module in its own interpreter.
 
 ---
 
@@ -190,7 +202,8 @@ just fixed forever, and a way to the table that reads the fresh snapshot.
   beside the options, never inside one), a field from a newer engine is ignored
   rather than fatal, and a drawn haul (`tally`) crosses the wire
 - the lore bubble never covers the menu it opened
-- the founding card flies the new banner instead of the empty hall
+- the founding card flies the new banner instead of the empty hall, and the
+  leave card doesn't still seat you at the table
 
 Existing suites to update: `test_029_collect_badges.py`, `test_023_interest.py`
 (badge is a field now), `test_render.py` (new slots).

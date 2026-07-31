@@ -692,10 +692,26 @@ def guildhall_action(p: dict, oid: str, text: str = "") -> Scene:
         _effect(p, "guild_join", guild=g)
         return guildhall_scene(p, note=f"+ you drink under the {g} banner now")
     if oid == "guild_leave":
-        g = p.pop("guild", None)
+        g = p.pop("guild", None) or (fac or {}).get("name")
         if g:
             _effect(p, "guild_leave", guild=g)
-        return guildhall_scene(p, note="You fold your colors and walk out.")
+        # its own card, for the same reason founding has one: the snapshot in
+        # hand still seats you at the table you just walked out of.
+        return Scene(
+            eyebrow="ROOTHOLLOW · THE GUILDHALL",
+            headline="You fold your colors",
+            support="Milestone Wardens fall to war parties, not heroes.",
+            body_lines=[
+                f"+ your name comes off the {g} roster" if g
+                else "+ your name comes off the roster",
+                "What you paid in stays in the store. The rack keeps what "
+                "you hung on it.",
+            ],
+            options=[Option("hall_table", "The hall"),
+                     Option("town", "Back to the square")],
+            meters=meters(p),
+            banner="guildhall",
+        )
     return guildhall_scene(p)
 
 

@@ -231,6 +231,10 @@ def test_leave_emits_and_folds_the_colors():
     p = playing(world=member_world())
     p["guild"] = "Ember Pact"
     core.apply_choice(p, "guildhall")
-    core.apply_choice(p, "guild_leave")
+    s = core.apply_choice(p, "guild_leave")
     assert p.get("guild") is None
     assert fx(p, "guild_leave")
+    # and the card doesn't still seat you at the table you walked out of
+    body = " ".join(s.body_lines)
+    assert "Ember Pact" in body and "STORE" not in body
+    assert not any(o.id == "guild_leave" for o in s.options)
