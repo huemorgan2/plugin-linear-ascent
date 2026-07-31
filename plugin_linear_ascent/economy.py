@@ -24,6 +24,9 @@ ENERGY_BASE_CAP = 24
 
 COST_WILDS_FIGHT = 1
 COST_WARDEN_ATTEMPT = 3
+# every swing at a Warden — flat across floors, on top of the join cost,
+# so the keep drains the energy bar instead of being a free grind.
+COST_WARDEN_STRIKE = 3
 COST_BOSS_COMMIT = 5
 COST_PVP_ATTACK = 3
 

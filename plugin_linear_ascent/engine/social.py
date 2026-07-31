@@ -991,9 +991,10 @@ def warden_scene(p: dict, fl, note: str = "") -> Scene:
     # 026: say what a charge actually buys, in rounds, and that walking
     # out of a keep is a gamble rather than a button.
     lines.append(f"one charge buys an exchange of about "
-                 f"{economy.warden_exchange_rounds(fl.floor)} rounds — "
-                 "then its guard closes and drives you back. Turning your "
-                 "back on it early is a gamble; it can follow you out.")
+                 f"{economy.warden_exchange_rounds(fl.floor)} rounds, and "
+                 f"every swing inside costs {economy.COST_WARDEN_STRIKE} ⚡ "
+                 "more — then its guard closes and drives you back. Turning "
+                 "your back on it early is a gamble; it can follow you out.")
     opts = [Option("strike", "Join the fight",
                    f"{economy.COST_WARDEN_ATTEMPT} ⚡ · a full fight")]
     # 022/006: the horn — guild hands only, only while a wound is open.

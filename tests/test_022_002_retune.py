@@ -39,6 +39,9 @@ def _fight_warden(fno, seed):
         rounds = 0
         while p["encounter"] is not None and rounds < 80:
             rounds += 1
+            # the per-swing ⚡ toll is out of scope here — this sim
+            # measures combat math, so the bar is kept full
+            p["energy_val"] = state.energy_cap_of(p)
             s = combat.resolve_fight_action(p, fl, "attack")
             if s.event_kind == "death" or p["hp"] <= 0:
                 return False

@@ -21,6 +21,11 @@ the deep coordination band from ~60% at-level wins to ~20%.
      near-death fight the pool is measured in. Then its guard closes.
   2. A gate never lets you walk: the getaway is capped at 3-in-4 and the
      blow that catches you lands its grip, not a chip.
+
+Amended later by the designer: every swing inside the keep now ALSO costs
+COST_WARDEN_STRIKE ⚡ (free swings were the original complaint, and the
+round budget alone still let a full exchange run on one charge). The
+exchange budget and the getaway law above are unchanged.
 """
 
 import pytest
@@ -51,8 +56,12 @@ def _striker(level, floor=1, world=True):
 
 
 def _swing_until_it_ends(p, cap=400):
+    """Swings with the bar topped up each round — the exchange budget is
+    what these tests measure, not the per-swing toll (which has its own
+    test below)."""
     rounds = 0
     while p.get("encounter") is not None and rounds < cap:
+        p["energy_val"] = state.energy_cap_of(p)
         core.apply_choice(p, "attack")
         rounds += 1
     return rounds
@@ -106,18 +115,33 @@ def test_the_guard_closing_is_not_a_defeat_and_keeps_the_wound():
     assert "Driven back" in s.headline or "guard closes" in said
 
 
-def test_energy_is_still_charged_once_for_the_whole_exchange():
-    """022/001's design stands: 3 ⚡ is the price of a fight, not of a
-    swing. 026 bounds the fight instead of taxing the swing, because a
-    per-swing toll would price the floor-1 gate at ~70 ⚡ against a 21 ⚡
-    bar and make the first gate unreachable alone."""
+def test_every_swing_at_a_warden_costs_energy():
+    """The designer reversed 026's free-swing call: a keep taxes the SWING
+    as well as the entry — COST_WARDEN_STRIKE ⚡ each, flat on every
+    floor. The wounds-stay-cut pool is what makes this fair: the gate is
+    a multi-bar siege, not a single-bar sprint. A dry bar refuses the
+    swing BEFORE the round is spent — no venom tick, no counter-blow,
+    no round against the exchange budget."""
     p = _striker(1)
     _at_keep(p)
     before = state.energy_now(p)
     core.apply_choice(p, "strike")
     assert state.energy_now(p) == before - economy.COST_WARDEN_ATTEMPT
-    _swing_until_it_ends(p)
-    assert state.energy_now(p) == before - economy.COST_WARDEN_ATTEMPT
+    core.apply_choice(p, "close_in")     # the crossing is not a swing
+    at_close = state.energy_now(p)
+    assert at_close == before - economy.COST_WARDEN_ATTEMPT
+    core.apply_choice(p, "attack")
+    assert state.energy_now(p) == at_close - economy.COST_WARDEN_STRIKE
+
+    # dry bar: the swing is refused and nothing else is spent
+    p["energy_val"] = 0
+    hp = p["hp"]
+    rounds = p["encounter"].get("rounds", 0)
+    s = core.apply_choice(p, "attack")
+    assert p.get("encounter") is not None
+    assert p["hp"] == hp, "a refused swing must not eat a counter-blow"
+    assert p["encounter"].get("rounds", 0) == rounds
+    assert "⚡" in " ".join(s.body_lines)
 
 
 @pytest.mark.parametrize("level", [1, 4, 6, 10, 20])
