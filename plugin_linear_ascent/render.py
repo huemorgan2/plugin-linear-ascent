@@ -103,9 +103,11 @@ def _banner_data_url(slug: str) -> tuple[str, int, int] | None:
 
     Creature art (encounters/wardens, plan 005) wins over the banner dir
     so milestone bosses pick up their taller 320x200 art when it exists.
+    030: rooms prefer their tall 320x200 art too — a place is a picture,
+    not a letterhead; the 320x112 strip stays as the fallback.
     """
     for art_dir, sizes in ((_CREATURES, ("320x200", "320x112")),
-                           (_ART, ("320x112", "160x56", "320x200")),
+                           (_ART, ("320x200", "320x112", "160x56")),
                            (_SIGILS, ("320x112",))):
         for size in sizes:
             path = os.path.join(art_dir, f"{slug}_{size}.png")
@@ -693,6 +695,39 @@ def _opt_gear_icon(oid: str) -> str:
             f"mask-image:url('{url}')\"></span>")
 
 
+# ── 030 Phase 3: the gate ledger becomes a hall of doors ────────────────
+# A floor_{n} option row grows to ~3× height and shows where you are going:
+# the floor's fields art beside its warden. Resolved entirely render-side
+# from the option id — zero wire change, floors without art degrade to the
+# plain text row.
+_FLOOR_OPT = re.compile(r"^floor_(\d+)$")
+
+
+def _floor_tile_art(oid: str, locked: bool) -> str:
+    m = _FLOOR_OPT.match(oid)
+    if not m:
+        return ""
+    n = int(m.group(1))
+    field_slug = ""
+    try:
+        from .content import schema
+        field_slug = schema.get_floor(n).banner
+    except Exception:  # noqa: BLE001 — art is decoration, never a crash
+        pass
+    cells = []
+    for slug, tint in ((field_slug, DIM), (f"warden_{n:03d}", VIOLET)):
+        art = _banner_data_url(slug) if slug else None
+        if not art:
+            continue
+        url, _w, _h = art
+        cells.append(
+            f'<span class="fart" aria-hidden="true" '
+            f'style="background-color:{FAINT if locked else tint};'
+            f"-webkit-mask-image:url('{url}');"
+            f"mask-image:url('{url}');\"></span>")
+    return f'<span class="farts">{"".join(cells)}</span>' if cells else ""
+
+
 def _inventory_html(scene: Scene) -> str:
     """014: the pack strip — 32×32 single-color 1-bit icons under the
     rail. Equipped gear reads bright, pack items dim; every cell
@@ -1134,13 +1169,17 @@ def render_scene_fragment(scene: Scene) -> str:
             hint = (f'<span class="hint">{_ep(o.hint)}</span>'
                     if o.hint else "")
             gicon = _opt_gear_icon(o.id)
+            # 030: gate floor rows carry their fields + warden art
+            tile = _floor_tile_art(o.id, bool(getattr(o, "locked", False)))
+            if tile:
+                opt_cls += " ftile"
             # 027: the count leaves the label and becomes a blue chip —
             # a notification reads as a notification, at a glance.
             bn = int(getattr(o, "badge", 0) or 0)
             badge = f'<span class="badge">{bn}</span>' if bn else ""
             btn = (f'<button type="button" class="opt{opt_cls}" '
                    f'data-opt="{_e(o.id)}">'
-                   f'<span class="key{key_cls}">{i}</span>{gicon}'
+                   f'<span class="key{key_cls}">{i}</span>{tile}{gicon}'
                    f'<span class="lbl">{_et(o.label)}</span>{badge}'
                    f"{hint}</button>")
             # 014: the whisper glyph — [i] OUTSIDE the button, so tapping
@@ -1334,6 +1373,15 @@ SCENE_CSS = f"""
  background-color:{DIM};mask-size:100% 100%;-webkit-mask-size:100% 100%;
  mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;
  image-rendering:pixelated;}}
+/* ── 030: gate floor rows — a door you can see through ── */
+.opt.ftile{{min-height:96px;}}
+.farts{{flex:none;display:flex;gap:4px;align-items:center;}}
+.fart{{display:inline-block;width:120px;max-width:24vw;height:84px;
+ mask-size:cover;-webkit-mask-size:cover;mask-position:center;
+ -webkit-mask-position:center;mask-repeat:no-repeat;
+ -webkit-mask-repeat:no-repeat;image-rendering:pixelated;}}
+.opt.ftile:hover .fart{{background-color:{TEXT};}}
+.opt.ftile.locked:hover .fart{{background-color:{FAINT};}}
 .opt:hover .gicon{{background-color:{TEXT};}}
 .opt.locked .gicon,.opt.locked:hover .gicon{{background-color:{FAINT};}}
 .orow{{display:flex;align-items:stretch;gap:5px;}}

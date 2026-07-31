@@ -726,6 +726,27 @@ _GRIDS: dict[str, list[str]] = {
         "................",
         "................",
     ],
+    # 030: the shardmind itself — a faceted aether crystal, the crack of
+    # its waking running down the long facet. Drawn at 32px beside every
+    # whisper; the text surface keeps ◆.
+    "shard": [
+        "................",
+        ".......#........",
+        "......###.......",
+        ".....#####......",
+        ".....#####......",
+        "....#######.....",
+        "....##.####.....",
+        "....##.####.....",
+        "...####.####....",
+        "...####.####....",
+        "...#########....",
+        "....#######.....",
+        ".....#####......",
+        "......###.......",
+        ".......#........",
+        "................",
+    ],
     # strapped crate, cross-braced — the fallback
     "pack": [
         "................",
