@@ -21,6 +21,7 @@ whenever the session changes; the pane also answers 401s by asking again
 
 from __future__ import annotations
 
+from . import icons
 from .render import (AETHER, BORDER, DIM, FAINT, INK, INTERACT_JS, PANEL,
                      PANEL2, SCENE_CSS, SWAP_JS, TEXT, TIP_JS, VIOLET,
                      VIOLET_SOFT)
@@ -64,6 +65,8 @@ a{{color:{AETHER};}}
 .trow.head{{color:{FAINT};text-transform:uppercase;letter-spacing:.08em;}}
 .trow .r{{text-align:right;}}
 .trow .gold{{color:#f5a524;text-align:right;}}
+/* 030: gold reads gold wherever it is written, coin mask included. */
+.gold{{color:#f5a524;}}
 .trow.me{{color:{AETHER};}}
 .fbanner{{width:160px;aspect-ratio:320/112;background-color:{DIM};
  mask-size:100% 100%;-webkit-mask-size:100% 100%;mask-repeat:no-repeat;
@@ -175,6 +178,12 @@ async function call(path, body) {
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c =>
   ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const num = n => Number(n || 0).toLocaleString('en-US');
+/* 030: the one coin — the 16×16 mask, tinted by the .gold span it sits
+   in. The ◈ character stays a text-surface mark only. */
+const COIN = "__COIN__";
+const coin = n => '<span class="eg" aria-hidden="true" style="'
+  + "-webkit-mask-image:url('" + COIN + "');mask-image:url('" + COIN
+  + "')\"></span> " + num(n);
 const sig = (slug, cls) => {
   const u = API + '/art/factions/' + encodeURIComponent(slug) + '.png';
   return '<div class="fbanner ' + (cls || '') + '" style="mask-image:url(\''
@@ -352,8 +361,8 @@ async function loadScore() {
         + esc(p.race) + ' ' + esc(p.clazz) + '</span></span>'
         + '<span class="r">' + p.level + '</span>'
         + '<span class="r">' + p.floor + '</span>'
-        + '<span class="gold">◈ ' + num(p.gold) + '</span>'
-        + '<span class="gold">◈ ' + num(p.bank) + '</span>'
+        + '<span class="gold">' + coin(p.gold) + '</span>'
+        + '<span class="gold">' + coin(p.bank) + '</span>'
         + '<span class="faint">' + (esc(p.faction) || '—') + '</span></div>';
     });
     score.innerHTML = h + '</div>';
@@ -659,9 +668,10 @@ function renderBoard(d) {
       + 'Roothollow takes founders</div></div>';
     return h;
   }
-  h += '<div class="faint">entry ◈ ' + d.challenge.entry_per_member
-    + ' a head, paid from the faction store — the steward signs up at '
-    + 'the Guildhall</div>';
+  h += '<div class="faint">entry <span class="gold">'
+    + coin(d.challenge.entry_per_member)
+    + '</span> a head, paid from the faction store — the steward signs '
+    + 'up at the Guildhall</div>';
   if (d.last_week.length) {
     /* 027: a banner is a picture wherever it is named. */
     h += '<div style="margin-top:8px">';
@@ -698,7 +708,7 @@ function renderBoard(d) {
     + '</div>';
   h += '<div class="panel"><div class="eyebrow">richest store</div>'
     + d.richest.map(f => chipRow(f.name, banners,
-        '◈ ' + num(f.treasury))).join('')
+        '<span class="gold">' + coin(f.treasury) + '</span>')).join('')
     + '</div>';
   h += '<div class="panel"><div class="eyebrow">highest blades</div>'
     + d.highest.map(f => chipRow(f.name, banners,
@@ -736,5 +746,6 @@ def render_pane() -> str:
     <div class="eyebrow">the guildhall</div>unrolling the charters…</div></div>
 </div>
 <script>{INTERACT_JS}</script>
-<script>{_JS.replace("__API__", _API).replace("__SWAP_JS__", SWAP_JS)}</script>
+<script>{_JS.replace("__API__", _API).replace("__SWAP_JS__", SWAP_JS)
+           .replace("__COIN__", icons.icon_data_url("coin"))}</script>
 <script>{TIP_JS}</script></body></html>"""

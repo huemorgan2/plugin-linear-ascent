@@ -221,6 +221,70 @@ def _et(s: str) -> str:
     return _sub_glyphs(_e(s))
 
 
+# ── 030 Phase 1: one coin, one colour ───────────────────────────────────
+# An amount wears its colour everywhere: gold in GOLD behind the 16×16
+# coin mask (the win-card coin is THE coin now), XP in VIOLET_SOFT behind
+# the aether shard, energy amounts in AETHER with the bolt. ◈/✦ survive
+# only in Scene.to_text() — the text surface stays text.
+def _coin(n) -> str:
+    text = n if isinstance(n, str) else f"{int(n):,}"
+    return (f'<span class="amt" style="color:{GOLD}">'
+            f"{_eglyph('coin')} {text}</span>")
+
+
+def _xp(n) -> str:
+    text = n if isinstance(n, str) else f"{int(n):,}"
+    return (f'<span class="amt" style="color:{VIOLET_SOFT}">'
+            f"{_eglyph('aether')} {text} XP</span>")
+
+
+_PAINT_GOLD = re.compile(r"◈\s?(?P<n>[+\-−]?[\d,]+)")
+_PAINT_AE = re.compile(r"✦\s?(?P<n>[+\-−]?[\d,]+)")
+_PAINT_XP = re.compile(r"(?P<n>[+\-−]?\d[\d,]*)\s?XP\b")
+_PAINT_EN_A = re.compile(r"(?P<n>\d+)\s?⚡")
+_PAINT_EN_B = re.compile(r"⚡\s?(?P<n>[+\-−]?\d+)")
+
+
+def _paint_amounts(s: str) -> str:
+    """Runs on ESCAPED text, before _sub_glyphs — a painted ⚡ still
+    becomes the 1-bit bolt, tinted by the span it now sits inside. Runs
+    after the +/− gain-loss tint upstream, so a green line keeps a
+    gold-coloured amount inside it."""
+    s = _PAINT_GOLD.sub(lambda m: _coin(m.group("n")), s)
+    s = _PAINT_AE.sub(
+        lambda m: f'<span class="amt" style="color:{VIOLET_SOFT}">'
+                  f"{_eglyph('aether')} {m.group('n')}</span>", s)
+    s = _PAINT_XP.sub(
+        lambda m: f'<span class="amt" style="color:{VIOLET_SOFT}">'
+                  f"{_eglyph('aether')} {m.group('n')} XP</span>", s)
+    s = _PAINT_EN_A.sub(
+        lambda m: f'<span class="amt" style="color:{AETHER}">'
+                  f"{m.group('n')} ⚡</span>", s)
+    s = _PAINT_EN_B.sub(
+        lambda m: f'<span class="amt" style="color:{AETHER}">'
+                  f"⚡ {m.group('n')}</span>", s)
+    return s
+
+
+def _ep(s: str) -> str:
+    """Escape + paint amounts + glyph swap — hints, body lines, notices."""
+    return _sub_glyphs(_paint_amounts(_e(s)))
+
+
+def _shard_html(note: str) -> str:
+    """030 Phase 3: the shardmind has a face — the 16×16 `shard` grid at
+    32px, aether-lit, where it writes. to_text() keeps ◆."""
+    if "shard" in icons.ICON_KEYS:
+        url = icons.icon_data_url("shard")
+        glyph = (f'<span class="glyph savatar" aria-hidden="true" '
+                 f"style=\"-webkit-mask-image:url('{url}');"
+                 f"mask-image:url('{url}')\"></span>")
+    else:
+        glyph = '<span class="glyph">◆</span>'
+    return (f'<div class="shard type">{glyph}'
+            f"<span>{_ep(note)}</span></div>")
+
+
 # Combat numbers, colored in place: damage the player deals reads orange,
 # HP the player loses reads red. Scene content stays plain text (the
 # renderer contract) — these match the battle-text phrasings from
@@ -238,7 +302,7 @@ def _combat_html(line: str) -> str:
         lambda m: f'<span style="color:{RED}">{m.group(0)}</span>', s)
     s = _HIT_DMG.sub(
         lambda m: f'<span style="color:{ORANGE}">{m.group(0)}</span>', s)
-    return _sub_glyphs(s)
+    return _sub_glyphs(_paint_amounts(s))
 
 
 # ── 025 §6: the haul, drawn ─────────────────────────────────────────────
@@ -251,7 +315,9 @@ def _combat_html(line: str) -> str:
 # apart before the number is read. At the cap the heap would stop scaling
 # and start costing DOM, so the numeral takes over.
 TALLY_CAP = 100
-_TALLY_MARK = {"gold": ("coin", GOLD), "aether": ("aether", AETHER)}
+# 030: XP wears VIOLET_SOFT everywhere now (law 3) — blue stays the
+# notification ink plus energy amounts, nothing else.
+_TALLY_MARK = {"gold": ("coin", GOLD), "aether": ("aether", VIOLET_SOFT)}
 _TALLY_WORD = {"gold": "gold", "aether": "XP"}
 
 
@@ -294,7 +360,7 @@ def _notices_html(notices: list[dict]) -> str:
         rows.append(
             f'<button type="button" class="nrow" data-opt="{_e(opt)}">'
             f'<span class="nk">{word}</span>{chip}'
-            f'<span class="ntx">{_et(str(nt.get("text", "")))}</span>'
+            f'<span class="ntx">{_ep(str(nt.get("text", "")))}</span>'
             f'<span class="ngo">→</span></button>')
     if not rows:
         return ""
@@ -373,7 +439,7 @@ _TIP_XP = ("XP — experience. Fills as you fight and banks past the cap. "
            "XP — spending delays training, never lowers a level.")
 _TIP_LV = ("LV — your level. Levels are bought at the Guildhall: a full "
            "XP bar plus the training fee in gold.")
-_TIP_GOLD = ("◈ Carried gold — spendable anywhere but lost when you die. "
+_TIP_GOLD = ("Carried gold — spendable anywhere but lost when you die. "
              "The Vault banks it safely at 5%/day interest.")
 
 
@@ -405,7 +471,8 @@ def _meters_html(m: Meters) -> str:
         f"{_blocks(m.xp, m.xp_need)}</span></span>"
         f'<span class="gold">'
         f'<span class="lvl" data-tip="{_e(_TIP_LV)}">LV {m.level}</span>'
-        f'<span data-tip="{_e(_TIP_GOLD)}">◈ {val("gold", m.gold)}</span>'
+        f'<span data-tip="{_e(_TIP_GOLD)}">{_eglyph("coin")} '
+        f'{val("gold", m.gold)}</span>'
         f"</span></div>")
 
 
@@ -942,10 +1009,9 @@ def render_scene_fragment(scene: Scene) -> str:
         parts.append(_enemy_head_html(scene.enemy))
         parts.append(_dossier_html(scene.enemy))
     if scene.support:
-        parts.append(f'<div class="support type">{_et(scene.support)}</div>')
+        parts.append(f'<div class="support type">{_ep(scene.support)}</div>')
     if scene.shard_note:
-        parts.append(f'<div class="shard type"><span class="glyph">◆</span>'
-                     f"<span>{_et(scene.shard_note)}</span></div>")
+        parts.append(_shard_html(scene.shard_note))
     in_fold = False
     for line in scene.body_lines:
         # 007: ▣ fold markers — long shop shelves collapse into a
@@ -962,10 +1028,10 @@ def render_scene_fragment(scene: Scene) -> str:
             continue
         if line.startswith("+"):
             parts.append(f'<div class="body type" style="color:{OK}">'
-                         f"{_et(line)}</div>")
+                         f"{_ep(line)}</div>")
         elif line.startswith("−") or line.startswith("-"):
             parts.append(f'<div class="body type" style="color:{RED}">'
-                         f"{_et(line)}</div>")
+                         f"{_ep(line)}</div>")
         else:
             parts.append(f'<div class="body type">{_combat_html(line)}</div>')
     if in_fold:
@@ -984,7 +1050,7 @@ def render_scene_fragment(scene: Scene) -> str:
             # 019: a locked row is dimmed but stays a button — clicking
             # it is how the player asks why the gate is shut.
             opt_cls = " locked" if getattr(o, "locked", False) else ""
-            hint = (f'<span class="hint">{_et(o.hint)}</span>'
+            hint = (f'<span class="hint">{_ep(o.hint)}</span>'
                     if o.hint else "")
             gicon = _opt_gear_icon(o.id)
             # 027: the count leaves the label and becomes a blue chip —
@@ -1209,10 +1275,17 @@ SCENE_CSS = f"""
 .meter .mv{{font-variant-numeric:tabular-nums;transition:color .2s ease;}}
 .meter.up .mv{{color:{OK};}}
 .meter.down .mv{{color:{RED};}}
+/* 030 law 3: a number wears its colour — the meter labels match their
+   bars, not just the blocks. Blue stays energy + notifications only. */
+.meter.hp{{color:{OK};}}
 .meter.hp .blocks{{color:{OK};}}
+.meter.hp.low{{color:{RED};}}
 .meter.hp.low .blocks{{color:{RED};}}
+.meter.en{{color:{AETHER};}}
 .meter.en .blocks{{color:{AETHER};}}
+.meter.ae{{color:{VIOLET_SOFT};}}
 .meter.ae .blocks{{color:{VIOLET_SOFT};}}
+.amt{{white-space:nowrap;}}
 .rail .gold{{color:{GOLD};margin-left:auto;display:inline-flex;gap:1.5ch;}}
 .rail .gold [data-tip]{{cursor:help;}}
 .rail .lvl{{color:{TEXT};}}
