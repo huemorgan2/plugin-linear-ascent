@@ -295,6 +295,11 @@ def _paper_html(paper: dict) -> str:
     items = [i for i in (paper.get("items") or []) if i]
     if not items:
         return ""
+    # the sheet is 320×150 and the news area under the masthead is
+    # ~100 of those units — four 2-line-clamped items is what fits.
+    # Payload order is priority order (dawn, night, census, warden,
+    # gossip), so gossip yields first; to_text keeps every item.
+    items = items[:4]
     url = _paper_tex_url()
     tex = ""
     cls = " noart"
@@ -1414,13 +1419,13 @@ SCENE_CSS = f"""
 .opt:hover .badge{{background:{TEXT};}}
 /* ── 030 Phase 5: the Morning Crier's broadsheet ── */
 .paper{{position:relative;margin:0 0 10px;background:{PANEL};
- border:1px solid {BORDER};overflow:hidden;min-height:60px;}}
+ border:1px solid {BORDER};overflow:hidden;aspect-ratio:320/150;}}
 .paper .ptex{{position:absolute;inset:0;mask-size:cover;
  -webkit-mask-size:cover;mask-position:center;-webkit-mask-position:center;
  mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;
  image-rendering:pixelated;}}
-.paper .pbody{{position:relative;z-index:1;padding:9px 1.5ch 10px;
- color:{INK};}}
+.paper .pbody{{position:absolute;inset:0;z-index:1;overflow:hidden;
+ padding:9px 1.5ch 10px;color:{INK};}}
 .paper.noart .pbody{{color:{TEXT};}}
 .paper .pmast{{font-weight:700;letter-spacing:.18em;font-size:11px;
  text-transform:uppercase;border-bottom:1px solid currentColor;

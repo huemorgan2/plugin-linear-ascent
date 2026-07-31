@@ -198,6 +198,17 @@ def test_vault_scene_sends_the_strip():
     assert "1,240" in s.strip["text"]
 
 
+def test_paper_card_clamps_to_the_sheet():
+    paper = {"headline": "Day 1", "closable": True,
+             "items": [f"item number {n}" for n in range(1, 8)]}
+    html = render._paper_html(paper)
+    # the sheet is a fixed 320×150 — four 2-line items is what fits;
+    # gossip (the tail of the priority order) yields first
+    assert html.count('class="pit"') == 4
+    assert "item number 5" not in html
+    assert "aspect-ratio:320/150" in render.SCENE_CSS
+
+
 # ── Phase 6: a voice in every fields ────────────────────────────────────
 
 def test_floors_1_to_10_have_npcs_and_the_lint_holds():
