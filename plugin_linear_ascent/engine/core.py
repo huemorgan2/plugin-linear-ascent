@@ -231,6 +231,13 @@ def apply_choice(p: dict, option_id: str, text: str = "") -> Scene:
         p["news_day"] = state.world_day()
         return _stamp(p, _build_scene(p))
 
+    # 030 Phase 8: mid-reel every click is the next beat, exactly like the
+    # intro. A stray id ("hunt" sent before the arrival card) advances the
+    # frame instead of erroring — the reel only runs one direction and
+    # nothing can wedge against it.
+    if p.get("movie_floor"):
+        return _stamp(p, _floor_movie_advance(p))
+
     scene = _build_scene(p)
     if p.get("location") in _NOTICE_ROOMS and not scene.enemy:
         doors = {nt["opt"] for nt in notices.pending(p)}
@@ -482,6 +489,10 @@ def _build_scene(p: dict) -> Scene:
         return _creation_class_scene(p)
     if p["stage"] == "creation_name":
         return _creation_name_scene(p)
+    # 030 Phase 8: mid-movie a refresh replays the current beat — the
+    # movie has no skip, exactly like the intro.
+    if p.get("movie_floor"):
+        return _floor_movie_scene(p)
     if p.get("encounter"):
         fl = schema.get_floor(p["encounter"]["floor"])
         return combat.fight_scene(p, fl)
@@ -533,6 +544,8 @@ def _dispatch(p: dict, oid: str) -> Scene:
         return _creation_pick_class(p, oid)
     if p["stage"] == "creation_name":
         return _creation_name_scene(p)     # name comes as text
+    if p.get("movie_floor"):
+        return _floor_movie_advance(p)
     if p.get("encounter"):
         fl = schema.get_floor(p["encounter"]["floor"])
         return combat.resolve_fight_action(p, fl, oid)
@@ -2090,6 +2103,73 @@ def _gate_scene(p: dict) -> Scene:
     )
 
 
+# ── 030 Phase 8: the floor movie ─────────────────────────────────────────
+# A 2-3 beat scripted entry on the 016 intro pattern (fx + headline +
+# body + Next), exactly once per floor per character. Floors with loop
+# GIFs (1-10, law 1) animate; everywhere else the fx slug misses and the
+# still banner carries the beat — one code path, only the motion differs.
+
+def _floor_movie_scene(p: dict) -> Scene:
+    n = int(p["movie_floor"])
+    fl = schema.get_floor(n)
+    beat = int(p.get("movie_beat", 0))
+    if beat == 0:
+        body = [fl.arrival]
+        npc = getattr(fl, "npc", None)
+        if npc is not None:
+            body.append(npc.lore)
+        return Scene(
+            eyebrow=f"FLOOR {n} · {fl.zone.upper()} · I",
+            headline=f"{fl.biome} — {fl.zone}",
+            body_lines=body,
+            options=[Option("next", "Next")],
+            fx=f"floor{n}_world",
+            banner=fl.banner,
+        )
+    w = p.get("_world") or {}
+    frontier = int(w.get("frontier", p["unlocked_floor"]))
+    if frontier > n:
+        # the warden fell — same art under the shared demise treatment,
+        # and the text names WHO, when the world remembers.
+        names = ((w.get("warden") or {}).get("fallen_by")
+                 or {}).get(str(n), "")
+        by = (f"Broken by {names}." if names
+              else "Broken by a war party of climbers.")
+        return Scene(
+            eyebrow=f"FLOOR {n} · THE KEEP · II",
+            headline=f"{fl.warden_name} has already fallen",
+            body_lines=[f"{fl.warden_name} held this lift once. {by}",
+                        "The lift above runs free. The floor is yours "
+                        "to hunt."],
+            options=[Option("next", "Next")],
+            fx="warden_fall",
+            banner=f"warden_{n:03d}",
+        )
+    return Scene(
+        eyebrow=f"FLOOR {n} · THE KEEP · II",
+        headline=f"{fl.warden_name} holds the lift",
+        body_lines=[fl.warden_prose,
+                    f"{fl.warden_name} — ATK {fl.warden_atk} · DEF "
+                    f"{fl.warden_def} · {fl.warden_hp:,} HP. The stair "
+                    "stays shut while it stands."],
+        options=[Option("next", "Next")],
+        fx=f"floor{n}_warden",
+        banner=f"warden_{n:03d}",
+    )
+
+
+def _floor_movie_advance(p: dict) -> Scene:
+    n = int(p["movie_floor"])
+    beat = int(p.get("movie_beat", 0))
+    if beat < 1:
+        p["movie_beat"] = beat + 1
+        return _floor_movie_scene(p)
+    p["flags"][f"floor_seen_{n}"] = True
+    p.pop("movie_floor", None)
+    p.pop("movie_beat", None)
+    return _floor_arrival_scene(p, n)
+
+
 def _gate_pick(p: dict, oid: str) -> Scene:
     if not oid.startswith("floor_"):
         return _gate_scene(p)
@@ -2107,6 +2187,15 @@ def _gate_pick(p: dict, oid: str) -> Scene:
         return s
     p["floor"] = n
     p["location"] = "gate_town"
+    # 030 Phase 8: the first time a character sets foot on a floor, the
+    # floor introduces itself — a short movie, no skip, like the intro.
+    if not p["flags"].get(f"floor_seen_{n}"):
+        p["movie_floor"], p["movie_beat"] = n, 0
+        return _floor_movie_scene(p)
+    return _floor_arrival_scene(p, n)
+
+
+def _floor_arrival_scene(p: dict, n: int) -> Scene:
     fl = schema.get_floor(n)
     lines = [fl.arrival]
     lines += _presence_floor_lines(p, n)

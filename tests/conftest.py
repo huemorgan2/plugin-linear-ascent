@@ -73,3 +73,37 @@ def _stub_luna_sdk() -> None:
 
 
 _stub_luna_sdk()
+
+
+import pytest  # noqa: E402  (after the stub — pytest imports nothing of ours)
+
+
+def pytest_configure(config):
+    config.addinivalue_line(
+        "markers", "reel: test drives the 030 floor reel itself — "
+                   "the auto-stepper stays out of its way")
+
+
+@pytest.fixture(autouse=True)
+def _step_the_reel(request, monkeypatch):
+    """030 Phase 8: first entry to a floor plays a two-beat reel.
+
+    Every contract written before 030 picks a floor and acts in the same
+    breath. The reel is presentation, not rules — so the harness clicks
+    through it the way a player would, and the old contracts keep reading
+    exactly as written. Tests OF the reel mark themselves with @reel.
+    """
+    if request.node.get_closest_marker("reel"):
+        yield
+        return
+    from plugin_linear_ascent.engine import core
+    real = core.apply_choice
+
+    def step(p, option_id, text=""):
+        s = real(p, option_id, text)
+        while p.get("movie_floor"):
+            s = real(p, "1")
+        return s
+
+    monkeypatch.setattr(core, "apply_choice", step)
+    yield
