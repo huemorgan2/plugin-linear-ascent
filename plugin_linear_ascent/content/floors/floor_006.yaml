@@ -56,3 +56,19 @@ warden:
   prose: >-
     Where the lanes cross stands Thornhide — a bear-broad thing grown
     into a coat of living hedge, wire and briar braided through its hide.
+npc:
+  name: Jib
+  role: lane guide
+  greet: >-
+    A whistle comes off the hedge-bank before the man does. "Jib. I
+    walk the lanes for pay, and I'm the only guide who comes back
+    level. Down here your ears are worth more than your eyes."
+  lore: >-
+    "The lanes run below the fields and the light never reaches the
+    floor of them. Wolves hunt by sound; the goblins are blind as bats
+    and don't care. Step soft, breathe softer, never run downhill in
+    the dark."
+  warn: >-
+    "Thornhide is the bank itself, near the lift — hedge grown over
+    hide grown over spite. It lets you walk past once. Coming back is
+    the trap."

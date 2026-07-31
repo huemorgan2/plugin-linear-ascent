@@ -57,3 +57,20 @@ warden:
     On a throne of stacked rifle crates slouches Gnarl, crowned in salvage
     and fat with tribute. He raises one hand, and the parade ground goes
     quiet enough to hear the lift humming behind the throne.
+npc:
+  name: Vail
+  role: watch sergeant
+  greet: >-
+    A climber in patched colors watches the parade ground through a
+    slit in the palisade. "Sergeant Vail — what's left of the last
+    push. We counted the banners. Then we counted our dead. Sit down
+    before they see you."
+  lore: >-
+    "Every path out there is raked for inspection and walked by guards
+    in tower-scrap plate. The couriers run the gaps — fast, and they
+    scream when they see you. Take them quiet or the whole field knows
+    your name."
+  warn: >-
+    "The King holds the lift and no blade takes him alone. This is
+    war-party work — pledge at the Guildhall and come back with
+    numbers. The banners come down together or not at all."

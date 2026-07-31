@@ -77,6 +77,17 @@ class Encounter:
 
 
 @dataclass(frozen=True)
+class Npc:
+    """030: the floor's one voice — numberless prose, the engine says
+    the numbers (warden strength is derived, never authored)."""
+    name: str
+    role: str
+    greet: str
+    lore: str
+    warn: str
+
+
+@dataclass(frozen=True)
 class Floor:
     floor: int
     tier: int
@@ -88,6 +99,7 @@ class Floor:
     encounters: list[Encounter]
     warden_name: str
     warden_prose: str
+    npc: "Npc | None" = None
     # computed (economy.py — never authored)
     monster_atk: int = 0
     monster_def: int = 0
@@ -160,6 +172,24 @@ def _load_floor_file(path: str) -> Floor:
     _check_prose(raw["arrival"], f"{where}/arrival")
     _check_prose(raw["warden"]["prose"], f"{where}/warden")
 
+    npc = None
+    if raw.get("npc") is not None:
+        n_raw = raw["npc"]
+        for k in n_raw:
+            if k in _FORBIDDEN_NUMERIC_KEYS:
+                raise ContentError(
+                    f"{where}/npc: economy field {k!r} must not be authored")
+        for key in ("name", "role", "greet", "lore", "warn"):
+            if not str(n_raw.get(key) or "").strip():
+                raise ContentError(f"{where}/npc: missing {key!r}")
+        for key in ("greet", "lore", "warn"):
+            _check_prose(str(n_raw[key]), f"{where}/npc/{key}")
+        npc = Npc(name=str(n_raw["name"]).strip(),
+                  role=str(n_raw["role"]).strip(),
+                  greet=str(n_raw["greet"]).strip(),
+                  lore=str(n_raw["lore"]).strip(),
+                  warn=str(n_raw["warn"]).strip())
+
     matk, mdef, mhp = economy.monster_stats(f)
     watk, wdef, whp = economy.warden_stats(f)
     return Floor(
@@ -167,6 +197,7 @@ def _load_floor_file(path: str) -> Floor:
         gate_town=raw["gate_town"], arrival=raw["arrival"],
         banner=raw["banner"], encounters=encounters,
         warden_name=raw["warden"]["name"], warden_prose=raw["warden"]["prose"],
+        npc=npc,
         monster_atk=matk, monster_def=mdef, monster_hp=mhp,
         warden_atk=watk, warden_def=wdef, warden_hp=whp,
         milestone=economy.MILESTONES.get(f),
@@ -285,6 +316,12 @@ def lint_floors() -> list[str]:
         if fl.floor <= 10:
             errors.extend(_archetype_errors(fl))
             errors.extend(_class_pool_errors(fl))
+            # 030: every tuned floor owes the climber one voice at the
+            # gate town. Floors 11-100 stay silent until their art pass.
+            if fl.npc is None:
+                errors.append(
+                    f"floor {fl.floor}: missing npc block (030 — a voice "
+                    "in every fields, floors 1-10)")
         # 008: floors ≥ 11 speak the full language — lore on every
         # encounter (the [i] dossier's one breath) and a 4-5 shelf.
         if fl.floor >= 11:

@@ -55,3 +55,19 @@ warden:
   prose: >-
     Greycinder stands in the field's dead center, a stag-tall frame of
     charcoal and grate-iron, embers still alive somewhere in its chest.
+npc:
+  name: Smoor
+  role: charcoal burner
+  greet: >-
+    A soot-black figure tends a mound that smokes without fire. "Smoor.
+    I burned charcoal on this common before the common burned itself.
+    The ash keeps what the fire left. I rake carefully."
+  lore: >-
+    "The grass came back wrong — silver, brittle, whispering when there
+    is no wind. The goblin crews rake for salvage, and the shades rake
+    for the goblins. If your shadow warms, drop and roll before you
+    look."
+  warn: >-
+    "Greycinder beds down in the old fire-heart by the lift. Every step
+    near it wakes an ember. It doesn't roar — it smolders, and then the
+    field is alight behind you."

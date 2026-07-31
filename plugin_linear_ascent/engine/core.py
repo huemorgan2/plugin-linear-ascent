@@ -1553,6 +1553,8 @@ def _lodge_scene(p: dict) -> Scene:
             opts.append(Option(
                 "fire_stew", "Stand a stranger a stew",
                 f"◈ {economy.FIRE_STEW_GOLD} · a letter with it"))
+    # 030 Phase 6: the keeper has a mouth — how coin moves under this roof.
+    opts.append(Option("talk", "Talk to the keeper", "free"))
     opts.append(Option("back", "Back to the square"))
     return Scene(
         eyebrow="ROOTHOLLOW · THE LODGE",
@@ -1567,7 +1569,56 @@ def _lodge_scene(p: dict) -> Scene:
     )
 
 
+def _keeper_scene(p: dict) -> Scene:
+    """030 Phase 6: the keeper talks money. Every number is read off
+    economy.py at build time; the prose rotates so a second ask is not
+    a replay. This is the keeper's room — no shard chatter in it."""
+    day = state.world_day()
+    shift = _night_shift(day)
+    work = economy.night_work_gold(max(1, p["unlocked_floor"]))
+    rest = economy.night_rest_aether(p["level"])
+    tellings = (
+        [f"“Coin under this roof? The night slot. One action a "
+         f"night: take {shift} and there's ◈ {work} on the board at "
+         "dawn, or rest by the fire and bank the pool instead. I plan "
+         "nights, not lives.”"],
+        [f"“Rest is pay too. A night by my fire banks ✦ {rest} — "
+         f"it rides out at +{round(economy.RESTED_XP_BONUS_PCT * 100)}% "
+         "a kill till the pool runs dry. The pool holds "
+         f"{economy.RESTED_POOL_CAP_NIGHTS} nights' worth, no more — "
+         "sleep doesn't stack forever.”"],
+        [f"“The Vault pays {round(economy.BANK_INTEREST_RATE * 100)}% "
+         "a day on what you leave, stubs at dawn, regular as bells. "
+         "Banked coin is safe coin — but mind, it can't buy my bunk. "
+         "The palisade takes carried coin only.”"],
+        [f"“Spoils? The pawn broker across the square pays "
+         f"{round(economy.pawn_rate(day) * 100)}% of forge price today. "
+         "The rate is his mood and his mood is the day — patient "
+         "climbers sell on the good days.”"],
+    )
+    n = int(p["flags"].get("keeper_told", 0))
+    p["flags"]["keeper_told"] = n + 1
+    body = list(tellings[n % len(tellings)])
+    if not p["flags"].get("met_keeper"):
+        p["flags"]["met_keeper"] = True
+        body.insert(0, "The keeper sets down the ledger and looks you "
+                       "over once — a new name for the book.")
+    return Scene(
+        eyebrow="ROOTHOLLOW · THE LODGE",
+        headline="The keeper leans on the counter",
+        support="Ask again — there is always another way coin moves "
+                "through this room.",
+        body_lines=body,
+        options=[Option("talk", "Ask for another telling", "free"),
+                 Option("back", "Back to the square")],
+        meters=combat.meters(p),
+        banner="lodge",
+    )
+
+
 def _lodge_action(p: dict, oid: str) -> Scene:
+    if oid == "talk":
+        return _keeper_scene(p)
     if oid == "stew":
         return _eat_stew(p, _lodge_scene)
     if oid == "fire_word":
@@ -2108,8 +2159,49 @@ def _gate_town_options(p: dict, fl) -> list[Option]:
                 opts.append(Option(f"use_{slug}", f"Use a {item.name}",
                                    f"+{amount} HP · {have} left"))
     opts.append(Option("keep", f"The Warden's keep — {fl.warden_name}", "3 ⚡"))
+    # 030 Phase 6: the floor's one voice — floors without an npc block
+    # (11-100, until their art pass) simply have no talk row.
+    npc = getattr(fl, "npc", None)
+    if npc is not None:
+        opts.append(Option("talk", f"Talk — {npc.name}", npc.role))
     opts.append(Option("town", "Return to Roothollow"))
     return opts
+
+
+def _npc_scene(p: dict, fl) -> Scene:
+    """030 Phase 6: the gate town's local speaks. YAML prose is
+    numberless; the warden's strength is said in derived numbers
+    (economy.warden_stats via the Floor row) and the tone is keyed to
+    whether that warden still stands."""
+    npc = fl.npc
+    flag = f"met_npc_{fl.floor}"
+    body = []
+    if not p["flags"].get(flag):
+        p["flags"][flag] = True
+        body.append(npc.greet)
+    body.append(npc.lore)
+    body.append("Out past the wire: "
+                + ", ".join(e.name for e in fl.encounters) + ".")
+    w = p.get("_world") or {}
+    frontier = int(w.get("frontier", p["unlocked_floor"]))
+    if frontier > fl.floor:
+        body.append(f"“{fl.warden_name} fell — the lift above runs free, "
+                    "and this floor breathes easier for it. Thank you "
+                    "for every blade that helped.”")
+    else:
+        body.append(npc.warn)
+        body.append(f"{fl.warden_name} — ATK {fl.warden_atk} · "
+                    f"DEF {fl.warden_def} · {fl.warden_hp:,} HP. "
+                    "That's the shape of it. Walk in knowing.")
+    return Scene(
+        eyebrow=f"FLOOR {fl.floor} · {fl.gate_town.upper()}",
+        headline=f"{npc.name} — {npc.role}",
+        support="Talking is free. Listening is what saves you.",
+        body_lines=body,
+        options=_gate_town_options(p, fl),
+        meters=combat.meters(p),
+        banner=fl.banner,
+    )
 
 
 def _gate_town_scene(p: dict) -> Scene:
@@ -2132,6 +2224,8 @@ def _gate_town_scene(p: dict) -> Scene:
 
 def _gate_town_action(p: dict, oid: str) -> Scene:
     fl = schema.get_floor(max(1, p["floor"]))
+    if oid == "talk" and getattr(fl, "npc", None) is not None:
+        return _npc_scene(p, fl)
     if oid == "answer_flare":
         fw = _live_flare(p)
         if fw is None:

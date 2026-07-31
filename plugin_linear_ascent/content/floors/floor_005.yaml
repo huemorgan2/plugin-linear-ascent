@@ -55,3 +55,17 @@ warden:
   prose: >-
     Ramsteel stands at the stair — a great horned frame of shearing
     blades and ram's skull, pawing sparks from the flint of the downs.
+npc:
+  name: Maun
+  role: shepherd of nothing
+  greet: >-
+    A shepherd leans on a crook with no flock in sight. "Maun. I walked
+    these downs before the banners came. The sheep are all eaten. The
+    paths remember though — use them, they're worn safe and quiet."
+  lore: >-
+    "Goblin drovers run the shearing shed like they invented wool. The
+    boars churned the low ground — stay off it after rain. And the
+    courser is faster than you. Don't test that twice."
+  warn: >-
+    "Ramsteel paces the lift paddock, horns like bent girders. It rams
+    what stands still and tramples what runs straight. Move sideways."

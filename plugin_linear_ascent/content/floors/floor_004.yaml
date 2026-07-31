@@ -56,3 +56,17 @@ warden:
   prose: >-
     At the pylon's broken head crouches Glarefang, a wolf remade in
     chrome, one eye a burning floodlamp. Its shadow is thrown a mile long.
+npc:
+  name: Sella
+  role: beam-watcher
+  greet: >-
+    A climber gone grey sits with her back to the fallen pylon, eyes on
+    the beam. "Sella. I watch the light. Stand in it and everything
+    sees you. Stand out of it and you see everything. Choose."
+  lore: >-
+    "The goblins camp in the beam because they think light is armor.
+    The wolves hunt the shadow-line where it breaks. And don't look at
+    the moths when they open their wings — that's how they eat."
+  warn: >-
+    "Glarefang lairs where the beam dies at the lift-house. Its eyes
+    throw the light back at you, and it strikes while you're blinking."

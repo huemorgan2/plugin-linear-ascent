@@ -55,3 +55,17 @@ warden:
   prose: >-
     In the press-house, the Warden waits among the vats: a great ape-frame
     of orchard timber and engine parts, cider steaming from its joints.
+npc:
+  name: Old Perry
+  role: orchard keeper
+  greet: >-
+    A stooped figure racks cider under a tarp. "Perry. This was my
+    family's orchard nine generations. Have a cup — then mind the wire
+    between the trunks. It isn't mine."
+  lore: >-
+    "The goblins strung snare-line at ankle height through the good
+    rows, and the wolves learned to drive prey onto it. Walk the mown
+    strips, and watch the windfalls — some of them hum."
+  warn: >-
+    "Applewrath nests in the press-house by the lift. It has taken the
+    harvest for its own, and it prunes trespassers same as branches."

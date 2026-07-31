@@ -55,3 +55,19 @@ warden:
   prose: >-
     Above the fair's gate hangs the Hookmaster — a lanky engine of crane
     chain and carnival brass that unfolds down to meet you, hook first.
+npc:
+  name: Nan
+  role: fairwright
+  greet: >-
+    A woman oils the frozen carousel, horse by painted horse. "Nan. I
+    built half this fair. I wind what still winds and I keep the music
+    box shut — trust me on the music box."
+  lore: >-
+    "The goblins run the fair now, and the prizes on the hooks were
+    ours. The barker calls marks in, the kites cut down from the
+    bunting, and the carousel wolves hunt in a circle. Never follow one
+    — it's leading you around."
+  warn: >-
+    "The Hookmaster holds the gallows stage by the lift, and it weighs
+    every climber like a prize. Cut the hook lines first if you can
+    reach them. It hates that."

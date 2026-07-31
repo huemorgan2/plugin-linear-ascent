@@ -54,3 +54,17 @@ warden:
   prose: >-
     The stair-lift hums behind a beast of wolf and welded plate. Brackjaw
     circles once, servos ticking, and lowers its head to charge.
+npc:
+  name: Hobb Fennick
+  role: the last farmer
+  greet: >-
+    An old man mends a fence that pens nothing. "Hobb Fennick. I farmed
+    this land when it was land. Now I count what comes out of the hedges,
+    and I count the climbers who go in. The counts don't match."
+  lore: >-
+    "The hedgerows were mine once. Wolves come through the gap in the
+    third hedge — the dogs that kept it are gone. Mind the grass when it
+    stops moving. That's when something has set its feet."
+  warn: >-
+    "Brackjaw hunts the stair-lift meadow — wolf where it counts, welded
+    plate where it doesn't. It circles once before it charges. Once."

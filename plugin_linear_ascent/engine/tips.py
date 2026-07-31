@@ -101,6 +101,10 @@ _TIPS: dict[str, str] = {
     "sleep": ("◈ 10 × your level for the night: ambush-proof sleep and "
               "+20 HP by dawn. Skip it carrying gold and the fields may "
               "find you."),
+    # 030: people to talk to — the lodge keeper and the floor's voice
+    "talk": ("Talking is free. The locals know this ground — what "
+             "hunts it, what the Warden really is, and where the coin "
+             "moves. Listening is the cheapest armor sold anywhere."),
 
     # ── the night slot (022/005) ──
     "night_rest": ("Tonight's ONE night action: rest, and dawn banks "

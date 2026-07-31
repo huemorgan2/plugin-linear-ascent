@@ -55,3 +55,18 @@ warden:
   prose: >-
     Milldrown waits under the wheel — a sodden mass of wolf and weed and
     pump-iron, water running from it in ropes as it stands to full height.
+npc:
+  name: Ganny
+  role: the miller
+  greet: >-
+    A broad woman feathers the wheel-brake as you pass. "Ganny. My
+    family ground flour here; now the race feeds the tower's veins and
+    I grind nothing. Still my wheel, though. Still my river."
+  lore: >-
+    "The race runs uphill — trust nothing the water does here. Goblins
+    net the sluices, and the crabs come up with the coolant, warm as
+    fresh bread and twice as mean. Keep your feet dry and your back to
+    the wheel."
+  warn: >-
+    "Milldrown holds the wheelhouse pool by the lift. It pulls climbers
+    under the race and holds them there till the wheel stops counting."

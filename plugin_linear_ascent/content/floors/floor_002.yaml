@@ -55,3 +55,17 @@ warden:
   prose: >-
     The keep is a drowned barn, and Sedgeback rises out of it — a boar
     grown wrong, plated in rusted field-tin, water pouring off its back.
+npc:
+  name: Mirel
+  role: weir keeper
+  greet: >-
+    A woman stands knee-deep at the sluice gate, eels in a fence-wire
+    trap. "Mirel. I keep the weir. The water tells me what's wading
+    long before the floodlights do."
+  lore: >-
+    "Everything out there moves slow and hits like a flood coming in.
+    The pasture drowned when they tore the land skyward — what lived
+    through it learned patience. You should too."
+  warn: >-
+    "Sedgeback sits the deep water by the lift like a sunk barge. It
+    doesn't chase. It waits for the water to bring you close."
