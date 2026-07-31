@@ -35,6 +35,13 @@ COST_PVP_ATTACK = 3
 # or per floor instead.
 LEVEL_CAP = 30
 
+# 030 Phase 9: how deep the tuning work has actually gone. Slow sim
+# suites cover floors ≤ this cap on every run; the full tower runs only
+# under ASCENT_FULL_SIMS=1 (the pre-ship ritual, not the inner loop).
+# Whole-tower arithmetic gates (smoothness, pace, art coverage) ignore
+# this — they are quick and always on.
+TUNED_FLOOR_CAP = 10
+
 
 def energy_cap(gear_tier: int, race: str = "") -> int:
     """022/002: the cap is keyed off the GEAR BAND (tier of the best

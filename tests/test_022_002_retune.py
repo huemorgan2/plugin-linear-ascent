@@ -16,6 +16,7 @@ plans/022-one-world-many-clocks/002-the-grand-retune/plan.md:
 - no orphaned `level // 10` reads.
 """
 
+import os
 import pathlib
 import re
 
@@ -52,6 +53,12 @@ def _fight_warden(fno, seed):
 
 N_SIM = 150
 
+# 030 Phase 9: the warden sim walks only the tuned floors on a default
+# run (≤ TUNED_FLOOR_CAP); ASCENT_FULL_SIMS=1 sims the whole 1–29 band.
+# Everything else in this file is closed-form arithmetic and stays on.
+_SIM_TOP = (30 if os.environ.get("ASCENT_FULL_SIMS")
+            else economy.TUNED_FLOOR_CAP + 1)
+
 
 def test_solo_warden_band_wins_60_85():
     """Floors 5–29 (milestones excluded — they are quorum bosses tuned
@@ -59,7 +66,7 @@ def test_solo_warden_band_wins_60_85():
     the band AVERAGE inside the design's 60–85%. Floors 1–4 ramp in
     gently (fresh climbers, partial kits): ≥88%."""
     rates = {}
-    for fno in range(1, 30):
+    for fno in range(1, _SIM_TOP):
         if fno % 10 == 0:
             continue
         wins = sum(_fight_warden(fno, seed) for seed in range(N_SIM))

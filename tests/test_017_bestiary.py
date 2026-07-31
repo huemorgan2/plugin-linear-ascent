@@ -13,11 +13,24 @@ Floors without a traitless encounter use the class's fastest intended
 kill as the "plain" baseline — the drag ratio needs prey, not blanks.
 """
 
+import os
+
+import pytest
+
 from plugin_linear_ascent import economy
 from plugin_linear_ascent.content import schema
 from plugin_linear_ascent.engine import combat
 from tests.test_017_damage_types import (_class_mult, _sim_fight,
                                          _speed_counters, reference_player)
+
+# 030 Phase 9: everything here sims floors above TUNED_FLOOR_CAP — the
+# untuned tower. The default run skips the module; ASCENT_FULL_SIMS=1
+# is the pre-ship ritual that walks all hundred floors.
+if not os.environ.get("ASCENT_FULL_SIMS"):
+    pytest.skip(
+        f"floors 11-100 sims — tuned cap is {economy.TUNED_FLOOR_CAP} "
+        "(030 Phase 9); set ASCENT_FULL_SIMS=1 for the full tower",
+        allow_module_level=True)
 
 FLOORS = range(11, 101)
 # 022/002: 20 sims put ±10% noise on an 80% gate — floor 95's curator
