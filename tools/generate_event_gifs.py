@@ -396,6 +396,103 @@ EVENTS: dict[str, dict] = {
     },
 }
 
+# ── 030 Phase 8: the floor arrival reel, floors 1–10 ────────────────────
+# Two ambient loops per floor — the world beat (the fields as the lift
+# doors open) and the keep beat (the Warden holding the stair) — plus one
+# shared one-shot demise for floors whose Warden has already fallen.
+# fx slugs from core._floor_movie_scene: floor{n}_world / floor{n}_warden
+# / warden_fall. Floors 11+ have no reel art and fall back to the still
+# banner — the level-10 rule.
+_FLOOR_WORLDS = {
+    1: ("stolen meadowland rolling out under the tower's floodlights — "
+        "hedgerows in their old lines fencing abandoned fields, a "
+        "lamplit frontier steading with glowing windows at the meadow's "
+        "edge"),
+    2: ("a drowned pasture at dusk — flooded fields mirroring a gradient "
+        "sky, floodlight beams lying across the water in long white "
+        "bars, a stilt-town on the levee with lit windows"),
+    3: ("an orchard in perfect rows gone wild at the crowns, windfall "
+        "apples in the grass, a cider-press town glowing between the "
+        "trunks at the far end of the rows"),
+    4: ("a toppled floodlight pylon whose beam still burns along the "
+        "ground — a river of white light across black grass, a goblin "
+        "camp's fires dotted on the dark field beyond"),
+    5: ("sheep downs with deep-worn flock paths winding over bare "
+        "crests, goblin banners flying from a shearing shed, a small "
+        "gate town's lamps in the valley fold"),
+    6: ("sunken lanes running between banked hedges taller than a rider, "
+        "lantern light spilling into the green trench of the road, a "
+        "hedge-harbor town glowing at the lane's end"),
+    7: ("a river pumped uphill through a captured millrace, the old "
+        "watermill still turning against a luminous gradient sky, "
+        "coolant pipes climbing away toward the tower"),
+    8: ("a burnt common of silver-grey brittle grass whispering in the "
+        "wind, goblin scavenger crews' fires in the distance, ash "
+        "drifting as sparse dither on the air"),
+    9: ("a fairground seized mid-festival — stalls still bunted, a "
+        "carousel of painted horses frozen mid-turn, goblin lanterns "
+        "strung between the gallows poles"),
+    10: ("the last meadow before the lift turned parade ground — goblin "
+         "banners in their hundreds, rifle crates stacked into walls, "
+         "every path raked by watch-fires"),
+}
+_FLOOR_WARDENS = {
+    1: ("a beast of wolf and welded plate circling before a humming "
+        "stair-lift, servos ticking, head lowering to charge"),
+    2: ("a boar grown wrong, plated in rusted field-tin, rising out of "
+        "a drowned barn with water pouring off its back"),
+    3: ("a great ape-frame of orchard timber and engine parts waiting "
+        "among cider vats, steam curling from its joints"),
+    4: ("a wolf remade in chrome crouched at a broken pylon head, one "
+        "eye a burning floodlamp throwing its shadow a mile long"),
+    5: ("a great horned frame of shearing blades and ram's skull "
+        "standing at the stair, pawing sparks from the flint"),
+    6: ("a bear-broad thing grown into a coat of living hedge, wire "
+        "and briar braided through its hide, at a lane crossing"),
+    7: ("a sodden mass of wolf and weed and pump-iron under a turning "
+        "waterwheel, water running from it in ropes as it stands"),
+    8: ("a stag-tall frame of charcoal and grate-iron in a dead "
+        "field's center, embers alive somewhere in its chest"),
+    9: ("a lanky engine of crane chain and carnival brass hanging "
+        "above a fairground gate, unfolding downward hook first"),
+    10: ("a fat crowned goblin king slouched on a throne of stacked "
+         "rifle crates, raising one hand as watch-fires gutter"),
+}
+for _n in range(1, 11):
+    EVENTS[f"floor{_n}_world"] = {
+        "prompt": (
+            f"{_FLOOR_WORLDS[_n]}. Everything stands PERFECTLY STILL "
+            "except: light breathes slowly, smoke or mist drifts "
+            "sideways, small ambient flickers. Extremely subtle, calm, "
+            "continuous motion. Absolutely no zoom, no pan, no people "
+            "moving."),
+        "tint": DIM, "seconds": 6, "loop": True, "crossfade": 1.5,
+        "size": (320, 200),
+    }
+    EVENTS[f"floor{_n}_warden"] = {
+        "prompt": (
+            f"{_FLOOR_WARDENS[_n]}. The creature holds its ground in "
+            "slow menace — breathing, small head movements, steam or "
+            "sparks drifting — but never leaves its spot and never "
+            "attacks. Extremely subtle, continuous ambient motion. "
+            "Absolutely no zoom, no pan."),
+        "tint": VIOLET, "seconds": 6, "loop": True, "crossfade": 1.5,
+        "size": (320, 200),
+    }
+EVENTS["warden_fall"] = {
+    "prompt": (
+        "a colossal scrap-metal war-beast silhouette collapsing before "
+        "great gate doors: it staggers once, drops to its knees, and "
+        "crashes down in a burst of dust and sparks; the dust settles "
+        "and thin smoke rises from the wreck. The FINAL TWO SECONDS "
+        "are a perfectly still tableau: the dead machine-beast lying "
+        "in the settled dust, gate doors standing open behind it, "
+        "absolutely nothing moving — a frozen closing frame."),
+    "tint": GOLD, "seconds": 8, "loop": False, "hold_ms": 2000,
+    "trim": (0.0, 6.0),
+    "size": (320, 200),
+}
+
 # ── 009 kill FX variants: floors 1–3 families × landing damage type ─────
 # The victory scene shows YOUR kill: melee is the warrior's sword,
 # arrow the archer's shot, magic the giant wizard's cast. Engine side:
