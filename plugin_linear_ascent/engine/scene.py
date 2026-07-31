@@ -47,6 +47,10 @@ class Meters:
     xp_need: int        # xp_need(level) — full bar = licensed to train
     gold: int
     level: int = 1      # 012: shown next to the gold
+    atk: int = 0        # 030: total ATK/DEF ride the wire so the renderer
+    dfs: int = 0        # can draw pip rows without reading the player doc.
+                        # Defaults 0 = "not sent" (older engine): the
+                        # profile block simply omits the rows.
 
 
 @dataclass
@@ -139,9 +143,12 @@ class Scene:
                 lines.append(f" {i}) {o.label}{badge}{hint}")
         if self.meters:
             m = self.meters
+            stats = (f"   ATK {m.atk}   DEF {m.dfs}"
+                     if getattr(m, "atk", 0) else "")
             lines.append(
                 f"HP {m.hp}/{m.hp_max}   ⚡ {m.energy}/{m.energy_max}   "
-                f"XP {m.xp}/{m.xp_need}   LV {m.level}   gold {m.gold}")
+                f"XP {m.xp}/{m.xp_need}   LV {m.level}   gold {m.gold}"
+                f"{stats}")
         # 010.1: ⚡/🔒 are one-character markers for the HTML renderer's
         # 1-bit glyphs; the text surface (the agent reads this) speaks in
         # words so no emoji ever leaks into a chat reply.

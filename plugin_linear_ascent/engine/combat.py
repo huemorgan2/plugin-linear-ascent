@@ -79,7 +79,9 @@ def meters(p: dict) -> Meters:
         xp=p["xp"],
         xp_need=economy.xp_need(p["level"]),
         gold=p["gold"],
-        level=p["level"])
+        level=p["level"],
+        atk=state.atk(p),
+        dfs=state.dfs(p))
 
 
 def _eyebrow(p: dict, floor) -> str:

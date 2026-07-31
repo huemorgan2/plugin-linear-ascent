@@ -57,6 +57,8 @@ _EVENTS = os.path.join(_ART_ROOT, "events")
 # a picture everywhere now — cards included — so the same 1-bit art resolves
 # through the ordinary banner lookup.
 _SIGILS = os.path.join(_ART, "factions")
+# 030: full-body player portraits, 100×200 — one per armour forge tier.
+_PORTRAITS = os.path.join(_ART_ROOT, "portraits")
 
 # 011 event animations tint by their moment, not the floor mood.
 _FX_TINT = {"ascent_open": VIOLET, "ascent_title": VIOLET_SOFT,
@@ -474,6 +476,85 @@ def _meters_html(m: Meters) -> str:
         f'<span data-tip="{_e(_TIP_GOLD)}">{_eglyph("coin")} '
         f'{val("gold", m.gold)}</span>'
         f"</span></div>")
+
+
+# ── 030: the player profile — who is climbing ───────────────────────────
+# The rail grows into a profile block: a 100×200 full-body portrait that
+# suits up with the armour tier, and total ATK/DEF drawn as rows of ten
+# 16×16 glyphs — every 3 points fills half an icon (worn sword / armour
+# in the icon house style), the numeral always beside them. Missing art
+# or an older engine (no atk on the wire) degrades to the bare rail.
+
+_PORTRAIT_TIERS = ((9, "aegis"), (7, "plate"), (5, "scale"),
+                   (3, "chain"), (1, "leather"))
+
+_TIP_ATK = ("ATK — your total attack: class base plus weapon and honing. "
+            "Every 3 points fills half a sword.")
+_TIP_DEF = ("DEF — your total defense: shield, armor and honing. "
+            "Every 3 points fills half an icon.")
+
+
+def _portrait_slug(scene: Scene) -> str:
+    """rags → leather → chain → scale → plate → aegis, resolved from the
+    equipped armour on the pack strip — the renderer never opens the
+    player doc, it reads the scene it was handed."""
+    tier = 0
+    for cell in scene.inventory or []:
+        if cell.get("kind") == "armor" and cell.get("equipped"):
+            g = economy.FORGE.get(cell.get("slug", ""))
+            tier = g.tier if g else 0
+            break
+    for floor_t, slug in _PORTRAIT_TIERS:
+        if tier >= floor_t:
+            return slug
+    return "rags"
+
+
+@lru_cache(maxsize=None)
+def _portrait_data_url(slug: str) -> str | None:
+    path = os.path.join(_PORTRAITS, f"portrait_{slug}_100x200.png")
+    if os.path.exists(path):
+        b64 = base64.b64encode(open(path, "rb").read()).decode()
+        return f"data:image/png;base64,{b64}"
+    return None
+
+
+def _pip_row(key: str, label: str, stat: int, tint: str, tip: str) -> str:
+    halves = max(0, min(20, round(stat / 3)))
+    pips = []
+    for i in range(10):
+        left = halves - 2 * i
+        if left >= 2:
+            mode, col = "full", tint
+        elif left == 1:
+            mode, col = "half", tint
+        else:
+            mode, col = "outline", FAINT
+        url = icons.icon_data_url(key, mode)
+        pips.append(f'<span class="pip" style="background-color:{col};'
+                    f"-webkit-mask-image:url('{url}');"
+                    f"mask-image:url('{url}');\"></span>")
+    return (f'<div class="piprow" data-tip="{_e(tip)}">'
+            f'<span class="plab" style="color:{tint}">{label} {stat}</span>'
+            f'<span class="pips">{"".join(pips)}</span></div>')
+
+
+def _profile_html(scene: Scene) -> str:
+    m = scene.meters
+    right = _meters_html(m)
+    if getattr(m, "atk", 0):
+        right += ('<div class="piprows later">'
+                  + _pip_row("sword", "ATK", m.atk, ORANGE, _TIP_ATK)
+                  + _pip_row("armor", "DEF", getattr(m, "dfs", 0), DIM,
+                             _TIP_DEF)
+                  + "</div>")
+    url = _portrait_data_url(_portrait_slug(scene))
+    if not url:
+        return right
+    return (f'<div class="profile">'
+            f'<div class="portrait later" style="background-color:{TEXT};'
+            f"-webkit-mask-image:url('{url}');mask-image:url('{url}');\">"
+            f'</div><div class="pcol">{right}</div></div>')
 
 
 # ── 017/003: the enemy header + the [i] dossier ─────────────────────────
@@ -1073,7 +1154,7 @@ def render_scene_fragment(scene: Scene) -> str:
                      f"with a number</div></div>")
 
     if scene.meters:
-        parts.append(_meters_html(scene.meters))
+        parts.append(_profile_html(scene))
     parts.append(_inventory_html(scene))
 
     stripe = _STRIPE.get(scene.event_kind)
@@ -1286,6 +1367,23 @@ SCENE_CSS = f"""
 .meter.ae{{color:{VIOLET_SOFT};}}
 .meter.ae .blocks{{color:{VIOLET_SOFT};}}
 .amt{{white-space:nowrap;}}
+/* ── 030: the profile block — portrait beside the rail + pip rows ── */
+.profile{{display:flex;gap:2ch;align-items:flex-start;margin-top:10px;
+ padding-top:8px;border-top:1px dashed {BORDER};}}
+.profile .portrait{{flex:none;width:100px;aspect-ratio:100/200;
+ mask-size:100% 100%;-webkit-mask-size:100% 100%;mask-repeat:no-repeat;
+ -webkit-mask-repeat:no-repeat;image-rendering:pixelated;}}
+.profile .pcol{{flex:1;min-width:0;}}
+.profile .rail{{margin-top:0;padding-top:0;border-top:0;}}
+.piprows{{margin-top:8px;color:{DIM};}}
+.piprow{{display:flex;align-items:center;gap:1ch;margin-top:4px;
+ cursor:help;}}
+.piprow .plab{{flex:none;min-width:8ch;font-variant-numeric:tabular-nums;}}
+.piprow .pips{{display:inline-grid;grid-template-columns:repeat(10,18px);
+ gap:1px;}}
+.pip{{width:16px;height:16px;display:inline-block;
+ mask-size:100% 100%;-webkit-mask-size:100% 100%;mask-repeat:no-repeat;
+ -webkit-mask-repeat:no-repeat;image-rendering:pixelated;}}
 .rail .gold{{color:{GOLD};margin-left:auto;display:inline-flex;gap:1.5ch;}}
 .rail .gold [data-tip]{{cursor:help;}}
 .rail .lvl{{color:{TEXT};}}

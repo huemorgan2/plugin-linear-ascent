@@ -47,6 +47,27 @@ _GRIDS: dict[str, list[str]] = {
         "......####......",
         "................",
     ],
+    # 030: a broad blade for the ATK pip rows — wide enough to carry the
+    # three fill states (full / half / outline); the thin "weapon" glyph
+    # is all rim, so its hollow forms read identical.
+    "sword": [
+        "................",
+        ".......##.......",
+        "......####......",
+        "......####......",
+        ".....######.....",
+        ".....######.....",
+        ".....######.....",
+        ".....######.....",
+        ".....######.....",
+        ".....######.....",
+        "..############..",
+        "..############..",
+        "......####......",
+        "......####......",
+        ".....######.....",
+        "................",
+    ],
     # heater shield, solid, the boss a hole punched in the chief
     "shield": [
         "................",
@@ -759,6 +780,21 @@ def icon_key(slug: str, kind: str = "") -> str:
     return "pack"
 
 
+def _rimmed(grid: list[str]) -> list[list[bool]]:
+    """Rim pixels only — ink touching a hole or the edge. The outline
+    variant of a glyph (030 pip rows: an empty pip is the same icon,
+    hollowed) is exactly this ring."""
+    ink = [[c == "#" for c in row] for row in grid]
+
+    def hole(x: int, y: int) -> bool:
+        return not (0 <= x < _N and 0 <= y < _N) or not ink[y][x]
+
+    return [[ink[y][x] and any(hole(x + dx, y + dy)
+                               for dy in (-1, 0, 1) for dx in (-1, 0, 1)
+                               if dx or dy)
+             for x in range(_N)] for y in range(_N)]
+
+
 def _painted(grid: list[str]) -> list[list[bool]]:
     """Which pixels the mask paints: a solid rim around the silhouette
     and around every hole in it, plus a body that stays solid on the
@@ -800,12 +836,24 @@ def _painted(grid: list[str]) -> list[list[bool]]:
 
 
 @lru_cache(maxsize=None)
-def icon_data_url(key: str) -> str:
+def icon_data_url(key: str, mode: str = "full") -> str:
     """Inline SVG data URL for the 16×16 mask — white ink, crisp edges.
-    Unknown keys draw the pack crate (never a broken cell)."""
+    Unknown keys draw the pack crate (never a broken cell).
+
+    030 pip rows read stat thirds off one grid: `full` is the lit glyph,
+    `outline` its hollow rim, `half` the left eight columns lit with the
+    right eight hollow — a half pip is visibly the same icon, half-filled.
+    """
     grid = _GRIDS.get(key) or _GRIDS["pack"]
+    cells = _painted(grid)
+    if mode == "outline":
+        cells = _rimmed(grid)
+    elif mode == "half":
+        rim = _rimmed(grid)
+        cells = [[cells[y][x] if x < _N // 2 else rim[y][x]
+                  for x in range(_N)] for y in range(_N)]
     rects = []
-    for y, row in enumerate(_painted(grid)):
+    for y, row in enumerate(cells):
         x = 0
         while x < _N:
             if row[x]:
