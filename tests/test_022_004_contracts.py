@@ -35,11 +35,11 @@ def test_crier_reads_the_dawn_line_after_a_heal():
     p = create_character(fresh())
     p["daily"]["dawn_healed"] = True
     w = {"census": {"total": 3, "by_floor": {"1": 3}}, "frontier": 1}
-    s = core._news_scene(p, w, state.world_day())
-    assert any("dawn — your wounds have closed" in ln for ln in s.body_lines)
+    paper = core._paper_payload(p, w, state.world_day())
+    assert any("dawn — your wounds have closed" in ln for ln in paper["items"])
     p["daily"]["dawn_healed"] = False
-    s2 = core._news_scene(p, w, state.world_day())
-    assert not any("wounds have closed" in ln for ln in s2.body_lines)
+    paper2 = core._paper_payload(p, w, state.world_day())
+    assert not any("wounds have closed" in ln for ln in paper2["items"])
 
 
 def test_dawn_fires_exactly_once_per_world_day():

@@ -100,6 +100,11 @@ class Scene:
                                     # 027: clickable picture tiles —
                                     # {opt, slug, label, sub}. Faction
                                     # sigils are art, not filenames.
+    paper: dict | None = None       # 030 Phase 5: the Morning Crier —
+                                    # {headline, items[], closable}. Drawn
+                                    # as a broadsheet over paper art; ✕
+                                    # posts news_close. Top-level and
+                                    # optional — older clients drop it.
     strip: dict | None = None       # 030: a thin art band with one big
                                     # number — {art, text}. The vault's
                                     # strongbox shelf: 320×50 art, the
@@ -122,6 +127,12 @@ class Scene:
         # draws it, the agent says it.
         for nt in self.notices:
             lines.append(f"! {nt.get('text', '')}")
+        # 030 Phase 5: the agent reads the same paper the card draws.
+        if self.paper and self.paper.get("items"):
+            lines.append("— THE MORNING CRIER —")
+            if self.paper.get("headline"):
+                lines.append(self.paper["headline"])
+            lines += [f"· {it}" for it in self.paper["items"]]
         if self.awaits_text:
             lines.append(f"⌨ waiting for a typed chat reply: "
                          f"{self.awaits_text}")
@@ -191,6 +202,7 @@ class Scene:
             "notices": self.notices,
             "ask": self.ask,
             "gallery": self.gallery,
+            "paper": self.paper,
             "strip": self.strip,
             "enemy": self.enemy,
         }
@@ -230,6 +242,7 @@ class Scene:
             notices=list(d.get("notices", [])),
             ask=(dict(d["ask"]) if d.get("ask") else None),
             gallery=list(d.get("gallery", [])),
+            paper=(dict(d["paper"]) if d.get("paper") else None),
             strip=(dict(d["strip"]) if d.get("strip") else None),
             enemy=(dict(d["enemy"]) if d.get("enemy") else None),
         )

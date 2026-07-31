@@ -30,7 +30,9 @@ def test_world_mode_adds_social_options_and_happenings():
     s = core.current_scene(p)
     ids = {o.id for o in s.options}
     assert {"relay", "fields", "guildhall"} <= ids
-    assert any("ambushed" in l for l in s.body_lines)
+    # 030 Phase 5: the raw happenings dump is gone — world news arrives
+    # once, typeset, on the Crier's paper (gossip lines), never as body.
+    assert not any("ambushed" in l for l in s.body_lines)
 
 
 def test_pvp_attack_pays_energy_and_emits_effect():

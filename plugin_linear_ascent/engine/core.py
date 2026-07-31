@@ -224,6 +224,13 @@ def apply_choice(p: dict, option_id: str, text: str = "") -> Scene:
     if used is not None:
         return _stamp(p, used)
 
+    # 030 Phase 5: the paper's ✕ — closing the Crier stamps the same
+    # news_day guard the delivery keys on, so closed stays closed until
+    # dawn. Valid wherever the paper shows, hence outside the row list.
+    if option_id == "news_close":
+        p["news_day"] = state.world_day()
+        return _stamp(p, _build_scene(p))
+
     scene = _build_scene(p)
     if p.get("location") in _NOTICE_ROOMS and not scene.enemy:
         doors = {nt["opt"] for nt in notices.pending(p)}
@@ -258,9 +265,6 @@ def apply_choice(p: dict, option_id: str, text: str = "") -> Scene:
 def _pop_pending_event(p: dict) -> Scene | None:
     if p.get("encounter"):
         return None                      # never interrupt a fight
-    ev = _maybe_news(p)
-    if ev:
-        return ev
     ev = _maybe_present(p)
     if ev:
         return ev
@@ -274,9 +278,11 @@ def _pop_pending_event(p: dict) -> Scene | None:
 
 # ── World news — the Morning Crier (007 §4) ──────────────────────────────
 
-def _maybe_news(p: dict) -> Scene | None:
-    """Once per world day, in world mode only: what happened while you
-    were gone. Data comes from worldd's injection — never invented."""
+def _news_paper(p: dict) -> dict | None:
+    """030 Phase 5: the Morning Crier is a PAPER pinned to the square,
+    not an interstitial — it rides the town card until its ✕
+    (news_close) stamps news_day. Data comes from worldd's injection —
+    never invented."""
     if p["stage"] != "playing":
         return None
     w = p.get("_world") or {}
@@ -285,32 +291,31 @@ def _maybe_news(p: dict) -> Scene | None:
     day = state.world_day()
     if p.get("news_day", -1) >= day:
         return None
-    p["news_day"] = day
-    return _news_scene(p, w, day)
+    return _paper_payload(p, w, day)
 
 
-def _news_scene(p: dict, w: dict, day: int) -> Scene:
+def _paper_payload(p: dict, w: dict, day: int) -> dict:
     frontier = int(w.get("frontier", 1))
     census = w.get("census") or {}
     by_floor = {int(k): int(v)
                 for k, v in (census.get("by_floor") or {}).items()}
     total = int(census.get("total", 0))
     my_floor = p["floor"] if p["floor"] > 0 else frontier
-    lines = []
+    items = []
     # 022/004: noticed, never taught — the heal already happened in
     # touch_daily; the Crier only says what the body already knows.
     if p.get("daily", {}).get("dawn_healed"):
-        lines.append("· dawn — your wounds have closed.")
+        items.append("dawn — your wounds have closed.")
     # 022/005: the night slot settled at the same boundary.
     ny = p.get("daily", {}).get("night_yield")
     if ny and ny.get("kind") == "work":
-        lines.append(f"· the night shift paid ◈ {ny['gold']} while "
+        items.append(f"the night shift paid ◈ {ny['gold']} while "
                      "you slept.")
     elif ny and ny.get("kind") == "rest":
-        lines.append(f"· you wake rested — ✦ {ny['aether']} banked "
+        items.append(f"you wake rested — ✦ {ny['aether']} banked "
                      "toward your next kills.")
-    lines.append(
-        f"· {total} climber{'s' if total != 1 else ''} on the "
+    items.append(
+        f"{total} climber{'s' if total != 1 else ''} on the "
         f"Ascent — {by_floor.get(frontier, 0)} at the frontier "
         f"(floor {frontier}), {by_floor.get(1, 0)} down at floor 1, "
         f"{by_floor.get(my_floor, 0)} on floor {my_floor} with you.")
@@ -320,7 +325,7 @@ def _news_scene(p: dict, w: dict, day: int) -> Scene:
         fl = schema.get_floor(int(wd["floor"]))
         blades = len(wd.get("strikers") or [])
         line = (
-            f"· {fl.warden_name} holds floor {wd['floor']} at {pct}% — "
+            f"{fl.warden_name} holds floor {wd['floor']} at {pct}% — "
             + (f"{blades} blade{'s' if blades != 1 else ''} against it."
                if blades else "no blade against it yet."))
         # 022/006: the clock rides the news when a wound is open
@@ -328,26 +333,19 @@ def _news_scene(p: dict, w: dict, day: int) -> Scene:
             from . import social as _social
             line += (" The wound closes in "
                      f"{_social._fmt_countdown(wd['closes_in_s'])}.")
-        lines.append(line)
+        items.append(line)
     gossip = w.get("gossip") or []
     if gossip:
-        lines.append(f"heard around floor {my_floor}:")
-        lines += [f"· {g}" for g in gossip[:3]]
+        items += [g for g in gossip[:3]]
     else:
-        lines.append(f"· floor {my_floor} was quiet — no news is its "
+        items.append(f"floor {my_floor} was quiet — no news is its "
                      "own kind of news.")
-    return Scene(
-        eyebrow="ROOTHOLLOW · THE MORNING CRIER",
-        headline=f"Day {day} on the Ascent — the frontier stands at "
-                 f"floor {frontier}",
-        support="What moved while you were away.",
-        shard_note=_news_advice(p, w, frontier, wd),
-        body_lines=lines,
-        options=[Option("town", "Into the square")],
-        meters=combat.meters(p),
-        event_kind="news",
-        banner="roothollow",
-    )
+    return {
+        "headline": f"Day {day} on the Ascent — the frontier stands at "
+                    f"floor {frontier}",
+        "items": items,
+        "closable": True,
+    }
 
 
 def _quorum(p: dict, floor: int) -> int:
@@ -729,8 +727,9 @@ def _town_waiting(p: dict, w: dict) -> dict[str, int]:
 def _town_scene(p: dict) -> Scene:
     w = p.get("_world") or {}
     lines = []
-    for h in (w.get("happenings") or [])[:5]:
-        lines.append(f"· {h}")
+    # 030 Phase 5: the raw happenings dump is gone — the same news arrives
+    # once, typeset, on the Crier's paper below.
+    paper = _news_paper(p)
     # 020: the nearest unlock — and any protection that dies with it —
     # always readable from the square. The full ladder is at the Stone.
     nxt = unlocks.next_line(p)
@@ -787,10 +786,15 @@ def _town_scene(p: dict) -> Scene:
         headline=f"Roothollow — floor {max(1, p['unlocked_floor'])} is the "
                  "frontier",
         support="The last free settlement. Everything starts and restarts here.",
+        # the sidekick still reads the day's paper and says where the
+        # climb is — advice belongs to the shard, news to the Crier.
+        shard_note=(_news_advice(p, w, int(w.get("frontier", 1)),
+                                 w.get("warden")) if paper else ""),
         body_lines=lines,
         options=opts,
         meters=combat.meters(p),
         banner="roothollow",
+        paper=paper,
     )
 
 

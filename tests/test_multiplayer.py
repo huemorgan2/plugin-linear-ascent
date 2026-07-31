@@ -122,17 +122,25 @@ def crier_world(**kw):
 
 
 def test_crier_delivered_once_per_day():
+    # 030 Phase 5: the Crier is a paper on the town card, not an
+    # interstitial — it stays until its ✕ (news_close) stamps news_day.
     p = playing(world=crier_world())
     p["news_day"] = -1
     s = core.current_scene(p)
-    assert "MORNING CRIER" in s.eyebrow
-    assert s.event_kind == "news"
-    assert any("7 climbers" in l for l in s.body_lines)
-    assert any("3 at the frontier" in l for l in s.body_lines)
-    assert any("marsh wolf" in l for l in s.body_lines)
-    assert p["news_day"] == state.world_day()
+    assert s.paper and s.paper.get("closable")
+    items = s.paper["items"]
+    assert any("7 climbers" in l for l in items)
+    assert any("3 at the frontier" in l for l in items)
+    assert any("marsh wolf" in l for l in items)
+    assert "MORNING CRIER" in s.to_text()
+    # unread ≠ read: the paper stays up until closed
+    assert p["news_day"] == -1
     s2 = core.current_scene(p)
-    assert "MORNING CRIER" not in s2.eyebrow
+    assert s2.paper
+    s3 = core.apply_choice(p, "news_close")
+    assert p["news_day"] == state.world_day()
+    assert not s3.paper
+    assert "MORNING CRIER" not in s3.to_text()
 
 
 def test_crier_advice_respects_level_gates():

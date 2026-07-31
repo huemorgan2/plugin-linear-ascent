@@ -275,6 +275,39 @@ def _ep(s: str) -> str:
     return _sub_glyphs(_paint_amounts(_e(s)))
 
 
+def _paper_html(paper: dict) -> str:
+    """030 Phase 5: the Morning Crier as a broadsheet — paper texture
+    (banners/paper_320x150.png) as a light mask over the panel, the
+    day's items typeset in dark ink on top, ✕ top-right closes it for
+    the day (posts news_close). No texture on disk → a plain dark
+    noticeboard, same words."""
+    items = [i for i in (paper.get("items") or []) if i]
+    if not items:
+        return ""
+    art = _banner_data_url("paper")
+    tex = ""
+    cls = " noart"
+    if art:
+        url, _w, _h = art
+        tex = (f'<span class="ptex" aria-hidden="true" '
+               f'style="background-color:{DIM};'
+               f"-webkit-mask-image:url('{url}');"
+               f"mask-image:url('{url}');\"></span>")
+        cls = ""
+    close = ""
+    if paper.get("closable"):
+        close = ('<button type="button" class="pclose" data-opt="news_close" '
+                 'aria-label="close the paper for the day">✕</button>')
+    hl = paper.get("headline", "")
+    head = f'<div class="phl">{_e(hl)}</div>' if hl else ""
+    rows = "".join(
+        f'<div class="pit">{_ep(i if len(i) <= 76 else i[:75] + "…")}</div>'
+        for i in items)
+    return (f'<div class="paper{cls} later">{tex}{close}'
+            f'<div class="pbody"><div class="pmast">THE MORNING CRIER</div>'
+            f"{head}{rows}</div></div>")
+
+
 @lru_cache(maxsize=None)
 def _strip_art_url(slug: str) -> str | None:
     """030 Phase 4: thin band art — {slug}_320x50.png in banners/."""
@@ -1062,7 +1095,7 @@ let d=0;for(const el of later){setTimeout(()=>el.classList.add('shown'),d);d+=90
    input all act through the same one door (window.__laAct). */
 (function () {
   var btns = Array.prototype.slice.call(document.querySelectorAll(
-    'button.opt, button.nrow, button.gtile'));
+    'button.opt, button.nrow, button.gtile, button.pclose'));
   var acted = false;
   var hint = document.querySelector('.reply');
   function setHint(t) { if (hint) hint.textContent = t; }
@@ -1142,6 +1175,9 @@ def render_scene_fragment(scene: Scene) -> str:
     # above the headline. It is not a menu row and must never look like one.
     if getattr(scene, "notices", None):
         parts.append(_notices_html(scene.notices))
+    # 030 Phase 5: the day's paper — above the location, below the board.
+    if getattr(scene, "paper", None):
+        parts.append(_paper_html(scene.paper))
 
     parts.append(f'<div class="eyebrow type">{_e(scene.eyebrow)}</div>')
     hl_col = _HEADLINE.get(scene.event_kind, TEXT)
@@ -1315,6 +1351,27 @@ SCENE_CSS = f"""
  font-variant-numeric:tabular-nums;}}
 .badge{{margin-left:1ch;}}
 .opt:hover .badge{{background:{TEXT};}}
+/* ── 030 Phase 5: the Morning Crier's broadsheet ── */
+.paper{{position:relative;margin:0 0 10px;background:{PANEL};
+ border:1px solid {BORDER};overflow:hidden;min-height:60px;}}
+.paper .ptex{{position:absolute;inset:0;mask-size:cover;
+ -webkit-mask-size:cover;mask-position:center;-webkit-mask-position:center;
+ mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;
+ image-rendering:pixelated;}}
+.paper .pbody{{position:relative;z-index:1;padding:9px 1.5ch 10px;
+ color:{INK};}}
+.paper.noart .pbody{{color:{TEXT};}}
+.paper .pmast{{font-weight:700;letter-spacing:.18em;font-size:11px;
+ text-transform:uppercase;border-bottom:1px solid currentColor;
+ padding-bottom:3px;margin-bottom:5px;}}
+.paper .phl{{font-weight:700;margin-bottom:4px;text-wrap:balance;}}
+.paper .pit{{display:-webkit-box;-webkit-line-clamp:2;
+ -webkit-box-orient:vertical;overflow:hidden;margin-top:2px;}}
+.paper .pit::before{{content:"· ";}}
+.paper .pclose{{position:absolute;top:6px;right:6px;z-index:2;
+ background:{INK};border:1px solid {BORDER};color:{DIM};font:inherit;
+ line-height:1.2;cursor:pointer;padding:1px .6ch;border-radius:0;}}
+.paper .pclose:hover{{color:{TEXT};border-color:{TEXT};}}
 /* ── 027: the card's own input ── */
 .ask{{margin:10px 0 0;padding:10px 0 0;border-top:1px dashed {BORDER};
  display:block;}}

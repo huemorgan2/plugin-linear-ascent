@@ -297,7 +297,7 @@ function wireOptions() {
   /* 027: everything that carries a data-opt acts the same way — menu rows,
      notice-board shortcuts, sigil tiles and the pack popup's actions. */
   const btns = [...game.querySelectorAll('button.opt, button.nrow, '
-    + 'button.gtile')];
+    + 'button.gtile, button.pclose')];
   const hint = game.querySelector('.reply');
   btns.forEach(b => b.addEventListener('click', async () => {
     if (loading) return;

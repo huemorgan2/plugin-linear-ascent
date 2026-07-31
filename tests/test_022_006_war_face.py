@@ -157,7 +157,7 @@ def test_gate_names_the_war_when_a_wound_is_open():
 def test_crier_carries_the_countdown():
     p = wounded_warden(create_character(fresh()))
     w = p["_world"]
-    s = core._news_scene(p, w, state.world_day())
-    body = "\n".join(s.body_lines)
+    paper = core._paper_payload(p, w, state.world_day())
+    body = "\n".join(paper["items"])
     assert "at 43%" in body
     assert "The wound closes in 3h 12m." in body
