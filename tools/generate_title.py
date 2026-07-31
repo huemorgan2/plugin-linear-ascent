@@ -26,7 +26,14 @@ OUT = os.path.join(ART, "title")
 REF = os.path.join(ART, "banners", "raw", "ascent_raw.png")
 W, H = 320, 200  # 16:10 title card, upscaled ~2x with pixelated rendering
 
-sys.path.insert(0, os.path.join(_HERE, "..", "..", "plugin-image-gen"))
+# plugin-image-gen lives beside the old repo layout OR inside luna-plugins —
+# first hit wins.
+for _cand in (os.path.join(_HERE, "..", "..", "plugin-image-gen"),
+              os.path.join(_HERE, "..", "..", "..", "luna-plugins",
+                           "plugins", "plugin-image-gen")):
+    if os.path.isdir(_cand):
+        sys.path.insert(0, _cand)
+        break
 from plugin_image_gen import providers  # noqa: E402
 
 BAYER = [

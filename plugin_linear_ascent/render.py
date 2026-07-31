@@ -275,6 +275,17 @@ def _ep(s: str) -> str:
     return _sub_glyphs(_paint_amounts(_e(s)))
 
 
+@lru_cache(maxsize=None)
+def _paper_tex_url() -> str | None:
+    """The broadsheet's own grain — banners/paper_320x150.png. Its odd
+    size stays out of `_banner_data_url` so no room ever resolves it."""
+    path = os.path.join(_ART, "paper_320x150.png")
+    if os.path.exists(path):
+        b64 = base64.b64encode(open(path, "rb").read()).decode()
+        return f"data:image/png;base64,{b64}"
+    return None
+
+
 def _paper_html(paper: dict) -> str:
     """030 Phase 5: the Morning Crier as a broadsheet — paper texture
     (banners/paper_320x150.png) as a light mask over the panel, the
@@ -284,11 +295,10 @@ def _paper_html(paper: dict) -> str:
     items = [i for i in (paper.get("items") or []) if i]
     if not items:
         return ""
-    art = _banner_data_url("paper")
+    url = _paper_tex_url()
     tex = ""
     cls = " noart"
-    if art:
-        url, _w, _h = art
+    if url:
         tex = (f'<span class="ptex" aria-hidden="true" '
                f'style="background-color:{DIM};'
                f"-webkit-mask-image:url('{url}');"

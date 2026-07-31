@@ -35,7 +35,14 @@ RAW = os.path.join(ART, "raw")
 PREVIEW = os.path.join(ART, "preview")
 W, H = 320, 112  # native grid — 20:7, upscaled ~2x in the card
 
-sys.path.insert(0, os.path.join(_HERE, "..", "..", "plugin-image-gen"))
+# plugin-image-gen lives beside the old repo layout OR inside luna-plugins —
+# first hit wins.
+for _cand in (os.path.join(_HERE, "..", "..", "plugin-image-gen"),
+              os.path.join(_HERE, "..", "..", "..", "luna-plugins",
+                           "plugins", "plugin-image-gen")):
+    if os.path.isdir(_cand):
+        sys.path.insert(0, _cand)
+        break
 from plugin_image_gen import providers  # noqa: E402
 
 BAYER = [

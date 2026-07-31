@@ -108,7 +108,14 @@ NO_TEXT = (" IMPORTANT: render any signs, banners, or lettering mentioned "
 DIM, VIOLET = "#8b93a7", "#8b5cf6"
 PANEL = (0x11, 0x15, 0x1F)
 
-sys.path.insert(0, os.path.join(_HERE, "..", "..", "plugin-image-gen"))
+# plugin-image-gen lives beside the old repo layout OR inside luna-plugins —
+# first hit wins.
+for _cand in (os.path.join(_HERE, "..", "..", "plugin-image-gen"),
+              os.path.join(_HERE, "..", "..", "..", "luna-plugins",
+                           "plugins", "plugin-image-gen")):
+    if os.path.isdir(_cand):
+        sys.path.insert(0, _cand)
+        break
 from plugin_image_gen import providers  # noqa: E402
 
 
