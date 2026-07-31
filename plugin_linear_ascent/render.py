@@ -304,9 +304,11 @@ def _paper_html(paper: dict) -> str:
     tex = ""
     cls = " noart"
     if url:
+        # the grain sits a shade under the sheet — newsprint is LIGHT,
+        # the ink is dark; the texture must never fight the words.
         tex = (f'<span class="ptex" aria-hidden="true" '
-               f'style="background-color:{DIM};'
-               f"-webkit-mask-image:url('{url}');"
+               f'style="background-color:color-mix(in srgb,{FAINT} 22%,'
+               f"{TEXT});-webkit-mask-image:url('{url}');"
                f"mask-image:url('{url}');\"></span>")
         cls = ""
     close = ""
@@ -626,6 +628,9 @@ def _profile_html(scene: Scene) -> str:
                   + _pip_row("armor", "DEF", getattr(m, "dfs", 0), DIM,
                              _TIP_DEF)
                   + "</div>")
+    # the pack lives in the profile's right column — portrait on the
+    # left, everything the climber carries to its right, never below.
+    right += _inventory_html(scene)
     url = _portrait_data_url(_portrait_slug(scene))
     if not url:
         return right
@@ -686,39 +691,33 @@ def _active_mods(en: dict) -> list[str]:
     return mods
 
 
-_TIP_EATK = ("Its attack — the same scale as your sword row: every 3 "
-             "points fills half a blade. Read the matchup at a glance.")
-_TIP_EDEF = ("Its defense — the same scale as your armour row: every 3 "
-             "points fills half an icon.")
+_TIP_EHEAD = ("The enemy's sheet — HP, then attack and defense on the "
+              "same scale as your own rows. Everything else is in the "
+              "[i] dossier.")
 
 
 def _enemy_head_html(en: dict) -> str:
+    """One line on one ink plate: HP · ATK · DEF. Nothing more rides the
+    art — range, modifiers and the story live in the [i] dossier."""
     hp, cap = int(en.get("hp", 0)), max(1, int(en.get("hp_max", 1)))
-    low = " low" if hp * 10 <= cap * 3 else ""
-    rng = en.get("range", "")
-    chip = ""
-    if rng == "at_range":
-        chip = '<span class="rchip">◇ at range</span>'
-    elif rng == "close":
-        chip = '<span class="rchip">◇ close quarters</span>'
-    mods = _active_mods(en)
-    mod = (f'<span class="mchip">{_e(mods[0])}</span>' if mods else "")
-    # 030 Phase 7: the monster wears its numbers — ATK and DEF in the
-    # player's own pip language, each chip on a solid INK plate so the
-    # white pips read over any art (the black-background rule).
-    pips = ('<span class="echip">'
-            + _pip_row("sword", "ATK", int(en.get("atk", 0)), ORANGE,
-                       _TIP_EATK)
-            + _pip_row("armor", "DEF", int(en.get("def", 0)), DIM,
-                       _TIP_EDEF)
-            + "</span>")
-    return (f'<div class="ehead later">{pips}'
-            f'<span class="meter foe{low}" data-tip="The enemy\'s health — '
-            f'visible from the first breath. Kill it before it kills you.">'
-            f"<span>HP {hp}/{cap}</span>"
-            f'<span class="blocks" aria-hidden="true">'
-            f"{_blocks(hp, cap)}</span></span>"
-            f"{chip}{mod}</div>")
+    low = hp * 10 <= cap * 3
+    hp_col = RED if low else VIOLET_SOFT
+    sw = icons.icon_data_url("sword")
+    ar = icons.icon_data_url("armor")
+    return (f'<div class="ehead later">'
+            f'<span class="echip" data-tip="{_e(_TIP_EHEAD)}">'
+            f'<span class="st" style="color:{hp_col}">HP {hp}/{cap}</span>'
+            f'<span class="st" style="color:{ORANGE}">'
+            f'<span class="eg" aria-hidden="true" '
+            f"style=\"-webkit-mask-image:url('{sw}');"
+            f"mask-image:url('{sw}')\"></span>"
+            f'ATK {int(en.get("atk", 0))}</span>'
+            f'<span class="st" style="color:{DIM}">'
+            f'<span class="eg" aria-hidden="true" '
+            f"style=\"-webkit-mask-image:url('{ar}');"
+            f"mask-image:url('{ar}')\"></span>"
+            f'DEF {int(en.get("def", 0))}</span>'
+            f"</span></div>")
 
 
 def _dossier_html(en: dict) -> str:
@@ -758,6 +757,15 @@ def _dossier_html(en: dict) -> str:
     row("t_speed", f"speed — {_speed_word(mspd)} ({mspd}) against "
         f"your {pspd}.", chase,
         RED if mspd > pspd else (OK if mspd < pspd else DIM))
+    # the range word and every live modifier moved off the art (the
+    # plate is one line now) — they live here, always listed.
+    rng = en.get("range", "")
+    if rng == "at_range":
+        rows.append('<div class="drw"><span class="dmark">◇</span>'
+                    "<span>at range — it hasn't reached you yet</span></div>")
+    elif rng == "close":
+        rows.append('<div class="drw"><span class="dmark">◇</span>'
+                    "<span>close quarters — it is on you</span></div>")
     for m in _active_mods(en):
         rows.append(f'<div class="drw"><span class="dmark">◇</span>'
                     f"<span>{_e(m)}</span></div>")
@@ -1234,8 +1242,9 @@ def render_scene_fragment(scene: Scene) -> str:
 
     parts.append(f'<div class="eyebrow type">{_e(scene.eyebrow)}</div>')
     hl_col = _HEADLINE.get(scene.event_kind, TEXT)
+    # 030: an amount wears its colour even in a headline (law 1)
     parts.append(f'<div class="headline type" style="color:{hl_col}">'
-                 f"{_e(scene.headline)}</div>")
+                 f"{_ep(scene.headline)}</div>")
     if scene.enemy:
         # 003: the always-on enemy bar + range chip, and the [i] badge
         # (top-right of the card — over the banner when there is one).
@@ -1256,7 +1265,7 @@ def render_scene_fragment(scene: Scene) -> str:
         # <details> block (the [i]-dossier pattern, zero JS).
         if line.startswith("▣ "):
             parts.append(f'<details class="fold"><summary class="type">'
-                         f"{_et(line[2:])}</summary>")
+                         f"{_ep(line[2:])}</summary>")
             in_fold = True
             continue
         if line == "▣.":
@@ -1302,7 +1311,7 @@ def render_scene_fragment(scene: Scene) -> str:
             btn = (f'<button type="button" class="opt{opt_cls}" '
                    f'data-opt="{_e(o.id)}">'
                    f'<span class="key{key_cls}">{i}</span>{tile}{gicon}'
-                   f'<span class="lbl">{_et(o.label)}</span>{badge}'
+                   f'<span class="lbl">{_ep(o.label)}</span>{badge}'
                    f"{hint}</button>")
             # 014: the whisper glyph — [i] OUTSIDE the button, so tapping
             # it never fires the option; tip resolves by option id.
@@ -1315,8 +1324,9 @@ def render_scene_fragment(scene: Scene) -> str:
                      f"with a number</div></div>")
 
     if scene.meters:
-        parts.append(_profile_html(scene))
-    parts.append(_inventory_html(scene))
+        parts.append(_profile_html(scene))   # pack rides its right column
+    else:
+        parts.append(_inventory_html(scene))
 
     stripe = _STRIPE.get(scene.event_kind)
     style_attr = (f' style="border-left:3px solid {stripe};"' if stripe else "")
@@ -1332,24 +1342,16 @@ SCENE_CSS = f"""
  font:14px/1.6 ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
  font-variant-numeric:tabular-nums;overflow:hidden;position:relative;}}
 /* ── 017/003: enemy header + [i] dossier ── */
-.ehead{{display:flex;flex-wrap:wrap;align-items:center;gap:1ch 2ch;
- margin-top:6px;color:{DIM};}}
-/* 030 Phase 7: the stat plate over the fight art. Ink art under white
-   pips needs solid plates to read; the [i] badge keeps the very corner,
-   so the plate starts a badge-height lower. */
+.ehead{{display:flex;margin-top:6px;color:{DIM};}}
+/* 030: one line at the top of the art — HP · ATK · DEF on a solid ink
+   plate (the black-background rule); the [i] badge keeps the corner. */
 .bwrap{{position:relative;}}
-.bwrap .ehead{{position:absolute;top:34px;right:8px;margin:0;
- flex-direction:column;align-items:flex-end;gap:4px;z-index:2;}}
-.echip{{display:flex;flex-direction:column;gap:2px;background:{INK};
- border:1px solid {BORDER};padding:3px 6px;}}
-.bwrap .ehead .meter,.bwrap .ehead .rchip,.bwrap .ehead .mchip{{
- background:{INK};border:1px solid {BORDER};padding:2px 6px;}}
-.echip .piprow{{margin-top:0;}}
-.echip .piprow .plab{{min-width:6.5ch;text-align:right;font-size:12px;}}
-.meter.foe .blocks{{color:{VIOLET_SOFT};}}
-.meter.foe.low .blocks{{color:{RED};}}
-.rchip{{color:{VIOLET_SOFT};letter-spacing:.04em;}}
-.mchip{{color:{ORANGE};font-size:12px;}}
+.bwrap .ehead{{position:absolute;top:8px;right:46px;margin:0;z-index:2;}}
+.echip{{display:inline-flex;align-items:center;gap:1.5ch;background:{INK};
+ border:1px solid {BORDER};padding:2px 8px;font-size:12px;cursor:help;}}
+.echip .st{{display:inline-flex;align-items:center;gap:.5ch;
+ font-variant-numeric:tabular-nums;white-space:nowrap;}}
+.echip .eg{{vertical-align:0;}}
 .dx summary{{position:absolute;top:8px;right:8px;z-index:3;
  list-style:none;display:flex;align-items:center;padding:1px .6ch;
  background:{INK};border:1px solid {AETHER};color:{AETHER};
@@ -1417,9 +1419,11 @@ SCENE_CSS = f"""
  font-variant-numeric:tabular-nums;}}
 .badge{{margin-left:1ch;}}
 .opt:hover .badge{{background:{TEXT};}}
-/* ── 030 Phase 5: the Morning Crier's broadsheet ── */
-.paper{{position:relative;margin:0 0 10px;background:{PANEL};
+/* ── 030 Phase 5: the Morning Crier's broadsheet — a LIGHT sheet, dark
+   ink, like paper. Only the artless fallback stays a dark board. ── */
+.paper{{position:relative;margin:0 0 10px;background:{TEXT};
  border:1px solid {BORDER};overflow:hidden;aspect-ratio:320/150;}}
+.paper.noart{{background:{PANEL};}}
 .paper .ptex{{position:absolute;inset:0;mask-size:cover;
  -webkit-mask-size:cover;mask-position:center;-webkit-mask-position:center;
  mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;
@@ -1435,9 +1439,11 @@ SCENE_CSS = f"""
  -webkit-box-orient:vertical;overflow:hidden;margin-top:2px;}}
 .paper .pit::before{{content:"· ";}}
 .paper .pclose{{position:absolute;top:6px;right:6px;z-index:2;
- background:{INK};border:1px solid {BORDER};color:{DIM};font:inherit;
+ background:transparent;border:1px solid {FAINT};color:{INK};font:inherit;
  line-height:1.2;cursor:pointer;padding:1px .6ch;border-radius:0;}}
-.paper .pclose:hover{{color:{TEXT};border-color:{TEXT};}}
+.paper .pclose:hover{{border-color:{INK};background:{INK};color:{TEXT};}}
+.paper.noart .pclose{{background:{INK};border-color:{BORDER};color:{DIM};}}
+.paper.noart .pclose:hover{{color:{TEXT};border-color:{TEXT};}}
 /* ── 027: the card's own input ── */
 .ask{{margin:10px 0 0;padding:10px 0 0;border-top:1px dashed {BORDER};
  display:block;}}
@@ -1589,6 +1595,7 @@ SCENE_CSS = f"""
  -webkit-mask-repeat:no-repeat;image-rendering:pixelated;}}
 .profile .pcol{{flex:1;min-width:0;}}
 .profile .rail{{margin-top:0;padding-top:0;border-top:0;}}
+.profile .inv{{border-top:0;padding-top:0;margin-top:8px;}}
 .piprows{{margin-top:8px;color:{DIM};}}
 .piprow{{display:flex;align-items:center;gap:1ch;margin-top:4px;
  cursor:help;}}

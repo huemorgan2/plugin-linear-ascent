@@ -159,5 +159,5 @@ def test_crier_carries_the_countdown():
     w = p["_world"]
     paper = core._paper_payload(p, w, state.world_day())
     body = "\n".join(paper["items"])
-    assert "at 43%" in body
-    assert "The wound closes in 3h 12m." in body
+    assert "43%" in body
+    assert "closes in 3h 12m" in body      # 030 redo: headline-short

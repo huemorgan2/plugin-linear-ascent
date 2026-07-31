@@ -231,12 +231,12 @@ def apply_choice(p: dict, option_id: str, text: str = "") -> Scene:
         p["news_day"] = state.world_day()
         return _stamp(p, _build_scene(p))
 
-    # 030 Phase 8: mid-reel every click is the next beat, exactly like the
-    # intro. A stray id ("hunt" sent before the arrival card) advances the
-    # frame instead of erroring — the reel only runs one direction and
-    # nothing can wedge against it.
+    # 030 Phase 8: mid-reel every click is the next beat ("skip" cuts to
+    # the arrival card). A stray id ("hunt" sent before the arrival card)
+    # advances the frame instead of erroring — the reel only runs one
+    # direction and nothing can wedge against it.
     if p.get("movie_floor"):
-        return _stamp(p, _floor_movie_advance(p))
+        return _stamp(p, _floor_movie_advance(p, option_id))
 
     scene = _build_scene(p)
     if p.get("location") in _NOTICE_ROOMS and not scene.enemy:
@@ -321,25 +321,25 @@ def _paper_payload(p: dict, w: dict, day: int) -> dict:
     elif ny and ny.get("kind") == "rest":
         items.append(f"you wake rested — ✦ {ny['aether']} banked "
                      "toward your next kills.")
+    # 030: headlines, not paragraphs — the sheet is small and every
+    # item is clamped to two lines. Say it short.
     items.append(
-        f"{total} climber{'s' if total != 1 else ''} on the "
-        f"Ascent — {by_floor.get(frontier, 0)} at the frontier "
-        f"(floor {frontier}), {by_floor.get(1, 0)} down at floor 1, "
-        f"{by_floor.get(my_floor, 0)} on floor {my_floor} with you.")
+        f"{total} climber{'s' if total != 1 else ''} on the Ascent · "
+        f"{by_floor.get(frontier, 0)} at the frontier ({frontier}) · "
+        f"{by_floor.get(my_floor, 0)} on floor {my_floor} with you")
     wd = w.get("warden")
     if wd and wd.get("hp_max"):
         pct = max(0, round(100 * int(wd["hp"]) / int(wd["hp_max"])))
         fl = schema.get_floor(int(wd["floor"]))
         blades = len(wd.get("strikers") or [])
-        line = (
-            f"{fl.warden_name} holds floor {wd['floor']} at {pct}% — "
-            + (f"{blades} blade{'s' if blades != 1 else ''} against it."
-               if blades else "no blade against it yet."))
+        line = (f"{fl.warden_name} — {pct}% · floor {wd['floor']} · "
+                + (f"{blades} blade{'s' if blades != 1 else ''}"
+                   if blades else "no blades yet"))
         # 022/006: the clock rides the news when a wound is open
         if pct < 100 and wd.get("closes_in_s") is not None:
             from . import social as _social
-            line += (" The wound closes in "
-                     f"{_social._fmt_countdown(wd['closes_in_s'])}.")
+            line += (" · closes in "
+                     f"{_social._fmt_countdown(wd['closes_in_s'])}")
         items.append(line)
     gossip = w.get("gossip") or []
     if gossip:
@@ -489,8 +489,8 @@ def _build_scene(p: dict) -> Scene:
         return _creation_class_scene(p)
     if p["stage"] == "creation_name":
         return _creation_name_scene(p)
-    # 030 Phase 8: mid-movie a refresh replays the current beat — the
-    # movie has no skip, exactly like the intro.
+    # 030 Phase 8: mid-movie a refresh replays the current beat; the
+    # Skip on the card is how a player cuts it short.
     if p.get("movie_floor"):
         return _floor_movie_scene(p)
     if p.get("encounter"):
@@ -545,7 +545,7 @@ def _dispatch(p: dict, oid: str) -> Scene:
     if p["stage"] == "creation_name":
         return _creation_name_scene(p)     # name comes as text
     if p.get("movie_floor"):
-        return _floor_movie_advance(p)
+        return _floor_movie_advance(p, oid)
     if p.get("encounter"):
         fl = schema.get_floor(p["encounter"]["floor"])
         return combat.resolve_fight_action(p, fl, oid)
@@ -1583,31 +1583,42 @@ def _lodge_scene(p: dict) -> Scene:
 
 
 def _keeper_scene(p: dict) -> Scene:
-    """030 Phase 6: the keeper talks money. Every number is read off
-    economy.py at build time; the prose rotates so a second ask is not
-    a replay. This is the keeper's room — no shard chatter in it."""
+    """030 Phase 6: the keeper tells stories of glory — how climbers
+    under this roof turned nights of work into fortunes, over time.
+    Every number is read off economy.py at build time; the prose
+    rotates so a second ask is not a replay. This is the keeper's
+    room — no shard chatter in it."""
     day = state.world_day()
     shift = _night_shift(day)
     work = economy.night_work_gold(max(1, p["unlocked_floor"]))
     rest = economy.night_rest_aether(p["level"])
     tellings = (
-        [f"“Coin under this roof? The night slot. One action a "
-         f"night: take {shift} and there's ◈ {work} on the board at "
-         "dawn, or rest by the fire and bank the pool instead. I plan "
-         "nights, not lives.”"],
-        [f"“Rest is pay too. A night by my fire banks ✦ {rest} — "
-         f"it rides out at +{round(economy.RESTED_XP_BONUS_PCT * 100)}% "
-         "a kill till the pool runs dry. The pool holds "
-         f"{economy.RESTED_POOL_CAP_NIGHTS} nights' worth, no more — "
-         "sleep doesn't stack forever.”"],
-        [f"“The Vault pays {round(economy.BANK_INTEREST_RATE * 100)}% "
-         "a day on what you leave, stubs at dawn, regular as bells. "
-         "Banked coin is safe coin — but mind, it can't buy my bunk. "
-         "The palisade takes carried coin only.”"],
-        [f"“Spoils? The pawn broker across the square pays "
-         f"{round(economy.pawn_rate(day) * 100)}% of forge price today. "
-         "The rate is his mood and his mood is the day — patient "
-         "climbers sell on the good days.”"],
+        [f"“Okko came through that door in rags — couldn't pay for a "
+         "bunk, slept in the fields twice and got robbed twice. Then "
+         f"she learned the night slot: take {shift}, ◈ {work} on the "
+         "board at dawn, every dawn. A season of nights and she walked "
+         "out in plate she paid for herself. Coin isn't found here — "
+         "it's earned in rows, night after night.”"],
+        [f"“Brand never swung harder than anyone. He just slept "
+         f"smarter. A night by my fire banks ✦ {rest}, and it rides "
+         f"out at +{round(economy.RESTED_XP_BONUS_PCT * 100)}% a kill "
+         "till the pool runs dry — "
+         f"{economy.RESTED_POOL_CAP_NIGHTS} nights' worth it holds, no "
+         "more. He rested, he killed rested, he leveled a floor ahead "
+         "of climbers twice his arm. Glory is a schedule.”"],
+        [f"“Asha kept every coin she won in the Vault — "
+         f"{round(economy.BANK_INTEREST_RATE * 100)}% a day it pays, "
+         "stubs at dawn, regular as bells. Little numbers. She let "
+         "them stack a hundred days while the fools carried their "
+         "purses into the wilds and fed the grave-robbers. Her stubs "
+         "bought the Guild a war banner. Patience is a weapon too.”"],
+        [f"“Old Vell hauled every rusted blade back off the floors "
+         "and sold on the broker's good days only — he pays "
+         f"{round(economy.pawn_rate(day) * 100)}% of forge price "
+         "today, and his mood IS the day. Vell read the moods a "
+         "year straight and drank free the rest of his life. Spoils "
+         "are wages, if you sell them like a merchant and not like "
+         "a beggar.”"],
     )
     n = int(p["flags"].get("keeper_told", 0))
     p["flags"]["keeper_told"] = n + 1
@@ -2122,7 +2133,8 @@ def _floor_movie_scene(p: dict) -> Scene:
             eyebrow=f"FLOOR {n} · {fl.zone.upper()} · I",
             headline=f"{fl.biome} — {fl.zone}",
             body_lines=body,
-            options=[Option("next", "Next")],
+            options=[Option("next", "Next"),
+                     Option("skip", "Skip")],
             fx=f"floor{n}_world",
             banner=fl.banner,
         )
@@ -2141,7 +2153,8 @@ def _floor_movie_scene(p: dict) -> Scene:
             body_lines=[f"{fl.warden_name} held this lift once. {by}",
                         "The lift above runs free. The floor is yours "
                         "to hunt."],
-            options=[Option("next", "Next")],
+            options=[Option("next", "Next"),
+                     Option("skip", "Skip")],
             fx="warden_fall",
             banner=f"warden_{n:03d}",
         )
@@ -2152,16 +2165,20 @@ def _floor_movie_scene(p: dict) -> Scene:
                     f"{fl.warden_name} — ATK {fl.warden_atk} · DEF "
                     f"{fl.warden_def} · {fl.warden_hp:,} HP. The stair "
                     "stays shut while it stands."],
-        options=[Option("next", "Next")],
+        options=[Option("next", "Next"),
+                 Option("skip", "Skip")],
         fx=f"floor{n}_warden",
         banner=f"warden_{n:03d}",
     )
 
 
-def _floor_movie_advance(p: dict) -> Scene:
+def _floor_movie_advance(p: dict, oid: str = "next") -> Scene:
+    """Next steps a beat; Skip (on every beat) cuts straight to the
+    arrival card. Either way the floor counts as seen — the movie
+    plays once, skipped or watched."""
     n = int(p["movie_floor"])
     beat = int(p.get("movie_beat", 0))
-    if beat < 1:
+    if oid != "skip" and beat < 1:
         p["movie_beat"] = beat + 1
         return _floor_movie_scene(p)
     p["flags"][f"floor_seen_{n}"] = True
@@ -2187,8 +2204,9 @@ def _gate_pick(p: dict, oid: str) -> Scene:
         return s
     p["floor"] = n
     p["location"] = "gate_town"
-    # 030 Phase 8: the first time a character sets foot on a floor, the
-    # floor introduces itself — a short movie, no skip, like the intro.
+    # 030 Phase 8: the first time a character sets foot on a floor —
+    # old name or new — the floor introduces itself: a short movie,
+    # once per floor, skippable on every beat.
     if not p["flags"].get(f"floor_seen_{n}"):
         p["movie_floor"], p["movie_beat"] = n, 0
         return _floor_movie_scene(p)

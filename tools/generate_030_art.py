@@ -44,15 +44,20 @@ DIM = "#8b93a7"
 GOLD = "#f5a524"
 
 PORTRAIT_STYLE = (
-    "1-bit pixel art full-body character portrait in the classic "
-    "Macintosh / Playdate style. STRICTLY two colors: pure black and pure "
-    "white, every midtone as ordered Bayer dithering. ONE standing human "
-    "figure fills the frame top to bottom — head near the top edge, boots "
-    "at the bottom edge, facing the viewer, arms at the sides, weight "
-    "square. Strong rim light from the top-left, soft radial gradient "
-    "glow behind the figure fading to pure black at the frame edges, "
-    "gradient shading down the body. Chunky visible pixels. No text, no "
-    "border, no watermark. The figure: ")
+    "Dithered grayscale full-body character study rendered like a "
+    "charcoal drawing, then reduced to two colors through fine ordered "
+    "Bayer dithering — every surface described by smooth tonal "
+    "GRADIENTS of dither density, never by outlines. NO hard contour "
+    "lines, no cartoon linework, no cel shading, no ink outlines "
+    "anywhere: forms emerge from light and shadow alone, soft edges "
+    "dissolving into dither. ONE standing human figure fills the frame "
+    "top to bottom — head near the top edge, boots at the bottom edge, "
+    "facing the viewer, arms at the sides, weight square. Volumetric "
+    "shading: one soft key light from the top-left rolling across "
+    "every rounded form, deep core shadows, a faint radial glow behind "
+    "the figure fading to pure black at the frame edges. Painterly, "
+    "somber, realistic proportions. No text, no border, no watermark. "
+    "The figure: ")
 
 # one silhouette, six wardrobes — the suit-up IS the reward
 PORTRAIT_JOBS = {

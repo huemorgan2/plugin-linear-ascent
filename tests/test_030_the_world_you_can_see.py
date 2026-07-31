@@ -92,11 +92,16 @@ def test_pip_math_thirds():
     # …and the numeral always prints
 
 
-def test_player_and_enemy_use_the_same_pip_row():
-    row = render._pip_row("sword", "ATK", 12, render.ORANGE, "t")
+def test_enemy_head_is_one_hp_atk_def_line():
+    # the user's redo: "just the HP attack defense in one line on the
+    # top. nothing more." — icons yes, pips/range/mods no.
     enemy = render._enemy_head_html(
         {"name": "X", "hp": 5, "hp_max": 5, "atk": 12, "def": 0})
-    assert row[:60].split("data-tip")[0] in enemy or "piprow" in enemy
+    assert "HP 5/5" in enemy and "ATK 12" in enemy and "DEF 0" in enemy
+    assert icons.icon_data_url("sword") in enemy
+    assert icons.icon_data_url("armor") in enemy
+    assert "piprow" not in enemy
+    assert enemy.count('class="echip"') == 1
 
 
 # ── Phase 2: the armour-keyed portrait ──────────────────────────────────
@@ -134,6 +139,20 @@ def test_profile_block_holds_portrait_meters_and_pips():
     html = render._profile_html(s)
     assert 'class="profile"' in html   # portraits shipped with 030
     assert html.count('class="piprow"') == 2   # ATK and DEF rows
+
+
+def test_pack_rides_the_profile_right_column_not_below():
+    # the redo: the pack sits to the RIGHT of the portrait, inside the
+    # profile block's column — never as a strip under the image.
+    s = Scene(eyebrow="E", headline="H",
+              meters=Meters(10, 10, 5, 24, 0, 100, 0, atk=12, dfs=6),
+              inventory=[{"slug": "rusty_sword", "kind": "weapon",
+                          "equipped": True, "name": "Rusty Sword"}])
+    html = render._profile_html(s)
+    pcol = html.split('class="pcol"')[1]
+    assert 'class="inv later"' in pcol
+    frag = render.render_scene_fragment(s)
+    assert frag.count('class="inv later"') == 1   # only inside the profile
 
 
 # ── Phase 3: rooms are pictures, the shard has a face ───────────────────
@@ -209,6 +228,15 @@ def test_paper_card_clamps_to_the_sheet():
     assert "aspect-ratio:320/150" in render.SCENE_CSS
 
 
+def test_paper_is_light_newsprint_with_dark_ink():
+    # the redo: newsprint is LIGHT, the ink is dark — no more grain
+    # fighting dark text over a dark panel.
+    assert (".paper{position:relative;margin:0 0 10px;background:"
+            + render.TEXT) in render.SCENE_CSS
+    assert f".paper .pbody{{position:absolute;inset:0;z-index:1;" \
+           in render.SCENE_CSS
+
+
 # ── Phase 6: a voice in every fields ────────────────────────────────────
 
 def test_floors_1_to_10_have_npcs_and_the_lint_holds():
@@ -229,6 +257,19 @@ def test_npc_talk_names_the_warden_shape():
     assert fl.npc.warn in body
     assert f"ATK {fl.warden_atk}" in body
     assert any(o.id == "talk" for o in s.options)
+
+
+def test_keeper_tells_stories_of_glory():
+    # the redo: not rate sheets — stories of climbers who earned their
+    # fortunes over time under this roof, numbers woven in.
+    p = _playing("030-keeper-glory")
+    core.apply_choice(p, "lodge")
+    text = " ".join(
+        line for _ in range(4)
+        for line in core.apply_choice(p, "talk").body_lines)
+    for name in ("Okko", "Brand", "Asha", "Vell"):
+        assert name in text
+    assert "◈" in text and "✦" in text     # the coin is still real
 
 
 def test_keeper_rotates_tellings():
@@ -264,7 +305,7 @@ def test_first_floor_entry_plays_two_beats_then_arrival():
     s = core.apply_choice(p, "floor_1")
     assert p.get("movie_floor") == 1
     assert s.eyebrow.endswith("· I")
-    assert [o.id for o in s.options] == ["next"]
+    assert [o.id for o in s.options] == ["next", "skip"]
     s = core.apply_choice(p, "next")
     assert s.eyebrow.endswith("· II")
     assert schema.get_floor(1).warden_name in s.headline
@@ -284,6 +325,18 @@ def test_reel_plays_once_per_floor():
     core.apply_choice(p, "gate")
     s = core.apply_choice(p, "floor_1")
     assert not p.get("movie_floor")
+    assert any(o.id == "hunt" for o in s.options)
+
+
+@pytest.mark.reel
+def test_skip_cuts_the_reel_to_the_arrival_card():
+    p = _playing("030-reel-skip")
+    core.apply_choice(p, "gate")
+    s = core.apply_choice(p, "floor_1")
+    assert any(o.id == "skip" for o in s.options)   # skip on every beat
+    s = core.apply_choice(p, "skip")
+    assert not p.get("movie_floor")
+    assert p["flags"].get("floor_seen_1") is True   # skipped still counts
     assert any(o.id == "hunt" for o in s.options)
 
 

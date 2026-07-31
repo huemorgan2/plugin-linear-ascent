@@ -147,20 +147,25 @@ def test_dossier_carries_the_lore():
 
 # ── the fight header ─────────────────────────────────────────────────────
 
-def test_enemy_head_bar_math_and_low_state():
+def test_enemy_head_is_one_line_hp_atk_def_nothing_more():
+    # 030 redo: one line on one ink plate — HP, ATK, DEF. Range, mods
+    # and pips left the art; they live in the [i] dossier now.
     html = render._enemy_head_html(_payload())            # 40/80
     assert "HP 40/80" in html
-    assert "█" * 5 in html and "░" * 5 in html
-    low = dict(_payload(), hp=8)                          # ≤30% reads low
-    assert "foe low" in render._enemy_head_html(low)
+    assert "ATK 10" in html and "DEF 10" in html
+    assert render.VIOLET_SOFT in html                     # healthy HP ink
+    assert "piprow" not in html
+    assert "rchip" not in html and "mchip" not in html
+    assert "at range" not in html and "HALF" not in html
+    low = dict(_payload(), hp=8)                          # ≤30% reads red
+    assert render.RED in render._enemy_head_html(low)
 
 
-def test_enemy_head_names_range_and_modifier():
-    html = render._enemy_head_html(_payload(rng="at_range"))
-    assert "◇ at range" in html
-    assert "HALF" in html                                 # mod chip
-    close = render._enemy_head_html(_payload(rng="close", dtype="ranged"))
-    assert "◇ close quarters" in close
+def test_range_and_modifiers_moved_into_the_dossier():
+    at_range = render._dossier_html(_payload(rng="at_range"))
+    assert "at range" in at_range
+    close = render._dossier_html(_payload(rng="close", dtype="ranged"))
+    assert "close quarters" in close
     assert "×0.6" in close
 
 
