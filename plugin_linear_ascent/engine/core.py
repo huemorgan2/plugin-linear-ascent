@@ -1696,7 +1696,7 @@ def _vault_scene(p: dict) -> Scene:
     # credit — the pile is the reason to come back.
     stubs = state.interest_sync(p)
     lines = []
-    lines.append(f"banked ◈ {p['bank']:,} · carried ◈ {p['gold']:,}")
+    lines.append(f"carried ◈ {p['gold']:,}")
     opts = []
     if stubs:
         if len(stubs) > 5:
@@ -1754,6 +1754,11 @@ def _vault_scene(p: dict) -> Scene:
         options=opts,
         meters=combat.meters(p),
         banner="vault",
+        # 030 Phase 4: the deposit is a SHELF, not a sentence — one big
+        # number over the strongbox art. The ◈ paints into the coin glyph
+        # card-side; the text surface reads the line as written.
+        strip={"art": "vault_interior",
+               "text": f"DEPOSITED: ◈ {p['bank']:,}"},
     )
 
 

@@ -100,6 +100,12 @@ class Scene:
                                     # 027: clickable picture tiles —
                                     # {opt, slug, label, sub}. Faction
                                     # sigils are art, not filenames.
+    strip: dict | None = None       # 030: a thin art band with one big
+                                    # number — {art, text}. The vault's
+                                    # strongbox shelf: 320×50 art, the
+                                    # text drawn large and centered over
+                                    # it. Top-level and optional: older
+                                    # clients drop it, text keeps parity.
     enemy: dict | None = None       # 017/003: the fight dossier payload —
                                     # {name, hp, hp_max, atk, def, profile,
                                     #  range, lore, specimen, pspd, dtype,
@@ -130,6 +136,8 @@ class Scene:
                 lines.append("◇ close quarters — it is on top of you")
         if self.shard_note:
             lines.append(f"◆ {self.shard_note}")
+        if self.strip and self.strip.get("text"):
+            lines.append(self.strip["text"])
         for b in self.body_lines:
             # 007 fold markers degrade to a plain divider in text
             if b == "▣.":
@@ -183,6 +191,7 @@ class Scene:
             "notices": self.notices,
             "ask": self.ask,
             "gallery": self.gallery,
+            "strip": self.strip,
             "enemy": self.enemy,
         }
 
@@ -221,5 +230,6 @@ class Scene:
             notices=list(d.get("notices", [])),
             ask=(dict(d["ask"]) if d.get("ask") else None),
             gallery=list(d.get("gallery", [])),
+            strip=(dict(d["strip"]) if d.get("strip") else None),
             enemy=(dict(d["enemy"]) if d.get("enemy") else None),
         )

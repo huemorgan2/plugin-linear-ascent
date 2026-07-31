@@ -275,6 +275,34 @@ def _ep(s: str) -> str:
     return _sub_glyphs(_paint_amounts(_e(s)))
 
 
+@lru_cache(maxsize=None)
+def _strip_art_url(slug: str) -> str | None:
+    """030 Phase 4: thin band art — {slug}_320x50.png in banners/."""
+    path = os.path.join(_ART, f"{slug}_320x50.png")
+    if os.path.exists(path):
+        b64 = base64.b64encode(open(path, "rb").read()).decode()
+        return f"data:image/png;base64,{b64}"
+    return None
+
+
+def _strip_band_html(strip: dict) -> str:
+    """The strongbox shelf: one big number over a 320×50 art band on ink.
+    The art is a dim backdrop; the text is the point and paints its own
+    amounts (Phase 1). Missing art → the band is just the dark shelf."""
+    text = strip.get("text", "")
+    if not text:
+        return ""
+    art = ""
+    url = _strip_art_url(strip.get("art", ""))
+    if url:
+        art = (f'<span class="bart" aria-hidden="true" '
+               f'style="background-color:{PANEL2};'
+               f"-webkit-mask-image:url('{url}');"
+               f"mask-image:url('{url}');\"></span>")
+    return (f'<div class="stripband later">{art}'
+            f'<span class="btx">{_ep(text)}</span></div>')
+
+
 def _shard_html(note: str) -> str:
     """030 Phase 3: the shardmind has a face — the 16×16 `shard` grid at
     32px, aether-lit, where it writes. to_text() keeps ◆."""
@@ -1126,6 +1154,10 @@ def render_scene_fragment(scene: Scene) -> str:
         parts.append(_dossier_html(scene.enemy))
     if scene.support:
         parts.append(f'<div class="support type">{_ep(scene.support)}</div>')
+    # 030 Phase 4: the art band with one big number (the vault shelf).
+    # getattr: a strip-less Scene from an older engine must render fine.
+    if getattr(scene, "strip", None):
+        parts.append(_strip_band_html(scene.strip))
     if scene.shard_note:
         parts.append(_shard_html(scene.shard_note))
     in_fold = False
@@ -1340,6 +1372,17 @@ SCENE_CSS = f"""
  padding:8px 1.5ch;margin-top:8px;color:{DIM};}}
 .shard .glyph{{color:{AETHER};flex:none;}}
 .body{{margin:6px 0 0;white-space:pre-wrap;}}
+/* ── 030: the art band — one big number on a dark shelf ── */
+.stripband{{position:relative;display:flex;align-items:center;
+ justify-content:center;margin:8px 0 0;background:{INK};
+ border:1px solid {BORDER};aspect-ratio:320/50;overflow:hidden;}}
+.stripband .bart{{position:absolute;inset:0;mask-size:cover;
+ -webkit-mask-size:cover;mask-position:center;-webkit-mask-position:center;
+ mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;
+ image-rendering:pixelated;}}
+.stripband .btx{{position:relative;z-index:1;font-size:18px;
+ font-weight:700;letter-spacing:.06em;font-variant-numeric:tabular-nums;}}
+.stripband .btx .eg{{width:18px;height:18px;vertical-align:-3px;}}
 /* ── 007: folded shop shelves (▣ markers) ── */
 .fold{{margin:6px 0 0;}}
 .fold summary{{list-style:none;cursor:pointer;user-select:none;
