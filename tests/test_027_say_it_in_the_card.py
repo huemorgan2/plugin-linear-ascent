@@ -208,7 +208,8 @@ def test_the_pack_strip_carries_its_actions_to_the_card():
                              "hint": "+25 HP · 1 left"}]
     html = render.render_scene_fragment(s)
     assert 'data-acts="' in html and "use_medgel" in html
-    assert 'class="item act' in html                # the cell is a button now
+    # 031 §3: the cell is a slot button in the pack grid now
+    assert 'class="slot item act' in html
 
 
 def test_the_rail_can_be_counted_not_just_read():

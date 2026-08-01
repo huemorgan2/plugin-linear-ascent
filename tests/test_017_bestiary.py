@@ -91,9 +91,19 @@ def test_matchup_gate_at_scale():
                 if win >= 0.70:
                     pool += 1
                 if _intended(clazz, prof):
-                    assert win >= 0.80, f"{where}: prey escapes {win:.0%}"
-                elif (_class_mult(clazz, prof) <= 0.5 or prof["bulwark"]
-                        or _speed_counters(clazz, prof)):
+                    # 031 §7: the bow's free shooting needs faster legs.
+                    # Prey the archer outruns dies ≥80%; prey that
+                    # matches the (bootless) reference stride is a
+                    # close-quarters scrap at ×0.6 — a fair hunt, ≥75%.
+                    bar = (0.75 if economy.DAMAGE_TYPE[clazz] == "ranged"
+                           and prof["speed"] >= economy.PLAYER_BASE_SPEED
+                           else 0.80)
+                    assert win >= bar, f"{where}: prey escapes {win:.0%}"
+                # 031 §7: FAST is no longer a hard counter to the bow —
+                # the range phase is free shooting now. Speed matchups
+                # float between full and countered: exempt from the felt
+                # gate (mirrors the same carve-out in damage_types).
+                elif _class_mult(clazz, prof) <= 0.5 or prof["bulwark"]:
                     dragged = plain and rounds >= 1.6 * plain
                     assert win <= 0.75 or dragged, (
                         f"{where}: win {win:.0%}, rounds {rounds:.1f} vs "

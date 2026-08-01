@@ -252,7 +252,8 @@ def test_sorcerer_forge_points_at_the_arcanum():
     assert "buy_scrapwood_buckler" not in ids  # shields serve war+archer
     assert "buy_quilted_rags" in ids           # armor is shared (rung 1.2)
     assert "buy_cobbled_boots" in ids          # so are shoes
-    assert any("Arcanum" in ln for ln in s.body_lines)
+    # 031 §14: the card-wall Forge keeps its one pointer as a notice
+    assert "Arcanum" in (s.shard_note or "")
     # a forced staff buy at the Forge is turned away, not sold
     p["gold"] = 10_000
     s = choose(p, "buy_tallowwood_staff")

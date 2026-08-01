@@ -124,7 +124,8 @@ def test_dossier_names_the_active_modifiers():
     close_bow = render._dossier_html(_payload(rng="close", dtype="ranged"))
     assert "×0.6" in close_bow
     at_range = render._dossier_html(_payload(rng="at_range", dtype="melee"))
-    assert "HALF" in at_range
+    # 031 §7: at range it isn't halved — it can't answer at all
+    assert "CANNOT reach you" in at_range
     assert "swing until you close" in at_range
     flyer = render._dossier_html(_payload(flying=True, dtype="melee",
                                           rng="close"))

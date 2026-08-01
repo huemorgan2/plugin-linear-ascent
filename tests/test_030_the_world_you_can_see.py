@@ -182,10 +182,14 @@ def test_shard_note_wears_the_shard_mask():
     assert "◆" in txt
 
 
-def test_gate_floor_rows_carry_fields_and_warden_art():
-    html = render._floor_tile_art("floor_1", False)
-    assert html.count("fart") >= 2     # fields + warden, two masks
-    assert render._floor_tile_art("hunt", False) == ""
+def test_option_art_draws_only_what_the_engine_names():
+    # 031 §13: the art moved off the floor list onto the in-floor choice —
+    # the renderer draws a tile only for options the scene names art for
+    s = Scene(eyebrow="E", headline="H",
+              option_art={"hunt": "greenreach", "keep": "warden_001"})
+    assert "fart" in render._option_tile_art(s, "hunt", False)
+    assert "fart" in render._option_tile_art(s, "keep", False)
+    assert render._option_tile_art(s, "floor_1", False) == ""
 
 
 # ── Phase 4: the vault strip ────────────────────────────────────────────
@@ -219,22 +223,23 @@ def test_vault_scene_sends_the_strip():
 
 def test_paper_card_clamps_to_the_sheet():
     paper = {"headline": "Day 1", "closable": True,
-             "items": [f"item number {n}" for n in range(1, 8)]}
+             "items": [f"item number {n}" for n in range(1, 9)]}
     html = render._paper_html(paper)
-    # the sheet is a fixed 320×150 — four 2-line items is what fits;
-    # gossip (the tail of the priority order) yields first
-    assert html.count('class="pit"') == 4
-    assert "item number 5" not in html
-    assert "aspect-ratio:320/150" in render.SCENE_CSS
+    # 031 §12: the sheet flows to its content now — six items is the cap,
+    # and gossip (the tail of the priority order) yields first
+    assert html.count('class="pit"') == 6
+    assert "item number 7" not in html
+    assert "aspect-ratio:320/150" not in render.SCENE_CSS
 
 
 def test_paper_is_light_newsprint_with_dark_ink():
     # the redo: newsprint is LIGHT, the ink is dark — no more grain
-    # fighting dark text over a dark panel.
+    # fighting dark text over a dark panel. 031 §12: the body flows in
+    # place (no absolute inset) and the masthead reads like a masthead.
     assert (".paper{position:relative;margin:0 0 10px;background:"
             + render.TEXT) in render.SCENE_CSS
-    assert f".paper .pbody{{position:absolute;inset:0;z-index:1;" \
-           in render.SCENE_CSS
+    assert ".paper .pbody{position:relative;z-index:1;" in render.SCENE_CSS
+    assert "border-bottom:3px double currentColor" in render.SCENE_CSS
 
 
 # ── Phase 6: a voice in every fields ────────────────────────────────────
@@ -262,12 +267,13 @@ def test_npc_talk_names_the_warden_shape():
 def test_keeper_tells_stories_of_glory():
     # the redo: not rate sheets — stories of climbers who earned their
     # fortunes over time under this roof, numbers woven in.
+    # 031 §9: the keeper is Wick now, and he bores you with his life too.
     p = _playing("030-keeper-glory")
     core.apply_choice(p, "lodge")
     text = " ".join(
-        line for _ in range(4)
+        line for _ in range(6)
         for line in core.apply_choice(p, "talk").body_lines)
-    for name in ("Okko", "Brand", "Asha", "Vell"):
+    for name in ("Wick", "Brand", "Asha", "Vell"):
         assert name in text
     assert "◈" in text and "✦" in text     # the coin is still real
 

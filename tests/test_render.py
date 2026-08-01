@@ -64,7 +64,9 @@ def test_combat_numbers_are_colored():
                                       "0 damage.")
 
 
-def test_death_card_has_stripe():
+def test_death_card_has_no_stripe():
+    # 031 §1: the left stripe is retired everywhere — the death card
+    # speaks through its banner, not a colored edge
     p = make_player()
     p["daily"]["death_save"] = True
     core.apply_choice(p, "gate")
@@ -74,7 +76,7 @@ def test_death_card_has_stripe():
     p["encounter"]["atk"] = 999
     s = core.apply_choice(p, "attack")
     html = render_scene(s)
-    assert "border-left:3px solid" in html          # event stripe
+    assert "border-left" not in html
     assert _banner_data_url("death")                # death banner exists
 
 

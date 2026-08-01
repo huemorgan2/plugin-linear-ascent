@@ -51,6 +51,9 @@ class Meters:
     dfs: int = 0        # can draw pip rows without reading the player doc.
                         # Defaults 0 = "not sent" (older engine): the
                         # profile block simply omits the rows.
+    name: str = ""      # 031 §4: the profile header — who is climbing.
+    race: str = ""      # "" = not sent (older engine): the header line
+    clazz: str = ""     # simply omits the missing parts.
 
 
 @dataclass
@@ -117,6 +120,21 @@ class Scene:
                                     #  dodge}. The renderer draws the enemy
                                     #  HP bar, range chip and [i] card from
                                     #  this; content stays markup-free.
+    option_art: dict = field(default_factory=dict)
+                                    # 031 §13/§14: art slug per option id,
+                                    # riding BESIDE the options (wire law —
+                                    # a key inside an option dict crashes
+                                    # 0.28-0.32 clients). {"hunt": "gnarl"}
+    grid: bool = False              # 031 §14: draw the options as a card
+                                    # grid — image on top, label + hint
+                                    # under it, [i] kept on the card. The
+                                    # forge's stock uses this.
+    npc: dict | None = None         # 031 §9: a face beside the words —
+                                    # {name, portrait}. The portrait
+                                    # (100×200) sits left of the body.
+    activity: str = ""              # 031 §11: the lodge's evening state,
+                                    # drawn as a filled band under the
+                                    # options. "" = no band.
 
     def to_text(self) -> str:
         """Plain-text fallback — always works, cards are enhancement."""
@@ -167,6 +185,9 @@ class Scene:
                 hint = f"   ({o.hint})" if o.hint else ""
                 badge = f" ({o.badge})" if getattr(o, "badge", 0) else ""
                 lines.append(f" {i}) {o.label}{badge}{hint}")
+        # 031 §11: the evening state reads as words on every surface
+        if self.activity:
+            lines.append(self.activity)
         if self.meters:
             m = self.meters
             stats = (f"   ATK {m.atk}   DEF {m.dfs}"
@@ -212,6 +233,10 @@ class Scene:
             "paper": self.paper,
             "strip": self.strip,
             "enemy": self.enemy,
+            "option_art": self.option_art,
+            "grid": self.grid,
+            "npc": self.npc,
+            "activity": self.activity,
         }
 
     @staticmethod
@@ -252,4 +277,8 @@ class Scene:
             paper=(dict(d["paper"]) if d.get("paper") else None),
             strip=(dict(d["strip"]) if d.get("strip") else None),
             enemy=(dict(d["enemy"]) if d.get("enemy") else None),
+            option_art=dict(d.get("option_art") or {}),
+            grid=bool(d.get("grid", False)),
+            npc=(dict(d["npc"]) if d.get("npc") else None),
+            activity=d.get("activity", ""),
         )

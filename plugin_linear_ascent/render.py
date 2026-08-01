@@ -38,8 +38,8 @@ RED = "#f4645f"
 OK = "#3ad29f"
 ORANGE = "#ff9a3c"
 
-_STRIPE = {"loot": GOLD, "present": GOLD, "death": RED,
-           "letter": AETHER, "boss": VIOLET, "news": AETHER}
+# 031 §1: the left stripe is retired everywhere — event colour lives in
+# the headline and banner tint, never a vertical line on the box edge.
 _HEADLINE = {"death": RED, "loot": GOLD, "present": GOLD}
 _BOSS_SLUGS = {"gnarl", "skarn", "barrowking", "vyx", "cindermaw", "hrimgar",
                "zephyra", "huntsman", "malgrim", "vharuk"}
@@ -295,11 +295,10 @@ def _paper_html(paper: dict) -> str:
     items = [i for i in (paper.get("items") or []) if i]
     if not items:
         return ""
-    # the sheet is 320×150 and the news area under the masthead is
-    # ~100 of those units — four 2-line-clamped items is what fits.
-    # Payload order is priority order (dawn, night, census, warden,
-    # gossip), so gossip yields first; to_text keeps every item.
-    items = items[:4]
+    # 031 §12: the sheet flows to its content now — six 2-line-clamped
+    # items before the fold. Payload order is priority order (dawn,
+    # night, census, warden, gossip); to_text keeps every item.
+    items = items[:6]
     url = _paper_tex_url()
     tex = ""
     cls = " noart"
@@ -551,11 +550,24 @@ def _meters_html(m: Meters) -> str:
         f"<span>XP {val('xp', m.xp, m.xp_need)}/{m.xp_need:,}</span>"
         f'<span class="blocks" data-bar="xp" aria-hidden="true">'
         f"{_blocks(m.xp, m.xp_need)}</span></span>"
-        f'<span class="gold">'
-        f'<span class="lvl" data-tip="{_e(_TIP_LV)}">LV {m.level}</span>'
-        f'<span data-tip="{_e(_TIP_GOLD)}">{_eglyph("coin")} '
-        f'{val("gold", m.gold)}</span>'
-        f"</span></div>")
+        f"</div>")
+
+
+def _ident_html(m: Meters) -> str:
+    """031 §4: who is climbing, said once and plainly — name and calling
+    top-left, LEVEL and COINS in bold top-right. Gold's live counter
+    (data-m) moved here from the rail; there is exactly one on the card."""
+    who = " ".join(x for x in (m.race, m.clazz) if x)
+    left = (f'<span class="idname">{_e(m.name)}</span>'
+            + (f'<span class="idwho">{_e(who)}</span>' if who else ""))
+    gold = (f'<span class="mv" data-m="gold" data-v="{m.gold}">'
+            f"{m.gold:,}</span>")
+    right = (f'<span class="idlv" data-tip="{_e(_TIP_LV)}">'
+             f"LEVEL {m.level}</span>"
+             f'<span class="idgold" data-tip="{_e(_TIP_GOLD)}">'
+             f'COINS {_eglyph("coin")} {gold}</span>')
+    return (f'<div class="ident later"><span class="idl">{left}</span>'
+            f'<span class="idr">{right}</span></div>')
 
 
 # ── 030: the player profile — who is climbing ───────────────────────────
@@ -631,10 +643,12 @@ def _profile_html(scene: Scene) -> str:
     # the pack lives in the profile's right column — portrait on the
     # left, everything the climber carries to its right, never below.
     right += _inventory_html(scene)
+    ident = _ident_html(m)
     url = _portrait_data_url(_portrait_slug(scene))
     if not url:
-        return right
-    return (f'<div class="profile">'
+        return ident + right
+    return (ident
+            + f'<div class="profile">'
             f'<div class="portrait later" style="background-color:{TEXT};'
             f"-webkit-mask-image:url('{url}');mask-image:url('{url}');\">"
             f'</div><div class="pcol">{right}</div></div>')
@@ -677,7 +691,10 @@ def _active_mods(en: dict) -> list[str]:
     rng, dt = en.get("range", ""), en.get("dtype", "")
     prof = en.get("profile") or {}
     if rng == "at_range":
-        mods.append("its blows land at HALF — it hasn't reached you")
+        # 031 §7: nothing reaches you at range — the only blow it has
+        # left is the free half-strike when a break-away fails.
+        mods.append("it CANNOT reach you at this range — it is still "
+                    "crossing")
         if dt == "melee":
             mods.append("your steel can't swing until you close")
     elif rng == "close":
@@ -771,15 +788,19 @@ def _dossier_html(en: dict) -> str:
                     f"<span>{_e(m)}</span></div>")
     # 030 Phase 7: the odds — coin and XP ranges from the kill math,
     # painted per the one-coin-one-colour law.
+    # 031 §6: wardens carry these rows too; an exact purse (lo == hi)
+    # prints as one number, not a 40–40 range.
     drops = en.get("drops") or {}
     if drops.get("gold"):
         lo, hi = drops["gold"]
+        amt = f"{lo}" if lo == hi else f"{lo}–{hi}"
         rows.append(f'<div class="drw"><span class="dmark">·</span>'
-                    f"<span>{_ep(f'coins ◈ {lo}–{hi}')}</span></div>")
+                    f"<span>{_ep(f'coins ◈ {amt}')}</span></div>")
     if drops.get("xp"):
         lo, hi = drops["xp"]
+        amt = f"{lo}" if lo == hi else f"{lo}–{hi}"
         rows.append(f'<div class="drw"><span class="dmark">·</span>'
-                    f"<span>{_ep(f'XP ✦ {lo}–{hi}')}</span></div>")
+                    f"<span>{_ep(f'XP ✦ {amt}')}</span></div>")
     return (f'<details class="dx"><summary role="note" aria-label="enemy '
             f'dossier">i</summary><div class="dossier">'
             f'<div class="dhead">{_e(en.get("name", ""))} — the shard\'s '
@@ -808,93 +829,111 @@ def _opt_gear_icon(oid: str) -> str:
             f"mask-image:url('{url}')\"></span>")
 
 
-# ── 030 Phase 3: the gate ledger becomes a hall of doors ────────────────
-# A floor_{n} option row grows to ~3× height and shows where you are going:
-# the floor's fields art beside its warden. Resolved entirely render-side
-# from the option id — zero wire change, floors without art degrade to the
-# plain text row.
-_FLOOR_OPT = re.compile(r"^floor_(\d+)$")
+# ── 031 §13: art rides the choice the engine says it belongs to ─────────
+# 030 put fields+warden art on the gate's floor list; the designer moved
+# it to the IN-floor choice (hunt vs the keep). The engine now names the
+# art per option (scene.option_art, beside options on the wire); the
+# renderer just draws what it is told. No art named → plain text row.
 
 
-def _floor_tile_art(oid: str, locked: bool) -> str:
-    m = _FLOOR_OPT.match(oid)
-    if not m:
+def _option_tile_art(scene: Scene, oid: str, locked: bool) -> str:
+    slug = (getattr(scene, "option_art", None) or {}).get(oid) or ""
+    art = _banner_data_url(slug) if slug else None
+    if not art:
         return ""
-    n = int(m.group(1))
-    field_slug = ""
-    try:
-        from .content import schema
-        field_slug = schema.get_floor(n).banner
-    except Exception:  # noqa: BLE001 — art is decoration, never a crash
-        pass
-    cells = []
-    for slug, tint in ((field_slug, DIM), (f"warden_{n:03d}", VIOLET)):
-        art = _banner_data_url(slug) if slug else None
-        if not art:
-            continue
-        url, _w, _h = art
-        cells.append(
-            f'<span class="fart" aria-hidden="true" '
-            f'style="background-color:{FAINT if locked else tint};'
+    url, _w, _h = art
+    tint = FAINT if locked else (
+        VIOLET if slug.startswith("warden_") else DIM)
+    return (f'<span class="farts"><span class="fart" aria-hidden="true" '
+            f'style="background-color:{tint};'
             f"-webkit-mask-image:url('{url}');"
-            f"mask-image:url('{url}');\"></span>")
-    return f'<span class="farts">{"".join(cells)}</span>' if cells else ""
+            f"mask-image:url('{url}');\"></span></span>")
+
+
+def _slot_cell(it: dict) -> str:
+    """One pack slot — a square button holding the icon, the ×count and
+    the wear bar; the name lives in the tip and the action popup."""
+    slug = it.get("slug", "")
+    equipped = bool(it.get("equipped"))
+    url = icons.icon_data_url(icons.icon_key(slug, it.get("kind", "")))
+    # 025 §4: the same glyph in the style's ink — ember for keen steel,
+    # frost for warded. Unstyled gear keeps the worn/packed contrast.
+    tint = _STYLE_TINT.get(economy.style_of(slug)) or (
+        TEXT if equipped else DIM)
+    count = int(it.get("count", 1))
+    ct = (f'<span class="ct">{count}</span>'
+          if count > 1 and not equipped else "")
+    tip = tips.item_tip(slug, equipped=equipped)
+    name = str(it.get("name", slug))
+    tip = f"{name} — {tip}" if tip else name
+    # 005: worn gear shows a hairline bar under its icon; the hover
+    # names the number ("62% — repair at the Forge").
+    dur = it.get("dur")
+    durbar = ""
+    if dur is not None and dur < 1.0:
+        pct = max(0, round(dur * 100))
+        col = RED if dur <= 0 else (GOLD if dur < 0.34 else OK)
+        durbar = (f'<span class="dur"><span class="durf" '
+                  f'style="width:{max(pct, 4)}%;'
+                  f'background-color:{col};"></span></span>')
+        tip = (f"{tip} · " if tip else "") + (
+            "broken — half strength until the Forge repairs it"
+            if dur <= 0 else f"{pct}% — repair at the Forge")
+    # 027: the cell is a button — the popup lists what this thing can
+    # do HERE, or says where it can be done. `acts` come from the
+    # engine (core.pack_actions), never guessed client-side.
+    acts = it.get("acts") or []
+    act_attr = (f" data-acts=\"{_e(_json.dumps(acts))}\""
+                if acts else "")
+    why_attr = (f' data-why="{_e(str(it.get("why")))}"'
+                if it.get("why") else "")
+    return (
+        f'<button type="button" class="slot item act'
+        f'{" eq" if equipped else ""}" '
+        f'data-tip="{_e(tip)}" data-slug="{_e(slug)}" '
+        f'data-name="{_e(name)}"'
+        f"{act_attr}{why_attr}>"
+        f'<span class="picon" style="background-color:{tint};'
+        f"-webkit-mask-image:url('{url}');mask-image:url('{url}');\">"
+        f"</span>{ct}{durbar}</button>")
+
+
+_PACK_COLS = 6
+_PACK_MIN_SLOTS = 12
 
 
 def _inventory_html(scene: Scene) -> str:
-    """014: the pack strip — 32×32 single-color 1-bit icons under the
-    rail. Equipped gear reads bright, pack items dim; every cell
-    explains itself through the instant tipbox."""
+    """031 §3: the pack is a slot grid now — squares that fill with
+    what you carry, blanks where nothing does. The weapon in use and
+    the shield are promoted to two larger boxes on top; armor and
+    shoes keep their bright equipped tint inside the grid. Swapping
+    weapons stays the cell popup's job (wear_*), and buying better
+    steel still auto-promotes at the Forge."""
     if not scene.inventory:
         return ""
-    cells = []
+    hand: dict[str, dict] = {}
+    rest: list[dict] = []
     for it in scene.inventory:
-        slug = it.get("slug", "")
-        equipped = bool(it.get("equipped"))
-        url = icons.icon_data_url(icons.icon_key(slug, it.get("kind", "")))
-        # 025 §4: the same glyph in the style's ink — ember for keen steel,
-        # frost for warded. Unstyled gear keeps the worn/packed contrast.
-        tint = _STYLE_TINT.get(economy.style_of(slug)) or (
-            TEXT if equipped else DIM)
-        count = int(it.get("count", 1))
-        ct = (f'<span class="ct">×{count}</span>'
-              if count > 1 and not equipped else "")
-        tip = tips.item_tip(slug, equipped=equipped)
-        # 005: worn gear shows a hairline bar under its icon; the hover
-        # names the number ("62% — repair at the Forge").
-        dur = it.get("dur")
-        durbar = ""
-        if dur is not None and dur < 1.0:
-            pct = max(0, round(dur * 100))
-            col = RED if dur <= 0 else (GOLD if dur < 0.34 else OK)
-            durbar = (f'<span class="dur"><span class="durf" '
-                      f'style="width:{max(pct, 4)}%;'
-                      f'background-color:{col};"></span></span>')
-            tip = (f"{tip} · " if tip else "") + (
-                "broken — half strength until the Forge repairs it"
-                if dur <= 0 else f"{pct}% — repair at the Forge")
-        # 027: the cell is a button now — the popup lists what this thing
-        # can do HERE, or says where it can be done. `acts` come from the
-        # engine (core.pack_actions), never guessed client-side.
-        acts = it.get("acts") or []
-        act_attr = (f" data-acts=\"{_e(_json.dumps(acts))}\""
-                    if acts else "")
-        why_attr = (f' data-why="{_e(str(it.get("why")))}"'
-                    if it.get("why") else "")
-        cells.append(
-            f'<button type="button" class="item act'
-            f'{" eq" if equipped else ""}" '
-            f'data-tip="{_e(tip)}" data-slug="{_e(slug)}" '
-            f'data-name="{_e(str(it.get("name", slug)))}"'
-            f"{act_attr}{why_attr}>"
-            f'<span class="pico"><span class="picon" '
-            f'style="background-color:{tint};'
-            f"-webkit-mask-image:url('{url}');mask-image:url('{url}');\">"
-            f"</span>{durbar}</span>"
-            f'<span class="pname">{_e(it.get("name", slug))}{ct}</span>'
-            f"</button>")
+        kind = it.get("kind", "")
+        if it.get("equipped") and kind in ("weapon", "shield") \
+                and kind not in hand:
+            hand[kind] = it
+        else:
+            rest.append(it)
+    hrow = []
+    for kind, lab in (("weapon", "in hand"), ("shield", "shield")):
+        it = hand.get(kind)
+        cell = (_slot_cell(it) if it else
+                f'<span class="slot empty" data-tip="no {lab.replace("in hand", "weapon in hand")} — the Forge sells steel"></span>')
+        hrow.append(f'<span class="hcell"><span class="hlab">{lab}'
+                    f"</span>{cell}</span>")
+    n = len(rest)
+    total = max(_PACK_MIN_SLOTS, -(-n // _PACK_COLS) * _PACK_COLS)
+    cells = [_slot_cell(it) for it in rest]
+    cells += ['<span class="slot empty"></span>'] * (total - n)
     return (f'<div class="inv later"><span class="invlbl">pack</span>'
-            f'{"".join(cells)}</div>')
+            f'<div class="handrow">{"".join(hrow)}</div>'
+            f'<div class="slotgrid">{"".join(cells)}</div></div>')
 
 
 # The card's script, three blocks in one tag:
@@ -1259,6 +1298,20 @@ def render_scene_fragment(scene: Scene) -> str:
         parts.append(_strip_band_html(scene.strip))
     if scene.shard_note:
         parts.append(_shard_html(scene.shard_note))
+    # 031 §9: a scene with a face — the NPC's portrait floats left of
+    # the words, name under it; body text wraps beside it. Missing art
+    # or an old wire (no npc) renders the same words, faceless.
+    npc = getattr(scene, "npc", None) or {}
+    if npc.get("portrait"):
+        nurl = _portrait_data_url(npc["portrait"])
+        if nurl:
+            parts.append(
+                f'<div class="npcbox later"><span class="npcimg" '
+                f'style="background-color:{TEXT};'
+                f"-webkit-mask-image:url('{nurl}');"
+                f"mask-image:url('{nurl}');\"></span>"
+                f'<span class="npclab">{_e(npc.get("name", ""))}</span>'
+                f"</div>")
     in_fold = False
     for line in scene.body_lines:
         # 007: ▣ fold markers — long shop shelves collapse into a
@@ -1291,7 +1344,13 @@ def render_scene_fragment(scene: Scene) -> str:
         parts.append(_ask_html(scene.ask))
 
     if scene.options:
-        rows = []
+        # 031 §14: grid mode — a scene may ask for a card wall instead of
+        # rows. Options that resolve a gear icon become picture cards;
+        # the rest (hone, repair, back…) stay rows underneath. Numbering
+        # runs across both in scene.options order, so the typed-number
+        # fallback never notices the layout.
+        grid_mode = bool(getattr(scene, "grid", False))
+        rows, cards = [], []
         for i, o in enumerate(scene.options, 1):
             key_cls = " aether" if o.aether else ""
             # 019: a locked row is dimmed but stays a button — clicking
@@ -1300,37 +1359,53 @@ def render_scene_fragment(scene: Scene) -> str:
             hint = (f'<span class="hint">{_ep(o.hint)}</span>'
                     if o.hint else "")
             gicon = _opt_gear_icon(o.id)
-            # 030: gate floor rows carry their fields + warden art
-            tile = _floor_tile_art(o.id, bool(getattr(o, "locked", False)))
+            # 031 §13: rows carry art only when the engine names it
+            tile = _option_tile_art(scene, o.id,
+                                    bool(getattr(o, "locked", False)))
             if tile:
                 opt_cls += " ftile"
             # 027: the count leaves the label and becomes a blue chip —
             # a notification reads as a notification, at a glance.
             bn = int(getattr(o, "badge", 0) or 0)
             badge = f'<span class="badge">{bn}</span>' if bn else ""
+            # 014: the whisper glyph — [i] OUTSIDE the button, so tapping
+            # it never fires the option; tip resolves by option id.
+            # 031 §14: the card wall keeps it too, pinned to the corner.
+            tip = tips.option_tip(o.id)
+            info = (f'<span class="info" tabindex="0" role="note" '
+                    f'data-tip="{_e(tip)}">i</span>' if tip else "")
+            if grid_mode and gicon:
+                card = (f'<button type="button" class="opt gcard{opt_cls}" '
+                        f'data-opt="{_e(o.id)}">'
+                        f'<span class="key{key_cls}">{i}</span>{gicon}'
+                        f'<span class="lbl">{_ep(o.label)}</span>{badge}'
+                        f"{hint}</button>")
+                cards.append(f'<div class="gcell">{card}{info}</div>')
+                continue
             btn = (f'<button type="button" class="opt{opt_cls}" '
                    f'data-opt="{_e(o.id)}">'
                    f'<span class="key{key_cls}">{i}</span>{tile}{gicon}'
                    f'<span class="lbl">{_ep(o.label)}</span>{badge}'
                    f"{hint}</button>")
-            # 014: the whisper glyph — [i] OUTSIDE the button, so tapping
-            # it never fires the option; tip resolves by option id.
-            tip = tips.option_tip(o.id)
-            info = (f'<span class="info" tabindex="0" role="note" '
-                    f'data-tip="{_e(tip)}">i</span>' if tip else "")
             rows.append(f'<div class="orow">{btn}{info}</div>')
-        parts.append(f'<div class="options later">{"".join(rows)}'
+        wall = (f'<div class="ggrid">{"".join(cards)}</div>'
+                if cards else "")
+        parts.append(f'<div class="options later">{wall}{"".join(rows)}'
                      f'<div class="reply">click an option — or reply '
                      f"with a number</div></div>")
+
+    # 031 §11: the activity band — what tonight is already set to do,
+    # a filled box with no outline at the foot of the options.
+    if getattr(scene, "activity", ""):
+        parts.append(f'<div class="actband later">{_ep(scene.activity)}'
+                     "</div>")
 
     if scene.meters:
         parts.append(_profile_html(scene))   # pack rides its right column
     else:
         parts.append(_inventory_html(scene))
 
-    stripe = _STRIPE.get(scene.event_kind)
-    style_attr = (f' style="border-left:3px solid {stripe};"' if stripe else "")
-    return (f'<div class="card" data-scene="{_e(scene.scene_id)}"{style_attr}>'
+    return (f'<div class="card" data-scene="{_e(scene.scene_id)}">'
             + "".join(parts) + "</div>")
 
 
@@ -1396,7 +1471,7 @@ SCENE_CSS = f"""
  border-bottom:1px solid {BORDER};}}
 /* ── 027: the notice board. Blue is the notification ink — it never
    means a stat, only "something waits for you". ── */
-.notices{{border:1px solid {AETHER};border-left:3px solid {AETHER};
+.notices{{border:1px solid {AETHER};
  background:color-mix(in srgb,{AETHER} 7%,{PANEL});
  padding:8px 1.5ch 9px;margin:0 0 10px;}}
 .nhead{{color:{AETHER};text-transform:uppercase;letter-spacing:.14em;
@@ -1421,22 +1496,29 @@ SCENE_CSS = f"""
 .opt:hover .badge{{background:{TEXT};}}
 /* ── 030 Phase 5: the Morning Crier's broadsheet — a LIGHT sheet, dark
    ink, like paper. Only the artless fallback stays a dark board. ── */
+/* 031 §12: the Crier reads as an actual newspaper — light sheet,
+   centered masthead over a double rule, serif headline, ruled items,
+   the ✕ folds it for the day. Height follows the news, not the art. */
 .paper{{position:relative;margin:0 0 10px;background:{TEXT};
- border:1px solid {BORDER};overflow:hidden;aspect-ratio:320/150;}}
+ border:1px solid {BORDER};overflow:hidden;min-height:96px;}}
 .paper.noart{{background:{PANEL};}}
 .paper .ptex{{position:absolute;inset:0;mask-size:cover;
  -webkit-mask-size:cover;mask-position:center;-webkit-mask-position:center;
  mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;
  image-rendering:pixelated;}}
-.paper .pbody{{position:absolute;inset:0;z-index:1;overflow:hidden;
- padding:9px 1.5ch 10px;color:{INK};}}
+.paper .pbody{{position:relative;z-index:1;
+ padding:9px 2.5ch 10px 1.5ch;color:{INK};}}
 .paper.noart .pbody{{color:{TEXT};}}
-.paper .pmast{{font-weight:700;letter-spacing:.18em;font-size:11px;
- text-transform:uppercase;border-bottom:1px solid currentColor;
- padding-bottom:3px;margin-bottom:5px;}}
-.paper .phl{{font-weight:700;margin-bottom:4px;text-wrap:balance;}}
+.paper .pmast{{font-weight:700;letter-spacing:.22em;font-size:12px;
+ text-transform:uppercase;text-align:center;
+ border-bottom:3px double currentColor;
+ padding-bottom:4px;margin-bottom:6px;}}
+.paper .phl{{font-weight:700;margin-bottom:5px;text-wrap:balance;
+ font-family:Georgia,"Times New Roman",serif;font-size:15px;
+ line-height:1.35;}}
 .paper .pit{{display:-webkit-box;-webkit-line-clamp:2;
- -webkit-box-orient:vertical;overflow:hidden;margin-top:2px;}}
+ -webkit-box-orient:vertical;overflow:hidden;padding:3px 0 2px;
+ border-top:1px dotted color-mix(in srgb,currentColor 45%,transparent);}}
 .paper .pit::before{{content:"· ";}}
 .paper .pclose{{position:absolute;top:6px;right:6px;z-index:2;
  background:transparent;border:1px solid {FAINT};color:{INK};font:inherit;
@@ -1488,19 +1570,32 @@ SCENE_CSS = f"""
 .pmenu .pact:hover:not(:disabled){{border-color:{AETHER};}}
 .pmenu .pact .phint{{margin-left:auto;color:{FAINT};}}
 .pmenu .pwhy{{color:{DIM};}}
-.inv .item{{background:none;border:0;border-radius:0;font:inherit;
- padding:0;}}
+.inv .item{{font:inherit;border-radius:0;padding:0;}}
 .inv .item.act{{cursor:pointer;}}
+.inv .item.act:hover,.inv .item.act:focus-visible{{
+ border-color:{DIM};}}
 .inv .item.act:hover .picon,.inv .item.act:focus-visible .picon{{
  background-color:{AETHER} !important;}}
 .eyebrow{{color:{FAINT};text-transform:uppercase;letter-spacing:.08em;}}
 .headline{{font-weight:700;margin:4px 0 0;text-wrap:balance;}}
 .support{{color:{DIM};}}
-.shard{{display:flex;gap:1ch;border-left:2px solid {AETHER};
+.shard{{display:flex;gap:1ch;
  background:color-mix(in srgb,{AETHER} 5%,{PANEL});
  padding:8px 1.5ch;margin-top:8px;color:{DIM};}}
 .shard .glyph{{color:{AETHER};flex:none;}}
 .body{{margin:6px 0 0;white-space:pre-wrap;}}
+/* ── 031 §9: the NPC block — portrait left of the words ── */
+.npcbox{{float:left;display:flex;flex-direction:column;align-items:center;
+ gap:3px;margin:8px 2ch 4px 0;}}
+.npcbox .npcimg{{width:80px;aspect-ratio:100/200;display:block;
+ mask-size:100% 100%;-webkit-mask-size:100% 100%;mask-repeat:no-repeat;
+ -webkit-mask-repeat:no-repeat;image-rendering:pixelated;}}
+.npcbox .npclab{{color:{DIM};text-transform:uppercase;
+ letter-spacing:.12em;font-size:11px;}}
+/* ── 031 §11: the activity band — a filled box, no outline ── */
+.actband{{margin-top:10px;padding:8px 1.5ch;border:0;
+ background:color-mix(in srgb,{VIOLET_SOFT} 14%,{PANEL});
+ color:{VIOLET_SOFT};letter-spacing:.02em;}}
 /* ── 030: the art band — one big number on a dark shelf ── */
 .stripband{{position:relative;display:flex;align-items:center;
  justify-content:center;margin:8px 0 0;background:{INK};
@@ -1520,7 +1615,8 @@ SCENE_CSS = f"""
 .fold summary::before{{content:"▸ ";color:{FAINT};}}
 .fold[open] summary::before{{content:"▾ ";}}
 .fold .body{{margin-left:1ch;}}
-.options{{margin:10px 0 0;padding:10px 0 0;border-top:1px dashed {BORDER};
+.options{{clear:both;margin:10px 0 0;padding:10px 0 0;
+ border-top:1px dashed {BORDER};
  display:flex;flex-direction:column;gap:5px;}}
 .opt{{display:flex;align-items:center;gap:1ch;width:100%;
  background:{PANEL2};border:1px solid {BORDER};padding:6px 1.5ch;
@@ -1558,6 +1654,21 @@ SCENE_CSS = f"""
 .opt.locked .gicon,.opt.locked:hover .gicon{{background-color:{FAINT};}}
 .orow{{display:flex;align-items:stretch;gap:5px;}}
 .orow .opt{{flex:1;min-width:0;}}
+/* ── 031 §14: the card wall — a shop shelf you look at, not read ── */
+.ggrid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));
+ gap:6px;margin-bottom:6px;}}
+.gcell{{position:relative;display:flex;}}
+.gcard{{flex-direction:column;align-items:center;justify-content:flex-start;
+ gap:6px;padding:22px 1ch 10px;text-align:center;position:relative;}}
+.gcard .key{{position:absolute;top:5px;left:7px;}}
+.gcard .gicon{{width:56px;height:56px;background-color:{TEXT};}}
+.gcard:hover .gicon{{background-color:{GOLD};}}
+.gcard.locked .gicon,.gcard.locked:hover .gicon{{background-color:{FAINT};}}
+.gcard .lbl{{font-weight:700;line-height:1.3;}}
+.gcard .hint{{margin-left:0;text-align:center;color:{GOLD};}}
+.gcard.locked .hint{{color:{FAINT};}}
+.gcell .info{{position:absolute;top:5px;right:5px;border:0;
+ background:none;padding:0;}}
 .info{{flex:none;display:flex;align-items:center;padding:0 .5ch;
  background:{PANEL2};border:1px solid {BORDER};color:{FAINT};
  cursor:help;user-select:none;font-style:italic;}}
@@ -1587,9 +1698,21 @@ SCENE_CSS = f"""
 .meter.ae{{color:{VIOLET_SOFT};}}
 .meter.ae .blocks{{color:{VIOLET_SOFT};}}
 .amt{{white-space:nowrap;}}
-/* ── 030: the profile block — portrait beside the rail + pip rows ── */
-.profile{{display:flex;gap:2ch;align-items:flex-start;margin-top:10px;
+/* ── 030: the profile block — portrait beside the rail + pip rows ──
+   031 §4: the ident band opens it — name + calling left, LEVEL and
+   COINS bold right — and carries the divider the profile used to. */
+.ident{{display:flex;align-items:baseline;gap:2ch;margin-top:10px;
  padding-top:8px;border-top:1px dashed {BORDER};}}
+.ident .idl{{display:inline-flex;align-items:baseline;gap:1.5ch;
+ min-width:0;}}
+.ident .idname{{font-weight:700;color:{TEXT};}}
+.ident .idwho{{color:{DIM};text-transform:uppercase;
+ letter-spacing:.08em;font-size:12px;}}
+.ident .idr{{margin-left:auto;display:inline-flex;gap:2ch;
+ white-space:nowrap;}}
+.ident .idlv{{font-weight:700;color:{TEXT};cursor:help;}}
+.ident .idgold{{font-weight:700;color:{GOLD};cursor:help;}}
+.profile{{display:flex;gap:2ch;align-items:flex-start;margin-top:8px;}}
 .profile .portrait{{flex:none;width:100px;aspect-ratio:100/200;
  mask-size:100% 100%;-webkit-mask-size:100% 100%;mask-repeat:no-repeat;
  -webkit-mask-repeat:no-repeat;image-rendering:pixelated;}}
@@ -1605,24 +1728,31 @@ SCENE_CSS = f"""
 .pip{{width:16px;height:16px;display:inline-block;
  mask-size:100% 100%;-webkit-mask-size:100% 100%;mask-repeat:no-repeat;
  -webkit-mask-repeat:no-repeat;image-rendering:pixelated;}}
-.rail .gold{{color:{GOLD};margin-left:auto;display:inline-flex;gap:1.5ch;}}
-.rail .gold [data-tip]{{cursor:help;}}
-.rail .lvl{{color:{TEXT};}}
-.inv{{display:flex;flex-wrap:wrap;align-items:center;gap:6px 2ch;
- margin-top:8px;padding-top:8px;border-top:1px dashed {BORDER};}}
-.invlbl{{color:{FAINT};text-transform:uppercase;letter-spacing:.08em;}}
-.inv .item{{display:inline-flex;align-items:center;gap:1ch;cursor:help;
- outline:none;}}
-.inv .item:hover .pname,.inv .item:focus-visible .pname{{color:{TEXT};}}
-.picon{{width:32px;height:32px;flex:none;display:inline-block;
+/* ── 031 §3: the pack is a slot grid — squares fill Minecraft-style;
+   the weapon in use and the shield sit promoted in two boxes on top ── */
+.inv{{margin-top:8px;padding-top:8px;border-top:1px dashed {BORDER};}}
+.invlbl{{color:{FAINT};text-transform:uppercase;letter-spacing:.08em;
+ display:block;margin-bottom:5px;}}
+.handrow{{display:flex;gap:2ch;margin-bottom:6px;}}
+.hcell{{display:inline-flex;flex-direction:column;gap:3px;}}
+.hlab{{color:{FAINT};text-transform:uppercase;letter-spacing:.08em;
+ font-size:10px;}}
+.slot{{position:relative;width:40px;height:40px;flex:none;
+ background:{INK};border:1px solid {BORDER};display:inline-flex;
+ align-items:center;justify-content:center;cursor:help;outline:none;}}
+.hcell .slot{{width:50px;height:50px;}}
+.slot.empty{{border-style:dashed;opacity:.5;}}
+.slotgrid{{display:grid;grid-template-columns:repeat({_PACK_COLS},40px);
+ gap:4px;}}
+.picon{{width:28px;height:28px;flex:none;display:inline-block;
  mask-size:100% 100%;-webkit-mask-size:100% 100%;mask-repeat:no-repeat;
  -webkit-mask-repeat:no-repeat;image-rendering:pixelated;}}
-.inv .pname{{color:{DIM};}}
-.inv .item.eq .pname{{color:{TEXT};}}
-.inv .ct{{color:{FAINT};margin-left:.5ch;}}
-.pico{{display:inline-flex;flex-direction:column;flex:none;gap:2px;}}
-.pico .dur{{display:block;width:32px;height:3px;background:{BORDER};}}
-.pico .durf{{display:block;height:100%;}}
+.hcell .picon{{width:34px;height:34px;}}
+.slot .ct{{position:absolute;right:2px;bottom:0;color:{TEXT};
+ font-size:11px;line-height:1.2;text-shadow:0 0 3px {INK};}}
+.slot .dur{{position:absolute;left:3px;right:3px;bottom:2px;height:3px;
+ background:{BORDER};}}
+.slot .durf{{display:block;height:100%;}}
 #tipbox{{position:fixed;display:none;z-index:99;max-width:340px;
  background:{INK};border:1px solid {VIOLET};color:{TEXT};
  padding:8px 1.5ch;font-size:12px;line-height:1.55;

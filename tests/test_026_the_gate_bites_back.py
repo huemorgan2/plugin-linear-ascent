@@ -116,20 +116,20 @@ def test_the_guard_closing_is_not_a_defeat_and_keeps_the_wound():
 
 
 def test_every_swing_at_a_warden_costs_energy():
-    """The designer reversed 026's free-swing call: a keep taxes the SWING
-    as well as the entry — COST_WARDEN_STRIKE ⚡ each, flat on every
-    floor. The wounds-stay-cut pool is what makes this fair: the gate is
-    a multi-bar siege, not a single-bar sprint. A dry bar refuses the
-    swing BEFORE the round is spent — no venom tick, no counter-blow,
-    no round against the exchange budget."""
+    """031 §5: the walk is free, the fight is free to JOIN — the swing
+    alone carries the whole tax, COST_WARDEN_STRIKE ⚡ each, flat on
+    every floor. The wounds-stay-cut pool is what makes this fair: the
+    gate is a multi-bar siege, not a single-bar sprint. A dry bar
+    refuses the swing BEFORE the round is spent — no venom tick, no
+    counter-blow, no round against the exchange budget."""
     p = _striker(1)
     _at_keep(p)
     before = state.energy_now(p)
     core.apply_choice(p, "strike")
-    assert state.energy_now(p) == before - economy.COST_WARDEN_ATTEMPT
+    assert state.energy_now(p) == before, "joining the fight is free"
     core.apply_choice(p, "close_in")     # the crossing is not a swing
     at_close = state.energy_now(p)
-    assert at_close == before - economy.COST_WARDEN_ATTEMPT
+    assert at_close == before
     core.apply_choice(p, "attack")
     assert state.energy_now(p) == at_close - economy.COST_WARDEN_STRIKE
 

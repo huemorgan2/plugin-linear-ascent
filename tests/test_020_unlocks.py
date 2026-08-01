@@ -33,6 +33,7 @@ def test_every_level_gate_constant_has_a_registry_entry():
         "BEGINNER_MERCY_MAX_LEVEL": economy.BEGINNER_MERCY_MAX_LEVEL + 1,
         "BEGINNER_PROTECTION_MAX_LEVEL":
             economy.BEGINNER_PROTECTION_MAX_LEVEL + 1,
+        "DEATH_NO_PARDON_LEVEL": economy.DEATH_NO_PARDON_LEVEL,
     }
     missing = {n: v for n, v in gates.items() if v not in level_ats}
     assert not missing, f"gates with no registry entry: {missing}"
@@ -45,7 +46,7 @@ def test_no_gate_constant_was_forgotten_by_this_test():
     known = {"ARCANUM_LEVEL", "RELAY_LEVEL", "FIELDS_LEVEL", "BOARD_LEVEL",
              "NIGHT_SLOT_LEVEL", "STRONGBOX_LEVEL",
              "GRANT_MIN_RECEIVER_LEVEL", "BEGINNER_MERCY_MAX_LEVEL",
-             "BEGINNER_PROTECTION_MAX_LEVEL"}
+             "BEGINNER_PROTECTION_MAX_LEVEL", "DEATH_NO_PARDON_LEVEL"}
     exempt = {"LODGE_PRICE_PER_LEVEL", "GRANT_DAILY_CAP_PER_LEVEL"}
     found = {n for n in dir(economy)
              if re.search(r"_LEVEL$", n) and n.isupper()}

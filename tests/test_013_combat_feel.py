@@ -77,7 +77,8 @@ def test_stand_can_still_hold_the_line_at_zero():
     geared(p)
     p["level"] = 10
     in_fight(p)
-    p["hp"] = 400
+    p["encounter"]["atk"] = 5             # pin the roll — daily spawns
+    p["hp"] = 400                         # vary; chip must be 1 or 2
     dmgs = set()
     for _ in range(30):
         dmgs.add(combat._monster_hit(p, halved=True)["dmg"])

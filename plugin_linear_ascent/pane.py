@@ -50,7 +50,7 @@ body{{color:{TEXT};
  color:{DIM};}}
 .placeholder .eyebrow{{color:{FAINT};text-transform:uppercase;
  letter-spacing:.08em;margin-bottom:6px;}}
-.err{{border:1px solid {BORDER};border-left:3px solid #f4645f;
+.err{{border:1px solid {BORDER};
  background:{PANEL};color:{DIM};padding:12px 2ch;margin-top:10px;}}
 a{{color:{AETHER};}}
 {SCENE_CSS}
@@ -128,7 +128,7 @@ select.ti{{background:{INK};color:{TEXT};border:1px solid {BORDER};
 .deskmsg{{color:{DIM};padding:6px 0 0;min-height:18px;}}
 .deskmsg.bad{{color:#f4645f;}}
 .deskmsg.good{{color:{AETHER};}}
-.deskbar{{border:1px solid {BORDER};border-left:3px solid {VIOLET};
+.deskbar{{border:1px solid {BORDER};
  background:{PANEL};color:{DIM};padding:9px 2ch;margin-top:10px;
  cursor:pointer;letter-spacing:.06em;}}
 .deskbar:hover{{color:{TEXT};border-color:{VIOLET};}}

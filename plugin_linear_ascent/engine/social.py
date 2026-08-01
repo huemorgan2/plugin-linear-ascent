@@ -988,15 +988,15 @@ def warden_scene(p: dict, fl, note: str = "") -> Scene:
     else:
         lines.append("no blade has touched it yet — the first strike is "
                      "yours to take")
-    # 026: say what a charge actually buys, in rounds, and that walking
-    # out of a keep is a gamble rather than a button.
-    lines.append(f"one charge buys an exchange of about "
-                 f"{economy.warden_exchange_rounds(fl.floor)} rounds, and "
-                 f"every swing inside costs {economy.COST_WARDEN_STRIKE} ⚡ "
-                 "more — then its guard closes and drives you back. Turning "
-                 "your back on it early is a gamble; it can follow you out.")
+    # 031 §5: walking in and joining are free — the ONLY price is the
+    # swing. Say it plainly, and that walking out is a gamble.
+    lines.append(f"joining costs nothing — every swing costs "
+                 f"{economy.COST_WARDEN_STRIKE} ⚡. An exchange runs about "
+                 f"{economy.warden_exchange_rounds(fl.floor)} rounds, then "
+                 "its guard closes and drives you back. Turning your back "
+                 "on it early is a gamble; it can follow you out.")
     opts = [Option("strike", "Join the fight",
-                   f"{economy.COST_WARDEN_ATTEMPT} ⚡ · a full fight")]
+                   f"free · {economy.COST_WARDEN_STRIKE} ⚡ a swing")]
     # 022/006: the horn — guild hands only, only while a wound is open.
     if p.get("guild") and hp < hp_max:
         opts.append(Option("horn", "Sound the horn",
@@ -1048,9 +1048,7 @@ def warden_action(p: dict, fl, oid: str) -> Scene:
     wd = w.get("warden") or {}
     if wd.get("floor") != fl.floor:
         return _warden_fallen_scene(p, fl)
-    if not state.spend_energy(p, economy.COST_WARDEN_ATTEMPT):
-        return warden_scene(p, fl, note="Joining the fight takes 3 ⚡ you "
-                                        "don't have. The wilds cost less.")
+    # 031 §5: joining is free — the swing is the price, charged inside.
     from . import combat
     s = combat.start_encounter(p, fl, None, "warden")
     e = p["encounter"]

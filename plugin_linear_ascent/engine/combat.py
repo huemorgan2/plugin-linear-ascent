@@ -81,7 +81,11 @@ def meters(p: dict) -> Meters:
         gold=p["gold"],
         level=p["level"],
         atk=state.atk(p),
-        dfs=state.dfs(p))
+        dfs=state.dfs(p),
+        # 031 §4: the header line — who is climbing
+        name=p.get("name") or "",
+        race=p.get("race") or "",
+        clazz=p.get("clazz") or "")
 
 
 def _eyebrow(p: dict, floor) -> str:
@@ -304,6 +308,33 @@ def _drop_ranges(p: dict, floor) -> dict:
     }
 
 
+def _warden_drop_ranges(p: dict, floor) -> dict:
+    """031 §6: the Warden [i] declares its purse like every monster —
+    from the SAME math the payouts use, so promise and payout can't
+    drift. Solo/echo: the kill purse itself. Shared: your estimated cut
+    for one full exchange of damage (the real cut scales with damage)."""
+    e = p["encounter"]
+    n = floor.floor
+    if e.get("shared"):
+        mult = economy.world_warden_reward_mult(n)
+        share = economy.pool_unit(n) / max(1, economy.world_warden_hp(n))
+        g = economy.warden_gold(n) * mult * share
+        x = economy.warden_xp(n) * mult * share
+        return {"gold": [max(1, round(g * 0.8)), max(1, round(g * 1.2))],
+                "xp": [max(1, round(x * 0.8)), max(1, round(x * 1.2))]}
+    fade = economy.fade_multiplier(p["unlocked_floor"], n)
+    x = economy.warden_xp(n) * fade
+    g = economy.warden_gold(n) * fade
+    if floor.milestone:
+        x = floor.milestone.xp / 2 * fade
+        g = floor.milestone.gold / 2 * fade
+    if e.get("echo"):
+        x *= economy.WARDEN_ECHO_MULT
+        g *= economy.WARDEN_ECHO_MULT
+    g, x = max(1, round(g)), max(1, round(x))
+    return {"gold": [g, g], "xp": [x, x]}
+
+
 def _enemy_payload(p: dict, floor) -> dict:
     """003: everything the [i] card and the fight header need, in one
     dict on the Scene — the renderer never reads the player doc."""
@@ -313,7 +344,9 @@ def _enemy_payload(p: dict, floor) -> dict:
     return {
         # 030 Phase 7: additive keys — old renderers drop them (wire law)
         "story": _lore(e, floor),
-        "drops": _drop_ranges(p, floor) if e["kind"] == "wilds" else None,
+        "drops": (_drop_ranges(p, floor) if e["kind"] == "wilds"
+                  else _warden_drop_ranges(p, floor)
+                  if e["kind"] == "warden" else None),
         "name": e["name"],
         "hp": max(0, e["hp"]), "hp_max": e["hp_max"],
         "atk": e["atk"], "def": e["def"],
@@ -410,7 +443,9 @@ def fight_scene(p: dict, floor, opener: bool = False, note: str = "") -> Scene:
         opts = [Option("close_in", "Close in", "cross the ground")]
     else:
         opts = [Option("attack", "Attack", strike_hint)]
-    if not at_range:
+    # 031 §7: you cannot open ground from something as fast as you —
+    # the row only shows when your legs actually beat its legs.
+    if not at_range and economy.player_speed(p) > _mspd(p):
         opts.append(Option("open_distance", "Open distance"))
     opts += [
         Option("stand", "Stand your ground"),
@@ -1034,14 +1069,24 @@ def _death(p: dict, floor) -> Scene:
         p["hp"] = 1
         p["encounter"] = None
         p["location"] = "gate_town"
+        # 031 §8: the save keeps your life and your gear — never your
+        # purse. Half the carried coin scatters where you fell.
+        save_tax = p["gold"] - p["gold"] // 2
+        p["gold"] //= 2
+        save_lines = [f"The {e['name']} loses you in the grass."]
+        if save_tax:
+            save_lines.append(f"− ◈ {save_tax:,} carried gold, scattered "
+                              "where you fell")
+        save_lines.append("You are at 1 HP. The gate town is close.")
+        if save_tax:
+            _ledger(p, "death", gold=-save_tax, note=e["name"])
         return Scene(
             eyebrow=_eyebrow(p, floor),
             headline="Your shardmind drags you out",
             support="Everything goes white, then very loud, then quiet.",
             shard_note="I have you. Once a day, I have you. Do not spend it "
                        "like this again.",
-            body_lines=[f"The {e['name']} loses you in the grass.",
-                        "You are at 1 HP. The gate town is close."],
+            body_lines=save_lines,
             options=[Option("heal", "The healer's tent",
                             f"◈ {economy.HEALER_TENT_PER_FLOOR * floor.floor}"),
                      Option("town", "Limp back to Roothollow")],
@@ -1101,13 +1146,32 @@ def _death(p: dict, floor) -> Scene:
             p["flags"]["mercy_end_named"] = True
             lines.append("▪ the tower is no longer gentle with you — "
                          "from here, deaths cost gear and gold")
-        frac = state.rng_int(p, round(economy.DEATH_GOLD_MIN * 100),
-                             round(economy.DEATH_GOLD_MAX * 100)) / 100
+        # 031 §8: past the pardon level the tower takes almost everything
+        # you carry — the Vault is the only mercy left.
+        no_pardon = p["level"] >= economy.DEATH_NO_PARDON_LEVEL
+        if no_pardon:
+            frac = economy.DEATH_GOLD_NO_PARDON
+        else:
+            frac = state.rng_int(p, round(economy.DEATH_GOLD_MIN * 100),
+                                 round(economy.DEATH_GOLD_MAX * 100)) / 100
         lost_gold = round(p["gold"] * frac)
         p["gold"] -= lost_gold
         if lost_gold:
             lines.append(f"− ◈ {lost_gold:,} carried gold "
                          f"({round(frac * 100)}%), gone")
+        if no_pardon:
+            stacks = sorted(slug for slug, n in (p.get("inventory") or {})
+                            .items() if n > 0)
+            if stacks:
+                slug = stacks[state.rng_int(p, 0, len(stacks) - 1)]
+                n = p["inventory"].pop(slug)
+                (p.get("durability_pack") or {}).pop(slug, None)
+                it = (economy.FORGE.get(slug)
+                      or economy.APOTHECARY.get(slug)
+                      or economy.RELICS.get(slug))
+                name = it.name if it else slug.replace("_", " ")
+                lines.append(f"− {name}" + (f" ×{n}" if n > 1 else "")
+                             + " tumbles from your pack into the dark")
         lost_names = []
         for where, slug in _paid_weapons(p):
             if not state.roll_ok(p, economy.DEATH_WEAPON_LOSS):
@@ -1188,8 +1252,9 @@ def _driven_back(p: dict, floor, spent: str = "guard") -> Scene:
     if dealt:
         lines.append(f"▪ the {dealt:,} you cut away stays cut — it holds "
                      "your wounds for the next blade")
-    lines.append(f"▪ another {economy.COST_WARDEN_ATTEMPT} ⚡ buys another "
-                 "exchange, and the wound will be exactly where you left it")
+    lines.append("▪ walk back in whenever you like — every swing costs "
+                 f"{economy.COST_WARDEN_STRIKE} ⚡, and the wound will be "
+                 "exactly where you left it")
     return Scene(
         eyebrow=_eyebrow(p, floor),
         headline="Driven back from the keep",
@@ -1493,6 +1558,12 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
             + (f" {snap}" if snap else "")))
 
     if option_id == "open_distance" and _range_state(p) == "close":
+        # 031 §7: no gap opens from something your speed or better —
+        # refused flat, before the turn is spent.
+        if _mspd(p) >= economy.player_speed(p):
+            return fight_scene(p, floor, note=(
+                f"The {e['name']} matches you stride for stride — "
+                "no gap will open against those legs."))
         # §2.4: speed decides; on failure the monster gets a free
         # halved hit while you turn.
         snap = _wear(p, "shoes")       # 005: the turn spends shoe tread
@@ -1680,7 +1751,19 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
                     "out. The Forge sells arrows by the pack."))
             p["inventory"]["arrows"] = arrows - 1
     snap = _wear(p, "weapon")          # 005: every swing spends the edge
+    # 031 §7: while the gap is open the beast has no answer — its whole
+    # round is the ground between you (_advance_chase). Closing the gap
+    # or getting caught is what puts you back in its reach.
+    unreachable = _range_state(p) == "at_range"
     if _off_class(p) and state.roll_ok(p, economy.OFF_CLASS_MISS):
+        if unreachable:
+            chase = _advance_chase(p)
+            return fight_scene(p, floor, note=(
+                f"Not your weapon — your {weapon_name(p)} goes wide "
+                "of anything that matters. It cannot reach you to "
+                "make you pay."
+                + (f" {chase}" if chase else "")
+                + (f" {snap}" if snap else "")))
         back = _monster_hit(p)
         if p["hp"] <= 0:
             return _death(p, floor)
@@ -1703,6 +1786,15 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
     fxn = _apply_shot_effect(p, effect) if effect else ""
     if pierce and dmg > 0:
         fxn = "The shaft goes through plate like paper."
+    if unreachable:
+        # 031 §7: the shot flies, nothing flies back — the gap is armor.
+        chase = _advance_chase(p)
+        return fight_scene(p, floor, note=(
+            f"{_strike_text(p, dmg)}"
+            + (f" {fxn}" if fxn else "")
+            + " It has no answer at this range."
+            + (f" {chase}" if chase else "")
+            + (f" {snap}" if snap else "")))
     back = _monster_hit(p)
     if p["hp"] <= 0:
         return _death(p, floor)

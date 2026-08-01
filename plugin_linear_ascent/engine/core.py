@@ -927,9 +927,11 @@ def _rack(p: dict, items: list, opts: list, lines: list) -> None:
                 else ("+{} ATK".format(g.bonus) if g.slot == "weapon"
                       else "+{} DEF".format(g.bonus)))
 
+    # 031 §14: the stat rides IN the hint now — the Forge's card grid
+    # has no body lines to carry it, and richer hints hurt no shop
     for g in show:
-        hint = (f"◈ {g.price:,} · worn — buy a spare"
-                if g.slug == worn else f"◈ {g.price:,}")
+        hint = (f"◈ {g.price:,} · {_stat(g)} · worn — spare"
+                if g.slug == worn else f"◈ {g.price:,} · {_stat(g)}")
         opts.append(Option(f"buy_{g.slug}", g.name, hint))
         flavor = f", {g.flavor}" if g.flavor else ""
         lines.append(f"{g.name}{flavor} — {_stat(g)}")
@@ -939,12 +941,10 @@ def _rack(p: dict, items: list, opts: list, lines: list) -> None:
         if g is show[-1]:
             for v in economy.gear_styles(g):
                 opts.append(Option(f"buy_{v.slug}", v.name,
-                                   f"{economy.STYLE_WORD[v.style]} · "
-                                   f"◈ {v.price:,}"))
+                                   f"◈ {v.price:,} · {_stat(v)} · "
+                                   f"{economy.STYLE_WORD[v.style]}"))
                 lines.append(f"{v.name} — {_stat(v)}, {v.flavor}")
     if nxt is not None:
-        stat = (f"+{nxt.speed} spd" if nxt.slot == "shoes"
-                else f"+{nxt.bonus}")
         # 022/002: past the level cap the gate is the WORLD's floor,
         # not your level — the locked row says which one bars it.
         freq = economy.rung_floor_req(nxt)
@@ -952,8 +952,9 @@ def _rack(p: dict, items: list, opts: list, lines: list) -> None:
                 else f"level {economy.rung_player_level_req(nxt)}")
         opts.append(Option(
             f"buy_{nxt.slug}", nxt.name,
-            f"🔒 {gate} · ◈ {nxt.price:,}", locked=True))
-        lines.append(f"{nxt.name} — {stat}, the rung you're saving for")
+            f"🔒 {gate} · ◈ {nxt.price:,} · {_stat(nxt)}", locked=True))
+        lines.append(f"{nxt.name} — {_stat(nxt)}, "
+                     "the rung you're saving for")
 
 
 def _wearable_pack(p: dict) -> list:
@@ -1026,12 +1027,14 @@ def _relic_buy(p: dict, slug: str, scene_fn) -> Scene:
 def _forge_scene(p: dict) -> Scene:
     clazz = p.get("clazz") or ""
     opts, lines = [], []
+    nod = ""
     # weapons: your own line at the Forge — staves live at the Arcanum
     if clazz in ("warrior", "archer"):
         _rack(p, economy.weapon_line(clazz), opts, lines)
     elif clazz == "sorcerer":
-        lines.append("The smith nods at your staff and points across "
-                     "the square: staves and focuses live at the Arcanum.")
+        # 031 §14: the one line worth keeping rides as a notice, not prose
+        nod = ("The smith nods at your staff and points across "
+               "the square: staves and focuses live at the Arcanum.")
     if clazz != "sorcerer":
         # shields serve warrior and archer; the caster's guard is the
         # Arcanum's focus (same slot, different shop)
@@ -1106,13 +1109,15 @@ def _forge_scene(p: dict) -> Scene:
                      + (f" — yours: {honed}" if honed else ""))
     opts.append(Option("back", "Back to the square"))
     tier = economy.gear_tier_for_floor(p["unlocked_floor"])
+    # 031 §14: the Forge is a card wall now — no prose above the racks.
+    # Everything the body lines used to say lives in the hints and the
+    # [i] tips; `lines` is built and dropped so _rack stays one shape.
     return Scene(
         eyebrow="ROOTHOLLOW · THE FORGE",
         headline=f"Tier {tier} steel, scrap to plasma",
-        support="Blades, bows, plate and boots. The locked rung is the "
-                "one you're saving for.",
-        body_lines=lines,
+        shard_note=nod,
         options=opts,
+        grid=True,
         meters=combat.meters(p),
         banner="forge",
     )
@@ -1521,6 +1526,10 @@ def _lodge_scene(p: dict) -> Scene:
     # 022/005: the night slot — one action per night, resolved at dawn.
     # 0.29.1: below the level it is SHOWN and locked — a visible door is
     # a reason to climb; an invisible one is nothing.
+    # 031 §10/§11: say it plainly. The job is a JOB OFFER with the pay
+    # and the trade-off in the line; the rest is an ACTIVITY; whichever
+    # is picked lives in the activity band under the options.
+    activity = ""
     if p["level"] < economy.NIGHT_SLOT_LEVEL:
         body.append("The night slot — one action a night: rest by the "
                     "fire or take a shift for coin at dawn.")
@@ -1530,25 +1539,33 @@ def _lodge_scene(p: dict) -> Scene:
     if p["level"] >= economy.NIGHT_SLOT_LEVEL:
         day = state.world_day()
         shift = _night_shift(day)
+        work_pay = economy.night_work_gold(max(1, p["unlocked_floor"]))
+        rest_pool = economy.night_rest_aether(p["level"])
+        body.append("One thing gets done per night: work a shift for "
+                    "coin, or rest by the fire and fight sharper "
+                    "tomorrow. Either way dawn still closes your wounds.")
         night = p.get("night") or {}
         plan = night.get("choice") if night.get("day") == day else None
         if plan == "rest":
-            body.append("Tonight: rest by the fire — the pool banks at "
-                        "dawn.")
+            activity = (f"ACTIVITY IN THE LODGE: resting by the fire — "
+                        f"✦ {rest_pool} banked at dawn, spent as "
+                        f"+{round(economy.RESTED_XP_BONUS_PCT * 100)}% "
+                        "XP on your next kills")
         elif plan == "work":
-            body.append(f"Tonight: {shift} — coin at dawn.")
+            activity = (f"ACTIVITY IN THE LODGE: job taken — {shift}, "
+                        f"◈ {work_pay} paid at dawn (a working night: "
+                        "no rested-XP bonus)")
         else:
-            body.append("No plan for tonight yet. One action a night — "
-                        "rest it or work it.")
+            activity = "ACTIVITY IN THE LODGE: no activity selected"
         if plan != "rest":
             opts.append(Option(
-                "night_rest", "Tonight: rest",
-                f"✦ {economy.night_rest_aether(p['level'])} banked at dawn"))
+                "night_rest", "ACTIVITY: rest by the fire",
+                f"✦ {rest_pool} banked — sharper kills, no pay"))
         if plan != "work":
             opts.append(Option(
-                "night_work", f"Tonight: {shift}",
-                f"◈ {economy.night_work_gold(max(1, p['unlocked_floor']))} "
-                "at dawn"))
+                "night_work", f"JOB OFFER: {shift}",
+                f"◈ {work_pay} at dawn — paid work, no rested-XP "
+                "bonus"))
     # 022/008: the long fire — canned words only, no free chat.
     fire = (p.get("_world") or {}).get("fire")
     if fire is not None:
@@ -1566,8 +1583,8 @@ def _lodge_scene(p: dict) -> Scene:
             opts.append(Option(
                 "fire_stew", "Stand a stranger a stew",
                 f"◈ {economy.FIRE_STEW_GOLD} · a letter with it"))
-    # 030 Phase 6: the keeper has a mouth — how coin moves under this roof.
-    opts.append(Option("talk", "Talk to the keeper", "free"))
+    # 031 §9: the keeper has a face and a name now — Wick.
+    opts.append(Option("talk", "Talk with Wick", "the keeper · free"))
     opts.append(Option("back", "Back to the square"))
     return Scene(
         eyebrow="ROOTHOLLOW · THE LODGE",
@@ -1577,28 +1594,34 @@ def _lodge_scene(p: dict) -> Scene:
                 "may find you.",
         body_lines=body,
         options=opts,
+        activity=activity,
         meters=combat.meters(p),
         banner="lodge",
     )
 
 
 def _keeper_scene(p: dict) -> Scene:
-    """030 Phase 6: the keeper tells stories of glory — how climbers
-    under this roof turned nights of work into fortunes, over time.
-    Every number is read off economy.py at build time; the prose
-    rotates so a second ask is not a replay. This is the keeper's
-    room — no shard chatter in it."""
+    """030 Phase 6 → 031 §9: the keeper is Wick now — a stout one-armed
+    old climber with a braided beard and a tankard he never sets down.
+    He explains the lodge, bores you with his life story, and hands out
+    the lore of the tower in the same breath. Every number is read off
+    economy.py at build time; the prose rotates so a second ask is not
+    a replay. His portrait rides scene.npc; this is Wick's room — no
+    shard chatter in it."""
     day = state.world_day()
     shift = _night_shift(day)
     work = economy.night_work_gold(max(1, p["unlocked_floor"]))
     rest = economy.night_rest_aether(p["level"])
     tellings = (
-        [f"“Okko came through that door in rags — couldn't pay for a "
-         "bunk, slept in the fields twice and got robbed twice. Then "
-         f"she learned the night slot: take {shift}, ◈ {work} on the "
-         "board at dawn, every dawn. A season of nights and she walked "
-         "out in plate she paid for herself. Coin isn't found here — "
-         "it's earned in rows, night after night.”"],
+        ["“Lodge works like this, and I'll keep it short because the "
+         "beer won't. A bunk for the night keeps the ambushers off "
+         "you — dawn heals everybody, but only the palisade decides "
+         "who FINDS you first. One thing gets done per night: a shift "
+         f"for coin — tonight it's {shift}, ◈ {work} at dawn — or you "
+         f"rest by my fire and bank ✦ {rest} toward your next kills. "
+         "Work pays, rest sharpens. Pick one, you can't have both. "
+         "Now, did I ever tell you about my elbows? Forty years of "
+         "carrying trays. Ruined. Both of them.”"],
         [f"“Brand never swung harder than anyone. He just slept "
          f"smarter. A night by my fire banks ✦ {rest}, and it rides "
          f"out at +{round(economy.RESTED_XP_BONUS_PCT * 100)}% a kill "
@@ -1606,6 +1629,15 @@ def _keeper_scene(p: dict) -> Scene:
          f"{economy.RESTED_POOL_CAP_NIGHTS} nights' worth it holds, no "
          "more. He rested, he killed rested, he leveled a floor ahead "
          "of climbers twice his arm. Glory is a schedule.”"],
+        ["“The arm? Floor nine took it. I was a climber once — Wick "
+         "the Quick, if you can believe it, and my knees certainly "
+         "can't anymore. Made it past three Wardens in my day. The "
+         "tower was here before Roothollow, before the wire, before "
+         "anyone thought to charge for beds — the Wardens don't guard "
+         "the floors, you know. They guard the LIFT. Kill one anywhere "
+         "and the whole world rides up free. That's why every blade "
+         "counts, even the rusty ones. Especially the rusty ones. "
+         "I was a rusty one.”"],
         [f"“Asha kept every coin she won in the Vault — "
          f"{round(economy.BANK_INTEREST_RATE * 100)}% a day it pays, "
          "stubs at dawn, regular as bells. Little numbers. She let "
@@ -1625,15 +1657,19 @@ def _keeper_scene(p: dict) -> Scene:
     body = list(tellings[n % len(tellings)])
     if not p["flags"].get("met_keeper"):
         p["flags"]["met_keeper"] = True
-        body.insert(0, "The keeper sets down the ledger and looks you "
-                       "over once — a new name for the book.")
+        body.insert(0, "The old man behind the counter sets down the "
+                       "ledger — one arm, a braided beard, a tankard "
+                       "that never empties. “Wick. Keeper of this roof "
+                       "and everything it knows. A new name for the "
+                       "book, then.”")
     return Scene(
         eyebrow="ROOTHOLLOW · THE LODGE",
-        headline="The keeper leans on the counter",
-        support="Ask again — there is always another way coin moves "
-                "through this room.",
+        headline="Wick leans on the counter",
+        support="Ask again — Wick always has another story, and most "
+                "of them are even true.",
         body_lines=body,
-        options=[Option("talk", "Ask for another telling", "free"),
+        npc={"name": "Wick", "portrait": "wick"},
+        options=[Option("talk", "Talk with Wick — another story", "free"),
                  Option("back", "Back to the square")],
         meters=combat.meters(p),
         banner="lodge",
@@ -2232,6 +2268,7 @@ def _floor_arrival_scene(p: dict, n: int) -> Scene:
         support="A healer, a rumor bench, and the wilds beyond the wire.",
         body_lines=lines,
         options=_gate_town_options(p, fl),
+        option_art=_gate_town_art(fl),
         meters=combat.meters(p),
         banner=fl.banner,
     )
@@ -2244,6 +2281,14 @@ def _live_flare(p: dict) -> dict | None:
     if fw and not fw.get("own") and not fw.get("answered_by"):
         return fw
     return None
+
+
+def _gate_town_art(fl) -> dict:
+    """031 §13: the hunting grounds and the Warden wear their pictures
+    on the choice ITSELF — the hunt row carries the floor's fields, the
+    keep row its warden. Rides beside options on the wire (option_art);
+    old clients drop the unknown top-level key and lose only decoration."""
+    return {"hunt": fl.banner, "keep": f"warden_{fl.floor:03d}"}
 
 
 def _gate_town_options(p: dict, fl) -> list[Option]:
@@ -2265,7 +2310,9 @@ def _gate_town_options(p: dict, fl) -> list[Option]:
                 amount = int(item.effect.rsplit("_", 1)[1])
                 opts.append(Option(f"use_{slug}", f"Use a {item.name}",
                                    f"+{amount} HP · {have} left"))
-    opts.append(Option("keep", f"The Warden's keep — {fl.warden_name}", "3 ⚡"))
+    # 031 §5: the walk to the keep is free — the swing is the price.
+    opts.append(Option("keep", f"The Warden's keep — {fl.warden_name}",
+                       f"{economy.COST_WARDEN_STRIKE} ⚡ a swing"))
     # 030 Phase 6: the floor's one voice — floors without an npc block
     # (11-100, until their art pass) simply have no talk row.
     npc = getattr(fl, "npc", None)
@@ -2306,6 +2353,7 @@ def _npc_scene(p: dict, fl) -> Scene:
         support="Talking is free. Listening is what saves you.",
         body_lines=body,
         options=_gate_town_options(p, fl),
+        option_art=_gate_town_art(fl),
         meters=combat.meters(p),
         banner=fl.banner,
     )
@@ -2325,6 +2373,7 @@ def _gate_town_scene(p: dict) -> Scene:
         support="The fire is small but honest. Beyond the wire, the wilds.",
         body_lines=body,
         options=_gate_town_options(p, fl),
+        option_art=_gate_town_art(fl),
         meters=combat.meters(p),
     )
 
@@ -2403,11 +2452,8 @@ def _gate_town_action(p: dict, oid: str) -> Scene:
         # below the frontier: the ECHO bout — a monument that still
         # bites, half pay, no world effect (022/001). Local dev play
         # (no world) keeps the real bout: a world of one.
-        if not state.spend_energy(p, economy.COST_WARDEN_ATTEMPT):
-            s = _gate_town_scene(p)
-            s.shard_note = "A Warden takes 3 ⚡ you don't have. The wilds " \
-                           "cost less."
-            return s
+        # 031 §5: walking into a keep is free — every swing inside
+        # costs 3 ⚡, and that is the whole price.
         s = combat.start_encounter(p, fl, None, "warden")
         if w:
             p["encounter"]["echo"] = True

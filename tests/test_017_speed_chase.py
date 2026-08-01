@@ -123,7 +123,13 @@ def test_close_in_crosses_without_a_swing():
     assert p["encounter"]["hp"] == hp0                    # no damage dealt
     assert any("cross the open ground" in ln for ln in s.body_lines)
     ids = [o.id for o in s.options]
-    assert "attack" in ids and "open_distance" in ids
+    # 031 §7: equal legs never part — the wolf matches the warrior at 5,
+    # so the break is not even on the menu
+    assert "attack" in ids and "open_distance" not in ids
+    # against something SLOWER the break is offered again
+    p["encounter"]["profile"]["speed"] = economy.SPEED_SLOW
+    ids = [o.id for o in combat.fight_scene(p, fl).options]
+    assert "open_distance" in ids
 
 
 def test_bare_attack_at_range_is_the_crossing_for_melee():
@@ -139,12 +145,15 @@ def test_bare_attack_at_range_is_the_crossing_for_melee():
 
 def test_open_distance_success_and_failure(monkeypatch):
     fl, enc = _enc(1, "grey_wolf")
+    # 031 §7: the break only exists against something SLOWER — pin the
+    # wolf slow for the success/failure halves below
     # success: forced rolls — open succeeds, the close roll then fails
     p = _player("archer", 1, "open-ok")
     combat.start_encounter(p, fl, enc)
     p["encounter"]["range"] = "close"
+    p["encounter"]["profile"]["speed"] = economy.SPEED_SLOW
     monkeypatch.setattr(state, "roll_ok",
-                        lambda pl, prob: prob >= 0.4)     # open .5 ok, close .25 no
+                        lambda pl, prob: prob >= 0.4)     # open .5+ ok, close no
     s = combat.resolve_fight_action(p, fl, "open_distance")
     assert p["encounter"]["range"] == "at_range"
     assert any("put ground between you" in ln for ln in s.body_lines)
@@ -152,6 +161,7 @@ def test_open_distance_success_and_failure(monkeypatch):
     p2 = _player("archer", 1, "open-no")
     combat.start_encounter(p2, fl, enc)
     p2["encounter"]["range"] = "close"
+    p2["encounter"]["profile"]["speed"] = economy.SPEED_SLOW
     hp0 = p2["hp"]
     monkeypatch.setattr(state, "roll_ok", lambda pl, prob: False)
     # 009: pin the damage roll high — a LOW day-seeded roll can chip 1,
@@ -161,9 +171,22 @@ def test_open_distance_success_and_failure(monkeypatch):
     assert p2["encounter"]["range"] == "close"
     assert p2["hp"] < hp0
     assert any("No gap opens" in ln for ln in s2.body_lines)
+    # refused: equal legs — the round is NOT spent, nothing lands
+    p3 = _player("archer", 1, "open-equal")
+    combat.start_encounter(p3, fl, enc)
+    p3["encounter"]["range"] = "close"
+    hp1 = p3["hp"]
+    s3 = combat.resolve_fight_action(p3, fl, "open_distance")
+    assert p3["encounter"]["range"] == "close"
+    assert p3["hp"] == hp1
+    assert any("stride for stride" in ln for ln in s3.body_lines)
 
 
-def test_monster_hits_halved_at_range(monkeypatch):
+def test_monster_cannot_answer_your_shot_at_range(monkeypatch):
+    """031 §7: a shot loosed from distance draws NO counter — the enemy
+    is still crossing open ground. Only in close quarters do blows come
+    back. (The halved charging strike survives on the other paths: a
+    failed open_distance, a flare guard.)"""
     fl, enc = _enc(1, "grey_wolf")
     taken = {}
     for label, rng in (("at_range", "at_range"), ("close", "close")):
@@ -176,7 +199,8 @@ def test_monster_hits_halved_at_range(monkeypatch):
         hp0 = p["hp"]
         combat.resolve_fight_action(p, fl, "attack")
         taken[label] = hp0 - p["hp"]
-    assert taken["at_range"] == taken["close"] // 2
+    assert taken["at_range"] == 0
+    assert taken["close"] > 0
 
 
 def test_bow_penalty_in_close_quarters(monkeypatch):

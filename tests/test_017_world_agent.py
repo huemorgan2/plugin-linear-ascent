@@ -130,28 +130,28 @@ def test_the_worn_rung_stays_on_the_rack_as_a_spare():
     choose(p, "buy_pigsticker")
     s = core.current_scene(p)
     row = next(o for o in s.options if o.id == "buy_pigsticker")
-    assert "worn — buy a spare" in row.hint
+    assert "worn — spare" in row.hint
 
 
 # ── folded shelves (006 retro) ───────────────────────────────────────────
 
-def test_a_long_forge_shelf_folds_and_a_short_one_does_not():
-    p = create_character(fresh("fo-1"))
-    p["level"] = 6                               # full racks on the wall
-    p["unlocked_floor"] = 6                      # quivers+ in forge stock
-    choose(p, "forge")
-    s = core.current_scene(p)
-    assert any(l.startswith("▣ the relic shelf") for l in s.body_lines)
-    assert "▣." in s.body_lines
+def test_fold_markers_still_work_and_the_forge_wall_stays_bare():
+    # 031 §14: the Forge card wall retired the only shelf long enough to
+    # fold — but the ▣ machinery stays live (THE LONG FIRE still uses
+    # it), so the render law is held here on its own
+    from plugin_linear_ascent.engine.scene import Scene
+    s = Scene(eyebrow="E", headline="H",
+              body_lines=["▣ the relic shelf — 3 on the wall",
+                          "row one", "row two", "▣."])
     html = render.render_scene_fragment(s)
     assert '<details class="fold">' in html and "▣" not in html
     txt = s.to_text()
     assert "▣" not in txt and "— the relic shelf" in txt
-    # a fresh page stays short and unfolded
+    # the Forge page carries no prose at all — cards and rows only
     q = create_character(fresh("fo-2"))
     choose(q, "forge")
-    assert not any(l.startswith("▣") for l in
-                   core.current_scene(q).body_lines)
+    fs = core.current_scene(q)
+    assert fs.grid and fs.body_lines == [] and fs.support == ""
 
 
 # ── the armory, engine side ──────────────────────────────────────────────

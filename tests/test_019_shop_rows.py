@@ -28,7 +28,7 @@ def test_worn_rung_stays_on_sale_as_a_spare():
     assert p["gear"]["weapon"] == "pigsticker"
     s = core.current_scene(p)
     row = next(o for o in s.options if o.id == "buy_pigsticker")
-    assert "worn — buy a spare" in row.hint
+    assert "worn — spare" in row.hint
     assert not row.locked
 
 

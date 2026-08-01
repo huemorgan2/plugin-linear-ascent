@@ -54,10 +54,11 @@ PORTRAIT_STYLE = (
     "top to bottom — head near the top edge, boots at the bottom edge, "
     "facing the viewer, arms at the sides, weight square. Volumetric "
     "shading: one soft key light from the top-left rolling across "
-    "every rounded form, deep core shadows, a faint radial glow behind "
-    "the figure fading to pure black at the frame edges. Painterly, "
-    "somber, realistic proportions. No text, no border, no watermark. "
-    "The figure: ")
+    "every rounded form, deep core shadows. The background is pure "
+    "flat black — NO glow, NO halo, NO aura, NO backlight of any kind "
+    "behind the figure; the silhouette meets darkness directly. "
+    "Painterly, somber, realistic proportions. No text, no border, no "
+    "watermark. The figure: ")
 
 # one silhouette, six wardrobes — the suit-up IS the reward
 PORTRAIT_JOBS = {
@@ -83,6 +84,13 @@ PORTRAIT_JOBS = {
         "a champion in ornate master-forged aegis plate, crowned helm "
         "under one arm, filigree glowing faintly along every edge in "
         "soft gradient halos, a great cloak — the top of the ladder."),
+    # 031: the lodge has a face — Wick, the keeper
+    "portrait_wick": (
+        "a stout old innkeeper with a magnificent braided beard, a "
+        "leather apron over a rolled-sleeve shirt, one sleeve pinned "
+        "flat over a missing left arm, a tankard in his remaining "
+        "hand, laugh lines and tired kind eyes — a retired climber "
+        "who runs the lodge now."),
 }
 
 # rooms regenerated tall (320x200) — prompts are the proven ones from the

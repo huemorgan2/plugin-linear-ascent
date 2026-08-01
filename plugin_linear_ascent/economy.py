@@ -1667,8 +1667,13 @@ APPLE_SHIELD_MULT = 2.0
 APPLE_DECAY = 0.20             # the overshield rots 20% of itself a round
 
 # 006 §3.6 death economy (level > BEGINNER_MERCY_MAX_LEVEL, unprotected)
-DEATH_GOLD_MIN = 0.40
+# 031 §8: death is taxed at EVERY level — even the daily shard save takes
+# half the carried coin. Past DEATH_NO_PARDON_LEVEL there is no pardon:
+# 90% of carried coin and one random pack stack go with you.
+DEATH_GOLD_MIN = 0.50
 DEATH_GOLD_MAX = 0.60
+DEATH_NO_PARDON_LEVEL = 6      # = BEGINNER_PROTECTION_MAX_LEVEL + 1
+DEATH_GOLD_NO_PARDON = 0.90
 DEATH_WEAPON_LOSS = 0.20       # each paid weapon rolls: gone for good
 DEATH_DURABILITY_HIT = 0.50    # armor/shield/shoes lose half a pool
 SPARE_SPELL_LEAK = 0.50        # each spare Reincarnation Spell on a

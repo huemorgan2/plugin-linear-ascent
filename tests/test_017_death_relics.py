@@ -13,7 +13,7 @@ of daily_income per band, in the test, before anything ships.
 
 from plugin_linear_ascent import economy
 from plugin_linear_ascent.content import schema
-from plugin_linear_ascent.engine import combat, core, state
+from plugin_linear_ascent.engine import combat, core, state, tips
 
 
 def fresh(name):
@@ -107,14 +107,15 @@ def _shopper(clazz="warrior", floor=21, gold=10 ** 7, user=None):
 
 
 def test_the_forge_shelf_says_the_law_out_loud():
+    # 031 §14: the Forge is a card wall — the law moved from the body
+    # prose into the card's [i] tip, still named before the coin leaves
     p = _shopper(floor=11)
     p["location"] = "forge"
     s = core.current_scene(p)
-    body = " ".join(s.body_lines)
-    assert "the relic shelf" in body
-    r = economy.RELICS["weapon_oil"]
-    assert r.effect in body and r.limit in body
     assert any(o.id == "buy_weapon_oil" for o in s.options)
+    r = economy.RELICS["weapon_oil"]
+    tip = tips.option_tip("buy_weapon_oil")
+    assert r.effect in tip and r.limit in tip
 
 
 def test_quivers_arrive_in_packs_of_five():

@@ -80,6 +80,12 @@ def registry() -> tuple[Unlock, ...]:
                economy.BEGINNER_PROTECTION_MAX_LEVEL + 1, "closes",
                "ambush immunity ends", "the fields",
                "other climbers can ambush you back — the Lodge is the shield"),
+        # 031 §8: past this level a death is no accident of bookkeeping
+        Unlock("pardon_ends", "level",
+               economy.DEATH_NO_PARDON_LEVEL, "closes",
+               "the pardon ends", "the tower",
+               "death scatters 90% of carried gold and shakes a stack "
+               "loose from your pack"),
     ]
     # ── gear tiers: a level gate up to the cap, the WORLD's floor past
     # it (022/002 — the cap can never strand a tier) ──

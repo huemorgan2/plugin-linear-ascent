@@ -188,10 +188,12 @@ _TIPS: dict[str, str] = {
                  "costs the round — the monster strikes at HALF power "
                  "while you close. Bows and spellwork don't need this; "
                  "a blade does."),
-    "open_distance": ("Break contact and put ground between you — your "
-                      "speed against its speed. Costs the round; if no "
-                      "gap opens it gets a free half-power hit. At range "
-                      "a bow shoots full and its blows land at half."),
+    "open_distance": ("Break contact and put ground between you — only "
+                      "possible against something SLOWER than you; equal "
+                      "legs never part. Costs the round; if no gap opens "
+                      "it gets a free half-power hit. At range a bow "
+                      "shoots full and nothing reaches you back — until "
+                      "it closes the gap."),
     "scout": ("Your shard scans the enemy — exact ATK, DEF and HP. "
               "Free on an optics charge, otherwise it burns XP. Knowing "
               "when to press and when to run saves more than it "

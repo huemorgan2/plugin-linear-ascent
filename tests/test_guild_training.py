@@ -131,7 +131,8 @@ def test_meters_carry_level_and_render_says_xp_and_lv():
     assert scene.meters.level == 3
     html = render_scene_fragment(scene)
     assert "XP " in html
-    assert "LV 3" in html
+    # 031 §4: the level left the rail for the ident header, spelled out
+    assert "LEVEL 3" in html
     assert "✦" not in html
     text = scene.to_text()
     assert "XP" in text and "LV 3" in text

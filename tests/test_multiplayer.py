@@ -41,8 +41,8 @@ def test_frontier_keep_is_the_shared_warden():
 
 
 def test_strike_joins_a_full_fight_whose_wounds_persist():
-    """022/001: the single swing is retired — 3 ⚡ buys a real fight
-    against the world's body; the exit emits ONE effect with the total."""
+    """031 §5: joining is free — every swing inside costs 3 ⚡; the exit
+    emits ONE effect with the total."""
     p = playing(world=warden_world(1))
     core.apply_choice(p, "gate")
     core.apply_choice(p, "floor_1")
@@ -50,7 +50,7 @@ def test_strike_joins_a_full_fight_whose_wounds_persist():
     e_before = state.energy_now(p)
     hp_before = p["_world"]["warden"]["hp"]
     core.apply_choice(p, "strike")
-    assert state.energy_now(p) == e_before - economy.COST_WARDEN_ATTEMPT
+    assert state.energy_now(p) == e_before, "joining the fight is free"
     e = p["encounter"]
     assert e and e.get("shared")
     assert e["hp_max"] == economy.world_warden_hp(1)
