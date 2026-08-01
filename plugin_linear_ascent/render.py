@@ -247,6 +247,21 @@ _PAINT_AE = re.compile(r"✦\s?(?P<n>[+\-−]?[\d,]+)")
 _PAINT_XP = re.compile(r"(?P<n>[+\-−]?\d[\d,]*)\s?XP\b")
 _PAINT_EN_A = re.compile(r"(?P<n>\d+)\s?⚡")
 _PAINT_EN_B = re.compile(r"⚡\s?(?P<n>[+\-−]?\d+)")
+_PAINT_ATK = re.compile(r"\+(?P<n>\d+)\s?ATK\b")
+_PAINT_DEF = re.compile(r"\+(?P<n>\d+)\s?DEF\b")
+
+
+def _stat_gain(n: int, key: str, tint: str) -> str:
+    """A gear gain wears its stat, not the coin's gold: +3 ATK is three
+    orange daggers, +2 DEF two dim shields — same glyphs and tints as
+    the profile pip rows. Past eight the count would smear, so it
+    collapses to the number and one glyph (+56⚔)."""
+    url = icons.icon_data_url(key)
+    pip = (f'<span class="gpip" style="background-color:{tint};'
+           f"-webkit-mask-image:url('{url}');"
+           f"mask-image:url('{url}');\"></span>")
+    body = f"+{n:,}{pip}" if n > 8 else "+" + pip * n
+    return f'<span class="amt" style="color:{tint}">{body}</span>'
 
 
 def _paint_amounts(s: str) -> str:
@@ -267,6 +282,10 @@ def _paint_amounts(s: str) -> str:
     s = _PAINT_EN_B.sub(
         lambda m: f'<span class="amt" style="color:{AETHER}">'
                   f"⚡ {m.group('n')}</span>", s)
+    s = _PAINT_ATK.sub(
+        lambda m: _stat_gain(int(m.group("n")), "sword", ORANGE), s)
+    s = _PAINT_DEF.sub(
+        lambda m: _stat_gain(int(m.group("n")), "armor", DIM), s)
     return s
 
 
@@ -1665,8 +1684,15 @@ SCENE_CSS = f"""
 .gcard:hover .gicon{{background-color:{GOLD};}}
 .gcard.locked .gicon,.gcard.locked:hover .gicon{{background-color:{FAINT};}}
 .gcard .lbl{{font-weight:700;line-height:1.3;}}
-.gcard .hint{{margin-left:0;text-align:center;color:{GOLD};}}
+.gcard .hint{{margin-left:0;text-align:center;color:{DIM};}}
 .gcard.locked .hint{{color:{FAINT};}}
+.gpip{{display:inline-block;width:11px;height:11px;margin:0 1px;
+ vertical-align:-1px;mask-size:contain;-webkit-mask-size:contain;
+ mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;
+ mask-position:center;-webkit-mask-position:center;
+ image-rendering:pixelated;}}
+.opt.locked .gpip,.gcard.locked .gpip{{background-color:{FAINT}!important;}}
+.opt.locked .amt,.gcard.locked .amt{{color:{FAINT}!important;}}
 .gcell .info{{position:absolute;top:5px;right:5px;border:0;
  background:none;padding:0;}}
 .info{{flex:none;display:flex;align-items:center;padding:0 .5ch;
