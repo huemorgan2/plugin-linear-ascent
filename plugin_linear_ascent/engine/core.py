@@ -11,7 +11,7 @@ import datetime as dt
 
 from .. import economy, unlocks
 from ..content import schema
-from . import combat, contracts, notices, state, weekly
+from . import combat, contracts, names, notices, state, weekly
 from .scene import Meters, Option, Scene
 
 
@@ -692,25 +692,41 @@ def _creation_pick_class(p: dict, oid: str) -> Scene:
 
 
 def _creation_name_scene(p: dict) -> Scene:
+    # 004: name and username are one string. It is the name the Crier
+    # speaks, the name letters are addressed to, and the name on the
+    # Stone — so it is one word, and nobody else in the world holds it.
     return Scene(
         eyebrow="THE TOWER GATE · REGISTRAR",
-        headline="Your name, for the Stone",
-        support="Two to twenty-four letters the granite can hold.",
-        shard_note="Choose one you'd want carved where everyone reads it.",
+        headline="Your username — the Stone carves the same one",
+        support="One word, two to twenty-four strokes, yours alone in the "
+                "whole world.",
+        shard_note="You get one name here: it signs your letters, rides the "
+                   "Crier, and takes the credit when a Warden falls. Spaces "
+                   "get joined — granite has no gaps.",
         options=[],
-        awaits_text="the character's name",
-        ask={"kind": "text", "max": 24, "label": "your name",
-             "placeholder": "what the Stone should carve",
-             "submit": "CARVE IT"},
+        awaits_text="the climber's username",
+        ask={"kind": "text", "max": 24, "label": "your username",
+             "placeholder": "one word — the world will read it",
+             "submit": "CLAIM IT"},
     )
 
 
 def _creation_set_name(p: dict, text: str) -> Scene:
-    name = text.strip()
-    if not (2 <= len(name) <= 24):
+    name = names.canonical(text)
+    if not names.is_legal(name):
         s = _creation_name_scene(p)
-        s.shard_note = "Two to twenty-four letters. The mason charges by " \
-                       "the stroke."
+        s.shard_note = ("Two to twenty-four strokes — letters and numbers, "
+                        "- and _ if you must. The mason charges by the "
+                        "stroke and carves nothing else.")
+        return s
+    # worldd is the only judge of who already holds a name: it claims the
+    # row before the engine runs and leaves the verdict here. Offline play
+    # has no registry and no flag — one climber alone may call itself
+    # whatever it likes.
+    if (p.get("_world") or {}).get("name_claim") == "taken":
+        s = _creation_name_scene(p)
+        s.shard_note = (f"{name} already climbs — one name, one world. Pick "
+                        "another and the registrar writes it down.")
         return s
     p["name"] = name
     p["stage"] = "playing"
@@ -722,6 +738,9 @@ def _creation_set_name(p: dict, text: str) -> Scene:
     s.shard_note = ("We carry ◈ 50 and a rusted shiv — the Forge's cheapest "
                     "real blade wants ◈ 250. The tower gate first: hunt "
                     "floor 1 until steel is affordable.")
+    if names.joined_words(text, name):
+        s.body_lines = [f"+ the registrar closes the gaps — you climb as "
+                        f"{name}"] + list(s.body_lines)
     return s
 
 

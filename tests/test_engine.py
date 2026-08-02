@@ -71,9 +71,11 @@ def test_creation_flow_and_gates():
     assert p["stage"] == "creation_name"
     s = choose(p, text="x")                  # too short
     assert p["stage"] == "creation_name"
+    # 004: the name IS the username — one word, so the words are joined
     s = choose(p, text="Nyx of the Vale")
     assert p["stage"] == "playing"
-    assert "Nyx of the Vale" in s.headline
+    assert p["name"] == "NyxoftheVale"
+    assert "NyxoftheVale" in s.headline
 
 
 def test_numbered_fallback_resolves_positionally():

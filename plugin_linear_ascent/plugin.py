@@ -328,7 +328,7 @@ class LinearAscentPlugin(LunaPlugin):
                     "current scene. Pass `option` as the option id OR the "
                     "number the player typed (e.g. '2'). Some scenes wait "
                     "for a TYPED chat reply instead (marked '⌨ waiting for "
-                    "a typed chat reply' — character names, banner names, "
+                    "a typed chat reply' — usernames, banner names, "
                     "fees, dues, donation amounts, letters): for those "
                     "pass the player's message as `text` and leave "
                     "`option` empty. The "
