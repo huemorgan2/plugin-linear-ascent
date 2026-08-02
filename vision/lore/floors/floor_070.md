@@ -88,13 +88,13 @@ fights from the eye of the storm, hurling gales, loosing her air-guard, and
 riding the wind out of reach. Reach the Storm Throne and break the storm-crown
 (with Stillstorm) and the borrowed tempest disperses — the queen wakes to
 herself, the gales fall to a breeze, and the Tempest Gate opens on the eighth
-tier.
+tier of stolen realms.
 
 ## When it falls
 Zephyra throws down the storm-crown and the endless tempest calms to clear
 sky; her freed court comes down off the perches into still air. This is the
-third ruler won back on the climb — after Skarn and Hrimgar — and the last
-before the tower's own manufactured floors: proof that even a crowned tyrant
-is a captive underneath. The sky-folk climb as the rising's storm-fleet:
-weather-wrights and drake-riders carrying **Stillstorm** and storm-glass. The
-seventh tier is freed; the eighth — the tower's own Making — opens above.
+third ruler won back on the climb — after Skarn and Hrimgar — proof that even a
+crowned tyrant is a captive underneath. The sky-folk climb as the rising's
+storm-fleet: weather-wrights and drake-riders carrying **Stillstorm** and
+storm-glass. The seventh tier is freed; the eighth opens above — the last of
+the stolen realms before the tower's own Making begins.
