@@ -69,6 +69,23 @@ def _guildhall_notices(p: dict) -> list[dict]:
     }]
 
 
+def _hall_notices(p: dict, w: dict) -> list[dict]:
+    """032 §9: a steward with an unentered week gets a blue bar on the
+    square. Members don't — nudging is a body line at the hall, not a
+    town-wide claim. No hall key (older worldd) → no notice."""
+    fac = w.get("faction")
+    if not isinstance(fac, dict) or not isinstance(fac.get("hall"), dict):
+        return []
+    if fac.get("role") != "steward":
+        return []
+    if (fac.get("week") or {}).get("entered"):
+        return []
+    return [{
+        "door": "hall", "opt": "hall", "n": 0, "kind": "plan",
+        "text": "the week stands unentered at your hall",
+    }]
+
+
 def pending(p: dict, w: dict | None = None) -> list[dict]:
     """Everything waiting, in the order a player should care about it."""
     if p.get("stage") != "playing":
@@ -117,6 +134,7 @@ def pending(p: dict, w: dict | None = None) -> list[dict]:
             })
     out.extend(_forge_notices(p))
     out.extend(_guildhall_notices(p))
+    out.extend(_hall_notices(p, w))
     # The plan row sits last and speaks a different verb: nothing here is
     # collected, it is DECIDED, and dawn decides it for you if you don't.
     if p["level"] >= economy.NIGHT_SLOT_LEVEL \

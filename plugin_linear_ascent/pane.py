@@ -404,9 +404,11 @@ const KIND_LABEL = {hoard: 'HOARD — gold earned',
                     climb: 'CLIMB — experience won'};
 
 function chipRow(name, banners, right) {
+  /* 032 §10: the sigil rides small to the LEFT of the name here — the
+     stat is the row's point, the colors are its face. */
   const slug = banners[name] || '';
   return '<div class="frow">'
-    + (slug ? sig(slug) : '<div class="fbanner"></div>')
+    + (slug ? sig(slug, 'small') : '<div class="fbanner small"></div>')
     + '<div class="meta"><div>' + fac(name) + '</div></div>'
     + '<span class="dim">' + right + '</span></div>';
 }
@@ -528,8 +530,18 @@ function requestRow(r) {
     + '</div></div>';
 }
 
+const ROOM_NAMES = {1: 'the back room', 2: 'a hall of your own',
+                    3: 'the long hall', 4: 'the high hall'};
+
 function renderFaction(d) {
   const v = d.viewer || {};
+  /* 032 \u00a710: the hall's numbers on the public page \u2014 the room for
+     everyone, the coffer/chest/beds/board only when the API exposes
+     them (members). An older worldd sends neither; nothing renders. */
+  const hall = d.hall || null;
+  const room = d.room_name
+    || (hall && ROOM_NAMES[hall.room_tier])
+    || (d.room_tier ? ROOM_NAMES[d.room_tier] : '');
   let h = '<span class="back" id="back">\u25c0 THE BOARD</span>';
   h += '<div class="panel">' + sig(d.banner, 'big')
     + '<div class="eyebrow" style="margin-top:8px">' + esc(d.name)
@@ -537,16 +549,36 @@ function renderFaction(d) {
     + '<div class="kv"><span class="k">founded by</span>'
     + '<span><span class="tag founder">\u2605</span> ' + esc(d.founder)
     + '</span></div>'
+    + (room ? '<div class="kv"><span class="k">the hall</span><span>'
+        + esc(room) + '</span></div>' : '')
     + '<div class="kv"><span class="k">at the table</span><span>'
     + d.members.length + '</span></div>'
-    + '<div class="kv"><span class="k">coin vault</span>'
-    + '<span class="gold">\u25c8 ' + num(d.store) + '</span></div>'
+    + '<div class="kv"><span class="k">the coffer</span>'
+    + '<span class="gold">\u25c8 ' + num(d.store)
+    + (hall && hall.coffer && hall.coffer.cap
+        ? ' of \u25c8 ' + num(hall.coffer.cap) : '')
+    + '</span></div>'
+    + (hall && hall.chest
+        ? '<div class="kv"><span class="k">the chest</span><span>'
+          + num(hall.chest.used) + ' of ' + num(hall.chest.cap)
+          + ' slots</span></div>' : '')
+    + (hall && hall.beds
+        ? '<div class="kv"><span class="k">the bunks</span><span>'
+          + num(hall.beds.count) + ' bed'
+          + (hall.beds.count === 1 ? '' : 's') + ' \u00b7 '
+          + ((hall.beds.tonight || []).length) + ' claimed tonight'
+          + '</span></div>' : '')
     + '<div class="kv"><span class="k">join fee</span><span>\u25c8 '
     + num(d.join_fee) + '</span></div>'
     + '<div class="kv"><span class="k">weekly dues</span><span>\u25c8 '
     + num(d.dues) + '</span></div>'
     + '<div class="kv"><span class="k">weeks won</span><span>' + d.wins
-    + '</span></div>';
+    + '</span></div>'
+    + (hall && (hall.notes || []).length
+        ? '<div class="faint" style="margin-top:6px">DAY '
+          + num(hall.notes[0].day) + ' \u00b7 '
+          + esc(hall.notes[0].player) + ' \u2014 '
+          + esc(hall.notes[0].line) + '</div>' : '');
   // an outsider's call to action
   if (!v.in_faction) {
     h += v.requested
@@ -585,16 +617,16 @@ function renderFaction(d) {
       + '<div class="kv"><span class="k">the Ascent demands</span><span>'
       + esc((KIND_LABEL[wk.kind] || wk.kind || '').toString())
       + '</span></div>'
-      + '<div class="kv"><span class="k">entry, from the vault</span>'
+      + '<div class="kv"><span class="k">entry, from the coffer</span>'
       + '<span class="gold">\u25c8 ' + num(wk.entry_cost) + '</span></div>'
-      + '<div class="kv"><span class="k">vault holds</span>'
+      + '<div class="kv"><span class="k">the coffer holds</span>'
       + '<span class="gold">\u25c8 ' + num(d.store) + '</span></div>'
       + (wk.entered
          ? '<div class="deskmsg good">entered \u2014 everything the table '
            + 'earns this week counts (target ' + num(wk.target) + ')</div>'
          : '<button class="btn" data-desk="enter">ACCEPT THE CHALLENGE '
            + '\u2014 PAY \u25c8 ' + num(wk.entry_cost)
-           + ' FROM THE VAULT</button>')
+           + ' FROM THE COFFER</button>')
       + '</div>';
   }
   return h;
@@ -670,8 +702,8 @@ function renderBoard(d) {
   }
   h += '<div class="faint">entry <span class="gold">'
     + coin(d.challenge.entry_per_member)
-    + '</span> a head, paid from the faction store — the steward signs '
-    + 'up at the Guildhall</div>';
+    + '</span> a head, paid from the faction coffer — the steward signs '
+    + 'up at the hall</div>';
   if (d.last_week.length) {
     /* 027: a banner is a picture wherever it is named. */
     h += '<div style="margin-top:8px">';
@@ -706,7 +738,7 @@ function renderBoard(d) {
     + d.most_members.map(f => chipRow(f.name, banners,
         f.members + ' member' + (f.members === 1 ? '' : 's'))).join('')
     + '</div>';
-  h += '<div class="panel"><div class="eyebrow">richest store</div>'
+  h += '<div class="panel"><div class="eyebrow">richest coffer</div>'
     + d.richest.map(f => chipRow(f.name, banners,
         '<span class="gold">' + coin(f.treasury) + '</span>')).join('')
     + '</div>';

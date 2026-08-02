@@ -842,12 +842,21 @@ def _dossier_html(en: dict) -> str:
             f"dossier</div>{''.join(rows)}</div></details>")
 
 
-def _opt_gear_icon(oid: str) -> str:
+def _opt_gear_icon(oid: str, art_slug: str = "") -> str:
     """004: shop rows carry their 1-bit gear icon (32×32 display of the
-    16×16 grids) — buy_/wear_ options only, everything else stays text."""
+    16×16 grids) — buy_/wear_ options only, everything else stays text.
+    032: the faction chest's cards (take_arm_/put_ ids) name their gear
+    through scene.option_art instead — a gear slug there resolves the
+    same icon, so the card wall works for any option the engine dresses."""
     if not (oid.startswith("buy_") or oid.startswith("wear_")):
-        return ""
-    slug = oid.split("_", 1)[1]
+        if art_slug and (art_slug in economy.FORGE
+                         or art_slug in economy.RELICS
+                         or art_slug == "arrow_pack"):
+            slug = art_slug
+        else:
+            return ""
+    else:
+        slug = oid.split("_", 1)[1]
     if slug == "arrow_pack":
         key = "arrows"
     elif slug in economy.RELICS:
@@ -1409,7 +1418,9 @@ def render_scene_fragment(scene: Scene) -> str:
             opt_cls = " locked" if getattr(o, "locked", False) else ""
             hint = (f'<span class="hint">{_ep(o.hint)}</span>'
                     if o.hint else "")
-            gicon = _opt_gear_icon(o.id)
+            gicon = _opt_gear_icon(
+                o.id, (getattr(scene, "option_art", None) or {})
+                .get(o.id) or "")
             # 031 §13: rows carry art only when the engine names it
             tile = _option_tile_art(scene, o.id,
                                     bool(getattr(o, "locked", False)))

@@ -255,6 +255,8 @@ def guildhall_scene(p: dict, note: str = "") -> Scene:
         return _donate_prompt(p, note)
     if p.get("faction_kicking"):
         return _kick_prompt(p, note)
+    if p.get("banner_page"):
+        return _banner_page_scene(p, note)
     w = world(p) or {}
     fac = w.get("faction")
     # 020: a note may carry several announcement lines (level-up card)
@@ -282,14 +284,35 @@ def guildhall_scene(p: dict, note: str = "") -> Scene:
     # 027: your own colors hang over your own table — the generic hall art
     # only shows when you have no banner of your own.
     banner = "guildhall"
+    hb = (w.get("hall_board")
+          if isinstance(w.get("hall_board"), dict) else None)
     if fac:
-        _member_panel(p, fac, lines, opts)
-        headline = f"The {fac['name']} table"
+        hall_d = (fac.get("hall")
+                  if isinstance(fac.get("hall"), dict) else None)
+        if hall_d is not None:
+            # 032 §3: the member's business lives in THE HALL now — one
+            # warm row at the top of a civic floor.
+            from . import hall as hall_mod
+            opts.insert(0, Option(
+                "hall", f"YOUR HALL — the {fac['name']} table",
+                hall_mod.tier_name(hall_d.get("room_tier", 1))))
+            headline = "Where the banners fly"
+            if hb is not None:
+                gallery = _civic_floor(p, hb, lines)
+        else:
+            # an older worldd injects no hall — the 010 member panel holds
+            _member_panel(p, fac, lines, opts)
+            headline = f"The {fac['name']} table"
         if fac.get("banner"):
             banner = str(fac["banner"])
     elif w.get("factions") is not None:
-        gallery = _hall_list(p, w["factions"], lines, opts)
-        headline = "Banners for hire"
+        if hb is not None:
+            gallery = _civic_floor(p, hb, lines)
+            _join_rows(p, w, lines, opts)
+            headline = "Where the banners fly"
+        else:
+            gallery = _hall_list(p, w["factions"], lines, opts)
+            headline = "Banners for hire"
     else:
         # local dev mode — legacy doc-string guilds, no purse
         mine = p.get("guild")
@@ -432,6 +455,136 @@ def _hall_list(p: dict, factions: list, lines: list,
         opts.append(Option("found_guild", "Raise a new banner",
                            f"◈ {GUILD_FOUND_FEE}"))
     return gallery
+
+
+def _civic_floor(p: dict, hb: dict, lines: list) -> list[dict]:
+    """032 §3: the civic floor — THIS WEEK's standings wall, then THE
+    HALL OF BANNERS as picture tiles. Reads worldd's hall_board; both
+    the flat shape ({week, kind, standings, banners}) and a nested week
+    dict pass, and every tile opens that banner's public page."""
+    from . import hall as hall_mod
+    wk = hb.get("week") if isinstance(hb.get("week"), dict) else hb
+    kind = str(wk.get("kind", "") or "").upper()
+    head = str(wk.get("target_note", "") or "").strip()
+    lines.append(f"THIS WEEK — {head}" if head
+                 else (f"THIS WEEK — THE ASCENT DEMANDS A {kind}"
+                       if kind else "THIS WEEK"))
+    standings = [s for s in (wk.get("standings") or [])
+                 if isinstance(s, dict)]
+    standings.sort(key=lambda s: -(int(s.get("progress", 0) or 0)
+                                   / max(1, int(s.get("target", 1) or 1))))
+    for s_ in standings[:8]:
+        prog = int(s_.get("progress", 0) or 0)
+        target = max(1, int(s_.get("target", 1) or 1))
+        lines.append(f"▪ {str(s_.get('name', '?')).upper()} "
+                     f"{hall_mod.progress_bar(prog, target, 6)} "
+                     f"{prog:,}/{target:,}")
+    if not standings:
+        lines.append("no banner has entered the week yet — the wall waits")
+    halls = [f for f in (hb.get("banners") or hb.get("hall") or [])
+             if isinstance(f, dict)]
+    halls.sort(key=lambda f: -int(f.get("wins", 0) or 0))
+    if not halls:
+        lines.append("No banners fly yet — the wall waits for a "
+                     "first sigil.")
+    gallery: list[dict] = []
+    for i, f in enumerate(halls[:10]):
+        nm = str(f.get("name", "?"))
+        wins = int(f.get("wins", 0) or 0)
+        n = int(f.get("members", 0) or 0)
+        gallery.append({
+            "opt": f"page_{nm}",
+            "slug": str(f.get("banner") or ""),
+            "label": ("★ " if i == 0 and wins > 0 else "") + nm,
+            "sub": (f"{wins} win{'s' if wins != 1 else ''} · {n} at the "
+                    f"table · {hall_mod.tier_name(f.get('room_tier', 1))}"),
+        })
+    return gallery
+
+
+def _join_rows(p: dict, w: dict, lines: list, opts: list) -> None:
+    """The unaffiliated climber's rows under the civic floor — the tiles
+    above are the ask; these keep the ledger and the founding door
+    (019: always rows, locked below the rank)."""
+    lines.append("A banner pools coin, fields a war party, racks shared "
+                 "gear and enters the world's weekly challenges — its "
+                 "prize is minted, not taken.")
+    requested = w.get("faction_requested", "")
+    if requested:
+        lines.append(f"your request waits at the {requested} desk — "
+                     "their page holds the cancel")
+    total = int(w.get("factions_total", len(w.get("factions") or [])))
+    if total:
+        opts.append(Option("hall_ledger", "Join a banner",
+                           f"{total} flying · the Community tab"))
+    if p["level"] < FOUND_MIN_LEVEL:
+        opts.append(Option("found_guild", "Raise a new banner",
+                           f"🔒 level {FOUND_MIN_LEVEL} · "
+                           f"◈ {GUILD_FOUND_FEE}", locked=True))
+    else:
+        opts.append(Option("found_guild", "Raise a new banner",
+                           f"◈ {GUILD_FOUND_FEE}"))
+
+
+def _banner_page_scene(p: dict, note: str = "") -> Scene:
+    """032 §3: a banner's public page — sigil large, the room they keep,
+    the scores, and the ask. Any climber can look; only the bannerless
+    get the join row."""
+    from . import hall as hall_mod
+    w = world(p) or {}
+    name = str(p.get("banner_page") or "")
+    hb = w.get("hall_board") if isinstance(w.get("hall_board"), dict) \
+        else {}
+    halls = hb.get("banners") or hb.get("hall") or []
+    row = next((f for f in halls if str(f.get("name")) == name), None)
+    if row is None:
+        p.pop("banner_page", None)
+        return guildhall_scene(p, note="That banner came down while you "
+                                       "read the wall.")
+    lines = note.split("\n") if note else []
+    tier = int(row.get("room_tier", 1) or 1)
+    wins = int(row.get("wins", 0) or 0)
+    n = int(row.get("members", 0) or 0)
+    lines.append(f"{wins} week{'s' if wins != 1 else ''} won all-time · "
+                 f"{n} at the table · {hall_mod.tier_name(tier)}")
+    wk = hb.get("week") if isinstance(hb.get("week"), dict) else hb
+    st = next((s for s in (wk.get("standings") or [])
+               if isinstance(s, dict) and str(s.get("name")) == name),
+              None)
+    if st:
+        prog = int(st.get("progress", 0) or 0)
+        target = max(1, int(st.get("target", 1) or 1))
+        lines.append(f"this week's {str(wk.get('kind', '') or '').upper()}"
+                     f": {hall_mod.progress_bar(prog, target, 8)} "
+                     f"{prog:,}/{target:,}")
+    else:
+        lines.append("not entered in this week's lists")
+    opts = []
+    mine = bool(w.get("faction")) or bool(p.get("guild"))
+    if not mine:
+        if w.get("faction_requested", "") == name:
+            opts.append(Option("cancel_request", "CANCEL THE REQUEST",
+                               "your name waits at their desk"))
+        else:
+            fee = next((int(f.get("join_fee", 0) or 0)
+                        for f in (w.get("factions") or [])
+                        if f.get("name") == name), 0)
+            opts.append(Option(f"join_{name}", f"ASK TO JOIN {name}",
+                               (f"◈ {fee} if they take you" if fee
+                                else "the steward decides")))
+    opts.append(Option("guildhall", "Back to the hall floor"))
+    opts.append(Option("town", "Back to the square"))
+    return Scene(
+        eyebrow=f"THE GUILDHALL · {name.upper()}",
+        headline=f"The {name} banner",
+        support="Milestone Wardens fall to war parties, not heroes.",
+        body_lines=lines,
+        options=opts,
+        meters=meters(p),
+        banner=str(row.get("banner") or "") or "guildhall",
+        strip={"art": f"hall_room_{tier}",
+               "text": hall_mod.tier_name(tier)},
+    )
 
 
 def guild_train(p: dict) -> Scene:
@@ -606,6 +759,33 @@ def guildhall_action(p: dict, oid: str, text: str = "") -> Scene:
                 p, note=f"+ {target}'s chair scrapes back. The table "
                         "moves on.")
         return guildhall_scene(p)
+    if p.get("banner_page"):
+        # 032 §3: reading a banner's public page
+        if oid == "guildhall":
+            p.pop("banner_page", None)
+            return guildhall_scene(p)
+        if oid == "cancel_request":
+            _effect(p, "faction_request_cancel")
+            w["faction_requested"] = ""
+            return _banner_page_scene(
+                p, note="+ your paper comes back off their desk.")
+        if not (oid.startswith("join_")
+                and oid.removeprefix("join_") == p["banner_page"]):
+            return _banner_page_scene(p)
+        # the ask falls through to the generic request-filing below
+    if oid == "hall" and fac and isinstance(fac.get("hall"), dict):
+        # 032: through to your own table
+        from . import hall as hall_mod
+        return hall_mod.enter(p)
+    if oid.startswith("page_"):
+        hb = w.get("hall_board") if isinstance(w.get("hall_board"), dict) \
+            else {}
+        nm = oid.removeprefix("page_")
+        if any(str(x.get("name")) == nm
+               for x in (hb.get("banners") or hb.get("hall") or [])):
+            p["banner_page"] = nm
+            return _banner_page_scene(p)
+        return guildhall_scene(p)
     if oid == "guild_train":
         return guild_train(p)
     if oid == "hall_ledger":
@@ -677,6 +857,14 @@ def guildhall_action(p: dict, oid: str, text: str = "") -> Scene:
             # 015: joining is a request — no gold moves until an admin
             # accepts it (the fee is charged at the desk, on accept)
             f = next((x for x in w["factions"] if x["name"] == g), None)
+            if f is None:
+                # 032: the top-5 list may not carry the tapped banner —
+                # the hall-of-banners wall knows every flying name
+                hb = (w.get("hall_board")
+                      if isinstance(w.get("hall_board"), dict) else {})
+                f = next((x for x in (hb.get("banners") or hb.get("hall")
+                                      or [])
+                          if str(x.get("name")) == g), None)
             if f is None:
                 return guildhall_scene(p, note="That banner came down "
                                                "while you read the wall.")

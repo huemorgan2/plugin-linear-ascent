@@ -23,8 +23,8 @@ from .scene import Meters, Option, Scene
 # in the wilds or inside a keep, where the only thing that matters is the
 # thing trying to kill you.
 _NOTICE_ROOMS = ("town", "forge", "arcanum", "medlab", "lodge", "vault",
-                 "pawn", "stone", "guildhall", "board", "relay", "fields",
-                 "grants")
+                 "pawn", "stone", "guildhall", "hall", "board", "relay",
+                 "fields", "grants")
 
 
 def _stamp(p: dict, scene: Scene) -> Scene:
@@ -216,6 +216,11 @@ def apply_choice(p: dict, option_id: str, text: str = "") -> Scene:
         return _stamp(p, social.guildhall_found(p, text))
     if p.get("faction_donating") and text and not option_id:
         return _stamp(p, social.guildhall_donate(p, text))
+    if p.get("hall_ask") and text and not option_id:
+        # 032: the hall's inline asks — a donate sum, a board line,
+        # the banner's new name
+        from . import hall
+        return _stamp(p, hall.hall_text(p, text))
 
     # 027: two surfaces act from OUTSIDE the menu — the pack popup and the
     # notice board. Their ids are validated by the engine that owns them,
@@ -496,7 +501,7 @@ def _build_scene(p: dict) -> Scene:
     if p.get("encounter"):
         fl = schema.get_floor(p["encounter"]["floor"])
         return combat.fight_scene(p, fl)
-    from . import social
+    from . import hall, social
     loc = p["location"]
     if loc == "muster":
         # The Muster Roll is retired; saved docs may still stand there.
@@ -509,7 +514,8 @@ def _build_scene(p: dict) -> Scene:
         "stone": _stone_scene, "gate": _gate_scene,
         "gate_town": _gate_town_scene,
         "relay": social.relay_scene, "fields": social.fields_scene,
-        "guildhall": social.guildhall_scene, "grants": social.grant_scene,
+        "guildhall": social.guildhall_scene, "hall": hall.hall_scene,
+        "grants": social.grant_scene,
         "boss_keep": _boss_keep_scene,
         "warden_keep": _warden_keep_scene,
     }
@@ -780,6 +786,15 @@ def _town_scene(p: dict) -> Scene:
                p.get("guild") or "training", badge=_b("guildhall")),
         Option("stone", "Stone of the Climb", "news"),
     ]
+    # 032: members get their own door — the banner's name on the hint.
+    # No hall key from the world (older worldd) → no door, old behavior.
+    fac = w.get("faction") if isinstance(w.get("faction"), dict) else None
+    if fac and isinstance(fac.get("hall"), dict):
+        gi = next((i for i, o in enumerate(opts) if o.id == "guildhall"),
+                  len(opts) - 1)
+        opts.insert(gi + 1, Option("hall", "YOUR HALL",
+                                   str(fac.get("name", "")),
+                                   badge=_b("hall")))
     if w:
         inbox = w.get("inbox_count", 0)
         opts.append(Option(
@@ -819,9 +834,15 @@ def _dispatch_location(p: dict, oid: str) -> Scene:
     if oid == "town":
         p["location"] = "town"
         p["floor"] = 0
+        # 032: stepping onto the square drops any hall or banner-page
+        # sub-state — the doors reopen fresh
+        for k in ("hall_area", "hall_ask", "hall_putting", "hall_kicking",
+                  "hall_promoting", "banner_page"):
+            p.pop(k, None)
         return _town_scene(p)
     town_menus = ("forge", "arcanum", "medlab", "lodge", "vault", "pawn",
-                  "stone", "gate", "relay", "fields", "guildhall", "board")
+                  "stone", "gate", "relay", "fields", "guildhall", "hall",
+                  "board")
     if loc == "town" and oid in town_menus:
         if oid == "arcanum" and not _door_open(p, economy.ARCANUM_LEVEL):
             s = _town_scene(p)
@@ -888,6 +909,9 @@ def _dispatch_location(p: dict, oid: str) -> Scene:
         return social.fields_action(p, oid)
     if loc == "guildhall":
         return social.guildhall_action(p, oid)
+    if loc == "hall":
+        from . import hall
+        return hall.hall_action(p, oid)
     if loc == "grants":
         return social.grant_action(p, oid)
     if loc == "boss_keep":
