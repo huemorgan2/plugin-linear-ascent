@@ -673,11 +673,13 @@ def _profile_html(scene: Scene) -> str:
     url = _portrait_data_url(_portrait_slug(scene))
     if not url:
         return ident + right
+    # a real <img>, not a masked div: with the height stretched to the
+    # column, width:auto keeps the 1:2 ratio from the PNG itself — the
+    # one sizing rule every webview agrees on. The ink is baked white.
     return (ident
             + f'<div class="profile">'
-            f'<div class="portrait later" style="background-color:{TEXT};'
-            f"-webkit-mask-image:url('{url}');mask-image:url('{url}');\">"
-            f'</div><div class="pcol">{right}</div></div>')
+            f'<img class="portrait later" src="{url}" alt="">'
+            f'<div class="pcol">{right}</div></div>')
 
 
 # ── 017/003: the enemy header + the [i] dossier ─────────────────────────
@@ -1153,9 +1155,25 @@ INTERACT_JS = """(function () {
     last = seen;
   }
 
+  /* ── the portrait fills the profile column's height; setting an
+     explicit px height lets the img's own 1:2 ratio give the width —
+     the one proportional-scaling rule every webview honors ── */
+  function sizePortrait(root) {
+    root.querySelectorAll('.profile').forEach(function (pr) {
+      var img = pr.querySelector('.portrait');
+      var col = pr.querySelector('.pcol');
+      if (!img || !col) return;
+      img.style.height = Math.max(200, col.offsetHeight) + 'px';
+      img.style.width = 'auto';
+    });
+  }
+  window.addEventListener('resize', function () {
+    sizePortrait(document);
+  });
+
   window.__laWire = function (root) {
     root = root || document;
-    wirePack(root); wireAsk(root); countUp(root);
+    wirePack(root); wireAsk(root); countUp(root); sizePortrait(root);
   };
 })();"""
 
@@ -1746,10 +1764,8 @@ SCENE_CSS = f"""
 .ident .idlv{{font-weight:700;color:{TEXT};cursor:help;}}
 .ident .idgold{{font-weight:700;color:{GOLD};cursor:help;}}
 .profile{{display:flex;gap:2ch;align-items:stretch;margin-top:8px;}}
-.profile .portrait{{flex:none;width:auto;aspect-ratio:100/200;
- min-height:200px;
- mask-size:100% 100%;-webkit-mask-size:100% 100%;mask-repeat:no-repeat;
- -webkit-mask-repeat:no-repeat;image-rendering:pixelated;}}
+.profile .portrait{{flex:none;align-self:stretch;height:auto;width:auto;
+ min-height:200px;image-rendering:pixelated;}}
 .profile .pcol{{flex:1;min-width:0;}}
 .profile .rail{{margin-top:0;padding-top:0;border-top:0;}}
 .profile .inv{{border-top:0;padding-top:0;margin-top:8px;}}

@@ -96,9 +96,37 @@ a bare name survives. The API payloads already carry the slug
 Members stop landing on a report. The Guildhall member panel's
 faction half moves into a new location: `p["location"] = "hall"`,
 reached by a "YOUR HALL" row at the Guildhall (and a door on the town
-square once a banner is joined). The Guildhall keeps founding,
-joining, training, and the hall-of-banners browsing for the
-unaffiliated.
+square once a banner is joined).
+
+**The split is total — civic vs. home.** The Guildhall keeps only
+what belongs to the town: browsing the hall of banners, asking to
+join, raising a new banner, and training (012 — leveling is personal,
+not factional). *Every member action moves into the hall:*
+
+| action | where it lives now | where it goes |
+|---|---|---|
+| donate gold | Guildhall member panel | THE COFFER (presets + custom) |
+| enter the week | Guildhall member panel | THE WEEK box, hall home |
+| armory put/take | Guildhall member panel | THE CHEST |
+| roster, kick, promote | Guildhall member panel | the hall home roster rows |
+| approve/reject join requests | Guildhall / admin desk | THE DESK, in the hall |
+| rename the banner | admin desk (pane) | THE DESK, in the hall |
+| buy upgrades, beds | — (new) | THE WORKS |
+| write a note | — (new) | THE BULLETIN BOARD |
+| sleep safe | — (new) | THE BUNKS |
+
+The Community tab's ADMIN DESK (`pane.py:531-601`) stays as a
+remote mirror of THE DESK — same endpoints, browse-side convenience —
+but the hall is the canonical door. A member visiting the Guildhall
+sees the civic rows plus one warm row at the top: `YOUR HALL — the
+{faction} table` — and nothing else of their faction's private
+business.
+
+**Every hall scene wears the faction's name in the eyebrow** —
+`EMBER PACT · A HALL OF YOUR OWN`, `EMBER PACT · THE COFFER`,
+`EMBER PACT · THE BUNKS` — never a generic `ROOTHOLLOW · …`. Each
+sub-area keeps telling you whose roof you are under; the room-tier
+name doubles as the hall home's eyebrow location.
 
 The hall home screen, top to bottom:
 
@@ -112,7 +140,8 @@ The hall home screen, top to bottom:
 5. **The doors**, as option rows with `option_art`:
    `THE COFFER — ◈140 of ◈200` · `THE CHEST — 3 of 4 slots` ·
    `THE BULLETIN BOARD` · `THE BUNKS — 2 beds, 1 claimed` (tier ≥ 2)
-   · `THE WORKS — buy up the hall` · roster/desk rows as today ·
+   · `THE WORKS — buy up the hall` · `THE DESK — 2 ask to join`
+   (stewards; blue-badged when requests wait) · the roster rows ·
    `[back]` to town.
 
 Every area is its own Scene; `back` returns to the hall, from the
