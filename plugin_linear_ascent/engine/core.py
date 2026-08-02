@@ -2158,8 +2158,14 @@ def _gate_scene(p: dict) -> Scene:
 
 def _floor_movie_scene(p: dict) -> Scene:
     n = int(p["movie_floor"])
-    fl = schema.get_floor(n)
     beat = int(p.get("movie_beat", 0))
+    if beat < 0:
+        # 033: the fall reel's opening beat — the Warden of floor n−1
+        # goes down under all three blades. The receipt rides the doc
+        # (worldd lands the settled numbers on the doc the same turn the
+        # kill resolves, so a mid-reel refresh keeps them).
+        return _warden_slain_scene(p, n - 1)
+    fl = schema.get_floor(n)
     if beat == 0:
         body = [fl.arrival]
         npc = getattr(fl, "npc", None)
@@ -2208,18 +2214,64 @@ def _floor_movie_scene(p: dict) -> Scene:
     )
 
 
+def _warden_slain_scene(p: dict, n: int) -> Scene:
+    """033: the fall reel, beat one — the Warden of floor n dies on
+    screen, brought down the only way great Wardens die: blade in
+    close, an arrow's line from the treeline, sorcerer's light behind.
+    The kill receipt (033 item 2) is the text of this beat."""
+    from . import combat
+    fl = schema.get_floor(n)
+    r = p.get("kill_receipt") or {}
+    body = combat.kill_receipt_lines(r)
+    body.append(f"FLOOR {n + 1} stands open.")
+    names = r.get("names", "")
+    tally = []
+    if r.get("gold") or r.get("xp"):
+        tally = [{"kind": "gold", "n": int(r.get("gold", 0))},
+                 {"kind": "aether", "n": int(r.get("xp", 0))}]
+    return Scene(
+        eyebrow=f"FLOOR {n} · THE KEEP · THE FALL",
+        headline=f"{fl.warden_name} falls",
+        support=(f"Struck down by {names}." if names else
+                 "The Warden's frame ticks as it cools. The whole "
+                 "tower heard that."),
+        body_lines=body,
+        options=[Option("next", "Next"),
+                 Option("skip", "Skip")],
+        fx="warden_slain",
+        banner=f"warden_{n:03d}",
+        tally=tally,
+    )
+
+
+def floor_movie_scene(p: dict) -> Scene:
+    """The current movie beat — combat routes the Warden kill here so
+    the victory card IS the fall reel's first frame (033)."""
+    return _floor_movie_scene(p)
+
+
 def _floor_movie_advance(p: dict, oid: str = "next") -> Scene:
     """Next steps a beat; Skip (on every beat) cuts straight to the
     arrival card. Either way the floor counts as seen — the movie
-    plays once, skipped or watched."""
+    plays once, skipped or watched. 033: entered from a Warden kill
+    (movie_teaser) the reel opens on the slain beat, the floor beats
+    only exist where the content does, and the exit is the floor the
+    player is standing on, not an arrival card for one they may not
+    yet be allowed to enter."""
     n = int(p["movie_floor"])
     beat = int(p.get("movie_beat", 0))
-    if oid != "skip" and beat < 1:
+    last = 1 if n <= schema.max_content_floor() else -1
+    if oid != "skip" and beat < last:
         p["movie_beat"] = beat + 1
         return _floor_movie_scene(p)
-    p["flags"][f"floor_seen_{n}"] = True
+    if n <= schema.max_content_floor():
+        p["flags"][f"floor_seen_{n}"] = True
+    teaser = bool(p.pop("movie_teaser", None))
     p.pop("movie_floor", None)
     p.pop("movie_beat", None)
+    p.pop("kill_receipt", None)
+    if teaser:
+        return _build_scene(p)
     return _floor_arrival_scene(p, n)
 
 

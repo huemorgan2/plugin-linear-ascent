@@ -846,31 +846,53 @@ def _report_shared_strike(p: dict) -> int:
     return dealt
 
 
+def kill_receipt_lines(r: dict) -> list[str]:
+    """033: the Warden kill receipt, one wording everywhere — the fall
+    reel at the kill, the mid-reel refresh, and the worldd patch that
+    lands the settled numbers on the outgoing card all read this."""
+    lines = []
+    if r.get("dealt"):
+        lines.append(f"Your blade took the last {int(r['dealt']):,} of it.")
+    if r.get("xp"):
+        share = " — your share of the kill" if r.get("shared") else ""
+        lines.append(f"+ {int(r['xp']):,} XP{share}")
+    if r.get("gold"):
+        lines.append(f"+ ◈ {int(r['gold']):,} from the Warden's hoard")
+    if r.get("loot"):
+        lines.append("▪ the killing blow was yours — rare loot: "
+                     f"{r['loot']}")
+    return lines
+
+
+def _slain_reel(p: dict, floor, beat: int) -> None:
+    """033: arm the fall reel — the slain beat, then floor n+1's world
+    and keep beats (the existing 030 movie), then back to this floor.
+    Watching from the kill counts as the once-per-floor showing."""
+    p["movie_floor"] = floor.floor + 1
+    p["movie_beat"] = beat
+    p["movie_teaser"] = True
+
+
 def _shared_warden_victory(p: dict, floor) -> Scene:
     """The pool hit zero under YOUR blade. The server settles the fall —
     frontier raise, reward split by damage, letters to every striker —
-    so this card promises nothing it doesn't know."""
+    in the SAME request; worldd lands the settled receipt on this card
+    before it goes out (033: the kill pays in the card)."""
     e = p["encounter"]
     dealt = _report_shared_strike(p)
     p["encounter"] = None
     p["location"] = "gate_town"
-    return Scene(
-        eyebrow=_eyebrow(p, floor),
-        headline=f"{e['name']} collapses",
-        support="The Warden's frame ticks as it cools. The whole tower "
-                "heard that.",
-        body_lines=[
-            f"Your blade took the last {dealt:,} of it.",
-            "The fall pays every striker by damage dealt — your share "
-            "arrives with the word of it.",
-            f"FLOOR {floor.floor + 1} opens for everyone the moment the "
-            "tower counts the body.",
-        ],
-        options=_after_fight_options(p, floor),
-        meters=meters(p),
-        event_kind="boss",
-        fx=_kill_fx(e, e["name"], True, _damage_type(p)),
-    )
+    # 033: this Warden fell — its memory of the treeline dies with it.
+    tw = p.get("treeline_wardens")
+    if tw and floor.floor in tw:
+        tw.remove(floor.floor)
+    p["kill_receipt"] = {"dealt": dealt, "shared": True}
+    _slain_reel(p, floor, beat=-1)     # this card IS the slain beat
+    from . import core
+    s = core.floor_movie_scene(p)
+    s.event_kind = "boss"
+    s.meters = meters(p)
+    return s
 
 
 def _assist_partner(p: dict, e: dict) -> str:
@@ -1004,6 +1026,15 @@ def _victory(p: dict, floor) -> Scene:
     p["encounter"] = None
     p["location"] = "gate_town"
     kind = "boss" if e["kind"] == "warden" else "loot"
+    opts = _after_fight_options(p, floor)
+    if first_clear:
+        # 033: a first clear earns the fall reel — this card keeps the
+        # haul (the numbers are right here), the next click shows the
+        # Warden go down, then floor n+1 introduces itself.
+        p["kill_receipt"] = {"xp": xp + rested, "gold": gold,
+                             "loot": economy.APOTHECARY[loot].name}
+        _slain_reel(p, floor, beat=-2)   # the reel starts NEXT click
+        opts = [Option("next", "Next"), Option("skip", "Skip")]
     return Scene(
         eyebrow=_eyebrow(p, floor),
         headline=(f"{e['name']} defeated"
@@ -1011,7 +1042,7 @@ def _victory(p: dict, floor) -> Scene:
         support="The wilds go quiet around you." if e["kind"] == "wilds"
                 else "The Warden's frame ticks as it cools.",
         body_lines=lines,
-        options=_after_fight_options(p, floor),
+        options=opts,
         meters=meters(p),
         event_kind=kind,
         # 025 §6: the haul, drawn. The lines above still SAY the numbers
@@ -1695,6 +1726,13 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
     if option_id == "treeline_shot" and p.get("clazz") == "archer" \
             and not e["shot_used"]:
         e["shot_used"] = True
+        if e.get("shared") and e["kind"] == "warden":
+            # 033: a Warden you have fled remembers you — where the
+            # wounds persist, so does its memory. The shot from cover
+            # works once per Warden, not once per fight.
+            seen = p.setdefault("treeline_wardens", [])
+            if int(e["floor"]) not in seen:
+                seen.append(int(e["floor"]))
         snap = _wear(p, "weapon")      # 005: the long shot is an attack
         mult, pierce, effect = _quiver_shot(p)   # 006: special ammo rides
         e.pop("veiled", None)                    # the veil breaks here too

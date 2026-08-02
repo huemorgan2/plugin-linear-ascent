@@ -492,6 +492,27 @@ EVENTS["warden_fall"] = {
     "trim": (0.0, 6.0),
     "size": (320, 200),
 }
+# 033: the fall reel's opening beat — a Warden dies the only way great
+# Wardens die: all three climber classes in the same frame. Split art:
+# the kill plays once, then the reel settles on the cooling wreck while
+# the player reads the receipt.
+EVENTS["warden_slain"] = {
+    "prompt": (
+        "a colossal scrap-metal war-beast silhouette brought down by "
+        "three tiny climber silhouettes attacking TOGETHER before great "
+        "gate doors: on the left a warrior silhouette drives a sword "
+        "up into its chest, from the right a single bright arrow "
+        "streaks in from off-frame and strikes its head, and behind "
+        "them a robed sorcerer silhouette raises both arms as a lance "
+        "of pale light hits the beast's back; the war-beast staggers "
+        "once, drops to its knees, and crashes down in a burst of dust "
+        "and sparks. Then the dust settles and thin smoke rises from "
+        "the wreck while the three small silhouettes stand motionless "
+        "around it — a still, held tableau, absolutely nothing moving "
+        "except the thin smoke."),
+    "tint": GOLD, "seconds": 8, "split": 5.0, "crossfade": 1.0,
+    "size": (320, 200),
+}
 
 # ── 009 kill FX variants: floors 1–3 families × landing damage type ─────
 # The victory scene shows YOUR kill: melee is the warrior's sword,

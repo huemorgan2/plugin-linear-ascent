@@ -130,15 +130,14 @@ def test_death_still_persists_the_wounds():
 
 
 def test_finishing_the_pool_pays_nothing_locally():
-    """The server splits the pool by damage — the kill card promises
-    letters, never coins."""
+    """The server splits the pool by damage — the engine pays no coins
+    of its own (033: worldd lands the settled numbers on the card)."""
     p = playing(world=warden_world(1, hp=1))
     join_fight(p)
     p["encounter"]["range"] = "close"
     xp0, gold0 = p["xp"], p["gold"]
-    s = core.apply_choice(p, "attack")
+    core.apply_choice(p, "attack")
     assert p["encounter"] is None
-    assert "collapses" in s.headline
     assert p["xp"] == xp0 and p["gold"] == gold0
     fx = [x for x in p["_effects"] if x["kind"] == "warden_strike"]
     assert len(fx) == 1 and fx[0]["damage"] >= 1

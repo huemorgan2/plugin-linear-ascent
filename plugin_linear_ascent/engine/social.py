@@ -1053,6 +1053,22 @@ def warden_action(p: dict, fl, oid: str) -> Scene:
     s = combat.start_encounter(p, fl, None, "warden")
     e = p["encounter"]
     e["shared"] = True
+    # 033: a Warden you have fled remembers you. The treeline shot works
+    # once per Warden — the flag dies with the beast (entries below the
+    # frontier are fallen Wardens; prune them so a new era starts clean).
+    seen = [f for f in p.get("treeline_wardens", [])
+            if f >= int(w.get("frontier", fl.floor))]
+    if seen:
+        p["treeline_wardens"] = seen
+    else:
+        p.pop("treeline_wardens", None)
+    note = ""
+    if fl.floor in seen:
+        e["shot_used"] = True
+        if p.get("clazz") == "archer":
+            # 027 law: a missing button is said out loud.
+            note = ("It watches the treeline now — your shot from "
+                    "cover is spent until this Warden falls.")
     # the fight is against the WORLD's body: pick up the pool where the
     # last blade left it (optimistic — the server clamps on the effect).
     e["hp"] = max(1, int(wd.get("hp", e["hp"])))
@@ -1063,7 +1079,7 @@ def warden_action(p: dict, fl, oid: str) -> Scene:
     # into a half-cut gate is credited with everyone else's work and the
     # pool collapses on his first swing.
     e["hp_join"] = e["hp"]
-    s2 = combat.fight_scene(p, fl, opener=True)
+    s2 = combat.fight_scene(p, fl, opener=True, note=note)
     s2.event_kind = s.event_kind or "boss"
     s2.support = ("Its wounds are the world's wounds — whatever you cut "
                   "away stays cut.")
