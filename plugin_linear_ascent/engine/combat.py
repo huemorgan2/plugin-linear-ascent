@@ -810,16 +810,6 @@ def _fx_tick(p: dict) -> bool:
     return False
 
 
-def _train_nudge(p: dict) -> list[str]:
-    """012: levels are bought, never granted. When the bar fills, point
-    at the Guildhall instead of leveling — XP banks past the cap."""
-    if p["xp"] < economy.xp_need(p["level"]):
-        return []
-    fee = economy.levelup_gold(p["level"])
-    return [f"Your XP bar is full. The Guildhall trains climbers to "
-            f"LEVEL {p['level'] + 1} — the fee is ◈ {fee:,}."]
-
-
 def _cut_this_fight(e: dict) -> int:
     """What THIS fight took out of the shared body — measured from where
     the blade joined it, not from the body's full size."""
@@ -971,7 +961,10 @@ def _victory(p: dict, floor) -> Scene:
     downed = (f"The {e['name']} goes down — no match for your "
               f"{weapon_name(p)}."
               if e["kind"] == "wilds" else f"The {e['name']} goes down.")
-    lines = [downed, f"+ {xp} XP", f"+ ◈ {gold} carried gold"]
+    # Just what the kill paid — no Guildhall lecture. A full bar already
+    # badges the hall on the notice board; repeating LEVEL N here made a
+    # moth kill read like a training brochure.
+    lines = [downed, f"+ {xp} XP", f"+ ◈ {gold} gold"]
     if rested:
         lines.insert(2, f"+ {rested} XP rested — ✦ {p['rested']} left "
                         "in the pool")
@@ -999,7 +992,6 @@ def _victory(p: dict, floor) -> Scene:
                                   (economy.ALPHA_CHARM_PCT, "luck_charm")])
         p["inventory"][loot] = p["inventory"].get(loot, 0) + 1
         lines.append(f"▪ alpha spoils: {economy.APOTHECARY[loot].name}")
-    lines += _train_nudge(p)
 
     first_clear = False
     if e["kind"] == "warden":

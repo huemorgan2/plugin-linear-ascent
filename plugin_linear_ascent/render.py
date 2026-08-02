@@ -1386,10 +1386,9 @@ def render_scene_fragment(scene: Scene) -> str:
                 parts.append("</details>")
                 in_fold = False
             continue
-        if line.startswith("+"):
-            parts.append(f'<div class="body type" style="color:{OK}">'
-                         f"{_ep(line)}</div>")
-        elif line.startswith("−") or line.startswith("-"):
+        if line.startswith("−") or line.startswith("-"):
+            # losses stay red; gains are NOT green — gold paints gold,
+            # XP paints XP, everything else keeps the card's ink.
             parts.append(f'<div class="body type" style="color:{RED}">'
                          f"{_ep(line)}</div>")
         else:
