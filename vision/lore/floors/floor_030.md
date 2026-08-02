@@ -1,0 +1,92 @@
+# Floor 30 — The Kingsbarrow (Men) · Warden
+
+> *"He was a good king, they say, a thousand years down. The tower woke him wrong. What walks the mound now only remembers the crown." — Barrow-queen Mereth Wakesend*
+
+**Cut from:** the ancestral grave-country of Men — the royal barrow · **Gate-town:** Wakesend · **Warden:** **The Barrow King**
+
+## The land
+The royal barrow: one colossal grassed mound ringed by a black moat, standing
+alone under a heavy sky at the head of the whole grave-country. Here the old
+king-dead of Men were laid with their halls, their gold, and their guard,
+drowned in a moat to keep them sleeping. The tower's fever has soaked to the
+king's own bones, and he has risen — a dead sovereign who remembers only that
+he ruled, and means to rule the barrows again. It is the last floor of the
+third tier, and the first floor where a *ruler* stands against the climb.
+
+## Flora
+- **Trees / canopy:** the royal yew-ring, nine black yews circling the mound.
+- **Ground & water plants:** king-grass over the mound, moat-reed and drowned
+  lily in the black water, and the grave-orchid that blooms only over a king.
+- **Under the Yoke:** the moat-reeds clutch; the drowned lilies pull under;
+  the yew-ring drips a sap that dulls the will to resist a crown.
+
+## Three places
+- **The cave — the Moat Undercroft.** The flooded burial-hall inside the
+  mound, the king's drowned court laid in ranks. *Seed: the true crown lies
+  here — and whoever holds it can command the risen court or unmake it.*
+- **The peak — the Mound-Crown.** The mound's summit, the king's raising-
+  ground. *Seed: the fight ends here; from it the whole tier reads, freed.*
+- **The gate in the mountain — the Kingsbarrow Gate.** The stair-lift is set
+  in the mound's stone lych-face, sealed with the king's own seal. *Seed:
+  only the Barrow King's fall breaks the seal — the gate to the fourth tier.*
+
+## The people
+Barrow-keepers of Wakesend — the royal grave's hereditary wardens, who kept
+the king sleeping for a thousand years and failed only when the tower reached
+his bones. They hold the moat-causeway, refusing the risen court's summons to
+kneel. They love a king well-remembered and well-asleep, a moat kept full,
+and a crown left in its grave. They fear the king's pull and the drowned
+court rising behind him.
+**The keeper:** Mereth Wakesend, barrow-queen — last of the royal wardens,
+holds the causeway and knows the rite that could lay her king down for good.
+
+## The six
+1. **Moat-watcher eel** (N) — *was:* a moat-guardian eel. *now:* huge in the
+   black water, dragging causeway-walkers under. *Cured, it sinks into the
+   deep moat.*
+2. **Barrow raven** (N) — *was:* the king's messenger-ravens. *now:* a black
+   storm of them crying the king's summons. *Cured, they lift and settle,
+   quiet, on the yews.*
+3. **Moat-hound** (N) — *was:* the royal grave-hounds. *now:* risen and
+   dripping, coursing the causeway. *Cured, they lie down at the water's
+   edge and sleep.*
+4. **The Herald** (W) — *was:* the king's herald, aether in his silver horn.
+   *now:* a shade that blows a summons compelling the living to kneel and
+   approach. *Broken, the horn cracks and it drains into the moat.*
+5. **The Tribute-bearer** (W) — *was:* a courtier buried with the king's
+   tribute, aether in the gold he carries. *now:* a laden shade that offers
+   grave-gold to lure the greedy off the causeway. *Broken, the tribute
+   spills and it fades.*
+6. **The Barrow Guard** (W) — *was:* the king's sworn housecarls, drowned to
+   guard him, aether in their war-gear. *now:* a rank of dripping dead that
+   forms a shield-wall for their king. *Broken, the wall falls to the moat
+   and drains, rank by rank.*
+
+## Three finds  *(quest seeds)*
+- **Crown-unmaking — spell.** Strips the compulsion of a false or fevered
+  crown, freeing those bound to kneel; the barrow-queen's deepest rite.
+  *Seed: learn it from Mereth to break the king's summons — and, at the top,
+  the tower's own claim to rule.*
+- **Barrow-gold, royal — material.** The king's own grave-gold, the most
+  aether-rich metal below the throne itself; enough to forge a crown-breaking
+  weapon. *Seed: take it from the Moat Undercroft — but the true crown is the
+  real prize.*
+- **Libation — potion.** A grave-offering draught that lays a small dead one
+  to rest and steels a climber's will against a sovereign's pull.
+
+## The Warden — The Barrow King
+A dead king of Men, risen wrong: welded into his own drowned war-gear and
+grave-gold, crowned and cold, commanding a court of drowned dead. He is not a
+beast the fever cured badly but a *ruler* the tower woke to rule again — and
+so his ending is an *eviction,* not a curing: the borrowed aether driven out
+and the true king laid, finally, to rest. He summons his court, compels the
+living to kneel, and fights from a shield-wall of the drowned. Take the crown
+or break him on the Mound-Crown and the summons dies; the court sinks back;
+the Kingsbarrow seal breaks on the fourth tier above.
+
+## When it falls
+The king is laid to rest for good, the moat closes over a court finally
+sleeping, and Wakesend guards a quiet royal grave at last. The barrow-keepers
+climb as the host's crown-breakers, carrying **Crown-unmaking** and the true
+crown — the folk who know how to un-king a risen ruler, which the climb will
+need most of all at the very top. The third tier is freed; the fourth opens.
