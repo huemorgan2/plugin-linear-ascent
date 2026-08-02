@@ -134,7 +134,7 @@ The hall home screen, top to bottom:
    as today.
 2. **The room art band** — a `strip` (320×50) whose art is the room
    tier's interior. Different tier, different room, visibly.
-3. **THE WEEK box — the loudest thing on the page** (see §8).
+3. **THE WEEK box — the loudest thing on the page** (see §9).
 4. **The latest bulletin line** — `DAY 34 · Kettle — "dues land
    tonight, pay up"` — one line, dim, clickable through to the board.
 5. **The doors**, as option rows with `option_art`:
@@ -148,7 +148,42 @@ Every area is its own Scene; `back` returns to the hall, from the
 hall to town. Sub-state rides `p["hall_area"]` exactly the way the
 founding wizard rides `p["founding_guild"]` (`engine/social.py:476`).
 
-### 3. Rooms — four tiers, bought, never granted
+### 3. The Guildhall, revamped — where the banners fly
+
+With the member business gone home, the Guildhall's floor is free for
+its true civic job: **showing the world's banners and their scores.**
+Today the unaffiliated see a flat sigil gallery (`_hall_list`,
+`engine/social.py:389-434`) and the scores hide in the Community tab.
+The revamped Guildhall shows, to everyone — member or not:
+
+1. **THIS WEEK — the standings.** The week's challenge (`THE ASCENT
+   DEMANDS A CULL — 120 heads a banner`) and under it every entered
+   banner as a row: small sigil left of the name (§1 applies in-scene
+   too), progress against its own target, sorted by completion —
+   `▪ EMBER PACT ▓▓▓▓░░ 84/120` — rivalry on the wall, exactly the
+   loop 010 wanted ("rivalry for free, and the Crier has one
+   headline").
+2. **THE HALL OF BANNERS** — every banner as a `gallery` picture
+   tile: sigil, name, and its score line — wins all-time, members,
+   room tier. Sorted by wins, the reigning banner called out first.
+   Tapping a tile opens that banner's **public page** (a scene, not
+   the pane): sigil large on top, its room tier art strip, wins,
+   member count, week standing — and the `ASK TO JOIN` /
+   `CANCEL REQUEST` row for the unaffiliated. This replaces the flat
+   join list; joining now means *walking up to a banner you've seen
+   the scores of.*
+3. **The civic rows** — `RAISE A NEW BANNER` (locked-but-visible
+   under level 4 / ◈300, per 019), training, and for members the
+   `YOUR HALL` door at the top.
+
+The data is already served — `/v1/faction/board` (worldd
+`factions.py:569-607`) carries standings, wins, and top-5s for the
+pane; the engine's scene injection grows a trimmed `hall_board` key
+with the same numbers. The Community tab keeps the full ledger,
+search, and history; the Guildhall is the *place* where the same
+truth hangs on the wall.
+
+### 4. Rooms — four tiers, bought, never granted
 
 | tier | name | interior art | beds fit | price (from the coffer) |
 |---|---|---|---|---|
@@ -163,7 +198,7 @@ gate — the user asked for paid scaling, so a rich trio may sit in a
 high hall it rattles around in. Room tier is worn proudly: it shows on
 the Community faction page and the hall-of-banners rows.
 
-### 4. The coffer — the store, capped, with a door
+### 5. The coffer — the store, capped, with a door
 
 The treasury gets a **capacity**, and the capacity is bought:
 
@@ -188,7 +223,7 @@ rows (as the panel does today), and the **donate** rows —
 `◈10 · ◈50 · ◈100 · a sum of your naming` — the last one an inline
 `ask` input, presets one tap. Carried gold only, as designed.
 
-### 5. The chest — the armory, reborn as a card wall
+### 6. The chest — the armory, reborn as a card wall
 
 The armory becomes THE CHEST, and its flat 50-row cap becomes slots
 that are bought:
@@ -212,7 +247,7 @@ ways, **one take per player per world-day**, donor kept for audit.
 Existing armories over the new slot count are grandfathered
 (tier set to fit), never truncated.
 
-### 6. The bulletin board
+### 7. The bulletin board
 
 New table, new area, one mechanic: any member writes **one line**
 (≤ 64 chars, plain text, inline `ask` input). The board shows the
@@ -223,7 +258,7 @@ at most one note per world-day (writing again the same day replaces
 it — no flooding, no moderation surface). Notes die with the era, as
 all faction things do.
 
-### 7. The bunks — a free safe night
+### 8. The bunks — a free safe night
 
 In THE WORKS the steward buys **beds at ◈250 each**, capped by room
 tier (0 / 2 / 6 / 10). In THE BUNKS any member takes
@@ -237,7 +272,7 @@ job, no rested-XP — dawn heals everyone regardless, as always. That
 a wealthy banner undercuts the Lodge is the point; it is what the
 dues bought.
 
-### 8. THE WEEK, made loud
+### 9. THE WEEK, made loud
 
 The top box of the hall, directly under the room strip, full width,
 notification-blue border when action waits:
@@ -258,7 +293,7 @@ No new mechanics — `enter_week`, targets, multipliers, resolution all
 stand. This section is purely: the thing the faction lives for gets
 the biggest slot on its page, every day, without hunting for it.
 
-### 9. The Community tab mirrors it
+### 10. The Community tab mirrors it
 
 The pane faction detail page (`pane.py:531-601`) adds: the room tier
 name under the big banner, coffer balance *of* cap, chest slots used,
@@ -335,9 +370,12 @@ Through the existing Gemini → Bayer 1-bit pipeline
 1. **worldd** — migration 011, tier tables, clip-to-cap on every
    coffer inflow, effects, panel `hall` injection, era wipe, board
    heading rename. Tests beside the existing faction tests.
-2. **engine (vendored)** — the hall location + five areas, the WEEK
-   box, donate presets + ask, chest card grid on the armory, bulletin,
-   bunks, works; steward notice on the square.
+2. **engine (vendored)** — the hall location + its areas (coffer,
+   chest, board, bunks, works, desk), the WEEK box, donate presets +
+   ask, chest card grid on the armory, bulletin, bunks, works;
+   steward notice on the square; the Guildhall revamp — weekly
+   standings wall, hall-of-banners score tiles, public banner pages
+   (`hall_board` injection).
 3. **art** — generate, place under `content/art/`, wire slugs.
 4. **pane** — sigils beside every name (§1), faction detail additions
    (§9).
@@ -371,5 +409,7 @@ buy coffer 2, room 2, one bed · second member claims the bed, third
 bounces · verify the claimant vanishes from `pvp_targets` · chest:
 put 4, refuse the 5th, take 1 (day-capped) · write two notes same
 day, see the upsert · enter the week from the hall, watch the box
-flip from offer to progress · Community: sigils in all five lists,
+flip from offer to progress · Guildhall: standings wall shows both
+test banners with sigils + progress bars, tap a tile → public banner
+page → ask to join from there · Community: sigils in all five lists,
 room tier + latest line on the detail page.
