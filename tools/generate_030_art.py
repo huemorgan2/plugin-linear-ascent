@@ -50,8 +50,10 @@ PORTRAIT_STYLE = (
     "GRADIENTS of dither density, never by outlines. NO hard contour "
     "lines, no cartoon linework, no cel shading, no ink outlines "
     "anywhere: forms emerge from light and shadow alone, soft edges "
-    "dissolving into dither. ONE standing human figure fills the frame "
-    "top to bottom — head near the top edge, boots at the bottom edge, "
+    "dissolving into dither. ONE standing human figure nearly fills "
+    "the frame — the WHOLE head fully inside the frame with a clear "
+    "margin of pure black above the hair (never touching or crossing "
+    "the top edge), boots at the bottom edge, "
     "facing the viewer, arms at the sides, weight square. Volumetric "
     "shading: one soft key light from the top-left rolling across "
     "every rounded form, deep core shadows. The background is pure "
@@ -84,13 +86,50 @@ PORTRAIT_JOBS = {
         "a champion in ornate master-forged aegis plate, crowned helm "
         "under one arm, filigree glowing faintly along every edge in "
         "soft gradient halos, a great cloak — the top of the ladder."),
-    # 031: the lodge has a face — Wick, the keeper
+    # the lodge has a face — Wick, the keeper
     "portrait_wick": (
         "a stout old innkeeper with a magnificent braided beard, a "
         "leather apron over a rolled-sleeve shirt, one sleeve pinned "
         "flat over a missing left arm, a tankard in his remaining "
         "hand, laugh lines and tired kind eyes — a retired climber "
         "who runs the lodge now."),
+}
+
+# an elf is not a human in a costume — the whole silhouette changes:
+# taller, thinner, long ears, and a wardrobe cut the elven way.
+ELF = (
+    "The figure is unmistakably an ELF: very tall and willow-thin, "
+    "elongated graceful proportions, LONG POINTED EARS sweeping up "
+    "through long fine hair, high angular cheekbones, ageless sharp "
+    "features. ")
+
+ELF_JOBS = {
+    "portrait_elf_rags": (
+        "a fresh elf climber in a patched travel tunic falling to the "
+        "thigh over close leggings, wrapped feet, a woven-cord belt, "
+        "chin high — poor but never graceless."),
+    "portrait_elf_leather": (
+        "an elf climber in a leaf-tooled leather jerkin cut long and "
+        "slim, vine-stamped bracers, soft high boots to the knee, a "
+        "slender curved blade on the hip — forest kit, first steel."),
+    "portrait_elf_chain": (
+        "an elf climber in fine elven mail of tiny silver rings that "
+        "falls like cloth over a high-collared under-robe, long "
+        "gauntlets, a narrow sash — the mail shimmering as dithered "
+        "sparkle."),
+    "portrait_elf_scale": (
+        "an elf climber in overlapping leaf-shaped scales trailing "
+        "into a long split coat, a high collar, slim plated boots, a "
+        "light cloak pinned at one shoulder — every scale a leaf."),
+    "portrait_elf_plate": (
+        "an elf climber in fluted elven plate drawn to slender lines, "
+        "crescent-curved pauldrons, visorless high helm under one arm, "
+        "a long thin sword point-down in one fist — a poised sentinel."),
+    "portrait_elf_aegis": (
+        "an elf champion in master-forged elven aegis plate traced "
+        "with filigree vines glowing faintly along every edge, a "
+        "circlet on the brow, a great flowing cloak — the summit of "
+        "elven craft."),
 }
 
 # rooms regenerated tall (320x200) — prompts are the proven ones from the
@@ -168,6 +207,10 @@ def _jobs() -> dict[str, tuple[str, tuple[int, int], str, str]]:
     for slug, prompt in PORTRAIT_JOBS.items():
         jobs[slug] = (PORTRAIT_STYLE + prompt, (100, 200), PORTRAITS,
                       TEXT_INK)
+    for slug, prompt in ELF_JOBS.items():
+        jobs[slug] = (PORTRAIT_STYLE.replace("human figure",
+                                             "elven figure")
+                      + ELF + prompt, (100, 200), PORTRAITS, TEXT_INK)
     for slug in ROOM_SLUGS:
         prompt, tint = gb.SCENES[slug]
         jobs[slug] = (gb.STYLE + prompt, (320, 200), BANNERS, tint)

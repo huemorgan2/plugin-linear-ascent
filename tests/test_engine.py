@@ -208,6 +208,8 @@ def test_fade_no_longer_punishes_overleveling_on_frontier():
     choose(p, "hunt")
     p["encounter"]["range"] = "close"        # 002: skip the crossing
     p["encounter"]["hp"] = 1                 # next hit kills
+    p["encounter"]["traits"] = []            # 025: pin threat ×1 — the
+    # daily draw may be a low-pay archetype, and this test is about fade
     xp_before = p["xp"]
     gold_before = p["gold"]
     choose(p, "attack")
@@ -406,6 +408,8 @@ def test_elf_learns_faster():
     choose(p, "hunt")
     p["encounter"]["range"] = "close"        # 002: skip the crossing
     p["encounter"]["hp"] = 1
+    p["encounter"]["traits"] = []            # 025: pin threat ×1 — the
+    # daily draw may be a low-pay archetype, and this test is about race
     choose(p, "attack")
     # base 4 ±25% then ×1.05: minimum possible is round(round(4·0.75)·1.05)
     assert p["xp"] >= round(round(4 * 0.75) * 1.05)

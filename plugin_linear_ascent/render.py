@@ -608,17 +608,24 @@ _TIP_DEF = ("DEF — your total defense: shield, armor and honing. "
 def _portrait_slug(scene: Scene) -> str:
     """rags → leather → chain → scale → plate → aegis, resolved from the
     equipped armour on the pack strip — the renderer never opens the
-    player doc, it reads the scene it was handed."""
+    player doc, it reads the scene it was handed. A race that has its
+    own wardrobe (portrait_elf_*_100x200.png) wears it; anyone else
+    keeps the shared human set."""
     tier = 0
     for cell in scene.inventory or []:
         if cell.get("kind") == "armor" and cell.get("equipped"):
             g = economy.FORGE.get(cell.get("slug", ""))
             tier = g.tier if g else 0
             break
-    for floor_t, slug in _PORTRAIT_TIERS:
+    slug = "rags"
+    for floor_t, s in _PORTRAIT_TIERS:
         if tier >= floor_t:
-            return slug
-    return "rags"
+            slug = s
+            break
+    race = getattr(scene.meters, "race", "") or ""
+    if race and _portrait_data_url(f"{race}_{slug}"):
+        return f"{race}_{slug}"
+    return slug
 
 
 @lru_cache(maxsize=None)
