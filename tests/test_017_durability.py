@@ -208,9 +208,12 @@ def test_broken_is_never_gone():
 
 # ── the Forge mends ──────────────────────────────────────────────────────
 
-def _worn_smith(gold=10_000, xp=500):
+def _worn_smith(gold=10_000, xp=None):
     p = create_character(fresh("smithy"))
-    p["gold"], p["xp"] = gold, xp
+    # The bar is hard now (022): XP over the level's need is clamped on load,
+    # so fill it exactly rather than piling on a number the model won't hold.
+    p["gold"] = gold
+    p["xp"] = economy.xp_need(1) if xp is None else xp
     p["gear"]["weapon"] = "pigsticker"
     p["durability"]["weapon"] = economy.durability_pool(1) // 2
     p["location"] = "forge"

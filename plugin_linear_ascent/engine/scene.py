@@ -43,7 +43,7 @@ class Meters:
     hp_max: int
     energy: int
     energy_max: int
-    xp: int             # the XP pool inside the level (banks past the cap)
+    xp: int             # the XP pool inside the level (hard-capped at need)
     xp_need: int        # xp_need(level) — full bar = licensed to train
     gold: int
     level: int = 1      # 012: shown next to the gold

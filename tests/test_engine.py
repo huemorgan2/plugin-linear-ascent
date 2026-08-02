@@ -166,14 +166,14 @@ def test_bare_hands_impossible_via_gear_bonus_floor():
 def test_honing_buy_flow_and_reset_on_purchase():
     p = create_character(fresh())
     p["gold"] = 10_000
-    p["xp"] = 50                             # 006: honing burns ✦ too
+    p["xp"] = economy.xp_need(1)             # 006: honing burns ✦ too
     p["unlocked_floor"] = 3                  # cap = 2 this band
     hone_xp = economy.hone_xp(3)
     choose(p, "forge")
     choose(p, "buy_pigsticker")
     s = choose(p, "hone_weapon")
     assert p["hone"]["weapon"] == 1
-    assert p["xp"] == 50 - hone_xp           # ✦ charged alongside gold
+    assert p["xp"] == economy.xp_need(1) - hone_xp  # ✦ charged alongside gold
     # 022/002: a hone level is worth its slot's weight, not a flat +1
     assert state.gear_bonus(p, "weapon") == 8 + economy.HONE_WEIGHT["weapon"]
     choose(p, "hone_weapon")

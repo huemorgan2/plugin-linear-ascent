@@ -589,7 +589,7 @@ def _banner_page_scene(p: dict, note: str = "") -> Scene:
 
 def guild_train(p: dict) -> Scene:
     """012: buy the level — full XP bar is the license, gold is the fee.
-    XP banked past the cap carries over; wounds close on the level.
+    The bar is hard (no overflow to carry); wounds close on the level.
     022/002: LEVEL_CAP ends the drill — a refusal worth reading."""
     if p["level"] >= economy.LEVEL_CAP:
         return guildhall_scene(

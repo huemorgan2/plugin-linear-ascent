@@ -948,11 +948,18 @@ def _victory(p: dict, floor) -> Scene:
     if buff:
         xp = round(xp * (1 + buff / 100))     # 010: CLIMB week blessing
     # 022/005: rested aether pays out here and ONLY here — on a kill's
-    # XP, never on contract or strongbox payouts.
-    rested = state.rested_bonus(p, xp)
-    p["xp"] += xp + rested
+    # XP, never on contract or strongbox payouts. The bar is hard: once
+    # it fills, more XP (and the rested that would ride it) goes nowhere.
+    got = state.gain_xp(p, xp)
+    rested = state.rested_bonus(p, got) if got else 0
+    if rested:
+        landed = state.gain_xp(p, rested)
+        if landed < rested:                 # bar filled mid-draw — refund
+            p["rested"] = int(p.get("rested", 0)) + (rested - landed)
+            rested = landed
+    xp_landed = got + rested
     p["gold"] += gold
-    _ledger(p, "kill", gold=gold, xp=xp + rested, note=e["name"])
+    _ledger(p, "kill", gold=gold, xp=xp_landed, note=e["name"])
     if e["kind"] == "wilds":
         # 022/004: the kill the engine just scored is the contract
         # board's only bookkeeping.
@@ -961,13 +968,15 @@ def _victory(p: dict, floor) -> Scene:
     downed = (f"The {e['name']} goes down — no match for your "
               f"{weapon_name(p)}."
               if e["kind"] == "wilds" else f"The {e['name']} goes down.")
-    # Just what the kill paid — no Guildhall lecture. A full bar already
-    # badges the hall on the notice board; repeating LEVEL N here made a
-    # moth kill read like a training brochure.
-    lines = [downed, f"+ {xp} XP", f"+ ◈ {gold} gold"]
+    # Just what landed — a full bar takes no more XP, so a kill at the
+    # cap writes gold (and spoils) and stays quiet about the overflow.
+    lines = [downed]
+    if got:
+        lines.append(f"+ {got} XP")
     if rested:
-        lines.insert(2, f"+ {rested} XP rested — ✦ {p['rested']} left "
-                        "in the pool")
+        lines.append(f"+ {rested} XP rested — ✦ {p['rested']} left "
+                     "in the pool")
+    lines.append(f"+ ◈ {gold} gold")
     if e["kind"] == "wilds" and p.get("_world") is not None:
         # 022/008: assist strikes — a floor-mate on the same prey inside
         # the window links the logs. Gold only (rested already paid on
@@ -1027,7 +1036,7 @@ def _victory(p: dict, floor) -> Scene:
         # 033: a first clear earns the fall reel — this card keeps the
         # haul (the numbers are right here), the next click shows the
         # Warden go down, then floor n+1 introduces itself.
-        p["kill_receipt"] = {"xp": xp + rested, "gold": gold,
+        p["kill_receipt"] = {"xp": xp_landed, "gold": gold,
                              "loot": economy.APOTHECARY[loot].name}
         _slain_reel(p, floor, beat=-2)   # the reel starts NEXT click
         opts = [Option("next", "Next"), Option("skip", "Skip")]
@@ -1045,7 +1054,7 @@ def _victory(p: dict, floor) -> Scene:
         # (the agent reads those); the card lays out one coin per gold and
         # one shard per point of XP so a big kill looks like a big kill.
         tally=[{"kind": "gold", "n": gold},
-               {"kind": "aether", "n": xp + rested}],
+               {"kind": "aether", "n": xp_landed}],
         fx=_kill_fx(e, e["name"], first_clear, _damage_type(p)),
     )
 

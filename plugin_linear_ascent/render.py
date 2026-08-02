@@ -533,10 +533,10 @@ _TIP_HP = ("HP — health. At 0 you die: all carried gold is lost and armor "
            "and shield break. Heal at the healer's tent or the Apothecary.")
 _TIP_EN = ("Energy — actions spend it: wilds hunt 1, Warden attempt 3, "
            "milestone boss 5, PvP attack 3. Regenerates 1 every 45 minutes.")
-_TIP_XP = ("XP — experience. Fills as you fight and banks past the cap. "
-           "A full bar is your license to train: buy the next level with "
-           "gold at the Guildhall. Honing, spells, and shard scans burn "
-           "XP — spending delays training, never lowers a level.")
+_TIP_XP = ("XP — experience. Fills as you fight, up to the bar for the "
+           "next level — surplus goes nowhere. A full bar is your license "
+           "to train: buy the next level with gold at the Guildhall. "
+           "Honing, spells, and shard scans burn XP from the bar.")
 _TIP_LV = ("LV — your level. Levels are bought at the Guildhall: a full "
            "XP bar plus the training fee in gold.")
 _TIP_GOLD = ("Carried gold — spendable anywhere but lost when you die. "

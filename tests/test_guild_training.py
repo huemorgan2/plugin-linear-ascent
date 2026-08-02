@@ -63,14 +63,16 @@ def test_xp_below_gold_everywhere():
 
 def test_full_bar_never_levels_in_the_field():
     p = create_character(fresh())
-    p["xp"] = economy.xp_need(1) + 10            # bar already overflowing
+    need = economy.xp_need(1)
+    p["xp"] = need                               # bar already full
     hp_before_max = state.max_hp(p)
     p["hp"] = hp_before_max - 5
     s = _kill_one(p)
     assert p["level"] == 1                       # no level granted
-    assert p["xp"] > economy.xp_need(1)          # XP banks past the cap
+    assert p["xp"] == need                       # surplus goes nowhere
     assert p["hp"] < state.max_hp(p)             # no free level-up heal
-    assert "Guildhall" in "\n".join(s.body_lines)  # the nudge instead
+    assert not any(ln.startswith("+ ") and "XP" in ln for ln in s.body_lines)
+    assert any(ln.startswith("+ ◈") for ln in s.body_lines)
 
 
 # ── training at the Guildhall ────────────────────────────────────────────
@@ -100,17 +102,52 @@ def test_train_refused_without_the_fee():
 def test_train_buys_the_level_and_heals():
     p = create_character(fresh())
     need, fee = economy.xp_need(1), economy.levelup_gold(1)
-    p["xp"] = need + 7                           # banked overflow carries
+    p["xp"] = need                               # hard bar — no overflow
     p["gold"] = fee + 50
     p["hp"] = 1
     choose(p, "guildhall")
     s = choose(p, "guild_train")
     assert p["level"] == 2
-    assert p["xp"] == 7
+    assert p["xp"] == 0                          # next bar starts empty
     assert p["gold"] == 50
     assert p["hp"] == state.max_hp(p)            # wounds close on the level
     assert any(e["kind"] == "levelup" for e in p["_ledger"])
     assert "LEVEL 2" in "\n".join(s.body_lines)
+
+
+def test_gain_xp_stops_at_the_bar():
+    p = create_character(fresh())
+    need = economy.xp_need(1)
+    p["xp"] = need - 3
+    assert state.gain_xp(p, 100) == 3
+    assert p["xp"] == need
+    assert state.gain_xp(p, 50) == 0
+    assert p["xp"] == need
+
+
+def test_gain_xp_uncapped_at_level_cap():
+    p = create_character(fresh())
+    p["level"] = economy.LEVEL_CAP
+    p["xp"] = 10_000
+    assert state.gain_xp(p, 500) == 500
+    assert p["xp"] == 10_500
+
+
+def test_ensure_current_clamps_overfilled_bar():
+    p = create_character(fresh())
+    p["xp"] = economy.xp_need(1) + 99
+    state.ensure_current(p)
+    assert p["xp"] == economy.xp_need(1)
+
+
+def test_full_bar_kill_does_not_burn_rested():
+    p = create_character(fresh())
+    need = economy.xp_need(1)
+    p["xp"] = need
+    p["rested"] = 40
+    _kill_one(p)
+    assert p["xp"] == need
+    assert p["rested"] == 40                 # nothing drawn off a 0-land kill
 
 
 def test_guildhall_always_offers_training():

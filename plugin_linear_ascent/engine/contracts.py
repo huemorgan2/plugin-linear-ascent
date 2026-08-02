@@ -174,7 +174,8 @@ def claim(p: dict, job: dict) -> tuple[int, int]:
     pay_gold, pay_xp = pay_for(p, job)
     gold = max(0, pay_gold - economy.BOARD_PRICE)
     p["gold"] += gold
-    p["xp"] += pay_xp
+    from . import state as pstate
+    pay_xp = pstate.gain_xp(p, pay_xp)
     if job.get("token"):
         inv = p.setdefault("inventory", {})
         inv[job["token"]] = inv.get(job["token"], 0) + 1

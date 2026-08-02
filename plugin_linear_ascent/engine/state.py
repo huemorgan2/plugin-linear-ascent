@@ -110,6 +110,30 @@ def gain_energy(p: dict, amount: int, at: dt.datetime | None = None) -> None:
     p["energy_ts"] = at.isoformat()
 
 
+def xp_room(p: dict) -> int | None:
+    """How much XP still fits in this level's bar.
+
+    None means uncapped — at LEVEL_CAP the Guildhall refuses training and
+    the pool is pure currency (hone / sleep / scan). Below the cap the bar
+    is hard: surplus from a kill goes nowhere.
+    """
+    if int(p.get("level", 1)) >= economy.LEVEL_CAP:
+        return None
+    return max(0, economy.xp_need(int(p["level"])) - int(p.get("xp", 0)))
+
+
+def gain_xp(p: dict, amount: int) -> int:
+    """Add XP, stopping at a full bar. Returns how much actually landed."""
+    amount = max(0, int(amount))
+    if amount <= 0:
+        return 0
+    room = xp_room(p)
+    if room is not None:
+        amount = min(amount, room)
+    p["xp"] = int(p.get("xp", 0)) + amount
+    return amount
+
+
 def spend_xp(p: dict, amount: int) -> bool:
     """Burn aether — XP from the current level's pool (006). Never goes
     below 0 and never touches level; the caller shows the refusal."""
@@ -278,6 +302,12 @@ def ensure_current(p: dict) -> None:
                     event_kind="present",
                 ).to_dict())
         p["version"] = 5
+    # Soft clamp: XP used to bank past a full bar. Anyone already over
+    # is brought back to the bar — surplus never bought a level anyway.
+    if xp_room(p) is not None:
+        need = economy.xp_need(int(p["level"]))
+        if int(p.get("xp", 0)) > need:
+            p["xp"] = need
 
 
 # ── Durability (005 §3.5) ────────────────────────────────────────────────

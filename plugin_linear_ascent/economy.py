@@ -491,7 +491,8 @@ XP_NEED_BASE = 24              # 022/002: was 60 — the cap arrives in the
 
 
 def xp_need(level: int) -> int:
-    """XP to go from `level` to `level+1`: 24 · L^1.5. At LEVEL_CAP the
+    """XP to go from `level` to `level+1`: 24 · L^1.5. Below LEVEL_CAP the
+    bar is hard — surplus from a kill is discarded. At LEVEL_CAP the
     Guildhall refuses training and the ✦ pool becomes pure currency
     (honing, spells, scans — the sinks that already exist)."""
     return round(XP_NEED_BASE * level ** 1.5)

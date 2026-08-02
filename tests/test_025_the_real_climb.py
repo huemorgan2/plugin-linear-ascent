@@ -324,7 +324,7 @@ def test_a_kill_carries_a_structured_tally():
     assert set(kinds) == {"gold", "aether"}
     assert all(n > 0 for n in kinds.values())
     # the lines still SAY the numbers — the agent reads the text surface
-    assert f"◈ {kinds['gold']} carried gold" in " ".join(s.body_lines)
+    assert f"◈ {kinds['gold']} gold" in " ".join(s.body_lines)
 
 
 def test_the_card_draws_one_mark_per_point_then_switches_to_a_numeral():
