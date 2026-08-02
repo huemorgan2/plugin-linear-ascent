@@ -1745,8 +1745,9 @@ SCENE_CSS = f"""
  white-space:nowrap;}}
 .ident .idlv{{font-weight:700;color:{TEXT};cursor:help;}}
 .ident .idgold{{font-weight:700;color:{GOLD};cursor:help;}}
-.profile{{display:flex;gap:2ch;align-items:flex-start;margin-top:8px;}}
-.profile .portrait{{flex:none;width:100px;aspect-ratio:100/200;
+.profile{{display:flex;gap:2ch;align-items:stretch;margin-top:8px;}}
+.profile .portrait{{flex:none;width:auto;aspect-ratio:100/200;
+ min-height:200px;
  mask-size:100% 100%;-webkit-mask-size:100% 100%;mask-repeat:no-repeat;
  -webkit-mask-repeat:no-repeat;image-rendering:pixelated;}}
 .profile .pcol{{flex:1;min-width:0;}}
