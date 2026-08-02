@@ -41,6 +41,28 @@ the world was wide enough:
   from the aether in their own sap, tended by people who spoke to the
   lamps as neighbors.
 
+And between and beneath those three realms lay two more places that
+belonged to no one people — which matters, because the tower stole from
+them too:
+
+- **The Deep.** Under all three realms ran the **under-caverns**: a shared
+  dark of mines, delvings, and lamp-lit cavern-towns that no crown owned.
+  Giants sank the first shafts, but men and elves followed the aether-seams
+  down after them, so the Deep's folk are **delvers of every race** — pit
+  crews, cable-gangs, vault-keepers — born to the rope and the lamp. Its
+  native life never saw the sun: cave-spiders, trolls, blind fish, and
+  brood-things in the silk.
+- **The Waste.** Where the realms burned against one another's edges — old
+  volcanic frontier, glass-flats, and slag-barrens the crowns called
+  worthless — lived the **borderland folk**: ash-nomads, glass-gleaners,
+  and vent-tenders scratching a hard living off ground nobody claimed.
+  Its animals are the fire-bred kind — salamanders, ogres, and the desert
+  wyrmlings.
+
+So Aldervale was three peoples and two commons: the sunlit realms, the
+shared Deep below, and the burned Waste at the margins. Six kinds of home,
+and the theft came for all of them.
+
 It was not a golden age. It was just a world, going about its business,
 with the lights on. That is the thing worth remembering, because it is the
 thing that was taken.
@@ -63,8 +85,13 @@ marsh taken mid-flood, an orchard taken a week before pressing, a forge
 taken with the fire still lit, a forest taken with its lamps still
 burning. He lifted each stolen slab into the sky and welded it onto the
 one below — black iron, aether-chain, and grav-engines humming — until a
-tower stood where the weather used to be. A hundred stolen countries in a
-single column, and on the hundredth, his throne.
+tower stood where the weather used to be. Fourscore stolen countries and
+more, welded in a single column — and above them, where the height grew
+too near the throne to trust to anyone's stolen home, he stopped stealing
+and began to **build**: raising a citadel of his own iron and manufacture,
+tier on tier, to the hundredth floor, where his throne sits welded into
+the core. The lower tower is the world he *took*; the upper tower is the
+thing he *made*. Both are the Ascent.
 
 The people named it for the only thing left to do about it: **the
 Ascent.**
@@ -83,9 +110,10 @@ built a world in which it can never happen.
 
 He did not stack the realms whole. He **broke** them and **scattered the
 pieces up the column**, on purpose, so that no people is ever whole on one
-floor. A valley's farmers are split across three landings; the giants'
-forge-halls sit ten floors below the giants' ice-holds; the elves' one
-great wood is cut apart and buried between a marsh and a desert. Every
+floor. A valley's farmers are split across a dozen landings; the giants'
+forge-halls and their ice-holds are strewn floors apart; the elves' one
+great wood is cut into pieces and buried up and down the column, between
+marshes, mines, and deserts. Every
 floor is a fragment, and every fragment is a prison the size of a country,
 and the only door out of each is a single lift that goes one way — **up,
 one floor, and only when its jailer allows it.**
@@ -162,8 +190,9 @@ legible as one of these:
   does not tame them (feral generations don't forget in a day, which is
   why a freed floor is still worth hunting), but the wrongness goes out of
   them, and they pull back from the gate roads to the wild edges.
-- **The Pressed.** Vharuk's conscript garrison — **goblins** in the low
-  floors, kobolds and Red Orcs deeper up, and worse things higher still.
+- **The Pressed.** Vharuk's conscript garrison — **goblins** at the foot
+  of the climb, kobolds, Red Orcs, and troll-gangs scattered through the
+  stolen middle, and the tower's own imps and hellknights near the throne.
   These are not monsters by nature; they are the *first-taken*, forced
   into collars and debts and sent to fight with whatever scrap they were
   handed: notched blades, stolen spears, cut-down bows, siege gear too big
@@ -318,11 +347,12 @@ down the Demon King on floor 100.**
 ## 8. The hundred floors
 
 **Every floor is its own world.** Not ten biomes repeated ten times each — a
-hundred distinct stolen countries, each with its own ground, its own
-weather, its own animals, and its own frightened people, because that is
-what the Theft actually was: a hundred different places, cut out on a
-hundred different days and stacked in the dark. A climber should be able to
-tell floor 4 from floor 6 blindfolded, by the animals alone.
+hundred distinct places, each with its own ground, its own weather, its own
+animals, and its own frightened people. The lower eighty are *stolen
+countries*, cut out on a hundred different days and stacked in the dark;
+the upper reaches are the tower's own *manufacture* (§2), built and not
+robbed. A climber should be able to tell floor 4 from floor 6 blindfolded,
+by the animals alone.
 
 One row per floor below — the world, the animals the fever rides there (the
 shapes you fight and free), who is trapped waiting for you, and the Warden
@@ -332,91 +362,107 @@ grouping — fragments of one people are scattered up the column on purpose
 (§3), so an elf-wood floor stranded between a marsh and a mine is not a
 mistake, it is the crime. Per-floor files elaborate each of these from here.
 
-*People key: **Men** · **Giants** (the "dwarves") · **Elves** · **Deep**
-(the under-caverns, no one people's home) · **Waste** (the burned
-borderlands) · **Made** (no stolen people — the tower's own manufacture).*
+**What the "People" column means.** Six labels run in that column, but they
+are not six peoples — they are the six kinds of *home* the theft cut from
+(§1–§2). Read it as "where this fragment was cut from," not "who lives on
+it," because the Deep and the Waste were always shared:
+
+- **Peoples (homes stolen whole):** **Men**, **Giants** (the old word is
+  "dwarves"), **Elves**. A fragment tagged with one of these was a piece
+  of that people's realm — a farm, a forge-hall, a lamp-wood.
+- **Commons (belonged to no one people):** **Deep** — the shared
+  under-caverns; its captives are *delvers of every race* (miners,
+  cable-crews, vault-keepers) and its beasts are the lightless kind
+  (spiders, trolls, blind fish). **Waste** — the burned borderlands; its
+  captives are *borderlanders* (ash-nomads, glass-gleaners, vent-tenders)
+  and its beasts are fire-bred (salamanders, ogres, wyrmlings).
+- **Made (not stolen at all):** the upper tower Vharuk *built* rather than
+  took (§2), of black iron and forced labor. No realm was robbed for it, so
+  no free people waits there — only **captives and thralls** dragged up
+  from below, garrisoned by the tower's own manufacture (imps, hellknights,
+  and the Wrongmade) on the approach to the throne.
 
 | # | People | The world (this floor, and no other) | Its animals — the fever's shapes | Who is trapped here | Warden |
 |---|---|---|---|---|---|
 | 1 | Men | The Fencerows — hedged farmland under white floodlight-bars | grey wolves, feral boars, hedgerow rats | Lamplit Steading's last farmers | Brackjaw |
-| 2 | Men | The Drowned Pasture — a flooded water-meadow, hay-ricks as islands | marsh wolves, mire boars, an ancient shellback tortoise, fence-wire eels | Weirsend's weir-folk & eel-trappers | Sedgeback |
-| 3 | Men | The Orchard Rows — a nine-generation orchard gone to rot and wasps | orchard wolf-packs, cider-mad boars, hornet swarms · *windfall haunt (W)* | Cider Cross's pressers | Applewrath |
-| 4 | Men | The Beacon Field — a night signal-heath of humming pylons | glare moths, night-hawks, shadow-line wolves | Pylon Rest's beacon-keepers | Glarefang |
-| 5 | Men | The Shearing Downs — bare chalk sheep-downs, wind-cropped | downs coursers (hares), shear-mad rams, sky-larks | Woolgate's shepherds | Ramsteel |
-| 6 | Men | The Hollow Lanes — sunken droving lanes between high hedgebanks | bank martens, lane bull-boars, hedge-blind wolves | Hedgeharbor's drovers | Thornhide |
-| 7 | Men | The Millrace — watermill leats, sluices, and wheel-ponds | leat crabs, sluice wolves, water-voles, wheelhouse boars | Wheelhouse's millers | Milldrown |
-| 8 | Men | The Burnt Common — a wildfire-scorched heath, ash over new bracken | cinder wolves, char-tusk boars, fire-beetles · *ember shade (W)* | Ashfold's commoners | Greycinder |
-| 9 | Men | The Gallows Fair — an abandoned fairground, bunting and empty cages | carousel wolves, prize boars, bunting kites, fair-cats | Fairstead's fair-folk | Hookmaster |
+| 2 | Giants | The Rustwater Adit — a mine-mouth weeping orange water, bat-hung | adit bats, rust hounds, cave crickets · *kobolds, Red Orc outriders (P)* | Lampfall's miners | Rustmaw |
+| 3 | Men | The Drowned Pasture — a flooded water-meadow, hay-ricks as islands | marsh wolves, mire boars, an ancient shellback tortoise, fence-wire eels | Weirsend's weir-folk & eel-trappers | Sedgeback |
+| 4 | **Elves** | The Lightless Glade — a self-lit elf-wood with its lights murdered | pale stags, lamp moths · *lamp-eater, glade-wight (W)* — *an elf-wood cut loose among the low country (§3)* | Lanternroot's last lamplighters | Palegleam |
+| 5 | Giants | The Flooded Mine — sump-drowned galleries of black water | sump eels, blind cave-fish, gallery newts · *bilge kobolds (P)* | Pumpstead's pump-crews | Sumplock |
+| 6 | Deep | The Threshold Dark — the cave-mouth, first true dark, guano-thick | grave-moths, threshold beetles, cave broodlings · *silk-wrapped husk (W)* | Lastlight's delvers | Duskspin |
+| 7 | Men | The Orchard Rows — a nine-generation orchard gone to rot and wasps | orchard wolf-packs, cider-mad boars, hornet swarms · *windfall haunt (W)* | Cider Cross's pressers | Applewrath |
+| 8 | Waste | The Ashline — grey ash dunes patrolled by jackals and vultures | ash salamanders, ashline jackals, cinder vultures · *dune ogres* | Greywell's ash-nomads | Cinderhide |
+| 9 | Men | The Beacon Field — a night signal-heath of humming pylons | glare moths, night-hawks, shadow-line wolves | Pylon Rest's beacon-keepers | Glarefang |
 | 10 | Men | The Kingsfield — a muster meadow drowned in a hundred banners | banner-broken wolves, courier-hounds, parade horses · *goblin guard (P)* | Bannerline's muster-folk | **Gnarl, the Goblin King** |
-| 11 | Giants | The Rustwater Adit — a mine-mouth weeping orange water, bat-hung | adit bats, rust hounds, cave crickets · *kobolds, Red Orc outriders (P)* | Lampfall's miners | Rustmaw |
-| 12 | Giants | The Flooded Mine — sump-drowned galleries of black water | sump eels, blind cave-fish, gallery newts · *bilge kobolds (P)* | Pumpstead's pump-crews | Sumplock |
-| 13 | Giants | The Counting Halls — echoing coin-dust halls of ledger-shelves | scrip rats, ledger-moths, cricket-swarms · *coin-sifter kobolds (P); ledger wisp (W)* | Ledgerstone's clerks | Brassbone |
+| 11 | Giants | The Counting Halls — echoing coin-dust halls of ledger-shelves | scrip rats, ledger-moths, cricket-swarms · *coin-sifter kobolds (P); ledger wisp (W)* | Ledgerstone's clerks | Brassbone |
+| 12 | Men | The Shearing Downs — bare chalk sheep-downs, wind-cropped | downs coursers (hares), shear-mad rams, sky-larks | Woolgate's shepherds | Ramsteel |
+| 13 | **Elves** | The Eaves — the dark-wood's edge, humming with dead signals | gloom hounds, dusk boars · *dead signal, eaves shade (W)* | Lastlamp's edge-elves | Duskhide |
 | 14 | Giants | The Gear Galleries — belt-and-flywheel machine halls | belt-runner rodents, grease-moths · *gear-thief kobolds, Red Orc pit-fighters (P)* | Sprocket Row's machinists | Gearhide |
-| 15 | Giants | The Fusion Vaults — glow-lit fuel-rod vaults in half-light | luminous cave-spiders · *glow-sick kobolds (P); rod-wisps, forge remnant (W)* | Half-Light's vault-crews | Coreburn |
-| 16 | Giants | The Anvil Commons — a communal forge-floor of bellows and anvils | bellows hounds, forge-crickets · *Red Orc armorers (P); half-forged thing (W)* | Hammerhome's smiths | Anvilback |
-| 17 | Giants | The Smelterworks — smelters and glowing slag-runnels | slag rats, runnel salamanders · *smelter-boss Orcs, ladle kobolds (P); heat-haunt (W)* | Crucible Gate's smelters | Smeltjaw |
-| 18 | Giants | The Deep Drifts — deep exploratory shafts, winch-rope dark | drift moths, pit hounds, blind diggers · *winch-crawler (W)* | Ropewalk's drift-crews | Deepwinch |
-| 19 | Giants | The Broken Doors — breached blast-doors and rubble, crow-loud | breach crows, scorch rats · *door-breaker Orcs, powder kobolds (P); doorward remnant (W)* | Last Lantern's doorwards | Gatebone |
+| 15 | Deep | The Cable Roots — a tangle of root-like cables, static-lit | wire-weaver spiders, cable-eels · *charge-wisp (W); cable troll* | Wiregate's cable-crews | Wirefang |
+| 16 | Men | The Hollow Lanes — sunken droving lanes between high hedgebanks | bank martens, lane bull-boars, hedge-blind wolves | Hedgeharbor's drovers | Thornhide |
+| 17 | Waste | The Glass Flats — fulgurite glass flats shimmering with mirage | glass salamanders, flat-skitter lizards · *heat-ghost (W); shard-picker ogres* | Shardside's glass-gleaners | Glassjaw |
+| 18 | Men | The Millrace — watermill leats, sluices, and wheel-ponds | leat crabs, sluice wolves, water-voles, wheelhouse boars | Wheelhouse's millers | Milldrown |
+| 19 | Giants | The Fusion Vaults — glow-lit fuel-rod vaults in half-light | luminous cave-spiders · *glow-sick kobolds (P); rod-wisps, forge remnant (W)* | Half-Light's vault-crews | Coreburn |
 | 20 | Giants | The Red Warcamp — an orc warcamp pitched in the mine, drum-loud | warcamp hounds · *Red Orc honor guard, warframe champion, drum kobolds, looters (P)* | Shieldwall's captives | **Warlord Skarn** |
-| 21 | Men | The Mirefields — peat mire, bog-pools, and drifting cairn-lights | bog hounds, mire leeches, marsh adders · *mire ghoul (W)* | Cairnside's peat-folk | Mirebone |
-| 22 | Men | The Tithe Barrows — grassed burial mounds, beetle-riddled | grave beetles, barrow rats, mound-owls · *tithe-wight, barrow ghoul (W)* | Wakewater's grave-wardens | Tithegrim |
-| 23 | **Elves** | The Lightless Glade — a self-lit elf-wood with its lights murdered | pale stags, lamp moths · *lamp-eater, glade-wight (W)* — *the elf-wood stranded in the marsh (§3)* | Lanternroot's last lamplighters | Palegleam |
-| 24 | Men | The Rig Graves — a drowned exo-rig graveyard, rust-island marsh | marsh adders, rig-eels, carrion crows · *rig-wight, drowned beacon (W)* | Rustwake's salvage-folk | Rigrot |
-| 25 | Men | The Processional Way — a funeral causeway of willows and passing-bells | causeway ravens, marsh hares · *verge ghoul, coffin-bearer, passing-bell light (W)* | Mourngate's mourners | Mournhide |
-| 26 | Men | The Peat Cuts — black peat trenches, midge-hazed | midge clouds, turf hounds · *peat-cured king, cutter ghoul (W)* | Turfside's cutters | Peatlock |
-| 27 | Men | The Bone Garths — walled bone-yards, picker-birds | picker rats, garth-crows · *restless heap, yard ghoul (W)* | Garthend's bone-wardens | Garthbone |
-| 28 | Men | The Sunken Chantry — a flooded chapel of fonts and vigil-candles | font newts, chantry bats · *vigil light, font ghoul, drowned congregant (W)* | Bellmarsh's faithful | Bellrot |
-| 29 | Men | The Doorstone Moor — a dolmen moor of standing stones and heather | moor hounds, moor-hares, curlews · *something unsealed, moor ghoul (W)* | Stonewake's moor-folk | Doorstone |
+| 21 | Men | The Burnt Common — a wildfire-scorched heath, ash over new bracken | cinder wolves, char-tusk boars, fire-beetles · *ember shade (W)* | Ashfold's commoners | Greycinder |
+| 22 | **Elves** | The Whisperwood — a wood that repeats what it hears, wasp-galled | echo hounds, gall wasps, stray nightmares · *quoted shade (W)* | Hushfall's wood-elves | Hearsay |
+| 23 | Giants | The Anvil Commons — a communal forge-floor of bellows and anvils | bellows hounds, forge-crickets · *Red Orc armorers (P); half-forged thing (W)* | Hammerhome's smiths | Anvilback |
+| 24 | Deep | The Broodwarrens — silk-choked spider brood-warrens | broodling swarms, warren bats, brood-midwife spiders · *warren troll* | Silkstead's townsfolk | Cradlesilk |
+| 25 | Men | The Gallows Fair — an abandoned fairground, bunting and empty cages | carousel wolves, prize boars, bunting kites, fair-cats | Fairstead's fair-folk | Hookmaster |
+| 26 | Waste | The Slag Barrens — heaped slag and clinker, ash-bats | slag salamanders, clinker hounds, cinder bats · *ridge ogres* | Clinker Row's slag-folk | Slagbone |
+| 27 | Men | The Mirefields — peat mire, bog-pools, and drifting cairn-lights | bog hounds, mire leeches, marsh adders · *mire ghoul (W)* | Cairnside's peat-folk | Mirebone |
+| 28 | Giants | The Smelterworks — smelters and glowing slag-runnels | slag rats, runnel salamanders · *smelter-boss Orcs, ladle kobolds (P); heat-haunt (W)* | Crucible Gate's smelters | Smeltjaw |
+| 29 | Men | The Tithe Barrows — grassed burial mounds, beetle-riddled | grave beetles, barrow rats, mound-owls · *tithe-wight, barrow ghoul (W)* | Wakewater's grave-wardens | Tithegrim |
 | 30 | Men | The Kingsbarrow — a great moated barrow, the drowned king's mound | moat-watcher eels, barrow ravens · *herald, tribute-bearer, barrow guard (W)* | Wakesend's barrow-keepers | **The Barrow King** |
-| 31 | Deep | The Threshold Dark — the cave-mouth, first true dark, guano-thick | grave-moths, threshold beetles, cave broodlings · *silk-wrapped husk (W)* | Lastlight's delvers | Duskspin |
-| 32 | Deep | The Cable Roots — a tangle of root-like cables, static-lit | wire-weaver spiders, cable-eels · *charge-wisp (W); cable troll* | Wiregate's cable-crews | Wirefang |
-| 33 | Deep | The Broodwarrens — silk-choked spider brood-warrens | broodling swarms, warren bats, brood-midwife spiders · *warren troll* | Silkstead's townsfolk | Cradlesilk |
-| 34 | Deep | The Troll Delvings — troll-dug galleries, rubble and grubs | rubble-borer grubs, cave-toads, gallery stalkers · *delving trolls, whelps* | Delvers' Rest's miners | Mossmaul |
-| 35 | Deep | The Signal Deeps — dead server-deeps, cold light and echo | aisle-runner rodents, rack-weaver spiders · *signal husk (W); heat-drunk troll* | Faintlight's signal-delvers | Echobone |
-| 36 | Deep | The Hanging City — a chasm-city hung on bridges of silk | balloon-drifting spiders, chasm bats · *citizen husk (W); chasm troll* | Skeinside's city-folk | Skeinback |
-| 37 | Deep | The Trapdoor Fields — a floor of dust-funnels and hidden lids | trapdoor spiders, dust moths · *sprung trap (W); field-wise troll* | Latchlight's field-delvers | Latchjaw |
-| 38 | Deep | The Silk Vaults — silk-wrapped storerooms, still and white | vault rats, silk-moths, vault-keeper spiders · *fresh bundle (W); vault-breaker troll* | Spoolgate's vault-crews | Spoolhide |
-| 39 | Deep | The Egg Galleries — pale hatchery galleries, sac-lit | gallery-bats, sentinel spiders · *hatching sac, sac-light (W); brood-fed troll* | Palewatch's watchers | Husklight |
+| 31 | **Elves** | The Grey Rides — grey bridleways through the trees, crow-lined | ride-warden hounds, ride crows · *grey outriders, verge-runner shade (W)* | Bridlerest's ride-keepers | Tallyhorn |
+| 32 | Giants | The Deep Drifts — deep exploratory shafts, winch-rope dark | drift moths, pit hounds, blind diggers · *winch-crawler (W)* | Ropewalk's drift-crews | Deepwinch |
+| 33 | Deep | The Troll Delvings — troll-dug galleries, rubble and grubs | rubble-borer grubs, cave-toads, gallery stalkers · *delving trolls, whelps* | Delvers' Rest's miners | Mossmaul |
+| 34 | Men | The Rig Graves — a drowned exo-rig graveyard, rust-island marsh | marsh adders, rig-eels, carrion crows · *rig-wight, drowned beacon (W)* | Rustwake's salvage-folk | Rigrot |
+| 35 | Waste | The Vent Country — a plain of steam-vents and sulfur crabs | vent salamanders, vent crabs, ash wyrmlings · *scalded ogres* | Steamgate's vent-tenders | Ventmaw |
+| 36 | Men | The Processional Way — a funeral causeway of willows and passing-bells | causeway ravens, marsh hares · *verge ghoul, coffin-bearer, passing-bell light (W)* | Mourngate's mourners | Mournhide |
+| 37 | Giants | The Broken Doors — breached blast-doors and rubble, crow-loud | breach crows, scorch rats · *door-breaker Orcs, powder kobolds (P); doorward remnant (W)* | Last Lantern's doorwards | Gatebone |
+| 38 | Men | The Peat Cuts — black peat trenches, midge-hazed | midge clouds, turf hounds · *peat-cured king, cutter ghoul (W)* | Turfside's cutters | Peatlock |
+| 39 | **Elves** | The Echo Glades — glades that answer, moth-drifting | glade-shy hounds, glade moths · *the dancers, skirmish remnant (W)* | Fainthollow's glade-elves | Encore |
 | 40 | Deep | The Broodthrone — Vyx's tribute-hung throne-web | *throne-web guard, wrapped knight, pale consort, thread-page, tribute husk (W)* | Threadneedle's captives | **Matriarch Vyx** |
-| 41 | Waste | The Ashline — grey ash dunes patrolled by jackals and vultures | ash salamanders, ashline jackals, cinder vultures · *dune ogres* | Greywell's ash-nomads | Cinderhide |
-| 42 | Waste | The Glass Flats — fulgurite glass flats shimmering with mirage | glass salamanders, flat-skitter lizards · *heat-ghost (W); shard-picker ogres* | Shardside's glass-gleaners | Glassjaw |
-| 43 | Waste | The Slag Barrens — heaped slag and clinker, ash-bats | slag salamanders, clinker hounds, cinder bats · *ridge ogres* | Clinker Row's slag-folk | Slagbone |
-| 44 | Waste | The Vent Country — a plain of steam-vents and sulfur crabs | vent salamanders, vent crabs, ash wyrmlings · *scalded ogres* | Steamgate's vent-tenders | Ventmaw |
-| 45 | Waste | The Ogre Steps — terraced kiln-steps grazed by fire-goats | kiln salamanders, kiln goats, kiln vultures · *terrace ogres* | Kilnrest's terrace-folk | Kilnfist |
-| 46 | Waste | The Ember Dunes — rolling sand dunes, night-adders, ember-moths | dune-swimmer salamanders, dune adders, ember moths · *ember-blind ogres* | Duneshade's dune-nomads | Emberback |
-| 47 | Waste | The Reactor Scar — the crater itself, burning colorless | scar salamanders, scar rats · *colorless flame (W); canyon-hermit ogres* | Scarwatch's scar-survivors | Palescorch |
-| 48 | Waste | The Char Forest — a petrified burned forest, soot-owled | charcoal salamanders, soot owls · *hollow trunk (W); rooter ogres* | Stumpwell's char-burners | Charspine |
-| 49 | Waste | The Wyrmroad — a wyrm-migration road drifted with shed molt | road wyrmlings, glass hares, molt-fat salamanders · *scale-picker ogres* | Moltgate's road-folk | Moltcrown |
+| 41 | Giants | The Moraine Gates — a glacial boulder-field under wheeling hawks | rime wolves, glare hawks · *moraine trolls; frozen scout (W)* | Coldquay's ice-folk | Coldjaw |
+| 42 | Deep | The Signal Deeps — dead server-deeps, cold light and echo | aisle-runner rodents, rack-weaver spiders · *signal husk (W); heat-drunk troll* | Faintlight's signal-delvers | Echobone |
+| 43 | Men | The Bone Garths — walled bone-yards, picker-birds | picker rats, garth-crows · *restless heap, yard ghoul (W)* | Garthend's bone-wardens | Garthbone |
+| 44 | Waste | The Ogre Steps — terraced kiln-steps grazed by fire-goats | kiln salamanders, kiln goats, kiln vultures · *terrace ogres* | Kilnrest's terrace-folk | Kilnfist |
+| 45 | Men | The Sunken Chantry — a flooded chapel of fonts and vigil-candles | font newts, chantry bats · *vigil light, font ghoul, drowned congregant (W)* | Bellmarsh's faithful | Bellrot |
+| 46 | Giants | The Frozen Sea — a pack-ice coolant sea, gull-cried | floe wolf-packs, brine gulls, ice-seals · *coolant wight (W); swell trolls* | Floeside's sealers | Floeback |
+| 47 | Men | The Doorstone Moor — a dolmen moor of standing stones and heather | moor hounds, moor-hares, curlews · *something unsealed, moor ghoul (W)* | Stonewake's moor-folk | Doorstone |
+| 48 | **Elves** | The Black Meadows — night pastures grazed by nightmares | grazing nightmares (horses), herd stallions, black crakes, pasture hounds | Wickstead's night-herders | Nightbridle |
+| 49 | Giants | The Rime Forest — a frozen conifer forest, glass-antlered | glass-antlered stags, bell-wise wolves · *chime sprite (W); hammer-logger trolls* | Firwatch's foresters | Rimehide |
 | 50 | Waste | The Cindermouth — the caldera mouth, ringed with tribute-pyres | nest wyrmlings, caldera salamanders, rim jackals · *tribute ogres* | Lastwater's caldera-folk | **Cindermaw the Wyrm** |
-| 51 | Giants | The Moraine Gates — a glacial boulder-field under wheeling hawks | rime wolves, glare hawks · *moraine trolls; frozen scout (W)* | Coldquay's ice-folk | Coldjaw |
-| 52 | Giants | The Frozen Sea — a pack-ice coolant sea, gull-cried | floe wolf-packs, brine gulls, ice-seals · *coolant wight (W); swell trolls* | Floeside's sealers | Floeback |
-| 53 | Giants | The Rime Forest — a frozen conifer forest, glass-antlered | glass-antlered stags, bell-wise wolves · *chime sprite (W); hammer-logger trolls* | Firwatch's foresters | Rimehide |
-| 54 | Giants | The Troll Bridges — snow-bridges over crevasses, raven-haunted | gorge ravens, crevasse-climbers, toll-runner wolves · *bridge-trolls* | Bridgeward's bridge-keepers | Spanbreak |
-| 55 | Giants | The Giant Steadings — freehold farms sized for giants | steading bulls, steading hounds · *rick-thief trolls; freeholder giants* | Thanesrest's freeholders | Fencewright |
-| 56 | Giants | The Ice Quarries — sawn ice quarries strung with gantries | quarry crows, gantry wolves · *quarried thing (W); quarry-gang trolls* | Hewnstone's quarriers | Hewnheart |
-| 57 | Giants | The Coolant Falls — frozen white falls, marten-run | ice martens, glass-coat wolves · *white pilgrim (W); falls trolls* | Milkwater's falls-folk | Whitefall |
-| 58 | Giants | The Wind Walls — wind-scoured ice ramparts, kite-torn | gale kites, gale-running wolves · *shutter trolls; wall-warden giants* | Shuttergate's wall-folk | Galebone |
-| 59 | Giants | The Jarl's Road — the jarl's high road, herald-wolf-run | herald-wolves, post ravens · *lamplighter trolls; thane of the road* | Horncall's road-folk | Hallmarch |
+| 51 | Deep | The Hanging City — a chasm-city hung on bridges of silk | balloon-drifting spiders, chasm bats · *citizen husk (W); chasm troll* | Skeinside's city-folk | Skeinback |
+| 52 | Men | The Cloudline — cloud-wreathed ridgelines grazed by cliff-goats | cloudline harpies, squall drakes, cliff goats · *fallen rigger (W)* | Skyfoot's cliff-holders | Thermal |
+| 53 | Waste | The Ember Dunes — rolling sand dunes, night-adders, ember-moths | dune-swimmer salamanders, dune adders, ember moths · *ember-blind ogres* | Duneshade's dune-nomads | Emberback |
+| 54 | Men | The Wreckfields — a field of crashed sky-ships, hull-boring | salvage harpies, hold-nesting drakes, hull borers · *wreck-crew (W)* | Hullside's salvagers | Keelhaul |
+| 55 | Giants | The Troll Bridges — snow-bridges over crevasses, raven-haunted | gorge ravens, crevasse-climbers, toll-runner wolves · *bridge-trolls* | Bridgeward's bridge-keepers | Spanbreak |
+| 56 | Men | The Rookeries — sheer cliff rookeries, fledgling-mobbed | rookery-matron harpies, rook martens, fledgling mobs, rookery drakes | Rookwall's rookery-keepers | Shrikewind |
+| 57 | **Elves** | The Shade Walks — lamplit avenues where shadows won't hold | avenue hounds, avenue rats · *unfixed shadow, candle-thief shade (W)* | Candlerow's lamp-keepers | Palewick |
+| 58 | Giants | The Giant Steadings — freehold farms sized for giants | steading bulls, steading hounds · *rick-thief trolls; freeholder giants* | Thanesrest's freeholders | Fencewright |
+| 59 | Deep | The Trapdoor Fields — a floor of dust-funnels and hidden lids | trapdoor spiders, dust moths · *sprung trap (W); field-wise troll* | Latchlight's field-delvers | Latchjaw |
 | 60 | Giants | The Frosthall — the great mead-hall, hearth-warm and skald-loud | hearth-wolves, hall-ravens · *mead-bearer trolls; hall-thane, ice skald (W)* | Hearthold's hall-folk | **Jarl Hrimgar** |
-| 61 | Men | The Cloudline — cloud-wreathed ridgelines grazed by cliff-goats | cloudline harpies, squall drakes, cliff goats · *fallen rigger (W)* | Skyfoot's cliff-holders | Thermal |
-| 62 | Men | The Wreckfields — a field of crashed sky-ships, hull-boring | salvage harpies, hold-nesting drakes, hull borers · *wreck-crew (W)* | Hullside's salvagers | Keelhaul |
-| 63 | Men | The Rookeries — sheer cliff rookeries, fledgling-mobbed | rookery-matron harpies, rook martens, fledgling mobs, rookery drakes | Rookwall's rookery-keepers | Shrikewind |
-| 64 | Men | The Anchor Chains — vast mooring-chains slung across the sky | chain-walker harpies, link-coiled drakes, chain ticks · *moss-farmer's remnant (W)* | Chainrest's chain-keepers | Shacklewise |
-| 65 | Men | The Updrafts — dueling updraft-passes strung with kite-lines | updraft-duelist harpies, column drakes, pass boars · *kite-line cutter (W)* | Kitegate's kite-pilots | Galecrest |
-| 66 | Men | The Mast Forest — a forest of broken masts and shroud-lines | shroud-runner harpies, crowsnest drakes, shroud crabs · *tangled topman (W)* | Sparside's mast-folk | Mastwrack |
-| 67 | Men | The Lightning Fields — a plain of copper lightning-poles | charge-thief harpies, fieldborn drakes, copper rats · *lane-stone mover (W)* | Copperpole's field-folk | Groundstrike |
-| 68 | Men | The Drake Aeries — high drake-aeries piled with hoard | aerie-heir drakes, drake-groom harpies, hoard lizards · *deposed tyrant (drake)* | Scalewatch's drake-keepers | Stoopfall |
-| 69 | Men | The Eye Wall — the storm's uncanny calm eye, rain-hushed | eye-wall harpies, rain hounds · *pressure-ghost (W); lull courtiers* | Lullside's eye-dwellers | Stillmark |
+| 61 | Men | The Anchor Chains — vast mooring-chains slung across the sky | chain-walker harpies, link-coiled drakes, chain ticks · *moss-farmer's remnant (W)* | Chainrest's chain-keepers | Shacklewise |
+| 62 | Waste | The Reactor Scar — the crater itself, burning colorless | scar salamanders, scar rats · *colorless flame (W); canyon-hermit ogres* | Scarwatch's scar-survivors | Palescorch |
+| 63 | Men | The Updrafts — dueling updraft-passes strung with kite-lines | updraft-duelist harpies, column drakes, pass boars · *kite-line cutter (W)* | Kitegate's kite-pilots | Galecrest |
+| 64 | Giants | The Ice Quarries — sawn ice quarries strung with gantries | quarry crows, gantry wolves · *quarried thing (W); quarry-gang trolls* | Hewnstone's quarriers | Hewnheart |
+| 65 | Men | The Mast Forest — a forest of broken masts and shroud-lines | shroud-runner harpies, crowsnest drakes, shroud crabs · *tangled topman (W)* | Sparside's mast-folk | Mastwrack |
+| 66 | **Elves** | The Kennel Courts — the hunt's kennels and owl-hung mews | pack-matron hounds, mews owls, mews-kept nightmares · *kennel-master shade (W)* | Stillhorn's kennel-keepers | Leashbone |
+| 67 | Giants | The Coolant Falls — frozen white falls, marten-run | ice martens, glass-coat wolves · *white pilgrim (W); falls trolls* | Milkwater's falls-folk | Whitefall |
+| 68 | Deep | The Silk Vaults — silk-wrapped storerooms, still and white | vault rats, silk-moths, vault-keeper spiders · *fresh bundle (W); vault-breaker troll* | Spoolgate's vault-crews | Spoolhide |
+| 69 | Men | The Lightning Fields — a plain of copper lightning-poles | charge-thief harpies, fieldborn drakes, copper rats · *lane-stone mover (W)* | Copperpole's field-folk | Groundstrike |
 | 70 | Men | The Tempest Court — Zephyra's sky-court of unbottled gales | champion drakes, court-guard harpies, perch squires · *unbottled gale (W)* | Galesend's court-captives | **Zephyra, the Storm Queen** |
-| 71 | **Elves** | The Eaves — the dark-wood's edge, humming with dead signals | gloom hounds, dusk boars · *dead signal, eaves shade (W)* | Lastlamp's edge-elves | Duskhide |
-| 72 | **Elves** | The Whisperwood — a wood that repeats what it hears, wasp-galled | echo hounds, gall wasps, stray nightmares · *quoted shade (W)* | Hushfall's wood-elves | Hearsay |
-| 73 | **Elves** | The Grey Rides — grey bridleways through the trees, crow-lined | ride-warden hounds, ride crows · *grey outriders, verge-runner shade (W)* | Bridlerest's ride-keepers | Tallyhorn |
-| 74 | **Elves** | The Echo Glades — glades that answer, moth-drifting | glade-shy hounds, glade moths · *the dancers, skirmish remnant (W)* | Fainthollow's glade-elves | Encore |
-| 75 | **Elves** | The Black Meadows — night pastures grazed by nightmares | grazing nightmares (horses), herd stallions, black crakes, pasture hounds | Wickstead's night-herders | Nightbridle |
-| 76 | **Elves** | The Shade Walks — lamplit avenues where shadows won't hold | avenue hounds, avenue rats · *unfixed shadow, candle-thief shade (W)* | Candlerow's lamp-keepers | Palewick |
-| 77 | **Elves** | The Kennel Courts — the hunt's kennels and owl-hung mews | pack-matron hounds, mews owls, mews-kept nightmares · *kennel-master shade (W)* | Stillhorn's kennel-keepers | Leashbone |
-| 78 | **Elves** | The Snare Woods — woods seeded with wire and beetle-tick | funnel hounds, wire beetles · *the caught thing, snare-setter (W)* | Brambleside's snare-folk | Springtrap |
-| 79 | **Elves** | The Quarry Runs — the hunt's quarry-runs, crow-watched | pacing hounds, stand crows, a rival quarry-beast · *course steward (W)* | Bayhollow's quarry-folk | Foxglove |
+| 71 | Waste | The Char Forest — a petrified burned forest, soot-owled | charcoal salamanders, soot owls · *hollow trunk (W); rooter ogres* | Stumpwell's char-burners | Charspine |
+| 72 | Men | The Drake Aeries — high drake-aeries piled with hoard | aerie-heir drakes, drake-groom harpies, hoard lizards · *deposed tyrant (drake)* | Scalewatch's drake-keepers | Stoopfall |
+| 73 | Giants | The Wind Walls — wind-scoured ice ramparts, kite-torn | gale kites, gale-running wolves · *shutter trolls; wall-warden giants* | Shuttergate's wall-folk | Galebone |
+| 74 | **Elves** | The Snare Woods — woods seeded with wire and beetle-tick | funnel hounds, wire beetles · *the caught thing, snare-setter (W)* | Brambleside's snare-folk | Springtrap |
+| 75 | Giants | The Jarl's Road — the jarl's high road, herald-wolf-run | herald-wolves, post ravens · *lamplighter trolls; thane of the road* | Horncall's road-folk | Hallmarch |
+| 76 | **Elves** | The Quarry Runs — the hunt's quarry-runs, crow-watched | pacing hounds, stand crows, a rival quarry-beast · *course steward (W)* | Bayhollow's quarry-folk | Foxglove |
+| 77 | Deep | The Egg Galleries — pale hatchery galleries, sac-lit | gallery-bats, sentinel spiders · *hatching sac, sac-light (W); brood-fed troll* | Palewatch's watchers | Husklight |
+| 78 | Men | The Eye Wall — the storm's uncanny calm eye, rain-hushed | eye-wall harpies, rain hounds · *pressure-ghost (W); lull courtiers* | Lullside's eye-dwellers | Stillmark |
+| 79 | Waste | The Wyrmroad — a wyrm-migration road drifted with shed molt | road wyrmlings, glass hares, molt-fat salamanders · *scale-picker ogres* | Moltgate's road-folk | Moltcrown |
 | 80 | **Elves** | The Pale Court — the Huntsman's court and pale kennels | pale hounds, unblooded hounds · *the first whip, the master's remount (W)* | Hornsend's court-captives | **The Pale Huntsman** |
 | 81 | Made | The First Outwork — the tower's first siege-outwork, crow-picked | outwork crows, furnace rats · *outwork imps, gate hellknights (P); wall-flesh (W)* | Sappersrest's captive sappers | Rivetgrim |
 | 82 | Made | The Chain Yards — chain-forging yards over quench-pits | quench-pit eels, forge bats · *chain-gang imps, quench knights (P); living chain (W)* | Linkside's chain-slaves | Anchorwrath |
@@ -446,15 +492,25 @@ fevered, and freed by the killing.*
 Two things this table encodes on purpose:
 
 - **The peoples are interleaved** (§3). "People" marks the realm a fragment
-  was cut from, not a block of floors. The Lightless Glade (23) sitting in
-  the marsh, and the whole elf-wood (71–80) buried above a demon-forge, are
-  the clearest wounds — a floor that doesn't match its neighbors *is* the
-  Theft, and its lore should say so.
-- **Higher up, "whose land" gives way to "what the tower made."** The Deep,
-  the Waste, and especially the Made floors (81–100) hold fewer stolen
-  people and more Wrongmade; the inhabitants thin to captives and thralls,
-  and the horror shifts from *stolen* to *manufactured*. That change should
-  be felt as you climb.
+  was cut from, not a block of floors — read the column down and it never
+  settles: a mine under a farm, an elf-wood dropped among the low country, a
+  marsh beside an ice-hold. The Lightless Glade (4), stranded in the bottom
+  farmland, and the elf fragments scattered all the way up to the Pale Court
+  (80) are the clearest wounds — a floor that doesn't match its neighbors
+  *is* the Theft, and its lore should say so.
+- **Only the top is a block, and on purpose.** Below floor 81 no people runs
+  more than a floor or two before another cuts in. But the last tier
+  (81–100) is all **Made** — because by then you have climbed out of the
+  stolen lands entirely and into the tower's own manufacture: no realm was
+  robbed to build it, its inhabitants are captives and thralls, and the
+  horror shifts from *stolen* to *made*. That change should be felt as you
+  climb.
+
+*A note on sequence: the floor numbers above are the **target** order. The
+shipped floors (`content/floors/floor_XXX.yaml`) still run in the old
+biome-block order (1–10 farmland, 11–20 mine, …) and have to be
+re-sequenced to match this table. Until they are, the floor numbers in §9
+point at the **shipped** build, not this list.*
 
 ---
 
