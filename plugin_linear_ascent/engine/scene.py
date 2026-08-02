@@ -54,6 +54,8 @@ class Meters:
     name: str = ""      # 031 §4: the profile header — who is climbing.
     race: str = ""      # "" = not sent (older engine): the header line
     clazz: str = ""     # simply omits the missing parts.
+    faction: str = ""   # the banner you swore to; "" = bannerless (or
+                        # an older engine that never sent it).
 
 
 @dataclass

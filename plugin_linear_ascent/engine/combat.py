@@ -85,7 +85,11 @@ def meters(p: dict) -> Meters:
         # 031 §4: the header line — who is climbing
         name=p.get("name") or "",
         race=p.get("race") or "",
-        clazz=p.get("clazz") or "")
+        clazz=p.get("clazz") or "",
+        # the banner: worldd injects w["faction"] for members; local
+        # dev mode keeps the legacy doc-string guild name.
+        faction=(((p.get("_world") or {}).get("faction") or {})
+                 .get("name") or p.get("guild") or ""))
 
 
 def _eyebrow(p: dict, floor) -> str:

@@ -541,6 +541,9 @@ _TIP_LV = ("LV — your level. Levels are bought at the Guildhall: a full "
            "XP bar plus the training fee in gold.")
 _TIP_GOLD = ("Carried gold — spendable anywhere but lost when you die. "
              "The Vault banks it safely at 5%/day interest.")
+_TIP_FACTION = ("Your banner. Go to the faction house on Roothollow "
+                "main street — the Guildhall — for the store, the "
+                "armory and your brothers.")
 
 
 def _meters_html(m: Meters) -> str:
@@ -579,6 +582,10 @@ def _ident_html(m: Meters) -> str:
     who = " ".join(x for x in (m.race, m.clazz) if x)
     left = (f'<span class="idname">{_e(m.name)}</span>'
             + (f'<span class="idwho">{_e(who)}</span>' if who else ""))
+    fac = getattr(m, "faction", "")
+    if fac:
+        left += (f'<span class="idfac" data-tip="{_e(_TIP_FACTION)}">'
+                 f'brother of the <b>{_e(fac)}</b> faction</span>')
     gold = (f'<span class="mv" data-m="gold" data-v="{m.gold}">'
             f"{m.gold:,}</span>")
     right = (f'<span class="idlv" data-tip="{_e(_TIP_LV)}">'
@@ -1759,6 +1766,9 @@ SCENE_CSS = f"""
 .ident .idname{{font-weight:700;color:{TEXT};}}
 .ident .idwho{{color:{DIM};text-transform:uppercase;
  letter-spacing:.08em;font-size:12px;}}
+.ident .idfac{{color:{DIM};font-size:12px;cursor:help;
+ white-space:nowrap;}}
+.ident .idfac b{{color:{TEXT};font-weight:700;}}
 .ident .idr{{margin-left:auto;display:inline-flex;gap:2ch;
  white-space:nowrap;}}
 .ident .idlv{{font-weight:700;color:{TEXT};cursor:help;}}
