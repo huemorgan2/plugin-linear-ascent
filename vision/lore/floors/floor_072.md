@@ -12,7 +12,8 @@ and hiss; the ledges are treacherous with rolled coin and shed scale; the
 drakes wheel and squabble over their piles. Men lived here by an old truce
 with the drakes, keeping the aeries and sharing the heights. The fever has
 broken the truce and turned the aeries into a war of every drake against every
-climber.
+climber. The stair-lift is set in a hoard-cave behind a curtain of nesting
+ledges high on the cliff; Stoopfall stoops on the approach before it.
 
 ## Flora
 - **Trees / canopy:** none — eyrie-ledges and hoard-caves; wind-stunted
@@ -23,16 +24,19 @@ climber.
   edge; the scale-lichen greases the coin-strewn floors; the aerie-thorn
   snags a climbing hand.
 
-## Three places
-- **The cave — the Hoard-Deep.** The deepest treasure-cave, where the eldest
-  drake's hoard lies richest. *Seed: a drake-scale hauberk and a fortune in
-  hoard-gold — guarded by whatever still nests on it.*
-- **The peak — the High Aerie.** The topmost eyrie, the tyrant-drake's perch;
-  the whole cliff reads from it. *Seed: from it the aeries can be read and a
-  drake-truce re-struck.*
-- **The gate in the mountain — the Aerie Gate.** The stair-lift is set in a
-  hoard-cave behind a curtain of nesting ledges. *Seed: Stoopfall stoops on
-  the approach.*
+## Places of interest
+- **The Hoard-Deep.** The deepest treasure-cave in the cliff, where the eldest
+  drake's hoard lies richest under drifts of coin and shed scale. *Seed: a
+  drake-scale hauberk and a fortune in hoard-gold wait here, guarded by
+  whatever still nests on the pile.*
+- **The High Aerie.** The topmost eyrie, the tyrant-drake's own perch, from
+  which the whole cliff of aeries reads. *Seed: from here the aeries can be
+  read and the old drake-truce re-struck with whatever drake claims the
+  height.*
+- **The Truce-Ledge.** The broad shelf midway up the cliff where Men and
+  drakes first struck their old understanding, marked by a weather-worn truce-
+  stone carved with both their signs. *Seed: renew the truce at the stone and
+  the aeries fight beside the climb instead of against it.*
 
 ## The people
 Drake-keepers — Men of the aeries: eyrie-cleaners, scale-gatherers, and the
@@ -63,22 +67,24 @@ old rider-signals, and climbs to the tyrant's perch no one else dares.
    climbing toward the perch it lost. *Cured, the old drake glides down to a
    low ledge and rests at last.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Drakespeak — spell.** Calms and commands a drake at a word — the keepers'
   truce-signals made into true speech; kin to floor 66's Houndcall. *Seed:
   learn it to re-strike the aerie-truce and command drakes above.*
 - **Drake-scale mail — material.** The keepers' armor of shed drake-scale,
   turning both flame and blade; and hoard-gold beside it. *Seed: the Hoard-
   Deep.*
-- **Eyrie-draught — potion.** A keeper's brew for the heights; kills the fear
-  of the drop and locks the grip on any ledge for a spell.
+- **A won-over drake — mount.** A young aerie-drake calmed at the Truce-Ledge
+  and won to the rider's hand rather than fought — the climb's first drake,
+  and the seed of a ridden wing. *Seed: re-strike the truce and it carries a
+  climber where no stair reaches.*
 
 ## The Warden — Stoopfall
 The old deposed tyrant-drake, welded with a stoop-harness that lets it dive
 faster and turn tighter — it fights from the air, stooping out of the sky onto
 the ledges and beating climbers off the cliff with wing-storms, calling the
 aerie's drakes to its aid. Break it and the aeries calm; the truce can be
-re-struck; the Aerie Gate's ledges quiet.
+re-struck; the stair-lift's ledges quiet.
 
 ## When it falls
 Scalewatch re-strikes the drake-truce from the High Aerie and the aeries share

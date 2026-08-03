@@ -10,7 +10,9 @@ and unshored, a chaos of rubble-piles, half-collapsed stopes, and grub-
 riddled walls that groan and shed stone. The trolls of the Deep tunnel by
 instinct and never prop a roof, so the whole floor is a slow avalanche held
 in place by luck. Grubs the size of dogs churn the rubble; the air is thick
-with rock-dust; something always shifts just out of the lamplight.
+with rock-dust; something always shifts just out of the lamplight. The
+stair-lift stands half-buried under a troll-dug rubble-slope that Mossmaul's
+diggings keep re-burying, and the beast holds the fall before it.
 
 ## Flora
 - **Trees / canopy:** none — raw rock and rubble.
@@ -19,16 +21,18 @@ with rock-dust; something always shifts just out of the lamplight.
 - **Under the Yoke:** the rubble-moss loosens instead of binds, triggering
   falls; the root-fungus fruits into choking spore-bursts.
 
-## Three places
-- **The cave — the Grub Warren.** The deepest grub-den, where Mossmaul's
-  brood churns the rubble. *Seed: the trolls dug into a sealed elder-vault
-  here and left it half-open — no one has dared go in.*
-- **The peak — the Roof-Fall Gallery.** The highest stope, its roof a frozen
-  avalanche; the floor reads from the one stable ledge. *Seed: bring it down
-  deliberately and it seals a tower-shaft the fever pours through.*
-- **The gate in the mountain — the Delving Gate.** The stair-lift is half-
-  buried under a troll-dug rubble-slope. *Seed: Mossmaul's diggings keep
-  re-burying it.*
+## Places of interest
+- **The Grub Warren.** The deepest grub-den, a churning nursery where
+  Mossmaul's brood works the rubble and the root-fungus is farmed. *Seed:
+  the warren's reek is the one scent the maddened grubs will follow — bait it
+  and you can lead the whole brood off the safe ground.*
+- **The Elder Vault.** A finely-cut older mine the blundering trolls holed
+  into and left half-open — proper stonework predating the Deep's diggers,
+  its inner doors still barred from within. *Seed: whatever the old delvers
+  sealed away and walled themselves against is still in there.*
+- **The Roof-Fall Gallery.** The highest stope, its roof a frozen avalanche
+  read from one stable ledge. *Seed: bring it down on purpose and it seals a
+  tower-shaft the fever pours through.*
 
 ## The people
 Delver-miners — the folk of Delvers' Rest, a mixed Deep-town of proper
@@ -60,24 +64,28 @@ maps the safe ground hour by hour as the trolls unmake it.
    bury the living beside it. *Broken, it slumps into the rubble and drains
    down.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Stoneshore — spell.** Sets loose rubble and a cracking roof solid for a
-  spell — or drops it on command; the pick-boss's art. *Seed: learn it to
-  cross the Delvings safely and to bring down the Roof-Fall on purpose.*
-- **Troll-iron — metal.** Crude ore the trolls expose but never smelt —
-  plentiful, tough, and easily won once the digging stops. *Seed: work the
-  exposed veins.*
-- **Troll-blood tonic — potion.** Distilled from the trolls' famous knitting
-  blood; a swallow closes wounds fast and regrows what's torn — the best
-  healing draught below the throne. *Seed: taken from a cured troll, freely
-  given.*
+  spell, or drops it on command · the pick-boss's art, taught in Delvers'
+  Rest · *Seed: learn it to cross the Delvings and bring down the Roof-Fall
+  on purpose.*
+- **Troll-iron — salvage.** Crude ore the trolls expose but never smelt,
+  plentiful and tough · lying in the worked-out veins, easily won once the
+  digging stops · *Seed: mine the galleries in safety.*
+- **Troll-blood tonic — brew.** A swallow of the trolls' knitting blood
+  closes wounds fast and regrows what's torn, the best healing draught below
+  the throne · taken from a cured troll, freely given · *Seed: keep an army
+  on its feet.*
+- **A cured delver-troll — companion.** One freed troll, its digging-instinct
+  turned to honest work · won in the galleries with a gentle cornering ·
+  *Seed: the strongest tunnel-hand and shorer the climb can keep.*
 
 ## The Warden — Mossmaul
 A delving troll grown huge and moss-hided, welded with a jaw of grinding
 mill-stone — it digs the fight toward itself, collapsing galleries to trap and
 bury, and it knits its own wounds as fast as they're dealt. Out-lasting its
 regeneration is the trick. Break it and the digging stops; the roofs settle;
-the Delving Gate rubble can be cleared.
+the stair-lift's rubble-slope can be cleared.
 
 ## When it falls
 Delvers' Rest shores the galleries and works the exposed iron in safety; the

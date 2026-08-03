@@ -12,7 +12,9 @@ foals of the Black Meadows. It rings day and night with baying, hooting, and
 the clatter of empty feed-troughs. The keepers' art was gentling; the fever
 has ungentled everything, and the courts now loose their half-trained packs on
 any warm thing that enters. It is a floor of stone runs and iron leashes, loud
-with beasts that no longer know their names.
+with beasts that no longer know their names. The stair-lift is set in a
+court-wall behind the great iron pack-gates; Leashbone holds the runs before
+it.
 
 ## Flora
 - **Trees / canopy:** mews-yew shading the owl-perches, and the whelping-oak
@@ -23,16 +25,18 @@ with beasts that no longer know their names.
   maddens instead of calms; the mews-moss carries a scent that drives the
   packs to hunt.
 
-## Three places
-- **The cave — the Whelping-Den.** The deep warm den where the hunt's young
-  were born and named. *Seed: the gentling-lore — the words and scents that
-  calm every hunt-beast — is kept here.*
-- **The peak — the Mews-Tower.** The high owl-mews overlooking every court;
-  the whole kennel reads from it. *Seed: the master horn hangs here; sounded
-  true, it heels every pack on the floor.*
-- **The gate in the mountain — the Kennel Gate.** The stair-lift is set in a
-  court-wall behind the iron pack-gates. *Seed: Leashbone holds the runs
-  before it.*
+## Places of interest
+- **The Whelping-Den.** The deep warm den at the courts' heart where the
+  hunt's young were born, named, and first gentled. *Seed: the gentling-lore —
+  the words and scents that calm every hunt-beast — is kept here, carved on
+  the den's whelping-stones.*
+- **The Mews-Tower.** The high owl-mews overlooking every court, from which
+  the whole kennel reads and the master horn hangs. *Seed: sound the horn true
+  from the tower and every pack, owl, and foal on the floor heels at once.*
+- **The Foal-Paddock.** The walled meadow where the dream-foals of the Black
+  Meadows were pastured and broken to the hunt, its turf churned now by
+  ungentled hooves. *Seed: gentle the herd here and the rising gains its first
+  dream-foals — mounts that go where a beast should not.*
 
 ## The people
 Kennel-keepers — elves whose calling is the gentling of beasts: houndsmen,
@@ -62,22 +66,24 @@ master horn, and still whispers each beast's name through the bars, hoping.
    horn to loose the packs on the living. *Broken (or out-horned), the false
    note dies and it drains into the kennel-stone.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Houndcall — spell.** Commands hounds, owls, and hunt-beasts to heel, hunt,
   or guard at a word; the keepers' gentling turned to command. *Seed: learn it
   from the Whelping-Den to heel the packs and lead beast-hosts above.*
 - **Leash-silver — material.** The gentling-silver of the hunt's leads and
   jesses, worked into gear that calms and commands beasts. *Seed: the courts'
   tack-hoard.*
-- **Houndsense draught — potion.** A keeper's brew that sharpens a climber's
-  own senses to a hound's — scent, hearing, and the feel of a hidden thing.
+- **A gentled pack — companions.** Hounds, a mews-owl, or a dream-foal brought
+  back to heel rather than cured-and-gone, remembering their names when the
+  master horn sounds. *Seed: the climb's first beast-host — the proof that
+  what the fever loosed can be won back to the hand whole.*
 
 ## The Warden — Leashbone
 A pack-matron hound grown vast, welded with a harness of iron leashes that
 run to every run on the floor, so it drags whole packs behind it as a living
 weapon — it fights by loosing and hauling its packs in waves. Break it (or
-sound the master horn) and the leashes fall slack; the packs heel; the Kennel
-Gate's iron gates open.
+sound the master horn) and the leashes fall slack; the packs heel; the stair-lift's
+iron gates open.
 
 ## When it falls
 Stillhorn sounds the master horn from the Mews-Tower and every pack, owl, and

@@ -11,7 +11,9 @@ steel, and welded sorrow that seals the throne away from all the world below.
 There is nothing else here — no landscape, only the vast dim hall, the Door,
 and the thing set to guard it. The whole tower narrows to this point. Every
 freed floor, every spell learned, every liberated soul climbing behind the hero
-has been for this last threshold and what waits beyond it.
+has been for this last threshold and what waits beyond it. The Last Door is
+itself the stair-lift the whole Ascent has climbed toward; the Champion is
+welded into it, and only her freeing — or her fall — opens it on the throne.
 
 ## "Flora" — the Making's growth
 - **Canopy:** none — the black lintel of the Door overhead.
@@ -21,15 +23,18 @@ has been for this last threshold and what waits beyond it.
   watch; the adamant-lichen seals the Door tighter at a blasphemer's touch;
   the threshold-moss roots an intruder on the sill.
 
-## Three places
-- **The cave — the Threshold Undercroft.** The vault beneath the sill where
-  the Champion's own famous arms — and her true name — were buried when she was
-  welded to the Door. *Seed: recover her name and her sword to reach the woman
-  inside the guardian.*
-- **The peak — the Lintel.** The high span of the Door, from which the guard
-  watches the hall. *Seed: the fight ends here, at the very seam of the Door.*
-- **The gate in the mountain — the Last Door.** The threshold itself; beyond
-  it, the throne. *Seed: only the guard's freeing (or fall) opens it.*
+## Places of interest
+- **The Threshold Undercroft.** The vault beneath the sill where the Champion's
+  own famous arms — and her true name — were buried when she was welded to the
+  Door. *Seed: recover her name and her sword to reach the woman inside the
+  guardian.*
+- **The Lintel.** The high span above the Door, from which the guardian keeps
+  its endless watch over the hall. *Seed: the fight ends here, at the very seam
+  of the Door.*
+- **The Weld-Face.** The Door's own black surface, a mosaic of liberators
+  welded into the metal where they fell, their names still faintly legible.
+  *Seed: read the fallen to find the Door's weak seams — and the Champion's own
+  weld among them.*
 
 ## The people — who you are freeing
 Lastward captives — the last handful of the bound, held in the threshold-hall
@@ -60,17 +65,20 @@ belief, against all the tower's despair, that she can still be brought back.
    Door beside its welded hero. *Pressed — freeing it (Break-collar, Recant)
    turns the Champion's oldest friend to the rising's side for the last fight.*
 
-## Three finds  *(quest seeds)*
-- **Unmake — spell.** The capstone unbinding-art: breaks welds, adamant,
-  King-steel, and the deepest bindings of the Made at a word, gathering
-  Unrivet, Unseam, and Mirrorbreak into one. *Seed: learn it to open the Last
-  Door — and to unmake whatever the King has bound himself with above.*
-- **King-steel — material.** The Door's own black adamant, the hardest metal
-  in the world, reforged into the single finest weapon the rising can carry
-  to the throne. *Seed: break the Door and take its metal.*
-- **Champion's-draught — potion.** The buried brew from the Champion's own
-  kit, recovered from the Undercroft — the strongest restorative in the tower,
-  saved for the last climb.
+## Finds  *(quest seeds)*
+- **Unmake — spell.** The capstone unbinding-art: breaks welds, adamant, King-
+  steel, and the deepest bindings of the Made at a word, gathering Unrivet,
+  Unseam, and Mirrorbreak into one · *Seed: learn it to open the Last Door and
+  to unmake whatever the King has bound himself with above.*
+- **King-steel — salvage.** The Door's own black adamant, the hardest metal in
+  the world · taken from the broken Door · *Seed: reforge it into the single
+  finest weapon the rising can carry to the throne.*
+- **The Champion's name and sword — reclaimed relic.** Her buried true name and
+  famous blade, hidden in the Threshold Undercroft when she was welded away ·
+  *Seed: recover both to reach the hero inside the weld and win her back alive.*
+- **Champion's-draught — a brew.** The buried tincture from the Champion's own
+  kit, the strongest restorative in the tower · recovered from the Undercroft ·
+  *Seed: saved, unspent, for the last climb to the throne.*
 
 ## The Warden — the Champion
 The greatest liberator who ever climbed, taken alive at the very last step of a

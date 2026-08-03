@@ -10,7 +10,10 @@ between glades — and now, with the songs dead, it repeats *everything else*:
 footsteps, breath, a whispered curse, thrown back minutes or hours later from
 the wrong direction. The trees are galled and knotted, hung with old wasps'
 nests like grey lanterns. It is a wood full of voices and empty of speakers,
-where your own words hunt you, and the only safety is silence.
+where your own words hunt you, and the only safety is silence. The
+stair-lift stands in a gall-knotted scarp at the wood's edge that
+murmurs your approach back before you reach it; Hearsay speaks from
+everywhere in front of it.
 
 ## Flora
 - **Trees / canopy:** whisper-elm and gall-oak, their trunks knotted with
@@ -20,16 +23,18 @@ where your own words hunt you, and the only safety is silence.
 - **Under the Yoke:** the murmur-moss now repeats threats in a climber's own
   voice; the gall-lanterns burst into wasp-swarms when they "hear" fear.
 
-## Three places
-- **The cave — the Hush Hollow.** A dead-sound cave where no echo lives —
-  the one truly silent place on the floor. *Seed: the wood-elves' true
-  lamp-song is preserved here, unrepeated, waiting to be sung back.*
-- **The peak — the Sounding Oak.** The tallest gall-oak, which carries the
-  whole wood's voice; whatever is said from it, the wood obeys. *Seed: sing
-  the true song from it and the repeating stops.*
-- **The gate in the mountain — the Whisper Gate.** The stair-lift is set in
-  a gall-knotted scarp that murmurs back your approach. *Seed: Hearsay speaks
-  from everywhere before it.*
+## Places of interest
+- **The Hush Hollow.** A dead-sound grotto in the wood's heart where no
+  echo lives — the one place a spoken word does not come back armed, and
+  so the last refuge of the silenced wood-elves. *Seed: the true lamp-song
+  is kept here, unrepeated, waiting to be sung back.*
+- **The Sounding Oak.** The tallest gall-oak, so hung with sound-galls
+  that whatever is spoken from its crown the whole wood repeats and obeys.
+  *Seed: sing the true song from it and the repeating stops for good.*
+- **The Roofless Choir.** A ruined open-air song-hall of tiered stone
+  benches where the elves once raised the lamp-songs together, now silent
+  but for the wood throwing back centuries of overheard grief. *Seed: its
+  fallen song-stones each still hold a fragment of the old harmonies.*
 
 ## The people
 Wood-elves — song-keepers and gall-wrights who tended the wood's carrying
@@ -50,10 +55,12 @@ and guards the last true lamp-song in the silent hollow.
 3. **Mimic-thrush** (N) — *was:* a song-thrush the elves prized. *now:*
    mimicking a companion's voice to lure a climber off the path. *Cured, it
    sings its own song and flits away.*
-4. **Stray nightmare** (N) — *was:* a night-horse wandered from the elf
-   pastures (see floor 75). *now:* a black horse that gallops the wood
-   repeating the sound of hooves that already passed. *Cured, it slows,
-   real, and drifts off grazing.*
+4. **Stray nightmare** (N) — *the wood's one outsider.* A night-horse of
+   the elf night-pastures far above (floor 75), strayed down through the
+   cut when its meadow-floor was welded hard against the Whisperwood, and
+   never found the road back. *was:* a grazing night-horse. *now:* a black
+   horse that gallops the wood, repeating the sound of hooves that already
+   passed. *Cured, it slows, real, and drifts off grazing.*
 5. **Gall-boar** (N) — *was:* a mast-rooting boar. *now:* gall-knotted and
    deaf-furious, charging at echoes. *Cured, it shakes its knotted hide and
    ambles off.*
@@ -62,22 +69,27 @@ and guards the last true lamp-song in the silent hollow.
    dead and of the climber themself. *Broken, the last quote finishes and it
    fades into the silence.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Echo-turn — spell.** Throws a sound or a spoken spell back the way it
-  came; learned by singing true in the Hush Hollow. *Seed: master it to
-  reach the Sounding Oak and quiet the wood.*
-- **Gall-iron — material.** The dense sound-storing resin-iron of the galls,
-  worked into ward-charms that hold a spoken word. *Seed: harvest the mother-
-  galls.*
-- **Quiet-draught — potion.** A song-keeper's brew that muffles a climber's
-  own sound for a spell — footfall, breath, and battle-cry alike.
+  came · learned by singing true in the Hush Hollow · *master it to reach
+  the Sounding Oak and quiet the wood.*
+- **Gall-iron — material.** Dense, sound-storing resin-iron of the mother-
+  galls, worked into ward-charms that hold a single spoken word · in the
+  deep galls · *harvest them without waking their wasps.*
+- **Hushfall's sign-cant — knowledge.** The silent hand-speech the elves
+  use above ground, where a word costs blood; shown, never written · from
+  Sela in the Hollow · *learn it and the wood can no longer overhear your
+  plans.*
+- **Quiet-draught — brew.** A song-keeper's tonic that muffles a climber's
+  own sound for a spell — footfall, breath, and battle-cry alike · pressed
+  from the murmur-moss · *worth a flask before every open crossing.*
 
 ## The Warden — Hearsay
 A quoted shade grown vast on the galls, welded to the Sounding Oak so it
 speaks with the whole wood's voice — it fights by throwing a climber's own
 words and spells back at them, and by summoning wasp-swarms out of stored
 fear. Break it (and sing the true song) and the wood falls silent, then
-carries only what is meant. The Whisper Gate opens on real quiet.
+carries only what is meant. The stair-lift opens on real quiet.
 
 ## When it falls
 Hushfall sings the true lamp-song from the Sounding Oak and the wood carries

@@ -11,7 +11,9 @@ upturned like whale-ribs across the grass. The ships fell the night the sky
 changed and never flew again; now hull-borers tunnel the timbers, drakes nest
 in the holds, and salvage-harpies pick the rigging. It was a proud sky-nation's
 fleet, and its graveyard is a treasure-house of flight-craft — if you can climb
-the wrecks past the things that live in them.
+the wrecks past the things that live in them. The stair-lift stands in a
+bluff behind a beached flagship-hull at the field's edge; Keelhaul nests in
+the hull before it.
 
 ## Flora
 - **Trees / canopy:** none but the wrecks' own snapped masts standing like
@@ -22,17 +24,17 @@ the wrecks past the things that live in them.
   lichen puffs a buoyant spore that lifts and drops the unwary; the hull-moss
   hides rotten decking.
 
-## Three places
-- **The cave — the Hold.** The intact cargo-hold of the flagship, deep in its
-  buried hull. *Seed: the fleet's charts, a live lift-cell, and the admiral's
-  log lie sealed in there.*
-- **The peak — the Keel-Ridge.** A great wreck's upturned keel forming a
-  spine over the whole field; the wreckfields read from it. *Seed: its
-  signal-mast, re-rigged, could call the salvagers together and warn of the
-  drakes.*
-- **The gate in the mountain — the Wreck Gate.** The stair-lift is set in a
-  bluff behind a beached flagship-hull. *Seed: Keelhaul nests in the hull
-  before it.*
+## Places of interest
+- **The Hold.** The intact cargo-hold of the buried flagship, deep in its
+  hull — the fleet's charts, a live lift-cell, and the admiral's log sealed
+  inside. *Seed: break into it and the fleet's flight-craft can fly again.*
+- **The Keel-Ridge.** A great wreck's upturned keel arched like a whale-rib
+  spine over the whole field; every hull reads from its crest. *Seed: re-rig
+  its signal-mast to call the salvagers together and warn of the drakes.*
+- **The Mast-Forest.** A stand of snapped masts still upright where a squadron
+  went down wing-to-wing, rigging-vine strung between them like a rotten
+  canopy. *Seed: the drakes roost thickest here; clear it and the safest
+  salvage-road across the field opens.*
 
 ## The people
 Salvagers — Men of the fallen fleet: former sky-sailors, riggers, and lift-
@@ -64,23 +66,28 @@ figurehead and which holds still hold air, and dives the deepest hulls alone.
    drowned ship's rigging to swing spars and drop masts. *Broken, the crew
    falls slack and drains into the timbers.*
 
-## Three finds  *(quest seeds)*
-- **Loft — spell.** Lightens a body or object to near-weightless, or floats
-  it on a breath of aether; the lift-wrights' art, logged in the Hold. *Seed:
+## Finds  *(quest seeds)*
+- **Loft — spell.** Lightens a body or object to near-weightless, or floats it
+  on a breath of aether; the lift-wrights' art, logged in the Hold. *Seed:
   learn it to climb the wrecks and, above, to hoist the host across the sky-
   gaps.*
 - **Lift-plate — material.** The aether-buoyant hull-alloy of the fleet, salved
-  from sound hulls — the material of flying-craft and floating siege-works.
+  from sound hulls — the stuff of flying-craft and floating siege-works.
   *Seed: strip the flagship.*
-- **Riggers' draught — potion.** A sky-sailor's brew for nerve and grip at
-  height; steadies the hands and stomach on any mast or line.
+- **The admiral's charts — knowledge.** The fleet's sky-charts and the
+  admiral's log, sealed in the Hold — every wind-road and mooring the
+  sky-nation flew. *Seed: recover them and the salvaged ships know where to
+  sail.*
+- **A salved sky-skiff — craft.** One small hull still holds air and a live
+  cell, and Weld can make it fly. *Seed: the first flying thing the climb can
+  keep — a scout above the wrecks and a lifeboat over the drops.*
 
 ## The Warden — Keelhaul
 A hull-borer grown monstrous, welded into the flagship's upturned keel so it
 wears a whole wreck as a shell — it fights by tunneling the wrecks to collapse
 them, snapping masts down, and dragging climbers into the splintered holds
 with grapple-lines of rigging. Break it and the wrecks lie still; the borers
-scatter; the Wreck Gate's hull can be entered.
+scatter; the stair-lift behind the flagship-hull can be reached.
 
 ## When it falls
 Hullside raises a live lift-cell from the Hold and re-rigs the Keel-Ridge

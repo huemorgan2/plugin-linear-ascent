@@ -11,7 +11,9 @@ what the ancestors feared. Under the Yoke one dolmen has cracked open: a
 portal-tomb the old folk sealed for good reason, now gaping, breathing a cold
 wrong wind across the heather. The moor is wide and wind-scoured and silent
 but for curlew-cry, and every stone hums faintly with old warding — except the
-one that no longer holds.
+one that no longer holds. The stair-lift stands under a lintel of three great
+standing stones at the moor's edge; Doorstone bars it as it bars every true
+door on the moor.
 
 ## Flora
 - **Trees / canopy:** none — heather, gorse, and grey stone.
@@ -21,16 +23,18 @@ one that no longer holds.
   ward-lichen is peeling from the cracked stone; the gorse points its thorns
   toward the breach.
 
-## Three places
-- **The cave — the Portal Dolmen.** The opened tomb-chamber itself, the
-  breach in the moor's old seal. *Seed: the sealing-rite that shut it once is
-  carved inside — and can be carved again, if the Warden lets you reach it.*
-- **The peak — the Ring.** The great stone circle on the moor's crown, the
-  master ward that anchors all the lesser stones. *Seed: re-hallow the Ring
-  and every ward-stone on the moor answers, sealing the breach.*
-- **The gate in the mountain — the Doorstone Gate.** The stair-lift is set
-  in a lintel of three standing stones. *Seed: Doorstone bars it as it bars
-  all the moor's true doors.*
+## Places of interest
+- **The Portal Dolmen.** The opened tomb-chamber itself, the breach in the
+  moor's old seal. *Seed: the sealing-rite that shut it once is carved inside
+  — and can be carved again, if the Warden lets you reach it.*
+- **The Ring.** The great stone circle on the moor's crown, the master ward
+  that anchors all the lesser stones. *Seed: re-hallow the Ring and every
+  ward-stone on the moor answers, sealing the breach.*
+- **The Ancestor Well.** The moor's old holy spring in a heather hollow,
+  ringed with worn offering-stones, its water still clear and cold long after
+  the Theft. *Seed: the unsealed thing cannot abide the well-water — carried
+  in a flask, it is the one weapon that drives the drifting hunger back toward
+  its dolmen.*
 
 ## The people
 Moor-folk — Men of the megalith-country: stone-wardens and ward-keepers whose
@@ -62,15 +66,20 @@ guard.
    in the heather. *now:* a peat-black figure that drags the living toward the
    open dolmen. *Broken, it sinks into the flush and drains down.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Wardstone — spell.** Seals a portal, door, or breach with old ward-lore,
   and binds what tries to pass; carved in the Portal Dolmen. *Seed: learn it
   to re-seal the breach and, above, to shut the tower's summoning-ways.*
 - **Doorstone granite — material.** Ward-carved menhir-stone that will not
   break and turns aether aside; the finest shield-core and seal-stone in the
   tower. *Seed: quarry a fallen menhir.*
-- **Heather-mead — potion.** A moor-brew of ling-honey; steels the heart and
-  clears the head against dread and old fear.
+- **The sealing-rite — knowledge, not a thing.** The ancestors' words for
+  shutting a door for good, carved inside the Portal Dolmen and kept whole in
+  Bran Stonewake's memory. *Seed: learn it to re-carve the breach shut and,
+  above, to close the tower's own summoning-ways.*
+- **Heather-mead — tonic.** A moor-brew of ling-honey that steels the heart
+  and clears the head against dread and old fear; brewed in Stonewake. *Seed:
+  a horn of it before facing what the wind off the breach is waking.*
 
 ## The Warden — Doorstone
 The moor's ancient stone sentinel, roused wrong — a dolmen-golem of standing-
@@ -79,7 +88,7 @@ every door on the moor *open* instead of shut. It fights before the Portal
 Dolmen, raising ward-stones as walls and weapons. It is a construct woken to
 the wrong purpose, so its end is an *eviction:* break its fever-hold and the
 old guardian-will returns — it seals the breach itself and stands down. The
-Doorstone Gate unbars.
+stair-lift unbars.
 
 ## When it falls
 Stonewake re-hallows the Ring, the breach seals, and the wrong thing is shut

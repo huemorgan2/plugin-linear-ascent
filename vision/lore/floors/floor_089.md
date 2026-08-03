@@ -12,6 +12,8 @@ brazen fanfare without pause. The sound is a physical force; the banners hang
 like iron sails; the road is beaten smooth by a thousand years of ceremony.
 Slave road-gangs polish the horns and hang the banners. It is a floor of pure
 noise and pomp, the tower shouting its own glory, and the shout is a weapon.
+The stair-lift stands beneath the Proclamation Arch at the road's head, before
+Malgrim's own gate; Trumpetsteel heralds the approach before it.
 
 ## "Flora" — the Making's growth
 - **Canopy:** banner-cloth of the King strung overhead like a metal canopy.
@@ -21,16 +23,16 @@ noise and pomp, the tower shouting its own glory, and the shout is a weapon.
   bone-shaking; the banner-lichen drops the banners to smother; the clarion-
   moss echoes the blare to disorient.
 
-## Three places
-- **The cave — the Banner-Vault.** The store of the King's banners and
-  standards beneath the road. *Seed: burning the King's standards here shakes
-  the Made's morale for floors around.*
-- **The peak — the Proclamation Arch.** The great horn-arch over the road's
-  head; the approach reads from it. *Seed: from it the proclamation-horns can
-  be turned — silenced, or made to blare a false decree.*
-- **The gate in the mountain — the Herald Gate.** The stair-lift is set
-  beneath the arch, before Malgrim's own gate. *Seed: Trumpetsteel heralds
-  before it.*
+## Places of interest
+- **The Banner-Vault.** The store of the King's banners and standards beneath
+  the road · *Seed: burn the King's standards here and the Made's morale
+  shakes for floors around.*
+- **The Proclamation Arch.** The great horn-arch over the road's head, from
+  which the fanfare is set · *Seed: turn the proclamation-horns — silence
+  them, or blare a false decree.*
+- **The Horn-Colonnade.** The processional avenue of house-sized proclamation-
+  horns lining the road · *Seed: silence the colonnade and a climber crosses
+  without the blare warning the Herald ahead.*
 
 ## The people — who you are freeing
 Road-thralls — the re-enslaved set to tend the horns and hang the banners,
@@ -59,16 +61,17 @@ knack of turning a proclamation-horn against its own fanfare.
    herald whose voice is a brazen blast. *Pressed — the collar can break; its
    silence is worth an army.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Blare — spell.** Looses a deafening brazen blast that staggers and
-  scatters, and drowns an enemy's horns and fear-calls; the road-thralls'
-  turned-horn art. *Seed: learn it to silence the Herald's fanfare and blast
-  the King's ranks above.*
-- **Clarion-brass — material.** The great sounding-brass of the horns, cast
-  into war-horns, shield-bosses, and sonic-gear for the host. *Seed: cut a
-  proclamation-horn down.*
-- **Steady-ear tot — potion.** A road-gang brew that shields the ears and
-  head against the bone-shaking blare and any fear-horn.
+  scatters, and drowns an enemy's horns and fear-calls · the road-thralls'
+  turned-horn art · *Seed: silence the Herald's fanfare and blast the King's
+  ranks above.*
+- **Clarion-brass — salvage.** The great sounding-brass of the horns · cut
+  from any proclamation-horn · *Seed: war-horns, shield-bosses, and sonic-gear
+  for the host.*
+- **Steady-ear tot — brew.** A road-gang draught that shields the ears and
+  head against the bone-shaking blare and any fear-horn · *Seed: cross the
+  road and face the King's terror-calls unshaken.*
 
 ## The Warden — Trumpetsteel
 An honor-guard knight welded into a horn-bodied herald — a captured soul
@@ -77,8 +80,8 @@ engine. **He is Pressed,** not a construct, and his collar is loosened by the
 counter-creed carried up from the chantries. He fights with staggering blasts
 and his ceremonial guard. Break his collar (Break-collar and Recant) rather
 than his body, and Trumpetsteel falls silent, then blares the King's own decree
-*backward* — a false disband that throws the muster into confusion. The Herald
-Gate opens.
+*backward* — a false disband that throws the muster into confusion. The stair-
+lift opens.
 
 ## When it falls
 Clarionfall turns the Proclamation Arch and the King's endless fanfare chokes

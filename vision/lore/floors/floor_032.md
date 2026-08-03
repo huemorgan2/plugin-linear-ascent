@@ -11,7 +11,9 @@ lamps seem to be swallowed. The giants dug here chasing a deeper vein and
 found only more dark and the blind things that live in it. Winch-ropes hang
 everywhere, some still creaking under loads that will never come up. Cold air
 sighs up the shafts. It is the deepest, blackest, most vertical floor of the
-tier — a country measured in fathoms down.
+tier — a country measured in fathoms down. The stair-lift shares the main
+shaft's headframe, its arch a cage-door, and Deepwinch works the ropes
+before it.
 
 ## Flora
 - **Trees / canopy:** none — timbered shafts and rope.
@@ -20,16 +22,19 @@ tier — a country measured in fathoms down.
 - **Under the Yoke:** the rope-rot fungus eats through winch-ropes on cue to
   drop a load; the drift-lichen glows just enough to lure, never to see by.
 
-## Three places
-- **The cave — the Sump.** The flooded bottom of the deepest shaft, where the
-  drifts run out in black water. *Seed: the deep vein the giants died chasing
-  is here, and it is aether-ore richer than anything above.*
-- **The peak — the Headframe.** The great winch-tower over the main shaft;
-  from its platform the whole drift-maze is worked. *Seed: master the winch
-  and the whole floor's cages and loads answer to it.*
-- **The gate in the mountain — the Drift Gate.** The stair-lift shares the
-  main shaft's headframe, its arch a cage-door. *Seed: Deepwinch works the
-  ropes before it.*
+## Places of interest
+- **The Sump.** The flooded bottom of the deepest shaft, where the drifts
+  run out in black water; the deep vein the giants died chasing lies drowned
+  here, aether-ore richer than anything above. *Seed: pump or dive the Sump
+  and the richest strike in the tier is yours.*
+- **The Headframe.** The great winch-tower straddling the main shaft, its
+  platform working every cage and load on the floor. *Seed: master the winch
+  and the whole drift-maze answers to one hand.*
+- **The Last Sinking.** The deepest crew-bothy, a timbered cabin hung at the
+  workings' end where the sinkers slept between shifts — tin lamps cold on
+  their hooks and a chalked tally still on the wall. *Seed: the tally names
+  every drift that still holds air, and the one that broke through into the
+  dark that answered.*
 
 ## The people
 Drift-crews — giant sinkers and delver-ropemen who work the deep shafts,
@@ -61,22 +66,24 @@ the ropes and the timing of the echoes, and trusts neither anymore.
    winch-ropes hand over hand to reach the platforms. *Broken, it falls into
    the sump and drains away.*
 
-## Three finds  *(quest seeds)*
-- **Deepsight — spell.** Grants sight in total dark for a spell — the
-  sinkers' most-wished, least-had art, finally learnable here. *Seed: master
-  it to reach the Sump and the deep vein.*
-- **Winch-iron — metal.** The deep-forged cable-iron of the winches, drawn
-  into rope-steel and wire stronger than the drifts could break. *Seed: the
-  headframe's spare cable.*
-- **Drift-draught — potion.** A sinker's tonic against the crushing depth;
-  steadies the head and lungs on the deepest, most vertical floors.
+## Finds  *(quest seeds)*
+- **Deepsight — spell.** Sight in total dark for a spell, the sinkers'
+  most-wished, least-had art · learnable only down here in the true dark ·
+  *Seed: master it to reach the Sump and the deep vein.*
+- **Winch-iron — salvage.** Deep-forged cable-iron drawn into rope-steel and
+  wire stronger than the drifts could break · coiled as spare cable on the
+  Headframe · *Seed: rig the host with rope nothing can cut.*
+- **The drift-charts — knowledge.** Orla's reckoning of every shaft that
+  still holds air and every rope near failing · carried in her head and
+  chalked in the Last Sinking · *Seed: win her trust and she walks you the
+  only safe descent.*
 
 ## The Warden — Deepwinch
 A blind digger welded into the great headframe-winch itself, hauling the
 drifts' ropes and cages as weapons — it drops loads, swings cages, and drags
 climbers off ledges into the shaft. It fights in the vertical dark where a
 fall is the real killer. Break it and the ropes go slack; the winch answers
-true; the Drift Gate's cage opens on the floor above.
+true; the stair-lift's cage opens on the floor above.
 
 ## When it falls
 Ropewalk sinks a safe cage to the Sump and brings up the deep vein at last;

@@ -10,7 +10,9 @@ to gloom, humming faintly with the *dead signals* of a lamp-network long
 snuffed. It is a threshold place — half open eave, half deep wood — and the
 hum sets teeth on edge, a ghost of the elves' old lamp-song looping with no
 one to answer. Dropped a full tier from its own forest, the Eaves stands like
-a torn edge with nothing beyond it but marsh and mine.
+a torn edge with nothing beyond it but marsh and mine. The stair-lift is set
+in a moss-furred scarp at the wood's ragged end, its arch woven of living
+root and copper filament; Duskhide dens in the border-gloom before it.
 
 ## Flora
 - **Trees / canopy:** eave-oak and thin lamp-birch, their sap dim, laced with
@@ -20,16 +22,20 @@ a torn edge with nothing beyond it but marsh and mine.
 - **Under the Yoke:** the listening-moss repeats snatches of the dead signal;
   the gloom-fern turns to face warmth and rustles when nothing moves.
 
-## Three places
-- **The cave — the Root-Eaves.** A hollow under the border-oaks where the
-  edge-elves kept watch-fires. *Seed: the last watch-fire's embers still
-  hold a shard of the true lamp-song.*
-- **The peak — the Watchpine.** The tallest edge-tree, the elves' lookout
-  over the marsh below. *Seed: from it the dead signal can be traced to its
-  source — and silenced.*
-- **The gate in the mountain — the Eaves Gate.** The stair-lift is set in a
-  moss-furred scarp, its arch woven of living root and copper filament.
-  *Seed: Duskhide dens in the border-gloom before it.*
+## Places of interest
+- **The Watchpine.** The tallest edge-tree, the elves' old lookout out over
+  the marsh below, its high boughs still strung with signal-copper. *Seed:
+  from its crown the dead signal can be traced back to its source — and
+  silenced for good.*
+- **The Lampwright's Shrine.** A small moss-furred shrine at the border where
+  the first lamp of the whole network was lit and tended; its cold lamp-glass
+  still holds one shard of the true lamp-song under the dead hum. *Seed:
+  rekindle it and the true song can be carried back into the wood.*
+- **The Fallen Span.** A great root-and-copper bridge that once carried the
+  lamp-line across to the deep glades, now sheared clean off at the torn edge
+  and hanging in the gloom over the marsh. *Seed: its dangling cable is the
+  one physical thread still running toward the signal's source below — follow
+  it, if the drop doesn't take you first.*
 
 ## The people
 Edge-elves — the wood's outer watch, wardens and signalers who lived at the
@@ -60,21 +66,27 @@ strains to hear a true signal in the dead hum.
    listening-moss. *now:* a grey watcher that mimics a fellow's voice at the
    treeline. *Broken, the watch ends and it fades into the gloom.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Hush — spell.** Silences signals and sound in a circle — kills the dead
-  hum, and later, alarms. *Seed: learn it from the watch-fire embers to reach
-  the Watchpine.*
-- **Shadow-silver — ore.** A dim elf-metal that swallows light and sound,
-  worked into a scout's gear. *Seed: mine the border-roots.*
-- **Dusk-draught — potion.** Blends a climber into gloom and dims their heat-
-  trace for a spell. *Seed: pressed from gloom-fern; prized for the shade-
+  hum now, and alarms later · learned from the true song kept in the
+  Lampwright's Shrine · *Seed: relight the shrine to reach the Watchpine
+  unheard.*
+- **Shadow-silver — metal.** A dim elf-metal that swallows light and sound,
+  worked into a scout's gear · mined from the border-roots · *Seed: gear for
+  moving unseen and unheard.*
+- **A cured gloom hound — a companion.** One of the tracking hounds, brought
+  back rather than cured-and-gone: cornered gently, it whines and comes to a
+  hand · found hunting the gloom-fern · *Seed: the first silent tracker the
+  climb can keep.*
+- **Dusk-draught — brew.** Blends a climber into gloom and dims their heat-
+  trace for a spell · pressed from gloom-fern · *Seed: prized for the shade-
   hunted floors above.*
 
 ## The Warden — Duskhide
 An edge-stag of the border, welded with a rack of dead signal-antennae that
 broadcast the looping hum — it fights half-seen in the gloom, throwing the
 false signal to scatter and confuse before it gores. Break it and the dead
-hum finally stops; the Watchpine's true watch resumes; the Eaves Gate opens.
+hum finally stops; the Watchpine's true watch resumes; the stair-lift opens.
 
 ## When it falls
 Lastlamp's watch-fire burns clean and the dead signal dies into real

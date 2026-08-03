@@ -11,7 +11,9 @@ houses, silk-cable streets, and gossamer plazas that sway over a drop with no
 floor. Lamps hang in the void like low stars. The great spiders that spun it
 were the city's partners once; the fever has turned them, and now they drift
 the chasm on balloon-silk, cutting cables and wrapping citizens. It is the
-first of the high tiers, and to cross it is to walk on thread over nothing.
+first of the high tiers, and to cross it is to walk on thread over nothing. The stair-lift
+is anchored to the chasm-wall behind a curtain of drift-silk; Skeinback cuts
+the approach-cables to drop the unwary before it.
 
 ## Flora
 - **Trees / canopy:** none — silk-cable and hanging platform in place of any
@@ -22,16 +24,18 @@ first of the high tiers, and to cross it is to walk on thread over nothing.
   moss makes the platforms slick; the chasm-fungus lures with warmth-scent
   over the drop.
 
-## Three places
-- **The cave — the Undercatch.** The great safety-net cavern slung below the
-  city to catch fallers and dropped goods. *Seed: a fortune in fallen cargo —
-  and the survivors who fell and lived — are down there in the net.*
-- **The peak — the High Spindle.** The topmost anchor-tower from which all
-  the city's cables hang; the whole web reads from it. *Seed: it holds the
-  master anchor — securing it steadies every bridge on the floor.*
-- **The gate in the mountain — the Skein Gate.** The stair-lift is anchored
-  to the chasm-wall behind a curtain of drift-silk. *Seed: Skeinback cuts the
-  approach-cables to drop the unwary.*
+## Places of interest
+- **The Undercatch.** The great safety-net cavern slung below the city to
+  catch fallers and dropped goods. *Seed: a fortune in fallen cargo — and the
+  survivors who fell and lived — are down there in the net.*
+- **The High Spindle.** The topmost anchor-tower from which all the city's
+  cables hang; the whole web reads from it. *Seed: it holds the master anchor
+  — securing it steadies every bridge on the floor.*
+- **The Gossamer Market.** The great hanging plaza at the city's heart, a
+  woven-silk square where the Deep's traders once met, its stalls still slung
+  and swaying empty over the drop. *Seed: raise the market again and the
+  scattered city-folk get their one meeting-place back — and its old trade-
+  lines reach every floor of the Deep.*
 
 ## The people
 City-folk of Skeinside — Deep-dwellers of every race who built and live in
@@ -63,21 +67,22 @@ walks the cables checking every splice, one hand always on a line.
    behind the living. *Broken, the husk falls into the Undercatch and drains
    away.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Threadwalk — spell.** Lets the caster walk silk, cable, or a hand's-width
   ledge over any drop without falling; the city's founding art. *Seed: learn
   it to cross the Hanging City and every chasm-floor above.*
 - **Skein-silk cable — material.** The city's woven bridge-silk, the
   strongest span-cable in the tower — rope, bridge, and rigging for the whole
   climb. *Seed: harvest the High Spindle's master lines.*
-- **Vertigo-draught — potion.** A cable-walker's brew that kills the fear of
-  height and steadies the inner ear; indispensable for the sky-tiers.
+- **Vertigo-draught — tonic.** A cable-walker's brew that kills the fear of
+  height and steadies the inner ear — indispensable for the sky-tiers; mixed
+  in Skeinside. *Seed: a flask before the first sky-floor.*
 
 ## The Warden — Skeinback
 A chasm troll welded with balloon-spinnerets, drifting the void on silk-sails
 — it fights by cutting the city's cables to collapse the bridges under
 climbers and wrapping the fallen mid-air. Break it and the drifting stops; the
-cables hold; the master anchor can be secured and the Skein Gate reached.
+cables hold; the master anchor can be secured and the stair-lift reached.
 
 ## When it falls
 Skeinside secures the High Spindle and the hanging city stops swaying; the

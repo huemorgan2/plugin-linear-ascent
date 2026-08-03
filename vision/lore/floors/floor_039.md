@@ -11,7 +11,8 @@ glades *answer:* they caught the last festival's music and motion the night
 of the Theft and replay it forever, a spectral revel of dancers who never
 tire and never stop. Wander in and your feet find the step whether you will
 or no, and the glade will dance you until you fall. The moths, the light, the
-music — all lovely, all deadly.
+music — all lovely, all deadly. The stair-lift is set in a flower-hung scarp
+at the glade's edge, and Encore leads the eternal revel across it.
 
 ## Flora
 - **Trees / canopy:** lantern-oak and revel-birch ringing the greens, hung
@@ -21,16 +22,17 @@ music — all lovely, all deadly.
 - **Under the Yoke:** the dancing-grass sweeps a walker into step; the moth-
   flower's scent lulls the will; the moths drift in patterns that hypnotize.
 
-## Three places
-- **The cave — the Green Room.** A shaded grove off the glades where
-  performers waited to take the floor. *Seed: the festival's true final note
-  — the one that *ends* a dance — is kept here, un-played.*
-- **The peak — the Dancing-Floor.** The raised central greensward where the
-  spectral revel whirls; the glades read from its edge. *Seed: play the true
-  final note upon it and the eternal dance can be let go.*
-- **The gate in the mountain — the Encore Gate.** The stair-lift is set in a
-  flower-hung scarp at the glade's edge. *Seed: Encore leads the revel across
-  it.*
+## Places of interest
+- **The Green Room.** A shaded grove off the glades where performers waited to
+  take the floor. *Seed: the festival's true final note — the one that *ends* a
+  dance — is kept here, un-played.*
+- **The Dancing-Floor.** The raised central greensward where the spectral revel
+  whirls, the glades legible from its edge. *Seed: play the true final note
+  upon it and the eternal dance can be let go.*
+- **The Lantern-Walk.** The mile-long avenue of lantern-oaks that leads into
+  the glades, its moth-drawing dance-lamps dark and cold since the Theft.
+  *Seed: relight the walk in the old order and its steady light breaks the
+  moths' hypnotic drift, opening a safe path in.*
 
 ## The people
 Glade-elves — the wood's revelers and dance-wrights, players and lamp-lighters
@@ -62,15 +64,19 @@ dances the edges to pull the caught back out before they drop.
    an old skirmish across the dance. *Broken, the old fight ends and they
    drain into the sward.*
 
-## Three finds  *(quest seeds)*
-- **Grace — spell.** Grants a dancer's evasion for a spell — every blow slips,
-  every step lands true; learned by dancing the revel and living. *Seed:
-  master it to cross the Dancing-Floor and reach the true final note.*
-- **Dance-silver — metal.** The light bright revel-silver of the players'
-  finery, worked into armor that never slows a step. *Seed: the Green Room's
-  hoard.*
-- **Revel-draught — potion.** A festival-cup of tireless joy; restores a
-  climber's wind and lifts a beaten heart — morale in a bottle.
+## Finds  *(quest seeds)*
+- **Grace — spell.** A dancer's evasion for a spell — every blow slips, every
+  step lands true · learned by dancing the revel and living · *Seed: master it
+  to cross the Dancing-Floor and reach the true final note.*
+- **Dance-silver — salvage.** The light bright revel-silver of the players'
+  finery, worked into armor that never slows a step · won from the Green
+  Room's hoard · *Seed: outfit the swift of the host.*
+- **The true final note — song (knowledge).** The closing bar that ends any
+  compelled dance · kept un-played in the Green Room · *Seed: learn it to free
+  the danced and, above, to quiet the tower's music-snares.*
+- **Revel-draught — brew.** A festival-cup that restores a climber's wind and
+  lifts a beaten heart — morale in a bottle · poured in Fainthollow · *Seed:
+  keep an army's heart up through the grimmest floors ahead.*
 
 ## The Warden — Encore
 The festival's lead dancer, fallen and risen wrong — a grey maestro-shade
@@ -78,7 +84,7 @@ welded to the ghost-music itself, who leads the eternal revel and compels all
 comers to dance to exhaustion, calling *encore* on every ending. It is a
 performer the tower woke to perform forever, so its end is an *eviction:* play
 the true final note and break its hold, and the borrowed aether is driven out
-and the revel finally, gratefully, ends. The Encore Gate opens on the applause.
+and the revel finally, gratefully, ends. The stair-lift opens on the applause.
 
 ## When it falls
 Fainthollow plays the true final note and the spectral revel bows and lets go

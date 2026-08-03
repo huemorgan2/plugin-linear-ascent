@@ -12,7 +12,8 @@ things about to hatch. This is where the brood that fills the warrens and
 vaults is grown, tended by sentinel-spiders and warm with incubating life. The
 fever has quickened the hatch to a flood, and sacs burst constantly, spilling
 broods into the dark. It is a floor lit by the light of its own dreadful
-fertility.
+fertility. The stair-lift stands behind a wall of glowing sacs at the
+gallery's end; Husklight guards the Incubatory before it.
 
 ## Flora
 - **Trees / canopy:** none — sac-racks and silk-vaulting.
@@ -22,15 +23,18 @@ fertility.
   husk-fungus lures with warmth-scent; the sac-lichen's glow hides how many
   are about to open.
 
-## Three places
-- **The cave — the Incubatory.** The deepest, warmest hatch-chamber, where the
-  mother-sacs are tended. *Seed: chilling it (or holding it in stasis) halts
-  the whole floor's hatch — the source of the brood-flood above.*
-- **The peak — the Sac-Spire.** The tallest egg-cluster, a glowing spire to
-  the vault; the galleries read from it. *Seed: from it the hatch-tempo can be
-  read and slowed.*
-- **The gate in the mountain — the Hatch Gate.** The stair-lift is set behind
-  a wall of glowing sacs. *Seed: Husklight guards the Incubatory before it.*
+## Places of interest
+- **The Incubatory.** The deepest, warmest hatch-chamber, where the mother-
+  sacs are tended and the whole floor's brood begins. *Seed: chill it (or hold
+  it in stasis) and the hatch halts at its source, choking the brood-flood
+  above.*
+- **The Husk Gallery.** A spent gallery of burst, cold, empty sacs — a hatch
+  that already flooded, its broods long gone into the dark and its dead
+  watchers risen as sac-lights. *Seed: the watchers' chilling-tools and hatch-
+  tally lie cached here, where the cold already won.*
+- **The Sac-Spire.** The tallest egg-cluster, a glowing spire to the vault;
+  the galleries read from it. *Seed: from it the hatch-tempo can be read and
+  slowed.*
 
 ## The people
 Watchers of Palewatch — Deep-folk who monitor the hatcheries and cull the
@@ -61,7 +65,7 @@ chilling-tools, and knows to the hour when a gallery will flood.
    glow. *now:* a drifting pale light that lures the living deep into the
    quickening racks. *Broken, the glow guts and drains away.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Stasis — spell.** Halts a thing's motion and growth for a spell — freezes
   a hatch, a swarm, or a foe mid-strike; the watchers' hatch-halting art.
   *Seed: learn it to still the Incubatory and to freeze the tower's engines
@@ -69,14 +73,17 @@ chilling-tools, and knows to the hour when a gallery will flood.
 - **Sac-glass — material.** The glowing quickened crystal the sacs are grown
   in, a soft-light lens and a life-charged enchanting-stone. *Seed: harvest
   the Sac-Spire.*
-- **Hatchling-tonic — potion.** A tonic of the sacs' quickening humor;
-  restores a climber with the raw vitality of new life, closing wounds fast.
+- **The chilling-tools — tools.** The watchers' cold-irons and stasis-flasks
+  for slowing a hatch by hand, cached in the Husk Gallery. *Seed: take them to
+  still the Incubatory even without a mage.*
+- **Hatchling-tonic — brew.** A tonic of the sacs' quickening humor; restores
+  a climber with the raw vitality of new life, closing wounds fast.
 
 ## The Warden — Husklight
 A sentinel spider grown vast, welded around a cluster of mother-sacs so it
 glows from within and births broods as it fights — it fills the galleries with
 hatching swarms and lures with its own light. Break it and the glow dies; the
-hatch halts across the floor; the Incubatory can be stilled and the Hatch Gate
+hatch halts across the floor; the Incubatory can be stilled and the stair-lift
 reached.
 
 ## When it falls

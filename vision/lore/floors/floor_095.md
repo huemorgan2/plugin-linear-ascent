@@ -12,7 +12,8 @@ of a hundred freed floors re-captured, and — grimly labelled — the gear of
 every climber who came before and failed. It is Vharuk's museum of his own
 conquest, curated by collared thralls, a monument to the vanity of a King who
 keeps proof of everything he's unmade. The relics here are the richest arsenal
-in the tower — and the most haunted.
+in the tower — and the most haunted. The stair-lift stands behind the hoard's
+adamant door at the vaults' end, and the Curator holds its keys.
 
 ## "Flora" — the Making's growth
 - **Canopy:** none — vaulted shelving and dust-light.
@@ -22,15 +23,17 @@ in the tower — and the most haunted.
   the hoard-moss glues a spoil to its shelf; the dust-lichen wakes an idle
   trophy to defend itself.
 
-## Three places
-- **The cave — the Deep Vault.** The lowest, oldest hoard, where the first
-  spoils of the Theft are kept. *Seed: the regalia of Aldervale-that-was — the
-  crowns and seals that would legitimize a restored realm — lie here.*
-- **The peak — the Display Hall.** The great gallery where the King's proudest
-  trophies stand; the vaults read from it. *Seed: the fight ends here, among
-  the arms of fallen liberators.*
-- **The gate in the mountain — the Vault Gate.** The stair-lift is behind the
-  hoard's adamant door. *Seed: the Curator holds the keys.*
+## Places of interest
+- **The Deep Vault.** The lowest, oldest hoard, where the first spoils of the
+  Theft are sealed away under adamant. *Seed: the regalia of Aldervale-that-was
+  — the crowns and seals that would legitimize a restored realm — lie here.*
+- **The Display Hall.** The great gallery where the King's proudest trophies
+  stand on lit plinths; the whole hoard is catalogued from it. *Seed: the fight
+  ends here, among the arms of fallen liberators.*
+- **The Climbers' Shelf.** The grim aisle where the gear of every liberator who
+  came before and failed is displayed, each set labelled with its dead owner's
+  name — a space kept blank at the end for yours. *Seed: reclaim their arms, lay
+  the failed to rest, and take the warning off your own empty plinth.*
 
 ## The people — who you are freeing
 Hoardside curators — collared archivists made to dust and catalogue the proof
@@ -59,15 +62,20 @@ every relic was, and can put a hero's arms back in a hero's hand.
    into his displayed crown. *now:* a crowned husk that guards the Deep Vault's
    regalia. *Broken, the old king drains to rest and his crown comes free.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Repossess — spell.** Seizes a stolen object back to its rightful owner and
-  disarms relic-traps; the curators' restoring-art. *Seed: learn it to reclaim
-  the hoard — arming the whole rising from the King's own museum.*
-- **Hero-steel — material.** The reclaimed arms of fallen liberators and the
-  regalia of drowned realms — the finest weapons and armor in the tower, each
-  with a name. *Seed: empty the shelves.*
-- **Owner's draught — potion.** A curator's brew that lets a claimed relic
-  answer to a new hand without the old ghost's grudge.
+  disarms relic-traps · the curators' restoring-art, kept by Vess · *Seed: learn
+  it to reclaim the hoard, arming the whole rising from the King's own museum.*
+- **Hero-steel — salvaged arms.** The reclaimed weapons of fallen liberators —
+  the finest arms in the tower, each with a name · off the Display Hall's
+  plinths · *Seed: empty the shelves and put the heroes' steel back in living
+  hands.*
+- **The Aldervale regalia — reclaimed relic.** The crowns and seals of
+  Aldervale-that-was, sealed in the Deep Vault · *Seed: recover them to
+  legitimize a restored realm when the tower comes down.*
+- **Owner's draught — a brew.** A curator's tincture that lets a claimed relic
+  answer to a new hand without the old ghost's grudge · from Vess's kit ·
+  *Seed: a dose lets the rising wield the haunted arms it reclaims.*
 
 ## The Warden — Curator
 A vast construct accreted from a thousand trophies — a figure of welded crowns,
@@ -76,7 +84,7 @@ the arms of every hero it has shelved. A construct of the Making, it fights by
 turning the fallen liberators' own famous weapons against the climber. Its end
 is an *eviction:* Repossess and break it, and the borrowed aether drains, the
 trophies clatter dead, and the arms of the fallen fall free to be carried
-onward. The Vault Gate opens.
+onward. The stair-lift opens.
 
 ## When it falls
 Vess's curators throw open the vaults, and the rising arms itself from the

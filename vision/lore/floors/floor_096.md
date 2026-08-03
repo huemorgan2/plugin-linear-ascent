@@ -13,7 +13,8 @@ and it is obscene: the garden is *grown from the taken,* captives planted in the
 black beds and coaxed to flower, their faces surfacing in the petals. Perfumed
 air lulls and binds; thorn-hedges walk; the fountains run with sweet aether.
 It is the tower's most seductive floor and its cruelest — a paradise fertilized
-with people.
+with people. The stair-lift stands behind a living thorn-arch at the garden's
+far wall, and Nightbloom roots that arch shut.
 
 ## "Flora" — the Making's growth
 - **Canopy:** black nightwood in flower, and luminous bloom-vault overhead.
@@ -23,15 +24,16 @@ with people.
   the face-lilies wear the taken's faces to lure; the dream-moss roots a
   wanderer to lie down and never rise.
 
-## Three places
-- **The cave — the Root-Cellar.** The black undercroft where the planted are
-  rooted and fed. *Seed: the captives grown into the beds can be dug free and
-  woken here before the garden claims them wholly.*
-- **The peak — the Belvedere.** The high viewing-pavilion where the King came
-  to admire his garden; it reads the whole pleasance. *Seed: the fight ends
-  here, above the beds.*
-- **The gate in the mountain — the Garden Gate.** The stair-lift is behind a
-  living thorn-arch. *Seed: Nightbloom roots the gate shut.*
+## Places of interest
+- **The Root-Cellar.** The black undercroft where the planted are rooted and
+  fed on the garden's dark liquor. *Seed: the captives grown into the beds can
+  be dug free and woken here before the garden claims them wholly.*
+- **The Belvedere.** The high viewing-pavilion where the King came alone to
+  admire his one beautiful thing; it overlooks the whole pleasance. *Seed: the
+  fight ends here, above the beds.*
+- **The Glass Orangery.** The warm hothouse where the newest-taken are forced
+  to bud, their faces only beginning to surface in the petals. *Seed: the
+  freshest-planted are here, still nearly whole and the easiest of all to wake.*
 
 ## The people — who you are freeing
 Bloomside gardeners — captives kept to tend the beds that are made of their own
@@ -60,15 +62,20 @@ planted free before they flower past saving.
    that lulls a whole party to root. *Broken, the bed withers and the faces go
    still, freed to be woken.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Deadbloom — spell.** Withers unnatural growth, breaks binding-perfume, and
-  kills a walking hedge at a word; the gardeners' un-rooting art. *Seed: learn
-  it to wither the garden — and to break the King's last living wards above.*
-- **Nightwood — material.** The garden's black flowering hardwood, carved into
-  bows and hafts that never rot and drink poison harmlessly. *Seed: fell the
-  black trees.*
-- **Waking-draught — potion.** A gardener's brew that snaps a mind free of
-  perfume, dream, and the urge to lie down and root.
+  kills a walking hedge at a word · the gardeners' un-rooting art, kept by Elys
+  · *Seed: learn it to wither the garden and to break the King's last living
+  wards above.*
+- **Nightwood — salvage.** The garden's black flowering hardwood, which never
+  rots and drinks poison harmlessly · felled from the flowering trees · *Seed:
+  fell the black trees for bows and hafts the rising can carry to the throne.*
+- **Waking-draught — a brew.** A gardener's tincture that snaps a mind free of
+  perfume, dream, and the urge to lie down and root · from Elys's un-rooting kit
+  · *Seed: a dose walks a whole party unlulled through the beds.*
+- **A woken planter — a freed companion.** One of the half-planted, dug out of
+  the Orangery before flowering and roused whole · *Seed: freed, they know
+  every safe path through the beds and guide the climb to the Belvedere.*
 
 ## The Warden — Nightbloom
 The face-lily host grown into one vast night-flower — a towering bloom of black
@@ -77,7 +84,7 @@ center and breathing a perfume that would lull an army to sleep in its beds. A
 construct of the Making, it fights by binding climbers in perfume and walking
 thorn while it feeds. Its end is an *eviction:* Deadbloom it and break the
 flower, and the pooled aether drains, the petals fall, and the faces in them go
-still — freed to be dug out of the beds. The Garden Gate opens.
+still — freed to be dug out of the beds. The stair-lift opens.
 
 ## When it falls
 Elys's gardeners dig the beds free, and the garden's grown-people wake in the

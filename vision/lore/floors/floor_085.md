@@ -12,7 +12,9 @@ Soot hangs thick; flue-fires gutter in every cell; the din of a hundred
 thousand soldiers at rest never quiets. Press-gangs haul fresh captives
 through on their way to the welding-halls. It is the soldiery's home, and the
 one floor where the Made's army can be met *out of order* — off-duty,
-distracted, and, some of them, quietly sick of the King.
+distracted, and, some of them, quietly sick of the King. The stair-lift stands
+behind the block's iron muster-gate at the warren's top tier; Fluegrim keeps
+order before it.
 
 ## "Flora" — the Making's growth
 - **Canopy:** none — cell-tiers and flue-shafts.
@@ -21,16 +23,15 @@ distracted, and, some of them, quietly sick of the King.
 - **How the Making twists it:** the flue-fungus fruits choking spores; the
   soot-moss smothers a lamp; the cell-lichen greases the tier-ladders.
 
-## Three places
-- **The cave — the Deep Flue.** The bottom of the warren's main flue-shaft,
-  where the soot and the dead gather. *Seed: a network of the disaffected —
+## Places of interest
+- **The Deep Flue.** The soot-choked bottom of the warren's main flue-shaft,
+  where the soot and the dead gather · *Seed: a network of the disaffected —
   imps and knights half-freed of the collar — meets in the smoke here.*
-- **The peak — the Muster-Balcony.** The high assembly-tier where the shifts
-  form up; the warrens read from it. *Seed: from it a false muster can be
-  called to empty a whole block.*
-- **The gate in the mountain — the Warren Gate.** The stair-lift is set
-  behind the block's iron muster-gate. *Seed: Fluegrim keeps order before
-  it.*
+- **The Muster-Balcony.** The high assembly-tier where the shifts form up ·
+  *Seed: call a false muster from it and empty a whole cell-block at once.*
+- **The Cell-Tiers.** The stacked iron holding-blocks where fresh captives are
+  penned on their way to the racks above · *Seed: unbar a tier and a hundred
+  bound go free in a breath.*
 
 ## The people — who you are freeing
 Warren-captives — the re-enslaved held in the slum's holding-cells awaiting
@@ -60,15 +61,16 @@ knows which soldiers can still be reached with a whisper and a broken collar.
    half-doubting. *Pressed — the most reachable knight on the climb: many
    will break their own collars if given the chance.*
 
-## Three finds  *(quest seeds)*
-- **Passfor — spell.** Cloaks the caster as one of the Made's own — imp or
-  knight — to pass unchallenged through the tower's ranks; the captives'
-  survival-trick. *Seed: learn it to walk the King's works unseen above.*
-- **Warren-iron — material.** The rough cell-and-bar iron of the slum, cheap
-  and plentiful, reforged into the rising's rank gear. *Seed: strip a cell-
-  block.*
-- **Smokelung tot — potion.** A warren brew that lets the lungs work in flue-
-  smoke and soot; wards choke for a spell.
+## Finds  *(quest seeds)*
+- **Passfor — spell.** Cloaks the caster as one of the Made's own, imp or
+  knight, to pass unchallenged through the tower's ranks · the captives'
+  survival-trick, taught in the Deep Flue · *Seed: walk the King's works unseen
+  above.*
+- **Warren-iron — salvage.** The rough cell-and-bar iron of the slum, cheap
+  and everywhere · stripped from any block · *Seed: rank gear for the rising.*
+- **A turned hellknight — companion.** An off-duty knight reached with a
+  whisper and a broken collar wakes to who it was and joins · *Seed: the most
+  reachable soldier on the climb, and an insider in the King's works.*
 
 ## The Warden — Fluegrim
 A hellknight-champion, the warren's enforcer — a captured soul welded huge and
@@ -77,7 +79,7 @@ under the plate is someone who was freed once, below, and re-taken. He fights
 to hold his block — but his collar is old and cracked from a hundred half-
 doubts. Break the collar (Break-collar, from floor 20) rather than the body,
 and Fluegrim wakes, throws down the King's order, and turns his whole warren
-to the rising. The Warren Gate opens on his word.
+to the rising. The stair-lift opens on his word.
 
 ## When it falls
 Fluegrim's collar breaks and a barracks-slum of soldiers wakes to who they

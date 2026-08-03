@@ -11,7 +11,9 @@ suspended, the light is soft and gold, and a warm, drowsy peace lies over
 everything like a drug. After the screaming gales of the outer floors, the
 stillness is bliss — and lethal, because the eye lulls the will to move, to
 climb, to live, and those who sit to rest in it never rise. It is a floor
-whose danger is not fury but a peace that kills by kindness.
+whose danger is not fury but a peace that kills by kindness. The stair-lift
+stands in a crag at the eye-wall's foot, on the edge of the roar; Stillmark
+holds the Still Point before it.
 
 ## Flora
 - **Trees / canopy:** still-cypress standing motionless in the dead air, and
@@ -22,16 +24,19 @@ whose danger is not fury but a peace that kills by kindness.
   hush-grass muffles all urgency; the rain-lilies hang a drowsing mist that
   slows the heart.
 
-## Three places
-- **The cave — the Barometer Vault.** The pressure-readers' undercroft, the
-  one place the lull can't reach. *Seed: the eye-lore — how to keep moving in
-  the calm — is kept here, with the master barometer that reads the storm.*
-- **The peak — the Still Point.** The dead center of the eye, stillest and
-  most lethal; the whole storm reads from it. *Seed: it is the calm's heart —
-  break the lull here and the eye lets its captives go.*
-- **The gate in the mountain — the Eye Gate.** The stair-lift is set in a
-  crag at the eye-wall's foot, on the edge of the roar. *Seed: Stillmark holds
-  the Still Point before it.*
+## Places of interest
+- **The Barometer Vault.** The pressure-readers' undercroft, the one built
+  place the lull can't reach; the eye-lore — how to keep moving in the calm —
+  is kept here, with the master barometer that reads the storm. *Seed: hold the
+  vault and you hold the art of staying awake in the killing peace.*
+- **The Sitting Garden.** A becalmed pleasure-garden where the eye's first
+  captives sat to rest a thousand years ago and never rose — folk still seated
+  among the suspended rain, breathing, dreaming, and the pressure-ghosts
+  thickest around them. *Seed: rouse the seated here and you wake a whole
+  gentle crowd to the rising at a stroke.*
+- **The Still Point.** The dead center of the eye, stillest and most lethal;
+  the whole storm reads from it. *Seed: it is the calm's heart — break the lull
+  here and the eye lets its captives go.*
 
 ## The people
 Eye-dwellers — Men caught in the calm when the tempest formed: weather-readers,
@@ -65,14 +70,18 @@ takes them.
    that beckons the living to lie beside it. *Broken (or roused), the peace
    cracks and it drains into the still air.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Lull — spell.** Imposes or lifts a deep calm — pacifies a raging foe, or
   rouses the drugged and panicked; the eye-wardens' double-edged art. *Seed:
   learn it to break the killing calm and to steady the host near the throne.*
 - **Pressure-crystal — material.** The eye-glass grown in the dead-still air,
   a barometer-stone and a calm-charm; steadies whatever it's set in. *Seed:
   the Still Point.*
-- **Sharpwake draught — potion.** An eye-dweller's brew against drowse and
+- **The master barometer — tool.** Mera's great storm-glass, kept in the
+  Barometer Vault; it reads the eye-wall's turning and shows the one safe
+  moment to cross into the roar. *Seed: win it to time the crossing and to read
+  the throne's own storms above.*
+- **Sharpwake draught — brew.** An eye-dweller's draught against drowse and
   compulsion; keeps a climber alert and moving through any lull or lulling
   spell.
 
@@ -82,7 +91,7 @@ the killing calm — it fights not with fury but with peace, deepening the lull
 until limbs go heavy and the will to fight drains away, welcoming climbers to
 lie down and rest. It is a stillness the tower quickened, so its end is an
 *eviction:* rouse the eye and break the calm at the Still Point and the
-borrowed peace disperses; the captives wake; the Eye Gate opens.
+borrowed peace disperses; the captives wake; the stair-lift opens.
 
 ## When it falls
 Lullside breaks the killing calm at the Still Point and the eye lets its

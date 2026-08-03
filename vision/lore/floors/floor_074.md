@@ -11,7 +11,9 @@ deadfall, and beetle-tick, the fever multiplying every snare a thousandfold.
 Trip-wires glint between the trees; spring-poles stand cocked in the
 underbrush; the leaf-litter hides pits and nooses. The wood is quiet and green
 and utterly lethal, a place where the ground and the branches both want to
-catch you. The snare-folk move through it one tested step at a time.
+catch you. The snare-folk move through it one tested step at a time. The
+stair-lift stands in a bramble-choked scarp thick with cocked snares;
+Springtrap sets the approach before it.
 
 ## Flora
 - **Trees / canopy:** snare-elm and springpole-ash, their boughs cocked with
@@ -22,17 +24,19 @@ catch you. The snare-folk move through it one tested step at a time.
   tripwire-bramble strings itself between trees; the bait-flowers mark the
   worst traps as if they were safe clearings.
 
-## Three places
-- **The cave — the Deadfall Den.** The biggest snare-den, where the wood's
-  master-traps are set and its catch is kept. *Seed: the snare-lore — how to
-  read and slip every trap in the wood — is carved on the den-post.*
-- **The peak — the Watch-Elm.** The tallest elm, where all the trip-lines
-  converge to a single watch-trigger; the whole wood reads from its crown.
+## Places of interest
+- **The Deadfall Den.** The wood's master-trap house, where the great snares
+  are set and cocked; the snare-lore — how to read and slip every trap in the
+  wood — is carved on its den-post. *Seed: take the den and you take the wood's
+  own trap-craft.*
+- **The Gibbet Glade.** A clearing where the sprung snares kept their catch —
+  game and folk alike still hang in the trees, long dead, the caught-thing
+  wights risen from among them. *Seed: cut the caught down here to rob the
+  wights of their dead and give the snare-folk their lost kin a grave.*
+- **The Watch-Elm.** The tallest elm, where every trip-line in the wood
+  converges to a single watch-trigger; the whole wood reads from its crown.
   *Seed: from it every snare-line on the floor can be sprung or slackened at
   once.*
-- **The gate in the mountain — the Snare Gate.** The stair-lift is set in a
-  bramble-choked scarp thick with cocked snares. *Seed: Springtrap sets the
-  approach.*
 
 ## The people
 Snare-folk — elves who hunted by trap and tripline, patient light-footed folk
@@ -65,7 +69,7 @@ disarms the master-traps, and reads a cocked wood by the tension in the air.
    every trap a climber disarms. *Broken, its springpoles fall slack and it
    drains away.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Unspring — spell.** Disarms and slackens snares, springs, and cocked traps
   at a word — the twin of floor 59's Reveal, for the traps you can already see.
   *Seed: learn it from the Deadfall Den to cross the wood and disarm the
@@ -73,15 +77,18 @@ disarms the master-traps, and reads a cocked wood by the tension in the air.
 - **Spring-silver — material.** The fine cocked spring-wire of the snares,
   worked into hair-triggers, spring-blades, and the host's own trap-craft.
   *Seed: harvest the Watch-Elm's trigger-lines.*
-- **Slip-oil — potion.** A snare-folk's oil that makes a climber impossible to
-  hold; no noose, grip, or binding can keep them for a spell.
+- **A trap-sniffer hound — companion.** A funnel hound cured and won over
+  rather than driven off; it heels to a hand and freezes dead at the scent of
+  a cocked snare, walking a climber safe through wire that would kill them.
+  *Seed: the first friend won from the wood, and a living trap-finder for the
+  climb ahead.*
 
 ## The Warden — Springtrap
 A funnel hound welded into a walking snare-engine, strung with cocked spring-
 poles and wire that lash out to noose and fling — it fights by springing the
 whole wood's traps in cascades and re-cocking them behind, herding climbers
 from one snare to the next. Break it and the wood's traps fall slack; the
-snare-lines slacken; the Snare Gate's cocked approach goes safe.
+snare-lines slacken; the stair-lift's cocked approach goes safe.
 
 ## When it falls
 Brambleside slackens every snare-line from the Watch-Elm and the wood goes

@@ -10,7 +10,9 @@ once drove across the wetlands to reap and drain, now toppled and rusting in a
 brown marsh, each half-sunk hull an island in the reeds. Rust-water stains
 the meres orange; reeds grow through cracked cockpits; the rigs' aether-cores
 still tick faintly in the mud. It was proud, ingenious country, taken with the
-harvest half-in, and now it is a salvage-yard the marsh is slowly eating.
+harvest half-in, and now it is a salvage-yard the marsh is slowly eating. The
+stair-lift is set in a rust-streaked bluff behind a beached hull, and Rigrot
+wallows the channel before it.
 
 ## Flora
 - **Trees / canopy:** drowned willow and the rigs' own rusted derricks
@@ -20,16 +22,18 @@ harvest half-in, and now it is a salvage-yard the marsh is slowly eating.
 - **Under the Yoke:** the rust-reed cuts like tin; the oil-lily's slick
   ignites; the bolt-barnacles clamp onto a wading leg.
 
-## Three places
-- **The cave — the Hull Undercroft.** The dry interior of a capsized flagship-
-  rig, its cockpit an air-pocket in the marsh. *Seed: the rig-masters'
-  charts and a still-live core are sealed in there.*
-- **The peak — the Crane-Mast.** The one rig left standing, its derrick the
-  high point over the whole fen. *Seed: its beacon-lamp, relit, guides the
-  salvage-folk's boats and warns of the drowned lights.*
-- **The gate in the mountain — the Rig Gate.** The stair-lift is set in a
-  rust-streaked bluff behind a beached hull. *Seed: Rigrot wallows the
-  channel before it.*
+## Places of interest
+- **The Hull Undercroft.** The dry interior of a capsized flagship-rig, its
+  cockpit an air-pocket in the marsh, the rig-masters' charts and a still-live
+  core sealed inside. *Seed: recover the charts and the last live core before
+  the water finds them.*
+- **The Crane-Mast.** The one rig left standing, its derrick the high point
+  over the whole fen. *Seed: relight its beacon-lamp to guide the salvage-
+  folk's boats and drown out the false lights.*
+- **The Foundry-Barge.** The fen-farmers' floating repair-yard, half-sunk on
+  its moorings — forge, slipway, and gantry-crane still whole under the rust,
+  where every rig was built and mended. *Seed: raise the barge and the
+  salvage-folk can make a dead rig walk again.*
 
 ## The people
 Salvage-folk — Men of the fen who once drove the rigs and now strip them,
@@ -60,23 +64,28 @@ where its core still ticks, and dives the hulls no one else will.
    the false light. *now:* a marsh-light on a dead derrick that lures boats
    onto the scrap-reefs. *Broken, the light gutters and drains down.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Corrode — spell.** Rusts and weakens metal at a touch — jams a rig,
-  unmakes a weld, frees a clamped limb; the salvagers' cutting-art. *Seed:
+  unmakes a weld, frees a clamped limb · the salvagers' cutting-art · *Seed:
   learn it to open the sealed Hull Undercroft and, later, to rot the tower's
   plate.*
-- **Rig-steel — material.** The light strong frame-steel of the harvest-rigs,
-  salvaged into fast armor and — for the ambitious — walking-frames of the
-  host's own. *Seed: strip a sound hull.*
-- **Diver's draught — potion.** A salvager's brew that lets the lungs work
-  underwater for a spell — vital for the flooded and drowned floors ahead.
+- **Rig-steel — salvage.** The light strong frame-steel of the harvest-rigs ·
+  stripped from a sound hull · *Seed: fast armor now, and walking-frames of
+  the host's own for the ambitious.*
+- **Diver's draught — brew.** Lets the lungs work underwater for a spell ·
+  brewed by Rustwake's divers · *Seed: vital for the flooded and drowned
+  floors ahead.*
+- **A salvaged harvest-rig — war-engine.** A sound walker-frame with its
+  aether-core still live, driven again · raised from the graves and fitted at
+  the Foundry-Barge · *Seed: the first walking war-engine the rising can
+  field.*
 
 ## The Warden — Rigrot
 A rig-wight grown into its flagship hull — a half-drowned harvest-rig walking
 again on rust-frozen legs, welded with reaping-blades and dragging the marsh
 with it. It fights in the channels where footing is deep mud, and lures with
 drowned beacons. Break it and the great wreck lies still for good; the false
-lights die; the Rig Gate's channel clears.
+lights die; the stair-lift's channel clears.
 
 ## When it falls
 Rustwake raises the flagship's live core and relights the Crane-Mast beacon;

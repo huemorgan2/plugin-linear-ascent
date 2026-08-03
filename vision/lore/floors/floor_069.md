@@ -11,7 +11,9 @@ earthing-vaults, under a permanent storm-ceiling that never rains but never
 stops flashing. The air smells of ozone; the poles hum and spit; a strike can
 come down anywhere, but comes down oftenest on the tallest thing standing —
 which, out on the field, is you. Men harvested the storm here and grew rich on
-its charge. Now the storm is fever-mad and aims to kill.
+its charge. Now the storm is fever-mad and aims to kill. The stair-lift is set in an
+earthed bluff ringed by copper poles at the field's edge; Groundstrike calls
+the strikes before it.
 
 ## Flora
 - **Trees / canopy:** none — copper poles and storm-sky.
@@ -22,17 +24,20 @@ its charge. Now the storm is fever-mad and aims to kill.
   the field; the copper-flowers draw the next bolt to where the living
   stand; the ozone-moss sparks underfoot.
 
-## Three places
-- **The cave — the Ground-Vault.** The earthing-cellar beneath the field
-  where the harvested charge is stored and bled to earth. *Seed: the master
-  earthing-switch is here — thrown, it makes the whole field safe to cross,
-  or turns it into one great weapon.*
-- **The peak — the Master Pole.** The tallest lightning-rod, crowned in
-  standing fire; the field reads from its base. *Seed: it draws every strike
-  — stand clear of it and the field is survivable; claim it and the storm is
-  yours.*
-- **The gate in the mountain — the Field Gate.** The stair-lift is set in a
-  bluff ringed by poles. *Seed: Groundstrike calls the strikes before it.*
+## Places of interest
+- **The Ground-Vault.** The earthing-cellar beneath the field where the
+  harvested charge is stored and bled safely to earth. *Seed: the master
+  earthing-switch is down here — thrown one way it makes the whole field safe
+  to cross, thrown the other it becomes one great weapon.*
+- **The Master Pole.** The tallest lightning-rod on the plain, crowned in a
+  standing crown of fire, drawing to itself every strike the sky throws.
+  *Seed: stand clear of it and the field is survivable; claim its head and the
+  storm answers to you.*
+- **The Glass Garden.** The stretch of field where a thousand strikes have
+  fused the sand to branching fulgurite, a silent grove of lightning-glass
+  grown where the bolts came down. *Seed: the glass records where the storm
+  strikes oftenest — read the garden and you read the safe lanes across the
+  whole field.*
 
 ## The people
 Field-folk — Men of the storm-harvest: pole-wrights, charge-wardens, and
@@ -63,7 +68,7 @@ reads the storm's aim by the crawl of the charge on her skin.
    safe-lane marker-stones to lead the living under the poles. *Broken, it
    earths out and drains into the field.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Conduct — spell.** Channels a bolt of lightning through the caster and
   hurls it — the field-folk's offensive art, the striking twin of floor 15's
   defensive Earth. *Seed: learn it to cross the field and turn the storm on
@@ -71,16 +76,17 @@ reads the storm's aim by the crawl of the charge on her skin.
 - **Storm-copper — material.** Charge-hardened copper drawn from the poles,
   the finest aether-conductor and shock-weapon core in the tower. *Seed:
   strip a spent pole.*
-- **Galvanic tonic — potion.** A crew's brew that wards the body against shock
-  and quickens the nerves; a jolted climber shrugs it off and moves faster
-  for a spell.
+- **The strike-map — knowledge.** Mera's read of the storm's aim — the hum of
+  the poles, the lean of the copper-flowers, the fulgurite of the Glass Garden
+  — that shows where the sky will hit next. *Seed: win her trust and she walks
+  the host safe across the killing field.*
 
 ## The Warden — Groundstrike
 A fieldborn drake welded to the Master Pole, crowned in captured lightning —
 it fights by calling the storm's strikes down onto the living wherever they
 stand, shifting the safe lanes, and hurling arced bolts. Break it and the
 aiming storm goes wild and harmless; the safe lanes hold; the master switch
-can be thrown and the Field Gate reached.
+can be thrown and the stair-lift reached.
 
 ## When it falls
 Copperpole throws the master switch and the field earths safe; the harvested

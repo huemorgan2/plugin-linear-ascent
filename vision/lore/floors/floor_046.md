@@ -11,7 +11,9 @@ solid into groaning pack-ice since the forges fell cold. Pressure-ridges heave
 up like walls; leads of black water open without warning; brine-gulls cry over
 the floes. It is a horizontal wilderness of ice, beautiful and lethal, where
 the ground can crack beneath a boot and the cold alone can kill. Crossing it
-means reading the ice like the sealers do.
+means reading the ice like the sealers do. The stair-lift stands in an ice-
+clad scarp at the sea's frozen edge, its arch sheathed in blue rime; Floeback
+breaks the ice before it.
 
 ## Flora
 - **Trees / canopy:** none — pack-ice, pressure-ridges, and open leads.
@@ -20,17 +22,19 @@ means reading the ice like the sealers do.
 - **Under the Yoke:** the frost-flowers mark thin ice as if it were thick;
   the brine-kelp drags at a swimmer; the ice-algae make the floes slick.
 
-## Three places
-- **The cave — the Melt-Grotto.** A sea-cave hollowed under a grounded berg,
-  the one warm-ish shelter on the sea. *Seed: the coolant-sluice controls
-  here — reopened, the sea could take heat again and the ice give up its
-  dead and its old road.*
-- **The peak — the Great Ridge.** The highest pressure-ridge, a wall of
-  heaved ice; the sea reads from its crest. *Seed: a beacon here marks the
-  safe floe-road across.*
-- **The gate in the mountain — the Floe Gate.** The stair-lift is set in an
-  ice-clad scarp at the sea's edge. *Seed: Floeback breaks the ice before
-  it.*
+## Places of interest
+- **The Melt-Grotto.** A sea-cave hollowed under a grounded berg, the one
+  warm-ish shelter on the sea, where the coolant-sluice controls stand.
+  *Seed: reopened, the sluice lets the sea take heat again — the ice gives up
+  its dead and its old road.*
+- **The Great Ridge.** The highest pressure-ridge, a wall of heaved ice that
+  the sea reads from its crest. *Seed: a beacon here marks the safe floe-road
+  clear across the pack.*
+- **The Locked Fleet.** The sealers' floe-boats and a great forge-barge caught
+  fast when the sea froze in a single night, masts and hulls standing in the
+  pack like a drowned town. *Seed: their holds still keep winter stores, iron,
+  and gear — a supply-cache for the cold campaign, if the ice can be worked
+  open.*
 
 ## The people
 Sealers — giant ice-hunters and delver-floe-crews who work the leads for
@@ -53,30 +57,39 @@ ice-staff and knows the pack's moods by its groans.
    water.*
 4. **Crack-eel** (N) — *was:* a cold-water eel. *now:* riding the open leads,
    coiling round a swimmer's legs. *Cured, it sinks into the deep.*
-5. **Swell troll** (N) — *was:* a coolant-sea troll denned on a berg. *now:*
-   ice-hided, heaving floes to spill climbers into the leads. *Cured, the
-   slow giant lumbers off across the pack.*
+5. **Swell troll** (N) — *the sea's one beast that never belonged to it.*
+   Trolls are Deep-dwellers, not ice-things; this one was drawn up from the
+   delvings far below through the same forge-shafts that once fed the coolant-
+   sea its heat, and denned on a grounded berg when the water froze around it.
+   *was:* a Deep troll. *now:* ice-hided and fever-slow, heaving whole floes to
+   spill climbers into the black leads. *Cured, the slow giant lumbers off
+   across the pack to find a way back down.*
 6. **Coolant-wight** (W) — *was:* a sealer frozen when a lead closed, aether
    locked in the ice. *now:* a rime-shrouded figure that opens leads under
    the living to drown and freeze them. *Broken, it sinks and drains into the
    sea.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Icebind — spell.** Freezes open water into crossable ice, or seizes an
   enemy in a rime-lock; the sealers' art. *Seed: learn it to bridge the leads
   and reach the Melt-Grotto.*
 - **Floe-iron — metal.** Brine-quenched iron that stays keen in killing cold;
   the cold-campaign standard, prized over rime-iron for edges. *Seed: work
   the grotto's ore.*
-- **Sealsblood tonic — potion.** A sealer's brew of seal-fat and brine; wards
-  against both cold and drowning-chill, and lets the lungs work in icy water.
+- **Sealsblood tonic — tonic.** A sealer's brew of seal-fat and brine that
+  wards both cold and drowning-chill and lets the lungs work in icy water;
+  rendered at Floeside. *Seed: a flask before the first lead.*
+- **Orla's ice-reading — knowledge, not a thing.** The sealer-elder's whole
+  map of the pack — every sound floe, thin lead, and safe crossing, read by
+  groan and colour, memorized not written. *Seed: win her trust and she'll
+  sound the safe road across for the host.*
 
 ## The Warden — Floeback
 A swell troll grown vast, welded under a shell of pressure-ice that regrows
 from the sea — it fights by heaving the floes and cracking leads beneath a
 climber's feet, dragging the whole battle toward the black water. Break it and
-the pack settles; the leads close; the Floe Gate's ice holds firm enough to
-cross.
+the pack settles; the leads close; the ice at the stair-lift holds firm enough
+to cross.
 
 ## When it falls
 Floeside reopens the coolant-sluice and the sea takes heat again, the ice

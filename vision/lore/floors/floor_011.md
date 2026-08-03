@@ -11,6 +11,9 @@ frozen mid-count; account-scrolls drift like snow in the still air; the
 floodlights catch the coin-dust so the whole hall glitters, and the glitter
 gets in the lungs. It is a monument to a bookkeeping so vast it needed its
 own country — cut off, and still faintly ringing with the sound of tallies.
+The stair-lift is set in a rock face carved with account-runes, its door a
+giant ledger-cover that opens to a written reckoning, not a key; Brassbone
+guards the count before it.
 
 ## Flora
 - **Trees / canopy:** none — stone galleries and brass fittings.
@@ -19,16 +22,17 @@ own country — cut off, and still faintly ringing with the sound of tallies.
 - **Under the Yoke:** the paper-fungus has learned to move, drifting like ash
   and settling on warmth; the coin-lichen bites.
 
-## Three places
-- **The cave — the Vault Undercroft.** The deep coin-vault beneath the halls,
-  its true reserve sealed behind a tally-lock. *Seed: the lock opens only to a
-  correct reckoning — a puzzle-quest in itself.*
-- **The peak — the Tally-Tower.** The great central abacus-tower that summed
-  the whole realm; from its top the halls read like a map. *Seed: set it
-  counting true and the ledgers name where the clerks are hidden.*
-- **The gate in the mountain — the Brass Gate.** The stair-lift is set in a
-  rock face carved with account-runes, its door a giant ledger-cover. *Seed:
-  Brassbone guards it, and it opens to a written word, not a key.*
+## Places of interest
+- **The Vault Undercroft.** The deep coin-vault beneath the halls, its true
+  reserve sealed behind a tally-lock. *Seed: the lock opens only to a correct
+  reckoning — a puzzle-quest in itself.*
+- **The Tally-Tower.** The great central abacus-tower that summed the whole
+  realm; from its top the halls read like a map. *Seed: set it counting true
+  and the ledgers name where the clerks are hidden.*
+- **The Shelf-Maze.** Miles of ledger-shelving where account-scrolls drift
+  down like snow and the paper-fungus hunts warmth through the stacks; a
+  party is easily lost in it. *Seed: the surviving clerks — and the ledger
+  naming their refuge — are somewhere deep in the shelves.*
 
 ## The people
 Ledger-clerks and reckoners — giants and delver-scribes who kept the deep-
@@ -51,28 +55,33 @@ last ledger, because stopping would mean admitting the count is broken.
 4. **Brass beetle** (N) — *was:* a coin-vault beetle. *now:* armored in
    verdigris, rolling like flung coins underfoot. *Cured, it trundles into a
    crack.*
-5. **Coin-sifter kobold** (P) — *was:* a first-taken conscript set to sort
-   coin by hand. *now:* collared, coin-blind, flinging brass shot. *A real
-   death; freeing is the collar.*
+5. **Coin-sifter kobold** (P) — *a conscript, not native to these halls.*
+   First-taken from the warrens far below, marched up the lifts and set to
+   sort coin by hand in the giants' counting-house because the giant clerks
+   are barred among the shelves. *now:* collared, half coin-blind, flinging
+   brass shot by the fistful at any warmth. *A real death; freeing it is the
+   collar, not the body.*
 6. **Ledger wisp** (W) — *was:* a clerk who died mid-count, aether caught in
    the unfinished sum. *now:* a drifting light that reads numbers aloud and
    reaches for warm hands. *Broken, the sum finishes and it drains away.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Reckon — spell.** Compels a true count of anything hidden — coins, doors,
   lies; the reckoners' cornerstone art. *Seed: learn it to open the tally-
   lock and, later, to read false musters above.*
 - **Coin-brass — metal.** The dense true brass of the reserve, prized for
   fittings and aether-conductors. *Seed: the vault's ingots.*
-- **Clerk's clarity — potion.** A reckoner's draught that quiets the coin-
-  dust in the head; sharpens focus for a spell.
+- **The Master Ledger — knowledge.** The halls' great index, which — read
+  with Reckon — names every sealed cache, hidden clerk, and false account in
+  the tower's own books. *Seed: recover it to unpick the tower's accounts
+  floor by floor above.*
 
 ## The Warden — Brassbone
 A brass beetle of the vault, welded vast around a core of ledger-locks and
 tally-gears — it fights by *counting:* every blow it takes it tallies and
 answers in kind, growing harder to hurt the longer the sum runs. Break the
-count (not just the shell) and Brassbone stops; the Brass Gate reads its
-final balance and opens.
+count (not just the shell) and Brassbone stops; the stair-lift's ledger-door
+reads its final balance and opens.
 
 ## When it falls
 Ledgerstone's clerks come out and close the last ledger honestly — the count

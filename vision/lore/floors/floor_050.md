@@ -12,7 +12,9 @@ the air; the fire-lake below pulses like a heart. Here dwells Cindermaw — a
 true wyrm, older than the Ascent, who the fever drove to demand tribute, and
 whom the terrified Waste-folk have appeased for a thousand years by feeding
 her pyres. It is the last floor of the fifth tier, and the first *dragon* the
-climb must face.
+climb must face. The stair-lift stands in the rim's glassed rock behind a
+curtain of pyre-flame — the gate to the sixth tier; only Cindermaw's freeing
+opens it, and she coils before it.
 
 ## Flora
 - **Trees / canopy:** none — glass terraces, pyre-stacks, and ash-drifts.
@@ -21,17 +23,19 @@ climb must face.
 - **Under the Yoke:** the ember-poppies burst into flame near warmth; the
   fire-lilies breathe scalding pollen; the pyre-moss reignites cold pyres.
 
-## Three places
-- **The cave — the Nest.** Cindermaw's caldera lair above the fire-lake,
-  floored with the hoard of a thousand years of tribute. *Seed: the hoard
-  holds a wyrm-scale shield and caldera-gold enough to arm a tier — and the
-  fight for it is the fight for the floor.*
-- **The peak — the Caldera Rim.** The high rim-walk ringing the mouth; the
-  whole Waste-tier reads from it, and the tribute-pyres are lit from it.
-  *Seed: dousing the pyres in the old free-rite breaks the tribute-hold.*
-- **The gate in the mountain — the Cinder Gate.** The stair-lift is set in the
-  rim's glassed rock behind a curtain of pyre-flame. *Seed: only Cindermaw's
-  freeing opens it — the gate to the sixth tier.*
+## Places of interest
+- **The Nest.** Cindermaw's caldera lair above the fire-lake, floored with the
+  hoard of a thousand years of tribute. *Seed: the hoard holds a wyrm-scale
+  shield and caldera-gold enough to arm a tier — and the fight for it is the
+  fight for the floor.*
+- **The Caldera Rim.** The high rim-walk ringing the mouth, from which the
+  whole Waste-tier can be read and the tribute-pyres are lit. *Seed: hold the
+  rim and a commander sees — and can signal — across every floor of the fifth
+  tier at once.*
+- **The Pyre-Field.** The terraced ranks of tribute-pyres stepping down toward
+  the fire-lake, where a thousand years of the given were burned. *Seed:
+  dousing these in the old free-rite is the act that ends the feeding and
+  frees the floor — and the deep ash hides a thousand years of grave-goods.*
 
 ## The people
 Caldera-folk of Lastwater — Waste-folk whose whole society became the tending
@@ -67,16 +71,17 @@ feeding.
    pyres and dragging the living to them. *Broken, it collapses to ash and
    drains into the caldera.*
 
-## Three finds  *(quest seeds)*
-- **Wyrmfire — spell.** Hurls a gout of dragon-fire; the caldera's own power,
-  learnable only by one who faces the wyrm and lives. *Seed: won from
+## Finds  *(quest seeds)*
+- **Wyrmfire — spell.** Hurls a gout of true dragon-fire; the caldera's own
+  power, learnable only by one who faces the wyrm and lives. *Seed: won from
   Cindermaw — fire to turn on the fire-floors and the throne.*
 - **Wyrm-scale — material.** Cindermaw's shed and won scale, the finest fire-
-  proof armor-plate in the tower, and caldera-gold from the hoard beside it.
-  *Seed: the Nest.*
-- **Wyrmsblood elixir — potion.** A draught of the wyrm's own blood; grants
+  proof armor-plate in the tower, with caldera-gold from the hoard heaped
+  beside it in the Nest. *Seed: won from the freed wyrm, or taken from her
+  lair.*
+- **Wyrmsblood elixir — elixir.** A draught of the wyrm's own blood that grants
   fire-immunity and a great surge of vigor — the mightiest tonic below the
-  throne. *Seed: taken from the freed wyrm, freely given.*
+  throne. *Seed: taken from the freed Cindermaw, freely given.*
 
 ## The Warden — Cindermaw the Wyrm
 A true wyrm, ancient and vast, coiled about the fire-lake — not a beast the
@@ -86,7 +91,7 @@ the ash to a storm, and a tail that heaves the terraces; her wyrmlings and
 drakes wheel to her aid. Because she is *native,* her ending is a *curing,* not
 a killing: break the fever's hold (and douse the pyres) and the hunger leaves
 her — she stops demanding tribute, and the true wyrm, ally to none but no
-longer enemy, spreads her wings and is free. The Cinder Gate opens on the
+longer enemy, spreads her wings and is free. The stair-lift opens on the
 sixth tier.
 
 ## When it falls

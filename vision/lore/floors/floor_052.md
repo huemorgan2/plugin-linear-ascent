@@ -11,7 +11,9 @@ green sun-lit turf above a white ocean of vapor with heart-stopping drops
 below. Cliff-goats graze the ledges; thermals boom up the faces; the wind
 never stops. Men held these ridges for the high grazing and the thin clear
 air, and the cloud-line is where the safe green ends and the fall begins.
-Cross it on the ridges, or not at all.
+Cross it on the ridges, or not at all. The stair-lift stands in a
+cloud-wreathed ridge-saddle at the high pastures' end, its arch iced white;
+Thermal rides the updraft before it.
 
 ## Flora
 - **Trees / canopy:** wind-stunted cloud-pine on the leeward ledges, and the
@@ -21,16 +23,19 @@ Cross it on the ridges, or not at all.
 - **Under the Yoke:** the cloud-grass hides the ledge-edge; the mist-fern
   breathes a blinding fog; the saxifrage crumbles its hold underfoot.
 
-## Three places
-- **The cave — the Cloud Grotto.** A ridge-cave behind a curtain of drifting
-  cloud, the cliff-holders' shelter. *Seed: the ridge-lore — every safe line
-  across the cloud-sea — is chalked on its walls.*
-- **The peak — the Ridge-Crown.** The highest peak, breaking clear above all
-  cloud; the whole cloud-line reads from it in the sun. *Seed: a beacon here
-  is visible to every ridge, and marks the safe crossings.*
-- **The gate in the mountain — the Cloudline Gate.** The stair-lift is set in
-  a ridge-saddle wreathed in cloud. *Seed: Thermal rides the updraft before
-  it.*
+## Places of interest
+- **The Windward Shrine.** A herders' weather-chapel wedged on a leeward
+  ledge, its walls chalked with the ridge-lore — every safe line and rotten
+  ledge across the cloud-sea. *Seed: read the lore here and the crossings no
+  fog can hide open up.*
+- **Windvane Aerie.** A wind-scoured raptor-crag standing clear above the
+  cloud, white with generations of down and its scree thick with meteoric
+  falls; the whole cloud-line reads from its top. *Seed: a beacon lit here
+  shows every safe line at once.*
+- **The Swaying Bridge.** A rope-and-plank span the cliff-holders strung
+  across the deepest cloud-chasm, still swinging in the updraft with half its
+  planks gone. *Seed: re-plank it and the two halves of the ridge-country are
+  one crossing again.*
 
 ## The people
 Cliff-holders — Men of the high ridges: goat-herders, cloud-farmers, and ledge-
@@ -60,24 +65,28 @@ the herds along the safe lines, reading the thermals by the wind's voice.
    ledges cutting rope-lines and crying a false warning to send climbers the
    wrong way. *Broken, it drops into the cloud-sea and drains away.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Featherfall — spell.** Slows a fall to a drift and lets the caster ride a
-  thermal for a spell; chalked in the Cloud Grotto. *Seed: learn it to cross
-  the cloud-line and survive the sky-tiers' drops.*
-- **Sky-iron — metal.** Meteoric iron gathered from the high crowns, light
-  and keen and prized for flyers' gear. *Seed: work the Ridge-Crown's fall.*
-- **Highlung tonic — potion.** A cliff-holder's brew for the thin air; lets
-  the lungs work at any height and steadies the head against altitude.
+  thermal for a spell; its ridge-lore chalked in the Windward Shrine. *Seed:
+  learn it to cross the cloud-line and survive the sky-tiers' drops.*
+- **Sky-iron — metal.** Meteoric iron gathered from the Windvane Aerie's
+  scree, light and keen and prized for flyers' gear. *Seed: work the aerie's
+  falls.*
+- **Mera's ridge-lore — knowledge.** The cliff-holder's memorized map of every
+  thermal, safe line, and rotten ledge on the floor. *Seed: win her trust and
+  she walks you the crossings by the wind's voice alone.*
+- **Highlung tonic — potion.** A cliff-holder's brew for the thin air; the
+  lungs work at any height and the head steadies against the altitude.
 
 ## The Warden — Thermal
 A cloudline harpy grown vast, welded with wind-sails that let it ride the
 updrafts at will — it fights from the air, stooping out of the cloud and
 riding the thermals up out of reach, calling the squall-drakes to strafe the
-ridges. Break it and the cloud-line clears; the harpies calm; the Cloudline
-Gate opens on the sunlit saddle.
+ridges. Break it and the cloud-line clears; the harpies calm; the stair-lift
+opens on the sunlit saddle.
 
 ## When it falls
-Skyfoot lights the Ridge-Crown beacon and the safe crossings show clear above
-the cloud-sea. The cliff-holders climb as the host's ridge-runners and glide-
+Skyfoot lights the Windvane Aerie beacon and the safe crossings show clear
+above the cloud-sea. The cliff-holders climb as the host's ridge-runners and glide-
 scouts, carrying **Featherfall** and sky-iron — the folk who cross any height
 and never fear the drop, which the sky-tiers demand at every step.

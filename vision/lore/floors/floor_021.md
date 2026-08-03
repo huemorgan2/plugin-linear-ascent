@@ -10,7 +10,9 @@ country of burnt gorse and standing char, with a haze of new green bracken
 pushing up through the ash. The floodlights lie grey on the cinders. It is a
 place mid-healing and stopped there: the char never washed away, the green
 never grew past knee-high, the whole common held forever at the moment after
-the burn. Underfoot the ash is soft and still faintly warm.
+the burn. Underfoot the ash is soft and still faintly warm. The stair-lift is
+set in a fire-cracked bluff, its arch soot-black; Greycinder beds in the warm
+ash before it.
 
 ## Flora
 - **Trees / canopy:** char-standing birch and gorse-skeletons, and the one
@@ -20,16 +22,20 @@ the burn. Underfoot the ash is soft and still faintly warm.
 - **Under the Yoke:** the fireweed smoulders at the root and reseeds in
   little bursts of ember; the char-birch drops burning bark.
 
-## Three places
-- **The cave — the Cinder Delf.** A burnt-out badger sett under the fire-oak,
-  its walls glazed by old heat. *Seed: the commoners hid the parish seed-
-  store here to save it from the burn.*
-- **The peak — the Burnt Tor.** The heath's one rise, crowned by the old
-  fire-beacon the commoners lit for warning. *Seed: relit, it warns the
-  freed floors of a fire the Warden could still spread.*
-- **The gate in the mountain — the Ash Gate.** The stair-lift is set in a
-  fire-cracked bluff, its arch soot-black. *Seed: Greycinder beds in the warm
-  ash before it.*
+## Places of interest
+- **The Cinder Delf.** A burnt-out badger sett under the fire-oak, its earth
+  walls glazed to glass by the heat that rolled through it. *Seed: the
+  commoners hid the parish seed-store deep in the sett to save it from the
+  burn — it is still down there in the cool.*
+- **The Ash Chapel.** A little heath chapel gutted by the wildfire, roofless
+  and smoke-black, its bell fallen in the nave — the place some of the folk
+  sheltered and not all of them walked out of. *Seed: re-hang and ring the
+  fallen bell and it sounds the all-clear that gathers the scattered
+  commoners.*
+- **The Burnt Tor.** The heath's one rise, crowned by the old fire-beacon the
+  commoners lit to warn of a blaze. *Seed: relit, it warns the freed floors of
+  a fire the Warden could still spread — and its fallen ironwork is worth the
+  climb.*
 
 ## The people
 Commoners — Men of the shared heath: turf-cutters, bee-keepers, gorse-
@@ -60,20 +66,23 @@ reads the green's return like a calendar of hope.
    the fireweed alight where it passes. *Broken, it collapses to cold ash and
    drains down.*
 
-## Three finds  *(quest seeds)*
-- **Quench — spell.** Snuffs fire in a circle and cools scorched ground; cut
-  into the Cinder Delf's glazed wall. *Seed: learn it to cross the ember-heath
-  and, later, to face the forge and reactor floors above.*
+## Finds  *(quest seeds)*
+- **Quench — spell.** Snuffs fire in a circle and cools scorched ground · cut
+  into the Cinder Delf's glazed wall · *Seed: cross the ember-heath now, and
+  face the forge and reactor floors later.*
 - **Cinder-iron — metal.** Fire-hardened bog-iron from the burn, tough and
-  heat-proof. *Seed: dig the tor's old beacon-ironwork.*
-- **Greenshoot tonic — potion.** Brewed from the new bracken; a healing
-  draught that closes wounds like the green closing over the black.
+  heat-proof · dug from the Burnt Tor's fallen beacon-ironwork · *Seed: forge
+  heat-proof gear for the fire-floors above.*
+- **The parish seed-store — craft.** The commoners' saved seed and the plain
+  lore for bringing burned ground back to life · hidden deep in the Cinder Delf
+  · *Seed: replant this common — and every scorched floor the climb frees
+  above.*
 
 ## The Warden — Greycinder
 A char-tusk boar of the common, welded under a shell of ember-iron that
 glows hotter as it fights — it charges through the ash in a trail of fire,
 setting the fireweed alight to hem a climber in. Break it and its fire dies;
-the ember-things go cold; the Ash Gate opens, and the green is left to finish
+the ember-things go cold; the stair-lift opens, and the green is left to finish
 what the burn began.
 
 ## When it falls

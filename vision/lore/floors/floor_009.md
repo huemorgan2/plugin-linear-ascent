@@ -10,7 +10,9 @@ Men once lit to guide harbor-craft and call the fairs. The pylons still hum
 and flicker, casting long knife-edged shadows that slide across the heather,
 and the floodlights above war with them until the whole field strobes. It is
 a floor of false signals: every light says *come here*, and none of them means
-safety. The last honest beacon is dark.
+safety. The last honest beacon is dark. The stair-lift is cut into a granite
+tor ringed by pylons, its arch inlaid with beacon-code; Glarefang hunts the
+strobing shadows before it.
 
 ## Flora
 - **Trees / canopy:** wind-bent rowan and gorse in the pylon-lee.
@@ -19,15 +21,15 @@ safety. The last honest beacon is dark.
 - **Under the Yoke:** the glow-lichen pulses in false code, and the gorse
   has gone to spines that catch the strobing light like teeth.
 
-## Three places
-- **The cave — the Cable Vault.** A buried junction-chamber where the
-  pylons' aether-cables meet, still live and sparking. *Seed: from here every
-  pylon on the floor could be silenced — or turned true.*
-- **The peak — the Old Beacon.** The tallest pylon, the original beacon-mast,
-  now dark. *Seed: relight it true and the sky-harbors above would see it.*
-- **The gate in the mountain — the Signal Gate.** The stair-lift is cut into
-  a granite tor ringed by pylons, its arch inlaid with beacon-code. *Seed:
-  Glarefang hunts the strobing shadows before it.*
+## Places of interest
+- **The Cable Vault.** A buried junction-chamber where the pylons'
+  aether-cables meet, still live and sparking in the dark. *Seed: from here
+  every pylon on the floor could be silenced — or turned true.*
+- **The Old Beacon.** The tallest pylon, the original beacon-mast, now dark.
+  *Seed: relight it true and the sky-harbors above would see it burn.*
+- **The Grounded Skiff.** A small sky-sailing harbor-craft that read a false
+  beacon and came down in the heather, hull split, crew long gone. *Seed:
+  its light-charts are still aboard, and they map the whole signal-net.*
 
 ## The people
 Beacon-keepers and pylon-wrights — Men of the signal-line, who lived by
@@ -58,20 +60,22 @@ reads the field by the pattern of its false flashes.
    dark between flashes. *Broken, the arc earths out and it drains down the
    cables.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Truelight — spell.** Cuts a steady beam through strobe and glare that
   false lights can't fake; scored into the Cable Vault. *Seed: learn it to
   cross the strobing heath and reach the Old Beacon.*
 - **Beacon-copper — metal.** The pure signal-copper of the cables, prized for
   aether-work. *Seed: strip a dead pylon-run.*
-- **Steadeye — potion.** A keeper's draught that quiets the flicker in the
-  eyes; ward against blinding and strobe for a spell.
+- **The signal-cipher — knowledge.** The beacon-keepers' code for reading and
+  sending true light across the dark, held by Wick Harlow and half in the
+  Grounded Skiff's charts. *Seed: learn it to signal the freed floors below
+  and read the tower's false beacons above.*
 
 ## The Warden — Glarefang
 A shadow-line wolf of the heath, welded with a mane of pylon-lamps that
 strobe blinding-bright — it hunts in its own flicker, seen only in the
 dark between its own flashes. It rushes when the field goes black. Break it
-and the false beacons die; the Old Beacon can be lit true; the Signal Gate
+and the false beacons die; the Old Beacon can be lit true; the stair-lift
 opens.
 
 ## When it falls

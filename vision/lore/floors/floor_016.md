@@ -11,6 +11,8 @@ thick they meet overhead in a green tunnel. The floodlight barely reaches
 the lane-floor; the light comes down in coins. It is a maze with no map, all
 blind bends and hidden gates, taken with the drove still on the road. You can
 walk it for an hour and never see the sky, and never be sure you're alone.
+The stair-lift is set where a lane cuts into a rock spur, its arch worn smooth
+by generations of cattle-horn; Thornhide blocks the lane before it.
 
 ## Flora
 - **Trees / canopy:** the hedgebanks themselves — hazel, thorn, and holly
@@ -20,16 +22,19 @@ walk it for an hour and never see the sky, and never be sure you're alone.
 - **Under the Yoke:** the holly has grown swords, the hedges close behind a
   traveler, and the old man's beard reaches down for warmth.
 
-## Three places
-- **The cave — the Sunken Meet.** The deepest holloway, where four lanes
-  meet under an earth-roof of grown roots. *Seed: the drovers cached their
-  toll-hoard and their true lane-map here before the banks closed.*
-- **The peak — the Bank-Top.** A single high hedgebank a climber can breach
-  to see over the whole maze. *Seed: from it the true lanes read clear —
-  worth a map for the whole floor.*
-- **The gate in the mountain — the Drove Gate.** The stair-lift is set where
-  a lane cuts into a rock spur, its arch worn smooth by cattle-horn. *Seed:
-  Thornhide blocks the meet before it.*
+## Places of interest
+- **The Sunken Meet.** The deepest holloway, where four lanes meet under an
+  earth-roof of grown roots — the old heart of the droving-web. *Seed: the
+  drovers cached their toll-hoard and their true lane-map here before the banks
+  closed over the gaps.*
+- **The Halfway Inn.** A drovers' inn dug back into a hedgebank at a day's
+  drove, now dark and shuttered behind the closed hedges, its yard silent.
+  *Seed: its cellar still holds sound barrels and a lane-map scratched behind
+  the bar by a hundred drovers.*
+- **The Cattle-Pound.** A stone drove-pound where beasts were held overnight,
+  its high walls the one solid ground in a maze made of earth and hedge.
+  *Seed: the only defensible fastness on the floor — a place to make a stand,
+  or to shelter folk brought in off the lanes.*
 
 ## The people
 Drovers and lane-wrights — Men of the road who moved the realm's herds along
@@ -60,20 +65,23 @@ with every turning, and no longer trusts the notches.
    in the deep mud. *now:* a mud-figure that calls a herd-cry round a blind
    bend to lead climbers into a dead-end. *Broken, it slumps into the mud.*
 
-## Three finds  *(quest seeds)*
-- **Wayfind — spell.** Points true north and holds a path in the mind through
-  any maze; cut into the Sunken Meet's roof-root. *Seed: learn it to map the
-  Hollow Lanes and never be turned around again.*
+## Finds  *(quest seeds)*
+- **Wayfind — spell.** Points true and holds a path in the mind through any
+  maze · cut into the Sunken Meet's roof-root · *Seed: map the Hollow Lanes and
+  never be turned around again.*
 - **Drove-iron — metal.** The tough ox-shoe iron of the lanes, forged into
-  gear that takes long punishment. *Seed: the toll-hoard's cache.*
-- **Drover's brew — potion.** A road-draught of the long lanes; steadies a
-  climber for a long push without rest.
+  gear that takes long punishment · in the Sunken Meet's toll-hoard · *Seed:
+  gear that outlasts a long climb.*
+- **Cobb's lane-staff — tool.** The head drover's staff, notched down its
+  length with every turning, ford, and safe bend in the maze · carried by the
+  keeper · *Seed: win it and read the true lanes even where the hedges
+  rearrange them.*
 
 ## The Warden — Thornhide
 A lane bull-boar, welded under a hide of thorn-iron and living holly that
 regrows as it's cut — it fights in the narrow meet where there's no room to
 flank, and the closing hedges are its ally. Break it and the hedges fall
-still; the lanes stop rearranging; the Drove Gate opens.
+still; the lanes stop rearranging; the stair-lift opens.
 
 ## When it falls
 Hedgeharbor's lanes hold their shape and open end to end; the last drove

@@ -11,7 +11,9 @@ lids of trapdoor-spider burrows and the funnels of dust-pits. Everything looks
 like safe ground; almost nothing is. Dust-motes drift in the lamp-light; the
 silence is total until a lid springs. It was a dead-flat Deep commons the
 delvers crossed by marked lines, and the fever has made every burrow a snare
-and every lid a jaw. One wrong step and the floor eats you.
+and every lid a jaw. One wrong step and the floor eats you. The stair-lift stands in a low wall at
+the plain's far side, its approach thick with hidden lids; Latchjaw's
+king-burrow guards it.
 
 ## Flora
 - **Trees / canopy:** none — flat dust and hidden lids.
@@ -22,15 +24,17 @@ and every lid a jaw. One wrong step and the floor eats you.
   dust-lichen perfectly masks the lid-seams; the funnel-moss loosens the rim
   to slide a walker in.
 
-## Three places
-- **The cave — the Deepest Burrow.** Latchjaw's own great trapdoor lair, the
-  king-burrow at the plain's heart. *Seed: a dozen swallowed climbers'
-  packs — and one or two survivors — are down the burrow-throat.*
-- **The peak — the Watch-Mound.** The single true rise on the plain, the one
-  thing that isn't a lid; the field of traps reads from it. *Seed: from it the
-  lid-pattern shows clear and a safe line can be walked.*
-- **The gate in the mountain — the Latch Gate.** The stair-lift is set in a
-  low wall, its approach thick with lids. *Seed: Latchjaw's burrow guards it.*
+## Places of interest
+- **The Watch-Mound.** The one true rise on the plain — the single thing that
+  isn't a lid — where Latchlight shelters and re-marks the safe lines. *Seed:
+  from its top the lid-pattern shows clear and a safe line can be walked.*
+- **The King-Burrow.** Latchjaw's own great trapdoor lair at the plain's heart,
+  its throat dropping into dark. *Seed: a dozen swallowed climbers' packs — and
+  one or two survivors — are down it.*
+- **The Dust-Funnels.** A stretch where the floor gives way to slow whirlpools
+  of fine dust that swallow anything stepping their rim — no lids, just hunger.
+  *Seed: the funnel-moss lining them can be reaped, and a firm causeway laid
+  across the one gap they guard.*
 
 ## The people
 Field-delvers — Deep-folk who cross and map the trap-fields by marked lines
@@ -62,24 +66,27 @@ every step, and has the scars to prove which steps she got wrong.
    walks the plain springing lids under the living. *Broken, it falls into a
    burrow and drains away.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Reveal — spell.** Strips camouflage from hidden lids, seams, and snares,
-  showing every trap and secret door on a stretch of ground; the delvers'
-  art. *Seed: learn it to cross the fields safely and to find the tower's
-  hidden ways above.*
+  showing every trap and secret door on a stretch of ground; the delvers' art.
+  *Seed: learn it to cross the fields safely and to find the tower's hidden
+  ways above.*
 - **Trap-hinge iron — material.** The fine spring-iron of the burrow-lids,
   worked into hair-triggers, snap-traps, and the host's own field-defenses.
   *Seed: strip the sprung lids.*
+- **Wend's lid-maps — knowledge.** The field-delver's charts of every proven
+  line and moving lid, paid for in scars. *Seed: win her trust and she walks
+  you the one safe way across.*
 - **Surestep draught — potion.** A field-delver's brew that lets a climber
-  sense unstable ground; no trap or lid triggers under a sure-stepping foot
-  for a spell.
+  sense unstable ground; no trap or lid triggers under a sure-stepping foot for
+  a spell.
 
 ## The Warden — Latchjaw
 A trapdoor spider grown vast, welded into a great hinged lid that is its own
 shell — it fights by dropping the floor out from under climbers into its
 burrow-throat and springing the lesser lids all around. Out-waiting its ambush
 and forcing it into the open is the trick. Break it and the lids fall still;
-the safe lines hold; the Latch Gate's approach clears.
+the safe lines hold; the stair-lift's approach clears.
 
 ## When it falls
 Latchlight walks the true line from the Watch-Mound and the field's lids lie

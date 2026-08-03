@@ -11,7 +11,9 @@ dark, the glimmer-moss is ash-grey, and the wood stands in a black that the
 tower's floodlights can't reach past the first branches. It is stranded a
 single lift above a farm valley, an ancient lit forest buried in the cellar
 of the world. Walking it feels like walking a cathedral after the candles
-have been drowned.
+have been drowned. The stair-lift is set in a mossed cliff carved with
+elf-lamp sigils, each socket dark and empty; Palegleam stalks the black
+wood before it.
 
 ## Flora
 - **Trees / canopy:** lamp-birch and candle-oak, silver-barked, whose sap-
@@ -21,16 +23,17 @@ have been drowned.
 - **Under the Yoke:** the lamp-eater rot — a black lichen that drinks light
   — sheets the trunks and spreads toward any flame a climber carries.
 
-## Three places
-- **The cave — the Snuffed Hollow.** A root-cellar under the great oak where
-  the wood's last lit lamp still burns, tended by no one. *Seed: its flame
-  is the seed-light to rekindle the whole glade.*
-- **The peak — the Candle Oak.** The tallest lamp-tree, once the glade's
-  beacon, now a black spire. *Seed: relit, it would call every lamplighter
-  still hiding in the dark.*
-- **The gate in the mountain — the Lantern Gate.** The stair-lift is set in
-  a mossed cliff carved with elf-lamp sigils, each socket empty. *Seed: fill
-  the sockets with lampsilver and the sigils wake.*
+## Places of interest
+- **The Snuffed Hollow.** A root-cellar under the great oak where the wood's
+  last lit lamp still burns, tended by no one. *Seed: its flame is the
+  seed-light to rekindle the whole glade.*
+- **The Candle Oak.** The tallest lamp-tree, once the glade's beacon, now a
+  black spire against the dark. *Seed: relit, it would call every
+  lamplighter still hiding in the wood.*
+- **The Dark Mere.** A still forest pool that once doubled the whole lit
+  canopy in its face; now it holds only black, and the drowned lamps of
+  those who waded in to hide their lights. *Seed: the sunken lamps still
+  hold a charge, if a diver dares the cold to lift them.*
 
 ## The people
 Lamplighters and sap-wrights — elves who spent their lives tending the
@@ -62,22 +65,26 @@ lantern he refuses to abandon, waiting for a flame worth spending.
    *now:* a walking snarl of black branch and cold false glow. *Broken, it
    collapses into deadfall.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Rekindle — spell.** The word that relights a dead aether-lamp; it is the
   floor's whole heart. *Seed: learn it from the Snuffed Hollow's flame, then
   walk the glade lighting sockets — a quest chain across the wood.*
 - **Lampsilver — ore.** The sap-metal that holds light like a battery; the
-  sigil-sockets of the Lantern Gate hunger for it. *Seed: mine it from the
+  stair-lift's sigil-sockets hunger for it. *Seed: mine it from the
   candle-oak roots.*
-- **Moonsap — potion.** Pressed from wick-flowers; grants sight in true dark
-  for a spell — the first draught worth having for the Deep floors ahead.
+- **A wick-owl — companion.** One of the lamplighters' owls (below) can be
+  won back rather than cured-and-gone: whistled to, it returns to a shoulder
+  that will have it and watches for guttering lamps. *Seed: a living
+  early-warning against the dark of the Deep floors ahead.*
+- **Moonsap — tonic.** Pressed from wick-flowers; grants sight in true dark
+  for a spell — worth its weight going into the lightless floors.
 
 ## The Warden — Palegleam
 A pale stag of the glade, taken and crowned with a welded lamp-cage of
 antlers that shed a cold, false, blueish light — light that shows nothing
 and blinds everything near it. It stalks the dark and charges from the edge
 of its own glare. Break it and the false light dies; the true sap stirs;
-the Lantern Gate opens on the first honest dark since the Theft.
+the stair-lift opens on the first honest dark since the Theft.
 
 ## When it falls
 The lamplighters come out with Ithren's lantern finally lit, and floor by

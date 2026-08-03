@@ -10,7 +10,9 @@ look grown, not laid — the under-realm's arteries, carrying captured aether
 in root-thick bundles that hum and spit blue static in the dark. Where the
 insulation has rotted, the whole tangle sparks, and the sparks light the
 cavern in stutters. Delver-crews once tapped these lines for the deep floors'
-lamps. Now the lines are live, hungry, and full of teeth.
+lamps. Now the lines are live, hungry, and full of teeth. The stair-lift
+stands behind a curtain of live cable woven across the rock; Wirefang re-weaves
+it faster than it can be cut, and guards it in the sparking dark.
 
 ## Flora
 - **Trees / canopy:** none but the cable-tangle itself, mistaken a hundred
@@ -20,16 +22,19 @@ lamps. Now the lines are live, hungry, and full of teeth.
 - **Under the Yoke:** the spark-moss discharges when stepped near, and the
   filament-fungus reroutes the live cables toward warmth.
 
-## Three places
-- **The cave — the Root-Tangle.** The main cabling cavern, a maze of humming
-  bundles. *Seed: at its heart is the trunk-junction that feeds the floors
-  above — cut or claim it and the tower's lamps flicker.*
-- **The peak — the Junction Spire.** The tallest cable-mast, where the lines
-  gather to a crown of blue fire. *Seed: tapped, it could power the freed
-  floors' works below.*
-- **The gate in the mountain — the Cable Gate.** The stair-lift is behind a
-  curtain of live cable woven across the rock. *Seed: Wirefang re-weaves it
-  faster than it can be cut.*
+## Places of interest
+- **The Junction Spire.** The tallest cable-mast, where the lines gather to a
+  crown of blue fire and the great trunk-line feeds the floors above. *Seed:
+  tapped, its crown could power the freed floors below; claimed, the tower's
+  own lamps flicker overhead.*
+- **The Drowned Conduit.** A flooded conduit-tunnel where the cable-eels swim
+  and dead lines rust black under still water. *Seed: a delver-crew's cache
+  and a cold, dead trunk safe to walk both lie beneath its surface — if you
+  can cross without earthing a live line.*
+- **The Deadline Camp.** The abandoned delver camp on a bank of cold, dead
+  cable, the crews' last safe ground before the live tangle begins. *Seed: its
+  logbooks still record which lines are live and which are dead — a mapped
+  path clean across the floor.*
 
 ## The people
 Cable-crews — delvers of every race who tapped and tended the deep lines,
@@ -60,22 +65,24 @@ live cable, reads the tangle by the pitch of its static.
    *now:* a ball of blue fire that drifts the cables and leaps to the nearest
    warm thing. *Broken, it earths out and drains down the trunk.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Earth — ward (spell).** Grounds a shock harmlessly into stone for a
-  moment; scratched on Fend's rubber gauntlet. *Seed: learn it to cross the
-  Root-Tangle to the trunk-junction.*
-- **Livecopper — metal.** Cable-copper that holds a charge like a spring,
-  core of every aether-weapon worth the name. *Seed: harvest a live bundle
-  (carefully).*
-- **Static-salve — potion.** A crew's rub that numbs shock and steadies the
-  hands after a jolt.
+  moment · scratched on Fend's rubber gauntlet · *Seed: learn it to cross the
+  tangle to the trunk-junction alive.*
+- **Livecopper — metal.** Cable-copper that holds a charge like a spring, core
+  of every aether-weapon worth the name · harvested (very carefully) from a
+  live bundle · *Seed: arm the rising's line-wrights and beam-smiths.*
+- **Fend's deadline-map — knowledge.** The line-master's memory of every live
+  cable and every safely dead one, read by pitch of static · won from Fend, or
+  from the Deadline Camp's logbooks · *Seed: walk the whole tangle without ever
+  taking a shock.*
 
 ## The Warden — Wirefang
 A cable troll of the Deep, welded and *wired* — live bundles grafted into its
-arms so its every blow arcs, and spinnerets that re-weave the Cable Gate
-behind it. It fights in the sparking dark, throwing charge to blind before it
-swings. Break it and the arcs die; the trunk-junction is claimable; the Cable
-Gate's curtain falls slack.
+arms so its every blow arcs, and spinnerets that re-weave the stair-lift's
+curtain behind it. It fights in the sparking dark, throwing charge to blind before it
+swings. Break it and the arcs die; the trunk-junction is claimable; the
+curtain over the stair-lift falls slack.
 
 ## When it falls
 Wiregate's crews tap the Junction Spire and run clean power down to the freed

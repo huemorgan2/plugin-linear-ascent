@@ -12,6 +12,9 @@ drowned in a moat to keep them sleeping. The tower's fever has soaked to the
 king's own bones, and he has risen — a dead sovereign who remembers only that
 he ruled, and means to rule the barrows again. It is the last floor of the
 third tier, and the first floor where a *ruler* stands against the climb.
+The stair-lift stands in the mound's stone lych-face, sealed with the
+king's own seal; only the Barrow King's fall will break it, and it opens
+on the fourth tier.
 
 ## Flora
 - **Trees / canopy:** the royal yew-ring, nine black yews circling the mound.
@@ -20,15 +23,18 @@ third tier, and the first floor where a *ruler* stands against the climb.
 - **Under the Yoke:** the moat-reeds clutch; the drowned lilies pull under;
   the yew-ring drips a sap that dulls the will to resist a crown.
 
-## Three places
-- **The cave — the Moat Undercroft.** The flooded burial-hall inside the
-  mound, the king's drowned court laid in ranks. *Seed: the true crown lies
-  here — and whoever holds it can command the risen court or unmake it.*
-- **The peak — the Mound-Crown.** The mound's summit, the king's raising-
-  ground. *Seed: the fight ends here; from it the whole tier reads, freed.*
-- **The gate in the mountain — the Kingsbarrow Gate.** The stair-lift is set
-  in the mound's stone lych-face, sealed with the king's own seal. *Seed:
-  only the Barrow King's fall breaks the seal — the gate to the fourth tier.*
+## Places of interest
+- **The Moat Undercroft.** The flooded burial-hall inside the mound, the
+  king's drowned court laid out in ranks beneath the black water. *Seed: the
+  true crown lies here — and whoever holds it can command the risen court or
+  unmake it.*
+- **The Drowned Causeway.** The single stone causeway across the black moat,
+  the only dry approach to the mound, held by Wakesend against the court's
+  summons. *Seed: hold the causeway and the risen dead can reach the climb
+  only one rank at a time.*
+- **The Mound-Crown.** The mound's grassed summit, the king's raising-ground
+  and the highest point of the whole tier. *Seed: the fight ends here; win
+  it and the third tier reads out below you, freed.*
 
 ## The people
 Barrow-keepers of Wakesend — the royal grave's hereditary wardens, who kept
@@ -62,16 +68,20 @@ holds the causeway and knows the rite that could lay her king down for good.
    forms a shield-wall for their king. *Broken, the wall falls to the moat
    and drains, rank by rank.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Crown-unmaking — spell.** Strips the compulsion of a false or fevered
-  crown, freeing those bound to kneel; the barrow-queen's deepest rite.
-  *Seed: learn it from Mereth to break the king's summons — and, at the top,
+  crown, freeing those bound to kneel; the barrow-queen's deepest rite ·
+  learned from Mereth · *break the king's summons with it and, at the top,
   the tower's own claim to rule.*
+- **The true crown — relic.** The king's real crown, laid with him a
+  thousand years back; whoever holds it can command the risen court or
+  unmake it outright · in the Moat Undercroft · *take it and you need not
+  break the king by force at all.*
 - **Barrow-gold, royal — material.** The king's own grave-gold, the most
-  aether-rich metal below the throne itself; enough to forge a crown-breaking
-  weapon. *Seed: take it from the Moat Undercroft — but the true crown is the
-  real prize.*
-- **Libation — potion.** A grave-offering draught that lays a small dead one
+  aether-rich metal below the throne; enough to forge a crown-breaking
+  weapon · around the drowned court in the Undercroft · *the lesser prize
+  beside the crown, but a mighty one.*
+- **Libation — brew.** A grave-offering draught that lays a small dead one
   to rest and steels a climber's will against a sovereign's pull.
 
 ## The Warden — The Barrow King
@@ -82,7 +92,7 @@ so his ending is an *eviction,* not a curing: the borrowed aether driven out
 and the true king laid, finally, to rest. He summons his court, compels the
 living to kneel, and fights from a shield-wall of the drowned. Take the crown
 or break him on the Mound-Crown and the summons dies; the court sinks back;
-the Kingsbarrow seal breaks on the fourth tier above.
+the king's seal breaks and the stair-lift opens on the fourth tier above.
 
 ## When it falls
 The king is laid to rest for good, the moat closes over a court finally

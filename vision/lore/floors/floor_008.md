@@ -10,7 +10,9 @@ called worthless and left to the nomads. The wind moves the ash in slow
 sheets; jackals and vultures work the dune-shadows. It is the first floor
 that is *hot* — a dry, cindered heat under floodlights that only add glare —
 and the first that was nobody's home to steal, only a hard living cut off at
-the edges. Water here is a secret people kill to keep.
+the edges. Water here is a secret people kill to keep. The stair-lift is cut
+into a cinder-cone's flank, half-buried in ash-drift; Cinderhide dens in the
+ash-bowl before it.
 
 ## Flora
 - **Trees / canopy:** none but the ash-thorn, a black leafless scrub that
@@ -20,16 +22,18 @@ the edges. Water here is a secret people kill to keep.
 - **Under the Yoke:** the ash-thorn has turned to glass-tipped spines, and
   the ember-flower's pollen smolders.
 
-## Three places
-- **The cave — the Cinder Hollow.** A lava-tube under a dune where the nomads
-  cache water and shade. *Seed: its deepest bend holds a spring the ogres
-  have claimed.*
-- **The peak — the Slag Tor.** A black glassy outcrop, the one high ground,
-  scoured by the ash-wind. *Seed: from it a climber can read every buried
-  greywell by the reed-lines.*
-- **The gate in the mountain — the Ash Gate.** The stair-lift is cut into a
-  cinder-cone's flank, half-buried in drift. *Seed: Cinderhide dens in the
-  ash-bowl before it.*
+## Places of interest
+- **The Deep Spring.** The floor's one true water, welling in a lava-tube
+  under a dune where the nomads once cached shade and skins — now held by the
+  ogres who took the deepest bend. *Seed: break their hold and the whole
+  floor can drink.*
+- **The Slag Tor.** A black glassy outcrop, the one high ground, scoured by
+  the ash-wind. *Seed: from its top a climber can read every buried greywell
+  by the reed-lines that trace them.*
+- **The Buried Caravan.** A whole nomad tent-train swallowed by a dune-slip
+  in a single night, its poles and water-skins preserved dry under the ash.
+  *Seed: dig it out for rope, skins, and the water-map its lost finder was
+  carrying.*
 
 ## The people
 Ash-nomads — borderland folk of every stock, tent-dwellers who follow the
@@ -55,19 +59,21 @@ divining-reed and a knife, and trusts neither easily.
    dune.*
 5. **Glass-hare** (N) — *was:* a pale desert hare. *now:* razor-swift over
    the fulgurite, kicking up glass-dust. *Cured, it is a blur and gone.*
-6. **Dune ogre** (P) — *was:* a Waste-born giant conscript, pressed to hold
-   the deep spring. *now:* sun-mad, collared, hurling ash-glass boulders.
-   *Pressed — a real death; the few who put down the collar know these dunes
-   better than anyone.*
+6. **Dune ogre** (P) — *pressed in place, not marched in.* A Waste-born
+   giant of these very dunes, collared by the tower and set to hold the one
+   deep spring against the nomads it once shared water with — the cruelest
+   posting on the floor. *now:* sun-mad, collared, hurling ash-glass
+   boulders. *Pressed — a real death; the few who put down the collar know
+   these dunes better than anyone alive.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Waterwit — spell.** Senses buried water at a distance; the nomads' most
   guarded charm. *Seed: earn it from Kesh, then map every greywell for the
   rising.*
 - **Fulgurite glass — material.** Lightning-fused desert glass, edged sharper
   than steel, worked into blades and arrowheads. *Seed: harvest the Slag Tor
   strike-fields.*
-- **Ember-draught — potion.** Brewed from ember-flower; a swallow that turns
+- **Ember-draught — tonic.** Brewed from ember-flower; a swallow that turns
   aside heat and flame for a spell. *Seed: needed for the Waste and forge
   floors above.*
 
@@ -76,8 +82,8 @@ A dune ogre — Waste-born, pressed, and then *made worse:* welded into a hide
 of slag-plate and ash-glass, its collar fused to its skull so it cannot be
 freed the ordinary way. It hurls molten boulders and wades through its own
 ash-storms. Breaking it is the grimmest early kill: a conscript the tower
-made un-savable. But break it, and the deep spring is unguarded, and the Ash
-Gate clears.
+made un-savable. But break it, and the deep spring is unguarded, and the
+stair-lift clears.
 
 ## When it falls
 The nomads take back the deep spring; skins fill; the cinder-fires burn for

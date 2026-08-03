@@ -10,7 +10,9 @@ country taken at the shearing, the fleeces half-clipped and the flocks run
 wild. The turf is short and springy over old chalk, cut through with dew-
 ponds and sheep-tracks, and the wind never stops. Floodlight-glare off the
 white chalk is blinding by "day." It is high, clean, empty ground, and every
-fold-wall on it pens nothing now.
+fold-wall on it pens nothing now. The stair-lift stands in a white chalk
+scarp at the downs' edge, its arch shaped like a fold-hurdle; Ramsteel holds
+the fold before it.
 
 ## Flora
 - **Trees / canopy:** wind-bent hawthorn in the combes, and one shearing-oak
@@ -20,16 +22,20 @@ fold-wall on it pens nothing now.
 - **Under the Yoke:** the thyme has gone acrid and the hawthorn's haws
   harden into shot; the dew-ponds skin over with a grey wool-mould.
 
-## Three places
-- **The cave — the Chalk Combe.** A dry-valley cave the shepherds used for
-  lambing, warm out of the wind. *Seed: the deepest lambing-pen holds the
-  flock-book and the ram-lines it names.*
-- **The peak — the Long Barrow.** The highest down, an ancient burial ridge;
-  the whole floor reads from its crest. *Seed: a shepherd's beacon here would
-  gather the scattered folk.*
-- **The gate in the mountain — the Fold Gate.** The stair-lift is cut into a
-  white chalk scarp, its arch shaped like a fold-hurdle. *Seed: Ramsteel holds
-  the fold before it.*
+## Places of interest
+- **The Sheep-Wash.** A stone-lined wash-pool sunk into the biggest dew-pond,
+  where the whole down's flock was driven through the water before each
+  shearing. *Seed: the wool-mould is thickest here, and under it the wash-race
+  still runs clean — clear it and the ponds all down the valley run sweet
+  again.*
+- **The Wether Cross.** The weathered wool-market cross on the open turf, where
+  the downs' fleeces were weighed and sold each year and every shepherd knew
+  to meet. *Seed: gather the scattered folk back to the cross and Woolgate has
+  a rallying-place instead of a hiding-hole.*
+- **The Long Barrow.** The highest down, an ancient burial ridge the whole
+  floor reads from; the old shepherd's beacon stands broken on its crest.
+  *Seed: raise the beacon here and the folk lost across the combes will see it
+  and come in.*
 
 ## The people
 Shepherds and fleece-wrights — Men of the downs, spare and weather-hard, who
@@ -59,21 +65,27 @@ book, and knows the count is hopeless and keeps it anyway.
    and leads climbers onto the skinned ponds. *Broken, the whistle stops and
    it drains into the chalk.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Windward — ward (spell).** Stills the down-wind in a circle so a beacon
-  will catch and an arrow will fly true; cut into the Long Barrow's stone.
-  *Seed: raise it to light the shepherd's beacon.*
+  will catch and an arrow fly true · cut into the Long Barrow's stone · *Seed:
+  raise it to light the shepherd's beacon.*
 - **Shear-steel — metal.** The keen spring-steel of the shears, forged into
-  fast light blades. *Seed: the fold's shearing-hoard.*
-- **Tallow-tonic — potion.** A shepherd's cold-weather draught of rendered
-  fat and herbs; wards off cold and exhaustion on the high floors.
+  fast light blades · in the fold's shearing-hoard · *Seed: a climber's first
+  real edge.*
+- **The flock-book — knowledge.** Ewan's tally of every ram-line, safe combe,
+  and dew-pond ford, memorized more than written · carried by the keeper, its
+  oldest pages in the deepest lambing-pen · *Seed: win his trust and he walks
+  you the safe droveways the shear-mad rams can't cut off.*
+- **Tallow-tonic — brew.** A shepherd's cold-weather draught of rendered fat
+  and chalk-turf herbs · pressed in Woolgate · *Seed: wards off cold and
+  exhaustion on the high, wind-lashed floors far above.*
 
 ## The Warden — Ramsteel
 A shear-mad ram of the fold, welded under a helm and horn-plate of downland
 flint and steel — it paws, lowers, and charges the whole length of a combe,
 each hit ringing like a struck anvil. It fights on the open turf where its
 charge has room. Break it and the flock-fear lifts; the dew-ponds clear; the
-Fold Gate opens.
+stair-lift opens.
 
 ## When it falls
 Woolgate lights the Long Barrow beacon and the scattered flocks — and folk —

@@ -10,7 +10,9 @@ booths, a rusting carousel that still turns, a big wheel frozen against the
 floodlights, and bunting strung everywhere gone grey and rotten. The
 menagerie cages hang open. Music-box tunes wheeze from broken organs on the
 wind. It is a place built for crowds and joy, held forever in the moment
-after everyone fled — cheerful, tawdry, and deeply wrong in the empty.
+after everyone fled — cheerful, tawdry, and deeply wrong in the empty. The stair-lift stands
+in a painted rock-arch got up as a sideshow entrance, all grinning teeth
+and peeling gilt; Hookmaster works the ring before it.
 
 ## Flora
 - **Trees / canopy:** fairground limes hung with dead lanterns, and the
@@ -21,16 +23,18 @@ after everyone fled — cheerful, tawdry, and deeply wrong in the empty.
   nettle's sap is a gluey lure; the carousel-tunes carry a compulsion to
   follow.
 
-## Three places
-- **The cave — the Menagerie Undercroft.** The below-ground beast-cages where
-  the fair kept its show-animals. *Seed: the ringmaster's true takings — and
-  the cage-keys — are locked down here.*
-- **The peak — the Big Wheel.** The great fair-wheel, its top car the highest
-  point on the floor. *Seed: from it the whole fair can be lit for a real
-  crowd — the signal to bring Fairstead out.*
-- **The gate in the mountain — the Fair Gate.** The stair-lift is set in a
-  painted rock-arch got up as a sideshow entrance. *Seed: Hookmaster works the
-  ring before it.*
+## Places of interest
+- **The Menagerie Undercroft.** The below-ground beast-cages where the fair
+  kept its show-animals, the cage-doors now hanging open. *Seed: the
+  ringmaster's true takings — and the cage-keys — are locked in a strongbox
+  down here.*
+- **The Big Wheel.** The great fair-wheel frozen against the floodlights,
+  its top car the highest point on the floor. *Seed: light it and the whole
+  fair blazes for a real crowd — the signal to bring Fairstead out.*
+- **The Prize Arcade.** The long row of rigged games and hook-a-duck stalls
+  that now run themselves — cranks turning, hooks working the empty air.
+  *Seed: every game is rigged, but win one straight and its prize-brass is
+  yours.*
 
 ## The people
 Fair-folk — Men of the road-show: barkers, riggers, beast-keepers, sharps,
@@ -60,14 +64,17 @@ the cage-keys, and won't light the wheel until it's safe to draw a crowd.
    pull marks toward the snaring bunting. *Broken, the ropes go slack and it
    drains down.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Sleight — spell.** Misdirects an eye or a blow for an instant, or lifts
-  what a hand is holding; the sharps' art. *Seed: learn it from Pol to beat
-  the rigged games guarding the cage-keys.*
-- **Prize-brass — metal.** The bright cheap-looking brass of the fair-prizes
-  that is secretly a fine hard alloy; forged into gaudy, deadly gear. *Seed:
-  strip the games.*
-- **Candied tonic — potion.** A fair-sweet draught of sugar and spirit; a
+  what a hand is holding; the sharps' art · learned from Pol · *master it to
+  beat the rigged games guarding the cage-keys.*
+- **Prize-brass — metal.** The bright, cheap-looking brass of the fair-
+  prizes that is secretly a fine hard alloy; forged into gaudy, deadly gear
+  · stripped from the Prize Arcade · *win the games to take it.*
+- **The cage-keys — key.** The ringmaster's ring of menagerie keys, opening
+  every cage and lock-box on the floor · in the Undercroft strongbox · *the
+  key that frees the show-beasts, and later more than beasts.*
+- **Candied tonic — brew.** A fair-sweet draught of sugar and spirit; a
   fast jolt of energy that gets a tired climber through one more show.
 
 ## The Warden — Hookmaster
@@ -75,7 +82,7 @@ A fair-cat of the menagerie, welded with a rig of grabbing hooks and claw-
 arms from the strongman games — it works the ring like a rigged machine,
 snatching climbers off their feet with a hook and reeling them in. It fights
 where the carousel's turn confuses footing. Break it and the games fall
-still; the carousel stops; the Fair Gate opens.
+still; the carousel stops; the stair-lift opens.
 
 ## When it falls
 Pol lights the Big Wheel and Fairstead comes out to a fair run honest for the

@@ -12,7 +12,8 @@ as the outer defense of the King's works above. There is no nature here at
 all: no soil, no green, only slag-fill, iron, and rivet. Crows and rats infest
 it as they infest any fortress, but nothing *grows*. It was raised by slave-
 sappers dragged up from the freed floors below, and their bones are in the
-fill.
+fill. The stair-lift stands behind the outwork's riveted sally-port; Rivetgrim
+holds the port before it.
 
 ## "Flora" — the Making's growth
 - **Canopy:** none — riveted plate and trench-timber.
@@ -22,15 +23,18 @@ fill.
   cruel half-life that grasps; the rust-weed corrodes a climber's gear; the
   slag-lichen sparks the trench-gas.
 
-## Three places
-- **The cave — the Sap-Head.** The forward head of the sapping-tunnel driven
-  under the outwork by the slave-sappers. *Seed: the sappers cached demolition-
-  lore and a charge here — enough to bring the whole outwork down from below.*
-- **The peak — the Outwork Cavalier.** The high raised rampart overlooking the
-  Made's first floors; the siege-works read from it. *Seed: from it the
-  tower's outer defenses can be mapped for the whole rising.*
-- **The gate in the mountain — the Outwork Gate.** The stair-lift is set
-  behind the outwork's riveted sally-port. *Seed: Rivetgrim holds the port.*
+## Places of interest
+- **The Sap-Head.** The forward head of the sapping-tunnel the slave-sappers
+  drove in under the outwork. *Seed: the sappers cached demolition-lore and a
+  charge here — enough to bring the whole outwork down from below.*
+- **The Furnace-Trench.** A deep sap-trench that broke into a vent of the
+  tower's under-furnaces, running with trench-gas and slag-light, where the
+  captives are worked hottest and the wall-flesh reaches thickest from the
+  plate. *Seed: the demolition-lore says the whole outwork can be dropped by
+  firing this trench-gas — if the sappers can be got clear first.*
+- **The Outwork Cavalier.** The high raised rampart overlooking the Made's
+  first floors; the siege-works read from it. *Seed: from it the tower's outer
+  defenses can be mapped for the whole rising.*
 
 ## The people — who you are freeing
 Captive sappers — folk dragged back into bondage from the freed floors below
@@ -62,15 +66,17 @@ and the tally of the dead in the walls, and waits for the charge to be lit.
    reaches out of the plate to drag the living in. *Broken, the wall goes
    still and drains, and the dead in it are freed to rest.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Unrivet — spell.** Bursts rivets, bolts, and plate-seams at a word —
   opens the Made's armor and its constructs; the first un-making art. *Seed:
   learn it to breach the outwork and every plated horror above.*
 - **Rivet-steel — material.** The tower's own outwork-plate, turned against it
   — the heaviest salvaged armor the rising can field. *Seed: strip the
   ramparts.*
-- **Sapper's tot — potion.** A grim labor-camp brew that steadies the hands
-  and nerves for demolition-work under fire.
+- **The demolition-lore — knowledge.** The captive sappers' craft of sap,
+  charge, and trench-gas — how to drop a tower-work from beneath — cached with
+  the charge in the Sap-Head. *Seed: learn it to bring down the Made's
+  outworks all the way to the throne, wall by wall.*
 
 ## The Warden — Rivetgrim
 A mass of wall-flesh welded into a walking section of riveted rampart — the
@@ -78,7 +84,7 @@ outwork's own wall risen up, studded with the bones of the sappers built into
 it. A pure construct of the Making, it fights by dragging climbers into its
 plate and sealing them there. Its end is an *eviction:* Unrivet it and break
 it, and the borrowed aether is driven out, the wall falls to dead plate, and
-the sappers in it are freed to rest. The Outwork Gate opens.
+the sappers in it are freed to rest. The stair-lift opens.
 
 ## When it falls
 Sappersrest lights the cached charge and the first outwork comes down from

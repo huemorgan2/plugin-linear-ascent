@@ -11,7 +11,9 @@ corpse-lights that lead the wrong way. The peat preserves everything it
 takes: tools, beasts, and people lie perfect and brown in its depth. It was
 hard country the peat-folk knew by heart, cut off mid-cutting, the turf-
 stacks still drying that will never burn. Step wrong and the mire has you,
-whole, forever.
+whole, forever. The stair-lift stands in a low rock outcrop ringed by
+drowned cairns, out where the peat runs deepest; Mirebone wallows the
+pool before it.
 
 ## Flora
 - **Trees / canopy:** bog-oak (black, ancient, preserved) breaking the
@@ -21,16 +23,18 @@ whole, forever.
 - **Under the Yoke:** the sundew has grown to snare a boot; the cotton-grass
   marks false-firm ground that isn't; the cairn-lights hunt.
 
-## Three places
-- **The cave — the Peat Undercut.** A bank-cave where the peat-folk store
-  cut turf and the mire's preserved dead lie exposed. *Seed: a bog-oak
-  chamber holds a preserved elder who "knew where the old road ran."*
-- **The peak — the Great Cairn.** The largest waymark cairn, high and dry;
-  the safe paths all thread from it. *Seed: relight its cairn-lamp true and
-  the false lights lose their pull.*
-- **The gate in the mountain — the Cairn Gate.** The stair-lift is set in a
-  low rock outcrop ringed by drowned cairns. *Seed: Mirebone wallows the
-  pool before it.*
+## Places of interest
+- **The Peat Undercut.** A bank-cave where the peat-folk store cut turf and
+  the mire's preserved dead lie exposed in the black wall. *Seed: a bog-oak
+  chamber holds an elder kept whole by the peat, who "knew where the old
+  road ran."*
+- **The Great Cairn.** The largest waymark cairn, high and dry above the
+  quaking ground; every safe path threads from it. *Seed: relight its
+  cairn-lamp true and the false corpse-lights lose their pull.*
+- **The Drowned Wood.** A stand of black bog-oaks breaking the mire's
+  surface — an ancient forest the peat swallowed and kept, trunks hard as
+  iron, roots reaching down centuries. *Seed: among the sunken timbers lies
+  a whole preserved drove-road, firm-bottomed under the water.*
 
 ## The people
 Peat-folk — Men of the mire: turf-cutters, cairn-keepers, and bog-wardens who
@@ -60,14 +64,18 @@ cairn-lamps, and leads the lost across by memory, never by the lights.
    into the preserved flesh. *now:* a perfect brown corpse that walks up out
    of the bog to pull the living down. *Broken, it sinks back and is still.*
 
-## Three finds  *(quest seeds)*
-- **Firmground — spell.** Sets quaking bog solid underfoot for a few strides;
-  cut into the Great Cairn's stone. *Seed: learn it to cross the mire and
-  reach the preserved elder's chamber.*
+## Finds  *(quest seeds)*
+- **Firmground — spell.** Sets quaking bog solid underfoot for a few strides
+  · cut into the Great Cairn's stone · *learn it to cross the mire and reach
+  the preserved elder's chamber.*
 - **Bog-oak — material.** Black preserved oak, harder than iron and taking a
-  keen edge; and the bog-iron beside it. *Seed: raise the sunken bog-oak
-  timbers.*
-- **Preserving draught — potion.** Brewed from peat-lore; a long-lasting
+  keen edge, with bog-iron laid down beside it · in the Drowned Wood ·
+  *raise the sunken timbers to work them.*
+- **The old road — knowledge.** The drowned drove-road the preserved elder
+  remembers, a firm line clean across the mire · learned from the elder in
+  the Undercut · *walk an army over the bog where the false lights can't
+  reach.*
+- **Preserving draught — brew.** Brewed from peat-lore; a long-lasting
   healing tonic that keeps a wound from turning for days — the mire's gift
   turned kind.
 
@@ -76,7 +84,7 @@ A peat-boar of the mire, welded under a shell of bog-iron and preserved
 bog-oak so it never rots and never tires — it wallows the deep pool and drags
 the fight into the quaking ground where footing fails, calling the cairn-
 lights to mislead. Break it and the false lights die; the safe paths hold;
-the Cairn Gate opens.
+the stair-lift opens.
 
 ## When it falls
 Cairnside relights the Great Cairn true and the corpse-lights lose their pull;

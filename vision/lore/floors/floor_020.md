@@ -11,7 +11,11 @@ workings and the miners still trapped below. Watch-fires stain the stone red;
 drums beat a march that never departs; iron cages hold the floor's own people
 as labor and hostage. It is the last floor of the first mine-tier and the
 first true *army* the climb meets — the tower's fist, closed around a stolen
-home.
+home. The orcs are no more at home here than their captives: Skarn's host is
+itself Pressed, a whole conscript garrison massed in the giants' seized workings
+to hold the gate to the second tier and drive the caged miners as forced labor.
+The stair-lift stands in the gallery's cut end behind Skarn's own shield-wall
+of welded plate; only Skarn's fall opens it.
 
 ## Flora
 - **Trees / canopy:** none — trampled stone, tent-hide, and drum-frames.
@@ -20,16 +24,18 @@ home.
 - **Under the Yoke:** the smoke-lichen breathes a rage-smoke that shortens
   tempers, and the midden-fungus fruits on anything left still.
 
-## Three places
-- **The cave — the Cage Pens.** The barred galleries where Shieldwall's
-  people are held as labor. *Seed: freeing the pens turns the whole camp
-  against Skarn mid-fight.*
-- **The peak — the Drum-Tower.** The tallest drum-frame, from which Skarn's
-  march is beaten to every floor of the tier. *Seed: silence it and the
-  garrison's nerve breaks.*
-- **The gate in the mountain — the Warcamp Gate.** The stair-lift is set in
-  the gallery's cut end behind Skarn's own shield-wall of welded plate.
-  *Seed: only Skarn's fall opens it — the gate to the second tier.*
+## Places of interest
+- **The Cage Pens.** The barred mine-galleries where Shieldwall's people are
+  held as labor and hostage. *Seed: free the pens and the whole camp turns on
+  Skarn mid-fight.*
+- **The Drum-Tower.** The tallest drum-frame, from which Skarn's march is
+  beaten out to every floor of the tier. *Seed: silence it and the garrison's
+  nerve breaks.*
+- **The Sealed Shaft.** The mine's main downshaft, capped by the orcs and
+  pitched over with tents — the giants' true works, and the throat down to the
+  tier below, drum-guarded day and "night." *Seed: the miners know the shaft is
+  a back-way the orcs never dug; open it and the camp can be flanked from
+  under.*
 
 ## The people
 Miners and shield-folk of Shieldwall — giants and delvers of the seized
@@ -61,15 +67,21 @@ passes word between the pens and waits for the bars to weaken.
    one — the camp's un-freeable enforcer. *Broken, the frame comes apart and
    the scrap of will drains down.*
 
-## Three finds  *(quest seeds)*
-- **Break-collar — spell.** Snaps a Yoke-collar clean, freeing a Pressed
-  soul instead of killing it; a fragment of it is scratched in the Cage Pens.
-  *Seed: the whole game's mercy, in a word — learn it here and every Pressed
+## Finds  *(quest seeds)*
+- **Break-collar — spell.** Snaps a Yoke-collar clean, freeing a Pressed soul
+  instead of killing it · a fragment scratched into the wall of the Cage Pens ·
+  *Seed: the whole game's mercy in a word — learn it here and every Pressed
   floor above gains a second ending.*
 - **Warplate — metal.** The Red Orcs' welded shield-plate, reforged into the
-  host's own heavy gear. *Seed: strip the shield-wall.*
-- **Wrathsmoke antidote — potion.** A brew that clears the rage-smoke and
-  cools a hot head — steadies climbers against fear and fury both.
+  host's own heavy gear · stripped from Skarn's shield-wall · *Seed: armor a
+  freed people for the tier above.*
+- **The gaolers' pit-keys — key.** The ring of cage-keys the camp's gaolers
+  carry, opening every pen on the floor at once · taken off a broken looter or
+  gaoler · *Seed: throw the pens open mid-fight and turn the camp against
+  Skarn.*
+- **Wrathsmoke antidote — brew.** A draught that clears the rage-smoke and
+  cools a hot head · brewed from the pens' own trample-moss · *Seed: steadies
+  climbers against fear and fury both.*
 
 ## The Warden — Warlord Skarn
 A Red Orc warlord — himself first-taken, and now the hardest-collared thing
@@ -77,7 +89,7 @@ on the tier — welded into a mountain of shield-plate, drum-driven, hurling his
 own honor-guard into the fight ahead of him. He is a conscript made into a
 general and set to guard a mine full of the people he was stolen beside. Free
 the pens and silence the drum and even his guard may waver. Break him and the
-Warcamp Gate opens on the second tier of the tower.
+stair-lift opens on the second tier of the tower.
 
 ## When it falls
 The pens burst; Shieldwall's caged giants take up the dropped warplate and

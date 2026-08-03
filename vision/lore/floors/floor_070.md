@@ -12,7 +12,9 @@ weather. The gales scream through the colonnades; lightning stitches the
 clouds below; courtiers cling to their perches in the wind. It was the seat of
 the sky-realm's storm-queen, taken and crowned into a tyrant of tempest, and
 it is the last floor of the seventh tier — a whole court held captive in an
-endless hurricane.
+endless hurricane. The stair-lift is set in the crag behind a wall of
+screaming wind; only Zephyra's freeing stills the gale enough to reach it, and
+it opens onto the eighth tier of stolen realms.
 
 ## Flora
 - **Trees / canopy:** none — wind-scoured stone and screaming air; one
@@ -23,16 +25,19 @@ endless hurricane.
   lichen shrieks a wind that unbalances; the storm-orchid's scent draws the
   unbottled gales to a warm body.
 
-## Three places
-- **The cave — the Windward Undercroft.** The storm-cellar beneath the court,
-  where the gales were bottled in storm-glass and kept. *Seed: the queen's
-  own storm-crown — and the bottling-lore to unmake it — are cellared here.*
-- **The peak — the Storm Throne.** Zephyra's high sky-dais in the tempest's
-  eye; the whole sky-realm reads from it. *Seed: the fight ends here; the eye
-  is the one still place in the gale.*
-- **The gate in the mountain — the Tempest Gate.** The stair-lift is set in
-  the crag behind a wall of screaming wind. *Seed: only Zephyra's freeing
-  stills the gale enough to enter — the gate to the eighth tier.*
+## Places of interest
+- **The Windward Undercroft.** The storm-cellar deep beneath the court, where
+  the gales were once caught, bottled in storm-glass, and kept against foul
+  weather. *Seed: the queen's own storm-crown — and the bottling-lore to
+  unmake it — are cellared here.*
+- **The Storm Throne.** Zephyra's high sky-dais in the still eye of the
+  tempest, from which the whole sky-realm reads. *Seed: the fight ends here;
+  the eye is the one calm place in the gale, and only there can the crown be
+  broken.*
+- **The Weather-Hall.** The court's great open colonnade where the sky-realm's
+  weather-wrights read the sky and rang the day's winds out to the realm
+  below. *Seed: its wind-charts and instruments survive, the founding record
+  of how a whole people caught and steered the storm.*
 
 ## The people
 Court-captives of Galesend — the sky-realm's courtiers, weather-wrights, and
@@ -67,7 +72,7 @@ way to the storm-crown, and waits for a climber who can reach the eye.
    rides the gale, cutting tie-lines and crying false wind-warnings. *Broken,
    it's scattered on the wind and drains down.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Stillstorm — spell.** Calms and bottles a gale, opening a moment's eye of
   quiet in any tempest; the court's founding art, cellared in the Undercroft.
   *Seed: learn it to cross the Tempest Court and to still the storm-works near
@@ -75,9 +80,10 @@ way to the storm-crown, and waits for a climber who can reach the eye.
 - **Storm-glass — material.** The gale-bottling crystal of the court, holding
   a caught storm like lightning in a jar — the material of wind-weapons and
   the queen's own crown. *Seed: the Windward Undercroft.*
-- **Eye-of-storm draught — potion.** A weather-wright's brew that wraps a
-  climber in a calm the wind can't touch; wards against gale, buffet, and the
-  fear they carry.
+- **The bottling-lore — knowledge.** The court's founding craft of catching,
+  keeping, and steering storms, charted in the Weather-Hall and kept alive by
+  Galesend's captives. *Seed: recover it to unmake the storm-crown — and to
+  hand the rising the weather itself as a weapon.*
 
 ## The Warden — Zephyra, the Storm Queen
 The sky-realm's queen — first-taken, and crowned by the Yoke into a tyrant of
@@ -87,7 +93,7 @@ against her own; and like them, her ending is a *freeing,* not a killing. She
 fights from the eye of the storm, hurling gales, loosing her air-guard, and
 riding the wind out of reach. Reach the Storm Throne and break the storm-crown
 (with Stillstorm) and the borrowed tempest disperses — the queen wakes to
-herself, the gales fall to a breeze, and the Tempest Gate opens on the eighth
+herself, the gales fall to a breeze, and the stair-lift opens on the eighth
 tier of stolen realms.
 
 ## When it falls

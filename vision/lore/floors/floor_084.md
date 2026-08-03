@@ -12,7 +12,9 @@ hellknights that garrison every floor. Arc-light stutters blue-white; the air
 stinks of scorched flesh and flux; rows of half-made soldiers hang cooling on
 racks, some already stirring, some still screaming inside their seams. It is
 the source of the Made's army, and understanding it is understanding that every
-imp and knight the climb has fought was once someone freed below.
+imp and knight the climb has fought was once someone freed below. The stair-lift
+stands at the halls' far end, welded shut behind a seam of fresh iron that
+splits only when the Warden falls; Seamwright seals the racks before it.
 
 ## "Flora" — the Making's growth
 - **Canopy:** none — arc-rigs and cooling-racks.
@@ -22,15 +24,17 @@ imp and knight the climb has fought was once someone freed below.
   the seam-weed solders a boot to the floor; the flux-mould's fumes dull the
   will to resist the racks.
 
-## Three places
-- **The cave — the Cooling Rack.** The undercroft where fresh-welded soldiers
-  hang to cool and "set." *Seed: the un-welding lore — how to split a welded
-  soul free of its iron — is scratched here by a captive who learned it.*
-- **The peak — the Overseer's Gantry.** The high control-platform over the
-  arc-rigs; the halls read from it. *Seed: master it and every arc-rig on the
-  floor can be reversed — un-welding instead of welding.*
-- **The gate in the mountain — the Weld Gate.** The stair-lift is welded shut
-  behind a seam of fresh iron. *Seed: Seamwright seals it.*
+## Places of interest
+- **The Cooling Racks.** The undercroft where fresh-welded soldiers hang to
+  cool and "set," some already stirring, some still screaming in their seams ·
+  *Seed: the un-welding lore — how to split a welded soul free of its iron —
+  is scratched here by a captive who learned it.*
+- **The Overseer's Gantry.** The high control-platform over the arc-rigs, from
+  which every rig is fired · *Seed: seize it and the rigs run backward —
+  un-welding instead of welding.*
+- **The Scrap-Sink.** The slag-gutter where botched welds are dumped and the
+  rejected lot dens · *Seed: clear it and the racks lose the horror the
+  overseers herd captives with.*
 
 ## The people — who you are freeing
 Weld-captives — the re-enslaved awaiting the racks, and those already half-
@@ -63,24 +67,24 @@ splits free every half-made soldier the overseers leave unwatched.
    soldiers melted together that drags the living onto the racks. *Broken,
    the heap falls apart and the scrapped souls in it are freed to rest.*
 
-## Three finds  *(quest seeds)*
-- **Unseam — spell.** Splits a weld and frees a welded soul from its iron —
-  the un-making of the Made's soldiery, the deepest mercy the climb can
-  wield. *Seed: learn it to empty the racks and, above, to un-make the King's
-  whole army mid-battle.*
-- **Seam-steel — material.** The tower's soldier-plate, salvaged off freed
-  and fallen knights, reforged into the rising's armor — worn now by the
-  freed, not the bound. *Seed: strip the racks.*
-- **Annealing-draught — potion.** A weld-captive's brew that softens weld-
-  scar and eases the body un-made from iron; heals the freed of what the
-  racks did to them.
+## Finds  *(quest seeds)*
+- **Unseam — spell.** Splits a weld and frees a welded soul from its iron, the
+  deepest mercy the climb can wield · the un-welding lore from the Cooling
+  Racks · *Seed: empty the racks, and above, un-make the King's whole army
+  mid-battle.*
+- **Seam-steel — salvage.** The tower's soldier-plate, stripped off freed and
+  fallen knights and reforged for the freed, not the bound · from the racks ·
+  *Seed: armor the rising.*
+- **A soul split in time — companion.** A fresh-welded soldier freed before it
+  sets walks free itself again and often follows · *Seed: the climb's most
+  winnable friend, and living proof the Made can be undone.*
 
 ## The Warden — Seamwright
 The master welding-engine itself, risen as a construct — a gantry of arc-rigs
 and welding-arms grown a cruel will, that fights by welding climbers into new
 soldiers where they stand and hurling the rejected lot. A pure construct of
 the Making, its end is an *eviction:* reverse it (with Unseam) and break it,
-and the arc dies, every half-made soul on its racks freed. The Weld Gate's
+and the arc dies, every half-made soul on its racks freed. The stair-lift's
 seam splits open.
 
 ## When it falls

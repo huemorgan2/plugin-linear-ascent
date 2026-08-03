@@ -11,7 +11,9 @@ sleep itself. The grass is blue-black, the flowers glow, and the herds move
 like drifting shadow. The elves' art let the horses walk into dreams; the
 fever has turned that gift cruel, and now the nightmares graze the dreams of
 the living, feeding on sleep and leaving terror behind. It is a hushed,
-lovely, dreadful country where to close your eyes is dangerous.
+lovely, dreadful country where to close your eyes is dangerous. The stair-lift stands in a
+thorn-hung scarp at the meadow's far edge, its arch woven with black hedge-
+thorn; Nightbridle leads the herd before it.
 
 ## Flora
 - **Trees / canopy:** black hedge-thorn round the paddocks, and the great
@@ -22,15 +24,17 @@ lovely, dreadful country where to close your eyes is dangerous.
   where the herds can reach them; the moonflower's light lures; the thorn-
   hedges close on sleepers.
 
-## Three places
-- **The cave — the Foaling-Cave.** The warm dark grotto where the mares
-  foal, deepest and dream-thick. *Seed: the herd's true dream-bridle — the
-  gentle tack that made the nightmares kind — is kept here.*
-- **The peak — the Nightwatch Tor.** The rise where the herders kept dream-
-  watch; the meadows read from it. *Seed: from it a herder can walk the whole
-  meadow's dream at once and call the herds home.*
-- **The gate in the mountain — the Meadow Gate.** The stair-lift is set in a
-  thorn-hung scarp. *Seed: Nightbridle leads the herd before it.*
+## Places of interest
+- **The Foaling-Cave.** The warm dark grotto where the mares foal, deepest and
+  dream-thick. *Seed: the herd's true dream-bridle — the gentle tack that made
+  the nightmares kind — is kept here.*
+- **The Nightwatch Tor.** The rise where the herders kept dream-watch; the
+  meadows read from it. *Seed: from it a herder can walk the whole meadow's
+  dream at once and call the herds home.*
+- **The Dream-Oak.** The vast black oak at the meadow's heart whose roots run
+  through every sleeper's dream, its boughs hung with generations of retired
+  bridles and charms. *Seed: its heartwood is the only wood that takes a dream-
+  ward — a charm cut from it keeps a sleeper from being grazed.*
 
 ## The people
 Night-herders — elves who bred and gentled the dream-horses, quiet moon-eyed
@@ -62,7 +66,7 @@ walks the meadow's dream, trying to gentle the herds his family bred.
    sleepers through their dreams. *Broken, the dream ends and it drains into
    the night-grass.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Dreamride — spell.** Lets the caster walk into a dream — to soothe a
   sleeper, gentle a nightmare, or fight a terror on its own ground; the
   herders' art. *Seed: learn it from the dream-bridle to gentle the herds and
@@ -70,15 +74,20 @@ walks the meadow's dream, trying to gentle the herds his family bred.
 - **Dreamsilver — material.** The pale moon-silver of the nightmares' tack,
   worked into gear that wards the mind and never wakes a sleeper. *Seed: the
   Foaling-Cave's bridle-hoard.*
-- **Sleepless-draught — potion.** A herder's brew that grants rest without
-  true sleep; wards a climber from dream-snares and night-terror.
+- **Sleepless-draught — tonic.** A herder's brew that grants rest without true
+  sleep, warding a climber from dream-snares and night-terror; drawn in
+  Wickstead. *Seed: carry it onto any floor where closing your eyes is a risk.*
+- **A gentled nightmare — a companion.** One of the herd, cured and re-bridled
+  rather than driven off, that carries a rider into dream as easily as over
+  ground. *Seed: the first dream-horse the climb can keep — a mount that fights
+  the tower's terrors in the sleep of whoever rides it.*
 
 ## The Warden — Nightbridle
 The herd's great lead stallion, welded with a fever-bridle that spreads
 nightmare across the meadow — it fights half in the waking world and half in
 dream, dropping climbers into sleep with the poppy-scent and trampling them
 where they lie. Break it (and set the true bridle on it) and the herd gentles;
-the meadow's dream calms; the Meadow Gate opens.
+the meadow's dream calms; the stair-lift opens.
 
 ## When it falls
 Wickstead sets the true dream-bridle on the lead stallion and the nightmares

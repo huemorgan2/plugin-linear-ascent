@@ -12,7 +12,9 @@ the old world's great aether-lenses; the saws still shriek on captured power,
 the gantries still swing house-sized blocks that no one guides, and the whole
 quarry rings with cutting and groans with strain. It is a floor of glass
 canyons and moving loads, beautiful and murderous, where an unguided block can
-crush a climber to nothing.
+crush a climber to nothing. The stair-lift is set in a sawn ice-face at the
+quarry's foot, behind a curtain of hanging blocks; Hewnheart works the gantry
+before it.
 
 ## Flora
 - **Trees / canopy:** none — sawn ice-steps and iron gantry.
@@ -22,16 +24,19 @@ crush a climber to nothing.
   greases the walkways; the ice-lichen fogs the clear blocks so you can't see
   the load swinging through.
 
-## Three places
-- **The cave — the Quarry Sump.** The flooded bottom of the deepest cut,
-  where the melt gathers black and cold. *Seed: a perfect master-lens block,
-  the finest ever cut, was lost down here the night of the Theft.*
-- **The peak — the Gantry Head.** The top of the great crane-gantry over the
-  main quarry; the whole works reads from it. *Seed: master the gantry and
-  every swinging load on the floor answers your hand.*
-- **The gate in the mountain — the Quarry Gate.** The stair-lift is set in a
-  sawn ice-face behind a curtain of hanging blocks. *Seed: Hewnheart works
-  the gantry before it.*
+## Places of interest
+- **The Quarry Sump.** The flooded bottom of the deepest cut, where the melt
+  gathers black and cold below the working faces. *Seed: the finest master-
+  lens block ever cut was lost down here the night of the Theft, still perfect
+  under the black water.*
+- **The Long Gantry.** The iron crane-gantry that runs the whole length of the
+  main quarry, its house-sized loads still swinging unguided on captured
+  power. *Seed: master its locks and levers and every block on the floor
+  answers your hand — a weapon as much as a way across.*
+- **The Grinding-House.** The great lens-works on the quarry rim where cut ice
+  was ground and polished to the old world's aether-lenses, its wheels frozen
+  mid-turn. *Seed: the grinding-lore and the last unfinished lenses are here,
+  the craft the rising needs to make its own seeing-glass.*
 
 ## The people
 Quarriers — giant ice-cutters and delver-sawyers who hew and haul the clear
@@ -54,30 +59,34 @@ reads a block's flaws by the light through it before he trusts the saw.
    flaw.*
 4. **Saw-eel** (N) — *was:* a sump-dwelling eel. *now:* riding the melt-
    channels, coiling round a wading leg. *Cured, it sinks into the sump.*
-5. **Quarry-gang troll** (N) — *was:* a cold-country troll set hauling blocks.
-   *now:* fever-strong, tipping loads off the gantries onto the crews. *Cured,
-   the slow giant sets its block down square and lumbers off.*
+5. **Quarry-gang troll** (N) — *was:* a haul-troll of the Deep, brought up
+   from the under-caverns to swing the heaviest loads and never sent back
+   down. *now:* fever-strong, tipping blocks off the gantries onto the crews.
+   *Cured, the slow giant sets its load down square and lumbers off toward the
+   down-stair, bound for the caverns it came from.*
 6. **Quarried thing** (W) — *was:* a cutter crushed under a block, aether
    frozen into the clear ice. *now:* a barely-seen figure inside a moving
    block that swings the gantry-loads to crush the living. *Broken, the block
    shatters and it drains into the melt.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Cleave — spell.** Splits stone, ice, or armor along a clean true line at
   a word; the quarriers' art. *Seed: learn it to cut through the quarry and,
   above, to cleave the throne's crystal and stone defenses.*
 - **Clear-ice lens — material.** Flawless cut ice-crystal, the finest aether-
   optic in the tower — the heart of scryers' glasses, beam-focusers, and the
   master-lens if it can be raised from the sump. *Seed: the Quarry Sump.*
-- **Hewer's draught — potion.** A cutter's brew of tireless strength; a
-  climber cuts, hauls, and swings for a spell without wearying.
+- **Gantry-craft — knowledge.** The quarriers' working of the great cranes,
+  locks, and swinging loads — the skill to move a house-sized block by hand
+  and to lock a swaying one still. *Seed: master the Long Gantry and its
+  loads become the rising's to raise or to drop.*
 
 ## The Warden — Hewnheart
 A quarry-gang troll welded into the great gantry-crane, wielding a house-sized
 clear-ice block as a swinging maul — it fights by working the gantry to crush
 climbers under its loads and cutting the walkways out from under them with its
 saw-arm. Break it and the loads lock still; the gantry answers true; the
-Quarry Gate's hanging blocks are cleared.
+stair-lift's hanging blocks are cleared.
 
 ## When it falls
 Hewnstone raises the master-lens from the Quarry Sump and locks the swinging

@@ -10,7 +10,9 @@ and wheel-ponds carrying stolen water in tireless circles. Every great wheel
 still turns; every millstone hangs idle above its bed; the whole floor is
 loud with rushing water and the creak of wheels grinding nothing. It was
 taken at full flow, and the flow has never eased. The water is cold, quick,
-and everywhere, and it undercuts the ground you stand on.
+and everywhere, and it undercuts the ground you stand on. The stair-lift is
+set in a rock-cut leat-head with the head-race thundering past its arch;
+Milldrown churns the race before it.
 
 ## Flora
 - **Trees / canopy:** pollarded willow and alder along the leats, and the
@@ -20,16 +22,18 @@ and everywhere, and it undercuts the ground you stand on.
 - **Under the Yoke:** the water-crowfoot has grown grasping, fouling the
   wheels and reaching from the races; the mill-weed cuts.
 
-## Three places
-- **The cave — the Undershot.** The dripping cavern beneath the greatest
-  wheel, where the race runs into the dark. *Seed: the master sluice-gear is
-  here, and with it the flow of every leat on the floor.*
-- **The peak — the Mill-Tower.** The tallest mill's grain-tower, overlooking
-  the whole race-web. *Seed: from it the true channels can be read and the
-  floods redirected.*
-- **The gate in the mountain — the Sluice-Mount Gate.** The stair-lift is set
-  in a rock-cut leat-head, water thundering past its arch. *Seed: Milldrown
-  churns the head-race before it.*
+## Places of interest
+- **The Undershot.** The dripping works beneath the greatest wheel, where the
+  race runs on into the dark and the master sluice-gear stands. *Seed: throw
+  the gear here and you hold the flow of every leat on the floor.*
+- **The Drowned Mill.** A mill whose wheel-pond burst its banks and swallowed
+  it whole — only the roof-ridge and the top of the wheel break the flood now,
+  its rooms full of silt and eels. *Seed: the miller's strongbox and a dry
+  powder-store — blasting powder for clearing choked weirs — sit sealed in its
+  loft above the water.*
+- **The Great Weir.** The head-weir that dams the whole race-web, a stone wall
+  a climber can walk with the pond pressing black behind it. *Seed: open it or
+  hold it and you command the floods across the entire floor.*
 
 ## The people
 Millers and race-wrights — Men who lived by the wheel and the weir, who can
@@ -59,20 +63,23 @@ turning true because a wheel let go crooked would tear the mill down.
    dead shift, dragging climbers toward the pit. *Broken, the wheel it wears
    throws it into the race and it drains away.*
 
-## Three finds  *(quest seeds)*
-- **Current — spell.** Bends a body of water's flow to the caster's will for
-  a moment; carved on the Undershot's sluice-gear. *Seed: learn it to master
-  the races and reach the head-gate.*
+## Finds  *(quest seeds)*
+- **Current — spell.** Bends a body of water's flow to the caster's will for a
+  moment · carved on the Undershot's sluice-gear · *Seed: master the races and
+  reach the head of the flow.*
 - **Wheel-iron — metal.** The heavy, water-tempered iron of the axle-trees,
-  forged into gear that never tires. *Seed: the mill-yard's spare axles.*
-- **Miller's mash — potion.** A warm draught of first-grind and malt;
-  restores a climber run cold and weary by the water.
+  forged into gear that never tires · from the mill-yard's spare axle-trees ·
+  *Seed: arm the host with iron that takes any punishment.*
+- **Blasting powder — material.** The millers' own weir-clearing powder, kept
+  bone-dry against the flood (mining charge, not any firearm) · sealed in the
+  Drowned Mill's loft · *Seed: blow a jammed sluice, a fallen weir, or a
+  blocked stair on the floors above.*
 
 ## The Warden — Milldrown
 A wheelhouse boar, welded into a wheel-and-stone engine that rides the head-
 race, throwing bow-waves and dragging the current with it — it fights where
 the water runs fastest and uses the flow to sweep footing away. Break it and
-the race calms; the master sluice answers again; the Sluice-Mount Gate opens.
+the race calms; the master sluice answers again; the stair-lift opens.
 
 ## When it falls
 Wheelhouse sets its stones grinding true and the smell of real bread crosses

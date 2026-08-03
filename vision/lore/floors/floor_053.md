@@ -11,7 +11,9 @@ heat by night, when clouds of ember-moths settle and set the dune-crests
 smouldering. Night-adders swim the slipfaces; the dunes march and swallow
 paths; there is no landmark that stays put. It was trackless borderland the
 nomads crossed by star-lore, and now the stars are gone and the sand burns
-when it shouldn't. Only the dune-folk know how to read a moving desert.
+when it shouldn't. Only the dune-folk know how to read a moving desert. The
+stair-lift stands in a rock outcrop the dunes keep half-burying, at the
+desert's low edge; Emberback swims the sand before it.
 
 ## Flora
 - **Trees / canopy:** none — bare marching dunes.
@@ -21,17 +23,19 @@ when it shouldn't. Only the dune-folk know how to read a moving desert.
   the dune-grass hides slip-face collapses; the glass-cactus spits glass
   needles.
 
-## Three places
-- **The cave — the Slipface Hollow.** A lee-side sand-cave that stays cool
-  and still while the dune marches over it. *Seed: the nomads' star-charts
-  and water-maps are cached here — the only fixed knowledge on a moving
-  floor.*
-- **The peak — the Star Dune.** The tallest, oldest dune that never moves;
-  the desert reads from its crest. *Seed: from it the marching dunes' pattern
-  can be read and a safe line plotted.*
-- **The gate in the mountain — the Dune Gate.** The stair-lift is set in a
-  rock outcrop the dunes keep half-burying. *Seed: Emberback swims the sand
-  before it.*
+## Places of interest
+- **The Star Dune.** The one great dune that never marches — oldest and
+  tallest, its core fused to glass by ancient lightning; the desert's pattern
+  reads from its crest. *Seed: from it the marching dunes can be read and a
+  safe line plotted, and its glass core cut.*
+- **The Sunk Caravanserai.** A whole walled way-station the dunes swallowed and
+  periodically uncover — courtyards, cisterns, and stalls still half-full of
+  sand. *Seed: when the dune moves off it, a season's water and the old
+  trade-road reopen.*
+- **The Glasslight Pan.** A flat salt-and-fulgurite pan between the dunes where
+  lightning-glass grows in branching spires that ring in the wind. *Seed: the
+  nomads' star-charts and water-maps are cached in its cool spires — the only
+  fixed knowledge on a moving floor.*
 
 ## The people
 Dune-nomads — Waste-folk who cross the marching desert by star-lore and water-
@@ -56,26 +60,34 @@ maps and leads the caravans along the shifting safe lines.
 5. **Glass-scorpion** (N) — *was:* a fulgurite scorpion. *now:* glass-shelled
    and big as a dog, ambushing from the sand. *Cured, it burrows down and is
    gone.*
-6. **Ember-blind ogre** (P) — *was:* a Waste-born conscript blinded by the
-   ember-nights, set to guard the water-holes. *now:* collared, sightless,
-   swinging by sound and hurling burning sand. *Pressed — a real death; the
-   deserters navigate the dunes better blind than most do sighted.*
+6. **Ember-blind ogre** (P) — *the floor's pressed stranger.* Ogres are no
+   desert-folk; this one was collared in the borderland ogre-holds beyond the
+   Waste and marched up to garrison the water-holes, then blinded by the very
+   ember-nights it was left to guard. *now:* sightless, swinging by sound and
+   hurling fistfuls of burning sand at anything that stirs the dust. *A real
+   death, not a cure — its collar is the only thing to break; blinded, the
+   deserters read the dunes by ear better than most do by eye, and the few who
+   throw the collar down make the surest guides on the floor.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Sandshift — spell.** Raises a wall of sand, stills a storm, or firms a
-  slipface for a crossing; the nomads' art, drawn on the Slipface charts.
-  *Seed: learn it to cross the marching dunes and weather the ember-nights.*
+  slipface for a crossing; the nomads' art, cached with their charts in the
+  Glasslight Pan. *Seed: learn it to cross the marching dunes and weather the
+  ember-nights.*
 - **Desert-glass — material.** Sun-and-lightning-fused glass and sunstone from
-  the deep dunes; keen blades and aether-lenses both. *Seed: dig the Star
-  Dune's core.*
+  the deep dunes; keen blades and aether-lenses both. *Seed: cut the Star
+  Dune's glass core.*
+- **The nomads' star-charts — knowledge.** Sira's cached maps of every spring,
+  star-line, and dune-cycle on the floor. *Seed: recover them and the moving
+  desert can be crossed by anyone she trusts.*
 - **Waterless-draught — potion.** A nomad's brew that stops thirst and cools
-  the blood; lets a climber cross burning ground without water for a spell.
+  the blood; a climber crosses burning ground without water for a spell.
 
 ## The Warden — Emberback
 A dune-swimmer salamander grown vast, welded with an ember-carapace that
 glows hotter in the desert night — it swims the dunes to strike from below and
 sets the ember-moths raining fire on the crests. Break it and the ember-nights
-cool; the dunes settle to a readable march; the Dune Gate clears of its
+cool; the dunes settle to a readable march; the stair-lift clears of its
 burying sand.
 
 ## When it falls

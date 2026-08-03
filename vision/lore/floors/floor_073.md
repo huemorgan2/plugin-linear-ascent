@@ -11,7 +11,9 @@ they could open or close to let the wind through by measure. The shutters are
 jammed open now, and the gales scream through the wall-gaps hard enough to
 tear a climber off the ramparts. Between the walls lie sheltered wind-shadows;
 atop them, nothing but the shriek. It is a floor climbed along and over vast
-ramparts in a wind that wants you gone.
+ramparts in a wind that wants you gone. The stair-lift stands in a rampart
+behind a jammed wind-shutter, its arch a giant shutter-frame; Galebone slams
+the shutters before it.
 
 ## Flora
 - **Trees / canopy:** none — ice ramparts and iron shutters; wind-flattened
@@ -23,16 +25,21 @@ ramparts in a wind that wants you gone.
   rampart-lichen shrieks a disorienting note in the wind; the gale-flowers
   mark false shelter that the jammed shutters expose.
 
-## Three places
-- **The cave — the Sheltered Casemate.** A wind-proof chamber built into the
-  greatest wall, the one truly still place. *Seed: the shutter-lore — how to
-  work every gate in the wall — is kept here, along with the master crank.*
-- **The peak — the Rampart-Crown.** The top of the highest wall, in the full
-  scream of the gale; the whole wall-country reads from it. *Seed: from it the
-  jammed shutters can be freed and the wind tamed to measure.*
-- **The gate in the mountain — the Wall Gate.** The stair-lift is set in a
-  rampart behind a jammed wind-shutter. *Seed: Galebone slams the shutters
-  before it.*
+## Places of interest
+- **The Sheltered Casemate.** A wind-proof chamber built deep into the
+  greatest wall — the one truly still place on the floor, where the wall-folk
+  keep the shutter-lore and the master crank that works every gate in the
+  ramparts. *Seed: hold the casemate and you hold the means to tame the whole
+  wind-country to measure.*
+- **The Torn Rampart.** A wall-section where a shutter blew its jamb and the
+  gale took the working crew clean off into the white — their gear frozen
+  where it dropped, the crank-key lost with them. *Seed: recover the dead
+  crew's crank-key here to free the shutters the master crank alone can't
+  reach.*
+- **The Windharp.** The highest wall, its jammed shutter-gaps tuned by ages of
+  gale into a shrieking wind-organ; a warden who knows its notes can read the
+  whole country's weather and every coming gust. *Seed: learn its song to time
+  each crossing to a lull instead of a killing blast.*
 
 ## The people
 Wall-folk — giant rampart-wrights and delver-shutter-crews who built and
@@ -52,10 +59,13 @@ master crank, and reads the wind's force by the note it makes in the walls.
    lopes off into a wall-shadow.*
 3. **Ice-hawk** (N) — *was:* a rampart hawk. *now:* massing in the gale,
    mobbing climbers on the crown. *Cured, it wheels off on the wind.*
-4. **Shutter troll** (N) — *was:* a wall-troll set to work the shutters.
-   *now:* fever-strong, slamming the great shutters to blast climbers with
-   loosed gales. *Cured, the slow giant sets a shutter to measure and lumbers
-   off.*
+4. **Shutter troll** (N) — *the wall-folk's one beast not of the high cold:* a
+   Deep troll, no creature of the ice-country, hauled up the lifts in the old
+   days as the brute muscle to crank shutters no giant could work alone.
+   *was:* that wall-troll, set to the great gates. *now:* fever-strong,
+   slamming the shutters to blast climbers with loosed gales. *Cured, the slow
+   giant sets a shutter to measure and lumbers off toward the down-lifts and
+   the Deep it came from.*
 5. **Wall-boar** (N) — *was:* a wind-shadow boar. *now:* charging the narrow
    rampart-walks where the wind gives no room. *Cured, it trots into a
    casemate.*
@@ -64,22 +74,24 @@ master crank, and reads the wind's force by the note it makes in the walls.
    figure that jams the shutters open to loose the killing gaps on the living.
    *Broken, it's taken by the wind and drains away.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Bulwark — spell.** Raises a wall of ice or hardened air to break wind,
   blow, or blast for a spell; the wall-folk's art. *Seed: learn it to cross
   the ramparts and shelter the host from the throne's own storms above.*
 - **Rampart-iron — metal.** The wind-tempered shutter-iron of the walls,
   forged into the host's heaviest wind-proof gear and gate-works. *Seed:
   strip a jammed shutter.*
-- **Bracing-draught — potion.** A wall-crew's brew that roots the footing
-  immovable against any wind or shove for a spell.
+- **Windread — knowledge.** The wardens' craft of reading a coming gust by the
+  note the gale makes in the Windharp — the difference between a crossing
+  timed to a lull and one blown off the rampart. *Seed: learn it from Bruna to
+  walk the walls safe and weather the throne's storms above.*
 
 ## The Warden — Galebone
 A shutter troll welded into the greatest wall's master wind-shutter — it
 fights by slamming the shutters to blast climbers off the ramparts with loosed
 gales and dropping the wall-gaps out from under them. Break it and the
 shutters free to measure; the killing gaps close; the master crank answers and
-the Wall Gate opens.
+the stair-lift opens.
 
 ## When it falls
 Shuttergate frees the jammed shutters from the Rampart-Crown and the wind

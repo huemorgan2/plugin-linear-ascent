@@ -12,7 +12,8 @@ built to a giant's scale, so a climber crosses it dwarfed, wading through
 knee-high "grass" that is a giant's lawn. It was the giants' free country of
 smallholders and thanes, taken at the harvest, the ricks still standing that
 will never be threshed. The steadings stand proud and empty, penned by their
-own great fences.
+own great fences. The stair-lift stands in a rock outcrop behind a giant
+field-gate at the country's edge; Fencewright pens the way before it.
 
 ## Flora
 - **Trees / canopy:** giant orchard-oaks and a single vast steading-elm per
@@ -23,17 +24,18 @@ own great fences.
   giant clover's pollen brings a heavy, penning drowsiness; the grass hides
   furrows deep as trenches.
 
-## Three places
-- **The cave — the Root-Cellar.** The giant root-store beneath the greatest
-  steading, a climber-maze of vast crocks and barrels. *Seed: the freehold-
-  charter and the steading's seed-corn are kept here — proof of who owns this
-  land.*
-- **The peak — the Thane's Rick.** The tallest hay-rick, a hill of stacked
-  harvest; the steadings read from its top. *Seed: firing it in the old
-  beacon-way calls every freeholder in from the fields.*
-- **The gate in the mountain — the Steading Gate.** The stair-lift is set in
-  a rock outcrop behind a giant field-gate. *Seed: Fencewright pens the way
-  before it.*
+## Places of interest
+- **The Thane's Rick.** The tallest hay-rick, a hill of stacked harvest that
+  will never be threshed; the steadings read from its top. *Seed: firing it in
+  the old beacon-way calls every freeholder in from the fields.*
+- **The Root-Cellar.** The giant root-store under the greatest steading, a
+  climber-maze of vast crocks and barrels — the freehold-charter and the
+  seed-corn are kept here, proof of who owns this land. *Seed: recover the
+  charter and the freeholders have their claim to raise again.*
+- **The Cathedral Barn.** A byre the size of a minster, its great doors swung
+  wide on empty stalls and a threshing-floor where the giant clover's drowsing
+  pollen pools thickest. *Seed: clear and bar it and the freeholders have one
+  whole steading held safe.*
 
 ## The people
 Freeholders — giant smallholders and their thanes, proud independent farm-folk
@@ -55,7 +57,9 @@ and the seed-corn, and means to hold her steading free or not at all.
    dog-sized, massing in the ricks. *Cured, it bolts into the straw.*
 4. **Plough-boar** (N) — *was:* a steading boar. *now:* furrow-armored,
    bursting from the deep grass. *Cured, it trots off into the clover.*
-5. **Rick-thief troll** (N) — *was:* an upland troll that raided the ricks.
+5. **Rick-thief troll** (N) — *was:* an upland troll — troll-kind is Deep-born,
+   but these came up long ago from the delvings under the freeholds to raid the
+   ricks in lean winters, and the fever has turned the old thieving to rage.
    *now:* fever-greedy, hurling hay-bales and fence-stone. *Cured, the slow
    giant shoulders a bale and lumbers off to eat in peace.*
 6. **Scarecrow-wight** (W) — *was:* a field-hand who died in the harvest,
@@ -63,14 +67,17 @@ and the seed-corn, and means to hold her steading free or not at all.
    the furrows herding the living into the living-hedges. *Broken, it
    collapses to straw and drains into the field.*
 
-## Three finds  *(quest seeds)*
-- **Harvest — spell.** Grows or reaps plant-life at speed — raises a living-
-  hedge wall, ripens a field, or clears a path; the freeholders' craft.
+## Finds  *(quest seeds)*
+- **Harvest — spell.** Grows or reaps plant-life at speed — raises a
+  living-hedge wall, ripens a field, or clears a path; the freeholders' craft.
   *Seed: learn it to open the penning fences and, above, to raise green walls
   against the tower.*
 - **Ploughshare-steel — metal.** The heavy true-tempered steel of the giant
   ploughs, forged into the host's greatest blades and shield-bosses. *Seed:
   the steading's implement-hoard.*
+- **The freehold-charter — knowledge.** The steading's deed and seed-corn, kept
+  in the Root-Cellar — proof of who owns this land, and the seed to work it.
+  *Seed: recover it and Thanesrest can claim its ground free again.*
 - **Harvest-ale — potion.** A freeholder's strong harvest-brew; restores a
   giant's-worth of strength and lifts the heart with real cheer.
 
@@ -78,7 +85,7 @@ and the seed-corn, and means to hold her steading free or not at all.
 A steading bull welded into a walking wall of fence-stone and living hedge-
 thorn — it fights by penning climbers in closing living-fences and charging
 down the alleys it makes, mending its hedge-armor from any boundary it passes.
-Break it and the fences fall still; the steadings open; the Steading Gate
+Break it and the fences fall still; the steadings open; the stair-lift
 unbars.
 
 ## When it falls

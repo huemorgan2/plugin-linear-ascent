@@ -11,7 +11,8 @@ whole length with passing-bells that toll on their own in the wind. A
 spectral funeral shuffles the Way endlessly, coffin borne high, mourners
 grey, and the living who fall into step are swept along and never let go. The
 willows weep real water; the bells never stop; grief hangs in the air thick
-enough to breathe.
+enough to breathe. The stair-lift is set in a lych-arch at the causeway's
+end, and Mournhide bears the coffin across the road before it.
 
 ## Flora
 - **Trees / canopy:** weeping-willow avenues, and the black funeral-cypress
@@ -21,16 +22,18 @@ enough to breathe.
 - **Under the Yoke:** the willows' trailing withes snare and pull toward the
   water; the bell-flowers ring a compulsion to join the procession.
 
-## Three places
-- **The cave — the Lych-Undercroft.** The crypt-vault beneath the causeway
-  where processions rested the dead overnight. *Seed: the true burial-rite —
-  the one that lets a funeral *end* — is carved on its lych-slab.*
-- **The peak — the Bell-Tower.** The great tower at the Way's head that hung
-  the master passing-bell; its toll drives the procession. *Seed: still or
-  re-hallow the bell and the ghost-funeral can finally reach its grave.*
-- **The gate in the mountain — the Processional Gate.** The stair-lift is set
-  in a lych-arch at the causeway's end. *Seed: Mournhide bears the coffin
-  across it.*
+## Places of interest
+- **The Lych-Undercroft.** The crypt-vault beneath the causeway where
+  processions rested the dead overnight. *Seed: the true burial-rite — the one
+  that lets a funeral *end* — is carved on its lych-slab.*
+- **The Bell-Tower.** The great tower at the Way's head that hung the master
+  passing-bell, whose toll drives the procession. *Seed: still or re-hallow the
+  bell and the ghost-funeral can finally reach its grave.*
+- **The Barrow-Field.** The causeway's destination — low green burial-mounds
+  the procession has walked toward for a thousand years and never reached,
+  their doors open and waiting. *Seed: a dead one laid in an open barrow is a
+  dead one that stays down, and the field is the one ground the procession
+  cannot compel you across.*
 
 ## The people
 Mourners — Men of the funeral-town: bell-ringers, bearers, and grave-callers
@@ -64,15 +67,20 @@ true rite, and stops his own ears against the toll that would take him.
    the living into step. *Broken, the toll cracks off and it drains into the
    water.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Dirge — spell.** A mourning-word that stills grief-compulsion and lays a
-  restless dead to true rest; cut on the Lych-Undercroft's slab. *Seed: learn
+  restless dead to true rest · cut on the Lych-Undercroft's slab · *Seed: learn
   the true rite to end the ghost-funeral and, above, to quiet the tower's
   grief-snares.*
-- **Bell-bronze — metal.** The deep-ringing bronze of the passing-bells, cast
-  into weapons whose ring shakes the undead. *Seed: recast a cracked bell.*
-- **Widow's draught — potion.** A mourner's brew against despair; steadies a
-  climber's heart against sorrow, fear, and the pull to give up.
+- **Bell-bronze — salvage.** The deep-ringing bronze of the passing-bells,
+  cast into weapons whose ring shakes the undead · won by recasting a cracked
+  bell · *Seed: arm the host against the tower's raised dead.*
+- **Widow's draught — brew.** Steadies a climber's heart against sorrow, fear,
+  and the pull to give up · a mourner's brew against despair · *Seed: carry it
+  through the grimmest floors ahead.*
+- **A hallowed passing-bell — relic.** One master bell re-rung true, whose
+  toll frees any soul caught in a compulsion · re-hallowed in the Bell-Tower ·
+  *Seed: a portable end to the tower's grief- and music-snares above.*
 
 ## The Warden — Mournhide
 A coffin-bearer grown vast, welded under the master bier and hung with
@@ -80,7 +88,7 @@ passing-bells, tolling the whole Way as it comes — it fights by drawing the
 living into the procession's step and pressing the endless coffin onto them,
 its bells ringing the will out of the unwary. Break it (and ring the true
 rite) and the funeral reaches its grave at last; the bells fall silent; the
-Processional Gate opens.
+stair-lift opens.
 
 ## When it falls
 Mourngate rings the true rite from the Bell-Tower and the spectral funeral

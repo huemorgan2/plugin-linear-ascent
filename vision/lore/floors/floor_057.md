@@ -11,7 +11,9 @@ lamps have failed one by one, and where the light dies the *shadows won't hold
 to their casters:* they peel loose and wander, hungry for the warmth and the
 light they've lost. In the lit stretches all is graceful and calm; step into a
 dark one and your own shadow may leave you. It is a floor of light and dark in
-strict avenues, safe in the glow and lethal in the gaps.
+strict avenues, safe in the glow and lethal in the gaps. The stair-lift
+stands at a dark avenue's end, its arch a dead lamp-arch; Palewick pools the
+black before it.
 
 ## Flora
 - **Trees / canopy:** lantern-oak and candle-birch lining the walks, their
@@ -22,17 +24,18 @@ strict avenues, safe in the glow and lethal in the gaps.
   hoards its light and starves the walk; the lamp-lilies drink the glow and
   darken.
 
-## Three places
-- **The cave — the Wick-Vault.** The candle-cellar beneath the walks, where
-  the city's everlasting wicks and lamp-oil are stored. *Seed: the master
-  wick — the light that anchors every shadow on the floor — is kept here,
-  guttering.*
-- **The peak — the Great Lamp.** The central lamp-tower that lit the whole
-  wood-city; from it the lit and dark avenues read like a map. *Seed: relit,
-  it fixes every shadow back to its caster at once.*
-- **The gate in the mountain — the Shade Gate.** The stair-lift is set in a
-  dark avenue's end, its arch a dead lamp-arch. *Seed: Palewick pools the
-  dark before it.*
+## Places of interest
+- **The Great Lamp.** The central lamp-tower that once lit the whole
+  wood-city; from its gallery the lit and dark avenues read like a map.
+  *Seed: relit, it fixes every shadow back to its caster at once.*
+- **The Wick-Vault.** The candle-cellar beneath the walks where the city's
+  everlasting wicks and lamp-oil are stored — and the master wick, the light
+  that anchors every shadow on the floor, gutters low. *Seed: keep the master
+  wick alight and the wandering shadows cannot peel free.*
+- **The Drowned Lantern-Court.** A grand plaza whose fountain-pools swallowed
+  their own lamps when the dark came, now a black mirror of quenched lights
+  where the peeled shadows gather thickest. *Seed: rekindle its ring of lamps
+  and reclaim the city's heart from the shade.*
 
 ## The people
 Lamp-keepers — elves whose calling is the light: wick-trimmers, oil-wrights,
@@ -65,16 +68,19 @@ the lit lines relighting what she can, a lantern always in hand.
    it passes to spread the dark ahead of the living. *Broken, its lantern
    gutters out and it drains away.*
 
-## Three finds  *(quest seeds)*
-- **Lightbind — spell.** Fixes a wandering shadow back to its caster, kindles
-  a dead lamp, and banishes shadow-things in a burst of light; the keepers'
-  art. *Seed: learn it to relight the Walks and, above, to break the tower's
+## Finds  *(quest seeds)*
+- **Lightbind — spell.** Fixes a wandering shadow back to its caster, kindles a
+  dead lamp, and banishes shadow-things in a burst of light; the keepers' art.
+  *Seed: learn it to relight the Walks and, above, to break the tower's
   darkness.*
 - **Candle-silver — material.** The light-holding silver of the everlasting
-  lamps, worked into gear that sheds its own glow and wards shadow. *Seed:
-  the Wick-Vault's stores.*
-- **Brightdraught — potion.** A keeper's brew that lets the eye see true in
-  any dark and wards the warmth-draining shade for a spell.
+  lamps, worked into gear that sheds its own glow and wards shadow. *Seed: the
+  Wick-Vault's stores.*
+- **The master wick — relic.** The everlasting wick that anchors every shadow
+  on the floor, kept guttering in the Wick-Vault. *Seed: carry it lit and no
+  shadow — yours or another's — can wander from its feet.*
+- **Brightdraught — potion.** A keeper's brew that lets the eye see true in any
+  dark and wards the warmth-draining shade for a spell.
 
 ## The Warden — Palewick
 An unfixed shadow grown vast and given form, welded to the city's greatest
@@ -82,7 +88,7 @@ snuffed lamp — a shape of living dark that snuffs the lamps around it and sets
 the loose shadows on the living, fighting from the pooling black. It is a
 darkness the tower quickened, so its end is an *eviction:* flood it with light
 (relight the Great Lamp) and the borrowed aether is driven out, the shadows
-fix back to their casters, and the Shade Gate opens in the glow.
+fix back to their casters, and the stair-lift opens in the glow.
 
 ## When it falls
 Candlerow relights the Great Lamp and every shadow on the Walks snaps back to

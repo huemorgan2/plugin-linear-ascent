@@ -11,7 +11,9 @@ lit with a cold blue glow and humming with dead signal. Every hall echoes;
 whisper once and the deeps answer a hundred times, in a hundred voices, some
 of them true. Cold light, cold air, cold facts. It was the mind of the world
 kept in the dark, cut off and left talking to itself, and now the talk has
-gone strange.
+gone strange. The stair-lift stands behind a wall of lit lattice at the
+deeps' cold heart, its arch grown thick with signal-crystal; Echobone
+floods it with false signal and holds the aisle before it.
 
 ## Flora
 - **Trees / canopy:** none — lattice-racks and cold-light aisles.
@@ -20,18 +22,19 @@ gone strange.
 - **Under the Yoke:** the echo-moss throws voices to mislead; the signal-
   lichen flares false readings; the frost-fungus ices the aisle-floors.
 
-## Three places
-- **The cave — the Cold Aisle.** The deepest, coldest rack-aisle, where the
-  oldest true lattices are stored. *Seed: the world's own map of the tower —
-  every floor, every gate — is written in a core here, if it can be read
-  clean.*
-- **The peak — the Mainframe Spire.** The central core-tower the whole
-  archive answers to; from it the true signal can be told from the false.
-  *Seed: restore it and the deeps answer straight — a seer's advantage for
-  the whole climb.*
-- **The gate in the mountain — the Signal Gate.** The stair-lift is set
-  behind a wall of lit lattice. *Seed: Echobone floods it with false signal
-  to keep it sealed.*
+## Places of interest
+- **The Cold Aisle.** The deepest, coldest rack-aisle, where the oldest and
+  truest lattices still hold their charge unspoiled by the echo. *Seed: the
+  world's own map of the tower — every floor, every gate — is written in a
+  core here, if it can be read clean.*
+- **The Mainframe Spire.** The central core-tower the whole archive answers
+  to, dark since the Theft; from its restored crown the true signal can be
+  told from the false. *Seed: raise it lit again and the deeps answer straight
+  — a seer's advantage for the whole climb.*
+- **The Drowned Sump.** The flooded coolant-cistern at the deeps' foot, where
+  the cold runnels pool black and dead cores lie sunk beneath the water.
+  *Seed: the delvers' lost index went down here when the pumps died — recover
+  it and half the echo-storm can be read at a glance.*
 
 ## The people
 Signal-delvers — lore-keepers of every race who tend the lattices and mine
@@ -60,22 +63,28 @@ cores and cross-checks every answer thrice before he trusts it.
    spliced true-and-false voices to lead climbers astray. *Broken, the query
    closes and it drains into a core.*
 
-## Three finds  *(quest seeds)*
-- **Query — spell.** Draws one true answer from a lattice — a map, a name, a
-  weakness; the delvers' art, indexed on the Mainframe Spire. *Seed: learn it
-  to read the tower-map in the Cold Aisle and pierce false signal above.*
-- **Core-gold — material.** The aether-gold of the lattice-cores, the finest
-  enchant-conductor in the tower; a scryer's and enchanter's treasure. *Seed:
-  draw a spent core.*
-- **Clarity-draught — potion.** A delver's brew that clears the echo from the
-  head; wards against confusion, illusion, and madness for a spell.
+## Finds  *(quest seeds)*
+- **Query — spell.** A hall-reading art that draws one true answer from a
+  lattice — a map, a name, a weakness — indexed on the Mainframe Spire.
+  *Seed: learn it to read the tower-map in the Cold Aisle and pierce the
+  false signal above.*
+- **Core-gold — material.** The aether-gold of spent lattice-cores, the finest
+  enchant-conductor in the tower, waiting in every dead rack. *Seed: draw a
+  spent core for the host's scryers and enchanters.*
+- **The tower-map — knowledge, not a thing.** The old world's own survey of
+  the Ascent, every floor and gate and shaft, written into a single core in
+  the Cold Aisle. *Seed: read it clean and the whole climb above lies charted
+  before you set foot on it.*
+- **Clarity-draught — tonic.** A delver's brew that clears the echo from the
+  head, warding confusion, illusion, and madness for a spell; distilled in
+  Faintlight. *Seed: carry a flask up into the floors that lie.*
 
 ## The Warden — Echobone
 A signal husk grown vast on the racks, welded to the Mainframe Spire so it
 speaks with the whole archive's false voice — it fights by flooding the deeps
 with echoes and phantom images, striking from where its voice seems to be.
 Break it (and restore the Spire) and the deeps answer straight; the false
-signal dies; the Signal Gate reads open.
+signal dies; the stair-lift reads open.
 
 ## When it falls
 Faintlight restores the Mainframe Spire and the archive answers true again —

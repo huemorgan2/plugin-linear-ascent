@@ -10,7 +10,9 @@ mile of planted rows gone to rot, the ground ankle-deep in windfall fermenting
 under the floodlights. The air is thick, sweet, and drunk; wasps hang in it
 like sparks. The trees are old and huge and pruned by nine generations of the
 same families, and now they drop a harvest no one will ever press. Everything
-here is going soft and golden and wrong.
+here is going soft and golden and wrong. The stair-lift is set in a stone
+bluff behind the old press-house, its arch carved with apple-boughs;
+Applewrath beds in the deep windfall before it.
 
 ## Flora
 - **Trees / canopy:** cider-apple and perry-pear in long straight rows, and
@@ -20,16 +22,17 @@ here is going soft and golden and wrong.
 - **Under the Yoke:** the windfall ferments into a black cider-rot that gives
   off a drunkening haze, and the mistletoe has gone grasping.
 
-## Three places
-- **The cave — the Press-Cellar.** The stone cider-cellar under the crossing,
-  vats still full and turned to vinegar and worse. *Seed: the oldest vat holds
+## Places of interest
+- **The Press-Cellar.** The stone cider-cellar under the crossing, its vats
+  still full and turned to vinegar and worse. *Seed: the oldest vat holds
   something the pressers walled up rather than drink.*
-- **The peak — the Mother-Tree.** The huge central apple every row descends
-  from, tall enough to see the orchard's ends. *Seed: its topmost graft still
-  bears true fruit — seed-stock for a replanting.*
-- **The gate in the mountain — the Cider Gate.** The stair-lift is set in a
-  stone bluff behind the old press-house, its arch carved with apple-boughs.
-  *Seed: Applewrath beds in the windfall before it.*
+- **The Mother-Tree.** The huge central apple every row on the floor was
+  grafted from, tall enough to see the orchard's ends. *Seed: its topmost
+  boughs still bear true fruit — seed-stock for a replanting.*
+- **The Wasp Cathedral.** The abandoned press-house, its rafters filled by a
+  single vast paper nest the hornets raised over a decade of unpicked
+  harvest, humming like a struck bell. *Seed: the pressers' records — and one
+  sealed cask — are walled behind the comb, past the swarm.*
 
 ## The people
 Orchardists and pressers — families who count their worth in grafts and
@@ -61,15 +64,17 @@ grafts alive in a shuttered nursery, waiting for a year worth planting.
    and reaches with the other hand. *Broken, the cider spills and it drains
    into the cellar drains.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Clear-head — ward (spell).** Burns off the rot-haze in a breath; the
   charm is cut into the Press-Cellar lintel. *Seed: raise it to reach the
   walled-up vat sober.*
-- **Cellar-bronze — metal.** The heavy bronze of the press-screws, prized
-  for gear that takes a beating. *Seed: strip the old presses.*
-- **Firstdraw — potion.** The season's first true cider, pressed from the
-  mother-tree's real fruit; a heartening draught that is also seed-stock.
-  *Seed: it exists only if the true grafts survive.*
+- **True grafts — craft (seed-stock).** Cuttings from the mother-tree's
+  honest topmost boughs, kept alive in Cesta's shuttered nursery; the one
+  thing that can replant the floor. *Seed: carry them living to the next
+  safe ground.*
+- **Firstdraw — tonic.** The season's first true cider, pressed from the
+  mother-tree's real fruit; a heartening draught, and proof the orchard can
+  come back. *Seed: it exists only if the true grafts survive.*
 
 ## The Warden — Applewrath
 A cider-mad boar of the rows, welded under a carapace of press-iron and

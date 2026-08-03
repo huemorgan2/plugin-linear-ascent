@@ -10,7 +10,9 @@ grey water with the tops of hedges and half-drowned fences breaking the
 surface. Hay-ricks stand as islands, rotting from the waterline up.
 Willows trail into their own reflections. The floodlights lie flat on the
 water so the whole floor glares like a dropped mirror. Somewhere a sluice
-still turns, patiently, keeping the wrong things wet.
+still turns, patiently, keeping the wrong things wet. The stair-lift stands
+in a stone weir cut into a low bluff, water sheeting off its lintel;
+Sedgeback wallows the mill-pool before it.
 
 ## Flora
 - **Trees / canopy:** crack-willow and alder, drowned to the knees, and one
@@ -20,16 +22,18 @@ still turns, patiently, keeping the wrong things wet.
 - **Under the Yoke:** a black cutting-reed has taken the shallows, sharp
   enough to open a hand, and it grows toward warmth.
 
-## Three places
-- **The cave — the Weir-Undercroft.** A flooded sluice-chamber under the
-  stone weir, its machinery still grinding. *Seed: the old flood-ledger is
-  down there, and it names where the drain-cock was buried.*
-- **The peak — the Rick-Tor.** The largest hay-rick island, tall enough to
-  see the whole floor from; the trappers' lookout. *Seed: light its top and
-  the weir-folk will know it is safe to come out.*
-- **The gate in the mountain — the Sluice Gate.** The stair-lift is set in a
-  stone weir carved into a low bluff, water sheeting off its lintel. *Seed:
-  Sedgeback wallows in the mill-pool before it.*
+## Places of interest
+- **The Weir-Undercroft.** A flooded sluice-chamber under the stone weir,
+  its old machinery still grinding in the dark below the waterline. *Seed:
+  the flood-ledger is down there, and it names where the drain-cock was
+  buried.*
+- **The Rick-Tor.** The largest hay-rick island, tall enough to see the
+  whole floor from; the trappers' lookout and mooring. *Seed: light its top
+  and the scattered weir-folk will know it is safe to come out.*
+- **The Sunken Drove.** The old drove-road that once crossed the pasture,
+  now a causeway just under the surface with its half-drowned bridge
+  breaking the water midway. *Seed: it is the one dry-footed line across the
+  floor — for those who can read where the road runs beneath the flood.*
 
 ## The people
 Weir-keepers, eel-trappers, and fen-fishers — patient marsh-folk who read
@@ -63,15 +67,16 @@ the sluice, and has not been dry in a year.
    calls punts onto the black reed. *Broken, the light gutters out and
    drains down.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Stillwater — ward (spell).** Flattens the flood-current in a circle for
   a moment; the incantation is scratched inside the Weir-Undercroft. *Seed:
   raise it to reach the buried drain-cock and let the pasture breathe.*
-- **Weir-bronze — metal.** Green bronze from the old sluice-gates, prized
-  for fittings that never seize. *Seed: the finest casting is under the
-  mill-pool Sedgeback guards.*
-- **Eel-oil — potion.** Rendered from the fen eels; a draught that lets a
-  climber breathe the flooded chambers for a spell.
+- **The Flood-Ledger — knowledge.** The weir-folk's long record of every
+  ford, sluice, and buried drain-cock on the floor, sunk in the Undercroft.
+  *Seed: recover it and the drowned pasture reads like a map of safe lines.*
+- **Eel-oil — tonic.** Rendered from the fen eels; a draught that lets a
+  climber breathe the flooded chambers for a spell — the first find worth
+  having for the drowned floors above.
 
 ## The Warden — Sedgeback
 A mire boar of the pasture, welded under a weir-iron carapace of green

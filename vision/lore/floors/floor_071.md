@@ -11,7 +11,9 @@ snags of solid charcoal under a sky of drifting soot. Nothing has rotted;
 nothing has grown; the forest is a frozen instant of burning, black and silent
 but for soot-owls calling. Some petrified trunks still glow faintly at their
 hollow hearts, warm with a fire that never went out. The char-burners work the
-dead wood, and the dead wood does not always stay dead.
+dead wood, and the dead wood does not always stay dead. The stair-lift is set
+in a soot-black bluff behind a stand of char-snags at the forest's edge;
+Charspine dens in a glowing trunk before it.
 
 ## Flora
 - **Trees / canopy:** petrified char-oak and glass-black snag-pine, ringing
@@ -21,16 +23,19 @@ dead wood, and the dead wood does not always stay dead.
 - **Under the Yoke:** the ember-fungus reignites the hollow hearts; the soot-
   moss puffs choking clouds; the char-snags shed razor-glass splinters.
 
-## Three places
-- **The cave — the Kiln-Hollow.** The char-burners' pit-kiln cave, where they
-  turn the petrified wood to fuel-char. *Seed: the burners' fire-lore — how to
-  smother a hollow-heart before it flares — is scratched on the kiln-rim.*
-- **The peak — the Great Snag.** The tallest petrified tree, a black spire
-  over the frozen forest; the char-woods read from it. *Seed: still glowing
-  at its heart, it could be the one warm hearth on the tier — or a bonfire.*
-- **The gate in the mountain — the Char Gate.** The stair-lift is set in a
-  soot-black bluff behind a stand of char-snags. *Seed: Charspine dens in a
-  glowing trunk before it.*
+## Places of interest
+- **The Kiln-Hollow.** The char-burners' pit-kiln cave, where they still turn
+  the petrified wood to fuel-char in the one worked corner of the dead forest.
+  *Seed: the burners' fire-lore — how to smother a hollow-heart before it
+  flares — is scratched around the kiln-rim.*
+- **The Great Snag.** The tallest petrified tree, a black glass spire over the
+  frozen forest, still glowing deep at its hollow heart. *Seed: banked right
+  it becomes the one safe warm hearth on the tier; broken open it becomes a
+  bonfire that could take the whole char-woods.*
+- **The Charcoal Hall.** The forest-folk's old burning-lodge, caught by the
+  great fire and petrified whole — rafters, racks, and stacked char all turned
+  to ringing black stone. *Seed: the lodge's fireproof stores and the forest's
+  lost craft-lore stand untouched inside the char.*
 
 ## The people
 Char-burners — Waste-folk who work the petrified forest for fuel-char, soot-
@@ -53,16 +58,20 @@ smothering-tools, and knows which black trunks still hold a live coal.
 4. **Char-beetle** (N) — *was:* a charcoal-boring beetle. *now:* ember-
    shelled, swarming out of the hollow hearts. *Cured, it burrows into cold
    char.*
-5. **Rooter ogre** (P) — *was:* a Waste-born conscript set to grub the
-   petrified stumps. *now:* collared, char-scarred, hurling burning snag-
-   glass. *Pressed — a real death; the deserters know which trunks are safe
-   to shelter in.*
+5. **Rooter ogre** (P) — *the char-forest's one conscript.* The rooter ogres
+   are Waste borderland brutes, pressed into Vharuk's garrison for their
+   strength and set to grub the petrified stumps out by the roots — labor no
+   one else would do, at a post no one came back for. *now:* collared and
+   char-scarred, hurling burning snag-glass at anything that nears its stumps.
+   *No ghost leaves it — a killed ogre is a dead ogre; freeing it means
+   breaking the collar, and the few deserters who throw it down know which
+   black trunks are still safe to shelter in.*
 6. **Hollow trunk** (W) — *was:* a char-burner who died sheltering in a
    glowing trunk, aether caught in the live coal. *now:* a walking petrified
    husk that glows within and sets the forest reigniting around it. *Broken,
    its coal goes out and it crumbles to cold char.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Smother — spell.** Snuffs and suppresses fire, embers, and fire-breath in
   a circle, and can bank a foe's own flame; the burners' art, on the kiln-rim.
   *Seed: learn it to cross the char-forest and smother the throne's furnaces
@@ -70,14 +79,19 @@ smothering-tools, and knows which black trunks still hold a live coal.
 - **Petrified heartwood — material.** The black glassy charcoal-stone of the
   snags, harder than iron and fireproof; forged into char-black blades and
   fire-shields. *Seed: fell a sound snag.*
-- **Char-tea — potion.** A burner's soot-filtering brew; lets the lungs work
-  in smoke and ash and wards against choke and fire-fume.
+- **Char-tea — brew.** A burner's soot-filtering brew; lets the lungs work in
+  smoke and ash and wards against choke and fire-fume. *Seed: steeped in the
+  Kiln-Hollow.*
+- **The burners' fire-lore — knowledge.** Grint's read of the glowing trunks —
+  which black snag holds a live coal, which will reignite, and how to bank a
+  hollow-heart before it flares. *Seed: it lets the host move through any
+  ember-ground and put out fires the tower sets.*
 
 ## The Warden — Charspine
 A charcoal salamander grown vast, welded into a petrified-wood husk that glows
 molten at every crack — it fights by reigniting the hollow trunks around it
 into a burning maze and shedding char-glass splinters. Break it and the forest
-goes cold; the hollow hearts snuff out; the Char Gate's snags stop burning.
+goes cold; the hollow hearts snuff out; the stair-lift's snags stop burning.
 
 ## When it falls
 Stumpwell smothers the last glowing hearts and banks the Great Snag into one

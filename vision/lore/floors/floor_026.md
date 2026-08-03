@@ -11,7 +11,9 @@ and slump and still tick with old heat. Ash-bats cloud the dead sky; the
 ground crunches like broken pottery. It was no one's land, only everyone's
 midden, and the borderland folk made a life picking usable metal from the
 tips. The heaps are unstable now, and something dens in the warm hollows
-between them.
+between them. The stair-lift stands in a bluff at the barrens' edge,
+half-buried under a slumped tip; Slagbone dens in the warm hollow before
+it.
 
 ## Flora
 - **Trees / canopy:** none — only slag-hills and the skeletal iron of old
@@ -21,16 +23,18 @@ between them.
 - **Under the Yoke:** the rust-flower's pollen corrodes; the clinker-moss
   hides sink-holes that swallow the unwary into the hot heart of a heap.
 
-## Three places
-- **The cave — the Clinker Hollow.** A cooled void inside the largest heap
-  where the slag-folk shelter and sort their pickings. *Seed: a whole vein
-  of un-slagged good metal was buried in a tip here by mistake.*
-- **The peak — the Slag Ridge.** The highest, oldest heap, glassed hard
-  enough to stand on; the barrens read from its crown. *Seed: from it the
-  live-heat heaps can be mapped and avoided.*
-- **The gate in the mountain — the Slag Gate.** The stair-lift is set in a
-  bluff half-buried under a tip. *Seed: Slagbone dens in the warm hollow
-  before it.*
+## Places of interest
+- **The Clinker Hollow.** A cooled void inside the largest heap where the
+  slag-folk shelter and sort their pickings by lamplight. *Seed: a whole
+  vein of un-slagged good metal was tipped in here by mistake and buried.*
+- **The Crane Graveyard.** A field of toppled, rust-eaten tipping-cranes at
+  the barrens' heart — the iron skeletons that once dumped the waste, now
+  waste themselves. *Seed: their counterweights and cable are the only
+  heavy tackle on the floor, enough to haul the buried vein up whole.*
+- **The Black Glass Tarn.** A pool where a river of molten slag cooled to a
+  sheet of black glass, smooth and treacherous and ticking faintly warm
+  beneath. *Seed: what sank before it set — tools, bones, a picker's whole
+  cart — shows dim through the glass, waiting to be cut out.*
 
 ## The people
 Slag-folk — borderland pickers of every stock who make blades, nails, and
@@ -51,29 +55,36 @@ temper by its color, and which ones will kill you.
    fouling eyes and lamps. *Cured, the cloud thins and scatters.*
 4. **Slag-crab** (N) — *was:* a heap-picking crab. *now:* shell fused to
    glass, scuttling the cooling faces. *Cured, it sidles into a crevice.*
-5. **Ridge ogre** (P) — *was:* a Waste-born conscript set to guard the good
-   tips. *now:* collared, slag-armored, rolling heaps down on climbers.
-   *Pressed — a real death; the deserters know where the good metal lies.*
+5. **Ridge ogre** (P) — *not born to picking.* Ogres are Waste-border
+   brutes, pressed into Vharuk's garrison and marched down to the slag-tips
+   to keep the folk off the good metal the tower still wants — muscle set to
+   guard a midden. *was:* a Waste-born conscript collared to the heaps.
+   *now:* slag-armored, rolling whole tips down on climbers. *Pressed — a
+   real death; the deserters know where the good metal lies.*
 6. **Clinker-wight** (W) — *was:* a picker buried in a slump, aether in the
    cooling slag. *now:* a figure of fused clinker that walks the heaps and
    drags the living into the hot hollows. *Broken, it crumbles to cold slag
    and drains down.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Slagshape — spell.** Softens and molds slag or metal like clay for a
-  moment; the pickers' salvage-trick. *Seed: learn it from Grint to open the
-  buried vein and, later, to unmake the tower's welds.*
+  moment; the pickers' salvage-trick · learned from Grint · *use it to open
+  the buried vein and, later, to unmake the tower's welds.*
 - **Reclaimed steel — metal.** Good metal saved from the tips and reforged —
-  cheap, plentiful, and the backbone of the rising's rank-and-file gear.
-  *Seed: work the buried vein.*
-- **Cinderlung tonic — potion.** A picker's brew that clears soot from the
+  cheap, plentiful, the backbone of the rising's rank-and-file gear · from
+  the buried vein · *work it once the vein is dug out.*
+- **Grint's heap-lore — knowledge.** Which heaps still run live-hot, which
+  hide sink-holes, which have cooled safe — read off their color and kept
+  only in the tip-master's head · *win his trust and cross the barrens
+  without losing a soul to the heat.*
+- **Cinderlung tonic — brew.** A picker's draught that clears soot from the
   chest; wards against ash, smoke, and choke for a spell.
 
 ## The Warden — Slagbone
 A slag salamander of the tips, welded into a hulk of fused clinker and
 tipping-crane iron — it dens in a live-heat heap and fights by slumping the
 barrens, rolling molten slag and collapsing footing. Break it and the heaps
-settle; the sink-holes cool; the Slag Gate clears of its burying tip.
+settle; the sink-holes cool; the stair-lift clears of its burying tip.
 
 ## When it falls
 Clinker Row works the buried vein in safety and the barrens stop shifting.

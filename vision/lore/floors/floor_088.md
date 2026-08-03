@@ -12,7 +12,9 @@ Choir-imps drone an iron liturgy; furnace-priests swing censers of scorching
 incense; the walls are graven with the King's false scripture of theft and
 order. There is no nature, no light but the censer-glow, no sound but the
 chant. It is the floor that works not on the body but the mind — the Made's
-attempt to make its captives *believe.*
+attempt to make its captives *believe.* The stair-lift stands behind the high
+altar of black iron at the chantry's east end; Vespergrim officiates before
+it.
 
 ## "Flora" — the Making's growth
 - **Canopy:** none — iron vaulting and censer-chains.
@@ -22,16 +24,16 @@ attempt to make its captives *believe.*
   compelled devotion; the censer-moss chokes a held breath; the candle-lichen
   gutters any true light brought in.
 
-## Three places
-- **The cave — the Reliquary.** The crypt of the King's false relics beneath
-  the high chapel. *Seed: among the frauds is the counter-creed — the words
-  that break the iron faith — hidden by a thrall who stopped believing.*
-- **The peak — the Iron Belfry.** The war-bell tower whose toll calls the
-  worship; the chantries read from it. *Seed: ring it against the liturgy and
-  the whole congregation's compulsion cracks.*
-- **The gate in the mountain — the Chantry Gate.** The stair-lift is set
-  behind the high altar of black iron. *Seed: Vespergrim officiates before
-  it.*
+## Places of interest
+- **The Reliquary.** The crypt of the King's false relics beneath the high
+  chapel · *Seed: among the frauds is the counter-creed — the words that break
+  the iron faith — hidden by a thrall who stopped believing.*
+- **The Iron Belfry.** The war-bell tower whose toll calls the worship ·
+  *Seed: ring it against the liturgy and the whole congregation's compulsion
+  cracks.*
+- **The Censer-Nave.** The vast smoke-hazed hall where the bound are made to
+  kneel and chant · *Seed: douse the censers here and a service breaks before
+  it can take hold.*
 
 ## The people — who you are freeing
 Chantry-thralls — the re-enslaved forced into the iron congregation, made to
@@ -64,17 +66,16 @@ whispers it to those slipping under, holding minds against the chant.
    chants the living into devotion. *Broken, the chant dies and the dead in it
    rest.*
 
-## Three finds  *(quest seeds)*
-- **Recant — spell.** Breaks a compelled faith, loyalty, or indoctrination —
-  frees a mind the Made has turned; the counter-creed made a word. *Seed:
-  learn it from the Reliquary to free the believing and, above, to break the
-  King's hold on his truest servants.*
-- **Censer-brass — material.** The graven war-brass of the chapels, reforged
-  into gear that wards the mind and rings the undead. *Seed: strip the
-  belfry.*
-- **Clear-conscience draught — potion.** A thrall's brew that clears the
-  incense from the head and restores a mind to itself; the antidote to the
-  chant.
+## Finds  *(quest seeds)*
+- **Recant — spell.** Breaks a compelled faith, loyalty, or indoctrination,
+  freeing a mind the Made has turned · the counter-creed from the Reliquary,
+  made a word · *Seed: free the believing, and above, break the King's hold on
+  his truest servants.*
+- **Censer-brass — salvage.** The graven war-brass of the chapels · stripped
+  from the belfry · *Seed: gear that wards the mind and rings the undead.*
+- **Clear-conscience draught — brew.** A thrall's draught that clears the
+  incense from the head and restores a mind to itself · brewed in the Censer-
+  Nave · *Seed: the antidote to the chant, for freeing whole congregations.*
 
 ## The Warden — Vespergrim
 An incense-wight grown vast — the accreted false-faith of the chantries risen
@@ -83,7 +84,7 @@ of the dead. A construct of the Making, it fights by hazing the chapel with
 devotion-incense that saps the will to resist and chanting the living toward
 the altar. Its end is an *eviction:* Recant against it and break it, and the
 smoke disperses, the creed unspoken, the congregation's dead freed. The
-Chantry Gate opens on cleared air.
+stair-lift opens on cleared air.
 
 ## When it falls
 Chantside rings the Iron Belfry against the liturgy and the whole congregation's

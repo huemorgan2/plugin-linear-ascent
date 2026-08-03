@@ -11,7 +11,8 @@ running arrow-true where every other path winds. The lamps that lit them are
 dead, and a spectral hunt rides the Rides now, grey horse and grey rider,
 coursing the ways forever after quarry that was freed long ago. The forest
 crowds close on either side; the safe ground is the verge, and the verge is
-narrow.
+narrow. The stair-lift stands in a scarp where a Ride runs headlong into
+rock, its arch a grey bridle-arch; Tallyhorn leads the hunt across it.
 
 ## Flora
 - **Trees / canopy:** ride-oak and hunting-birch walling the ways, hung with
@@ -21,16 +22,18 @@ narrow.
 - **Under the Yoke:** the ride-moss drums with phantom hoofbeats; the verge-
   fern grabs at ankles to spill a walker into the Rides' path.
 
-## Three places
-- **The cave — the Verge Hollow.** A roadside den where ride-keepers
-  sheltered from a passing hunt. *Seed: the master bridle-tally is kept here
-  — the roll of every horse and rider the hunt has taken.*
-- **The peak — the Ride-Head.** The high crossroads-cairn where all the Rides
-  meet; the hunt must pass it. *Seed: sound a true recall from it and the
-  spectral hunt can be called home and laid down.*
-- **The gate in the mountain — the Ride Gate.** The stair-lift is set in a
-  scarp where a Ride runs into rock, its arch a grey bridle-arch. *Seed:
-  Tallyhorn leads the hunt across it.*
+## Places of interest
+- **The Verge Hollow.** A roadside dugout where ride-keepers once sheltered
+  from a passing hunt, dry and out of the coursing. *Seed: the master
+  bridle-tally is kept here — the roll of every horse and rider the hunt has
+  taken.*
+- **The Ride-Head.** The high crossroads where every Ride meets, a place the
+  hunt must pass however it courses. *Seed: sound a true recall from it and
+  the whole spectral hunt can be called home and laid down.*
+- **The Wayshrine.** A moss-grown roadside shrine where riders once blessed
+  the hunt and hung a token for a safe return, its niches full of grey
+  offerings no one came back to claim. *Seed: restore a rider's own token
+  here and their shade can be called by name off the Rides.*
 
 ## The people
 Ride-keepers — elves who tended the hunting-ways, kept the lantern-crows, and
@@ -61,14 +64,17 @@ recall-horn, and rides the verges at night looking for a way to end the hunt.
    aether in the ride-moss. *now:* a grey figure that flushes climbers off
    the verge and into the hunt's path. *Broken, it drains into the road.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Recall — spell.** Calls a hunt, a mount, or a summoned thing home and
-  stills it; the ride-master's horn-word. *Seed: learn it to sound the true
-  recall from the Ride-Head and end the hunt.*
+  stills it; the ride-master's horn-word · learned from Aline · *sound the
+  true recall from the Ride-Head to end the hunt.*
 - **Bridle-silver — metal.** The grey ride-silver of the hunt's tack, worked
-  into fast, light barding and blades. *Seed: the tally-hoard in the Verge
-  Hollow.*
-- **Riders' draught — potion.** A hunt-day tonic of speed and wind; a swallow
+  into fast, light barding and blades · in the tally-hoard in the Verge
+  Hollow · *take it once the hunt is laid.*
+- **The bridle-tally — knowledge.** The roll of every horse and rider the
+  hunt has swept up, each set down by name · kept in the Verge Hollow · *a
+  name off the tally calls its shade off the Rides, one at a time.*
+- **Riders' draught — brew.** A hunt-day tonic of speed and wind; a swallow
   lets a climber move at a courser's pace for a spell.
 
 ## The Warden — Tallyhorn
@@ -76,7 +82,7 @@ A grey courser welded to its dead rider and a great tally-horn, the master of
 the endless hunt — it charges the Rides in a storm of hounds, and its horn
 compels the living to run before it as quarry. It fights on the open road
 where its charge has room. Break it (and sound the true recall) and the whole
-hunt reins in and lies down; the Rides go quiet; the Ride Gate opens.
+hunt reins in and lies down; the Rides go quiet; the stair-lift opens.
 
 ## When it falls
 Bridlerest sounds the recall from the Ride-Head and the grey hunt comes home

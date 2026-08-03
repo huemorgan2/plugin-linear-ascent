@@ -12,7 +12,8 @@ his glory. Banners hang the length of it; the King's own likeness stares down a
 thousandfold; the whole floor is a work of propaganda in stone, built to awe the
 climber into worship before the throne is ever seen. But the masons who carved
 it hid the truth in the plinths — the real history, cut small where the King
-never looked.
+never looked. The stair-lift stands beyond the Triumphal Arch at the way's
+head, and the Waymarshal keeps the whole processional before it.
 
 ## "Flora" — the Making's growth
 - **Canopy:** triumphal arches and hanging King's-banners.
@@ -23,16 +24,17 @@ never looked.
   the banner-moss furls a banner to smother; the marble-lichen makes the
   paving heave underfoot in a false quake.
 
-## Three places
-- **The cave — the Crypt of False Kings.** The undercroft where Vharuk's
-  invented ancestors are entombed to fake a royal line. *Seed: the masons'
-  true history is hidden among the false tombs — proof the King is no king,
-  a usurper of nothing.*
-- **The peak — the Triumphal Arch.** The great arch at the way's head, before
-  the Court; the avenue reads from it. *Seed: the fight ends here, beneath the
-  King's proudest lie.*
-- **The gate in the mountain — the Kingsway Gate.** The stair-lift is beyond
-  the Arch. *Seed: the Waymarshal keeps the processional.*
+## Places of interest
+- **The Crypt of False Kings.** The undercroft where Vharuk's invented ancestors
+  are entombed to fake a royal line. *Seed: the masons' true history is hidden
+  among the false tombs — proof the King is no king, a usurper of nothing.*
+- **The Triumphal Arch.** The great arch at the way's head, before the Court,
+  where the avenue makes its last, loudest boast of the King. *Seed: the fight
+  ends here, beneath the King's proudest lie.*
+- **The Masons' Lodge.** The scaffolded work-yard where the captive carvers
+  still cut the endless reliefs — and where they hide the truth in the plinth-
+  bases. *Seed: read the smuggled record here and learn which colossi are hollow
+  and safe to bring down.*
 
 ## The people — who you are freeing
 Wayside masons — captive stonecutters made to carve the King's glory in
@@ -61,17 +63,20 @@ and the iconoclast's knack of bringing a colossus down.
    carvings to re-enact the King's victories on the climber. *Broken, the
    carving stills and drains back into the marble.*
 
-## Three finds  *(quest seeds)*
-- **Topple — spell.** Brings down statues, monuments, and stone-constructs at
-  a word; the masons' iconoclast art. *Seed: learn it to throw down the
-  Kingsway's idols — and, at the summit, whatever the King has raised of
+## Finds  *(quest seeds)*
+- **Topple — spell.** Brings down statues, monuments, and stone-constructs at a
+  word · the masons' iconoclast art, kept by Cord · *Seed: learn it to throw
+  down the Kingsway's idols and, at the summit, whatever the King has raised of
   himself.*
-- **Monument-marble — material.** The Kingsway's white stone and triumph-
-  bronze, re-cut into the rising's own honest monuments and heavy shields.
-  *Seed: quarry the toppled colossi.*
-- **Clear-sight tonic — potion.** A mason's brew that strips awe, propaganda-
-  glamour, and false-reverence from the mind and lets a climber see a tyrant
-  plain.
+- **Monument-marble — salvage.** The Kingsway's white stone and triumph-bronze
+  · quarried from the toppled colossi · *Seed: re-cut it into the rising's own
+  honest monuments and heavy shields.*
+- **The masons' true history — lore.** The real record of the Theft, cut small
+  in the plinths where the King never stooped to read · *Seed: read it aloud to
+  strip the King's false divinity and prove him a usurper of nothing.*
+- **Clear-sight tonic — a brew.** A mason's tincture that strips awe,
+  propaganda-glamour, and false-reverence from the mind · *Seed: a dose lets a
+  climber see a tyrant plain and walk the way unawed.*
 
 ## The Warden — Waymarshal
 The greatest statue-knight — a colossal marble Vharuk risen from the head of
@@ -79,7 +84,7 @@ the way, laurel-crowned and sword-raised, the King's own idealized image set to
 guard the approach to the true King. A construct of the Making, it fights with
 a god's arrogance and a mountain's weight. Its end is an *eviction* and an
 unmasking: Topple it and break it, and the marble falls to rubble — the false
-god shattered on the road to the real, mortal one. The Kingsway Gate opens
+god shattered on the road to the real, mortal one. The stair-lift opens
 beyond the Arch.
 
 ## When it falls

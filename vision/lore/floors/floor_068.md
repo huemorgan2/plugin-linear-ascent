@@ -11,7 +11,9 @@ wrapped its treasures for keeping: seed-stores, relics, records, all cocooned
 white and shelved in silence. Unlike the churning Broodwarrens far below,
 these vaults are hushed and clean, aisle on aisle of neat white bundles under
 a soft spun ceiling. The fever has turned the keeping cruel: the vault-spiders
-now wrap the living for "storage," and the shelves have begun to stir.
+now wrap the living for "storage," and the shelves have begun to stir. The
+stair-lift stands at the vaults' far end, wound shut behind a wall of neat
+white bundles; Spoolhide re-spools it endlessly before it.
 
 ## Flora
 - **Trees / canopy:** none — spun-silk vaulting and shelved bundles.
@@ -21,16 +23,19 @@ now wrap the living for "storage," and the shelves have begun to stir.
   the keeping-fungus lures with a scent of the preserved; the vault-lichen
   muffles all sound to hide a wrapping.
 
-## Three places
-- **The cave — the Deep Spool.** The master silk-store at the vaults' heart,
-  where the finest thread is reeled and kept. *Seed: the Deep's greatest
-  preserved treasures — and its wrapped living — are shelved deepest here.*
-- **The peak — the Reel-Tower.** The tall spooling-tower where the thread is
-  drawn and wound; the whole vault reads from it. *Seed: master the reel and
-  every strand of silk on the floor answers your hand.*
-- **The gate in the mountain — the Spool Gate.** The stair-lift is wound
-  shut behind a wall of neat white bundles. *Seed: Spoolhide re-spools it
-  endlessly.*
+## Places of interest
+- **The Deep Spool.** The master silk-store at the vaults' heart, where the
+  finest thread is reeled and the oldest bundles are shelved deepest. *Seed:
+  the Deep's greatest preserved treasures — and its longest-wrapped living —
+  lie shelved here, whichever the fever left.*
+- **The Reel-Tower.** The tall spooling-tower where the vaults' thread is
+  drawn and wound, its great reels still turning on captured power. *Seed:
+  master the reel and every strand of silk on the floor answers your hand — to
+  bind the Warden or free the wrapped.*
+- **The Ledger-Aisle.** The records-vault where every bundle the Deep ever
+  stored was catalogued on wound-silk ledgers, aisle on aisle of the under-
+  realm's memory. *Seed: read the ledgers and you learn which bundle holds
+  treasure, which holds a relic, and which holds someone still breathing.*
 
 ## The people
 Vault-crews — Deep-folk of every race who keep the silk-stores: spoolers,
@@ -62,23 +67,26 @@ still breathing.
    aisles wrapping the living into neat bundles beside it. *Broken, the
    cocoon falls empty and drains down.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Spindle — spell.** Spins loose silk into rope, net, or binding at a word,
   and mends a fraying line; the spoolers' art. *Seed: learn it to unwind the
-  Spool Gate and to spin the host's nets and lines above.*
+  stair-lift and to spin the host's nets and lines above.*
 - **Spun-adamant thread — material.** The vaults' finest keeping-thread, drawn
   through aether to a strength past any wire — the single strongest binding in
   the tower. *Seed: reel it from the Deep Spool.*
-- **Preserving-wrap salve — potion.** A preserver's silk-based balm; dresses a
+- **Preserving-wrap salve — salve.** A preserver's silk-based balm; dresses a
   wound so it cannot turn and keeps a climber's strength for days. *Seed:
   compounded from the keeping-fungus.*
+- **The vault-index — knowledge.** Wend's reading of the Ledger-Aisle: which
+  white bundle holds treasure and which holds someone still alive. *Seed: it
+  tells the crews which cocoons to cut free first, before the wrapping sets.*
 
 ## The Warden — Spoolhide
 A vault-keeper spider grown vast, welded into the master reel so it spins
 binding faster than any blade can cut — it fights by wrapping and shelving,
 immobilizing climbers in neat cocoons and re-spooling anything cut free. Break
 it and the reel stops; the bundles fall still; the wrapped come free and the
-Spool Gate unwinds.
+stair-lift unwinds.
 
 ## When it falls
 The Deep Spool is opened and Spoolgate's crews cut free a vault's worth of the

@@ -12,7 +12,8 @@ walk the galleries is to be surrounded by a thousand borrowed faces, some
 familiar, all wrong, mouthing in the glass. Quicksilver runs in the gutters;
 sconce-imps trim the mirror-lamps; the reflections whisper and swap. It is the
 King's vanity and cruelty made a maze — a place that steals not your life but
-your *self.*
+your *self.* The stair-lift stands behind a wall of silvered mirrors at the
+galleries' end, and Backglass holds the mirror-threshold before it.
 
 ## "Flora" — the Making's growth
 - **Canopy:** none — mirror-frames and quicksilver channels.
@@ -22,15 +23,19 @@ your *self.*
   lure; the silver-lichen lets a reflection reach out of the glass; the
   quicksilver pools mirror and steal a passing face.
 
-## Three places
-- **The cave — the Silvering Vault.** The undercroft where the mirrors are
-  silvered and the stolen faces stored. *Seed: the taken faces — including
-  those of fallen companions — can be reclaimed and restored from here.*
-- **The peak — the Grand Gallery.** The greatest mirror-hall, where the King's
-  own image is kept; the galleries read from it. *Seed: shatter the master
-  mirror and every stolen face returns to its owner.*
-- **The gate in the mountain — the Mirror Gate.** The stair-lift is set behind
-  a wall of tall mirrors. *Seed: Backglass holds the Grand Gallery.*
+## Places of interest
+- **The Silvering Vault.** The undercroft workshop where faces are peeled from
+  the taken, silvered into glass, and shelved — the stored likenesses of the
+  living and the dead alike. *Seed: reclaim taken faces here, including those of
+  fallen companions, and restore them to their owners.*
+- **The Grand Gallery.** The single greatest mirror-hall, where the King's own
+  image hangs and every lesser glass takes its cue; the whole Making of faces
+  reads from it. *Seed: shatter the master mirror and every stolen face flies
+  home at once.*
+- **The Veiled Gallery.** A side-hall of draped and turned-out mirrors — the one
+  place the borrowed-face things cannot reach, where the face-robbed hide from
+  their own reflections. *Seed: hold it as a refuge and the captives have a safe
+  room to be woken in.*
 
 ## The people — who you are freeing
 Sheenrest captives — the face-robbed, held in the galleries as blank-featured
@@ -62,15 +67,18 @@ stolen faces to the blank one mirror at a time.
    climber by name in a friend's stolen voice. *Broken, the faces fall away
    and it drains into the quicksilver.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Unmask — spell.** Strips a stolen face or false form and reveals the true
-  shape beneath; the captives' reclaiming-art. *Seed: learn it to see through
-  the galleries and, above, to unmask the King's court and the King himself.*
-- **Quicksilver — material.** The living mirror-silver of the galleries,
-  worked into scryers' glasses and blades that cut the unreal. *Seed: draw the
-  gutters.*
-- **Own-face draught — potion.** A captive's brew that anchors a climber's
-  own identity; no reflection can steal a face, name, or self while it holds.
+  shape beneath · the captives' reclaiming-art, taught by Illa in the galleries
+  · *Seed: learn it to see through the glass and, above, to unmask the King's
+  court and the King himself.*
+- **Quicksilver — salvage.** The living mirror-silver of the galleries, worked
+  into scryers' glasses and blades that cut the unreal · drawn from the gutter-
+  channels · *Seed: draw the gutters for the rising's scryers and blade-smiths.*
+- **A companion's face — a reclaimed relic.** The stored likeness of a fallen
+  friend, kept in the Silvering Vault · recovered and laid to rest, or a living
+  captive's own face returned · *Seed: give the dead their faces back and the
+  blank-featured their selves.*
 
 ## The Warden — Backglass
 An orphaned reflection grown vast — a figure made of a hundred stolen faces
@@ -79,7 +87,7 @@ mirror in the galleries. A construct of the Making, it fights by stealing a
 climber's face mid-blow and duelling with their own skill behind a dozen
 borrowed masks. Its end is an *eviction:* Unmask and break it (shatter the
 master mirror) and every stolen face returns to its owner; the borrowed self
-drains into the quicksilver. The Mirror Gate opens.
+drains into the quicksilver. The stair-lift opens.
 
 ## When it falls
 Illa's captives shatter the Grand Gallery's master mirror and a thousand stolen

@@ -10,7 +10,9 @@ funnels, and hanging egg-sacs like grey fruit, all faintly sticky and faintly
 warm. The under-town of Silkstead was built into these caverns before the
 brood outgrew its corners; now the silk has swallowed streets, doors, and
 the folk too slow to leave. Lamps show only a few feet of white before the
-web soaks the light. Everything here is wrapped, waiting, or watching.
+web soaks the light. Everything here is wrapped, waiting, or watching. The stair-lift stands
+cocooned in the deepest chamber of all, and Cradlesilk re-wraps it as
+fast as any blade can cut it free.
 
 ## Flora
 - **Trees / canopy:** none — silk in place of branches, spun over stone.
@@ -19,15 +21,17 @@ web soaks the light. Everything here is wrapped, waiting, or watching.
 - **Under the Yoke:** the web-moss spins itself now, closing passages
   overnight, and the sac-fungus fruits on anything left still too long.
 
-## Three places
-- **The cave — the Nursery.** The great brood-chamber where Cradlesilk's egg-
-  sacs hang thickest. *Seed: sealed behind the sacs is the old Silkstead
-  vault — and the townsfolk who barricaded into it.*
-- **The peak — the Silk Spire.** A stalagmite tower webbed to the roof, the
+## Places of interest
+- **The Nursery.** The great brood-chamber where Cradlesilk's egg-sacs hang
+  thickest, warm and faintly stirring. *Seed: burn the sacs before they
+  hatch and you buy the whole warren a quiet generation.*
+- **The Silk Spire.** A stalagmite tower webbed floor-to-roof as the
   warren's high anchor; from it the whole web reads like a map. *Seed:
-  cutting the spire's anchor-lines collapses the warren's silk gates at once.*
-- **The gate in the mountain — the Warren Gate.** The stair-lift is cocooned
-  in the deepest chamber. *Seed: Cradlesilk re-wraps it as fast as it's cut.*
+  cutting its anchor-lines collapses the warren's silk gates at once.*
+- **The Sealed Vault.** The under-town's old strongroom, its door held shut
+  against the silk by the last of Silkstead — a lamp still burning in the
+  one un-webbed room on the floor. *Seed: the survivors inside still know
+  the brood's old truce-signs, if a climber can reach them.*
 
 ## The people
 Under-townsfolk — delvers of every race who built Silkstead in the warm
@@ -58,22 +62,27 @@ and keeps a knife for silk and a lamp for the dark.
    draw rescuers onto the sticky sheets. *Broken, the cocoon falls empty and
    drains down.*
 
-## Three finds  *(quest seeds)*
-- **Sever — spell.** Cuts any binding — silk, rope, or grasping growth — at a
-  word; scratched on the Nursery's vault-door. *Seed: learn it to free the
-  wrapped townsfolk and reach the Warren Gate.*
-- **Silksteel thread — material.** Spun spider-silk drawn through aether into
-  a cable stronger than wire — rope, bowstring, and net for the whole host.
-  *Seed: harvest the Silk Spire's anchor-lines.*
-- **Antivenom — potion.** Brewed by the town's old truce-lore; neutralizes
-  venom and paralytic silk — indispensable for the brood-floors above.
+## Finds  *(quest seeds)*
+- **Sever — spell.** Cuts any binding — silk, rope, or grasping growth — at
+  a word · scratched on the Nursery's vault-door · *learn it to free the
+  wrapped townsfolk and reach the stair-lift.*
+- **Silksteel thread — material.** Spider-silk drawn through aether into a
+  cable stronger than wire — rope, bowstring, and net for the whole host ·
+  from the Silk Spire's anchor-lines · *harvest them before the collapse.*
+- **Antivenom — brew.** Neutralizes venom and paralytic silk, from the
+  town's old truce-lore · brewed in the Sealed Vault · *indispensable for
+  the brood-floors still above.*
+- **A cured brood-mother — companion.** One of the midwife-spiders, calmed
+  rather than killed, will spin silksteel on command and haul a load no
+  mule could · won by curing it gently in the Nursery · *the first of the
+  brood to keep the old truce again.*
 
 ## The Warden — Cradlesilk
 A brood-midwife spider grown monstrous, welded with spinnerets of aether-silk
 that lay wrapping-cable faster than any blade can cut — she fights by
 cocooning, immobilizing, and calling her broodlings, and she re-wraps the
-Warren Gate endlessly. Break her and the silk goes slack across the whole
-warren; the wrapped come free; the Warren Gate can finally be cut open.
+stair-lift endlessly. Break her and the silk goes slack across the whole
+warren; the wrapped come free; the stair-lift can finally be cut open.
 
 ## When it falls
 The Nursery is cleared and Silkstead's vaulted survivors come out into

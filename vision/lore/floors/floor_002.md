@@ -10,7 +10,9 @@ weeping the orange iron-water that gave the seam its name. Ore-carts sit
 loaded on rails that end in air. Bats hang thick in the roof of the entrance
 hall, and everything not iron is furred with rust. It is the first floor
 that goes *down* into the dark, dropped absurdly above a farm valley: a giant
-industry, stranded a single lift over a hedge.
+industry, stranded a single lift over a hedge. The stair-lift stands behind
+a giant ore-chute cut into the rock at the drift's end; Rustmaw holds the
+flooded main drift before it.
 
 ## Flora
 - **Trees / canopy:** none — this is stone. Only the timber pit-props, gone
@@ -20,17 +22,18 @@ industry, stranded a single lift over a hedge.
 - **Under the Yoke:** the ironcaps have swollen and weep a rust-sap that
   eats leather; the glow-moss pulses in time with the Warden's signal.
 
-## Three places
-- **The cave — the Weeping Adit.** The main drift, knee-deep in orange water,
-  its walls bleeding rust. *Seed: the deepest sump holds a pre-Theft ore
-  cache the miners never brought up.*
-- **The peak — the Headframe.** The winding-tower over the pit-shaft, iron
-  lattice climbing into the floodlight-haze. *Seed: its great wheel, if
-  turned again, could raise everything trapped below.*
-- **The gate in the mountain — the Ore Gate.** The stair-lift sits behind a
-  stone ore-chute carved straight into the rock, giant-sized, sigil-cut with
-  the forge-marks of Lampfall. *Seed: the chute is jammed with a rock-fall
-  Rustmaw guards.*
+## Places of interest
+- **The Headframe.** The iron winding-tower over the main pit-shaft, its
+  great wheel frozen mid-turn, lattice climbing into the floodlight-haze.
+  *Seed: set the wheel turning again and it could raise everything — and
+  everyone — still trapped in the galleries below.*
+- **The Weeping Sump.** The drift's deepest pool, filled neck-high with the
+  orange iron-water the seam still bleeds, its surface furred with rust.
+  *Seed: a pre-Theft ore cache the miners never hauled up lies sunk at its
+  bottom.*
+- **The Cart-End.** A string of loaded ore-carts halted on rails that run
+  straight off the cut edge of the floor and end in open air. *Seed: the
+  load-tally chalked on the lead cart names the rich seam Rustmaw dens in.*
 
 ## The people
 Miners and their families — giants of the deep-forge line, slab-shouldered
@@ -51,33 +54,40 @@ safety-lamp, who reads the mountain by the taste of its water.
 3. **Cave cricket** (N) — *was:* a harmless roof-cricket. *now:* fist-sized,
    leaping, it strips leather and lamp-wick. *Cured, they scatter into the
    cracks.*
-4. **Kobold digger** (P) — *was:* a first-taken conscript, set to dig. *now:*
-   collared, half-blind from the dark, swinging a mattock at anything with
-   a light. *A real death; the mercy is the broken collar.*
-5. **Red Orc outrider** (P) — *was:* a pressed veteran of Skarn's warcamp,
-   sent down to keep the diggers digging. *now:* scarred, brutal, and
-   underfed, fighting for a wage no one pays. *Pressed — killing costs
-   something; the few who desert are worth more than the kill.*
+4. **Kobold digger** (P) — *a conscript, not native to this stone.*
+   First-taken from the goblin-and-kobold warrens far below, marched up the
+   lifts and set to cut the giants' seams because the giants who cut them
+   are barred inside Lampfall. *now:* collared, half-blind from years in the
+   dark, swinging a mattock at anything that carries a light. *A real death;
+   the mercy is the broken collar, not the body.*
+5. **Red Orc outrider** (P) — *marched here too, and hates it.* A pressed
+   veteran of Skarn's warcamp on the stolen middle floors, sent down the
+   lifts to a mine-garrison to keep the diggers digging and stop them
+   bolting up. *now:* scarred, brutal, and underfed, driving a crew for a
+   wage no one pays. *Pressed — the kill costs something; the few who desert
+   into the deep are worth more than the corpse.*
 6. **The Seep** (W) — *was:* nothing — spilled aether pooled in the rust-
    water. *now:* a crawling orange stain that climbs walls and dissolves
    what it touches. *Broken, it drains back into the sump, evicted.*
 
-## Three finds  *(quest seeds)*
-- **Emberlight — cantrip (spell).** The miners' guide-flame that needs no
-  air; its ember-shard is lost in the Weeping Adit. *Seed: recover it to
+## Finds  *(quest seeds)*
+- **Emberlight — cantrip.** The miners' guide-flame that needs no air; its
+  ember-shard is lost somewhere in the flooded drift. *Seed: recover it to
   relight Lampfall and see in the deep floors to come.*
 - **Rustheart iron — ore.** Aether-bearing bog iron from the weeping seam;
-  forges into gear that will not shatter. *Seed: the richest node is behind
-  the jammed Ore Gate.*
-- **Black-water draught — potion.** Distilled from the adit water; a miner's
-  tonic against bad air and choke-damp.
+  forges into gear that will not shatter. *Seed: the richest node lies sunk
+  in the Weeping Sump.*
+- **Bergda's winding-gear — tool.** The crank-key and brake-shoe that work
+  the Headframe wheel, without which the great drum will not turn; still
+  clamped to the frozen shaft. *Seed: recover it to raise the crews sealed
+  in the galleries below.*
 
 ## The Warden — Rustmaw
 A rust hound of the pit, welded into a war-engine with an ore-crusher's jaw
 grafted over its head — it bites like a stamp-mill and drags the rails
 behind it. It hunts the flooded main drift, where the water hides its
-footing. Break it and the Ore Gate's rock-fall shifts, and the mine stops
-weeping for the first time in years.
+footing. Break it and the ore-chute's rock-fall shifts, the stair-lift
+opens, and the mine stops weeping for the first time in years.
 
 ## When it falls
 The pump-wheel of the Headframe turns; the lamps of Lampfall come up

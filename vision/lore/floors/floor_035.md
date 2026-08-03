@@ -11,7 +11,8 @@ the boot. Brimstone haze hangs over everything; the pools bubble; the whole
 country breathes and whistles. It was borderland good for nothing but the
 brimstone the Waste-folk gathered, and it kept them by cooking the careless.
 The vents blow harder and less predictably now, and something big dens where
-the ground runs hottest.
+the ground runs hottest. The stair-lift is set in a crusted bluff wreathed in
+permanent steam, and Ventmaw dens in the hot ground before it.
 
 ## Flora
 - **Trees / canopy:** none — vent-cones and sulfur-crust.
@@ -20,16 +21,17 @@ the ground runs hottest.
 - **Under the Yoke:** the brimstone-moss whistles a false all-clear before a
   blow; the sulfur-flower puffs choking spores; the steam-ferns lash.
 
-## Three places
-- **The cave — the Vent Undercroft.** The geothermal source-cavern beneath
-  the plain, where the steam is born. *Seed: the master vent-valve is here —
-  choke it and the whole plain's blows can be stilled, or loosed.*
-- **The peak — the Great Fumarole.** The tallest vent-cone, its plume the
-  landmark of the floor; the vent-clocks read from its rhythm. *Seed: tapped,
-  its steam could drive the freed floors' works below.*
-- **The gate in the mountain — the Steam Gate.** The stair-lift is set in a
-  crusted bluff wreathed in permanent steam. *Seed: Ventmaw dens in the hot
-  ground before it.*
+## Places of interest
+- **The Vent Undercroft.** The geothermal source-cavern beneath the plain,
+  where the steam is born and the master vent-valve stands. *Seed: hold the
+  valve and the whole plain's blows can be stilled, or loosed.*
+- **The Great Fumarole.** The tallest vent-cone, its plume the landmark of the
+  floor and the beat the vent-clocks read from. *Seed: tapped, its steam could
+  drive the freed floors' works below.*
+- **The Boil-Works.** The Waste-folk's brimstone-refinery on the cool crust —
+  sulfur-pans, condensers, and drying-floors where they cooked the raw
+  brimstone, now caked and cold. *Seed: fire the works again and Steamgate has
+  brimstone to trade and to temper iron for the rising.*
 
 ## The people
 Vent-tenders — Waste-folk who gather brimstone and read the vents' clocks by
@@ -52,30 +54,40 @@ tempo, and holds the master valve against the day it's worth choking.
    curls in a warm hollow and sleeps.*
 4. **Steam-bat** (N) — *was:* a haze-flying bat. *now:* riding the plumes,
    blinding with scald-wing gusts. *Cured, it wings off into the haze.*
-5. **Scalded ogre** (P) — *was:* a Waste-born conscript set to work the hot
-   ground. *now:* collared, steam-blistered, hurling boiling mud. *Pressed —
-   a real death; the deserters know the vent-clocks cold.*
+5. **Scalded ogre** (P) — *the floor's one true stranger.* No ogre denned on
+   this brimstone plain by nature; these were pressed out of the Waste's
+   border ogre-gangs — big, heat-hardy labor Vharuk's overseers marched in to
+   cap the wild vents and dig fresh ones, then collared and left when the
+   work turned killing. *now:* steam-blistered and half-blind, it hurls
+   boiling mud and works the vents against the living because that is the only
+   trade the collar ever taught it. *No ghost leaves it — a killed ogre is a
+   dead ogre; the mercy is breaking the collar, and the deserters who throw
+   it down know the vent-clocks colder than any tender.*
 6. **Sulfur-wight** (W) — *was:* a tender caught by an off-clock blow, aether
    in the brimstone. *now:* a yellow-crusted figure that walks the plain
    triggering vents under the living. *Broken, it crumbles to sulfur-dust and
    drains down.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Vent — spell.** Redirects or stills a jet of steam, gas, or pressure for
-  a moment; the tenders' survival-art, scored on the master valve. *Seed:
+  a moment · the tenders' survival-art, scored on the master valve · *Seed:
   learn it to cross the plain and choke the vents.*
-- **Brimstone-iron — metal.** Sulfur-tempered iron that shrugs off heat and
-  acid; forged into vent-proof armor. *Seed: work the crusted ore round the
-  Great Fumarole.*
-- **Brimstone tonic — potion.** A tender's draught against scald and choke-
-  gas; wards the lungs and skin from heat and fume for a spell.
+- **Brimstone-iron — salvage.** Sulfur-tempered iron that shrugs off heat and
+  acid · worked from the crusted ore round the Great Fumarole · *Seed: forge
+  vent-proof armor for the floors of fire above.*
+- **The vent-clocks — knowledge.** Sela's reckoning of every vent's whistle
+  and tempo, the one safe crossing of the plain · memorized, and scored on
+  the master valve · *Seed: win her trust and she times you across.*
+- **Brimstone tonic — brew.** Wards the lungs and skin from scald and choke-
+  gas for a spell · a tender's draught, cooked at the Boil-Works · *Seed:
+  bottle it for the burning floors ahead.*
 
 ## The Warden — Ventmaw
 A vent salamander grown huge, welded into a valve-and-cone hulk that carries
 its own fumarole — it dens in the hottest ground and fights by blowing the
 plain's vents in sequence to herd and scald, then striking through the steam.
-Break it and the off-clock blows stop; the plain's clocks run true; the Steam
-Gate's plume thins enough to pass.
+Break it and the off-clock blows stop; the plain's clocks run true; the
+stair-lift's plume thins enough to pass.
 
 ## When it falls
 Steamgate taps the Great Fumarole to drive the freed floors' works and stills

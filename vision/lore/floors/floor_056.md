@@ -11,7 +11,9 @@ wing and cry, hazed with drifting down, streaked with droppings, and stinking
 of fish and salt. Men farmed these cliffs for eggs, down, and guano, working
 the ledges on rope. The fever has stirred the rookery to a permanent riot, and
 the mobbing flocks will drive a climber off the wall as surely as any beast.
-It is a vertical floor climbed ledge by ledge through a storm of birds.
+It is a vertical floor climbed ledge by ledge through a storm of birds. The
+stair-lift stands in a guano-white scarp behind a curtain of nesting-ledges;
+Shrikewind roosts above it.
 
 ## Flora
 - **Trees / canopy:** none — nesting-ledges and guano-crusted stone.
@@ -21,16 +23,19 @@ It is a vertical floor climbed ledge by ledge through a storm of birds.
   slick as grease on the ledges; the samphire hides nesting-burrows that
   erupt underfoot.
 
-## Three places
-- **The cave — the Guano Delf.** The mined cave beneath the rookery where the
-  keepers cut guano and shelter from the mobs. *Seed: the rookery-lore — the
-  calls that calm the flocks — is chalked here.*
-- **The peak — the Matron's Stack.** The high sea-stack where the greatest
-  nesting-matrons roost; the whole cliff reads from it. *Seed: a true
-  rookery-call sounded from it settles every flock on the wall.*
-- **The gate in the mountain — the Rookery Gate.** The stair-lift is set in a
-  guano-white scarp behind a curtain of nesting-ledges. *Seed: Shrikewind
-  roosts above it.*
+## Places of interest
+- **The Matron's Stack.** A lone sea-stack off the cliff where the greatest
+  nesting-matrons roost above all the rest; the whole wall reads from its
+  crown. *Seed: a true rookery-call sounded from it settles every flock on the
+  cliff.*
+- **The Guano Delf.** The mined guano-galleries cut into the cliff-foot, where
+  the keepers dig the rich crop and shelter from the mobs; the rookery-lore —
+  the calls that calm the flocks — is chalked on the working-faces. *Seed:
+  read the calls here to quiet the wall.*
+- **The Hanging Rope-town.** A cat's-cradle of fixed ropes, baskets, and
+  plank-perches the down-gatherers slung across a whole cliff-face — a village
+  with no ground. *Seed: mend its lines and the keepers work the high ledges
+  again without the long fall.*
 
 ## The people
 Rookery-keepers — Men of the sea-cliffs: egg-climbers, down-gatherers, and
@@ -61,22 +66,25 @@ calming-calls, and climbs the highest ledges no one else will.
    ropes and stirring the mobs. *Broken, it drops off the wall and drains
    away.*
 
-## Three finds  *(quest seeds)*
-- **Beckon-flock — spell.** Calls birds to the caster's aid — to scout, to
-  mob an enemy, or to bear a message; the keepers' calming-call turned
-  outward. *Seed: learn it from the rookery-lore to settle the cliff and rally
-  the flocks above.*
+## Finds  *(quest seeds)*
+- **Beckon-flock — spell.** Calls birds to the caster's aid — to scout, to mob
+  an enemy, or to bear a message; the keepers' calming-call turned outward.
+  *Seed: learn it from the rookery-lore to settle the cliff and rally the
+  flocks above.*
 - **Quill-steel — material.** Feather-light spring-steel drawn to the fineness
-  of a quill; the material of flyers' blades and down-mail. *Seed: work the
-  Guano Delf's ore, tempered in guano-char.*
-- **Featherlung tonic — potion.** A cliff-climber's brew that lightens the
-  body and steadies the breath at height; eases every vertical floor.
+  of a quill and tempered in guano-char; the stuff of flyers' blades and
+  down-mail. *Seed: work the Guano Delf's ore.*
+- **Rookwall's calming-calls — knowledge.** The keepers' whistled language for
+  every flock's mood, kept by Cole. *Seed: learn it and the mobbing wall lets
+  you climb it in peace.*
+- **Featherlung tonic — potion.** A cliff-climber's brew that lightens the body
+  and steadies the breath at height; eases every vertical floor.
 
 ## The Warden — Shrikewind
 A rookery-matron harpy grown vast, welded with impaling spurs like a shrike's
 larder-thorns — it fights from the high ledges, stooping to snatch climbers
 and driving the whole cliff's mobs down on them in a screaming storm. Break it
-and the rookery calms; the mobs settle; the Rookery Gate opens on quiet
+and the rookery calms; the mobs settle; the stair-lift opens on quiet
 ledges.
 
 ## When it falls

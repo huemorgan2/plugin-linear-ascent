@@ -11,7 +11,8 @@ courtier, servant, or tribute. The Matriarch rules the Deep's spider-brood
 and the folk she has taken from a dozen floors, holding a mock-court of
 puppeted thralls that bow and dance on her threads. It is the last floor of
 the fourth tier, and the cruelest: not a slaughter but a *collection*, every
-victim kept alive to serve.
+victim kept alive to serve. The stair-lift stands cocooned behind the
+throne, and only Vyx's fall will free it — the way to the fifth tier.
 
 ## Flora
 - **Trees / canopy:** none — silk-galleries in place of trees, spun floor to
@@ -22,16 +23,17 @@ victim kept alive to serve.
   lichen carries Vyx's commands along the web; the husk-fungus lures with the
   scent of the taken.
 
-## Three places
-- **The cave — the Larder.** The cocoon-gallery where Vyx stores her wrapped
-  tribute alive. *Seed: cut the right cocoons and the freed captives turn the
-  whole court against her.*
-- **The peak — the Throne-Web.** Vyx's high web-throne, from which every
-  thread in the hall is spun and pulled. *Seed: the fight ends here; cut the
-  master-lines and the whole puppet-court goes free at once.*
-- **The gate in the mountain — the Broodthrone Gate.** The stair-lift is
-  cocooned behind the throne. *Seed: only Vyx's fall frees it — the gate to
-  the fifth tier.*
+## Places of interest
+- **The Larder.** The cocoon-gallery where Vyx stores her wrapped tribute
+  alive, hung like lanterns. *Seed: cut the right cocoons and the freed
+  captives turn the whole court against her.*
+- **The Throne-Web.** Vyx's high web-throne, from which every thread in the
+  hall is spun and pulled. *Seed: the fight ends here; cut the master-lines
+  and the whole puppet-court goes free at once.*
+- **The Anchor-Galleries.** The stone rim-tunnels where the web's great cables
+  are pinned to living rock — and where the last free captives hide, cutting
+  cocoons one thread at a time. *Seed: hold the anchors and you can bring the
+  whole hall down around the Matriarch.*
 
 ## The people
 Captives of Threadneedle — folk taken from a dozen floors and held alive in
@@ -55,25 +57,33 @@ and knows which lines are structural and which are leashes.
 4. **Pale consort** (P) — *was:* a captive noble kept and drained as Vyx's
    consort, thread-collared. *now:* puppeted to fight for her with borrowed
    grace. *Cut the collar-thread to free them; killing is the failure.*
-5. **Wrapped knight** (W) — *was:* a warrior long cocooned and dead, aether
-   pooled in the silk, puppeted on Vyx's lines. *now:* a cocoon-armored
-   corpse that fights as her champion. *Broken (its lines cut), the husk
-   falls empty and drains down.*
+5. **Wrapped knight** (W) — *a stranger to the Deep, carried down as a prize.*
+   No knight is born in a spider's cavern; this was a mailed warrior of the
+   Men's floors far above — taken in some upper campaign, wrapped whole, and
+   hauled down the web as the finest tribute in Vyx's court, long since dead
+   in the silk with aether pooled in the cocoon. *now:* a cocoon-armored corpse
+   puppeted on her lines as her champion, still fighting with a soldier's
+   drilled skill it no longer owns. *Broken — its lines cut — the husk falls
+   empty and drains down; there is no man left in it to free, only the strings
+   to sever.*
 6. **Tribute husk** (W) — *was:* a captive drained to death, aether left in
    the shell. *now:* a hollow silk-figure that walks to wrap the living for
    the larder. *Broken, the husk collapses and drains into the web.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Unstring — spell.** Cuts the controlling threads off a puppeted soul,
-  freeing it whole; the thread-cutters' art, and the mirror of floor 20's
-  Break-collar. *Seed: learn it to free Vyx's court mid-fight — and, above,
-  to cut every string the tower pulls.*
+  freeing it whole · the thread-cutters' art, mirror of floor 20's Break-
+  collar · *Seed: learn it to free Vyx's court mid-fight and, above, to cut
+  every string the tower pulls.*
 - **Websteel — material.** Vyx's throne-silk drawn into a thread stronger than
-  any cable, the finest bowstring and binding in the tower. *Seed: harvest
-  the master anchor-lines.*
-- **Queen's antivenin — potion.** Brewed from Vyx's own venom-glands; cures
-  any paralysis or poison in the tower — the master antidote. *Seed: taken
-  from the fallen Matriarch.*
+  any cable, the finest bowstring and binding in the tower · harvested from
+  the master anchor-lines · *Seed: string the host's bows and bind its gear.*
+- **Queen's antivenin — brew.** Cures any paralysis or poison in the tower,
+  the master antidote · taken from the fallen Matriarch's venom-glands ·
+  *Seed: carry it against every venom on the floors above.*
+- **The freed court — companions.** A dozen floors' captives cut loose, each
+  bringing their own home floor's craft · woken from the Larder's cocoons ·
+  *Seed: the widest band of allies the climb has yet won in one stroke.*
 
 ## The Warden — Matriarch Vyx
 A spider-matriarch grown vast and cruel, welded with aether-spinnerets that
@@ -81,8 +91,8 @@ lay control-threads onto every captive in her hall — she fights by puppeting
 her own court against the climber, wrapping to *keep* rather than kill, and
 re-leashing anything freed. She is a queen the tower let flourish, so her end
 is an *eviction:* cut her master-lines on the Throne-Web and the borrowed
-power is driven out, the whole puppet-court drops free, and the Broodthrone
-Gate opens on the fifth tier.
+power is driven out, the whole puppet-court drops free, and the stair-lift
+opens on the fifth tier.
 
 ## When it falls
 The cocoons open and Threadneedle's captives — a dozen floors' worth — walk

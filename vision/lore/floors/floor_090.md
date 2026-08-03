@@ -14,7 +14,9 @@ muster-drums that never stop beating men into soldiers. Banners of the King
 wall the yards; the drums drive the tempo of the whole Made; slave clerks tally
 the endless conscript-rolls. It is the ninth tier's climax and the last floor
 before the throne-tiers — the gate through which the tower's whole strength has
-always poured.
+always poured. Beyond the forming-yards stands the great muster-gate itself,
+the stair-lift set in its arch — the last gate below the throne-tiers, which
+only Malgrim's fall will open.
 
 ## "Flora" — the Making's growth
 - **Canopy:** the gatehouse's iron vault and the King's mustering-banners.
@@ -24,17 +26,16 @@ always poured.
   on their own; the muster-moss deadens a deserter's footfall to betray it;
   the roll-fungus re-inks a struck name back onto the conscript-rolls.
 
-## Three places
-- **The cave — the Muster-Rolls Vault.** The record-crypt where every
-  conscript in the tower is tallied. *Seed: strike the rolls here and the
-  Made cannot lawfully re-muster its freed — the paperwork of tyranny
-  undone.*
-- **The peak — the Drum-Throne.** Malgrim's high drum-dais over the yards;
-  the muster reads from it. *Seed: the fight ends here; silence the drum and
-  the forming legions falter.*
-- **The gate in the mountain — the Herald's Gate.** The great muster-gate
-  itself, the stair-lift beyond it. *Seed: only Malgrim's fall opens it — the
-  gate to the throne-tiers, 91 through 100.*
+## Places of interest
+- **The Muster-Rolls Vault.** The record-crypt where every conscript in the
+  tower is tallied · *Seed: strike the rolls here and the Made cannot lawfully
+  re-muster its freed — the paperwork of tyranny undone.*
+- **The Drum-Throne.** Malgrim's high drum-dais over the yards, whose beat
+  drives the tempo of the whole Made · *Seed: the fight ends here; silence the
+  drum and the forming legions falter.*
+- **The Forming-Yards.** The iron mustering-squares where ranked legions are
+  assembled and welded into order before they march out · *Seed: empty the
+  yards mid-muster and a legion the King is counting on never forms.*
 
 ## The people — who you are freeing
 Muster-captives — the re-enslaved processed through the yards to be welded and
@@ -64,16 +65,16 @@ them.
    to marshal the yards. *now:* a hard armored figure ordering the legions.
    *Pressed — the last winnable officer before the Herald himself.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Disband — spell.** Dismisses and scatters a mustered force at a word — the
   capstone of the Made's freeing-arts, gathering Break-collar, Unseam,
-  Countermand, and Recant into one command that empties an army. *Seed: learn
-  it to disband the King's host at the throne.*
-- **Muster-steel — material.** The gate's own ordnance-steel and herald-gold,
-  reforged into the rising's command-gear and standards. *Seed: the Drum-
-  Throne's hoard.*
-- **Herald's-bane — potion.** A muster-captive's brew that deafens the drum's
-  compulsion and steadies a soul against the call to fall in.
+  Countermand, and Recant into one command · won at the Drum-Throne · *Seed:
+  disband the King's host at the throne.*
+- **Muster-steel — salvage.** The gate's ordnance-steel and herald-gold · from
+  the Drum-Throne's hoard · *Seed: command-gear and standards for the rising.*
+- **The struck conscript-rolls — knowledge.** The Muster-Rolls Vault's
+  tallies, struck through, proof the Made cannot lawfully re-muster the freed ·
+  *Seed: carry them up so no freed floor is ever re-called.*
 
 ## The Warden — Malgrim, Herald of the King
 Once a man, freed on some floor far below and then re-taken, welded, and
@@ -85,7 +86,8 @@ free him** — Break-collar, Recant, every mercy learned below — and Malgrim
 *refuses,* clutching his chains as glory. He is the first captive who cannot be
 saved, because he no longer wishes it; and so, grieving, the climb must put him
 down as a *true enemy* — the King's willing voice silenced at last. The drum
-stops; the muster falters; the Herald's Gate swings open on the throne-tiers.
+stops; the muster falters; the great muster-gate swings open on the throne-
+tiers.
 
 ## When it falls
 Malgrim falls unfree, and it is the hardest victory of the climb — proof that

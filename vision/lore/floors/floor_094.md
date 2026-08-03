@@ -12,7 +12,8 @@ the vanishing point; summons-bells ring numbers that are recalled the instant
 they're called; slave-clerks re-issue tokens no one can ever redeem. It is
 bondage without a chain — the King's cruelty refined to pure, patient tedium, a
 purgatory of the almost-admitted that keeps the innermost captives docile at
-his very door.
+his very door. The stair-lift waits beyond the last, never-opened door at the
+head of the queue, and Anteroom keeps that door shut on everyone forever.
 
 ## "Flora" — the Making's growth
 - **Canopy:** none — panelled ceilings and dead clocks.
@@ -22,16 +23,17 @@ his very door.
   restart the wait; the queue-lichen ropes a wanderer back into line; the
   bench-moss roots a sitter to the seat.
 
-## Three places
-- **The cave — the Filing Crypt.** The undercroft where every petition ever
-  made is filed, unread, forever. *Seed: the true grievances of the taken —
-  and the King's own guilt — are recorded here, evidence for the reckoning.*
-- **The peak — the Chamberlain's Desk.** The front of the endless queue, the
-  last desk before the throne-approach. *Seed: the fight ends here; break the
-  desk and the queues dissolve.*
-- **The gate in the mountain — the Antechamber Gate.** The stair-lift is
-  beyond the last unopenable door. *Seed: Anteroom keeps the door shut on
-  everyone, forever.*
+## Places of interest
+- **The Filing Crypt.** The undercroft where every petition ever made is filed,
+  unread, forever, in stacks that reach the dark. *Seed: the true grievances of
+  the taken — and the King's own guilt — are recorded here, evidence for the
+  reckoning.*
+- **The Chamberlain's Desk.** The front of the endless queue, the last desk
+  before the throne-approach, where the token is checked and always found
+  wanting. *Seed: the fight ends here; break the desk and the queues dissolve.*
+- **The Bellcote.** The high loft of summons-bells that ring the recalled
+  numbers day and night, driving the wait. *Seed: still the bells and the queue
+  is freed from the call that keeps it standing.*
 
 ## The people — who you are freeing
 Doorward captives — the eternally-waiting, the innermost taken who hold ancient
@@ -62,16 +64,17 @@ and the hard knack of standing up and walking out of the line.
    number no one can claim. *Broken, the summons falls silent and it drains
    into the benches.*
 
-## Three finds  *(quest seeds)*
-- **Precedence — spell.** Grants the caster right-of-way past queues, locks,
-  waiting-wards, and any compulsion to stop and wait; the captives' door-art.
-  *Seed: learn it to walk the antechambers straight through — and to force the
+## Finds  *(quest seeds)*
+- **Precedence — spell.** Grants right-of-way past queues, locks, waiting-wards,
+  and any compulsion to stop and wait · the captives' door-art, held by Nib ·
+  *Seed: learn it to walk the antechambers straight through and to force the
   King's last barred doors above.*
-- **Token-brass — material.** The summons-sigils' brass and the desks' seal-
-  gold, reforged into keys and skeleton-seals that open the King's locks.
-  *Seed: melt the tokens.*
-- **Patience's-end draught — potion.** A captive's brew that breaks any
-  waiting- or standing-compulsion at once and frees the drinker to act.
+- **Token-brass — salvage.** The summons-sigils' brass and the desks' seal-gold
+  · melted down from the recalled tokens · *Seed: reforge it into keys and
+  skeleton-seals that open the King's locks.*
+- **The unread petitions — evidence.** A century of the taken's own grievances,
+  filed and never answered, in the Filing Crypt · *Seed: carry them up as the
+  case against the King, so the reckoning speaks in the victims' words.*
 
 ## The Warden — Anteroom
 The waiting itself given a body — a vast grey chamberlain-construct accreted
@@ -80,7 +83,7 @@ at the Chamberlain's Desk to keep everyone forever *almost* admitted. A
 construct of the Making, it fights by rooting climbers in place, recalling
 their "number," and drowning them in queue. Its end is an *eviction:*
 Precedence past it and break the Desk, and the accreted wait drains away, the
-queues dissolve, and every held token voids. The Antechamber Gate opens.
+queues dissolve, and every held token voids. The stair-lift opens.
 
 ## When it falls
 Nib's captives throw down their tokens and simply *walk out of the line* — the

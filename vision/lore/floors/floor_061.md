@@ -11,7 +11,9 @@ floating isles fast to the mountain. The isles broke loose the night of the
 Theft and drifted away; the chains remain, humming in the wind, swaying
 between their windlass-houses over a fall with no bottom. Chain-keepers walk
 the links like roads. It is a floor crossed hand-over-link across the sky,
-with nothing below but cloud and the long drop.
+with nothing below but cloud and the long drop. The stair-lift stands in an
+anchor-tower where a great chain meets rock; Shacklewise holds the windlass
+before it.
 
 ## Flora
 - **Trees / canopy:** none — iron links and anchor-stone.
@@ -21,16 +23,18 @@ with nothing below but cloud and the long drop.
   greases the links slick; the wind-lichen muffles the warning-hum of a
   failing chain.
 
-## Three places
-- **The cave — the Windlass House.** The great capstan-chamber where a chain
-  is wound and moored, anchored into the mountain. *Seed: the master mooring-
-  brake is here — set it and every chain on the floor holds fast.*
-- **The peak — the Crown Link.** The highest point of the greatest chain,
-  arcing above the cloud; the whole span reads from it. *Seed: from it the
-  drifted isles can be sighted — and one, still near, could be hauled back.*
-- **The gate in the mountain — the Anchor Gate.** The stair-lift is set in an
-  anchor-tower where a chain meets rock. *Seed: Shacklewise holds the
-  windlass before it.*
+## Places of interest
+- **The Windlass House.** The great capstan-hall where a chain is wound and
+  moored into the mountain; the master mooring-brake stands here. *Seed: set
+  the brake and every chain on the floor holds fast.*
+- **The Crown Link.** The highest point of the greatest chain, arcing above
+  the cloud; the whole span reads from it, and from it the drifted isles can
+  be sighted. *Seed: one isle, still near, could be hauled back to its
+  mooring.*
+- **The Drifted Isle.** The one floating isle that never drifted clear —
+  snagged on a slack chain just off the span, a whole hanging garden gone wild
+  and tilting in the wind. *Seed: haul it in on the chains and the floor has
+  solid ground in the sky again.*
 
 ## The people
 Chain-keepers — Men of the sky-moorings: link-walkers, windlass-crews, and
@@ -62,22 +66,25 @@ walks the links sounding each by its hum, reading a bad shackle by its silence.
    walks the chains cutting lines and greasing grips to spill the living.
    *Broken, it drops into the cloud and drains away.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Moor — spell.** Anchors a body or object immovable against wind, fall, or
-  force for a spell; the keepers' art, cut on the master brake. *Seed: learn
-  it to walk the chains and to hold fast on every wind-torn floor above.*
+  force for a spell; the keepers' art, cut on the master brake. *Seed: learn it
+  to walk the chains and to hold fast on every wind-torn floor above.*
 - **Anchor-chain steel — material.** The vast tempered link-iron of the
   moorings, drawn into unbreakable cable, grapples, and the host's heaviest
   chain-gear. *Seed: strip a spare chain.*
-- **Iron-grip draught — potion.** A link-walker's brew that locks the grip
-  like a vice; a climber cannot be shaken loose from any hold for a spell.
+- **The master mooring-brake — key.** The great windlass-brake in the Windlass
+  House that holds every chain on the floor at once. *Seed: set it and the
+  whole span goes still and safe underfoot.*
+- **Iron-grip draught — potion.** A link-walker's brew that locks the grip like
+  a vice; a climber cannot be shaken loose from any hold for a spell.
 
 ## The Warden — Shacklewise
 A link-coiled drake welded into the great windlass, wearing a mooring-chain as
 a lashing tail — it fights by paying out and snapping the chains to sway the
 spans, shaking climbers off the links, and hurling loosed shackles. Break it
-and the chains hold fast; the master brake answers; the Anchor Gate's tower is
-reached.
+and the chains hold fast; the master brake answers; the stair-lift's
+anchor-tower is reached.
 
 ## When it falls
 Chainrest sets the master brake and hauls the one near isle back to its

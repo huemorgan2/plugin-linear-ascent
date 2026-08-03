@@ -12,7 +12,8 @@ shroud-lines, ratlines, and rotting sail. The "ground" is the tangle of fallen
 rigging; the "canopy" is the crosstrees far above. Mast-folk live aloft in the
 crowsnests and cross-trees, moving through the forest by the shroud-lines
 without ever touching the wreck-choked floor. It is a floor climbed like a
-forest of rope.
+forest of rope. The stair-lift is set in the rock the masts are sunk into,
+behind a wall of tangled shroud-line; Mastwrack rigs the way before it.
 
 ## Flora
 - **Trees / canopy:** the masts and their rigging themselves — spar, shroud,
@@ -22,16 +23,20 @@ forest of rope.
 - **Under the Yoke:** the rope-vine grips and hauls like living rigging; the
   sail-mould drops a smothering spore; the shroud-moss rots the handholds.
 
-## Three places
-- **The cave — the Bilge.** The great flooded hull-base at the mast-roots
-  where the wrecks meet the rock. *Seed: the flagship's charts and its lift-
-  cell lie in the drowned bilge, deep in the tangle.*
-- **The peak — the Main-Crosstrees.** The highest crosstree-and-crowsnest of
-  the tallest mast; the whole forest reads from it. *Seed: re-rig its signal
-  and the scattered mast-folk gather to it.*
-- **The gate in the mountain — the Mast Gate.** The stair-lift is set in the
-  rock the masts are sunk into, behind a wall of shroud-line. *Seed:
-  Mastwrack rigs the way before it.*
+## Places of interest
+- **The Bilge.** The great flooded hull-base at the mast-roots where the
+  sunken decks meet the rock, black water standing over a drowned hold.
+  *Seed: the flagship's charts and its lift-cell lie down in the drowned
+  bilge, deep in the tangle.*
+- **The Flagship.** The fleet's dead flagship at the forest's heart, hull-deep
+  in the mountain but its decks and cabins still whole and walkable — a keep
+  of oak and iron in a forest of masts. *Seed: the admiral's cabin holds the
+  fleet's muster-roll and the standing to rally the scattered mast-folk to one
+  command.*
+- **The Signal-Top.** The highest crowsnest of the tallest mast, above the
+  whole shroud-canopy, where the fleet's lamps once signaled ship to ship.
+  *Seed: re-rig and light it and the mast-folk of the whole forest gather to
+  the old muster-signal.*
 
 ## The people
 Mast-folk — Men of the stranded fleet: topmen, rigging-wrights, and sail-
@@ -62,25 +67,26 @@ flagship's charts, and knows every safe line through the forest by feel.
    works the lines to snare and hang the living. *Broken, it falls into the
    Bilge and drains away.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Splice — spell.** Commands, cuts, or mends rope and rigging at a word —
   binds an enemy, throws a line, or repairs a fraying hold; the topmen's art.
   *Seed: learn it to cross the Mast Forest and rig the sky-floors above.*
-- **Shroud-cable — material.** The tarred spun-steel rigging of the fleet, the
+- **Shroud-cable — salvage.** The tarred spun-steel rigging of the fleet, the
   finest climbing-line and lashing in the tower. *Seed: strip a sound mast.*
-- **Topman's draught — potion.** A rigger's brew that kills the fear of height
-  and steadies the grip aloft; a climber works the highest lines unshaken for
-  a spell.
+- **The flagship's charts — knowledge.** The dead fleet's sky-charts and
+  sailing-lore, the routes and lift-lore of a people who crossed the sky.
+  *Seed: raise them from the Bilge and the rising can read and sail the sky-
+  floors below the throne.*
 
 ## The Warden — Mastwrack
 A crowsnest drake welded into the tallest main-mast, wearing the whole ship's
 rigging as lashing tentacles — it fights by whipping the shroud-lines to
 snare and fling climbers and dropping spars down the mast-lanes. Break it and
-the rigging falls slack; the forest stills; the Mast Gate's shroud-wall parts.
+the rigging falls slack; the forest stills; the stair-lift's shroud-wall parts.
 
 ## When it falls
-Sparside re-rigs the Main-Crosstrees signal and raises the flagship's lift-
-cell from the Bilge; a mast of the dead forest flies again. The mast-folk
+Sparside re-rigs the Signal-Top and raises the flagship's lift-cell from the
+Bilge; a mast of the dead forest flies again. The mast-folk
 climb as the host's riggers and topmen, carrying **Splice** and shroud-cable —
 the folk who rig the army's lines, sails, and grapples for the last sky-floors
 below the throne.

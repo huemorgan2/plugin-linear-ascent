@@ -10,7 +10,9 @@ whole valley of hedged fields taken mid-season, the hay half-cut and left
 to grey. The hedgerows still stand in their old lines, fencing pasture no
 one will graze again, and the white bars overhead never set, so the grass
 grows pale and the shadows never move. It is the gentlest floor in the
-Ascent and the saddest: everything here was ordinary a lifetime ago.
+Ascent and the saddest: everything here was ordinary a lifetime ago. The
+stair-lift stands in a chalk bluff at the valley's foot, its arch carved
+with sheaves of wheat; Brackjaw holds the meadow before it.
 
 ## Flora
 - **Trees / canopy:** field oaks and the tall blackthorn of the hedgerows,
@@ -20,17 +22,21 @@ Ascent and the saddest: everything here was ordinary a lifetime ago.
 - **Under the Yoke:** the blackthorn has turned inward, growing spines the
   length of a finger, and the hedges knit shut overnight across old gaps.
 
-## Three places
-- **The cave — Badger's Undercut.** A collapsed sunken lane where the bank
-  fell in; farm-children once hid here. Something denned in the dark since.
-  *Seed: the den holds the steading's lost hearth-shards.*
-- **The peak — Beacon Rise.** The one hill, crowned by a dead signal-oak
-  the farmers used to light for the fair. *Seed: relight it and the whole
-  valley can be signalled at once — a rallying point for the rising.*
-- **The gate in the mountain — the Third-Hedge Gate.** The stair-lift is
-  set into a chalk bluff at the valley's end, its arch carved with sheaves
-  of wheat. Brackjaw holds the meadow before it. *Seed: the gap in the
-  third hedge is the only clear approach.*
+## Places of interest
+- **The Burnt Steading.** A farmstead that was alight the night the Theft
+  cut the valley loose — still standing, black-timbered and roofless, the
+  fire long dead but the soot never rained off. *Seed: the family that lived
+  here left a hearth-shard buried under the threshold-stone, the steading's
+  lost lamplight, waiting to be relit.*
+- **Fairstone Green.** The old fair-green at the valley's heart, its weathered
+  market cross still standing over a ring of empty pitches where the whole
+  valley used to gather each autumn. *Seed: raise the fair here again and you
+  give the scattered field-folk their one rallying-place back.*
+- **Mother Ditch.** The great drainage dyke that drowned when the pumps
+  stopped — a reed-choked slow water running the length of the fields, its
+  drove-bridge half-sunk. Something big dens in the sluice-arch. *Seed: the
+  ditch is the one road the maddened beasts won't cross, a safe way clean
+  across the floor for those who learn its fords.*
 
 ## The people
 Farmers, drovers, and hedge-layers — plain field-folk who measure the world
@@ -57,31 +63,43 @@ who come out.
    dogs that once kept the wolves out. *now:* feral and fevered, hunting in
    a silent ring. *Cured, one of them will still turn its head at a whistle
    — the cruelest kindness on the floor.*
-5. **Goblin straggler** (P) — *was:* a first-taken conscript, left behind
-   when the war-band climbed. *now:* drags a notched longsword too heavy
-   for it by half, and sets its feet anyway. *No ghost leaves it; a killed
-   goblin is a dead goblin. Freeing it means breaking the collar, not the
-   body.*
+5. **Goblin straggler** (P) — *the floor's one true stranger.* Goblins have
+   no business in a farming valley; this one was marched down from the
+   goblin warrens far below — the first realm Vharuk ever took, the tower's
+   foundation — as part of a garrison sent to hold the low gate, then left
+   behind sick and footsore when the war-band climbed on without it. *now:*
+   it drags a notched longsword too heavy for it by half, guarding a door
+   nobody told it had already been abandoned, and sets its feet anyway. *No
+   ghost leaves it; a killed goblin is a dead goblin. Freeing it means
+   breaking the collar, not the body — and this one, cornered and paid by no
+   one, is the likeliest on the whole floor to throw the collar down.*
 6. **Hedge-wight** (W) — *was:* nothing living — spilled aether soaked into
    a rotten stile. *now:* a man-shaped snarl of blackthorn that walks the
    hedges at the floodlights' flicker. *Broken, it comes apart into dead
    wood and drains downward.*
 
-## Three finds  *(quest seeds)*
-- **Lamplight — cantrip (spell).** A hearth-ward the steading's wives once
-  taught their children; the shards that hold it are scattered in Badger's
-  Undercut. *Seed: recover the shards to relight Lamplit Steading.*
-- **Fencewire — salvage metal.** Aether-tempered hedge-wire, tough beyond
-  its gauge; a smith in Roothollow will take a coil for early gear.
-- **Hobb's cider-tonic — potion.** Pressed from windfall apples in the
-  corners of the fields; steadies the hand and the nerve for one hard fight.
+## Finds  *(quest seeds)*
+- **Lamplight — cantrip.** A hearth-ward the steading's wives once taught
+  their children; the shard that holds it is buried under the Burnt
+  Steading's threshold. *Seed: recover it to relight Lamplit Steading.*
+- **Fencewire — salvage.** Aether-tempered hedgerow wire, tough far beyond
+  its gauge and coiled along every field-boundary; a smith in Roothollow
+  will take a bundle for a climber's first real gear.
+- **Hobb's hedge-count — knowledge, not a thing.** The old farmer's tally of
+  every gap, ford, and blind bend in the valley — memorized, not written.
+  *Seed: win his trust and he'll walk you the safe lines the fevered beasts
+  can't cut off.*
+- **A turned sheepdog — a companion.** One of the last pack (below) can be
+  brought back rather than cured-and-gone: cornered gently, whistled to, it
+  remembers its name. *Seed: the first friend the climb can keep, and the
+  first proof that what the fever took can be won back whole.*
 
 ## The Warden — Brackjaw
 A grey wolf of the meadow, taken and welded into wolf-and-plate: servo-jaws
 of tower-iron over a living hunter's frame. It circles the stair-lift
 meadow once — always once — servos ticking, then lowers its head and
-charges in a straight line. Break it and the Third-Hedge Gate opens, and
-the floodlights over the Fencerows dim by a hair.
+charges in a straight line. Break it and the stair-lift in the chalk bluff
+opens, and the floodlights over the Fencerows dim by a hair.
 
 ## When it falls
 The doors of Lamplit Steading unbar; lamps get lit for a market instead of

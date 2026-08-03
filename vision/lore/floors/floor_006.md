@@ -11,7 +11,8 @@ years of roosts. Here the stolen surface finally gives out and the
 under-world begins — a vault of dripping stone, silk in the high corners,
 and a cold that has never known a season. Bring your own light or bring
 nothing. Lastlight is the last lamp before the deep, and its people named it
-as a warning.
+as a warning. The stair-lift is cut into the vault's deepest wall, its arch
+webbed shut with steel silk; Duskspin holds the dark before it.
 
 ## Flora
 - **Trees / canopy:** none. Stone teeth above, stone teeth below.
@@ -20,16 +21,17 @@ as a warning.
 - **Under the Yoke:** the threshold moss has turned lightless-hungry, and
   the silk in the corners grows faster than any spider could spin it.
 
-## Three places
-- **The cave — the Guano Vault.** The main cavern, floor soft and deep with
-  droppings, roof alive with roosts. *Seed: under the guano lies a pre-Theft
-  delver-cache, sealed when the light went.*
-- **The peak — the Chimney.** A natural shaft climbing toward a last grey
-  smear of borrowed daylight — the highest a climber can stand here. *Seed:
-  from its top the whole vault can be lit at once, if there were a flame big
-  enough.*
-- **The gate in the mountain — the Dark Gate.** The stair-lift is cut into
-  the deepest wall, its arch webbed shut. *Seed: Duskspin's silk seals it.*
+## Places of interest
+- **The Guano Vault.** The main cavern, floor soft and deep with the
+  droppings of a thousand years, roof alive with roosts. *Seed: under the
+  guano lies a pre-Theft delver-cache, sealed when the light went.*
+- **The Chimney.** A natural shaft climbing toward a last grey smear of
+  borrowed daylight — the highest a climber can stand here. *Seed: from its
+  top the whole vault could be lit at once, given a flame big enough.*
+- **The Rope-Reach.** An old delver span of knotted rope and plank crossing
+  a black chasm at the vault's edge, its far anchor already furred with the
+  spreading silk. *Seed: cross it to reach the sealed caches beyond — before
+  the silk finishes eating the ropes.*
 
 ## The people
 Delvers — of every race, born to the deep, who read stone by echo and never
@@ -61,21 +63,23 @@ will not step past the last lit stone until it is safe.
    voice to draw lamps close. *Broken, the silk falls empty and drains
    downward.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Echo-sight — spell.** Reads the shape of a dark room from a single
   clap; the delvers' oldest art, half-forgotten. *Seed: learn it from Sable
   to map the silk-choked floors above.*
-- **Threshold spar — ore.** A dark crystal that holds a charge of light,
-  mined only at the edge of the true dark. *Seed: it could feed the Chimney
-  beacon.*
-- **Deep-draught — potion.** A delver's tonic against the cold and the fear
-  of the lightless — steadies a climber in any dark.
+- **Threshold spar — material.** A dark crystal that holds a charge of
+  light, found only at the edge of the true dark. *Seed: it could feed a
+  beacon at the Chimney's top.*
+- **Sable's blind-map — knowledge.** The echo-reader's map of the whole
+  vault and the Deep roads beyond it, carried in her head and never written.
+  *Seed: win her trust and she'll walk the host through the lightless floors
+  no surface-folk can read.*
 
 ## The Warden — Duskspin
 A sentinel spider of the vault, welded huge with spinnerets of aether-wire
-that lay cable, not thread — it walls the Dark Gate behind steel silk and
+that lay cable, not thread — it walls the stair-lift behind steel silk and
 drops from the unseen roof. It fights by the dark it owns, cutting lamps
-first. Break it and the wire-silk parts, the Dark Gate clears, and the
+first. Break it and the wire-silk parts, the stair-lift clears, and the
 Chimney can be lit to give the vault its first light in an age.
 
 ## When it falls

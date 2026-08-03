@@ -12,7 +12,8 @@ lanes, launch-perches, and cut-lines of a people who lived by riding the wind.
 The updrafts howl; kites (empty now, or worse) still ride the columns; the
 crosswinds between passes will dash the unwary on the walls. It is a floor
 crossed on the wind itself, launching from perch to perch across the roaring
-gorges.
+gorges. The stair-lift is set in a gorge-wall at a sheltered landing-perch
+deep in the pass-country; Galecrest rides the column before it.
 
 ## Flora
 - **Trees / canopy:** wind-raked pass-pine clinging to the gorge-walls.
@@ -21,15 +22,19 @@ gorges.
 - **Under the Yoke:** the kite-lichen frays the lines mid-flight; the updraft-
   grass hides the perch-edge; the cliff-vetch grabs at a launching foot.
 
-## Three places
-- **The cave — the Lee Cave.** A windless shelter behind a gorge-spur, the
-  pilots' rigging-room. *Seed: the wind-lore — every updraft's strength and
-  timing — is charted here, and a master glider hangs ready.*
-- **The peak — the Duelist's Perch.** The highest launch, where the strongest
-  column boosts a flyer over the whole pass-country. *Seed: from it the safe
-  flight-lanes read clear across every gorge.*
-- **The gate in the mountain — the Updraft Gate.** The stair-lift is set in a
-  gorge-wall at a landing-perch. *Seed: Galecrest rides the column before it.*
+## Places of interest
+- **The Lee Roost.** A windless shelter behind a great gorge-spur, Kitegate's
+  rigging-hall, where every updraft's strength and timing is charted and the
+  master glider hangs ready on its cradle. *Seed: the wind-lore kept here is
+  the only safe way to read the columns before you trust one with your life.*
+- **The Spanlines.** A web of fixed kite-lines strung across the widest gorge,
+  where no column will lift a flyer clean over — the one crossing for those
+  who cannot fly, if the lines still hold. *Seed: re-rig the Spanlines and the
+  pass-country opens to those on foot, not just the winged.*
+- **The Wrecking-Floor.** The gorge-bottom far below the flight-lanes, where
+  every kite that ever fell has come to rest in a drift of broken spar and
+  shroud. *Seed: a champion's lost glider lies whole down there in the tangle,
+  worth more than any built new.*
 
 ## The people
 Kite-pilots — Men of the wind-passes: glider-flyers, line-riggers, and perch-
@@ -60,27 +65,29 @@ glider, and reads every updraft by the note it makes in the gorge.
    perches cutting flight-lines and fraying gliders. *Broken, it's taken by
    the crosswind and drains away.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Gale — spell.** Summons and steers wind — to lift a glider, blunt a fall,
-  or blast an enemy off a perch; the pilots' art, charted in the Lee Cave.
+  or blast an enemy off a perch; the pilots' art, charted in the Lee Roost.
   *Seed: learn it to ride the Updrafts and command the wind on the sky-floors
   above.*
 - **Glider-silk — material.** The taut ripstop wing-silk and spar-cane of the
   kites, the material of gliders, wing-cloaks, and sails for the whole climb.
-  *Seed: the Lee Cave's rigging-stores.*
-- **Aeronaut's draught — potion.** A pilot's brew against wind-sickness and
-  the spins; steadies a flyer through any turbulence for a spell.
+  *Seed: the Lee Roost's rigging-stores.*
+- **Cole's wind-lore — knowledge.** The keeper's charted timing of every
+  column, updraft, and killing crosswind in the pass-country, carried in his
+  head. *Seed: win him over and he reads you a safe flight-line across any
+  gorge on the floor.*
 
 ## The Warden — Galecrest
 An updraft-duelist harpy grown vast, welded with wind-cutting wing-vanes that
 let it own the columns — it fights entirely in the air, riding the updrafts
 out of reach, cutting kite-lines, and calling the column-drakes to strafe.
-Break it and the passes' winds steady; the harpies duel no more; the Updraft
-Gate's landing-perch is reached.
+Break it and the passes' winds steady; the harpies duel no more; the stair-lift's
+landing-perch is reached.
 
 ## When it falls
-Kitegate charts the safe lanes from the Duelist's Perch and the pass-country
-opens to clean flight. The kite-pilots climb as the host's glider-scouts and
+Kitegate charts the safe lanes from the Lee Roost's wind-lore and the pass-
+country opens to clean flight. The kite-pilots climb as the host's glider-scouts and
 wind-callers, carrying **Gale** and glider-silk — the airborne folk who scout
 ahead, cross any gorge on the wind, and command the sky the tower thinks is
 its own.

@@ -11,7 +11,9 @@ works, glowing red from beneath so a climber walks on a griddle above a lake
 of fire. Cinder-swifts flit through the updrafts; slag drips from the gantries;
 the gratings ring hot underfoot. Slave road-crews stoke the pits and haul the
 fuel. It is a floor crossed grate by glowing grate, with fire below and
-falling cinder above.
+falling cinder above. The stair-lift stands at the road-network's end behind a
+grating gone white-hot, cooled only when the Warden falls; Cindergrate stokes
+the approach-road before it.
 
 ## "Flora" — the Making's growth
 - **Canopy:** none — grating and gantry over fire.
@@ -21,15 +23,16 @@ falling cinder above.
   the grate-lichen weakens the bars to give way; the cinder-moss flares in a
   down-draught.
 
-## Three places
-- **The cave — the Under-Grate.** The ash-cellar below the road-gratings,
-  choked with fallen cinder and the fallen. *Seed: the master draught-damper
-  is here — shut it and the furnaces below the roads bank cold.*
-- **The peak — the Flue-Head.** The great chimney-head over the furnace-
-  roads; the network reads from it. *Seed: the flue's draught controls the
-  heat of every road on the floor.*
-- **The gate in the mountain — the Furnace Gate.** The stair-lift is set
-  behind a grating gone white-hot. *Seed: Cindergrate stokes it.*
+## Places of interest
+- **The Under-Grate.** The ash-cellar below the causeways, choked with fallen
+  cinder and the fallen · *Seed: the master draught-damper is here — shut it
+  and every furnace under the roads banks cold.*
+- **The Flue-Head.** The great chimney-head where the whole network's draught
+  is set · *Seed: choke the flue and the griddle cools to a road a host can
+  cross.*
+- **The Fuel-Marshalling Yard.** The open tipping-yard where slag-carts and
+  coke are staged before the roads · *Seed: fire the fuel-stacks and the
+  furnace-roads starve cold for a floor.*
 
 ## The people — who you are freeing
 Road-crews — re-enslaved folk set to stoke the furnaces and haul fuel across
@@ -60,23 +63,24 @@ and reads which gratings are about to give by their glow.
    that reaches up through the bars to drag the living down to the fire.
    *Broken, it slumps into the ash and the fallen in it are freed.*
 
-## Three finds  *(quest seeds)*
-- **Bank — spell.** Damps and banks a furnace, forge, or fire-source, cooling
-  a stretch of the Made to crossable; the road-crews' art, on the damper.
-  *Seed: learn it to bank the furnace-roads and the King's fires above.*
-- **Grate-iron — material.** The heat-tempered grating-iron of the roads,
-  forged into fire-walks, griddle-shields, and furnace-gear for the host.
-  *Seed: pull a cooled grating.*
-- **Ember-ward tot — potion.** A stoker's brew against the griddle-heat;
-  wards the feet and lungs from furnace-fire for a spell.
+## Finds  *(quest seeds)*
+- **Bank — spell.** Damps and banks any furnace, forge, or fire-source,
+  cooling a stretch of the Made to crossable · learned on the damper from
+  Grint · *Seed: bank the furnace-roads, and the King's fires above.*
+- **Grate-iron — salvage.** The heat-tempered grating-iron of the roads ·
+  pulled from any cooled causeway · *Seed: fire-walks and griddle-shields for
+  the host.*
+- **A road-crew's fireway — knowledge.** Grint's memorized reading of which
+  gratings hold and which glow to give, the only safe line across · *Seed: win
+  his trust and cross the roads without losing one of your own.*
 
 ## The Warden — Cindergrate
 An under-grate thing grown vast — the fused ash and bone of a hundred fallen
 crews risen as a slag-golem that wears the road-gratings as armor. A construct
 of the Making, it fights by dropping the gratings out from under climbers into
 the furnace and belching cinder. Its end is an *eviction:* Bank its fires and
-break it, and the slag falls dead, the burned crews in it freed. The Furnace
-Gate cools enough to pass.
+break it, and the slag falls dead, the burned crews in it freed. The stair-lift
+cools enough to pass.
 
 ## When it falls
 Stokegate shuts the master damper and the furnace-roads bank cold; the road-

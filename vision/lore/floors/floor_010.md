@@ -11,7 +11,9 @@ rotting on their poles. The banners hang heavy and colorless in the dead
 air; parade-horses wander the churned ground; empty muster-tents flap. It is
 the tenth floor and the first Warden-*king*, and the tower has made a
 spectacle of it: the meadow of hosts, held by a goblin crowned to mock the
-very idea of gathering.
+very idea of gathering. The stair-lift is set in a carved bluff shaped like
+a triumphal arch, cut with the marks of ten kings; Gnarl's throne of
+banner-poles blocks it.
 
 ## Flora
 - **Trees / canopy:** muster-oaks along the field's edge, hung with tattered
@@ -21,16 +23,17 @@ very idea of gathering.
 - **Under the Yoke:** the banner-thistle has grown barbed and clutching, and
   the rotting standards weep a dye that stains what it touches.
 
-## Three places
-- **The cave — the Colors-Vault.** A stone undercroft where the muster kept
-  its true standards and muster-rolls. *Seed: the real banner of the freed
-  climb could be raised from here.*
-- **The peak — the Standard-Elm.** The central tree where the king's own
-  color flew; the whole field takes its cue from it. *Seed: raise a true
-  color on it and every hiding muster-hand will come.*
-- **The gate in the mountain — the Muster Gate.** The stair-lift is set in a
-  carved bluff shaped like a triumphal arch, cut with the marks of ten
-  kings. *Seed: Gnarl's throne of banner-poles blocks it.*
+## Places of interest
+- **The Colors-Vault.** A stone undercroft where the muster kept its true
+  standards and muster-rolls, safe under the churned field. *Seed: the real
+  banner of the freed climb could be raised from what is stored here.*
+- **The Standard-Elm.** The central tree where the king's own color flew;
+  the whole field takes its cue from what flies on it. *Seed: raise a true
+  color here and every hiding muster-hand will come.*
+- **The Long Camp.** Rows of empty muster-tents and rotted horse-lines,
+  cook-fires cold, where the levy was quartered the day the field froze
+  mid-gathering. *Seed: its tent-poles, harness, and drum-signals could
+  order and equip a new host.*
 
 ## The people
 Muster-folk — Men of the levy line: banner-wrights, drummers, farriers, and
@@ -53,21 +56,26 @@ folded under her coat, waiting for the field to be worth raising it on.
    fever-wild, trampling the churned field. *Cured, it gentles and stands.*
 4. **Banner-kite** (N) — *was:* a scavenging kite. *now:* nesting in the
    standards, stooping on anything bright. *Cured, it lifts off the poles.*
-5. **Goblin guard** (P) — *was:* a first-taken conscript, Gnarl's honor-
-   watch. *now:* collared, over-armored, guarding a king it despises. *A real
+5. **Goblin guard** (P) — *here as the tower's joke, not as any native.*
+   Goblins have no business on a Men's muster-meadow — but the warrens were
+   the first realm Vharuk took, so he crowned a goblin king here and posted
+   a goblin honor-watch to hold the field where Men once made kings: the
+   first-taken people set to guard the first would-be army, mockery doubled.
+   *now:* collared, over-armored, guarding a king it despises. *A real
    death; the ones who throw down the collar hate Gnarl most of all.*
 6. **Muster-wight** (W) — *was:* the field's dead, aether pooled in the
    trampled mire. *now:* a rank of half-there soldiers that forms up and
    marches nowhere. *Broken, the rank sinks back into the mud.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Rally — spell.** A muster-word that steadies and gathers those who hear
   it; the serjeants' art, near-lost. *Seed: recover it from the Colors-Vault
   — the literal magic of the host gathering.*
-- **Standard-steel — metal.** The bright hard steel of the banner-spikes,
-  forged for gear that catches the eye and the light. *Seed: pull the true
-  standards.*
-- **Levy-tonic — potion.** The muster's marching draught; a swallow that lets
+- **The True Color — relic.** The freed climb's own standard, sewn in secret
+  and kept folded under Mella's coat; raised on the Standard-Elm it calls
+  every hiding muster-hand to the field. *Seed: earn the right, and the
+  ground, to raise it.*
+- **Levy-tonic — tonic.** The muster's marching draught; a swallow that lets
   a tired climber stand one more round.
 
 ## The Warden — Gnarl, the Goblin King
@@ -78,7 +86,7 @@ set to guard the meadow where real kings were made. He is welded onto a
 throne of banner-poles and dead colors, wielding a great notched sword he
 was never built to lift, hurling honor-guard into the fight ahead of him.
 He is pitiable and he is deadly and he knows he is a punchline. Break him
-and the joke ends; the Muster Gate opens; the first tier of the tower is
+and the joke ends; the stair-lift opens; the first tier of the tower is
 free behind you.
 
 ## When it falls

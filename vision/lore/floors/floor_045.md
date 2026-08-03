@@ -11,7 +11,9 @@ burning still on the black water, throwing gold light up into a ribbed roof.
 The flood came the night of the Theft and never drained. Prayers hang in the
 wet air. It should be the most peaceful floor of the tier, and it nearly is —
 except the drowned congregation never left their pews, and they still keep
-the vigil, and they want company.
+the vigil, and they want company. The stair-lift stands in a flooded lych-
+porch at the nave's foot, its arch a brimming font-arch; Bellrot keeps the
+drowned chancel before it.
 
 ## Flora
 - **Trees / canopy:** none — drowned stone columns and a rood-screen of
@@ -21,16 +23,17 @@ the vigil, and they want company.
 - **Under the Yoke:** the font-lilies pull under; the candle-moss gutters the
   vigil-lights to draw the faithful into the dark aisles.
 
-## Three places
-- **The cave — the Crypt.** The flooded undercroft beneath the chancel, where
-  the chantry's relics and its founders lie. *Seed: the rite of sanctifying —
-  the chantry's true blessing — is graven on the founder's tomb.*
-- **The peak — the Bell-Loft.** The chapel tower above the flood-line, its
-  vigil-bell silent. *Seed: rung true and hallowed, the bell lays the whole
-  drowned congregation to rest.*
-- **The gate in the mountain — the Chantry Gate.** The stair-lift is set in a
-  flooded lych-porch, its arch a font-arch. *Seed: Bellrot keeps the chancel
-  before it.*
+## Places of interest
+- **The Crypt.** The flooded undercroft beneath the chancel, where the
+  chantry's relics and its founders lie. *Seed: the rite of sanctifying — the
+  chantry's true blessing — is graven on the founder's tomb.*
+- **The Bell-Loft.** The chapel tower above the flood-line, its vigil-bell
+  silent. *Seed: rung true and hallowed, the bell lays the whole drowned
+  congregation to rest.*
+- **The Pilgrim Causeway.** The raised stone walk that once carried pilgrims
+  dry-shod up the nave, now broken and half-drowned, its arches the only
+  footing above the black water. *Seed: rebuild the spans and there is a dry
+  road clear across the drowned floor, out of the drowned congregation's reach.*
 
 ## The people
 The faithful of Bellmarsh — Men of the pilgrim-chantry: vigil-keepers, font-
@@ -62,22 +65,27 @@ the true bell, and prays over the pews she cannot yet lay to rest.
    for anyone who kneels. *Broken (and blessed), it bows its head and drains
    away, at peace.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Hallow — spell.** Blesses ground or water so the undead cannot abide it
   and the living take heart; graven on the founder's tomb. *Seed: learn it to
   cross the nave and, above, to sanctify against the tower's raised dead.*
 - **Font-silver — material.** The blessed silver of the fonts and vessels,
   aether-hallowed by long vigil; forged into weapons that sear the undead.
   *Seed: raise the vessels from the Crypt.*
-- **Holy water — potion.** Blessed font-water; a draught that turns and burns
-  the undead and steadies the living heart against dread.
+- **Holy water — tonic.** Blessed font-water that turns and burns the undead
+  and steadies the living heart against dread; drawn from any hallowed font.
+  *Seed: fill a flask before crossing the nave.*
+- **The founder's lamp — relic.** The chantry's first vigil-lamp, sealed in
+  the Crypt with its founders, that has burned in memory since before the
+  Theft. *Seed: raise it and its unquenchable light wards a whole company
+  through the tower's dark and drowned floors.*
 
 ## The Warden — Bellrot
 A drowned bell-ringer welded to the chantry's great cracked bell, rung by no
 hand — it tolls a false vigil that draws the living toward the deep water and
 raises the drowned congregation to its aid, fighting from the flooded chancel.
 Break it (and ring the true bell) and the toll turns to blessing; the
-congregation lies to rest; the Chantry Gate opens on hallowed water.
+congregation lies to rest; the stair-lift opens on hallowed water.
 
 ## When it falls
 Bellmarsh rings the true bell from the Bell-Loft and the drowned congregation

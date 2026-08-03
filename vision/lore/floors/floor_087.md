@@ -12,7 +12,9 @@ of girder and cabled to swell to war-readiness. The "plants" are metal and the
 "gardeners" are slaves with pruning-torches; the beds ooze black oil for sap;
 half-grown engines creak and flex in their rows. It is the Made mocking the
 stolen realms it was built by unmaking, growing weapons where the world grew
-food.
+food. The stair-lift stands at the garden's head behind a grown hedge of
+iron-thorn that withers open only when the Warden falls; Rootram roots the
+approach before it.
 
 ## "Flora" — the Making's growth  *(here the "flora" is the point)*
 - **Canopy:** trellised assault-towers and girder-vines trained overhead.
@@ -22,15 +24,16 @@ food.
   engine-vine lashes like a grown ram; the oil-lily's slick ignites at the
   pruning-torches.
 
-## Three places
-- **The cave — the Seed-Vault.** The store of iron-seed from which the engines
-  are grown. *Seed: destroy or claim the seed and the King's siege-supply
-  withers at the root.*
-- **The peak — the Trellis-Tower.** The high trellis where the tallest
-  assault-engines are trained up; the gardens read from it. *Seed: from it the
-  whole crop can be blighted at once.*
-- **The gate in the mountain — the Garden Gate.** The stair-lift is set
-  behind a hedge of grown iron-thorn. *Seed: Rootram roots before it.*
+## Places of interest
+- **The Seed-Vault.** The store of iron-seed from which every engine is
+  grown · *Seed: destroy or claim it and the King's siege-supply withers at
+  the root.*
+- **The Trellis-Tower.** The high girder-trellis where the tallest assault-
+  engines are trained up · *Seed: from it the whole crop can be blighted at
+  once.*
+- **The Oil-Beds.** The terraced sap-beds that ooze black oil to feed the
+  growing iron · *Seed: fire the beds and a season's engines burn unripe in
+  their rows.*
 
 ## The people — who you are freeing
 Garden-thralls — the re-enslaved set to tend and harvest the engine-crop,
@@ -60,15 +63,16 @@ which beds can be soured before they fruit into war.
    aether in the swelling iron. *now:* a lurching immature ram-beast that
    flails on part-grown limbs. *Broken, it collapses to dead scrap.*
 
-## Three finds  *(quest seeds)*
-- **Blight — spell.** Withers and unmakes grown constructs and living metal
-  at a word — sours the engine-crop, rots the iron-thorn; the thralls' art
-  (kin to the freeholders' Harvest, floor 58, turned to ruin). *Seed: learn
-  it to blight the King's siege-crop and his grown horrors above.*
-- **Engine-iron — material.** The grown war-iron of the crop, harvested young
-  into the rising's own rams and towers. *Seed: cut a bed before it ripens.*
-- **Pruner's tonic — potion.** A garden-gang brew that steadies the hands and
-  wards the iron-thorn's oily venom for a spell.
+## Finds  *(quest seeds)*
+- **Blight — spell.** Withers and unmakes grown constructs and living metal at
+  a word · the thralls' art (kin to the freeholders' Harvest, floor 58, turned
+  to ruin) · *Seed: rot the King's siege-crop and his grown horrors above.*
+- **Engine-iron — salvage.** The grown war-iron of the crop, harvested young ·
+  cut from any bed before it ripens · *Seed: the rising's own rams and
+  towers.*
+- **Iron-seed — loot.** A stolen cache of the tower's engine-seed, which grows
+  the rising's siege-gear as readily as the King's · from the Seed-Vault ·
+  *Seed: turn the Made's own manufacture against it.*
 
 ## The Warden — Rootram
 An unripe engine grown vast and rooted — a half-grown assault-ram fused to the
@@ -76,7 +80,7 @@ garden's root-cables, dragging whole beds with it, hung with the bones of
 thralls grafted into its growth. A construct of the Making, it fights by
 flailing its grown ram-limbs and lashing the engine-vine. Its end is an
 *eviction:* Blight and break it, and the grown iron rots to scrap, the grafted
-thralls freed to rest. The Garden Gate's hedge withers open.
+thralls freed to rest. The stair-lift's iron-thorn hedge withers open.
 
 ## When it falls
 Ramside blights the crop from the Trellis-Tower and the seed-vault goes cold;

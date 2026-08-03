@@ -13,7 +13,8 @@ constructs, the fever that takes the beasts. It is the live heart of the horror
 that Floor 62's scar was only the ruin of. Coolant sluices run black; lead-
 crowned engineers tend the coils; the light *leaks* — a colorless glare that
 sears the unshielded. Everything the climb has fought against pours out of this
-room.
+room. The stair-lift stands behind the core's blast-shielding, and Halflight
+guards the shielded threshold before it.
 
 ## "Flora" — the Making's growth
 - **Canopy:** the core's colorless glare and the lead-vaulted gallery roof.
@@ -23,15 +24,16 @@ room.
   the coolant-moss chokes the sluices to overheat the core; the lead-lichen
   cracks the shielding and lets the glare out.
 
-## Three places
-- **The cave — the Coolant Sluice.** The dark undercroft where the core's
-  black coolant runs. *Seed: choke or open the sluices and the core can be
-  driven to scram from below.*
-- **The peak — the Control Spire.** The high shielded gallery from which the
-  core is governed. *Seed: the fight ends here; from the Spire the Yoke's
-  broadcast can be cut for the whole tower at once.*
-- **The gate in the mountain — the Reactor Gate.** The stair-lift is set
-  behind the core's blast-shielding. *Seed: Halflight guards the Spire.*
+## Places of interest
+- **The Coolant Sluice.** The dark undercroft where the core's black coolant
+  runs in iron channels, drudged clear by burned-hollow crews. *Seed: choke or
+  open the sluices and the core can be driven to scram from below.*
+- **The Control Spire.** The high shielded gallery from which the core is
+  governed, the one place the leak cannot reach. *Seed: the fight ends here;
+  from the Spire the Yoke's broadcast can be cut for the whole tower at once.*
+- **The Fuel Pens.** The cells off the core-floor where spent thralls are held
+  to be fed to the engine as fuel when their bodies fail. *Seed: the living can
+  still be pulled out of the pens before the core takes them.*
 
 ## The people — who you are freeing
 Coreside thralls — the reactor-crews, the innermost of the bound, worked to
@@ -61,16 +63,18 @@ the King's heart, and has waited a lifetime to use it.
    aether in the scorched shadow. *now:* a searing after-image that walks the
    galleries blinding the living. *Broken, the shadow fades and drains.*
 
-## Three finds  *(quest seeds)*
-- **Scram — spell.** Dampens, chokes, and shuts a reactor or aether-source at
-  a word; the thralls' core-art, the single most important spell in the tower.
-  *Seed: learn it to scram the core here — cutting the Yoke's broadcast and
-  starving the King's power for the final floors.*
-- **Core-lead — material.** The reactor's blast-shielding, worked into the
-  only armor and blades that stand against colorless flame and the King's
-  raw aether. *Seed: strip the galleries.*
-- **Lead-heart tonic — potion.** The thralls' strongest brew, a lead-bitter
-  draught that wards the body wholly against the leak and the King's fire.
+## Finds  *(quest seeds)*
+- **Scram — spell.** Dampens, chokes, and shuts a reactor or aether-source at a
+  word — the single most important spell in the tower · the thralls' core-art,
+  kept by Ferro · *Seed: learn it to scram the core here, cutting the Yoke's
+  broadcast and starving the King's power for the final floors.*
+- **Core-lead — salvage.** The reactor's blast-shielding, worked into the only
+  armor and blades that stand against colorless flame and the King's raw aether
+  · stripped from the gallery walls · *Seed: strip the galleries to armor the
+  rising against the King's fire.*
+- **The scram-order — knowledge.** Ferro's memorized sequence for shutting the
+  King's heart without blowing the core · held only in the old thrall's head ·
+  *Seed: win his trust to learn the safe shutdown he has hoarded a lifetime.*
 
 ## The Warden — Halflight
 The coil-fed demon grown vast — a towering figure of the core's own colorless
@@ -79,7 +83,7 @@ King's power given a body to guard its heart. A pure construct of the Making,
 it cannot be killed while it feeds; it must be cut from its coils and driven
 out. Its end is an *eviction:* choke the sluices, Scram the core from the
 Control Spire, and Halflight — starved of the light that is its life — gutters
-out to a dead cinder. The core goes dark. The Reactor Gate opens.
+out to a dead cinder. The core goes dark. The stair-lift opens.
 
 ## When it falls
 Ferro's thralls scram the King's heart, and for the first time in an age the

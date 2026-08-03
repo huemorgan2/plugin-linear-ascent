@@ -11,7 +11,9 @@ drills without pause: rank on rank forming up, wheeling, and presenting to
 drum and horn, a war-machine kept forever sharp. The ground is beaten parade-
 dirt over stone; ballistae stand ranked on the firing-steps; the tramp and
 count of the drill never stops. Slave-crews build the ramparts ever longer. It
-is discipline made a landscape, and its very order is the weapon.
+is discipline made a landscape, and its very order is the weapon. The stair-
+lift stands behind the command-bastion's sally-port at the drill-line's far
+end; Bastionheart drills the approach before it.
 
 ## "Flora" — the Making's growth
 - **Canopy:** none — ramparts and parade-ground.
@@ -22,16 +24,17 @@ is discipline made a landscape, and its very order is the weapon.
   caltrops on command; the parade-moss deadens sound so a drill-column is on
   you before you hear it; the rampart-lichen sights the ballistae.
 
-## Three places
-- **The cave — the Magazine.** The ammunition-undercroft beneath the firing-
-  steps, stacked with ballista-bolt and shot. *Seed: the drill-orders — the
-  whole line's commands and counter-signs — are filed here.*
-- **The peak — the Command Bastion.** The high fort from which the drill is
-  called; the line reads from it. *Seed: from it a countermand can halt or
-  turn the entire drilling army at once.*
-- **The gate in the mountain — the Bastion Gate.** The stair-lift is set
-  behind the command-bastion's sally-port. *Seed: Bastionheart drills the
-  approach.*
+## Places of interest
+- **The Magazine.** The ammunition-undercroft beneath the firing-steps,
+  stacked with ballista-bolt and shot · *Seed: the drill-orders — the whole
+  line's commands and counter-signs — are filed here.*
+- **The Command Bastion.** The high fort from which the whole drill is called ·
+  *Seed: a countermand from it can halt or turn the entire drilling army at
+  once.*
+- **The Endless Parade-Ground.** The beaten drill-yard stretching out of sight
+  where the ranks wheel and present without pause · *Seed: seed it with the
+  captives' stolen counter-signs and a drilling column marches itself into
+  confusion.*
 
 ## The people — who you are freeing
 Wall-captives — the re-enslaved set to extend the ramparts forever, building
@@ -59,14 +62,15 @@ stolen drill-orders and the counter-signs that can turn a column.
    automaton, hardest-collared. *now:* a towering ranker that anchors the
    line. *Pressed — the collar can be broken; freed, the rising's heaviest.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Countermand — spell.** Overrides an enemy's orders — halts a drill, turns
-  a charge, freezes a formation mid-command; the captives' stolen-order art.
-  *Seed: learn it to break the King's ranks and turn his army above.*
-- **Parade-steel — material.** The drilled bastion-plate of the line, salvaged
-  into the rising's disciplined heavy armor. *Seed: strip the firing-steps.*
-- **Drill-tot — potion.** A ranker's brew that steadies a company under fire
-  and holds a formation firm; discipline in a swallow.
+  a charge, freezes a formation mid-command · the stolen-order art, filed in
+  the Magazine · *Seed: break and turn the King's ranks above.*
+- **Parade-steel — salvage.** The drilled bastion-plate of the line · stripped
+  from the firing-steps · *Seed: disciplined heavy armor for the host.*
+- **The stolen drill-orders — knowledge.** Dara's copy of the line's full
+  commands and counter-signs · *Seed: win them and speak to any drilled column
+  as its own officer.*
 
 ## The Warden — Bastionheart
 A drill-master — a captured soul welded into command-plate and collared to run
@@ -75,7 +79,7 @@ not a construct: a soldier who once had a name and a people below. He fights by
 wheeling his drilled ranks in perfect order against the climber. Break his
 collar (not just his body) and the drill *stops* — the whole line falters as
 its heart wakes, and Bastionheart turns his disciplined army to the rising.
-The Bastion Gate opens.
+The stair-lift's sally-port opens.
 
 ## When it falls
 Bastionheart's collar breaks and the endless drill halts for the first time in

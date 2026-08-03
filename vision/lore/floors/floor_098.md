@@ -13,7 +13,9 @@ him. It is the one floor of the tower where the enemy is not a victim. Cloth-of-
 gold and cold candle-light, whispered intrigue, the smell of privilege built on
 a world's ruin. The only captives here are the servants in the walls; the court
 itself is guilty, awake, and unrepentant — the human face of the tyranny, and
-the hardest to strike because it looks like people, not monsters.
+the hardest to strike because it looks like people, not monsters. The stair-lift
+stands behind the Dais at the court's head, and the Grand Vizier bars that way
+to the Last Door.
 
 ## "Flora" — the Making's growth
 - **Canopy:** gilded coffers and chandeliers of cold flame.
@@ -23,14 +25,17 @@ the hardest to strike because it looks like people, not monsters.
   belonging that lulls the judgement; the candle-lichen gutters to plunge the
   court into scheming dark; the velvet-moss muffles a drawn blade.
 
-## Three places
-- **The cave — the Whispering Gallery.** The servants' undercroft where every
-  courtly secret echoes down. *Seed: the court's crimes and the King's own
-  weaknesses are overheard and kept here by the servants.*
-- **The peak — the Dais.** The high audience-floor before the throne-approach,
-  where the court assembles. *Seed: the fight ends here, among the willing.*
-- **The gate in the mountain — the Court Gate.** The stair-lift is behind the
-  Dais. *Seed: the Grand Vizier bars the way to the Last Door.*
+## Places of interest
+- **The Whispering Gallery.** The servants' undercroft, shaped so that every
+  courtly secret spoken above echoes down to the walls. *Seed: the court's
+  crimes and the King's own weaknesses are overheard and kept here by the
+  servants.*
+- **The Dais.** The high audience-floor before the throne-approach, where the
+  court assembles in its finery. *Seed: the fight ends here, among the willing.*
+- **The Perpetual Banquet.** The gilded feast-hall where the favourites gorge
+  without end on a world's ruin, waited on by the wall-servants. *Seed: the
+  court is at its most exposed here, and a servant can name every guilty face at
+  the table.*
 
 ## The people — who you are freeing
 Only the Courtside servants — the scullions, sweepers, and body-slaves worked
@@ -61,16 +66,20 @@ the servants' long ledger of the court's crimes.
    power — the willing echo of Malgrim. *now:* a proud armored traitor. *Given
    every chance to recant, and refusing, is fought as a true enemy.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Silence — spell.** Stills a room's glamour, flattery, lies, and courtly
-  compulsion at a word, so the willing can be seen and named plainly; the
-  servants' truth-art. *Seed: learn it to strip the court of its charm — and
-  to silence the King's own honeyed voice above.*
-- **Court-gold — material.** The favourites' jewelled arms and gilt plate,
-  stripped from the guilty and reforged as the rising's war-treasury. *Seed:
-  loot the Dais.*
-- **Clear-ear draught — potion.** A servant's brew that deafens the drinker to
-  flattery, glamour, and every honeyed lie for a spell.
+  compulsion at a word, so the willing can be seen and named plainly · the
+  servants' truth-art, kept by Bly · *Seed: learn it to strip the court of its
+  charm and to silence the King's own honeyed voice above.*
+- **Court-gold — salvaged arms.** The favourites' jewelled weapons and gilt
+  plate · stripped from the guilty on the Dais · *Seed: loot the Dais and
+  reforge it as the rising's war-treasury.*
+- **The servants' ledger — evidence.** Bly's long record of the court's crimes,
+  kept in the Whispering Gallery · *Seed: carry it to the throne so the willing
+  are called to account and the King answers before witnesses.*
+- **Clear-ear draught — a brew.** A servant's tincture that deafens the drinker
+  to flattery, glamour, and every honeyed lie · *Seed: a dose lets a climber
+  cross the court unmoved by its charm.*
 
 ## The Warden — the Grand Vizier
 Vharuk's chief believer — no captive, no construct, but a *free* man who has
@@ -80,7 +89,7 @@ fights with poison, glamour, and the court's blades at his call, and when
 offered mercy he laughs — he was never bound, and would do it all again. He is
 the second soul (after Malgrim) who **cannot be liberated because he does not
 wish it**, and so the climb *judges* him: silenced, stripped, and put down as
-the guilty man he is. The Court Gate opens on the Last Door.
+the guilty man he is. The stair-lift opens on the Last Door.
 
 ## When it falls
 The Vizier falls unfree and unmourned, and Bly's servants read the court's long

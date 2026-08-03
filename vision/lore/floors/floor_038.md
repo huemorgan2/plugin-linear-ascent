@@ -11,7 +11,9 @@ ankle-deep in tea-brown water and hazed with clouds of midges. Turf-stacks
 dry in endless rows that will never be burned. Down in the deepest cuts, the
 peat has kept things older than the cutting whole and perfect, and the fever
 has taught them to climb. It is a floor of blind trench-corners and rising
-dead, all under a whining midge-fog.
+dead, all under a whining midge-fog. The stair-lift is set where a cut runs
+into rock, its arch a turf-cutter's slot, and Peatlock wallows the flooded
+bottom before it.
 
 ## Flora
 - **Trees / canopy:** none but the black bog-oak jutting from the cut-walls.
@@ -20,16 +22,18 @@ dead, all under a whining midge-fog.
 - **Under the Yoke:** the sundew and butterwort have grown boot-catching and
   hungry; the cotton-grass marks false-firm banks over sink-cuts.
 
-## Three places
-- **The cave — the Deep Cut.** The oldest, deepest trench, where the peat's
-  preserved dead lie exposed in the black wall. *Seed: a peat-cured king (see
-  §5) lies here, whole — and the fever is climbing his cut.*
-- **The peak — the Stack-Field.** The high dry ground of drying turf-stacks;
-  the trench-maze reads from its top. *Seed: fire the stacks in a pattern and
+## Places of interest
+- **The Deep Cut.** The oldest, deepest trench, where the peat's preserved
+  dead lie exposed in the black wall. *Seed: a peat-cured king (see §5) lies
+  here, whole — and the fever is climbing his cut.*
+- **The Stack-Field.** The high dry ground of drying turf-stacks, the whole
+  trench-maze legible from its top. *Seed: fire the stacks in a pattern and
   the smoke drives the midge-fog and the risen back into the cuts.*
-- **The gate in the mountain — the Cut Gate.** The stair-lift is set where a
-  cut runs into rock, its arch a turf-cutter's slot. *Seed: Peatlock wallows
-  the flooded bottom before it.*
+- **The Drowned Chapel.** A little moor-chapel the cutters undercut and sank
+  years back, now standing to its eaves in a flooded cut, bell-cote above the
+  brown water — where they once blessed the dead the peat would not let rot.
+  *Seed: its font still holds, and water drawn from it lays a peat-risen back
+  down for good.*
 
 ## The people
 Cutters — Men of the industrial peat-works: turf-slicers, stackers, and
@@ -63,22 +67,26 @@ watches the Deep Cut, where the fever is coming up.
    the brown water. *Broken, it sinks into the flooded bottom and drains
    down.*
 
-## Three finds  *(quest seeds)*
-- **Firmground — (deepened) spell.** The mire-lore of floor 27, cut deeper
-  here: sets a whole trench-bottom firm and drains it for a spell. *Seed: the
-  Deep Cut's wall carries the fuller rite.*
-- **Bog-oak, black — material.** The hardest preserved oak in the tower,
-  raised whole from the cut-walls; stave, haft, and shield that never rot.
-  *Seed: dig the exposed timbers.*
-- **Preserving draught, strong — potion.** A cutter's brew stronger than
-  Cairnside's; a healing tonic that keeps for a season and closes deep
-  wounds. *Seed: distilled from the Deep Cut's peat.*
+## Finds  *(quest seeds)*
+- **Firmground — spell (deepened).** The mire-lore of floor 27 cut deeper:
+  sets a whole trench-bottom firm and drains it for a spell · the fuller rite
+  is carved on the Deep Cut's wall · *Seed: learn it to cross the flooded
+  cuts and drain the killing bottoms.*
+- **Bog-oak, black — material.** The hardest preserved oak in the tower —
+  stave, haft, and shield that never rot · dug whole from the cut-walls ·
+  *Seed: arm the host with timber the tower can't burn or rot.*
+- **The cut-map — knowledge.** Maddox's tally of every firm bank and false-
+  firm sink-cut in the maze · kept in Turfside · *Seed: win his trust for the
+  one dry way across.*
+- **Preserving draught, strong — brew.** A healing tonic that keeps for a
+  season and closes deep wounds, stronger than Cairnside's · distilled from
+  the Deep Cut's peat · *Seed: stock it for the long floors ahead.*
 
 ## The Warden — Peatlock
 A peat-boar of the cuts, welded under bog-oak plate and bog-iron so it neither
 rots nor tires — it fights in the flooded trenches, wallowing the bottoms to
 drag footing away and calling the midge-fog to blind. Break it and the fog
-lifts; the cured dead sink back; the Cut Gate's trench drains enough to pass.
+lifts; the cured dead sink back; the stair-lift's trench drains enough to pass.
 
 ## When it falls
 Turfside fires the stack-field in the old warding-pattern; the midge-fog

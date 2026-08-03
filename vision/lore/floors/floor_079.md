@@ -11,7 +11,9 @@ dune of shed molt: cast scales, sloughed skins, and spent teeth, layered by
 ages of passing wyrms. The molt-drifts shimmer with heat and shift like sand;
 young wyrms still den in the warm hollows; the whole road smells of sulfur and
 snake. It is a place older than the theft that made the tower, and the wyrms
-that walk it answer to no crown — not even Vharuk's.
+that walk it answer to no crown — not even Vharuk's. The stair-lift stands in
+the canyon wall behind a deep molt-drift; Moltcrown dens in the drift before
+it.
 
 ## Flora
 - **Trees / canopy:** none — molt-dunes and canyon-wall.
@@ -21,17 +23,18 @@ that walk it answer to no crown — not even Vharuk's.
   lichen shifts the drifts to swallow a foot; the sulfur-blooms puff a
   choking musk.
 
-## Three places
-- **The cave — the Molt-Drift Hollow.** A cave hollowed in a dune of shed
-  scale, where the road-folk shelter and sort the molt. *Seed: a perfect
-  cast wyrm-skin — a whole suit of scale-mail, shed intact — lies buried
-  here.*
-- **The peak — the Basking Ridge.** The high sun-warm ledge where the wyrms
-  bask on migration; the road reads from it. *Seed: from it a passing wyrm's
-  route can be read — and its goodwill, if it remembers Cindermaw's freeing.*
-- **The gate in the mountain — the Wyrm Gate.** The stair-lift is set in the
-  canyon wall behind a molt-drift. *Seed: Moltcrown dens in the drift before
-  it.*
+## Places of interest
+- **The Molt-Drift Hollow.** A shelter dug deep into a dune of shed scale,
+  where the road-folk hole up and sort the molt. *Seed: a perfect cast wyrm-
+  skin — a whole suit of scale-mail, shed intact — lies buried here.*
+- **The Bonefall.** The canyon-spanning skeleton of an ancient wyrm that died
+  on the road before the tower ever rose; the road-folk read the migration's
+  age in its arching ribs, and its skull-cave is the one den no living wyrm
+  will enter. *Seed: shelter or ambush in the Bonefall — the one safe hold on a
+  road otherwise full of denning young.*
+- **The Basking Ridge.** The high sun-warm ledge where the wyrms bask on
+  migration; the road reads from it. *Seed: from it a passing wyrm's route can
+  be read — and its goodwill, if it remembers Cindermaw's freeing.*
 
 ## The people
 Road-folk — Waste-folk who live along the wyrm-road, gathering molt for scale-
@@ -61,7 +64,7 @@ and knows which hollows hold a sleeping wyrmling.
    the richest molt. *now:* collared, scale-armored, hurling shed teeth.
    *Pressed — a real death; the deserters know the wyrms' tempers and routes.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Molt — spell.** Lets the caster shed a wound, a poison, or a binding like
   a wyrm sheds its skin, renewing whole for a moment; the road-folk's art.
   *Seed: learn it to slough off the tower's worst on the floors near the
@@ -69,8 +72,10 @@ and knows which hollows hold a sleeping wyrmling.
 - **Shed wyrm-scale — material.** The plentiful cast scale of the migration —
   fireproof scale-mail enough to armor a host, and molt-glass blades besides.
   *Seed: the intact cast skin in the Molt-Drift Hollow.*
-- **Molt-oil — potion.** A road-brew of rendered molt; sloughs off grabs and
-  bindings and heals scorched skin — frees a held climber and mends the burn.
+- **A spared wyrmling — companion.** A road wyrmling cured rather than driven
+  off; like Cindermaw it remembers who spared it, and a young fire-wyrm at a
+  climber's side is worth a warband. *Seed: the first free wyrm won to the
+  rising — and proof the whole migration might be called down on the throne.*
 
 ## The Warden — Moltcrown
 A road wyrmling grown huge on the migration, crowned and armored in ages of
@@ -78,7 +83,7 @@ shed scale welded into living plate — it fights by shifting the molt-drifts to
 swallow footing and spitting fire from the dunes. Because it is a *native*
 wyrm, its end is a *curing:* break the fever and the young wyrm sheds its
 welded crown, curls warm in a hollow, and — like Cindermaw before it —
-remembers who freed it. The Wyrm Gate opens.
+remembers who freed it. The stair-lift opens.
 
 ## When it falls
 Moltgate raises the intact cast skin and armors the rising in fireproof scale;

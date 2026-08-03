@@ -12,7 +12,9 @@ color. Here the whole elf-hunt answers: the Grey Rides, the Kennel Courts, the
 Quarry Runs all take their law from this court and its Master. A silent hunt
 forms and re-forms across the pale ground, pale hounds at heel, waiting on the
 Huntsman's horn. It is the last floor of the stolen realms, and the last —
-and most lost — of the crowned captives.
+and most lost — of the crowned captives. The stair-lift stands at the bone-
+white hall's end, hung with a thousand horns; only the Huntsman's freeing
+sounds the last horn and opens the way to the tower's own Making.
 
 ## Flora
 - **Trees / canopy:** pale birch and bone-white hunt-oak, leafless and
@@ -23,17 +25,19 @@ and most lost — of the crowned captives.
   moon-moss carries the Huntsman's horn to every corner; the hunt-orchids
   mark where the pale hounds will drive their quarry.
 
-## Three places
-- **The cave — the Pale Kennels.** The Huntsman's own hound-dens, where the
-  pale pack is kenneled. *Seed: the master hunt-horn and the calloff-lore —
-  the word that ends any hunt — are kept here.*
-- **The peak — the Master's Stand.** The Huntsman's high seat over the pale
-  court; the whole elf-hunt reads from it. *Seed: the fight ends here; from
-  it every hunt in the wood-realm can be called off at once.*
-- **The gate in the mountain — the Pale Gate.** The stair-lift is set in the
-  bone-white hall's end, hung with a thousand horns. *Seed: only the
-  Huntsman's freeing sounds the last horn and opens it — the gate to the
-  tower's own Making.*
+## Places of interest
+- **The Pale Kennels.** The Huntsman's own hound-dens, where the pale pack is
+  kenneled; the master hunt-horn and the calloff-lore — the word that ends any
+  hunt — are kept here. *Seed: win the kennels and you win the means to call
+  off the Master's endless hunt.*
+- **The Trophy Hall.** The bone-white hall's long gallery, hung with the horns
+  and heads of a thousand years of hunts — every quarry the Master ever took,
+  and, near the far end, the trophies of his own freed peers. *Seed: among the
+  trophies hangs proof of the gentle Master he once was — a keepsake to wake
+  his buried mercy.*
+- **The Master's Stand.** The Huntsman's high seat over the pale court; the
+  whole elf-hunt reads from it. *Seed: the fight ends here; from it every hunt
+  in the wood-realm can be called off at once.*
 
 ## The people
 Court-captives of Hornsend — the hunt's elves: horn-callers, whips, and
@@ -69,7 +73,7 @@ he must help break.
    whole pale court on the living. *Broken (or out-called), the horn cracks
    and it drains away.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Calloff — spell.** Ends any hunt, dismisses any summoned pack or beast,
   and breaks a hunter's Mark — the capstone of the elf-hunt's arts, gathering
   Recall, Houndcall, and Mark into one merciful word. *Seed: learn it from
@@ -78,8 +82,10 @@ he must help break.
 - **Pale-silver — material.** The moon-drained silver of the Master's court
   and horns, worked into the finest hunter's gear in the tower — and the
   Huntsman's own crown. *Seed: the Master's Stand.*
-- **Quarry's-draught — potion.** A hunted-one's brew that masks scent, warmth,
-  and sound; hides a climber from any hunt for a spell.
+- **The master hunt-horn — relic.** The Master's own horn, kept in the Pale
+  Kennels; sounded by a free hand it ends any hunt across the whole wood-realm
+  — the very horn the Huntsman must be made to blow. *Seed: recover it to call
+  off the pale hunt, and at the summit to silence the tower's own.*
 
 ## The Warden — The Pale Huntsman
 The Master of the Hunt — first-taken, and hunted by the tower longer than any
@@ -91,7 +97,7 @@ and most bittersweet of all. He fights from the Master's Stand, sounding the
 pale hunt, riding down the living with hound and whip and remount. His ending
 is a *freeing* — sound the calloff and break the pale crown, and the Master
 wakes, sounds the last true horn to end every hunt in the wood, and lays down
-the horn for good. The Pale Gate opens on the tower's own Making.
+the horn for good. The stair-lift opens on the tower's own Making.
 
 ## When it falls
 The Pale Huntsman wakes, calls off the endless hunt across the whole elf-

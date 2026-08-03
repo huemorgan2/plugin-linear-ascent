@@ -11,7 +11,8 @@ glare-hawks wheel. Great erratic boulders sit balanced where the ice dropped
 them; melt-runnels lace the gravel; the wind off the high ice cuts to the
 bone. It is the first truly cold floor of the tier, a grey wasteland of stone
 and frost that grinds underfoot and offers no shelter but the hollows beneath
-the fallen giants of rock.
+the fallen giants of rock. The stair-lift is set in a frost-shattered scarp
+behind a boulder-jam, and Coldjaw dens in the gravel before it.
 
 ## Flora
 - **Trees / canopy:** none — bare moraine and balanced boulders.
@@ -20,16 +21,18 @@ the fallen giants of rock.
 - **Under the Yoke:** the rock-tripe grows razor-crusted; the cushion-moss
   hides ice-slick sinkholes; the melt-runnels freeze around a wading foot.
 
-## Three places
-- **The cave — the Erratic Hollow.** The dry lee-cave beneath the largest
-  balanced boulder, the ice-folk's shelter. *Seed: the old ice-road markers
-  and a warmth-charm are cached here.*
-- **The peak — the Terminal Ridge.** The moraine's high crest, where the ice
-  once ended; the whole field reads from it. *Seed: a beacon here warns the
-  freed floors of the ice-fever spreading down.*
-- **The gate in the mountain — the Moraine Gate.** The stair-lift is set in a
-  frost-shattered scarp behind a boulder-jam. *Seed: Coldjaw dens in the
-  gravel before it.*
+## Places of interest
+- **The Erratic Hollow.** The dry lee-cave beneath the largest balanced
+  boulder, the ice-folk's shelter. *Seed: the old ice-road markers and a
+  warmth-charm are cached here.*
+- **The Terminal Ridge.** The moraine's high crest, where the ice once ended
+  and the whole field lies legible below. *Seed: a beacon here warns the freed
+  floors of the ice-fever spreading down.*
+- **The Meltwater Tarn.** The grey glacier-lake pooled at the moraine's foot
+  where every melt-runnel gathers — its ice-margin the one reliable water and
+  crossing on the floor, and a graveyard of frozen scouts standing upright in
+  the shallows. *Seed: chart the tarn's safe ice and you hold the one road the
+  falling erratics can't block.*
 
 ## The people
 Ice-folk — giant moraine-wardens and delver-gravel-crews who work the melt for
@@ -58,21 +61,25 @@ ice-road markers, and reads the moraine's shifts by the grind of the gravel.
    gravel dragging the living into the melt-runnels to freeze. *Broken, it
    thaws to slush and drains down.*
 
-## Three finds  *(quest seeds)*
+## Finds  *(quest seeds)*
 - **Kindle — spell.** Wraps the caster in enduring warmth and sheds killing
-  cold for a spell; scored on the Erratic Hollow's warmth-charm. *Seed: learn
+  cold for a spell · scored on the Erratic Hollow's warmth-charm · *Seed: learn
   it to cross the moraine and face the ice-floors above.*
-- **Rime-iron — metal.** Cold-forged glacier-iron that never grows brittle in
-  frost; the standard for every high-cold campaign. *Seed: work the melt-
-  exposed ore.*
-- **Coldsblood tonic — potion.** An ice-folk brew that thickens the blood
-  against frost; wards off cold and numbness for a spell.
+- **Rime-iron — salvage.** Cold-forged glacier-iron that never grows brittle
+  in frost · worked from the melt-exposed ore · *Seed: the standard for every
+  high-cold campaign above.*
+- **The ice-road markers — knowledge.** Bruna's marked safe lines across the
+  shifting gravel and the tarn's ice · cached in the Erratic Hollow · *Seed:
+  recover them for the one sure crossing, and the key to the ice-floors above.*
+- **Coldsblood tonic — brew.** Thickens the blood against frost and wards off
+  numbness for a spell · an ice-folk brew banked with the fires of Coldquay ·
+  *Seed: keep the host's hands working in the cold.*
 
 ## The Warden — Coldjaw
 A moraine troll grown vast, welded under a shell of ice and erratic-stone that
 regrows from the frost — it fights among the balanced boulders, kicking
 avalanches down the ridges and freezing the melt around a climber's feet.
-Break it and the moraine stills; the erratics hold; the Moraine Gate's
+Break it and the moraine stills; the erratics hold; the stair-lift's
 boulder-jam can be cleared.
 
 ## When it falls
