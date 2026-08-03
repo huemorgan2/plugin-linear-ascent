@@ -1,4 +1,4 @@
-# Chapter 31 — Breaking the Hunt
+# Chapter 36 — Breaking the Hunt
 
 Rhovan had been born under the Huntsman's law and had spent three hundred
 years getting out from under it, and now he knelt in the Pale Kennels
@@ -6,7 +6,7 @@ learning it back by lamplight, because the law was the only weapon on this
 floor that would loose.
 
 Nael Hornsend taught him. The old horn-caller had kept the calloff-lore
-alive for a thousand years the way the keepers kept everything on this
+alive for eighty years the way the keepers kept everything on this
 climb — alone, at night, against the day someone would come who could use
 it. The lore was not long. That was the terrible economy of it. Recall,
 Houndcall, Mark, and over them all one word that gathered the rest the way
@@ -152,7 +152,7 @@ court like a tide going home.
 Color came back first to the hounds. Brindle and tan and wheaten, a
 whole pack's plain dear colors flooding through the moon-white, and the
 pack went mad the way dogs go mad at a homecoming, swarming the stirrups
-of a man waking from a thousand years. The Master of the Hunt looked at
+of a man waking from fourscore years. The Master of the Hunt looked at
 his hands. He looked at his kennels, his court, his people standing in
 the wreck of his hunt wearing the colors he had forgotten. He did not
 speak. He never spoke, and Rhovan understood at last that this had

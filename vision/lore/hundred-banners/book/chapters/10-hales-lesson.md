@@ -1,4 +1,4 @@
-# Chapter 10 — Hale's Lesson
+# Chapter 11 — Hale's Lesson
 
 Nix kept his counts on a tally-stick of bog-oak, because paper burned and
 goblins forgot nothing but were believed about everything less than

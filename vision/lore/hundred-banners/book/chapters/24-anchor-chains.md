@@ -1,4 +1,4 @@
-# Chapter 24 — The Anchor Chains
+# Chapter 28 — The Anchor Chains
 
 Vega Coalbrow had drawn chain all her life, and she had never feared it
 until she walked upon one above the clouds.
@@ -165,6 +165,21 @@ It warmed her, like everyone else. That was what Berrin was for.
 
 ⁂
 
+Three countries lay between the chains and the fleet, and the army
+was the better part of a month in them. It skirted the Reactor Scar
+along the cool rim, two days' march of fused colorless glass ringing
+under the boots, drinking Grint Scarwatch's palewater at every halt
+while the scar-warden walked ahead of the van reading a fire nobody
+could see by the prickle of his own skin. It crossed the Updrafts on
+Cole Kitegate's re-rigged spanlines, a gorge-country that boomed,
+kite-pilots ferrying the baggage up the thermal columns while the
+ranks went hand over hand above a wind that wanted them. And it came
+up through the Ice Quarries walking canyon-floors of glass-clear
+blocks under Hune Hewnstone's locked gantries, house-sized loads
+hanging dead still overhead, the quarry-master reading each block's
+flaws by the light through it before he would let a company pass
+beneath.
+
 Floor sixty-five was a fleet.
 
 They came up the stair-lift into grey light and a forest, and the
@@ -237,15 +252,22 @@ cell with the fleet's own charts open beside her, and the hull
 groaned, and lifted, and stood upon the air.
 
 The Signal-Top was re-rigged by sunset. When its lamp was lit — the
-old muster-signal, ship to ship, that no lamp had answered in a
-thousand years — the mast-folk came out of the whole forest canopy to
+old muster-signal, ship to ship, that no lamp had answered in
+eighty years — the mast-folk came out of the whole forest canopy to
 look, and the light caught on the skiff riding at anchor above the
 wrecks, and Weld Sparside wept without once losing his footing on the
 line.
 
 ⁂
 
-The bridge floors went by like beads told on a string. In the Kennel
+The bridge floors went by like beads told on a string, and every bead
+was a country: the Kennel Courts heard half a day before they were
+seen, tiered stone yards baying under the mews-yews; the Coolant
+Falls a mile-high cliff of stopped white river, its milk-light
+showing the pilgrims still standing in the curtain; the Silk Vaults
+cold and hushed for two days' walking, aisle on aisle of neat white
+bundles; the Lightning Fields an ozone plain of verdigris poles under
+a ceiling that flashed and never rained. In the Kennel
 Courts the master horn sounded from the Mews-Tower and every ungentled
 pack on the floor heeled at last to its own name, and the rising
 marched out with hounds at its flanks and owls above its banners. At

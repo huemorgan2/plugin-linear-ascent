@@ -1,4 +1,4 @@
-# Chapter 12 — The Out-Mourned King
+# Chapter 13 — The Out-Mourned King
 
 The third assault died on the causeway like the first two, and Ede called
 it back before the moat could keep any more of her people.

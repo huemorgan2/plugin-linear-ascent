@@ -1,4 +1,4 @@
-# Chapter 22 — The Feast
+# Chapter 26 — The Feast
 
 On the morning of the feast of the charter, Mistress Calyne came to Ede
 in the Undercroft, among the casks, where the general had gone to be
@@ -95,7 +95,11 @@ Every lamp in the jarldom was lit, and every door stood open, the
 great north door to the yard and the south door by the kitchens and
 the little postern doors between, all wide, spilling gold onto the
 snow, because Hrimgar had commanded it: the hall had eleven years of
-darkness to pay back. The sixty-one banners hung overhead with the
+darkness to pay back. Beyond the doorways the jarldom ran out into
+its own night — snowfields going blue and then black toward hills no
+lamp would reach before morning, a country's worth of quiet — and the
+hall stood up in all that dark like one coal in a swept hearth. The
+sixty-one banners hung overhead with the
 charter itself among them, hung from the center-beam over the High
 Seat where all the hall could see it. The tables ran the full length
 of the floor, and at them sat the gathered world according to
@@ -175,13 +179,29 @@ the rafters, pitch-arrows among the banners, sixty-one flags of
 the gathered world beginning to burn over the heads of the world
 they gathered.
 
+One picture of that night outlasted all the rest in the
+tellings: the burning length of the Frosthall doubled in the
+mead sheeted across the stone floor, sixty-one banners burning
+twice, above and below, while the night wind came in through the
+fought-over doors off a hundred miles of snow and bent every
+flame in the hall toward the north door — as if the fire itself
+had been told where the way out was.
+
 Ede got out from under her oldest friend with his blood on her
 neck, and stood up into it, and did what she was for.
 
 "SHIELDWALL," she said, in the voice that carried over drum-fire,
 and the tables of the freed company came over onto their sides
 down the length of the hall in one crash, oak two fingers thick,
-and the gathered world went behind it. Vega was already moving —
+and the gathered world went behind it. Even then, in the noise,
+the fight had a shape, and she read it the way she read any
+field: fire along the center-beam, working at the roof; knives
+at the signers' benches, midway down both tables, where the
+charter's names were seated; Shieldwall's overturned oak making
+a keep of the hall's middle; and at either end of the long
+house the two great doors, north to the yard and south to the
+kitchens, which were the whole battle, because a burning hall
+is not a trap until it shuts. Vega was already moving —
 a giant among falling lamps, sweeping children and keepers behind
 her like a hand sweeping crumbs, her craft hurled up at the burning
 center-beam so that frost ran along it and the fire above the
@@ -260,7 +280,11 @@ sword in the old high guard he had drilled into Ede when she was
 seventeen and stupid, holding the south door of the Frosthall
 against the tower's own doctrine, *kill them all, they cannot
 then be enemies* — holding it open, this time, so that everything
-small could get out. The cooks went through under his arms. The
+small could get out. He had a rule from the fighting-pits, older
+than any doctrine, the first thing he gave every recruit he ever
+ruined and saved: lose your sword, lose your teeth, but keep your
+gate. Ede had heard it at seventeen and carried it thirty years.
+He kept his gate. The cooks went through under his arms. The
 last of them, the smallest boy, the one whose elbow he had
 steadied, would say all his life that Serjeant Hale looked down
 at him going past and said something, and that it was, "Straight
@@ -303,7 +327,7 @@ at all, which was worse than anything she could have said.
 Dun Harrow they laid on the High Seat's table with the banner
 of Shieldwall over him, and the freed of the cages stood watch
 in turns, all night, one-armed men and hollow-eyed women who
-had been two years in the dark of the Warcamp because a route
+had been five years in the dark of the Warcamp because a route
 was sold, standing over the man who had carried their name up
 sixty floors and put it in a doorway.
 

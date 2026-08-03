@@ -1,4 +1,4 @@
-# Chapter 11 — The Banner War
+# Chapter 12 — The Banner War
 
 Rhovan reached the Tithe Barrows two days ahead of everyone's better
 nature, and spent them the way he spent most days: on a height, in the

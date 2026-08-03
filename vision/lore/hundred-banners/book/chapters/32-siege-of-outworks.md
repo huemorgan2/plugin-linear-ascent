@@ -1,4 +1,4 @@
-# Chapter 32 — The Siege of the Outworks
+# Chapter 38 — The Siege of the Outworks
 
 Nix counted the squad in the dark, because the dark was where counting
 mattered most.

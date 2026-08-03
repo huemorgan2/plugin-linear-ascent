@@ -1,4 +1,4 @@
-# Chapter 35 — The Battle of the Herald's Gate
+# Chapter 41 — The Battle of the Herald's Gate
 
 Vega Coalbrow had built many things in a long life, and broken more, and
 she stood in the dark before the battle with her hand flat on the flank
@@ -32,6 +32,21 @@ at the rear on part-ripe limbs. Two years ago this army had been one
 disgraced captain, one lying archer, one guilty smith, and a goblin
 hiding behind a dropped standard. The tower had spent eighty-nine floors
 arming the thing that had come to unmake it.
+
+In the night the line had given the ground its own names, as lines do,
+because a soldier will not die at a map-mark. The stretch of yard-iron
+where the shields would plant was the Anvil. The lane kept clear behind
+the center for the bell-carriage was the Bell-Road. The flat
+killing-ground under the gatehouse's fixed lines the Bastion men called
+the Alley, with a drilled man's flat humor, and nobody crossed it
+standing tall. And the yards themselves ran beyond any seeing — a
+fortress-square the size of a lowland shire, wall to far wall a hard
+day's march, the King's banners on the distant ramparts reading as
+weather, not cloth. Vega walked the front of all that and looked down
+the ranks, floor stacked upon freed floor in one iron morning, and
+thought the thought the whole muster was thinking, the one the
+Frosthall had signed and the climb had spent two years proving: not a
+tower. A stair.
 
 And past the last shield stood the muster-yards of the Herald's Gate,
 and Malgrim's answer.
@@ -110,7 +125,7 @@ third rank's corner and Vega met it maul to gate-arm, her feet furrowing
 the yard-iron, and it was strong the way engines are strong, and she was
 strong the way mountains' daughters are strong, and she broke its knee
 and wept while she did it, because under the plate was some great
-captured soul that had hauled gates for a thief for a hundred years, and
+captured soul that had hauled gates for a thief for fourscore years, and
 her maul could not tell it so.
 
 That was the hour's true wound, worse than the bolts. Every blow the
@@ -147,6 +162,16 @@ smallest soldier of the rising was carving the war's whole meaning into
 its greatest battle, and the tower had no craft to answer him. How do
 you drum a soldier back into the collar you are standing on the wrong
 side of? How do you press a man who has, this very hour, been *unpressed*?
+
+By mid-morning the field had settled into a shape, and the shape held
+long enough to be learned: the shield-line bowed across the yards like
+a drawn bow, anchored at the Anvil where its hinge took the weight;
+the choir and the bell coming up the Bell-Road behind the bow's grip,
+slow as a tide-mark; the enemy's mass pressed on the line's whole
+outer face, deepest at the hinge, fed by the gatehouse down the Alley;
+and out in that mass, past any help, the threes and fives — a scatter
+of freed hands nobody could see and anybody could read, stillness
+spreading from them in rings, like rain beginning on a dusty road.
 
 The Marshal answered. Malgrim's second — a captured officer collared so
 long and so hard that his men said the collar had grown a man around it,
@@ -229,6 +254,16 @@ the middle of its greatest battle by more than every muster it had
 ever counted, and the whole vast engine of the day simply stopped,
 because a battle requires two armies, and now there was only one, and
 it was everyone's.
+
+From the gatehouse wall, where the freed clerks of Lastmuster stood
+watching their whole world change owners, the wave itself could be
+seen, and their telling of it became the age's: a ring of stillness
+widening out from the bell through a hundred thousand standing
+soldiers, the way a struck cymbal stills under a laid finger — and
+that ring, held one breath at its widest, every rank inside it seated
+and every rank beyond it still charging, was the picture the histories
+kept: the drawn line, moving outward, between the tower and whatever
+came after it.
 
 Not all. Nothing in the tower was ever all. The Wrongmade fought on,
 having nothing in them to free — the living chains, the wall-flesh

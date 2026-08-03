@@ -1,4 +1,4 @@
-# Chapter 39 — The Last Door
+# Chapter 46 — The Last Door
 
 They took the antechambers in two days of walking and one blow.
 
@@ -6,14 +6,14 @@ Ede had feared the ninety-fourth floor the way she had learned to fear all
 the Made's quiet, and it was quiet: a honeycomb of waiting-rooms running
 back bench by bench to the vanishing point, summons-bells ringing numbers
 that were recalled the same breath they were called. The waiting itself had
-a body there — a grey chamberlain grown out of a century of tokens and
+a body there — a grey chamberlain grown out of a lifetime of tokens and
 unread petitions, seated at the last desk before the throne-approach — and
 it did not fight the host so much as file it. Nib of Doorward taught the
 vanguard the door-art called Precedence, and the rising walked the whole
 length of the queue the wrong way, and Vega's hammer broke the desk like a
 bad promise. What Ede kept of that floor was not the eviction. It was an
-old woman of the taken standing up off a bench she had warmed for a
-hundred years, looking at the brass token in her fist — her number, her
+old woman of the taken standing up off a bench she had warmed for
+eighty years, looking at the brass token in her fist — her number, her
 whole life's wait — and letting it fall. The sound it
 made on the marble was small. The sound of ten thousand more was not.
 Nib's people brought the taken's unread petitions up out of the Filing

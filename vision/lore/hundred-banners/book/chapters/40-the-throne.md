@@ -1,4 +1,4 @@
-# Chapter 40 — The Throne
+# Chapter 47 — The Throne
 
 There was no hundredth floor. There was a summit.
 
@@ -68,7 +68,7 @@ court, carrying the long ledger of its crimes; Cord's masons with their
 chisels and their true history; Elys's gardeners, soil still on their
 knees from the beds they had emptied; Vess and her curators bearing the
 arms of five ages' fallen heroes back up to the place those heroes had
-been climbing toward; Nib's grey waiting-folk, each with a century's
+been climbing toward; Nib's grey waiting-folk, each with a lifetime's
 petitions in their arms and no token anywhere on them, walking — at last,
 at very long last — through the last door at the head of the queue.
 
@@ -114,6 +114,15 @@ arrived. There was no sound in it you could call a war-sound. There was
 breath, and boot-leather, and somewhere down the ranks a baby crying, and
 Ede thought: that is what he is listening to. Not for his tower. His
 tower is dead. He is listening to the world, standing in his room.
+
+Even filled, the hall was not full. The host stood in it as a town
+stands on a plain — ten thousand carried torches making one warm
+country of light, and the dark iron running out flat past its edges on
+every side, no wall in sight but the sky. The summit had never had
+weather; it had been built above all of it, one man's cold room over
+the world. It had weather now. The breath of the gathered peoples went
+up into the black and hung there, a faint drifting mist above the
+banners, the first cloud the top of the tower had ever owned.
 
 ⁂
 
@@ -171,6 +180,22 @@ striking home on a hundred floors at once, descending, fading, going all
 the way down to the dark of the Fencerows, where — Hobb swore it ever
 after, and no one doubted him — somebody thumped a fence-post.
 
+For the space of that answer, nothing in the hall moved at all. The
+tellers, who agree on nothing, agree on the stillness: a hundred
+banners upright as winter trees, ten thousand faces turned one way,
+one man standing before his chair with the mail of borrowed light
+stirring about him — the only moving thing in the world — and the
+sound going away downward under everyone's feet like a stone dropped
+down a well a hundred countries deep.
+
+And standing in that stillness Ede understood at last what was being
+refused, and it was not the chair. What he had built — floor on floor,
+collar on collar, portion by portion — was the wanting: the
+long-taught ache for a hand to hold the door and ration the light,
+the prison that outlives every stone it was learned in. Steel had
+never once touched it. The knock was the wanting breaking, a hundred
+floors at once, one more collar, the last one.
+
 The world had answered before its general. Ede waited until the last
 knock died in the iron underfoot, and then she gave Vharuk, King of the
 Ascent, the whole of her half of the shortest conversation in the book
@@ -191,6 +216,17 @@ and the garden's perfume, bells and banners and a marble fist of the
 Kingsway's rubble, and the hall of the summit became for forty
 heartbeats a place the tale-tellers would spend their whole craft on and
 never get right.
+
+The vanguard had named the ground while it crossed it, quietly, in the
+way of soldiers who need a thing called something before they will die
+on it: the Last Field, for the open iron between the door and the
+dais; the Steps, which needed no more name than that. And the fight,
+for all its forty-heartbeat fury, had a shape simple as a hinge: the
+shield-arc planted across the Last Field's head, the world massed
+behind it out to the torchlight's edge, and
+one small moving knot — Ede, Aldis at her right, Vega at her left,
+Rhovan's arrows going by them, Nix's count coming after — walking up
+the middle of everything the King could do.
 
 The host held. It held because every art he owned, some floor had
 already taught them to answer. The gardeners' word withered his blooms
@@ -315,4 +351,4 @@ beginning, in forty languages, to argue about supper — alive, unruled,
 loud, and free — and down through the open Last Door lay a hundred freed
 floors and every one of them was on the way home.
 
-She went down into her people, and the descent began.
+She went down into her people, and the climb was over.

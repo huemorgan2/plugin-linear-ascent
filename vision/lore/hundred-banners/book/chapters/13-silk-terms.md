@@ -1,9 +1,9 @@
-# Chapter 13 — Silk Terms
+# Chapter 15 — Silk Terms
 
 *The rising makes good pace,* Rhovan wrote. *Nine floors in a season. The
 host is fed and its factions hold.*
 
-He did not write: the host walked the Grey Rides behind a hundred-year
+He did not write: the host walked the Grey Rides behind a fourscore-year
 hunt and heard it called home. He did not write what that had sounded
 like. The Wake paid him for facts, and the Wake's ciphers had no
 characters for the things that mattered.
@@ -19,18 +19,48 @@ it. When Tallyhorn broke on the third morning — a courser welded to its
 dead rider, brought down on the open road — Aline had sounded the true
 recall from the Ride-Head crossroads, and the whole grey hunt had come
 home. Horse and rider and hound, laid down at the
-wayshrine, a hundred years late for their own supper. The ride-keepers
+wayshrine, fourscore years late for their own supper. The ride-keepers
 climbed with the rising now, its outriders and its fastest word.
 
 After that the floors ran together the way marching floors do. The Deep
 Drifts, winch-rope dark; the Troll Delvings; the Rig Graves, rust islands
-in a drowned marsh; the Vent Country's scalded plain. The Processional
+in a drowned marsh; the Vent Country's scalded plain. Ran together, and
+did not shrink. The Drifts were a week of going down to go up, a
+country measured in fathoms, winch-ropes creaking under loads that
+would never come up, cold air sighing out of shafts that swallowed
+lamplight whole; Orla Ropewalk's crews lowered the army cage by cage
+and raised it on the far headframe, reading the ropes by their pull
+the way other folk read sky. In the Delvings nobody spoke above a
+murmur for three days, because the trolls of the Deep shore up
+nothing, and the whole floor was one cave-in that had not finished
+falling, groaning and shedding stone at the lamplight's edge while
+Hune Delverest's pick-crews walked ahead chalking the hour's safe
+ground. The Rig Graves stank of rust and still water from rim to
+rim — the fen country's great harvest-rigs toppled to their own
+horizon, hulls for islands, derricks for dead trees — and Weld
+Rustwake's salvage-folk poled the column between them across the
+orange meres. On the Vent Country's crust Sela Steamgate walked the
+van herself for two days, timing the ground's white jets by their
+whistles — read the whistle, not the steam, she said; the steam has
+already cooked you — and the army crossed a breathing yellow plain
+single file, on the clock of one keeper's ear. The Processional
 Way they had dreaded — a funeral causeway of willows and passing-bells —
 they walked in three days, quietly, bells rung by the forms, Wakesend's
 keepers leading; they knew how to walk a funeral road now. Then the
 Broken Doors, the Peat Cuts, and the Echo Glades, where the wood answered
 whatever it heard, and three thousand marching feet came back out of the
-trees like a second army keeping step.
+trees like a second army keeping step. The Doors sobered even the
+giants: a tier of bulkhead-gates the deep-forge had built to hold an
+age, every one blown off its hinges in a single season, the corridors
+between them crow-loud and scorched where the tower's charges had cut
+through; Bruna Lastlantern kept the one door left, and walked the army
+through the breaches slowly, so that it would understand what it was
+climbing against. The Peat Cuts were two days of black trenches
+slotted dead-straight to the horizon, house-deep, ankle-flooded,
+whining with midge-fog, Maddox Turfside's cutters walking the banks
+above the column and calling down the firm ground — and in the deepest
+cut the peat gave up its dead whole and perfect, and the rising, which
+knew funerals by then, laid them back down.
 
 Berrin's supply-trains found them on every floor. That was the season's
 quiet miracle, and Rhovan, whose trade was noticing, noticed it:

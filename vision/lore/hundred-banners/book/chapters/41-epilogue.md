@@ -16,6 +16,11 @@ done — but to carve, small and low on one standing plinth, in a plain
 hand, the names of everyone the avenue had ever lied about. Nix read them
 until his eyes gave out. Then he had them read to him.
 
+Somebody asked him, on the long stair below the Kingsway, whether going
+down felt different from going up. Nix considered it for half a floor.
+"Turns out you climb a tower the same way you leave one," he said. "One
+true step, then the next." And went back to counting.
+
 He walked, mostly, near the wagons. That was where his work was. The
 parole of Berrin Or was a single sheet, written by the thirty and signed
 by the thirty, and it said in effect that the man who had sold Shieldwall

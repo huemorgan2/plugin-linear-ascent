@@ -1,4 +1,4 @@
-# Chapter 16 — The Molt
+# Chapter 18 — The Molt
 
 The fortieth floor fell without an arrow loosed, and Nix counted the
 arrows anyway. None. Naught. Not one. It was his favorite count of the

@@ -1,4 +1,4 @@
-# Chapter 17 — The Frozen Sea
+# Chapter 19 — The Frozen Sea
 
 Vega Coalbrow learned to forge without fire on the forty-first floor,
 and it humbled her the way only a new craft can humble an old master.
@@ -177,7 +177,7 @@ sheathed in blue rime — a swell troll grown vast and welded under a
 shell of pressure-ice that regrew as fast as it broke, heaving whole
 floes on its shoulders to spill the host into the leads. Its one tactic
 was a good one: make the ground itself a trap-door, drag the battle
-into the black water. It had worked for a hundred years on everything
+into the black water. It had worked for eighty years on everything
 the sea had sent against it.
 
 It had never fought a fleet. The freed floe-boats came on under sail

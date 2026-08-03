@@ -152,7 +152,7 @@ stolen flags where he had first snatched it up to hide behind — a goblin's
 shield of good wool and better ghosts. He had surrendered it that
 afternoon without being asked, the way you give back something you were
 keeping for someone. *"It never fit me,"* he'd said. *"Too tall. Wrong
-number of legs on the wolf. Also it's yours."* And Dun had taken it in his
+number of stones in the wall. Also it's yours."* And Dun had taken it in his
 one hand and said nothing at all, and gone away with his face very still,
 and now here he was.
 
@@ -171,7 +171,8 @@ Nobody spoke.
 wherever he sleeps, we are the one debt he'll never come to collect,
 because we cost him nothing and we were worth it." He turned to Ede then,
 and held the banner out across the fire, the pole steady in his single
-fist, the old wolf swaying in the heat-shimmer. "She came back. Walked up
+fist, the sewn wall and its crooked star swaying in the heat-shimmer.
+"She came back. Walked up
 the worst stair in the world to do her collecting. That sums it, for me.
 I'd plant this for you, Captain, but the floor's dwarven granite and I'm
 short a hand, so you'll have to hold it yourself, and God help you, so
@@ -266,8 +267,8 @@ climbers, Ede Stonhal, and I will tell you what the strong ones knew: home
 is the wound. Climb with it open. It bleeds less in the wind."*
 
 In the morning the freed mustered under the banner — sixty-three of them
-in dwarven boots, Vega having mended the old wolf's torn hoist with
-silver forge-wire, one-handed Dun directing the stitching like a man
+in dwarven boots, Vega having mended the old wall-and-star's torn hoist
+with silver forge-wire, one-handed Dun directing the stitching like a man
 conducting music — and when Ede asked, formally, who among them would go
 down to Roothollow and rest, not one soul stepped out of the line, and
 Serle Danner stood at the end of it with his jaw set, daring her to send

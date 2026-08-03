@@ -1,4 +1,4 @@
-# Chapter 37 — The Obsidian Stair
+# Chapter 43 — The Obsidian Stair
 
 The stair was cut from a single sweep of black volcanic glass, and it was
 the only light on the ninety-first floor: a cold gleam going up into dark,
@@ -89,7 +89,7 @@ was truly out.
 "You kept it," Rhovan said.
 
 "Kept," the reflection agreed. It had his voice, light and unbothered,
-and it dealt its words the way he had dealt words for a hundred years:
+and it dealt its words the way he had dealt words for fourscore years:
 one card at a time, face down. "Calyne lives, where I am."
 
 "Say the rest of it."
@@ -130,7 +130,7 @@ Calyne died proving Berrin because I was three floors away holding *her*
 faction to *Ede's* war, and if the glass keeps every road, then keep
 this: given all of it again, the wind floors, the token, the trap, the
 grave —" his voice did not break; elves' voices do not break; it merely
-told, for the second time in a hundred years, the entire truth at once,
+told, for the second time in fourscore years, the entire truth at once,
 "— I would turn again. I am not sorry. I have never once been sorry. I
 grieve her and I am not sorry, and you cannot say that, and she knew it
 of me before I did, and that is why her cipher-book went to Ede and her

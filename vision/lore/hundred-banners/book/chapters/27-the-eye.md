@@ -1,4 +1,4 @@
-# Chapter 27 — The Eye
+# Chapter 32 — The Eye
 
 Nix heard the silence before he saw it, which he would have told you
 was impossible, wrong, and exactly what happened.
@@ -17,7 +17,7 @@ water strung on nothing, close as barley in a field, and when Nix
 put out his hand and touched one it broke on his finger, warm, and
 did not wet the ones beside it. Still trees stood in ranks, not one
 leaf turning. Hush-grass grew silver over everything, and no wind
-had bent it in a thousand years.
+had bent it in eighty years.
 
 It was the most beautiful place he had seen in seventy-eight floors,
 and everything in him that had lived four years under a collar stood
@@ -49,7 +49,7 @@ noticing.
 At Lullside her folk lived close to the eye-wall on purpose, in the
 skirts of the roar, using the noise the way other towns used walls.
 They were weather-readers and rain-wrights, who had fought the
-drowse by habit for a thousand years, and they took the advance-
+drowse by habit since the Theft, and they took the advance-
 party into the Barometer Vault — the one built place the
 lull could not reach, cool stone and a great storm-glass taller
 than Vega — and showed Ede the eye-wall's turning, and the one safe
@@ -90,7 +90,7 @@ The eye had its price all the same; it showed them on the second
 day what sitting down cost. Off the camps' western ring lay a
 garden — the Sitting Garden, Mera called it, and walked them
 through it herself, one hand on her bells — where the calm's first
-captives had sat down to rest a thousand years ago and never
+captives had sat down to rest eighty years ago and never
 risen. They were still there. Folk of the old sky-realm, seated in
 the silver grass among the hanging rain, breathing. Their clothes
 had gone to moss and their hair to lichen and they breathed, one
@@ -190,7 +190,7 @@ The stillness pushed back. He felt it the way you feel a hill
 under a cart: a great, patient, downward softness leaning on the
 song, on the mourners, on every busy hand — the lull gathering
 itself at the garden the way it had gathered on sitting folk for a
-thousand years, the pressure-ghosts drifting in from the silver
+lifetime, the pressure-ghosts drifting in from the silver
 grass, drawn to grief as to tiredness, and among them, rising out
 of the Still Point at the garden's heart like cream rising in a
 pan, something vast and calm and almost kind — the stillness
@@ -204,7 +204,7 @@ That was the whole of the miracle, and Nix understood it even as
 his neck-hair stood: the eye had one art, and the art was rest,
 and Dun's song was the one human thing built exactly contrary — a
 count that demands an answer, a music you cannot sit down in. The
-seated of the Sitting Garden stirred. Breath by thousand-year
+seated of the Sitting Garden stirred. Breath by eighty-year
 breath, moss cracking along their shoulders, folk who had rested
 since before Roothollow had a name lifted their heads at the old,
 old shape of a muster-count — *count off, count off* — and
@@ -214,7 +214,7 @@ cracking off them, and the vast calm shape at the Still Point
 came apart last and slowest, not slain — there was nothing in it
 to slay — but evicted, dismissed like a servant whose office has
 ended, dissolving into a shower of ordinary rain that fell, that
-*fell*, the first falling rain the eye had known in a thousand
+*fell*, the first falling rain the eye had known in eighty
 years, straight down onto the graves like a blessing with its
 weight returned.
 

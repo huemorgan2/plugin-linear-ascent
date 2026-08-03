@@ -1,4 +1,4 @@
-# Chapter 25 — The Storm Queen's Price
+# Chapter 29 — The Storm Queen's Price
 
 The wind hit Ede before the floor did.
 
@@ -122,8 +122,8 @@ I have priced armies all my life. Yours is worth more than it knows.
 — And your price, — Ede said, — for the sky?
 
 — The throne, — said Zephyra, — his, — and for one breath the mildness
-opened, and what was under it was not rage; it was appetite with a
-thousand years of patience, appetite worn smooth. — When your banners
+opened, and what was under it was not rage; it was appetite with
+eighty years of patience, appetite worn smooth. — When your banners
 pull Vharuk down, you will not sit in his seat. You will not break
 it, either — do not pretend to me you know how. Someone will keep the
 tower's crown, general, because a crown does not stop existing when
@@ -251,6 +251,11 @@ its accounts.
 honest offer this tower has made you. Price of a stilled climb: a
 gale. Price of an audience: a gale. Price of an army's insolence,
 general, priced as armies are priced — by the third part.
+
+— And enter this in your own book, general, against the day you
+will want it: the Court does not refuse custom. When the wind
+profits, you shall have wind. My ledger keeps to the letter. You
+will learn, in time, what that is worth.
 
 Below the court, deep in the crag, in the Windward Undercroft where a
 realm's caught weather had been cellared in storm-glass against foul

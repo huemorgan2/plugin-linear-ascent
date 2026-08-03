@@ -1,4 +1,4 @@
-# Chapter 21 — The Frosthall Parliament
+# Chapter 24 — The Frosthall Parliament
 
 The hall-steward of Hearthold kept her songs the way other keepers had
 kept weirs and lamps and lid-maps: hidden, mended, and ready. Her name
@@ -226,7 +226,14 @@ preamble argued down to the bone, copied fair by three clerks,
 and the preamble said the only thing the whole tower agreed on:
 *that the world was one country before the Theft, and shall be
 one country after, and that no floor climbs alone.* Then the
-names. Hrimgar signed in the deep script, and Vega and Ulfar
+names. Hrimgar rose to put his down first, and stood a moment
+over the page, the pen a straw in his great hand, and said —
+slowly, the way his folk finish what they begin — "Alone, each
+of us was a floor. Stacked, we were his tower. Standing shoulder
+to shoulder, for the first time since the Theft, we are a
+stair." Nobody wrote it into the charter. Nobody needed to; the
+hall would carry it up the rest of the tower for him. He signed
+in the deep script, and Vega and Ulfar
 after him, brother and sister, one pen. Calyne signed small and
 plain. Voss signed with a flourish that used up more ink than
 his whole clause. Hobb Fennick, sent up from the first floor of

@@ -1,4 +1,4 @@
-# Chapter 28 — The Coursing
+# Chapter 33 — The Coursing
 
 The horns took them at moonset, on the third night in the eye.
 

@@ -1,4 +1,4 @@
-# Chapter 19 — The Wyrm's Pity
+# Chapter 21 — The Wyrm's Pity
 
 The ash began two floors below the fire. It greyed the frozen boughs
 of the Rime Forest; it lay on the Black Meadows like a mourning-cloth;
@@ -160,7 +160,7 @@ him longest of all. The keepers say you are the only being in the
 tower that pities him."
 
 "And your keepers say it as a wonder," said Cindermaw. "It is only
-age. I have watched him a thousand years — longer than his Heralds
+age. I have watched him eighty years — longer than his Heralds
 have lasted, longer than his courts. He is young. He is frightened.
 He was frightened first and cruel after; it is nearly always that way
 around. He stole a world and stacked it into a tower so that he would

@@ -1,4 +1,4 @@
-# Chapter 34 — The Vizier's Floor
+# Chapter 40 — The Vizier's Floor
 
 Five floors lay between the dead welding-rigs and the Herald's Gate, and
 the rising took them in nineteen days, and Rhovan of the Grey Rides —
@@ -15,7 +15,11 @@ The Imp Warrens fell first, and fell strangely: not stormed but *woken.*
 Floor eighty-five was the barracks-slum of the Made — iron cell-blocks
 stacked in reeking, smoke-hung tiers where the tower's soldiery denned
 between shifts — and Wend Sootside's whisper-network had been working it
-from within for years before the rising ever reached the stair. The Warden
+from within for years before the rising ever reached the stair. The
+warrens ran out of sight in every direction, tier over tier under a
+soot sky of their own making, flue-fires guttering like low red stars,
+and the din of a hundred thousand soldiers at rest never once went
+quiet in the two days the army spent inside it. The Warden
 himself was the proof of what the smoke-net claimed: Fluegrim, the
 warren's enforcer, a hellknight welded huge, whose collar was old and
 crazed with a hundred half-doubts. Nix went to him under a parley-rag,
@@ -46,7 +50,11 @@ discipline made a landscape, ramparts and parade-grounds running out of
 sight, ranked ballistae on the firing-steps and the tramp of the endless
 drill going through the ground like a pulse; it was the first floor to
 kill more of the rising than it lost, and for two days it was the war at
-its oldest and worst. Then Dara Wallrest's stolen counter-signs reached
+its oldest and worst. The parade-ground had no far side that any scout
+found; the drill came out of one horizon and wheeled away into the
+other, and the slave-crews of Wallrest were still building the
+ramparts longer at both ends, as if the tower meant its army to drill
+to the rim of the world. Then Dara Wallrest's stolen counter-signs reached
 the Command Bastion in a freed clerk's hand, and the word *Countermand*
 went down the drill-lines like frost down a window, and whole columns
 wheeled on their own officers' orders into confusion. Bastionheart's
@@ -60,13 +68,20 @@ days after, Vega's crews and the garden-thralls souring the iron-seed
 in its beds so that a season's crop of rams and towers rotted unripe in
 the rows; the Warden flailed and fell apart into dead scrap, and Nael
 Ramside wept at the seed-vault door, and the rising marched out with
-engine-iron and iron-seed enough to grow siege-works of its own. The
+engine-iron and iron-seed enough to grow siege-works of its own. Three
+days, because the gardens were a country: terraced beds stepping away
+to the horizon under trellised girder-vines, oozing black oil for sap,
+half-grown rams creaking in their rows like an orchard in wind — the
+Made's mockery of every green floor it had been built by unmaking. The
 Iron Chantries were harder, because the
 enemy there was belief — the King's black war-chapels, censer-smoke and
 iron liturgy working to make the bound *mean* the words — and Rhovan, who
 had spent a life being loyal in fractions, hated the floor with a
-completeness that surprised him. They rang the Iron Belfry against the
-liturgy and the whole compelled congregation cracked awake; the counter-
+completeness that surprised him. There was no light on all its miles
+but censer-glow, and no weather but the incense — a smoke that hung to
+the horizon and worked at the mind the way damp works at iron. They
+rang the Iron Belfry against the liturgy and the whole compelled
+congregation cracked awake; the counter-
 creed came out of the Reliquary and became a word, *Recant,* the art of
 breaking a faith that had been welded on; the freed furnace-priests
 stripped their censers and asked, as one body, to march with the van.
@@ -139,7 +154,7 @@ afterward say when his heart had started to slam.
 and Rhovan, who knew her ciphers better than any soul alive, understood
 that she was quoting the enemy's own ledger-form back at him deliberately,
 a huntsman's courtesy, a spymaster's contempt. "The toll-ledger Rhovan
-took at floor sixteen shows a payment moved *up* the tower the same week
+took at floor eleven shows a payment moved *up* the tower the same week
 Shieldwall's route was sold, drawn against Roothollow accounts. Item: the
 granary of Roothollow, burned that spring, was rebuilt that same summer,
 by unrecorded coin. I have the mason's dates. Item: at the Pale Court
@@ -147,7 +162,7 @@ hangs a Shieldwall shield sold upward through the toll-roads out of
 Roothollow that identical week. Item —" and here she paused, the only
 pause she permitted herself, and into it the drums beat twice — "three
 days ago, in the Welding Halls, a soldier of Shieldwall's thirty, sold
-twenty years since, was unsealed. His witness is one word wide. He has
+five years since, was unsealed. His witness is one word wide. He has
 carried it since the cages. He smelled the courier who came to count the
 merchandise."
 
@@ -179,7 +194,7 @@ was underneath had been underneath the whole time.
 
 Berrin Or stood up slowly at the charter-table, sixty years old, flour
 on his cuff, the face the entire rising trusted above any face alive,
-and said, mildly, "Wat. Lad. You've been iron twenty years. Memory's a
+and said, mildly, "Wat. Lad. You've been iron five years. Memory's a
 cruel smith, and this cruel woman —"
 
 "Open your shirt," said Calyne.

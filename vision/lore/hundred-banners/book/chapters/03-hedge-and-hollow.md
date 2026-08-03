@@ -215,7 +215,7 @@ Ede killed it.
 Rhovan did not see her decide, and that was the whole of what he saw:
 there was no deciding in it. The kobold's hands went to its collar and
 her blade was already through it — one motion, old and oiled and
-perfect, a stroke from another war, from a mine-dark nine years deep
+perfect, a stroke from another war, from a mine-dark five years deep
 where things that knelt in front of Shieldwall had killed the ones who
 believed the kneeling. The sound the body made was small. The sound the
 water made, dripping somewhere off in the galleries, went on exactly as
@@ -234,7 +234,7 @@ them.
 
 He took out the grey book. He was aware of her eyes coming up as the
 oilcloth cracked, aware of the recruits watching him do it, aware that
-there were words that could be said — *warcamp reflexes, nine years,
+there were words that could be said — *warcamp reflexes, five years,
 no one blames* — and that saying any of them was not his work. His
 work was the columns. He set the book on his knee and wrote, in the
 third column, in a fair hand, without hurry and without a word:
@@ -258,6 +258,20 @@ Brom met the crusher-jaw with the boss of his shield and the whole floor
 rang like a struck bell; and Ede finished it in the water, and stood
 after, breathing, while the orange stain of the drift settled around her
 knees.
+
+That night, walking the watch below the Headframe, Rhovan passed the
+banked fire where the captain sat alone and heard the splinter
+speaking, low, in the dark over her collar-bone, and did not stop
+walking, and heard it anyway.
+
+*I have carried one-and-forty climbers,* it said, *and every one of
+them was certain of something that killed somebody. A sword is quick,
+Ede Stonhal. It answers today's question and deafens you to
+tomorrow's. Spend your certainty slowly. It is the only coin in this
+tower that does not come back.*
+
+If she answered, the fire kept it. He wrote nothing in any column.
+There are entries a book cannot hold.
 
 The Headframe's great wheel turned that night for the first time in
 forty years, raising crews out of galleries the tower had written off,

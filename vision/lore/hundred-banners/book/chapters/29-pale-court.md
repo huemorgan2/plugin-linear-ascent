@@ -1,4 +1,4 @@
-# Chapter 29 — The Pale Court
+# Chapter 34 — The Pale Court
 
 The pale court leached the color out of things, and it did it slowly
 enough that you could watch it happen.
@@ -176,7 +176,7 @@ The spring the Warcamp filled its cages. Ede stood in the pale light with
 her hands loose at her sides and let the arithmetic finish itself, because
 it was going to finish whether she let it or not. The spring her company
 died, somebody in Roothollow had money moving up the toll-roads. She had
-known that much since floor sixteen — a payment up the tower, the week of
+known that much since floor eleven — a payment up the tower, the week of
 the sale; Rhovan's stolen ledger-page; a courier who smelled of Roothollow
 bread. A signature without a name. But she had been in Roothollow that
 spring, drunk and dying of it, and she remembered the season anyway,
@@ -269,7 +269,7 @@ She looked out at the bone-white court a long time.
 The pale light did not change, because it never changed. Morning in the
 Huntsman's country was only the hour the horns woke. When they did, they
 sounded a truce-call down the runs — the first mercy this floor had been
-allowed in a thousand years, bought by four walkers and a boon — and Ede
+allowed in eighty years, bought by four walkers and a boon — and Ede
 Stonhal washed her face in cold water, and hung her grief where the court
 hung its trophies, face-out, and went down to muster her army beside the
 man who had sold the last one.

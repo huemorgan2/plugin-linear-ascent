@@ -1,4 +1,4 @@
-# Chapter 15 — Calyne
+# Chapter 17 — Calyne
 
 The word came up with the ride-keepers, the way all word came up now:
 a grey rider on the Grey Rides, climbing alone.
@@ -62,8 +62,8 @@ He stood. He had the sense not to speak.
 "Item," she said, in a voice like a door being locked. "One founding.
 Item: one purpose, whole. Item: the name — the *name* — of the
 Leaf-Ledger, in the hearing of a general, a giant, a barrow-queen, a
-goblin, and a beast that files what it hears and never dies. Three
-centuries of silence, spent in an afternoon, by a field man, for
+goblin, and a beast that files what it hears and never dies. Fourscore
+years of silence, spent in an afternoon, by a field man, for
 *road-toll*." Her eyes went around the fire then, deliberately, and Ede
 felt them stop on her and weigh her like freight. "You will want to know
 if I have come to kill him. The Wake does not spill what it can still

@@ -1,4 +1,4 @@
-# Chapter 18 — Brother and Sister
+# Chapter 20 — Brother and Sister
 
 The survey came to the forge-barge in a strongbox with two locks, and
 Ulfar wore both keys on a chain around his neck, under the shirt, the
@@ -80,7 +80,7 @@ down to where it was stolen from. Every field seated back into its own
 scar. The delvers' caverns rejoined to the Deep. The elves' wood laid
 piece by piece back into the elves' country. Nobody falls, Vega. Not
 one soul, not one fence-post. That is what the engines are *for*. That
-is what they have been waiting rigged to do for a thousand years."
+is what they have been waiting rigged to do for eighty years."
 
 She went at the mathematics for half the night, because she was a
 Coalbrow too, and because somewhere in the second hour she had
@@ -176,7 +176,7 @@ any shard what it hears at night, even here, even now, with every
 Warden dead below us. There is a hum under the world's floorboards,
 and your plan keeps it humming for a generation, and calls it mercy."
 
-"Against ten centuries in the sky, sister. Weigh it."
+"Against eighty years in the sky, sister. Weigh it."
 
 "I am weighing it. Now weigh mine." She flattened her palm on the
 overlay, over the spine, over the small bright thread of the core. "The
@@ -236,8 +236,8 @@ its eyes open, which is more than any king ever offered it."
 
 "Yes," she said. "We will. And you will lose."
 
-"Perhaps. I am a patient man, sister. The engines have waited a
-thousand years. They can wait out a vote."
+"Perhaps. I am a patient man, sister. The engines have waited
+eighty years. They can wait out a vote."
 
 He gathered the vellum, sheet by sheet, squaring the edges the way he
 had squared everything since he was seven. At the door — filling it,

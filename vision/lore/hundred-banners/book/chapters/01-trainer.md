@@ -140,14 +140,14 @@ The tack-shed went away for a while.
 
 She stood in the mine-dark under floor twenty with her company breathing
 around her and the drums starting up, and heard, for the first time
-truly, what she had heard that night and buried under nine years of
+truly, what she had heard that night and buried under five years of
 asking the wrong question: the drums had been beating Shieldwall's own
 march. Their own signal-cadence, the beat she used to move the line in
 the dark, played back at them out of the black like a landlord jingling
 your own keys. She had taken it for mockery, improvised, some drummer's
 cruel good ear. It was not improvised. They had the watchwords. The gates
 had barred behind the company, not before it — she had cursed her own
-scouting for nine years over those gates — and Skarn's honor guard had
+scouting for five years over those gates — and Skarn's honor guard had
 already been formed up on the spoil-heaps above the road, in the dark, in
 silence, torches shuttered, waiting the way you wait for something whose
 hours you have in writing. The whole floor had not fought them. It had
@@ -157,7 +157,7 @@ Not a defeat. She had led thirty-one people into a mine and it was never
 a battle at all. It was a delivery, and she had carried it, on time, by
 the marked road, to the drums.
 
-She had spent nine years asking what she had done wrong. Here was the
+She had spent five years asking what she had done wrong. Here was the
 answer, in a clerk's fair hand, with the important half cut away: nothing.
 She had done nothing wrong, and it should have lifted something off her,
 and instead it set down something far heavier in its place, because a
@@ -202,7 +202,7 @@ the criers. Half this town already half-believes the captain sold her own
 company and drank herself kind about it after. The page doesn't say she
 didn't. Read it again if you doubt me. It names no seller. Papers like
 this hang whoever's standing nearest when they're read aloud, and you
-have been standing nearest for nine years."
+have been standing nearest for five years."
 
 Her hand had closed on the edge of the plank table. She watched her own
 knuckles whiten with a sort of distant interest, the way you watch
@@ -220,7 +220,7 @@ tack-shed, at the harness and the pay-ledger and the stool she hadn't
 offered, and then at her. "You count well. Everyone says so. The counts,
 the recruits, the ladles from that trough. Count this: thirty and some,
 sold by the head, and the seller's name cut clean, and kept. Somebody has
-been carrying that name for nine years, the way you've been carrying the
+been carrying that name for five years, the way you've been carrying the
 blame for it. Of the two of you, I'd say the name weighs less. Its owner
 has never once looked for the bottom of a cup."
 
@@ -246,7 +246,13 @@ The Stone of the Climb stood by the Root Gate, a standing slab the height
 of a giant, cut on every face. On the gate side glowed the names of the
 breakers — every climber who had ever put a Warden down and opened a lift,
 lit from within, oldest at the base, so that the whole stone stood in its
-own shallow light. On the north face, in plain dead letters, the lost.
+own shallow light. At the very base, under all that light, the first
+name ever cut stood worn nearly flat — A. BRIGHT, the letters more
+thumb now than chisel, its glow gone thin as breath under two
+generations of hands touching it on the way to the gate. Nobody in
+Roothollow could say who Bright had been. Nobody asked. It was only
+where the counting started. On the
+north face, in plain dead letters, the lost.
 
 She had cut thirty of those letters' names herself, one each night, the
 first winter she was sober, with a mason's chisel she returned every

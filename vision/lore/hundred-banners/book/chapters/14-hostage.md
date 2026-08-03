@@ -1,4 +1,4 @@
-# Chapter 14 — The Hostage Chapter
+# Chapter 16 — The Hostage Chapter
 
 There was no day in the Broodthrone, and no night, and after the first
 stretch Rhovan stopped pretending to count either. The vault kept its

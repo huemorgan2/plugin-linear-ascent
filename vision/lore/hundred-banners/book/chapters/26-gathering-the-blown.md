@@ -1,4 +1,4 @@
-# Chapter 26 — Gathering the Blown
+# Chapter 30 — Gathering the Blown
 
 Rhovan had spent a life finding things that did not want to be found,
 and he had never hated the work until the things were his own.
@@ -137,7 +137,7 @@ Calyne turned. Everyone turned.
 not offering fractions. — I have served the Wake since before this
 army had a name, and I tell this council what every elf at this table
 knows and will not say: the lamp-woods have stood cut and stolen for
-a thousand years. They grieve, and they wait, and they will still be
+eighty years. They grieve, and they wait, and they will still be
 grieving and waiting in the spring, because that is what woods do.
 The blown will not. The wire is at their throats *tonight*. The racks
 are quickening *tonight*. — He came forward into the lamplight, and

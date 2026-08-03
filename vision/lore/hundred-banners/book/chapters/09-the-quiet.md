@@ -1,4 +1,4 @@
-# Chapter 9 — The Quiet
+# Chapter 10 — The Quiet
 
 They learned the shape of winning on the Burnt Common, and it fit them so
 well it should have frightened her sooner.
@@ -270,7 +270,24 @@ are."*
 In the morning the fair rose anyway — that was the bitter wonder of it;
 eleven fair-folk mustered under the banners, tumblers and sharps and one
 grim rigger whose wagon had burned, because, the rigger said, hiding
-hadn't worked, so. The host climbed toward the Slag Barrens with its
+hadn't worked, so.
+
+Pol Fairstead did not muster. He came to the column's head instead,
+ring-keys on his belt, grey flag furled, to see the army off his
+floor, and what he said to Ede at the gate went up the tower with
+her. "You'll break more Wardens, captain; I don't doubt it now. Break
+this too, then. The tower is only the stone. The prison is what we
+learned to want. You can break stone." He looked back down the burned
+street, where the great wheel still burned its funeral lamps and the
+fair's children were out at last in the ash. "Now break the wanting."
+
+Behind him, thin and clear over the ash-lane, the children were
+already skipping rope to an old counting-rhyme of the Men floors —
+*run from the horn and the horn runs after; walk to the horn and the
+horn falls silent* — and Ede heard it without knowing she heard it,
+the way you bank a coal against a colder year.
+
+The host climbed toward the Slag Barrens with its
 first unwilling floor behind it and the wheel-light on its back, and at
 the rear of the column Ede watched the Cullers' grey pennons peel away
 and drop down the freed lifts, Hale's companies taking up the rear-gate

@@ -1,4 +1,4 @@
-# Chapter 33 — The Welded
+# Chapter 39 — The Welded
 
 The seam split at dawn, if the Made had dawns, and Ede Stonhal led the
 rising into the Welding Halls, and after that nobody spoke above a
@@ -151,7 +151,7 @@ crooked to carry what was not there.
 Ede knew the stance before she knew the face. Third file, shield-side,
 the anchor of the push — you built a shield-wall around men who stood like
 that. And then the face, above the iron: older, ruined, the same. Wat
-Kello. Twenty years on the Stone of the Climb in Roothollow, the fourth
+Kello. Five years on the Stone of the Climb in Roothollow, the fifth
 name from the top of the thirty, cut there by her own hand with the chisel
 skipping because she had still been shaking in those years, and she had
 smoothed the skip with her thumb and left the name crooked. Wat Kello,
@@ -159,7 +159,7 @@ who had held the third file at the Red Warcamp while the trap closed,
 whose body had never been found among the caged nor among the dead, and
 now she knew why, and the knowing was a whole war's weight arriving at
 once. Not caged. Not killed. *Sold on.* Passed up the tower like goods,
-held in the dark for twenty years — the Silk Vaults, the Trophy tiers,
+held in the dark for five years — the Silk Vaults, the Trophy tiers,
 whatever ledger-line he had been entered under — and fed at the last to
 these racks, to be finished into the enemy and sent down against his own.
 
@@ -168,7 +168,7 @@ at attention, waiting on her order.
 
 "Stand easy, Wat," Ede said. Her voice held. She had spent two years
 learning to make it hold. "Stand easy. You're stood down. You've been
-stood down twenty years, soldier. It's done."
+stood down five years, soldier. It's done."
 
 The iron body eased, joint by joint, as if easing were a drill it was
 performing from memory. Somebody had run for the banner — it went by
@@ -196,12 +196,12 @@ The racks' foot went still. Ede did not move at all.
 
 The hinge worked. "Bread." His free hand rose, shaking, and touched his
 own jaw, his nose — *smell*, the gesture said, the man who came smelled —
-and Ede stood in the blue-lit halls and was twenty years and eighty-four
+and Ede stood in the blue-lit halls and was five years and eighty-four
 floors away, in a burnt hall on floor sixty hearing a freed prisoner rasp
 about a hooded courier at the Warcamp who smelled of Roothollow bread; on
 a trophy floor with her own shield on the wall and toll-marks on its rim;
 at a watch-fire telling a splinter of crystal the one thing she could
-tell no one alive. He was giving testimony. Twenty years welded shut, and
+tell no one alive. He was giving testimony. Five years welded shut, and
 the first act of his freed will — before his own name, before hers — was
 to report to his commander the last thing he had learned in the field.
 The man who sold us came to the cages to count us. I marked him. Bread.
@@ -210,7 +210,7 @@ The man who sold us came to the cages to count us. I marked him. Bread.
 
 She said it very low, for him alone, and she watched the two human eyes
 above the iron read everything her face had spent a year hiding from an
-army. She let them read it. Twenty years he had carried his one word up
+army. She let them read it. Five years he had carried his one word up
 through the dark, and he had earned the truth ahead of every living soul
 but one: that his commander knew the courier's name, had known it since
 the Pale Court, and had climbed beside the man since, and eaten his bread

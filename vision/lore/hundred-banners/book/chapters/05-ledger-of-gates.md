@@ -56,7 +56,7 @@ chain."
 "The chain's the upkeep," said Weck, comfortably. "Anarchy's free,
 captain. Order costs."
 
-At Ede's shoulder the splinter burned. *In four hundred years,* said
+At Ede's shoulder the splinter burned. *In eighty years,* said
 Sliver, dry as coin-dust, *I have watched this tower try every cruelty
 it knows. It never once thought of this. He undercut the Demon King
 with a toll-chain.*
@@ -232,11 +232,24 @@ small weeks, which the rising had learned to distrust and take anyway.
 On the Shearing Downs the chalk lay open under the false light like a
 page, and shear-mad rams came down the wind at the column and were
 cured one by one, shaking their great heads, trotting away ordinary.
+The downs were three days wide, bare white country rolling to a white
+horizon with the wind never once stopping, the dew-ponds skinned grey
+with wool-mould and every fold-wall on the high ground penning
+nothing. Ewan Woolgate walked a day of it beside the van with his
+crook and his flock-book, counting a flock the Theft had scattered,
+because the count was hopeless and the keeping of it was not; and the
+night the column lay at Woolgate the shepherds raised the broken
+beacon on the Long Barrow, and folk came in off the far combes who
+had been hiding since the shearing.
 At the Eaves the dark wood stood full of dead signals, the hum of
 messages sent an age ago to no one; the edge-elves of Lastlamp came out
 to see elves climbing armed, and said almost nothing, and gave them
-almost everything — lamp-oil, guides, the wood's edge-paths. Rhovan
-walked those under his hood. Whatever else the Grey Rides had made of
+almost everything — lamp-oil, guides, the wood's edge-paths. Under the
+boots the listening-moss gave back scraps of the dead lamp-song, and
+from the crown of the Watchpine, strung with old signal-copper, a
+scout could look out over gloom lying level to the floor's own
+horizon — a night the width of a country, with one watch-fire in it.
+Rhovan walked those under his hood. Whatever else the Grey Rides had made of
 him, it had begun somewhere like this, and he told no one, which was
 itself a fraction.
 
@@ -247,7 +260,15 @@ its pressed pit-fighters, Red Orcs with chain-scarred fists who looked
 at the freed camp with no idea what to do in it; three stayed, grim as
 tax, and Ede took them, over Hale's one flat objection: "You'll want
 killing men soon enough, captain. You needn't recruit them from the
-kennel." The column crossed the Hollow Lanes behind Cobb Hedgeharbor's
+kennel." Above the Pit lay the Cable Roots, and the column walked that
+country four days on lines the color of old blood: a cavern strung
+floor to roof with copper grown root-thick, live bundles humming and
+spitting blue static into a dark the sparks lit in stutters. Fend
+Wiregate, the line-master, one hand scarred white, led them the whole
+way along the dead lines out of the Deadline Camp's logbooks, reading
+the tangle by the pitch of its static, and nobody strayed an arm's
+length, and nobody needed telling twice. The column crossed the
+Hollow Lanes behind Cobb Hedgeharbor's
 notched staff, hedge-blind wolves striking from the joining lanes and
 going cured down the green tunnels, and came up at last into the open
 at Hedgeharbor, sixteen floors above the world's floor, with the

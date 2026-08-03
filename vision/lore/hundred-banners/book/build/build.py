@@ -14,6 +14,7 @@ import markdown
 
 BOOK = Path(__file__).resolve().parent.parent
 CHAPTERS = BOOK / "chapters"
+APPENDICES = BOOK / "appendices"
 ART = BOOK / "art"
 OUT_HTML = BOOK / "the-hundred-banners.html"
 OUT_PDF = BOOK / "the-hundred-banners.pdf"
@@ -38,15 +39,37 @@ def md_to_html(text: str) -> str:
 
 
 def plate_for(stem: str) -> Path | None:
-    m = re.match(r"^(\d\d)(x?)-", stem + "-")
-    if not m or m.group(2) == "x":
+    # matches "07-", "08a-" (inserted chapters) but not "08x-" (interludes)
+    m = re.match(r"^(\d\d[a-w]?)-", stem)
+    if not m:
         return None
     p = ART / f"plate-{m.group(1)}.png"
     return p if p.exists() else None
 
 
+PRINT_ART = ART / "_print"
+
+
+def print_copy(path: Path) -> Path:
+    """Downscaled grayscale JPEG for embedding, so the PDF stays printable
+    but under repo size limits."""
+    PRINT_ART.mkdir(exist_ok=True)
+    out = PRINT_ART / (path.stem + ".jpg")
+    if not out.exists() or out.stat().st_mtime < path.stat().st_mtime:
+        subprocess.run(
+            ["sips", "-s", "format", "jpeg", "-s", "formatOptions", "80",
+             "-Z", "1200",
+             "--matchTo",
+             "/System/Library/ColorSync/Profiles/Generic Gray Profile.icc",
+             str(path), "--out", str(out)],
+            check=True, capture_output=True,
+        )
+    return out
+
+
 def figure(path: Path, cls: str = "plate") -> str:
-    return f'<figure class="{cls}"><img src="art/{path.name}" alt=""></figure>'
+    p = print_copy(path)
+    return f'<figure class="{cls}"><img src="art/_print/{p.name}" alt=""></figure>'
 
 
 def build() -> None:
@@ -89,11 +112,12 @@ def build() -> None:
         raw = f.read_text(encoding="utf-8")
         title_m = re.match(r"^#\s+(.+?)\s*$", raw.split("\n", 1)[0])
         title = title_m.group(1) if title_m else stem
-        num_m = re.match(r"^(\d\d)(x?)-", stem)
+        num_m = re.match(r"^(\d\d)([a-z]?)-", stem)
         num = int(num_m.group(1)) if num_m else None
         is_interlude = bool(num_m and num_m.group(2) == "x")
+        is_inserted = bool(num_m and num_m.group(2) and not is_interlude)
 
-        if not is_interlude and num in PARTS:
+        if not is_interlude and not is_inserted and num in PARTS:
             part, name, sub = PARTS[num]
             chapters_html.append(
                 f'<section class="partpage"><p class="partnum">{part}</p>'
@@ -111,6 +135,26 @@ def build() -> None:
             f'<section class="{cls}"><h1>{title}</h1>{fig}{html}</section>'
         )
         if not is_interlude:
+            toc.append(f"<li>{title}</li>")
+
+    # ---- appendices ----
+    appendix_files = sorted(APPENDICES.glob("*.md")) if APPENDICES.exists() else []
+    if appendix_files:
+        chapters_html.append(
+            '<section class="partpage"><p class="partnum">APPENDICES</p>'
+            "<h1>MATTER SAVED FROM THE FALL</h1>"
+            '<p class="partsub">compiled at Roothollow, in the first year of the ground</p></section>'
+        )
+        toc.append('<li class="tocpart">APPENDICES</li>')
+        for f in appendix_files:
+            raw = f.read_text(encoding="utf-8")
+            title_m = re.match(r"^#\s+(.+?)\s*$", raw.split("\n", 1)[0])
+            title = title_m.group(1) if title_m else f.stem
+            html = md_to_html(raw)
+            html = re.sub(r"^<h1>(.*?)</h1>", "", html, count=1, flags=re.S)
+            chapters_html.append(
+                f'<section class="appendix"><h1>{title}</h1>{html}</section>'
+            )
             toc.append(f"<li>{title}</li>")
 
     body.append(
@@ -146,7 +190,7 @@ def build() -> None:
     .maplabel { text-indent: 0; text-align: center; font-variant: small-caps;
       letter-spacing: 0.12em; font-size: 9pt; margin-bottom: 0.15in; }
     figure { margin: 0.18in 0 0.22in; text-align: center; page-break-inside: avoid; }
-    figure img { max-width: 100%; filter: grayscale(100%); }
+    figure img { max-width: 100%; }
     figure.map img { max-height: 7in; }
     figure.front img { max-height: 6.6in; max-width: 92%; }
     figure.plate img { max-height: 4.3in; }
@@ -174,6 +218,16 @@ def build() -> None:
 
     .interlude { font-style: italic; }
     .interlude p { text-indent: 0; margin-bottom: 0.5em; }
+
+    section.appendix { page-break-after: auto; page-break-before: always;
+      font-size: 9.8pt; }
+    .appendix h1 { font-size: 12.5pt; font-weight: normal; text-align: center;
+      font-variant: small-caps; letter-spacing: 0.1em; margin: 0.5in 0 0.24in; }
+    .appendix h2 { font-size: 10.5pt; font-variant: small-caps;
+      font-weight: normal; letter-spacing: 0.08em; margin: 0.9em 0 0.3em; }
+    .appendix p { text-indent: 0; margin-bottom: 0.35em; }
+    .appendix ul { padding-left: 1.1em; margin: 0.2em 0 0.6em; }
+    .appendix li { margin: 0.15em 0; }
     """
 
     OUT_HTML.write_text(

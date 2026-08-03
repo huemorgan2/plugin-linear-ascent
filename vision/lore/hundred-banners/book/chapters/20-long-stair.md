@@ -1,4 +1,4 @@
-# Chapter 20 — The Long Stair
+# Chapter 23 — The Long Stair
 
 There were one hundred and eleven bridges in the Hanging City, or one
 hundred and nine if you did not count the two that were only a single rope
@@ -157,6 +157,15 @@ Latchlight looked over the war-council, keepers and captains and one
 giant, and her eye came down on Nix like a lid, and she said, "Him," and
 that was the whole argument. You cannot volunteer for a thing you were
 always going to be given.
+
+At the plain's edge, on the first morning, before the silence-rule
+took hold, Wend asked him quietly whether he was afraid of the floor.
+Nix considered the grey nothing running out to its unseen far rim,
+and gave her the only wisdom he owned outright. "Big folk count
+floors. Little folk count steps. Steps are truer — a floor can lie to
+you, but a step is either under your foot or it isn't." Wend looked
+at him a moment longer than the words wanted, and then signed the
+column forward.
 
 The crossing took three days, and Nix remembered it afterward the way
 you remember a fever — in pieces, all of them too bright.

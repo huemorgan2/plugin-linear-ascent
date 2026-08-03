@@ -142,11 +142,11 @@ before you could lift a shield, and I'll tell you what that paper is.
 That's not a butcher's bill. That's a bill of lading. You don't write
 *persons* on what you mean to spoil."
 
-"They've been nine years in cages, if they're anywhere at all."
+"They've been five years in cages, if they're anywhere at all."
 
-"Then they've been nine years counting doors," Berrin said, "and nobody's
+"Then they've been five years counting doors," Berrin said, "and nobody's
 come. Suppose Dun is breathing. Just suppose it, one breath's worth,
-you can put it down after. He's kept your standard and your counts nine
+you can put it down after. He's kept your standard and your counts five
 years in the dark, because that's what that man is. What's his count of
 *you* at, do you reckon, by now?"
 
@@ -273,7 +273,7 @@ carrying it for years. And Ede Stonhal turned from the shard-house with
 her splinter lit at her throat and her eleven at her back and Rhovan
 falling in grey and silent at her shoulder, and walked under the black
 arch of the Root Gate, onto the stair-lift her name had been absent from
-for nine years, and climbed.
+for five years, and climbed.
 
 The lift ran up its chain into the dark of the first floor's underside —
 roots, hanging stone, the old severed veins of a stolen country — and

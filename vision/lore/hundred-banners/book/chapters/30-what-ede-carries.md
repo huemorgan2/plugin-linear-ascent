@@ -1,4 +1,4 @@
-# Chapter 30 — What Ede Carries
+# Chapter 35 — What Ede Carries
 
 The trains came in on the fourth day of the truce, and Berrin came with
 them, because Berrin never missed a muster.

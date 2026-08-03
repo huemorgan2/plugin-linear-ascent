@@ -125,6 +125,13 @@ them:
   shape against the sky; it *is* the sky — a cliff-face filling the
   world from east to west, its curve too slow to notice, its top beyond
   the air. No one has ever drawn the Ascent whole and been believed.
+- **The Theft is within living memory.** The cutting ended fourscore
+  years ago — eighty years. The eldest of the trapped still remember
+  the true sun and the weather of the whole world; their grandchildren
+  know it only as a story. The stolen countries themselves are as old
+  as countries are — their moats, their pyre-cults, their hunting laws
+  were ancient before Vharuk ever cut them loose — but everything the
+  tower did to them is counted in one long human lifetime.
 
 ---
 

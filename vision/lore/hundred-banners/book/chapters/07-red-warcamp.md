@@ -2,7 +2,7 @@
 
 Ede Stonhal had cut thirty names into the Stone of the Climb with her
 own hand, in the winter she stopped drinking, one name a night because
-her wrist would not stay true for more. Two years she had lived below a
+her wrist would not stay true for more. Five years she had lived below a
 tower with her company's tomb twenty floors up it. Now she stood in the
 mine-dark under that floor, with the drums coming down through a
 hundred feet of stone — boom, and boom, and boom, the march that never
@@ -23,7 +23,7 @@ Three companies stood to in the assembly-gallery, and she walked the
 line of them the way a smith walks a weld, looking for the cold spots.
 
 The Muster of Bannerline held the right: pikes and bills and the good
-brass horns, muster-folk who had waited a thousand years to finish
+brass horns, muster-folk who had waited eighty years to finish
 gathering and did not intend to be late for it, Serjeant Mella Rung at
 their head with the True Color cased on her shoulder. They would go at
 the warcamp's gate — the front door, the loud door — with the rams and
@@ -62,7 +62,7 @@ She stopped at the Van's front, where Vega knelt re-wrapping the haft
 of the smallest hammer, and Nix stood under the grey banner with the
 glow-sick kobold child asleep against the pole, and she said what
 captains say, which is nothing anyone remembers after, and then the
-thing she had climbed two years to say.
+thing she had climbed five years to say.
 
 "The people in those cages watched me leave this floor without them.
 Whatever they say to me when the doors open — that's mine to stand.
@@ -109,6 +109,19 @@ barred galleries stacked two high into the mine's old workings, and
 the shapes of people in them, gripping the bars, because the floor was
 shaking and the horns were the wrong horns and something in the middle
 of the camp had just become a hole.
+
+The Van had names for that ground before any of them stood on it. Five
+years of whisper-maps had come out through the bars of the pens,
+scratched on hide, sung into counting-songs, carried in the heads of
+the traded and the dead: Kitchen Row, where the tent-lanes ran widest;
+the Gallery Steps, the old miners' walk above the drum-towers; the
+Broadgate, which the Muster was even now making loud; and between the
+shaft and the cages, straight as a pit-prop, the lane the miners
+called the Paylane, because wages had walked it once, going down. The
+camp was bigger than a camp has any right to be — a stolen country's
+whole mine-hall, its watch-fires running away to their own red
+horizon, its smoke hanging under a dark too high for any lamp to find
+a roof in — and the plan needed none of it but the Paylane.
 
 Ede came out of that hole with her shield up and her point low, and
 for ten heartbeats the plan was perfect: the camp's whole face was at
@@ -177,6 +190,18 @@ Afterward, the histories made the locks the quiet part, and the
 histories were wrong. The locks were the battle. Everything else was
 noise to cover them.
 
+The night had a shape, and the histories, for all their noise, drew
+it true: three doors and a thread. The Muster at the Broadgate, loud
+on purpose, rams swinging, believed — the camp's whole face turned to
+it and held there. The Wrights at the shaft-mouth in the camp's
+middle, keeping the rim of their own hole against everything that
+turned. The Van's one thin lane running up the Paylane, shaft to
+pens, a stitched thread through tent-cloth. And past the pens, at the
+gallery's cut end, Skarn's shield-wall standing around the stair,
+unmoved, the still eye the whole turning camp went round. Everything
+the camp threw that night, it threw at one of those four places, and
+the war was decided by which of them it forgot.
+
 Vega worked the first pen's lock with her eyes shut, hands flat on
 the plate, reading her own steel like a letter she'd posted twenty
 years before — and swore, once, in the mountain tongue, because it
@@ -197,7 +222,7 @@ first, miners and shield-folk of the seized gallery, Dara Shieldwall
 at their head with her fists full of a gaoler's keys she'd lifted in
 the first confusion, already running for the second pen. But among
 them, threaded through them, in the wrong-colored rags of a company
-two years dead: her people. A face from the south wall at the
+five years dead: her people. A face from the south wall at the
 Warcamp. A face from the baggage-line. A woman who had stood the
 rearguard of the rout with her, shoulder to shoulder, the last time
 this floor had Ede Stonhal in it.
@@ -229,6 +254,15 @@ the first time in years — and into that silence, enormous, came the
 sound the drums had been drowning all along: the gate coming down,
 and the Muster's horns, and under the horns a floor's worth of freed
 voices finding out together what they sounded like.
+
+Of all that floor gave the histories, one picture outlived the rest,
+and the freed drew it on hearth-walls for a hundred years: the third
+drum-tower black against the brazier-light, its drums fallen still,
+and on top of it a goblin no bigger than the drum he had silenced,
+holding
+the frame with one hand in the rising smoke — not waving, not crying
+the victory, only counting, lips moving, with the grey banner planted
+small and crooked at the tower's foot below him.
 
 *The shield-wall,* said Sliver. *He is still at the stair, Ede. He
 has not moved. He is waiting for you.*
@@ -341,13 +375,13 @@ did. But here, now, in the wreck of Skarn's camp: her people, alive,
 freed, standing in the firelight in gaoler's plate with their own
 company's grey banner — Nix had planted it at the pens' head, and
 stood by it, small and smoke-black and counting the freed out loud
-because counting was how he wept — coming out of two years of cages
+because counting was how he wept — coming out of five years of cages
 to find the woman who had led them into this floor standing in the
 ashes of it with a drawn sword and no speech in her at all.
 
 A one-armed man came out of the third pen last, slow, unhurried, as
 if cages were a thing that happened to other people. Dun Harrow. Her
-standard-bearer. The arm he'd carried her colors with two years gone,
+standard-bearer. The arm he'd carried her colors with five years gone,
 gone. He looked at her a long moment across the fire-lane, the whole
 camp falling quiet around the look, and in it she read everything the
 histories would spend a chapter on: that being freed is not the same

@@ -91,3 +91,9 @@ Pressed, a death that should not have been needed.
   spells — with black iron only as the anchor the power is bolted to.
   Never write the tower as a building you could see all of, and never
   have a character cross a floor in an afternoon.
+- **The Theft's age (hard canon).** The Theft ended eighty years before
+  the rising — within living memory; the eldest freed remember the
+  ground. Tower-era spans (waiting in the tower, watching Vharuk,
+  warden ledgers, the engines' vigil) read in decades and lifetimes,
+  never centuries. The stolen realms' OWN histories may be as ancient
+  as you like — old countries were stolen whole.

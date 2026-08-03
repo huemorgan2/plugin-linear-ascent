@@ -1,4 +1,4 @@
-# Chapter 23 — The Reckoning of Names
+# Chapter 27 — The Reckoning of Names
 
 Rhovan of the Grey Rides had spent a long life sorting what people said
 from what was so, and he had learned that the second thing lives in

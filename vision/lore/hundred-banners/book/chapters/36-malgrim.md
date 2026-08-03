@@ -1,4 +1,4 @@
-# Chapter 36 — Malgrim
+# Chapter 42 — Malgrim
 
 The muster-drums of the ninetieth floor had beaten for an age and a half,
 the captives said, and no one living had ever heard them stop. They stopped
@@ -230,6 +230,8 @@ Court, and the thinking had taught her one thing: the judgment was not
 hers. She had known, and climbed beside him pretending; she had
 loved him; she had eaten his bread. A judge needs cleaner hands or a
 colder heart, and there was one company in the world with the right.
+She was certain of the rope, certain as a drawn sword; and she had
+learned — it had taken her a tower — to spend her certainty slowly.
 
 "No," she said. "Not mine to give or refuse. Shieldwall holds your
 trial."
@@ -256,13 +258,13 @@ this was not an excuse but an inventory, since they were counting.
 Asked what he sought, he said rope, and said it hoping.
 
 Marta Reed said rope too, when the company spoke. So did five others.
-Then it came around the fire to Sefwin, who had been welded, whose face
-was iron from the jaw down, whose first word in twenty years — spoken
+Then it came around the fire to Wat Kello, who had been welded, whose
+face was iron from the jaw down, whose first word in five years — spoken
 in the Welding Halls with his general's name in his eyes — had been
 *Bread.* The speech-slit they had cut him at floor 84 made every word
 cost.
 
-"Rope's a wage," Sefwin said. "Paid once. Done." He worked the iron
+"Rope's a wage," Wat said. "Paid once. Done." He worked the iron
 jaw. "He was a provisioner. Twenty years he fed floors to the tower."
 A long breath, the fire ticking. "Let him feed them back."
 
