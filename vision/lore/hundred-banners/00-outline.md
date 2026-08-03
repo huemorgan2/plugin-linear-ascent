@@ -146,8 +146,8 @@ pasture — the low war as it really is: rat-hunts, hedge-ambushes, Hobb
 Fennick's counts. Establishes the mercy system in action; Ede kills a
 surrendered kobold from old habit and Rhovan logs it without a word. **Turn:
 Cullers under Serjeant Hale annex the party "for escort" — Ede's old teacher
-owns the low floors.** *PLATE: hedgerows under floodlight-bars, a wolf between
-the gaps.*
+owns the low floors.** *PLATE: hedgerows under a vast shadowless false-daylight sky, a
+wolf between the gaps.*
 
 **4. The King of Nothing.** Floor 10, the Kingsfield. First battle: militia
 and Cullers storm the banner-meadow. Gnarl holds court in a hundred stolen
@@ -193,14 +193,16 @@ slowly. A hope led is a hope steered."*
 
 **9. The Quiet.** Floors 21–25. The Gallows Fair: a floor whose people *beg
 the rising to pass by* — they've survived reprisal before. First meeting with
-the Quiet; Ede loses the argument and it costs a village. **Turn: not
-everyone wants to be freed — the rising has a second enemy: fear.** *PLATE:
-empty fairground cages, bunting in the wind.*
+the Quiet; Ede loses the argument and it costs a village. In passing, the
+Broodwarrens (24) surrender whole to Nix's parley — the rising's first floor
+freed without a blow. **Turn: not everyone wants to be freed — the rising has
+a second enemy: fear.** *PLATE: empty fairground cages, bunting in the wind.*
 
-**10. Hale's Lesson.** Floors 26–28. The Cullers strike the Broodwarrens
-ahead of the party, kill-all doctrine against a warren that had already
-surrendered to Nix's parley. It goes wrong; brood-silk takes twenty Cullers;
-Hale carries out his own dead. **Turn: Hale's doctrine breaks him — he asks
+**10. Hale's Lesson.** Floor 24 revisited, then 26–28. The Cullers, holding
+the rear gates, break the Broodwarrens' surrender behind the host's van —
+kill-all doctrine against a warren that had already yielded to a goblin's
+word. The party descends too late; brood-silk takes twenty Cullers; Hale
+carries out his own dead. **Turn: Hale's doctrine breaks him — he asks
 Ede, once, how the goblin does it.** *PLATE: Hale kneeling in silk-shadow
 among cocooned armor.*
 

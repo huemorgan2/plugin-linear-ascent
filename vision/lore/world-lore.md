@@ -96,6 +96,36 @@ thing he *made*. Both are the Ascent.
 The people named it for the only thing left to do about it: **the
 Ascent.**
 
+### The measure of the thing
+
+Numbers fail the Ascent, but these are canon and every story must keep
+them:
+
+- **Each floor is a country, not a room.** A floor is the size of a whole
+  stolen realm — the breadth of Scotland, hills and all. It has horizons.
+  It has mountain ranges, rivers with far banks, roads that take a week.
+  Standing in the middle of a floor you cannot see its walls; on most
+  floors no living person has ever walked to the rim and back.
+- **Each floor carries its own sky.** Between one floor's ground and the
+  underside of the next stand kilometers of open air — enough for
+  weather to happen. Clouds form, rains come inland off a floor's own
+  cold lakes, winds run the length of the land. What hangs where the sun
+  should be is the Yoke's false light; the true ceiling is too far up to
+  see except on the clearest days, a faint dark grain in the sky like
+  weather that never moves.
+- **No brick could bear it.** Nothing built of stone on stone could hold
+  one country above another, let alone a hundred. The tower stands by
+  **aether** — grav-engines, binding-spells, chained will. The black
+  iron people see at the rims and gates is not structure; it is anchor,
+  the fitting the magic is bolted to. If the engines ever stopped, no
+  wall would matter. This is why breaking the Wardens weakens the tower
+  in a way no sapper ever could: the tower is held up by power, and
+  power can be unbound.
+- **The whole of it cannot be seen.** From Roothollow the tower is not a
+  shape against the sky; it *is* the sky — a cliff-face filling the
+  world from east to west, its curve too slow to notice, its top beyond
+  the air. No one has ever drawn the Ascent whole and been believed.
+
 ---
 
 ## 3. Why a hundred floors
