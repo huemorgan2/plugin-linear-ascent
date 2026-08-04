@@ -3,6 +3,12 @@
 > *"The high road ran from every steading to the Frosthall — the road we walked to feast and to war. Now something marches it that never arrives and never stops." — Road-warden Hune Horncall*
 
 **Cut from:** the Giants' high country — the jarldom's processional road (leading to floor 60) · **Gate-town:** Horncall · **Warden:** Hallmarch
+**Sky:** standard — four miles of upland air over the way.
+**Veil:** thin — a marching grey the road-lamps once held off.
+**Land:** Rimlands seven miles wide — the cairned road-verges; the deep
+middle holds the great mid-road cairn.
+**Gates:** both at the rim — the down-gate where the road leaves one edge,
+the up-gate where it cuts into the rock at the other.
 
 ## The land
 The great high road of the jarldom — a giant-built processional way of fitted
@@ -11,9 +17,12 @@ herald-posts, and roadside lamps, that once carried the giants to Hrimgar's
 hall for feast and muster. A spectral march tramps the road now, herald-wolves
 loping ahead, post-ravens crying the way, an endless column that marches to a
 feast that fell a thousand years ago. The road is wide and clear and safe-
-looking, and to walk it is to be swept into the march. The stair-lift stands
-where the road cuts into the rock, its arch a giant road-arch; Hallmarch leads
-the march before it.
+looking, and to walk it is to be swept into the march. The uplands bow
+toward their middle like every stolen country, and the road was built to
+dare it: it runs dead-straight from the light of one rim to the light of
+the other, over the summit at the deep middle where the Milestone Cairn
+crowns the way. The stair-lift stands where the road cuts into the rock,
+its arch a giant road-arch; Hallmarch leads the march before it.
 
 ## Flora
 - **Trees / canopy:** avenue-pine lining the road, and the great moot-oak at
@@ -94,6 +103,8 @@ clears; the stair-lift opens.
 ## When it falls
 Horncall sounds the true horn from the Milestone Cairn and the ghost-march
 tramps home to a feast at last and is released; the high road runs clear and
-quiet. The road-folk climb as the host's marshals and outriders, carrying
+quiet. The gloom unravels in a day and the way runs light from rim to rim;
+the lamps burn for welcome now, not warning, and the verges green between
+the cairns. The road-folk climb as the host's marshals and outriders, carrying
 **Forcemarch** and road-iron — the folk who move an army fast and sure to the
 gates of the Making ahead.

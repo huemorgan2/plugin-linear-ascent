@@ -4,6 +4,13 @@
 
 **Cut from:** the Elves' lamp-woods — the festival-glades · **Gate-town:** Fainthollow · **Warden:** Encore
 
+**Sky:** standard — four miles of soft air over the wood
+**Veil:** thin — a moth-pale dusk the dance-lamps once beat
+**Land:** Rimlands seven miles of lantern-tree lawns; the deep middle hides
+the revel-glade ring
+**Gates:** down-gate on the lawns by Fainthollow; up-gate in the flower-hung
+scarp at the glade's edge
+
 ## The land
 Bright open glades in the elf-wood where the folk once held their revels —
 greenswards ringed by lantern-trees, drifting always with pale moths. The
@@ -11,7 +18,10 @@ glades *answer:* they caught the last festival's music and motion the night
 of the Theft and replay it forever, a spectral revel of dancers who never
 tire and never stop. Wander in and your feet find the step whether you will
 or no, and the glade will dance you until you fall. The moths, the light, the
-music — all lovely, all deadly. The stair-lift is set in a flower-hung scarp
+music — all lovely, all deadly. The wood bends gently down toward its
+middle, where the glade-ring opens and the ghost-revel turns; the
+lantern-tree lawns of the rim are as near as the living build. The
+stair-lift is set in a flower-hung scarp
 at the glade's edge, and Encore leads the eternal revel across it.
 
 ## Flora
@@ -20,7 +30,8 @@ at the glade's edge, and Encore leads the eternal revel across it.
 - **Ground & water plants:** dancing-grass (that sways to the ghost-music),
   reveller's-clover, and the pale moth-flower.
 - **Under the Yoke:** the dancing-grass sweeps a walker into step; the moth-
-  flower's scent lulls the will; the moths drift in patterns that hypnotize.
+  flower's scent lulls the will; the moths drift in patterns that hypnotize,
+  brightest against the gloom.
 
 ## Places of interest
 - **The Green Room.** A shaded grove off the glades where performers waited to
@@ -37,8 +48,9 @@ at the glade's edge, and Encore leads the eternal revel across it.
 ## The people
 Glade-elves — the wood's revelers and dance-wrights, players and lamp-lighters
 whose craft was joy. Now their own festival dances without them, and they
-shelter in Fainthollow at the glade-edges, stopping their ears against a music
-that would take their feet. They love a true reel, a lit revel, and a dance
+shelter in Fainthollow out on the rim's lantern-lawns, stopping their ears
+against a music that would take their feet. They love a true reel, a lit
+revel, and a dance
 freely ended. They fear the compelling music and being danced to death.
 **The keeper:** Illa Fainthollow, glade-warden — keeps the true final note and
 dances the edges to pull the caught back out before they drop.
@@ -88,6 +100,8 @@ and the revel finally, gratefully, ends. The stair-lift opens on the applause.
 
 ## When it falls
 Fainthollow plays the true final note and the spectral revel bows and lets go
-after a thousand years of dancing. The glade-elves climb as the host's dancers
+after a thousand years of dancing. The moth-pale veil unravels in a day and
+real morning stands in the glades; the dance-lamps are lit again for joy
+instead of memory. The glade-elves climb as the host's dancers
 and morale-bearers, carrying **Grace** and revel-draught — the folk who slip
 every blow and keep an army's heart up through the grimmest floors ahead.

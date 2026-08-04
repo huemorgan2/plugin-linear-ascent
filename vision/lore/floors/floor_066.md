@@ -3,6 +3,12 @@
 > *"Every hound of the Grey Rides, every owl of the mews, every foal of the Black Meadows was born and gentled here. Now the kennels bay at the wrong master, and won't stop." — Kennel-keeper Nael Stillhorn*
 
 **Cut from:** the Elves' lamp-woods — the hunt's kennels and mews (feeding floors 31, 48) · **Gate-town:** Stillhorn · **Warden:** Leashbone
+**Sky:** standard — four miles of air above the mews.
+**Veil:** thin — a kennel-grey haze over the courts.
+**Land:** Rimlands five miles wide — the outer stone runs; the deep middle
+holds the whelping-dens.
+**Gates:** both at the rim — the down-gate by the outer runs, the up-gate in
+the court-wall behind the great iron pack-gates.
 
 ## The land
 The great kennel-courts of the elf-hunt — tiered stone yards of hound-runs,
@@ -12,9 +18,12 @@ foals of the Black Meadows. It rings day and night with baying, hooting, and
 the clatter of empty feed-troughs. The keepers' art was gentling; the fever
 has ungentled everything, and the courts now loose their half-trained packs on
 any warm thing that enters. It is a floor of stone runs and iron leashes, loud
-with beasts that no longer know their names. The stair-lift is set in a
-court-wall behind the great iron pack-gates; Leashbone holds the runs before
-it.
+with beasts that no longer know their names. The courts descend as the
+country does, tier under tier toward the middle: the outer runs and
+Stillhorn keep to the rim where the light comes in, and the whelping-dens
+lie warm and dark at the floor's heart — where the hunt always birthed its
+young, gloom or no gloom. The stair-lift is set in a court-wall behind the
+great iron pack-gates; Leashbone holds the runs before it.
 
 ## Flora
 - **Trees / canopy:** mews-yew shading the owl-perches, and the whelping-oak
@@ -87,7 +96,10 @@ iron gates open.
 
 ## When it falls
 Stillhorn sounds the master horn from the Mews-Tower and every pack, owl, and
-foal heels to its true name at last. The kennel-keepers climb as the host's
+foal heels to its true name at last. The haze lifts in a day; honest light
+gets into the runs, the houndsbane calms as it used to, and the beasts
+sleep their first true nights under real stars. The kennel-keepers climb as
+the host's
 beast-masters and houndsmen, bringing gentled packs, owls, and dream-foals and
 carrying **Houndcall** — the folk who turn the tower's own hunts to the
 rising's hand on the floors ahead.

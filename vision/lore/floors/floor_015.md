@@ -4,13 +4,22 @@
 
 **Cut from:** the shared under-caverns — the Deep · **Gate-town:** Wiregate · **Warden:** Wirefang
 
+**Sky:** standard — three miles of dark the sparks stutter against
+**Veil:** heavy — a gloom lit only in blue stutters when the tangle spits
+**Land:** Rimlands three miles of dead-cable shallows; the deep middle
+hides the live root-tangle
+**Gates:** rim — behind the woven cable-curtain on the rock
+
 ## The land
 A cavern strung floor-to-roof with a tangle of cables so old and so vast they
 look grown, not laid — the under-realm's arteries, carrying captured aether
 in root-thick bundles that hum and spit blue static in the dark. Where the
 insulation has rotted, the whole tangle sparks, and the sparks light the
 cavern in stutters. Delver-crews once tapped these lines for the deep floors'
-lamps. Now the lines are live, hungry, and full of teeth. The stair-lift
+lamps. Now the lines are live, hungry, and full of teeth. The cavern obeys
+the bend of the land: dead lines lying in the shallows at the rim, where
+Wiregate shelters, and the tangle growing denser, hotter, and more alive
+the deeper in it runs. The stair-lift
 stands behind a curtain of live cable woven across the rock; Wirefang re-weaves
 it faster than it can be cut, and guards it in the sparking dark.
 
@@ -20,7 +29,8 @@ it faster than it can be cut, and guards it in the sparking dark.
 - **Ground & water plants:** spark-moss (that feeds on stray charge), copper-
   lichen, and the filament-fungus that threads the dead cables.
 - **Under the Yoke:** the spark-moss discharges when stepped near, and the
-  filament-fungus reroutes the live cables toward warmth.
+  filament-fungus, light-starved under the gloom, reroutes the live cables
+  toward warmth.
 
 ## Places of interest
 - **The Junction Spire.** The tallest cable-mast, where the lines gather to a
@@ -39,8 +49,8 @@ it faster than it can be cut, and guards it in the sparking dark.
 ## The people
 Cable-crews — delvers of every race who tapped and tended the deep lines,
 insulation-wrapped and rubber-soled, who read a cable's health by its hum.
-They shelter in Wiregate on dead lines, terrified of touching a live one in
-the dark. They love a clean tap, a steady hum, and a lamp that stays lit.
+They shelter in Wiregate on the rim's dead lines, terrified of touching a
+live one in the dark. They love a clean tap, a steady hum, and a lamp that stays lit.
 They fear the sparking tangle and the wire-things that hunt the charge.
 **The keeper:** Fend Wiregate, line-master — one hand scarred white from a
 live cable, reads the tangle by the pitch of its static.
@@ -86,6 +96,8 @@ curtain over the stair-lift falls slack.
 
 ## When it falls
 Wiregate's crews tap the Junction Spire and run clean power down to the freed
-floors — light and forge-fire for the rising. They climb as the host's line-
+floors — light and forge-fire for the rising. The gloom unravels in a day
+and the cavern's rim sees a steady grey light no shorted line ever gave
+it. They climb as the host's line-
 wrights, carrying **Earth** and coils of livecopper into the charge-mad and
 reactor-lit floors far above.

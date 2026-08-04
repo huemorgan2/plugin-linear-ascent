@@ -4,6 +4,13 @@
 
 **Cut from:** the droving country of Men · **Gate-town:** Hedgeharbor · **Warden:** Thornhide
 
+**Sky:** low — a mile of air; between the hedge-roof and the lid there is
+hardly a sky at all
+**Veil:** thin — coin-light through the green roof, dim by architecture
+**Land:** Rimlands eight miles of high hedgebank mouths; the deep middle
+hides the blind heart of the lane-maze
+**Gates:** rim — where a lane cuts into the rock spur
+
 ## The land
 A country of sunken droving-lanes — holloways worn shoulder-deep by
 centuries of driven cattle, running between hedgebanks grown so high and
@@ -11,6 +18,12 @@ thick they meet overhead in a green tunnel. The floodlight barely reaches
 the lane-floor; the light comes down in coins. It is a maze with no map, all
 blind bends and hidden gates, taken with the drove still on the road. You can
 walk it for an hour and never see the sky, and never be sure you're alone.
+The lanes run the way the land bends — inward and downhill, worn deeper
+the further in they go, until the maze's blind heart lies below everything
+at the floor's middle; Hedgeharbor and the lane-mouths keep to the rim.
+The drovers kept one road the hedges never owned: a stay-cable leaving the
+rim toward the floor above, a smugglers' hair of a path the lane-wise
+still walk.
 The stair-lift is set where a lane cuts into a rock spur, its arch worn smooth
 by generations of cattle-horn; Thornhide blocks the lane before it.
 
@@ -85,6 +98,8 @@ still; the lanes stop rearranging; the stair-lift opens.
 
 ## When it falls
 Hedgeharbor's lanes hold their shape and open end to end; the last drove
-comes home. The drovers climb as the host's pathfinders, carrying **Wayfind**
+comes home. The veil frays within a day, and under the low lid the
+coin-light down through the green roof turns real — leaf-shadow that
+moves, rain that means weather. The drovers climb as the host's pathfinders, carrying **Wayfind**
 — the folk who will keep an army from getting lost in the mazework floors
 still ahead.

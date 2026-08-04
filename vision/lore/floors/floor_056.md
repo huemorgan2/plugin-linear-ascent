@@ -3,6 +3,12 @@
 > *"A million birds on one cliff, and every one of them knows you don't belong. Climb quiet, climb fast, and mind the fledglings — the mob's what kills you." — Rookery-keeper Cole Rookwall*
 
 **Cut from:** the sea-cliff country of Men — the great bird-rookeries · **Gate-town:** Rookwall · **Warden:** Shrikewind
+**Sky:** cathedral — six miles of crying, wheeling air.
+**Veil:** thin — a sea-haze a million wings keep stirred.
+**Land:** Rimlands two miles wide — the rope-worked lower ledges; the deep
+middle holds the high roosts.
+**Gates:** both at the rim — the down-gate at the cliff's foot, the up-gate
+in the guano-white scarp behind its curtain of nesting-ledges.
 
 ## The land
 A sheer cliff-face miles high, every ledge and cranny packed with the nests of
@@ -11,7 +17,12 @@ wing and cry, hazed with drifting down, streaked with droppings, and stinking
 of fish and salt. Men farmed these cliffs for eggs, down, and guano, working
 the ledges on rope. The fever has stirred the rookery to a permanent riot, and
 the mobbing flocks will drive a climber off the wall as surely as any beast.
-It is a vertical floor climbed ledge by ledge through a storm of birds. The
+It is a vertical floor climbed ledge by ledge through a storm of birds.
+Even set on end the country keeps the old bent shape: the worked ledges and
+Rookwall crowd the seaward face at the rim, where the slot-light comes in,
+and the high roosts hang away inland over the dark of the deep middle. The
+outermost seaward ledges jut past the floor above into true sun — forbidden
+perches under the Warden, though no one ever taught the birds the law. The
 stair-lift stands in a guano-white scarp behind a curtain of nesting-ledges;
 Shrikewind roosts above it.
 
@@ -89,7 +100,9 @@ ledges.
 
 ## When it falls
 Rookwall sounds the true call from the Matron's Stack and the cliff settles to
-an ordinary roaring rookery; the eggs are gathered in peace. The rookery-
+an ordinary roaring rookery; the eggs are gathered in peace. The sea-haze
+goes in a night and true sun works down the whole wall — no perch forbidden
+now — and the samphire comes back sweet on the ledges. The rookery-
 keepers climb as the host's flock-callers and cliff-climbers, carrying
 **Beckon-flock** and quill-steel — the folk who send birds ahead of the army
 and scale any wall the tower raises toward the sky.

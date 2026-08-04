@@ -171,6 +171,12 @@ Then the Master of the Hunt dismounted, hung the great horn on the
 kennel-post the way a laborer hangs a tool at the day's end, for good,
 and knelt into his hounds.
 
+It went out of the sky last. The moon-pale wash that had lain on this
+country let go from the rim inward, and what came in behind it was a
+wood's own evening — green-grey, low, with a west in it — and down the
+beaters' ways the freed of the runs stopped where they stood and
+looked straight up, at nothing, at the sky being only sky.
+
 ⁂
 
 The muster before the Made took three days to count, and Rhovan, who

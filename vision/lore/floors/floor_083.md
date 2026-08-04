@@ -4,13 +4,23 @@
 
 **The Made:** the tower's furnace-road network · **Gate-town:** Stokegate (a captive stoker-camp) · **Warden:** Cindergrate
 
+**Sky:** standard — three to five miles of cinder-lit air over the grates
+**Veil:** thin — the fires out-glow any gloom worth keeping
+**Land:** Rimlands two miles — the cool grate-ends; the deep middle is the
+fuel-lake
+**Gates:** both doors at the rim, as written — the up-gate behind a grating
+gone white-hot at the road's end
+
 ## The land
 The furnace-roads of the Made — a lattice of iron-grating causeways slung over
 open furnace-pits, the roads that carry the tower's heat and fuel between its
 works, glowing red from beneath so a climber walks on a griddle above a lake
 of fire. Cinder-swifts flit through the updrafts; slag drips from the gantries;
-the gratings ring hot underfoot. Slave road-crews stoke the pits and haul the
-fuel. It is a floor crossed grate by glowing grate, with fire below and
+the gratings ring hot underfoot. The lattice bends shallowly down toward the
+tray's middle, where the fires burn deepest over the fuel-lake — the cool
+grate-ends at the rim are the only footing in honest light, and every road
+runs inward and down toward the glow. Slave road-crews stoke the pits and
+haul the fuel. It is a floor crossed grate by glowing grate, with fire below and
 falling cinder above. The stair-lift stands at the road-network's end behind a
 grating gone white-hot, cooled only when the Warden falls; Cindergrate stokes
 the approach-road before it.
@@ -21,7 +31,7 @@ the approach-road before it.
   ash-traps, and ember-vine (welded pipe grown like creeper) along the rails.
 - **How the Making twists it:** the ember-vine glows to searing at a touch;
   the grate-lichen weakens the bars to give way; the cinder-moss flares in a
-  down-draught.
+  down-draught and feeds the smoke-gloom.
 
 ## Places of interest
 - **The Under-Grate.** The ash-cellar below the causeways, choked with fallen
@@ -37,7 +47,8 @@ the approach-road before it.
 ## The people — who you are freeing
 Road-crews — re-enslaved folk set to stoke the furnaces and haul fuel across
 the glowing gratings, half-cooked and soot-blind, who lose one of their own
-through a grate every shift. They love a banked furnace, a cool grate, and a
+through a grate every shift. They are penned at the cool grate-ends of the
+rim between shifts — the one mercy the roads allow, and not meant as one. They love a banked furnace, a cool grate, and a
 haul made without a loss. They fear the giving-way gratings and the under-
 grate things in the ash.
 **The keeper:** Grint Stokegate, road-crew boss — keeps the damper's secret
@@ -84,7 +95,9 @@ cools enough to pass.
 
 ## When it falls
 Stokegate shuts the master damper and the furnace-roads bank cold; the road-
-crews walk off a griddle that's fed on them for an age. The freed road-crews
-climb as the host's fire-walkers and furnace-wrights, carrying **Bank** and
+crews walk off a griddle that's fed on them for an age. The smoke-veil
+unravels in a day, and for the first time rain reaches the gratings and
+hisses out in silence; within a year there is cool moss on the bars that no
+Making twisted. The freed road-crews climb as the host's fire-walkers and furnace-wrights, carrying **Bank** and
 grate-iron — the folk who cool the tower's fires and cross any burning road to
 the throne.

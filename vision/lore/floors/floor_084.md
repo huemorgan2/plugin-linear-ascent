@@ -4,14 +4,24 @@
 
 **The Made:** the tower's soldier-forges · **Gate-town:** Seamside (a captive weld-camp) · **Warden:** Seamwright
 
+**Sky:** standard — three to five miles of arc-lit dark above the racks
+**Veil:** thin — the stuttering arc-light is gloom and daylight both
+**Land:** Rimlands two miles — the cooling-rack fringe; the deep middle
+holds the welding-racks
+**Gates:** both doors at the rim, as written — the up-gate behind a welded
+seam at the halls' far end
+
 ## The land
 The welding-halls of the Made — the horror-factory at the heart of Vharuk's
 war-machine, where captured souls dragged up from the freed floors are welded
 seam by seam into iron and made into the tower's soldiery: the imps and
 hellknights that garrison every floor. Arc-light stutters blue-white; the air
 stinks of scorched flesh and flux; rows of half-made soldiers hang cooling on
-racks, some already stirring, some still screaming inside their seams. It is
-the source of the Made's army, and understanding it is understanding that every
+racks, some already stirring, some still screaming inside their seams. The
+halls bend shallowly down toward the tray's middle, where the great arc-rigs
+burn — the cooling-rack fringe rings the rim in half-dark, and the
+blue-white glare rises from the deep middle like a false and dreadful sun.
+It is the source of the Made's army, and understanding it is understanding that every
 imp and knight the climb has fought was once someone freed below. The stair-lift
 stands at the halls' far end, welded shut behind a seam of fresh iron that
 splits only when the Warden falls; Seamwright seals the racks before it.
@@ -21,8 +31,8 @@ splits only when the Warden falls; Seamwright seals the racks before it.
 - **Ground growth:** flux-mould on the slag-trays, arc-lichen (that flares in
   the welding-light), and seam-weed of spilled solder along the gutters.
 - **How the Making twists it:** the arc-lichen flares to blind at a spark;
-  the seam-weed solders a boot to the floor; the flux-mould's fumes dull the
-  will to resist the racks.
+  the seam-weed solders a boot to the floor; the flux-mould's fumes thicken
+  the gloom and dull the will to resist the racks.
 
 ## Places of interest
 - **The Cooling Racks.** The undercroft where fresh-welded soldiers hang to
@@ -39,7 +49,9 @@ splits only when the Warden falls; Seamwright seals the racks before it.
 ## The people — who you are freeing
 Weld-captives — the re-enslaved awaiting the racks, and those already half-
 welded and not yet fully soldier, who can still be freed if the seams are
-split in time. This is the Made's engine and its cruelest wound: the freed
+split in time. The overseers pen them along the cooling-rack fringe at the
+rim, where the half-made hang in plain sight — the view is part of the
+breaking. This is the Made's engine and its cruelest wound: the freed
 peoples of eighty floors, being un-made into the tower's army. They love a
 seam split, a soul freed before it sets, and a rack emptied. They fear the
 arc-rigs and the moment their own seams finish cooling.
@@ -90,7 +102,10 @@ seam splits open.
 ## When it falls
 Seamside reverses the Overseer's Gantry and the welding-halls run *backward* —
 un-making soldiers instead of making them, racks of the half-welded walking
-free as themselves. This is the floor that turns the Made against the King:
+free as themselves. The veil unravels in a day; the arc-glare was the only
+sun this floor ever had, and the true light that replaces it is kinder to
+the freed than any they remember. This is the floor that turns the Made
+against the King:
 every hellknight above can now be un-welded, not just killed. The freed weld-
 captives climb as the host's un-welders and soul-freers, carrying **Unseam**
 and seam-steel — the folk who empty the King's army back into a people.

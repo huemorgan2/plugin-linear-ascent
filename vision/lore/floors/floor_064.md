@@ -3,6 +3,12 @@
 > *"We sawed clear ice into blocks the size of houses — the old world made its seeing-glass from it. The saws never stopped. Mind the gantries; the loads still swing." — Quarry-master Hune Hewnstone*
 
 **Cut from:** the Giants' high cold country — the clear-ice quarries · **Gate-town:** Hewnstone · **Warden:** Hewnheart
+**Sky:** standard — four miles of air above the gantries.
+**Veil:** thin — a milky grey the clear ice drinks.
+**Land:** Rimlands four miles wide — the sawn ice-benches; the deep middle
+holds the deepest saw-pit.
+**Gates:** both at the rim — the down-gate on the high benches, the up-gate
+in the sawn ice-face at the quarry's foot.
 
 ## The land
 Immense open quarries sawn from a glacier of flawless clear ice — stepped
@@ -12,7 +18,10 @@ the old world's great aether-lenses; the saws still shriek on captured power,
 the gantries still swing house-sized blocks that no one guides, and the whole
 quarry rings with cutting and groans with strain. It is a floor of glass
 canyons and moving loads, beautiful and murderous, where an unguided block can
-crush a climber to nothing. The stair-lift is set in a sawn ice-face at the
+crush a climber to nothing. The quarry steps down as the country does: the
+worked benches and Hewnstone keep to the rim where the light strikes the
+ice, and the cuts descend pit under pit to the flooded deepest saw-pit at
+the floor's dark middle. The stair-lift is set in a sawn ice-face at the
 quarry's foot, behind a curtain of hanging blocks; Hewnheart works the gantry
 before it.
 
@@ -90,7 +99,10 @@ stair-lift's hanging blocks are cleared.
 
 ## When it falls
 Hewnstone raises the master-lens from the Quarry Sump and locks the swinging
-gantries; the quarry cuts for the rising's seeing-glass. The quarriers climb as
+gantries; the quarry cuts for the rising's seeing-glass. The milky gloom
+lifts in a day and the sun gets into the clear ice for the first time in
+eighty years — the whole quarry lit from within like a lamp — and the
+fogging lichen dies back until the blocks show true. The quarriers climb as
 the host's cutters and lens-wrights, carrying **Cleave** and clear-ice lenses —
 the folk who split any wall the tower raises and grind the glass that lets the
 army see the throne coming.

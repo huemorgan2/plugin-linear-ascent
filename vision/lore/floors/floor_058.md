@@ -3,6 +3,12 @@
 > *"A freehold's a giant's whole world — his fields, his beasts, his fences, his name. The tower penned us in our own steadings and called it mercy." — Freeholder Dara Thanesrest*
 
 **Cut from:** the Giants' upland freehold-country · **Gate-town:** Thanesrest · **Warden:** Fencewright
+**Sky:** standard — four miles of upland air over the ricks.
+**Veil:** thin — a hay-grey haze the wide fields outgrow.
+**Land:** Rimlands ten miles wide — the walled giant-fields; the deep middle
+holds the great tithe-barn.
+**Gates:** both at the rim — the down-gate at the country's edge, the up-gate
+in the rock outcrop behind a giant field-gate.
 
 ## The land
 A country of giant-sized freehold farms — vast walled steadings with barns
@@ -12,8 +18,15 @@ built to a giant's scale, so a climber crosses it dwarfed, wading through
 knee-high "grass" that is a giant's lawn. It was the giants' free country of
 smallholders and thanes, taken at the harvest, the ricks still standing that
 will never be threshed. The steadings stand proud and empty, penned by their
-own great fences. The stair-lift stands in a rock outcrop behind a giant
-field-gate at the country's edge; Fencewright pens the way before it.
+own great fences. The country bows gently toward its middle like every
+stolen land: the best-walled fields and the steadings keep to the wide
+bright rim where the rain comes in, and the land runs down past the last
+fences to the great tithe-barn standing dark at the floor's heart. Eighty
+years of hay-seed blown off the ricks has rooted in the stay-saddles
+overhead — knot-gardens of wild barley in the tower's own rigging, sown by
+no giant and reaped by no Warden. The stair-lift stands in a rock outcrop
+behind a giant field-gate at the country's edge; Fencewright pens the way
+before it.
 
 ## Flora
 - **Trees / canopy:** giant orchard-oaks and a single vast steading-elm per
@@ -90,7 +103,10 @@ unbars.
 
 ## When it falls
 Thanesrest fires the Thane's Rick and the freeholders come in from the penned
-fields to hold their steadings free again. The freeholders climb as the host's
+fields to hold their steadings free again. The thin haze goes in a night and
+true weather comes back over the uplands; the clover flowers honest, the
+harvests come in heavy, and there is threshing at last worth a tithe-barn.
+The freeholders climb as the host's
 farmer-soldiers and hedge-wrights, carrying **Harvest** and ploughshare-steel
 — the folk who feed a rising and raise green walls where the tower expects
 bare ground.

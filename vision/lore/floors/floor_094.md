@@ -4,12 +4,23 @@
 
 **The Made — throne-tiers:** the King's endless waiting-rooms · **Gate-town:** Doorward · **Warden:** Anteroom
 
+**Sky:** low — a bare mile under the paneled lid; the ceiling presses like
+the wait
+**Veil:** thin — flat grey light with no hour in it
+**Land:** Rimlands three miles — benched waiting-halls; the deep middle is
+the never-opened door
+**Gates:** down-gate at the rim halls; the up-gate inland, as written —
+beyond the last door at the head of the queue
+
 ## The land
 The antechambers of the Made — a vast honeycomb of waiting-rooms, queues, and
 petition-halls before the throne, where the taken are given a numbered token
 and made to *wait* forever for an audience that never comes. Benches stretch to
 the vanishing point; summons-bells ring numbers that are recalled the instant
-they're called; slave-clerks re-issue tokens no one can ever redeem. It is
+they're called; slave-clerks re-issue tokens no one can ever redeem. The
+halls bend shallowly down toward the tray's middle, and the queues follow
+the grade — benches in the rim's grey light giving way, row on row, to the
+dark at the bottom of the bowl where the never-opened door waits. It is
 bondage without a chain — the King's cruelty refined to pure, patient tedium, a
 purgatory of the almost-admitted that keeps the innermost captives docile at
 his very door. The stair-lift waits beyond the last, never-opened door at the
@@ -19,9 +30,9 @@ head of the queue, and Anteroom keeps that door shut on everyone forever.
 - **Canopy:** none — panelled ceilings and dead clocks.
 - **Ground growth:** bench-moss on the seats, queue-lichen along the velvet
   ropes, and the grey token-fungus that fruits in the shape of a number.
-- **How the Making twists it:** the token-fungus prints a fresh number to
-  restart the wait; the queue-lichen ropes a wanderer back into line; the
-  bench-moss roots a sitter to the seat.
+- **How the Making twists it:** the token-fungus prints a fresh number in
+  the grey unchanging light to restart the wait; the queue-lichen ropes a
+  wanderer back into line; the bench-moss roots a sitter to the seat.
 
 ## Places of interest
 - **The Filing Crypt.** The undercroft where every petition ever made is filed,
@@ -38,7 +49,8 @@ head of the queue, and Anteroom keeps that door shut on everyone forever.
 ## The people — who you are freeing
 Doorward captives — the eternally-waiting, the innermost taken who hold ancient
 tokens and cannot make themselves leave the queue, worn to grey patience at the
-King's very threshold. They love a bell un-rung, a token thrown away, and a
+King's very threshold. Doorward itself keeps to the benched halls at the rim,
+where the queue is young enough to still talk. They love a bell un-rung, a token thrown away, and a
 door that finally opens. They fear losing their place and the summons that
 never truly comes.
 **The keeper:** Nib of Doorward — keeps the grievance-lore of the Filing Crypt
@@ -88,7 +100,9 @@ queues dissolve, and every held token voids. The stair-lift opens.
 ## When it falls
 Nib's captives throw down their tokens and simply *walk out of the line* — the
 bells fall silent, the queues empty, and the eternally-waiting reach the door
-at last. The Filing Crypt's grievances come up with them as the case against
-the King. The freed Doorward captives climb as the host's door-forcers,
+at last. The flat grey light unravels in a day into honest morning and
+honest dark — hours again, after an age without one — and the halls empty
+toward the rim as the freed walk out to feel weather. The Filing Crypt's
+grievances come up with them as the case against the King. The freed Doorward captives climb as the host's door-forcers,
 carrying **Precedence** and token-brass — the folk who will open the King's
 last barred doors above and refuse, this time, to wait.

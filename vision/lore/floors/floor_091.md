@@ -4,12 +4,23 @@
 
 **The Made — the throne-tiers:** the King's inner ascent begins · **Gate-town:** Firststep (captives held on the landings) · **Warden:** Firstriser
 
+**Sky:** standard — three to five miles of lightless hall above the glass
+**Veil:** heavy — a dark kept perfect for the glass
+**Land:** Rimlands two miles — black glass landings; the deep middle is the
+mirror-stair
+**Gates:** down-gate at the rim landings; the up-gate inland, as written —
+at the First Landing atop the stair
+
 ## The land
 The obsidian stair of the Made — the first floor of the throne-tiers, a
 colossal grand staircase cut from a single sweep of black volcanic glass,
 polished to a perfect mirror so that every climber ascends beside a flawless
 dark reflection of themselves. The stair rises through a lightless hall, lit
-only by the cold gleam off the glass. The reflections do not always copy; some
+only by the cold gleam off the glass. The hall bends shallowly down toward
+the stair's foot at the tray's middle, so the climb begins at the bottom of
+the floor's own dark bowl — what grey light there is stays on the outer
+landings at the rim, and the glass drinks the rest. The reflections do not
+always copy; some
 step out of the glass to climb ahead, or turn back down against you. It is the
 threshold of the King's sanctum, and its first test is whether you can face
 yourself. The stair-lift is set in the black glass at the First Landing atop
@@ -20,8 +31,8 @@ the stair; Firstriser bars the last treads before it.
 - **Ground growth:** glass-lichen in the stair-seams, reflection-moss on the
   treads, and the pale sheen-fungus that fruits where the glass has cracked.
 - **How the Making twists it:** the reflection-moss deepens a reflection until
-  it can step free; the glass-lichen shows a false step; the sheen-fungus
-  lures the eye into the glass.
+  it can step free; the glass-lichen shows a false step; in the tended dark
+  the sheen-fungus lures the eye into the glass.
 
 ## Places of interest
 - **The Understep.** The dark vault beneath the stair where the reflections
@@ -35,9 +46,9 @@ the stair; Firstriser bars the last treads before it.
   faced.*
 
 ## The people — who you are freeing
-Firststep captives — the innermost thralls, held on the stair's landings and
-made to polish the glass that torments them, worn down by the reflections of
-their own despair. They love a cracked mirror, a landing left un-polished, and
+Firststep captives — the innermost thralls, held on the outer landings at
+the rim and marched in to polish the glass that torments them, worn down by
+the reflections of their own despair. They love a cracked mirror, a landing left un-polished, and
 a reflection that stays put. They fear their own dark selves stepping out of
 the glass.
 **The keeper:** Wend of Firststep — keeps the mirror-lore and teaches the held
@@ -84,7 +95,10 @@ The stair-lift opens on the First Landing.
 
 ## When it falls
 Wend's captives crack the great glass and the reflections go still; the climber
-faces the last dark self and wins. This is the threshold-victory of the throne-
+faces the last dark self and wins. The tended dark unravels in a day, and
+true light crosses the glass for the first time — the stair shows only what
+stands before it, and the hall learns the plain grey of an honest morning.
+This is the threshold-victory of the throne-
 tiers — the proof that the climb can face what it fears most in itself. The
 freed Firststep captives climb as the host's mirror-breakers, carrying
 **Mirrorbreak** and obsidian glass into the King's hall of faces above.

@@ -5,6 +5,13 @@
 **The Made — throne-tiers:** the King's living core, source of the Yoke ·
 **Gate-town:** Coreside (reactor-thralls) · **Warden:** Halflight
 
+**Sky:** standard — three to five miles of lead-vaulted air over the ring
+**Veil:** thin — the core's colorless glare out-shines any gloom
+**Land:** Rimlands two miles — the shielded gallery ring; the deep middle is
+the burning core
+**Gates:** down-gate at the rim ring; the up-gate inland, as written —
+behind the core's blast-shielding
+
 ## The land
 The reactor-galleries of the Made — the tower's central core, alive and
 burning, the great colorless-flame engine from which the King's whole power is
@@ -12,17 +19,23 @@ broadcast: the Yoke that maddens the floors, the aether that welds his
 constructs, the fever that takes the beasts. It is the live heart of the horror
 that Floor 62's scar was only the ruin of. Coolant sluices run black; lead-
 crowned engineers tend the coils; the light *leaks* — a colorless glare that
-sears the unshielded. Everything the climb has fought against pours out of this
-room. The stair-lift stands behind the core's blast-shielding, and Halflight
+sears the unshielded. The tray is a perfect circle, and here the geometry
+confesses what all the Made's circles were for: the whole floor is a
+housing, gallery ringed within gallery around the core. It bends shallowly
+down toward the core at the circle's middle, the coolant sluices draining
+inward, and the light runs the wrong way for a country — dim at the shielded
+rim, rising toward the deep middle where a land's dark sea should be.
+Everything the climb has fought against pours out of this room. The stair-lift stands behind the core's blast-shielding, and Halflight
 guards the shielded threshold before it.
 
 ## "Flora" — the Making's growth
 - **Canopy:** the core's colorless glare and the lead-vaulted gallery roof.
 - **Ground growth:** lead-lichen on the shielding, coolant-moss in the
   sluices, and the pale glow-fungus that fruits where the light leaks.
-- **How the Making twists it:** the glow-fungus burns with the core's leak;
-  the coolant-moss chokes the sluices to overheat the core; the lead-lichen
-  cracks the shielding and lets the glare out.
+- **How the Making twists it:** the glow-fungus burns with the core's leak,
+  a false Kindling in the gloom; the coolant-moss chokes the sluices to
+  overheat the core; the lead-lichen cracks the shielding and lets the glare
+  out.
 
 ## Places of interest
 - **The Coolant Sluice.** The dark undercroft where the core's black coolant
@@ -38,7 +51,9 @@ guards the shielded threshold before it.
 ## The people — who you are freeing
 Coreside thralls — the reactor-crews, the innermost of the bound, worked to
 death shielding and feeding the core that powers their own bondage, their
-bodies burned hollow by the leak. They love a coil dampened, a sluice choked,
+bodies burned hollow by the leak. They are quartered on the rim's shielded
+ring — the one band of the floor the leak spares — and walk in to the coils
+by shifts. They love a coil dampened, a sluice choked,
 and the thought of the whole tower going quiet. They fear the glare and being
 fed to the core as fuel.
 **The keeper:** Ferro of Coreside — keeps the scram-lore, the knack of shutting
@@ -88,7 +103,10 @@ out to a dead cinder. The core goes dark. The stair-lift opens.
 ## When it falls
 Ferro's thralls scram the King's heart, and for the first time in an age the
 tower goes *quiet* — the Yoke's broadcast cuts, the fever loosens on every
-floor at once, and the constructs above lose their fire. This is the hinge of
+floor at once, and the constructs above lose their fire. This floor's own
+veil dies untended within the day, and — stranger to these galleries than
+any horror — plain daylight crosses the ring; in a year there will be green
+in the coolant-runs, feeding on nothing the core made. This is the hinge of
 the whole war: below this the climb freed the floors one at a time; here it
 strikes the source that bound them all. The freed Coreside thralls climb as the
 host's core-breakers, carrying **Scram** and core-lead — the folk who will keep

@@ -4,6 +4,13 @@
 
 **Cut from:** the rendering-country of Men — the walled bone-yards · **Gate-town:** Garthend · **Warden:** Garthbone
 
+**Sky:** standard — four miles of clattering air, room for real weather
+**Veil:** thin — a bone-white haze off the stacks
+**Land:** Rimlands six miles of bone-walled yards; the deep middle hides the
+rendering-pit
+**Gates:** down-gate in a walled yard by Garthend; up-gate in the
+bone-walled scarp at the garths' edge, its arch a rendered arch of horn
+
 ## The land
 A country of walled bone-garths — great fenced yards where the realm's dead
 beasts were rendered to bonemeal, glue, and char, the ground white with
@@ -11,7 +18,10 @@ splinter and the walls stacked house-high with clean bone. Picker-birds crowd
 the yard-walls; the wind clatters through the stacks like dry rain. The fever
 has soaked into the old bone, and the heaps have begun to shift and rise and
 walk. It is a grim, useful, orderly place turned into a boneyard in the worst
-sense — where the leavings of a thousand herds are standing up. The
+sense — where the leavings of a thousand herds are standing up. The garths
+step shallowly down toward the middle, where the rendering-pit sinks into
+the deepest ground and the oldest bone lies; the walled yards of the rim
+are where the wardens keep the work in the light. The
 stair-lift stands in a bone-walled scarp at the garths' edge, its arch a
 rendered arch of horn; Garthbone guards the rendering-pit before it.
 
@@ -21,7 +31,7 @@ rendered arch of horn; Garthbone guards the rendering-pit before it.
 - **Ground & water plants:** bone-nettle in the splinter, glue-weed by the
   rendering-vats, and the pale char-moss on the burnt heaps.
 - **Under the Yoke:** the bone-nettle grows needle-sharp; the glue-weed
-  snares; the char-moss reeks a fear-stink that unnerves.
+  snares; in the gloom the char-moss reeks a fear-stink that unnerves.
 
 ## Places of interest
 - **The Rendering Pit.** The sunken vat-cellar beneath the garths where the
@@ -90,6 +100,8 @@ the stair-lift opens.
 
 ## When it falls
 Garthend fires the Great Stack and the fear-stink settles the heaps for good;
-the garths go quiet and clean. The bone-wardens climb as the host's bone-
+the garths go quiet and clean. The bone-white gloom lifts in a day; real
+light crosses the yards, and grass takes root between the stacks for the
+first time since the cutting. The bone-wardens climb as the host's bone-
 menders and dead-layers, carrying **Knit-bone** and bonechar-steel — the folk
 who set an army's broken bones and put down whatever the tower raises above.

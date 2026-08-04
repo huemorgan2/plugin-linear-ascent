@@ -4,6 +4,14 @@
 
 **Cut from:** the shrine-country of Men — a great pilgrimage chantry · **Gate-town:** Bellmarsh · **Warden:** Bellrot
 
+**Sky:** standard — four miles of grey air over the ribbed roof
+**Veil:** heavy — a drowned dusk the candles barely dent
+**Land:** Rimlands seven miles of bell-marsh shallows; the deep middle hides
+the drowned chancel
+**Gates:** down-gate in the shallows by Bellmarsh; up-gate in the flooded
+lych-porch at the nave's foot, out where the water runs deepest — the way
+up is a wade down the whole drowned nave, pew by pew
+
 ## The land
 A vast chantry-chapel sunk to the waist in flood-water — nave and side-aisles
 drowned, stone fonts brimming, and thousands of vigil-candles floating and
@@ -11,17 +19,22 @@ burning still on the black water, throwing gold light up into a ribbed roof.
 The flood came the night of the Theft and never drained. Prayers hang in the
 wet air. It should be the most peaceful floor of the tier, and it nearly is —
 except the drowned congregation never left their pews, and they still keep
-the vigil, and they want company. The stair-lift stands in a flooded lych-
-porch at the nave's foot, its arch a brimming font-arch; Bellrot keeps the
-drowned chancel before it.
+the vigil, and they want company. The floor bends down toward the chancel
+at its middle, and the flood deepens with it: bell-marsh shallows at the
+rim, black water over the deep aisles. The only way up lies out there — a
+wade down the whole drowned nave, past every occupied pew, to the
+lych-porch standing to its lintel in the flood. The stair-lift stands in
+that flooded lych-porch at the nave's foot, its arch a brimming font-arch;
+Bellrot keeps the drowned chancel before it.
 
 ## Flora
 - **Trees / canopy:** none — drowned stone columns and a rood-screen of
   black oak.
 - **Ground & water plants:** font-lily on the still water, vigil-reed round
   the drowned pews, and the pale candle-moss climbing the pillars.
-- **Under the Yoke:** the font-lilies pull under; the candle-moss gutters the
-  vigil-lights to draw the faithful into the dark aisles.
+- **Under the Yoke:** the font-lilies pull under in the gloom-dark water; the
+  candle-moss gutters the vigil-lights to draw the faithful into the dark
+  aisles.
 
 ## Places of interest
 - **The Crypt.** The flooded undercroft beneath the chancel, where the
@@ -38,8 +51,9 @@ drowned chancel before it.
 ## The people
 The faithful of Bellmarsh — Men of the pilgrim-chantry: vigil-keepers, font-
 wardens, and bell-ringers whose calling is to keep the light and lay the dead
-kindly. They shelter in the dry Bell-Loft and the upper galleries, keeping the
-candles lit and gently turning back the drowned. They love a kept vigil, a
+kindly. They shelter in the dry Bell-Loft and the upper galleries — the one
+dry height on the floor — keeping the candles lit and gently turning back
+the drowned. They love a kept vigil, a
 hallowed font, and a soul seen safely on. They fear the drowned congregation
 and the false vigil-lights.
 **The keeper:** Mera Bellmarsh, vigil-keeper — keeps the sanctifying-rite and
@@ -89,7 +103,10 @@ congregation lies to rest; the stair-lift opens on hallowed water.
 
 ## When it falls
 Bellmarsh rings the true bell from the Bell-Loft and the drowned congregation
-bows and drains away at peace; the candles burn steady and kind. The faithful
+bows and drains away at peace; the candles burn steady and kind. The drowned
+dusk unravels in a day and true light falls through the high windows for the
+first time in eighty years; the flood begins, at last, to find its sluices
+and go down. The faithful
 climb as the host's chaplains and dead-layers, carrying **Hallow** and font-
 silver — the folk who hallow an army's ground and lay to rest whatever the
 tower raises on the floors ahead.

@@ -4,13 +4,23 @@
 
 **Cut from:** the burned borderlands — the Waste · **Gate-town:** Shardside · **Warden:** Glassjaw
 
+**Sky:** cathedral — seven miles of glare, sky enough for the mirages to
+raise their false towers in
+**Veil:** thin — the lie here is light itself, shimmer instead of shadow
+**Land:** Rimlands three miles of ringing glass shore; the deep middle
+hides the mirage sea
+**Gates:** rim — the fulgurite bluff, too bright to look at
+
 ## The land
 A plain of fulgurite — desert fused to glass by ancient lightning — stretching
 flat and mirror-bright to a horizon that shimmers with mirage. The heat lies
 in sheets; false lakes and false towers hang in the air; every distance lies.
 Underfoot the glass rings and cracks, and the cracks are edged like knives.
 It was borderland no crown claimed, and it kept its secrets by making anyone
-who crossed it doubt their own eyes. The mirages are worse now. The stair-lift
+who crossed it doubt their own eyes. The mirages are worse now, and they
+pool with the land: the flats bow toward the middle, where false water
+stands in a sheet the gleaners call the mirage sea, and thin along the rim
+shore where the true wind comes in. The stair-lift
 is set in a fulgurite bluff so bright it cannot be looked at directly; Glassjaw
 hides among mirror-images of itself before it.
 
@@ -39,7 +49,7 @@ hides among mirror-images of itself before it.
 ## The people
 Glass-gleaners — borderland folk who harvest fulgurite and read the true
 path across the mirage by lore passed mouth to mouth. They live in the Shard
-Hollow's shade, rationing water and truth. They love a real oasis, a clean-
+Hollow's shade at the rim shore, rationing water and truth. They love a real oasis, a clean-
 struck blade of glass, and a horizon that means what it shows. They fear the
 mirages that walk now, and the shard-picker ogres.
 **The keeper:** Sira Shardside, gleaner-elder — walks the flats blindfolded
@@ -89,6 +99,8 @@ shatter; the flats stop lying; the stair-lift dims enough to enter.
 
 ## When it falls
 Shardside reaches the buried oasis and the flats bloom with mirage-lily that,
-for once, marks real water. The gleaners climb as the host's illusion-
+for once, marks real water. The shimmer thins with the veil inside a day:
+distances tell the truth, and real stars stand over the glass for the
+first time since the Theft. The gleaners climb as the host's illusion-
 breakers and lens-smiths, carrying **Truesight** into the mirror galleries
 and false-faced floors near the throne.

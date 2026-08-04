@@ -4,10 +4,22 @@
 
 **The Made — the summit:** the throne of the tower, the top of the stolen world · **Gate-town:** none — beyond here there is only sky · **Warden:** **Vharuk, the Demon King** — the source of the Yoke, the architect of the Ascent, the last enemy
 
+**Sky:** cathedral — and then none: above the summit there is only true sky,
+black and starred
+**Veil:** thin — no gloom kept over the King's own head
+**Land:** Rimlands two miles — open iron floor; the deep middle is the
+throne
+**Gates:** no up-gate — the Last Door opens from below into the one hall,
+and there is nowhere left to climb
+
 ## The land
 The summit of the Ascent — a single vast throne-hall open to a black sky,
 crowning the hundred floors: a floor of raw broadcast-aether and cold iron
-where Vharuk sits above the whole stolen world. From here the Yoke went out to
+where Vharuk sits above the whole stolen world. The tray is a perfect
+circle, the hundredth and plainest, and even it obeys the rule that built
+all the rest: the open iron floor bends shallowly down toward its middle, so
+the throne stands at the lowest point of the highest place — the King at the
+bottom of his own lens. From here the Yoke went out to
 every floor; from here the fever was sown, the collars forged, the constructs
 made. It is the highest and emptiest place in creation, built by a King who
 wanted to be alone above a world he'd cut into a hundred pieces so it could
@@ -65,7 +77,10 @@ to prevent, achieved on his own throne-floor over his fallen body.
 There is no floor 101. The climb does not go up from here; it goes *down* — the
 liberated host descending the whole tower it freed, floor by floor, gathering
 every people it woke, until the Ascent itself, its purpose gone, is only a
-mountain again with a stair. Aldervale is not restored to what it was; it is
+mountain again with a stair. Below, the last veils die together — the whole
+ladder of lands turning gold at once, each floor getting back its weather,
+its stars, its honest nights; even the Made's iron miles will green in time,
+given light and left alone. Aldervale is not restored to what it was; it is
 made into what it never got to be — the many, no longer kept apart, deciding
 together what to build now that no one is dividing them. The keepers become the
 new world's memory; the freed soldiers lay down their collars as its guard;

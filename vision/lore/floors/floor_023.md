@@ -4,13 +4,23 @@
 
 **Cut from:** the Giants' deep-forge realm — a communal forge-floor · **Gate-town:** Hammerhome · **Warden:** Anvilback
 
+**Sky:** standard — three miles of coal-hazed air over the commons
+**Veil:** thin — coal-dust dimness, never true dark
+**Land:** Rimlands five miles of cold forge-yards; the deep middle hides
+the great cold hearth
+**Gates:** up-gate inland, as the smiths built it — behind the shared
+hearth at the commons' heart
+
 ## The land
 A vast communal forge-hall where the giant-smiths worked shoulder to
 shoulder — a floor of a hundred anvils around one great shared hearth, bellows
 the size of sails, and slack-tubs like ponds. The hearth is cold now, but the
 anvils *ring* on their own, struck by nothing, a maddening chorus that never
 rests. Coal-dust hangs black in the floodlight. It was the beating heart of
-the giants' craft, and it beats still, on empty. The stair-lift stands
+the giants' craft, and it beats still, on empty. The commons was laid out
+the way its country bends: forge-yards and Hammerhome ringing the rim, and
+the hundred anvils ranked inward and down around the one hearth at the
+floor's heart. The stair-lift stands
 in a rock face behind the great cold hearth, its arch cut as an anvil's
 silhouette; Anvilback holds the hearth before it.
 
@@ -91,6 +101,8 @@ lit; the stair-lift swings open on a forge that could arm a war.
 
 ## When it falls
 Dwald lights the Great Chimney and the shared hearth roars for the first time
-since the Theft; the anvils ring to real hammers again. The smiths climb as
+since the Theft; the anvils ring to real hammers again. The coal-dust
+dimness clears with the veil inside a day, and slot-light reaches anvils
+that had only ever shone by fire. The smiths climb as
 the host's armorers, carrying **Temper** and Hammerhome steel — the folk who
 will forge the rising's weapons for every floor still above.

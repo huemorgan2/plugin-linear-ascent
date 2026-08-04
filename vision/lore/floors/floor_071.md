@@ -3,6 +3,12 @@
 > *"A forest burned so hot it turned to stone instead of ash. A thousand years on, the trunks still stand black, and some of them are still warm inside." — Char-burner Grint Stumpwell*
 
 **Cut from:** the burned borderlands — the Waste, a forest petrified by fire · **Gate-town:** Stumpwell · **Warden:** Charspine
+**Sky:** standard — three miles of soot-drift air.
+**Veil:** heavy — soot and gloom laid black on black.
+**Land:** Rimlands five miles wide — the worked char-stands; the deep middle
+holds the glowing heartwood.
+**Gates:** both at the rim — the down-gate at the forest's edge, the up-gate
+in the soot-black bluff behind its stand of char-snags.
 
 ## The land
 A petrified burned forest — a whole woodland flash-charred and turned to black
@@ -11,9 +17,13 @@ snags of solid charcoal under a sky of drifting soot. Nothing has rotted;
 nothing has grown; the forest is a frozen instant of burning, black and silent
 but for soot-owls calling. Some petrified trunks still glow faintly at their
 hollow hearts, warm with a fire that never went out. The char-burners work the
-dead wood, and the dead wood does not always stay dead. The stair-lift is set
-in a soot-black bluff behind a stand of char-snags at the forest's edge;
-Charspine dens in a glowing trunk before it.
+dead wood, and the dead wood does not always stay dead. The dead forest bows
+toward its middle like every stolen country: the burners work the rim-stands
+where the grey light reaches, and the trunks glow warmer and oftener inland,
+down to the heartwood at the floor's dark center, where the old fire still
+waits. The stair-lift is set in a soot-black bluff behind a stand of
+char-snags at the forest's edge; Charspine dens in a glowing trunk before
+it.
 
 ## Flora
 - **Trees / canopy:** petrified char-oak and glass-black snag-pine, ringing
@@ -21,7 +31,8 @@ Charspine dens in a glowing trunk before it.
 - **Ground & water plants:** soot-moss on the char, ember-fungus glowing in
   the hollow trunks, and the pale ash-orchid in the burn-hollows.
 - **Under the Yoke:** the ember-fungus reignites the hollow hearts; the soot-
-  moss puffs choking clouds; the char-snags shed razor-glass splinters.
+  moss, thick under the gloom, puffs choking clouds; the char-snags shed
+  razor-glass splinters.
 
 ## Places of interest
 - **The Kiln-Hollow.** The char-burners' pit-kiln cave, where they still turn
@@ -96,6 +107,9 @@ goes cold; the hollow hearts snuff out; the stair-lift's snags stop burning.
 ## When it falls
 Stumpwell smothers the last glowing hearts and banks the Great Snag into one
 safe warm hearth for the tier; the frozen forest goes truly cold and quiet.
+The heavy gloom unravels in a day, and honest light crosses the black
+country for the first time since it burned; in the first true spring, green
+shoots stand up through the soot between the stone trees.
 The char-burners climb as the host's fire-smotherers and char-smiths, carrying
 **Smother** and petrified heartwood — the folk who put out the tower's fires
 and forge fireproof gear for the furnace-floors of the Making ahead.

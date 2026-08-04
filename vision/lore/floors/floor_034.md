@@ -4,6 +4,13 @@
 
 **Cut from:** the fen-farming country of Men, who worked the land with great arcanotech harvest-rigs · **Gate-town:** Rustwake · **Warden:** Rigrot
 
+**Sky:** standard — four miles of fen sky, room for real weather
+**Veil:** thin — a rust-brown haze off the meres
+**Land:** Rimlands six miles of reedy salvage shores; the deep middle hides
+the rust-water meres
+**Gates:** down-gate on the salvage shore by Rustwake; up-gate in the
+rust-streaked bluff behind a beached hull
+
 ## The land
 A drowned graveyard of exo-rigs — the towering walker-frames the fen-farmers
 once drove across the wetlands to reap and drain, now toppled and rusting in a
@@ -11,6 +18,9 @@ brown marsh, each half-sunk hull an island in the reeds. Rust-water stains
 the meres orange; reeds grow through cracked cockpits; the rigs' aether-cores
 still tick faintly in the mud. It was proud, ingenious country, taken with the
 harvest half-in, and now it is a salvage-yard the marsh is slowly eating. The
+fen bends down toward its middle, where the meres stain darkest and the
+biggest hulls went under; the reedy salvage shores of the rim are where the
+light and the living keep. The
 stair-lift is set in a rust-streaked bluff behind a beached hull, and Rigrot
 wallows the channel before it.
 
@@ -20,7 +30,8 @@ wallows the channel before it.
 - **Ground & water plants:** rust-reed, oil-lily on the slicks, and the
   bolt-barnacle that crusts the sunken hulls.
 - **Under the Yoke:** the rust-reed cuts like tin; the oil-lily's slick
-  ignites; the bolt-barnacles clamp onto a wading leg.
+  ignites; the bolt-barnacles clamp onto a wading leg in the gloom-dark
+  water.
 
 ## Places of interest
 - **The Hull Undercroft.** The dry interior of a capsized flagship-rig, its
@@ -38,7 +49,10 @@ wallows the channel before it.
 ## The people
 Salvage-folk — Men of the fen who once drove the rigs and now strip them,
 amphibious and rust-stained, reading a wreck by the way it lies. They shelter
-in Rustwake on floating platforms, salvaging cores and plate from the graves.
+in Rustwake on floating platforms off the rim shores, salvaging cores and
+plate from the graves. A few crews have quit the marsh altogether and live
+collared to a rim pillar — a bead-town of salvage-folk, hull-timber and
+rigging clamped around the strand, out of the water's reach.
 They love a good haul, a live core recovered, and a rig that still walks. They
 fear the drowned beacons and the rig-wights in the flooded hulls.
 **The keeper:** Weld Rustwake, salvage-master — knows every wreck's name and
@@ -89,7 +103,9 @@ lights die; the stair-lift's channel clears.
 
 ## When it falls
 Rustwake raises the flagship's live core and relights the Crane-Mast beacon;
-a salvaged rig walks the fen again, this time for the rising. The salvage-folk
+a salvaged rig walks the fen again, this time for the rising. The rust-haze
+gloom unravels in a day; real sun finds the meres, and the reeds green where
+they were orange. The salvage-folk
 climb as the host's wrights and rig-drivers, carrying **Corrode**, rig-steel,
 and — if the salvage was good — a walking harvest-rig turned war-engine for
 the floors above.

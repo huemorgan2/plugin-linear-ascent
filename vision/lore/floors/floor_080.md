@@ -4,11 +4,21 @@
 
 **Cut from:** the Elves' lamp-woods — the Master of the Hunt's own court (crowning floors 31, 66, 76) · **Gate-town:** Hornsend · **Warden:** **The Pale Huntsman**
 
+**Sky:** cathedral — six to eight miles of moon-pale heaven over the wood
+**Veil:** heavy — a cold pale gloom that leaches all color
+**Land:** Rimlands four miles — pale kennel-rings; the deep middle hides the
+bone-white hall
+**Gates:** down-gate at the rim; the up-gate stands inland, as written — at
+the hall's end in the wood's oldest heart, where the court keeps it
+
 ## The land
 The pale court of the Master of the Hunt — a bone-white hall in the wood's
 oldest heart, ringed by pale kennels and hung with the trophies and horns of a
 thousand years of hunting, lit by a cold moon-pale light that leaches all
-color. Here the whole elf-hunt answers: the Grey Rides, the Kennel Courts, the
+color. The wood bends shallowly down toward its oldest heart, under a heaven
+hung miles high and moon-pale — a silver day at the rim where the
+kennel-rings stand, the gloom whitening and deepening inland to the hall at
+the bottom of the bowl. Here the whole elf-hunt answers: the Grey Rides, the Kennel Courts, the
 Quarry Runs all take their law from this court and its Master. A silent hunt
 forms and re-forms across the pale ground, pale hounds at heel, waiting on the
 Huntsman's horn. It is the last floor of the stolen realms, and the last —
@@ -22,8 +32,8 @@ sounds the last horn and opens the way to the tower's own Making.
 - **Ground & water plants:** pale-grass drained of green, moon-moss on the
   kennel-stones, and the white hunt-orchid that blooms only on a kill.
 - **Under the Yoke:** the pale-grass shows the scent-trail of the hunted; the
-  moon-moss carries the Huntsman's horn to every corner; the hunt-orchids
-  mark where the pale hounds will drive their quarry.
+  moon-moss carries the Huntsman's horn through the heavy gloom to every
+  corner; the hunt-orchids mark where the pale hounds will drive their quarry.
 
 ## Places of interest
 - **The Pale Kennels.** The Huntsman's own hound-dens, where the pale pack is
@@ -42,7 +52,7 @@ sounds the last horn and opens the way to the tower's own Making.
 ## The people
 Court-captives of Hornsend — the hunt's elves: horn-callers, whips, and
 trophy-keepers, held in the pale court as the Huntsman's unwilling field. They
-shelter in the wood's edges, running as quarry when the horn sounds, keeping
+shelter at the wood's rim-edges, running as quarry when the horn sounds, keeping
 the calloff-lore alive. They love a hunt ended in mercy, a hound heeled, a
 quarry spared, and the gentle Master they remember. They fear the pale hunt
 and how far their Master has gone.
@@ -102,7 +112,10 @@ the horn for good. The stair-lift opens on the tower's own Making.
 ## When it falls
 The Pale Huntsman wakes, calls off the endless hunt across the whole elf-
 realm, and lets the quarry — his own people — go free at last; the pale court
-fills with color again. This is the fourth and final ruler won back among the
+fills with color again. The heavy gloom unravels in a day, and true light
+comes down the whole high heaven for the first time in eighty years — green
+into the pale-grass, gold into the wood, and the hunt-orchids blooming for
+something other than a kill. This is the fourth and final ruler won back among the
 stolen realms — Skarn, Hrimgar, Zephyra, and now the Huntsman — and the climb
 has proved that every warden the tower set over a people was a captive first.
 The hunt-elves climb as the host's master trackers and hunters, carrying

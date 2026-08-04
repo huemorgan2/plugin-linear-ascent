@@ -29,10 +29,19 @@ headline animals, trapped folk, and Warden all come from the table).*
 
 **Cut from:** {origin} · **Gate-town:** {town} · **Warden:** {Warden}
 
+**Sky:** {low|standard|cathedral} — {the miles of air, worded naturally}
+**Veil:** {heavy|thin} — {what the Warden's gloom is like on THIS floor}
+**Land:** {how wide the Rimlands run and what the rim band is like; what
+the deep middle hides}
+**Gates:** {where the down-gate and up-gate stand — rim is the norm}
+
 ## The land
 Landscape, light, weather — and the moment the Theft froze here. Name where the
 stair-lift stands (the gate the Warden holds) here, in a line — it does not
-need to be one of the three places below.
+need to be one of the three places below. Tie the landscape to the lens — the
+land bending shallowly down toward its dark middle, light and living at the
+rim — and remember settlements sit at the rim by default: a town or keeper
+placed inland owes the reader one clause of why.
 
 ## Flora
 - **Trees / canopy:** …

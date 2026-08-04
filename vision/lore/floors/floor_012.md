@@ -4,12 +4,23 @@
 
 **Cut from:** the chalk sheep-country of Men · **Gate-town:** Woolgate · **Warden:** Ramsteel
 
+**Sky:** cathedral — seven miles of sky the larks can lose themselves in
+**Veil:** thin — a white chalk-glare that blinds rather than darkens
+**Land:** Rimlands nine miles of springy chalk turf; the deep middle hides
+the great dew-pond
+**Gates:** rim — the chalk scarp at the downs' edge
+
 ## The land
 Bare chalk downs, wind-cropped and pale, rolling to a white horizon — sheep-
 country taken at the shearing, the fleeces half-clipped and the flocks run
 wild. The turf is short and springy over old chalk, cut through with dew-
 ponds and sheep-tracks, and the wind never stops. Floodlight-glare off the
-white chalk is blinding by "day." It is high, clean, empty ground, and every
+white chalk is blinding by "day." The downs roll gently down toward the
+middle, where the great dew-pond gathers the floor's water; the folds and
+the gate-town keep to the high rim turf. One white shoulder juts out past
+the floor above into true daylight — real sun, real stars, a forbidden
+mile of turf the shepherds call the Sunskirt and swear they never visit.
+It is high, clean, empty ground, and every
 fold-wall on it pens nothing now. The stair-lift stands in a white chalk
 scarp at the downs' edge, its arch shaped like a fold-hurdle; Ramsteel holds
 the fold before it.
@@ -89,6 +100,8 @@ stair-lift opens.
 
 ## When it falls
 Woolgate lights the Long Barrow beacon and the scattered flocks — and folk —
-come in off the downs. The shepherds climb the lift as the host's trackers
+come in off the downs. The veil goes within a day and the whole down
+stands under real sun — the light the Sunskirt promised all along — with
+the dew-ponds holding an honest blue. The shepherds climb the lift as the host's trackers
 and slingers, wind-wise and patient, carrying **Windward** for the storm-
 lashed floors far above.

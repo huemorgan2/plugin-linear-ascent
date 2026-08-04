@@ -5,6 +5,13 @@
 **The Made — throne-tiers:** the King's pleasure-garden of grown horrors ·
 **Gate-town:** Bloomside · **Warden:** Nightbloom
 
+**Sky:** standard — three to five miles of bloom-lit dark above the terraces
+**Veil:** heavy — a tended night, thick as garden soil
+**Land:** Rimlands four miles — fountained terraces; the deep middle holds
+the black beds
+**Gates:** both doors at the rim, as written — the up-gate behind the living
+thorn-arch at the garden's far wall
+
 ## The land
 The night-gardens of the Made — Vharuk's single vanity of beauty, a vast walled
 pleasance of black-flowering trees and luminous night-blooms laid out beneath
@@ -12,6 +19,11 @@ the throne-tiers, terraced and fountained and utterly still. It is beautiful
 and it is obscene: the garden is *grown from the taken,* captives planted in the
 black beds and coaxed to flower, their faces surfacing in the petals. Perfumed
 air lulls and binds; thorn-hedges walk; the fountains run with sweet aether.
+The garden wall runs a flawless circle and the beds are laid to its geometry
+— nothing here ever followed a river or an old border, and the symmetry is
+part of the obscenity. The pleasance bends shallowly down toward its middle,
+the fountains stepping terrace by terrace into the dark, and the oldest
+black beds lie at the bottom where the heavy gloom pools thickest.
 It is the tower's most seductive floor and its cruelest — a paradise fertilized
 with people. The stair-lift stands behind a living thorn-arch at the garden's
 far wall, and Nightbloom roots that arch shut.
@@ -20,9 +32,9 @@ far wall, and Nightbloom roots that arch shut.
 - **Canopy:** black nightwood in flower, and luminous bloom-vault overhead.
 - **Ground growth:** the night-blooms themselves, dream-moss on the terraces,
   and the pale face-lily that opens with a captive's features.
-- **How the Making twists it:** the night-blooms breathe a binding perfume;
-  the face-lilies wear the taken's faces to lure; the dream-moss roots a
-  wanderer to lie down and never rise.
+- **How the Making twists it:** the night-blooms drink the tended gloom and
+  breathe a binding perfume; the face-lilies wear the taken's faces to lure;
+  the dream-moss roots a wanderer to lie down and never rise.
 
 ## Places of interest
 - **The Root-Cellar.** The black undercroft where the planted are rooted and
@@ -37,7 +49,8 @@ far wall, and Nightbloom roots that arch shut.
 
 ## The people — who you are freeing
 Bloomside gardeners — captives kept to tend the beds that are made of their own
-kin, and the half-planted not yet wholly flowered. They love a bloom cut, a bed
+kin, and the half-planted not yet wholly flowered. They are housed on the
+rim's fountained terraces, where the perfume thins enough to think. They love a bloom cut, a bed
 dug free, and a face woken out of a petal. They fear the perfume, the walking
 thorns, and feeling their own feet begin to root.
 **The keeper:** Elys of Bloomside — keeps the un-rooting lore and digs the
@@ -89,6 +102,9 @@ still — freed to be dug out of the beds. The stair-lift opens.
 ## When it falls
 Elys's gardeners dig the beds free, and the garden's grown-people wake in the
 black soil and are lifted out — the King's one beautiful thing exposed as his
-foulest. The freed Bloomside gardeners climb as the host's hedge-breakers,
+foulest. The tended night unravels in a day, and true light is the garden's
+undoing and its mercy at once — the black blooms fade, the perfume dries,
+and honest green comes up through beds where people used to be planted. The
+freed Bloomside gardeners climb as the host's hedge-breakers,
 carrying **Deadbloom** and nightwood to wither the King's last wards. Only the
 court, the door, and the throne remain above.

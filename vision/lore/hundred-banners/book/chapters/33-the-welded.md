@@ -108,6 +108,14 @@ the foot of the Cooling Racks while the crews and the craft brought the
 fresh-welded down one at a time, and Sef's people found the seams, and
 the word was said, and the iron opened.
 
+The morning after the gantry fell, the veil went — untended, the grey
+false day thinning and tearing the way the freed had seen it go above
+every floor whose Warden they had broken — and down through the high
+smoke-vents came the grey-silver of an honest day, lying where only
+arc-light had ever lain. Work stopped, one breath, every hand; nobody
+needed it named. Then the word was said again, and the iron went on
+opening, in daylight.
+
 Not all of it opened. That was the first cruelty of the mending: Unseam
 split what had not set. What had set, stayed. A woman came off the racks
 with her hands her own again and her back iron forever. A boy — he had

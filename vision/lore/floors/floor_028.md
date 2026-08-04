@@ -4,6 +4,13 @@
 
 **Cut from:** the Giants' deep-forge realm — its smelting-floor · **Gate-town:** Crucible Gate · **Warden:** Smeltjaw
 
+**Sky:** standard — three miles of heat-shimmered air over the pour
+**Veil:** thin — furnace-orange eats the grey here
+**Land:** Rimlands three miles of cooled pour-yards; the deep middle hides
+the tipping crucibles
+**Gates:** down-gate in a cooled yard by Crucible Gate; up-gate behind the
+wall of moulded fire at the pour's far end, its arch a crucible's lip
+
 ## The land
 The smelting-floor: banks of furnaces still roaring on captured aether,
 runnels of molten metal threading the stone in glowing rivers, and the great
@@ -11,7 +18,10 @@ crucibles tipping their fire into moulds that cast nothing anymore — or cast
 tower-parts on their own. The air shimmers with heat; the light is furnace-
 orange; the runnels must be crossed on narrow tap-bridges. It is the loudest,
 hottest, most dangerous floor of the mine-tier, and the metal never stops
-pouring. The stair-lift stands behind a wall of moulded fire at the far
+pouring. Like every tray it tips toward its middle: the cooled pour-yards
+and Crucible Gate keep to the rim where the slot's air cools the stone,
+and the land runs down toward the great crucibles at the glowing heart.
+The stair-lift stands behind a wall of moulded fire at the far
 end of the pour, its arch cast as a crucible's lip; Smeltjaw pours before
 it.
 
@@ -21,7 +31,7 @@ it.
   the runnel-edges, and the crucible-fungus fruiting on flux-heaps.
 - **Under the Yoke:** the fire-lichen flares to flame at a breath of warmth;
   the crucible-fungus spits sparks; the runnels overflow their channels to
-  chase heat.
+  chase heat through the gloom.
 
 ## Places of interest
 - **The Tap-Hole Undercroft.** The channel-cave beneath the furnaces where
@@ -97,6 +107,8 @@ wall sets solid enough to pass.
 
 ## When it falls
 Bruna pulls the master tap and the endless pour finally stops; the smelters
-cast for the rising instead of the tower. They climb as the host's foundry-
+cast for the rising instead of the tower. What veil there was unravels in a
+day, and for the first time the smelters see honest daylight on the rim and
+bank their fires by a real dusk. They climb as the host's foundry-
 masters, carrying **Pour** and crucible steel — the folk who turn the freed
 mountain's ore into the weapons that will breach the throne.

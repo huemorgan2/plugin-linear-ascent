@@ -3,6 +3,12 @@
 > *"We grew copper like corn and harvested the sky. Best power in the world, till the day the sky started aiming." — Field-warden Mera Copperpole*
 
 **Cut from:** the storm-harvest country of Men · **Gate-town:** Copperpole · **Warden:** Groundstrike
+**Sky:** standard — four miles of storm-ceiling that never rains.
+**Veil:** thin — the flashing storm is lid enough.
+**Land:** Rimlands six miles wide — the earthed farm-belts; the deep middle
+holds the earthing-vaults.
+**Gates:** both at the rim — the down-gate among the farm-belts, the up-gate
+in the earthed bluff ringed by copper poles at the field's edge.
 
 ## The land
 A vast plain bristling with copper lightning-poles — rank on rank of tall
@@ -11,9 +17,13 @@ earthing-vaults, under a permanent storm-ceiling that never rains but never
 stops flashing. The air smells of ozone; the poles hum and spit; a strike can
 come down anywhere, but comes down oftenest on the tallest thing standing —
 which, out on the field, is you. Men harvested the storm here and grew rich on
-its charge. Now the storm is fever-mad and aims to kill. The stair-lift is set in an
-earthed bluff ringed by copper poles at the field's edge; Groundstrike calls
-the strikes before it.
+its charge. Now the storm is fever-mad and aims to kill. The plain bows
+toward its middle like every stolen country, and the harvest followed the
+shape of it: the earthed farm-belts and Copperpole keep to the rim, and the
+poles march down and inward to the earthing-vaults sunk at the floor's deep
+heart, where the charge runs to ground. The stair-lift is set in an earthed
+bluff ringed by copper poles at the field's edge; Groundstrike calls the
+strikes before it.
 
 ## Flora
 - **Trees / canopy:** none — copper poles and storm-sky.
@@ -90,7 +100,10 @@ can be thrown and the stair-lift reached.
 
 ## When it falls
 Copperpole throws the master switch and the field earths safe; the harvested
-storm pours into the rising's vaults instead of down on its people. The field-
+storm pours into the rising's vaults instead of down on its people. The
+Warden's gloom goes in a night; the storm-ceiling stays — it is the
+country's own stolen weather — but under it the safe lanes hold, and green
+comes back along the earthed belts where the grass no longer bites. The field-
 folk climb as the host's storm-callers and charge-wardens, carrying **Conduct**
 and storm-copper — the folk who turn the sky's own lightning on the throne and
 keep the army safe under any storm the tower calls.

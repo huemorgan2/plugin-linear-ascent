@@ -4,12 +4,22 @@
 
 **The Made:** the ceremonial approach to Malgrim's gate · **Gate-town:** Clarionfall (a captive road-gang) · **Warden:** Trumpetsteel
 
+**Sky:** standard — three to five miles of air, all of it ringing
+**Veil:** thin — a parade-light; the banners must be seen
+**Land:** Rimlands four miles — banner-hung verges; the deep middle holds
+the great horns
+**Gates:** both doors at the rim, as written — the up-gate beneath the
+Proclamation Arch at the road's head
+
 ## The land
 The Herald's Road of the Made — the grand ceremonial approach to Malgrim's
 muster-gate, a processional way lined with colossal proclamation-horns and
 towering banners of the King, that blares his titles and decrees in a deafening
 brazen fanfare without pause. The sound is a physical force; the banners hang
 like iron sails; the road is beaten smooth by a thousand years of ceremony.
+The way bends with the tray — down from the banner-hung verges at the bright
+rim into the dark middle where the greatest horns stand, then up again to
+the Arch — so every decree is blared loudest from the floor's deep heart.
 Slave road-gangs polish the horns and hang the banners. It is a floor of pure
 noise and pomp, the tower shouting its own glory, and the shout is a weapon.
 The stair-lift stands beneath the Proclamation Arch at the road's head, before
@@ -21,7 +31,7 @@ Malgrim's own gate; Trumpetsteel heralds the approach before it.
   poles, and fanfare-fungus in the horn-mouths.
 - **How the Making twists it:** the fanfare-fungus amplifies the horns to
   bone-shaking; the banner-lichen drops the banners to smother; the clarion-
-  moss echoes the blare to disorient.
+  moss carries the blare through the gloom to disorient.
 
 ## Places of interest
 - **The Banner-Vault.** The store of the King's banners and standards beneath
@@ -36,7 +46,8 @@ Malgrim's own gate; Trumpetsteel heralds the approach before it.
 
 ## The people — who you are freeing
 Road-thralls — the re-enslaved set to tend the horns and hang the banners,
-half-deafened, forced to proclaim the glory of the one who enslaved them. They
+half-deafened, camped on the rim's verges where the blare is merely
+deafening, forced to proclaim the glory of the one who enslaved them. They
 love a horn stopped, a banner burned, and a decree that never sounds. They fear
 the bone-shaking blare and being hung on the poles as decoration.
 **The keeper:** Nael Clarionfall, road-thrall — keeps the horn-lore and the
@@ -86,7 +97,9 @@ lift opens.
 ## When it falls
 Clarionfall turns the Proclamation Arch and the King's endless fanfare chokes
 to silence; the freed Trumpetsteel blares a false decree that ripples confusion
-into Malgrim's muster ahead. The freed road-thralls climb as the host's horn-
+into Malgrim's muster ahead. The gloom unravels in a day, and with it goes
+the last of the noise — true light on a silent road, and for the first time
+in an age the floor can hear its own wind. The freed road-thralls climb as the host's horn-
 callers and heralds, carrying **Blare** and clarion-brass — the folk who
 silence the tower's glory and sound the rising's own call at the gates of the
 King.

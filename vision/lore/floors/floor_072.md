@@ -3,6 +3,12 @@
 > *"We didn't tame the drakes. We came to an understanding: they let us keep the aeries clean, and they let us live. The understanding's off now." — Drake-keeper Weld Scalewatch*
 
 **Cut from:** the drake-riding country of Men — the high aeries · **Gate-town:** Scalewatch · **Warden:** Stoopfall
+**Sky:** cathedral — seven miles of flying weather.
+**Veil:** thin — a high haze the drakes climb out of.
+**Land:** Rimlands three miles wide — the coin-strewn lower ledges; the deep
+middle holds the great hoard-cave.
+**Gates:** the down-gate at the rim below the cliff; the up-gate inland and
+high, in a hoard-cave behind its curtain of nesting ledges.
 
 ## The land
 A vast cliff-face of drake-aeries — tiered eyries and hoard-caves where the
@@ -12,8 +18,14 @@ and hiss; the ledges are treacherous with rolled coin and shed scale; the
 drakes wheel and squabble over their piles. Men lived here by an old truce
 with the drakes, keeping the aeries and sharing the heights. The fever has
 broken the truce and turned the aeries into a war of every drake against every
-climber. The stair-lift is set in a hoard-cave behind a curtain of nesting
-ledges high on the cliff; Stoopfall stoops on the approach before it.
+climber. The country bends down and inward like every stolen land: keepers
+and light keep to the outer ledges at the rim, and the hoard-caves bore
+away into the cliff's dark inland heart, where the eldest piles lie
+deepest. And the topmost ledges stand out past the floor above into true
+daylight: the drakes wheel up there in real sun — the one joy the fever
+never touched, on the most forbidden ground the Warden owned. The
+stair-lift is set in a hoard-cave behind a curtain of nesting ledges high
+on the cliff; Stoopfall stoops on the approach before it.
 
 ## Flora
 - **Trees / canopy:** none — eyrie-ledges and hoard-caves; wind-stunted
@@ -88,7 +100,10 @@ re-struck; the stair-lift's ledges quiet.
 
 ## When it falls
 Scalewatch re-strikes the drake-truce from the High Aerie and the aeries share
-the heights again; the hoards are counted, not fought over. The drake-keepers
+the heights again; the hoards are counted, not fought over. The haze burns
+off in a day and the whole cliff stands in true light, no perch forbidden
+now; the aerie-thorn flowers, and the drakes teach their young the sun.
+The drake-keepers
 climb as the host's drake-riders and scale-smiths, carrying **Drakespeak**,
 drake-scale mail, and a wing of ridden drakes — the folk who bring the tower's
 own drakes over to the rising for the Making-floors ahead.

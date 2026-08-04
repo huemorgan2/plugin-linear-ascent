@@ -281,6 +281,12 @@ and the Fair and the Warcamp, wherever the willing had debts and the
 wronged had voices, for years, in gate-towns Ede would never see. The
 best of what they had built was that it did not need her.
 
+The keepers' reports had come up with the last supply-trains: true
+light standing inland where the gloom had been, pale trees gone over
+to honest green, the first heavy harvests in eighty years, the dens of
+the deep middles beginning to empty. Ede had them read before the
+sitting; a court should know what world its sentences are for.
+
 She stayed at the table after, in the lamp-hush, with the seal cooling
 under her hand. It had cost her all day, the old cost: rope was clean,
 rope was quick, and every hour of that long sitting some tired soldier

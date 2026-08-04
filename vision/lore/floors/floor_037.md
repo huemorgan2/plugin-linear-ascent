@@ -4,6 +4,14 @@
 
 **Cut from:** the Giants' deep-forge realm — its great blast-door bulkheads · **Gate-town:** Last Lantern · **Warden:** Gatebone
 
+**Sky:** standard — three miles of air, draughty with the breaches
+**Veil:** thin — a grey the howling draughts keep moving
+**Land:** Rimlands four miles of breached door-yards; the choked deep middle
+hides the road to the last sealed bulkhead
+**Gates:** down-gate in a door-yard at the near rim; up-gate is the one
+unbreached bulkhead itself at the tier's far end — the crossing runs breach
+by breach through the dark middle to reach it
+
 ## The land
 A tier of colossal breached blast-doors — the giants' bulkhead-gates that once
 sealed the deep-forge against flood and fire, now blown off their hinges and
@@ -11,7 +19,10 @@ lying in rubble, the corridors between them choked with debris and loud with
 nesting crows. Scorch-marks streak the walls where the tower's charges cut
 through. Draughts howl through the breaches. It was the mountain's armor, and
 its breaking is written plain in every twisted hinge — proof that nothing the
-old world built kept the tower out. The stair-lift is itself the one
+old world built kept the tower out. The corridor-country pitches down from
+the door-yards at the rim into its rubble-choked middle, every gate darker
+than the last, before rising again toward the tier's far end. The
+stair-lift is itself the one
 unbreached bulkhead, still sealed at the tier's end, and only Gatebone's fall
 will unbar it.
 
@@ -19,8 +30,8 @@ will unbar it.
 - **Trees / canopy:** none — steel bulkheads and blast-rubble.
 - **Ground & water plants:** breach-moss on the scorched steel, crow-nettle in
   the rubble, and the scorch-lichen ringing the blast-marks.
-- **Under the Yoke:** the crow-nettle grows razor-leaved in the debris; the
-  scorch-lichen re-ignites old blast-residue at a spark.
+- **Under the Yoke:** the crow-nettle grows razor-leaved in the gloom-damp
+  debris; the scorch-lichen re-ignites old blast-residue at a spark.
 
 ## Places of interest
 - **The Sally-Port.** A giant's side-door undercroft that survived the
@@ -95,6 +106,9 @@ restored; the stair-lift unbars on the floor above.
 
 ## When it falls
 Last Lantern restores the Gatehouse and seals the surviving bulkheads — a
-fortress-floor the rising can hold at its back. The doorwards climb as the
+fortress-floor the rising can hold at its back. The thin veil goes altogether
+with the Warden, and daylight walks the corridors through every breach — the
+first honest light the deep-forge doors have ever stood in. The doorwards
+climb as the
 host's breachers and gate-wrights, carrying **Barway** and blast-plate — the
 folk who open the tower's locked ways and shut its doors behind the army.

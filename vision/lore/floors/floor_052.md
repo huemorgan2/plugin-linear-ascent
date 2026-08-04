@@ -3,6 +3,12 @@
 > *"We farm the ridgetops where the clouds catch. Above the cloud it's sun and wind; below it, you can't see your own feet. The harpies hunt the line between." — Cliff-holder Mera Skyfoot*
 
 **Cut from:** the high mountain-farm country of Men · **Gate-town:** Skyfoot · **Warden:** Thermal
+**Sky:** cathedral — seven miles of open heaven above the crowns.
+**Veil:** thin — rags of gloom the ridge-winds tear apart.
+**Land:** Rimlands seven miles wide — sunlit ridge-pasture; the deep middle
+lies drowned under the cloud-sea.
+**Gates:** both at the rim — the down-gate among the low pastures, the
+up-gate in the iced ridge-saddle at the high pastures' end.
 
 ## The land
 A country of cloud-wreathed ridgelines — narrow high pastures strung along
@@ -11,7 +17,13 @@ green sun-lit turf above a white ocean of vapor with heart-stopping drops
 below. Cliff-goats graze the ledges; thermals boom up the faces; the wind
 never stops. Men held these ridges for the high grazing and the thin clear
 air, and the cloud-line is where the safe green ends and the fall begins.
-Cross it on the ridges, or not at all. The stair-lift stands in a
+Cross it on the ridges, or not at all. The country bows toward its own
+middle like every stolen land, and the cloud-sea pools over the deep of it;
+the green pasture and the holdings keep to the rim-ridges, where the light
+comes in off the open air. And the highest crowns jut clear past the floor
+above into true daylight — real sun, real stars over one herder's grazing —
+forbidden ground under the Warden, and the dearest on the floor. The
+stair-lift stands in a
 cloud-wreathed ridge-saddle at the high pastures' end, its arch iced white;
 Thermal rides the updraft before it.
 
@@ -21,7 +33,8 @@ Thermal rides the updraft before it.
 - **Ground & water plants:** cloud-grass on the high turf, cushion-saxifrage
   on the crags, and the mist-fern that drinks the cloud-sea.
 - **Under the Yoke:** the cloud-grass hides the ledge-edge; the mist-fern
-  breathes a blinding fog; the saxifrage crumbles its hold underfoot.
+  breathes the gloom's own blinding fog; the saxifrage crumbles its hold
+  underfoot.
 
 ## Places of interest
 - **The Windward Shrine.** A herders' weather-chapel wedged on a leeward
@@ -87,6 +100,9 @@ opens on the sunlit saddle.
 
 ## When it falls
 Skyfoot lights the Windvane Aerie beacon and the safe crossings show clear
-above the cloud-sea. The cliff-holders climb as the host's ridge-runners and glide-
-scouts, carrying **Featherfall** and sky-iron — the folk who cross any height
-and never fear the drop, which the sky-tiers demand at every step.
+above the cloud-sea. What thin gloom the Warden kept goes in a night, and
+true sun stands on every crown by right now, not by trespass; the high turf
+greens hard, and the mist-fern breathes plain mist again. The cliff-holders
+climb as the host's ridge-runners and glide-scouts, carrying **Featherfall**
+and sky-iron — the folk who cross any height and never fear the drop, which
+the sky-tiers demand at every step.

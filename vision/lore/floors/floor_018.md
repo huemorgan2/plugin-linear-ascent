@@ -4,12 +4,21 @@
 
 **Cut from:** the mill-country of Men · **Gate-town:** Wheelhouse · **Warden:** Milldrown
 
+**Sky:** standard — three miles of spray-hazed air over the races
+**Veil:** thin — a water-grey light, dim with spray and low cloud
+**Land:** Rimlands seven miles of leat-side holdings; the deep middle hides
+the master sluice
+**Gates:** rim — the rock-cut leat-head, the head-race thundering past
+
 ## The land
 A country of watermills strung along fast leats — a web of races, sluices,
 and wheel-ponds carrying stolen water in tireless circles. Every great wheel
 still turns; every millstone hangs idle above its bed; the whole floor is
 loud with rushing water and the creak of wheels grinding nothing. It was
-taken at full flow, and the flow has never eased. The water is cold, quick,
+taken at full flow, and the flow has never eased. Every leat obeys the
+land's shallow bowl: the water comes in off the rim, where the holdings
+and Wheelhouse sit, and runs inward and down to the dark middle, where the
+Undershot dives and the master sluice stands. The water is cold, quick,
 and everywhere, and it undercuts the ground you stand on. The stair-lift is
 set in a rock-cut leat-head with the head-race thundering past its arch;
 Milldrown churns the race before it.
@@ -83,6 +92,8 @@ the race calms; the master sluice answers again; the stair-lift opens.
 
 ## When it falls
 Wheelhouse sets its stones grinding true and the smell of real bread crosses
-the floor for the first time in an age. The millers climb as the host's water-
+the floor for the first time in an age. The water-grey light clears with
+the veil inside a day — sun on the races, real cloud instead of lid — and
+the leats run bright the whole way in. The millers climb as the host's water-
 wrights and provisioners, carrying **Current** for the flooded and reactor-
 cooled floors ahead — and enough flour to feed a rising.

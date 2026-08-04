@@ -212,6 +212,9 @@ no one on floor ninety-three heard any of it, because what they heard
 was nothing, enormous, everywhere nothing, the first nothing in an age
 and a half.
 
+What no one in the lead country could see, the Girdle-sea saw: the last
+veils dying together, and the grey rungs of the world going gold at once.
+
 In the gallery mouth, Halflight guttered. The coil-fed demon starved
 standing, its glare going out of it like water out of cupped hands, and
 what remained was a cinder in the shape of a kneeling man. The freed

@@ -4,6 +4,13 @@
 
 **Cut from:** the Giants' deep-forge realm — a mine-gallery seized as a mustering-ground for the Red Orcs · **Gate-town:** Shieldwall · **Warden:** **Warlord Skarn**
 
+**Sky:** cathedral — six miles of air; the drum-smoke climbs out of sight
+**Veil:** thin — red watch-fire haze; Skarn likes his camp seen
+**Land:** Rimlands four miles of picket-line stone; the deep middle hides
+the caged workings
+**Gates:** up-gate inland, as the orcs hold it — at the gallery's cut end,
+behind Skarn's shield-wall
+
 ## The land
 A giants' mine-gallery turned warcamp: the deep hall filled with the tents,
 pens, and drum-towers of the Red Orc host, pitched right on top of the
@@ -14,6 +21,10 @@ first true *army* the climb meets — the tower's fist, closed around a stolen
 home. The orcs are no more at home here than their captives: Skarn's host is
 itself Pressed, a whole conscript garrison massed in the giants' seized workings
 to hold the gate to the second tier and drive the caged miners as forced labor.
+The camp lies as the seized land bends: picket-lines at the rim stone,
+tents thickening inward, and the workings — pens and people both — sunk
+toward the floor's dark middle, because captives are quartered where the
+ore is, not where the light is.
 The stair-lift stands in the gallery's cut end behind Skarn's own shield-wall
 of welded plate; only Skarn's fall opens it.
 
@@ -93,7 +104,9 @@ stair-lift opens on the second tier of the tower.
 
 ## When it falls
 The pens burst; Shieldwall's caged giants take up the dropped warplate and
-turn the camp; the drums go silent for the first time. This is the floor where
+turn the camp; the drums go silent for the first time. The veil dies with
+the drums: within a day true light crosses a floor the watch-fires had
+kept red, and the freed pens empty into it. This is the floor where
 the host learns **Break-collar** — the day the climb stops only killing the
 Pressed and starts *freeing* them. The second tier opens above, and a caged
 people climbs out of it armed.

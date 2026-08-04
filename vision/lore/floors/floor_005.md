@@ -4,13 +4,23 @@
 
 **Cut from:** the Giants' deep-forge realm — the working galleries below the adit · **Gate-town:** Pumpstead · **Warden:** Sumplock
 
+**Sky:** low — barely a mile of air; the next floor's underside is a fact
+you live under
+**Veil:** heavy — a dark as still and total as the flood itself
+**Land:** Rimlands three miles of dry gallery mouths; the deep middle hides
+the black flood-sea
+**Gates:** rim to rim — the way up is the high dry adit, clear of the water
+
 ## The land
 The mine's true depth: gallery after gallery sunk into black water, the
 great pumps that held it back now silent and half-submerged. Drowned tools
 hang on drowned pegs. The water is dead-flat and dead-black, and it goes
 down further than any lamp will show. Where the Rustwater Adit above only
 wept, this floor is the flood the weeping fed — a giant industry gone under,
-one lift below its own mine-mouth. The stair-lift sits behind a dry adit cut
+one lift below its own mine-mouth. The galleries obey the bend of the land:
+dry mouths at the rim, where the fill runs thin and a grey slot-light still
+reaches, and every drift diving inward toward the middle, where the flood
+stands deepest over the lowest workings. The stair-lift sits behind a dry adit cut
 high in a rock face, reachable only when the flood drops; Sumplock rules the
 drowned galleries below it.
 
@@ -19,7 +29,8 @@ drowned galleries below it.
 - **Ground & water plants:** sump-weed in pale rafts, blind-cave lichen, and
   the ghost-fungus that fruits on the rotting props above the waterline.
 - **Under the Yoke:** the sump-weed has turned carnivorous, closing on
-  anything that stirs the surface, and the ghost-fungus glows to lure it.
+  anything that stirs the surface, and the ghost-fungus glows in the gloom
+  to lure it.
 
 ## Places of interest
 - **The Sump Galleries.** The drowned deep itself, a maze of flooded drifts
@@ -36,7 +47,8 @@ drowned galleries below it.
 ## The people
 Pump-crews and drift-miners — giants and delver-folk who kept the deep dry
 for generations, proud of a floor you could walk without wet feet. Now they
-cling to the few dry galleries, rationing air and lamp-oil, listening to
+cling to the few dry galleries at the rim, rationing air and lamp-oil,
+listening to
 their own drowned machines. They love a pump that runs clean, a dry seam,
 and a shift-song. They fear the water finding the last dry room.
 **The keeper:** Durn Sumphand, master of pumps — stands watch on the
@@ -85,7 +97,9 @@ flood.
 
 ## When it falls
 The walking-beam strokes; the water falls; drowned galleries drain into
-drier dark. Durn's crews come up the lift with pump-iron and long
+drier dark. The gloom unravels with the Warden inside a day, and a grey
+rim-light walks down the dry galleries further than any lamp — Pumpstead
+learns its own floor has a day. Durn's crews come up the lift with pump-iron and long
 experience of black water — the folk the host will want most on the drowned
 and flooded floors still to come. Pumpstead lights its shift-lamps and, for
 the first time in memory, keeps its feet dry.

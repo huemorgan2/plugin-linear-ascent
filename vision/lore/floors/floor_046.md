@@ -4,6 +4,13 @@
 
 **Cut from:** the Giants' deep-forge realm — its coolant-sea · **Gate-town:** Floeside · **Warden:** Floeback
 
+**Sky:** low — a scant mile under the iron lid; storms have no room
+**Veil:** thin — silver-grey; the pack glitters even so
+**Land:** Rimlands five miles of firm shore-ice; the deep middle hides the
+black heart-leads
+**Gates:** down-gate on the shore-ice by Floeside; up-gate in the ice-clad
+scarp at the sea's frozen edge, its arch sheathed in blue rime
+
 ## The land
 A frozen sea under a low iron sky — the giants' vast coolant reservoir, once
 kept just above freezing by the heat it drank from the forges, now locked
@@ -11,7 +18,10 @@ solid into groaning pack-ice since the forges fell cold. Pressure-ridges heave
 up like walls; leads of black water open without warning; brine-gulls cry over
 the floes. It is a horizontal wilderness of ice, beautiful and lethal, where
 the ground can crack beneath a boot and the cold alone can kill. Crossing it
-means reading the ice like the sealers do. The stair-lift stands in an ice-
+means reading the ice like the sealers do. The sea bows down toward its
+middle, where the water ran deepest and the worst leads open black; the
+firm shore-ice of the rim, and what silver light the slot lends it, is the
+only honest footing. The stair-lift stands in an ice-
 clad scarp at the sea's frozen edge, its arch sheathed in blue rime; Floeback
 breaks the ice before it.
 
@@ -20,7 +30,8 @@ breaks the ice before it.
 - **Ground & water plants:** ice-algae staining the floes green, brine-kelp
   in the leads, and frost-flowers blooming on fresh black ice.
 - **Under the Yoke:** the frost-flowers mark thin ice as if it were thick;
-  the brine-kelp drags at a swimmer; the ice-algae make the floes slick.
+  the brine-kelp drags at a swimmer; in the gloom the ice-algae make the
+  floes slick.
 
 ## Places of interest
 - **The Melt-Grotto.** A sea-cave hollowed under a grounded berg, the one
@@ -39,8 +50,9 @@ breaks the ice before it.
 ## The people
 Sealers — giant ice-hunters and delver-floe-crews who work the leads for
 seal and brine-kelp, ice-wise folk who never trust a floe they haven't
-sounded. They shelter in Floeside on the grounded bergs, hunting the leads
-and reading the pack. They love a sound floe, a full lead, and a fire in the
+sounded. They shelter in Floeside on the grounded bergs of the rim shallows,
+hunting the leads and reading the pack. They love a sound floe, a full
+lead, and a fire in the
 grotto. They fear the opening leads, the cold, and the coolant-wights frozen
 in the ice.
 **The keeper:** Orla Floeside, sealer-elder — sounds every floe with her
@@ -93,7 +105,9 @@ to cross.
 
 ## When it falls
 Floeside reopens the coolant-sluice and the sea takes heat again, the ice
-groaning back toward water and giving up its old road. The sealers climb as
+groaning back toward water and giving up its old road. The thin gloom goes
+entirely in a day; under a real sky the pack blazes white, and the sealers
+hunt the leads by honest daylight. The sealers climb as
 the host's ice-bridgers and cold-hunters, carrying **Icebind** and floe-iron —
 the folk who can bridge any frozen sea or open lead the tower puts between the
 army and the throne.

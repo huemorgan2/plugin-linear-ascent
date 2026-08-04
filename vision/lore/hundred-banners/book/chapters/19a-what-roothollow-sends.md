@@ -117,6 +117,19 @@ rolls, the road called it. Nix, who counted luck the way he counted
 everything, gave it a knot of respect and no further thought. Good
 paper, he decided. Good paper is a kind of armor.
 
+Two floors below the Barrows the road ran out along the rim, and out
+in the slot, clamped round one of the great stays in collars of
+timber and rope, a town hung — houses one below another like beads on
+a wire, ladders between them, cisterns rigged to catch the falling
+rain, lamps burning openly down the whole strand of it over four
+miles of air. Its people came out on their platforms to watch the
+wagons pass, the way rim-folk watch weather, and did not wave, and
+Nix did not wave either. He counted the lamps — twenty-two — and gave
+the town a notch of its own: small folk living where the tower had
+left no room, owning nothing under and nothing over. The train did
+not stop; he judged nothing ever did, and that this was likely why
+the town was still there.
+
 At the Broodwarrens the gate was kept by kobolds, and the rota-board
 was chalked in the hooked running-hand of the warrens, and Nix sat at
 the gate-matron's fire and was fed twice and argued with once, which is
@@ -156,7 +169,13 @@ lean and it did not end: you could walk a day out into the scrub and
 turn around and it had not become a shape; it had only become more of
 the world, thin lands fading up into the haze until the air gave out
 before the counting did. Clouds slid out of one land's rim, dragged
-their shadows across the land below, and came apart. On clear nights,
+their shadows across the land below, and came apart. The war stood in
+it too, the one way Roothollow ever saw the war: as color. The low
+lands read gold-edged now, freed floor above freed floor with honest
+weather riding their rims; one grey rung held among them, where a
+queen kept her own dark by contract; and above the gold the grey went
+on up into the haze, which was the size of the work remaining. On
+clear nights,
 they told him, you could see the undersides of the low floors
 glimmering far up the stack, hanging lamps in the black, a country's
 worth of them, like stars that paid rent. Nine years of his life hung
@@ -236,7 +255,11 @@ asleep, eating at fifty fires and hearing at every one some floor's own
 war: Hedgeharbor's flood-quarrel, the drover floors' great question
 of the bulls, two warrens' worth of kobold couriers who made him say
 the census-line out loud — *goblins: one* — and then argued about it,
-fiercely, as if the counting had wronged him. The train climbed through
+fiercely, as if the counting had wronged him. Once, from a lift-cage
+at first light, a garden went by outside the bars: soil packed into
+the saddle of a great cable-knot, three crooked apple trees growing
+sideways out of it, miles above anybody's country. Nobody had planted
+it, and he let it go by uncounted. The train climbed through
 harvest and frost and the Broodthrone's silk, paying warmth, losing not
 one wagon, and the higher it went the more it looked like what it was,
 which Nix put into words for nobody on the last night below the Deep:

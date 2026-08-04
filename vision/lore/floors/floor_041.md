@@ -4,6 +4,13 @@
 
 **Cut from:** the Giants' high cold country — a glacial moraine · **Gate-town:** Coldquay · **Warden:** Coldjaw
 
+**Sky:** cathedral — seven miles of hard white air; the lid a rumor
+**Veil:** thin — a glare-grey the wind scours
+**Land:** Rimlands five miles of melt-runnel gravels; the deep middle hides
+the balanced erratics
+**Gates:** down-gate on the gravels by Coldquay; up-gate in the
+frost-shattered scarp behind the boulder-jam at the rim
+
 ## The land
 A vast field of glacial rubble — moraine-ridges of boulders and grinding
 gravel left by an ice-river long withdrawn, under a hard white sky where
@@ -11,7 +18,11 @@ glare-hawks wheel. Great erratic boulders sit balanced where the ice dropped
 them; melt-runnels lace the gravel; the wind off the high ice cuts to the
 bone. It is the first truly cold floor of the tier, a grey wasteland of stone
 and frost that grinds underfoot and offers no shelter but the hollows beneath
-the fallen giants of rock. The stair-lift is set in a frost-shattered scarp
+the fallen giants of rock. The moraine bends down toward its middle, where
+the greatest erratics balance and every melt-runnel drains to the grey tarn;
+the gravels of the rim, under a sky vaulted miles high, are the only country
+here that forgives a mistake. The stair-lift is set in a frost-shattered
+scarp
 behind a boulder-jam, and Coldjaw dens in the gravel before it.
 
 ## Flora
@@ -19,7 +30,8 @@ behind a boulder-jam, and Coldjaw dens in the gravel before it.
 - **Ground & water plants:** rock-tripe lichen on the erratics, glacier-
   buttercup in the melt-runnels, and cushion-moss in the boulder-lee.
 - **Under the Yoke:** the rock-tripe grows razor-crusted; the cushion-moss
-  hides ice-slick sinkholes; the melt-runnels freeze around a wading foot.
+  hides ice-slick sinkholes in the gloom; the melt-runnels freeze around a
+  wading foot.
 
 ## Places of interest
 - **The Erratic Hollow.** The dry lee-cave beneath the largest balanced
@@ -84,6 +96,8 @@ boulder-jam can be cleared.
 
 ## When it falls
 Coldquay lights the Terminal Ridge beacon and marks the ice-roads clear; the
-moraine stops grinding. The ice-folk climb as the host's cold-wardens and
+moraine stops grinding. The glare-veil scours off in a day and the moraine
+stands in true light — hard, bright, honest; glacier-buttercup gilds the
+runnels that were traps. The ice-folk climb as the host's cold-wardens and
 gravel-sappers, carrying **Kindle** and rime-iron — the folk who keep an army
 warm and moving across the frozen floors that fill the fifth tier.

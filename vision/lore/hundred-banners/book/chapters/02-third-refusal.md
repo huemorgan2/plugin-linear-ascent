@@ -282,6 +282,11 @@ hedges of a farm valley ran their straight green lines to the horizon
 under the Yoke's false light, a day with no sun in it and nowhere to
 look for one, which never set, and never moved a shadow.
 
+It was Pike who looked up — a delver reads her roof before her road —
+and Ede followed the look and saw what a whole country had stopped
+seeing: past the glare, a smooth dark heaven shut flat over the sky,
+the underside of the next stolen land. The day was paint on a lid.
+
 Somewhere out in that stillness, she knew, an old farmer was already
 counting the lift-chain's links by ear, tallying the climbers coming up
 into his fields against the ones who would come back to the gate.

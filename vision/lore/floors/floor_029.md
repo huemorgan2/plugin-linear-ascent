@@ -4,6 +4,13 @@
 
 **Cut from:** the ancestral grave-country of Men · **Gate-town:** Wakewater · **Warden:** Tithegrim
 
+**Sky:** standard — four miles of still air under the grey lid
+**Veil:** thin — a mourning grey, gentle as the turf
+**Land:** Rimlands nine miles of soft barrow-turf; the deep middle hides the
+eldest waking mounds
+**Gates:** down-gate among the newer mounds near Wakewater; up-gate in the
+turf-covered rock mound at the field's edge, its arch a standing lych-stone
+
 ## The land
 A green country of grassed burial mounds — the old barrow-fields where Men
 laid their dead with a tithe of grave-goods, mound after mound to the
@@ -11,7 +18,10 @@ horizon under a still grey sky. The turf is soft, the mounds are quiet, and
 they should stay quiet — but the tower's fever has soaked into the grave-
 gold, and the barrows have begun to *wake*. Beetle-runs riddle the mounds;
 the grass is too green over the newest graves. It is a solemn place turned
-restless, where the dead are stirring and the living keep vigil. The
+restless, where the dead are stirring and the living keep vigil. The field
+bends shallowly down toward its middle, where the eldest and greatest
+mounds were raised on the deepest earth; the newer graves, and the living
+who tend them, keep to the rim's soft turf. The
 stair-lift stands in a turf-covered rock mound at the field's edge, its
 arch a standing lych-stone; Tithegrim keeps the vigil-ground before it.
 
@@ -20,8 +30,9 @@ arch a standing lych-stone; Tithegrim keeps the vigil-ground before it.
   mound.
 - **Ground & water plants:** barrow-grass (rich over the dead), grave-nettle,
   and the pale death-cap ring on the newest mounds.
-- **Under the Yoke:** the yews drip a waking-sap; the grave-nettle stings a
-  cold numbness; the death-cap rings mark where a barrow is about to open.
+- **Under the Yoke:** the yews drip a waking-sap in the gloom; the grave-
+  nettle stings a cold numbness; the death-cap rings mark where a barrow is
+  about to open.
 
 ## Places of interest
 - **The Barrow Chamber.** An opened mound's stone burial-chamber, grave-
@@ -32,8 +43,9 @@ arch a standing lych-stone; Tithegrim keeps the vigil-ground before it.
   and watch the dead before burial, its slabs never empty now. *Seed: the
   keeper's vigil-book here lists which mounds have begun to stir, and in
   what order.*
-- **The King's Mound.** The largest and oldest barrow, crowning the field
-  and still, so far, unwoken. *Seed: keep it sleeping — or wake it ready —
+- **The King's Mound.** The largest and oldest barrow, crowning the field's
+  deep middle and still, so far, unwoken. *Seed: keep it sleeping — or wake
+  it ready —
   and you decide what waits on the floor above.*
 
 ## The people
@@ -90,6 +102,8 @@ mound above.
 
 ## When it falls
 Wakewater lays the waking dead to rest and the barrow-field goes quiet and
-green again; the old tithes are paid at last. The grave-wardens climb as the
+green again; the old tithes are paid at last. The gloom lifts in a day and
+the field keeps its first vigil under real sky in eighty years; the yews put
+out honest growth over mounds that sleep. The grave-wardens climb as the
 host's dead-layers and vigil-keepers, carrying **Lay-to-rest** and barrow-gold
 — the folk who can put down whatever the tower raises on the floors ahead.

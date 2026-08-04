@@ -4,22 +4,34 @@
 
 **Cut from:** the shared under-caverns — the Deep belongs to no one people · **Gate-town:** Lastlight · **Warden:** Duskspin
 
+**Sky:** low — a mile of pressing air over the cavern country
+**Veil:** heavy — a dark that eats lamps a stride past the last terrace
+**Land:** Rimlands three miles of last-lamp terraces; the deep middle hides
+the guano vault
+**Gates:** cruel — down-gate at the rim terraces; the up-gate is cut into
+the vault's deepest wall
+
 ## The land
 The first true dark of the Ascent: a cave-mouth cavern where the tower's
 floodlights fail entirely, the floor thick with the guano of a thousand
 years of roosts. Here the stolen surface finally gives out and the
 under-world begins — a vault of dripping stone, silk in the high corners,
 and a cold that has never known a season. Bring your own light or bring
-nothing. Lastlight is the last lamp before the deep, and its people named it
-as a warning. The stair-lift is cut into the vault's deepest wall, its arch
-webbed shut with steel silk; Duskspin holds the dark before it.
+nothing. Lastlight and its terraces cling to the rim, where a thin
+slot-light still counts the hours; from there the floor bends inward and
+down into the true dark. Lastlight is the last lamp before the deep, and
+its people named it as a warning — for Vharuk set this floor's one door
+where no one would want to go. The stair-lift is cut into the vault's
+deepest wall, its arch webbed shut with steel silk, so the only way up is
+a walk through the whole dark; Duskspin holds that dark before it.
 
 ## Flora
 - **Trees / canopy:** none. Stone teeth above, stone teeth below.
 - **Ground & water plants:** cave-lichen, threshold moss at the light's dead
   edge, and pale root-hair where surface trees once reached down.
-- **Under the Yoke:** the threshold moss has turned lightless-hungry, and
-  the silk in the corners grows faster than any spider could spin it.
+- **Under the Yoke:** the threshold moss has turned lightless-hungry under
+  the gloom, and the silk in the corners grows faster than any spider could
+  spin it.
 
 ## Places of interest
 - **The Guano Vault.** The main cavern, floor soft and deep with the
@@ -84,6 +96,8 @@ Chimney can be lit to give the vault its first light in an age.
 
 ## When it falls
 Lastlight's lamps burn steady past their old edge; the delvers map the
-freed dark and open the sealed caches. They climb with rope, shielded
+freed dark and open the sealed caches. The gloom unravels in a day and a
+grey rim-light reaches deeper into the vault than any lamp ever carried;
+the dark that remains is honest cave-dark, no worse. They climb with rope, shielded
 lamps, and echo-sight — the guides the whole host will follow through every
 Deep floor above, where no surface-folk can find the way.

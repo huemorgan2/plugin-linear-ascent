@@ -4,6 +4,13 @@
 
 **Cut from:** the burned borderlands — the Waste, downwind of the forge-realms · **Gate-town:** Clinker Row · **Warden:** Slagbone
 
+**Sky:** standard — four miles of ash-hazed air, room for real weather
+**Veil:** thin — a soot-grey light the rim wind keeps ragged
+**Land:** Rimlands four miles of picked-over tips; the deep middle hides the
+warm hollow-dens
+**Gates:** down-gate in the low tips by Clinker Row; up-gate in the bluff at
+the barrens' edge, half-buried under its slumped tip
+
 ## The land
 A barrens of heaped slag and clinker — the tipping-ground where the deep-
 forge realms dumped their waste, a country of black glassy hills that shift
@@ -11,7 +18,10 @@ and slump and still tick with old heat. Ash-bats cloud the dead sky; the
 ground crunches like broken pottery. It was no one's land, only everyone's
 midden, and the borderland folk made a life picking usable metal from the
 tips. The heaps are unstable now, and something dens in the warm hollows
-between them. The stair-lift stands in a bluff at the barrens' edge,
+between them. The barrens bend shallowly down toward their dark middle,
+where the oldest heaps run deepest and hold their heat; the picked-over
+tips at the rim take what silver day the slot allows. The stair-lift
+stands in a bluff at the barrens' edge,
 half-buried under a slumped tip; Slagbone dens in the warm hollow before
 it.
 
@@ -20,7 +30,8 @@ it.
   tipping-cranes.
 - **Ground & water plants:** clinker-moss on the cooler heaps, slag-glasswort
   in the cracks, and the metal-drinking rust-flower.
-- **Under the Yoke:** the rust-flower's pollen corrodes; the clinker-moss
+- **Under the Yoke:** the rust-flower's pollen corrodes in the gloom's wet
+  air; the clinker-moss
   hides sink-holes that swallow the unwary into the hot heart of a heap.
 
 ## Places of interest
@@ -38,8 +49,11 @@ it.
 
 ## The people
 Slag-folk — borderland pickers of every stock who make blades, nails, and
-trade-iron from what the forges discarded. They live in the Clinker Hollow,
-lean and soot-black, proud of a good find. They love a clean vein in the
+trade-iron from what the forges discarded. They live by lamplight in the
+Clinker Hollow — in from the rim, because the good metal is — lean and
+soot-black, proud of a good find. A few crews live off the tray entirely,
+in a bead-town of friction-collars strung down a rim pillar, above the
+slumps and out of the ogres' reach. They love a clean vein in the
 waste, a fair trade, and a heap that holds its shape. They fear the sink-
 holes, the ridge-ogres, and the day a heap slumps on the hollow.
 **The keeper:** Grint of Clinker Row, tip-master — knows every heap's age and
@@ -88,6 +102,9 @@ settle; the sink-holes cool; the stair-lift clears of its burying tip.
 
 ## When it falls
 Clinker Row works the buried vein in safety and the barrens stop shifting.
+The gloom unravels in a day; the tips throw honest shadows for the first
+time in eighty years, and clinker-moss greens on the cooling heaps as the
+hollow-dens empty.
 The slag-folk climb as the host's salvagers and field-smiths, carrying
 **Slagshape** and cartloads of reclaimed steel — the folk who can arm a whole
 rising from what the tower threw away.

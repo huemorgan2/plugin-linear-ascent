@@ -3,17 +3,27 @@
 > *"The whole floor's a lie of flat dust. Every third step is a lid, and under every lid is a mouth. Walk where I walk, exactly." — Field-delver Wend Latchlight*
 
 **Cut from:** the shared under-caverns — the Deep, a spider-burrowed cavern-plain · **Gate-town:** Latchlight · **Warden:** Latchjaw
+**Sky:** low — a bare mile of air; the lid hangs close over the dust.
+**Veil:** heavy — a still grey murk the lamps barely dent.
+**Land:** Rimlands three miles wide — the marked dust-lines; the deep middle
+holds the king-burrow.
+**Gates:** both at the rim — the down-gate on the proven lines, the up-gate
+in the low wall at the plain's far side.
 
 ## The land
 A wide flat cavern-plain floored in fine grey dust — deceptively empty,
 deceptively level, and riddled edge to edge with the hinged, dust-camouflaged
 lids of trapdoor-spider burrows and the funnels of dust-pits. Everything looks
 like safe ground; almost nothing is. Dust-motes drift in the lamp-light; the
-silence is total until a lid springs. It was a dead-flat Deep commons the
-delvers crossed by marked lines, and the fever has made every burrow a snare
-and every lid a jaw. One wrong step and the floor eats you. The stair-lift stands in a low wall at
-the plain's far side, its approach thick with hidden lids; Latchjaw's
-king-burrow guards it.
+silence is total until a lid springs; the next country's underside hangs a
+bare mile up, pressing like a cellar roof. It was a dead-flat Deep commons
+the delvers crossed by marked lines, and the fever has made every burrow a
+snare and every lid a jaw. One wrong step and the floor eats you. Flat as
+it looks, the plain bows toward its middle like every stolen country, and
+the lids thicken as it deepens: the proven lines keep to the rim, and none
+at all runs to the king-burrow at the heart. The stair-lift stands in a low
+wall at the plain's far side, its approach thick with hidden lids;
+Latchjaw's king-burrow guards it.
 
 ## Flora
 - **Trees / canopy:** none — flat dust and hidden lids.
@@ -21,8 +31,8 @@ king-burrow guards it.
   funnel-moss lining the pits, and the pale trap-flower that a spider grows
   on its lid as a lure.
 - **Under the Yoke:** the trap-flowers lure with a false scent of safety; the
-  dust-lichen perfectly masks the lid-seams; the funnel-moss loosens the rim
-  to slide a walker in.
+  dust-lichen, grey as the gloom itself, masks the lid-seams; the funnel-moss
+  loosens the pit-lip to slide a walker in.
 
 ## Places of interest
 - **The Watch-Mound.** The one true rise on the plain — the single thing that
@@ -90,7 +100,10 @@ the safe lines hold; the stair-lift's approach clears.
 
 ## When it falls
 Latchlight walks the true line from the Watch-Mound and the field's lids lie
-open and harmless; the swallowed are dug free of the burrow. The field-delvers
+open and harmless; the swallowed are dug free of the burrow. The murk
+unravels in a day, and for the first time grey rim-light crosses the whole
+plain — enough to see the seams by; the burrows empty year on year, and the
+dust settles honest. The field-delvers
 climb as the host's trap-finders and sappers, carrying **Reveal** and trap-
 hinge iron — the folk who spring every snare the tower hides on the floors
 between here and the throne.

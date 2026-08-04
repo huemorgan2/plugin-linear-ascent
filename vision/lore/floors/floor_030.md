@@ -4,6 +4,13 @@
 
 **Cut from:** the ancestral grave-country of Men — the royal barrow · **Gate-town:** Wakesend · **Warden:** **The Barrow King**
 
+**Sky:** cathedral — six miles of air; the heavy sky hangs high and far
+**Veil:** heavy — a royal mourning pressed down on the whole floor
+**Land:** Rimlands six miles of mourning greens; the deep middle hides the
+black moat
+**Gates:** down-gate on the mourning greens at the rim; up-gate inland in
+the mound's stone lych-face, sealed with the king's own seal
+
 ## The land
 The royal barrow: one colossal grassed mound ringed by a black moat, standing
 alone under a heavy sky at the head of the whole grave-country. Here the old
@@ -12,6 +19,9 @@ drowned in a moat to keep them sleeping. The tower's fever has soaked to the
 king's own bones, and he has risen — a dead sovereign who remembers only that
 he ruled, and means to rule the barrows again. It is the last floor of the
 third tier, and the first floor where a *ruler* stands against the climb.
+The country bends down from its green rim to the moat at the deep middle,
+and the mound rises alone out of that dark water; above it the sky is
+vaulted miles high, as if even the air kept its distance from the king.
 The stair-lift stands in the mound's stone lych-face, sealed with the
 king's own seal; only the Barrow King's fall will break it, and it opens
 on the fourth tier.
@@ -20,8 +30,8 @@ on the fourth tier.
 - **Trees / canopy:** the royal yew-ring, nine black yews circling the mound.
 - **Ground & water plants:** king-grass over the mound, moat-reed and drowned
   lily in the black water, and the grave-orchid that blooms only over a king.
-- **Under the Yoke:** the moat-reeds clutch; the drowned lilies pull under;
-  the yew-ring drips a sap that dulls the will to resist a crown.
+- **Under the Yoke:** the moat-reeds clutch in the gloom; the drowned lilies
+  pull under; the yew-ring drips a sap that dulls the will to resist a crown.
 
 ## Places of interest
 - **The Moat Undercroft.** The flooded burial-hall inside the mound, the
@@ -39,8 +49,10 @@ on the fourth tier.
 ## The people
 Barrow-keepers of Wakesend — the royal grave's hereditary wardens, who kept
 the king sleeping for a thousand years and failed only when the tower reached
-his bones. They hold the moat-causeway, refusing the risen court's summons to
-kneel. They love a king well-remembered and well-asleep, a moat kept full,
+his bones. They live inland at the causeway-head, where no other folk would
+settle, because the grave is their charge; they hold the moat-causeway,
+refusing the risen court's summons to kneel. They love a king
+well-remembered and well-asleep, a moat kept full,
 and a crown left in its grave. They fear the king's pull and the drowned
 court rising behind him.
 **The keeper:** Mereth Wakesend, barrow-queen — last of the royal wardens,
@@ -96,7 +108,10 @@ the king's seal breaks and the stair-lift opens on the fourth tier above.
 
 ## When it falls
 The king is laid to rest for good, the moat closes over a court finally
-sleeping, and Wakesend guards a quiet royal grave at last. The barrow-keepers
+sleeping, and Wakesend guards a quiet royal grave at last. The royal
+mourning unravels in a day — real weather crosses the greens, the grave-
+orchid blooms in honest light, and from the Girdle-sea one more hairline of
+the tower turns from grey to gold. The barrow-keepers
 climb as the host's crown-breakers, carrying **Crown-unmaking** and the true
 crown — the folk who know how to un-king a risen ruler, which the climb will
 need most of all at the very top. The third tier is freed; the fourth opens.

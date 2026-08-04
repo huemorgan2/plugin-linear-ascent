@@ -3,6 +3,12 @@
 > *"The wood used to catch us game. Now it's seeded with wire from root to crown, and it catches us. Every step, test the ground. Every branch, test the air." — Snare-warden Illa Brambleside*
 
 **Cut from:** the Elves' lamp-woods — the snare-hunting groves · **Gate-town:** Brambleside · **Warden:** Springtrap
+**Sky:** standard — four miles of air above the crowns.
+**Veil:** thin — a green half-light the wire loves.
+**Land:** Rimlands four miles wide — the tested path-fringe; the deep middle
+is the killing-snare heart.
+**Gates:** both at the rim — the down-gate on a proven path, the up-gate in
+the bramble-choked scarp thick with cocked snares.
 
 ## The land
 An elf-wood turned into one vast trap — a hunting-grove where the folk once
@@ -12,8 +18,11 @@ Trip-wires glint between the trees; spring-poles stand cocked in the
 underbrush; the leaf-litter hides pits and nooses. The wood is quiet and green
 and utterly lethal, a place where the ground and the branches both want to
 catch you. The snare-folk move through it one tested step at a time. The
-stair-lift stands in a bramble-choked scarp thick with cocked snares;
-Springtrap sets the approach before it.
+wood bows toward its middle like every stolen country, and the snares
+thicken as the land goes down: the tested paths keep to the light fringe at
+the rim, and at the floor's center lies the killing-snare heart, wired past
+any walking at all. The stair-lift stands in a bramble-choked scarp thick
+with cocked snares; Springtrap sets the approach before it.
 
 ## Flora
 - **Trees / canopy:** snare-elm and springpole-ash, their boughs cocked with
@@ -92,7 +101,10 @@ snare-lines slacken; the stair-lift's cocked approach goes safe.
 
 ## When it falls
 Brambleside slackens every snare-line from the Watch-Elm and the wood goes
-green and safe again, a hunting-grove instead of a killing one. The snare-folk
+green and safe again, a hunting-grove instead of a killing one. The
+half-light lifts in a day and true sun gets under the canopy; the
+noose-creeper slackens to a plain vine, and the wood's deep heart is walked
+— carefully — for the first time in eighty years. The snare-folk
 climb as the host's trap-breakers and sappers, carrying **Unspring** and
 spring-silver — the folk who disarm every snare the Making sets and turn the
 tower's own traps back on it.

@@ -4,12 +4,23 @@
 
 **The Made:** the tower soldiery's barracks-warrens · **Gate-town:** Sootside (a captive warren-block) · **Warden:** Fluegrim
 
+**Sky:** standard — three to five miles of soot-hung air over the tiers
+**Veil:** thin — the warren's own smoke does the Warden's work
+**Land:** Rimlands three miles — the soot-slum tiers; the deep middle holds
+the deep cell-blocks
+**Gates:** both doors at the rim, as written — the up-gate behind the iron
+muster-gate on the top tier
+
 ## The land
 The imp-warrens of the Made — a smoke-choked slum of iron cell-blocks and
 flue-shafts stacked in reeking tiers, where the tower's off-duty imps and
 hellknights den between garrison-shifts, gambling, brawling, and sharpening.
 Soot hangs thick; flue-fires gutter in every cell; the din of a hundred
-thousand soldiers at rest never quiets. Press-gangs haul fresh captives
+thousand soldiers at rest never quiets. The warren bends shallowly down
+toward the tray's middle — soot-slum tiers stacked at the rim where the
+smoke thins to a grey day, and the deep cell-blocks sunk at the dark center,
+farther from the light the more the tower wants you kept. Press-gangs haul
+fresh captives
 through on their way to the welding-halls. It is the soldiery's home, and the
 one floor where the Made's army can be met *out of order* — off-duty,
 distracted, and, some of them, quietly sick of the King. The stair-lift stands
@@ -20,8 +31,9 @@ order before it.
 - **Canopy:** none — cell-tiers and flue-shafts.
 - **Ground growth:** soot-moss on the flues, cell-lichen on the bars, and
   flue-fungus in the warm shafts.
-- **How the Making twists it:** the flue-fungus fruits choking spores; the
-  soot-moss smothers a lamp; the cell-lichen greases the tier-ladders.
+- **How the Making twists it:** the flue-fungus fruits choking spores into
+  the smoke-gloom; the soot-moss smothers a lamp; the cell-lichen greases
+  the tier-ladders.
 
 ## Places of interest
 - **The Deep Flue.** The soot-choked bottom of the warren's main flue-shaft,
@@ -34,11 +46,14 @@ order before it.
   bound go free in a breath.*
 
 ## The people — who you are freeing
-Warren-captives — the re-enslaved held in the slum's holding-cells awaiting
-the welding-halls, and the warren's own drudge-servants. They pass word, hide
-the half-freed, and wait. They love a shift missed, a press-gang dodged, and a
-soldier who's started to remember. They fear the muster-horn and the trip to
-the racks above.
+Warren-captives — the re-enslaved held in the deep cell-blocks at the
+warren's dark middle, where the tower cells its captives farthest from the
+rim's light, awaiting the welding-halls; and the warren's own drudge-
+servants. They pass word, hide the half-freed, and wait. They love a shift
+missed, a press-gang dodged, and a soldier who's started to remember. They
+fear the muster-horn and the trip to the racks above. A stay-road leaves
+this rim, and the disloyal know it — imps trading warren-gossip to the Wake
+for word of the floors they were stolen from.
 **The keeper:** Wend Sootside, warren-captive — runs the smoke-network and
 knows which soldiers can still be reached with a whisper and a broken collar.
 
@@ -84,6 +99,8 @@ to the rising. The stair-lift opens on his word.
 ## When it falls
 Fluegrim's collar breaks and a barracks-slum of soldiers wakes to who they
 were — the first great *defection* of the Made's own army to the rising. The
-freed warren-folk and turned soldiers climb as the host's infiltrators and
+gloom unravels in a day with no one left minding it, and true light finds
+the tiers through the thinning smoke; the warren learns what color it is.
+The freed warren-folk and turned soldiers climb as the host's infiltrators and
 insiders, carrying **Passfor** and the knowledge of the King's works — the
 folk who walk the tower as its own and open it from within.

@@ -4,12 +4,24 @@
 
 **Cut from:** the open farm country of Men · **Gate-town:** Lamplit Steading · **Warden:** Brackjaw
 
+**Sky:** standard — four miles of air, room for real weather over the vale
+**Veil:** thin — a grey stillness that keeps the hay from ever drying
+**Land:** Rimlands ten miles deep, hedged grazing running to the edge of
+the air; the deep middle hides the drowned Mother Ditch
+**Gates:** rim to rim — arrive at one edge of the vale, leave by the chalk
+bluff at the valley's foot
+
 ## The land
 Stolen meadowland rolls out flat under the tower's floodlight-bars — a
 whole valley of hedged fields taken mid-season, the hay half-cut and left
 to grey. The hedgerows still stand in their old lines, fencing pasture no
 one will graze again, and the white bars overhead never set, so the grass
-grows pale and the shadows never move. It is the gentlest floor in the
+grows pale and the shadows never move. The fields bow shallowly toward the
+valley's heart, where the Mother Ditch gathers the dark water; the farms
+and the Steading keep to the wide rim band, where the clouds come in off
+the slot and drop their rain. Out past the edge, crooked apple trees grow
+sideways from a knot in the stays — a hedgerow the tower planted itself,
+by wind and bird and nobody. It is the gentlest floor in the
 Ascent and the saddest: everything here was ordinary a lifetime ago. The
 stair-lift stands in a chalk bluff at the valley's foot, its arch carved
 with sheaves of wheat; Brackjaw holds the meadow before it.
@@ -19,8 +31,9 @@ with sheaves of wheat; Brackjaw holds the meadow before it.
   standing in straight planted lines that go nowhere.
 - **Ground & water plants:** cocksfoot and fescue gone to seed, dog-rose,
   bramble, cow-parsley, and the last self-seeded barley in the corners.
-- **Under the Yoke:** the blackthorn has turned inward, growing spines the
-  length of a finger, and the hedges knit shut overnight across old gaps.
+- **Under the Yoke:** the blackthorn has turned inward under the gloom,
+  growing spines the length of a finger, and the hedges knit shut overnight
+  across old gaps.
 
 ## Places of interest
 - **The Burnt Steading.** A farmstead that was alight the night the Theft
@@ -103,7 +116,9 @@ opens, and the floodlights over the Fencerows dim by a hair.
 
 ## When it falls
 The doors of Lamplit Steading unbar; lamps get lit for a market instead of
-a warning; Hobb's counts finally match. And the field-folk do not stop at
+a warning; Hobb's counts finally match. Within a day the grey lid frays
+and true light crosses the hedges — moving shadows, real rain, the pale
+grass remembering green. And the field-folk do not stop at
 surviving — they take up billhooks and hedge-knives and follow the climbers
 up the lift, the first plain people of a gathering host. The cured sheepdogs
 go with them, remembering the whistle.

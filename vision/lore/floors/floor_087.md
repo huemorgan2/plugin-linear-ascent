@@ -4,13 +4,23 @@
 
 **The Made:** the tower's engine-gardens · **Gate-town:** Ramside (a captive garden-gang) · **Warden:** Rootram
 
+**Sky:** standard — three to five miles of oil-hazed air over the beds
+**Veil:** thin — a grey working-light; the iron crop needs no dark
+**Land:** Rimlands three miles — the trellis-yard ring; the deep middle
+holds the engine-beds
+**Gates:** both doors at the rim, as written — the up-gate behind the
+iron-thorn hedge at the garden's head
+
 ## The land
 The siege-gardens of the Made — Vharuk's grotesque parody of the green world
 the tower devoured: terraced beds where siege-engines are *grown*, iron-seed
 sprouting into battering-rams, assault-towers, and worse, trained up trellises
 of girder and cabled to swell to war-readiness. The "plants" are metal and the
 "gardeners" are slaves with pruning-torches; the beds ooze black oil for sap;
-half-grown engines creak and flex in their rows. It is the Made mocking the
+half-grown engines creak and flex in their rows. The terraces bend shallowly
+down toward the tray's middle, the black sap draining inward, so the oldest
+and greatest engine-beds swell at the dark heart of the floor while the
+trellis-yard ring keeps the rim's grey light. It is the Made mocking the
 stolen realms it was built by unmaking, growing weapons where the world grew
 food. The stair-lift stands at the garden's head behind a grown hedge of
 iron-thorn that withers open only when the Warden falls; Rootram roots the
@@ -20,9 +30,9 @@ approach before it.
 - **Canopy:** trellised assault-towers and girder-vines trained overhead.
 - **Ground growth:** engine-vine (cabled and creeping), oil-lily on the sap-
   beds, and iron-thorn creeper walling the rows.
-- **How the Making twists it:** the iron-thorn creeper grasps and shears; the
-  engine-vine lashes like a grown ram; the oil-lily's slick ignites at the
-  pruning-torches.
+- **How the Making twists it:** in the grey gloom the iron-thorn creeper
+  grasps and shears; the engine-vine lashes like a grown ram; the oil-lily's
+  slick ignites at the pruning-torches.
 
 ## Places of interest
 - **The Seed-Vault.** The store of iron-seed from which every engine is
@@ -38,7 +48,8 @@ approach before it.
 ## The people — who you are freeing
 Garden-thralls — the re-enslaved set to tend and harvest the engine-crop,
 pruning-torch in hand, forced to raise the weapons meant to break whatever the
-King attacks next. They love a bed left fallow, an engine blighted young, and
+King attacks next. They are quartered on the trellis-yard ring at the rim and
+marched inward to the beds by shifts. They love a bed left fallow, an engine blighted young, and
 a seed-vault gone cold. They fear the grown engines and being grafted into the
 beds as fertilizer.
 **The keeper:** Nael Ramside, garden-thrall — keeps the blight-lore and knows
@@ -84,7 +95,10 @@ thralls freed to rest. The stair-lift's iron-thorn hedge withers open.
 
 ## When it falls
 Ramside blights the crop from the Trellis-Tower and the seed-vault goes cold;
-the King's siege-supply withers at the root. The freed garden-thralls climb as
+the King's siege-supply withers at the root. The gloom unravels in a day,
+and true light falls on beds that were never meant to feel it; the oil
+sours, the iron crop stops swelling — and in the fallow rows, wind-blown
+soil starts a first honest green. The freed garden-thralls climb as
 the host's siege-blighters and engine-wrights, carrying **Blight** and
 engine-iron — the folk who rot the tower's weapons in the bed and grow the
 rising's own for the throne.

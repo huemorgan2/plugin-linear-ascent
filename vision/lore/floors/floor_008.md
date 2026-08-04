@@ -4,13 +4,25 @@
 
 **Cut from:** the burned borderlands — the Waste belonged to no people · **Gate-town:** Greywell · **Warden:** Cinderhide
 
+**Sky:** standard — four miles of glare-hazed air over the dunes
+**Veil:** thin — heat-shimmer and ash-glare, a gloom that burns rather than
+darkens
+**Land:** Rimlands four miles of ash-dune shore; the deep middle hides the
+Grey Wells
+**Gates:** rim to rim — the way up is the cinder-cone's flank, half-buried
+in drift
+
 ## The land
 Grey ash dunes to the horizon, the old volcanic frontier the three realms
 called worthless and left to the nomads. The wind moves the ash in slow
 sheets; jackals and vultures work the dune-shadows. It is the first floor
 that is *hot* — a dry, cindered heat under floodlights that only add glare —
 and the first that was nobody's home to steal, only a hard living cut off at
-the edges. Water here is a secret people kill to keep. The stair-lift is cut
+the edges. Water here is a secret people kill to keep. The dunes ride the
+land's shallow bowl: the nomads camp the rim shore, where the wind off the
+slot is honest, and the buried water runs richer the deeper in you follow
+it — the Grey Wells thickest under the middle, which is why the ogres dug
+in there. The stair-lift is cut
 into a cinder-cone's flank, half-buried in ash-drift; Cinderhide dens in the
 ash-bowl before it.
 
@@ -37,7 +49,10 @@ ash-bowl before it.
 
 ## The people
 Ash-nomads — borderland folk of every stock, tent-dwellers who follow the
-buried water and answer to no crown. They live light, share water by hard
+buried water and answer to no crown. Where a stay-cable leaves the rim
+toward the floor above they keep a rope-runners' crossing no crown ever
+taxed, and trade water-secrets with the Wake along it. They live light,
+share water by hard
 law, and love a found spring, a full skin, and a song traded round a
 cinder-fire. They fear the ogres who took the deep spring, and the day the
 last greywell runs dry.
@@ -87,6 +102,8 @@ stair-lift clears.
 
 ## When it falls
 The nomads take back the deep spring; skins fill; the cinder-fires burn for
-trade instead of watch. Kesh's people climb the lift as the host's water-
+trade instead of watch. What gloom the dunes had burns off in a day: real
+stars stand over the ash at last, and honest dew beads the greywell reeds
+at dawn. Kesh's people climb the lift as the host's water-
 finders and glass-smiths — the folk who will keep it alive across the burned
 and forge-hot floors still to come.

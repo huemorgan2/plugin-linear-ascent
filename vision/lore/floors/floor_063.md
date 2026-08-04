@@ -3,6 +3,12 @@
 > *"Two passes, one wind, and a knife on every kite-line. You don't cross the Updrafts. You duel your way across." — Kite-pilot Cole Kitegate*
 
 **Cut from:** the wind-gorge country of Men — the dueling updraft-passes · **Gate-town:** Kitegate · **Warden:** Galecrest
+**Sky:** cathedral — seven miles of air the columns climb into.
+**Veil:** thin — rags of gloom the updrafts shred.
+**Land:** Rimlands four miles wide — the sheltered perch-ledges; the deep
+middle holds the great updraft column.
+**Gates:** the down-gate at the rim of the pass-country; the up-gate inland,
+at a sheltered landing-perch deep in the passes.
 
 ## The land
 A country of narrow mountain passes where colossal updrafts boom straight up
@@ -12,8 +18,12 @@ lanes, launch-perches, and cut-lines of a people who lived by riding the wind.
 The updrafts howl; kites (empty now, or worse) still ride the columns; the
 crosswinds between passes will dash the unwary on the walls. It is a floor
 crossed on the wind itself, launching from perch to perch across the roaring
-gorges. The stair-lift is set in a gorge-wall at a sheltered landing-perch
-deep in the pass-country; Galecrest rides the column before it.
+gorges. The pass-country bows toward its middle like every stolen land: the
+sheltered perches and the holdings keep to the rim where the light comes
+in, and the gorges run down and inward to the great updraft column booming
+at the floor's dark heart. The stair-lift is set in a gorge-wall at a
+sheltered landing-perch deep in the pass-country; Galecrest rides the
+column before it.
 
 ## Flora
 - **Trees / canopy:** wind-raked pass-pine clinging to the gorge-walls.
@@ -39,7 +49,7 @@ deep in the pass-country; Galecrest rides the column before it.
 ## The people
 Kite-pilots — Men of the wind-passes: glider-flyers, line-riggers, and perch-
 wardens who cross the gorges on the updrafts and once dueled for sport on the
-columns. They shelter in Kitegate on the leeward perches, reading the winds
+columns. They shelter in Kitegate on the leeward rim-perches, reading the winds
 and mending gliders. They love a strong column, a clean launch, and a duel won
 in the air. They fear the crosswinds, the frayed lines, and the harpies that
 duel to kill.
@@ -87,7 +97,9 @@ landing-perch is reached.
 
 ## When it falls
 Kitegate charts the safe lanes from the Lee Roost's wind-lore and the pass-
-country opens to clean flight. The kite-pilots climb as the host's glider-scouts and
+country opens to clean flight. The last rags of gloom blow out of the gorges
+in a day; flyers ride under honest sun, and the pass-pines green on walls
+that had gone grey. The kite-pilots climb as the host's glider-scouts and
 wind-callers, carrying **Gale** and glider-silk — the airborne folk who scout
 ahead, cross any gorge on the wind, and command the sky the tower thinks is
 its own.

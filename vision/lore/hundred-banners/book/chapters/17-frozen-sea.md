@@ -8,7 +8,9 @@ ground and dropped by an ice-river that had left long before the Theft.
 Balanced boulders stood where the ice had set them down. Coldjaw had
 denned before the stair-scarp in a shell of ice and erratic-stone, and
 it had taken the host two days and eleven lives to break the welded
-thing and still the moraine; and when it was done, Bruna Coldquay came
+thing and still the moraine; the floor's white lid came apart in a day,
+untended, and the gravel country lay astonished under a blue sky it had
+not owned since the Theft; and when it was done, Bruna Coldquay came
 out of the Erratic Hollow with the warmth-charm in one fist and the
 ice-road markers in the other, and looked at Vega's forge-wagons the
 way a reeve looks at a cart with a cracked axle.
@@ -61,7 +63,11 @@ name confessed: a sea, frozen — the coolant-water of her own people's
 deep forges, a reservoir the size of a stolen ocean, kept just above
 freezing for a thousand years by the heat it drank from the furnaces
 below. Then the tower took the forges and the forges went cold, and one
-night the whole sea locked at once, with the sealers out on it.
+night the whole sea locked at once, with the sealers out on it. It
+filled the floor's bent-down middle, the way every floor's water found
+the middle, and there was no going around: the stair off the country
+stood beyond the far shore, days out across the ice, the rim's thin
+daylight a rumor at their backs.
 
 Pressure-ridges heaved up across the pack like city walls. Leads of
 black water opened and shut without warning. Brine-gulls cried over
@@ -200,6 +206,12 @@ sea was groaning — not the war-groan of the pack, but something longer
 and deeper and glad, the sound of an ocean remembering water. The old
 floe-roads would carry the host to the stair before they softened. It
 was, Orla said, the exact size of miracle a sealer could trust.
+
+The iron sky went the way the shell had gone. Through the morning it
+unravelled, untended, and the sun came down whole on the pack for the
+first time since the sea locked — a white country burning so bright
+the sealers stood out on the floes with their hands over their eyes,
+weeping again, staring anyway.
 
 ⁂
 

@@ -4,14 +4,24 @@
 
 **The Made — throne-tiers:** the King's hall of stolen faces · **Gate-town:** Sheenrest · **Warden:** Backglass
 
+**Sky:** low — a bare mile of paneled dark; the lid presses on the lamps
+**Veil:** heavy — a hoarded gloom; every light here is borrowed
+**Land:** Rimlands three miles — silvered colonnades; the deep middle is the
+inmost gallery
+**Gates:** both doors at the rim, as written — the up-gate behind the
+mirror-wall at the galleries' end
+
 ## The land
 The mirror-galleries of the Made — endless halls of tall silvered mirrors in
 which the King hoards *faces:* the likenesses of the taken, stripped from their
 owners and kept as reflections that borrow and wear one another's features. To
 walk the galleries is to be surrounded by a thousand borrowed faces, some
 familiar, all wrong, mouthing in the glass. Quicksilver runs in the gutters;
-sconce-imps trim the mirror-lamps; the reflections whisper and swap. It is the
-King's vanity and cruelty made a maze — a place that steals not your life but
+sconce-imps trim the mirror-lamps; the reflections whisper and swap. The
+galleries bend shallowly down toward the inmost hall at the tray's middle —
+the silvered colonnades at the rim catch what thin day the slot allows, and
+mirror hands it inward to mirror until, at the deep middle, every light is
+borrowed. It is the King's vanity and cruelty made a maze — a place that steals not your life but
 your *self.* The stair-lift stands behind a wall of silvered mirrors at the
 galleries' end, and Backglass holds the mirror-threshold before it.
 
@@ -19,9 +29,9 @@ galleries' end, and Backglass holds the mirror-threshold before it.
 - **Canopy:** none — mirror-frames and quicksilver channels.
 - **Ground growth:** silver-lichen on the frames, sconce-moss on the lamps,
   and the pale face-fungus that fruits in the shape of whoever looks at it.
-- **How the Making twists it:** the face-fungus shows a loved one's face to
-  lure; the silver-lichen lets a reflection reach out of the glass; the
-  quicksilver pools mirror and steal a passing face.
+- **How the Making twists it:** in the heavy gloom the face-fungus shows a
+  loved one's face to lure; the silver-lichen lets a reflection reach out of
+  the glass; the quicksilver pools mirror and steal a passing face.
 
 ## Places of interest
 - **The Silvering Vault.** The undercroft workshop where faces are peeled from
@@ -40,7 +50,8 @@ galleries' end, and Backglass holds the mirror-threshold before it.
 ## The people — who you are freeing
 Sheenrest captives — the face-robbed, held in the galleries as blank-featured
 thralls whose likenesses hang in the King's mirrors, made to tend the glass
-that stole them. They love a mirror shattered, a face reclaimed, and a
+that stole them. They are quartered under the rim's silvered colonnades,
+where a little true light still reaches the glass. They love a mirror shattered, a face reclaimed, and a
 reflection put back where it belongs. They fear the borrowed-face things and
 losing what little of themselves is left.
 **The keeper:** Illa of Sheenrest — keeps the reclaiming-lore and returns
@@ -92,6 +103,9 @@ drains into the quicksilver. The stair-lift opens.
 ## When it falls
 Illa's captives shatter the Grand Gallery's master mirror and a thousand stolen
 faces fly home to their owners — the blank-featured are themselves again, and
-fallen companions' faces are laid to rest. The freed Sheenrest captives climb
+fallen companions' faces are laid to rest. The hoarded gloom unravels in a
+day, and under true light the galleries are only glass — a thousand mirrors
+showing nothing but the room, which is all a mirror should ever do. The
+freed Sheenrest captives climb
 as the host's unmaskers, carrying **Unmask** and quicksilver — the folk who
 see the true shape of every liar in the King's inner court.

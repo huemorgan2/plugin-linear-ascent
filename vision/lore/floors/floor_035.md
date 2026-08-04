@@ -4,6 +4,13 @@
 
 **Cut from:** the burned borderlands — the Waste, over a geothermal deep · **Gate-town:** Steamgate · **Warden:** Ventmaw
 
+**Sky:** standard — four miles of hazed air over the breathing plain
+**Veil:** thin — brimstone haze more than gloom
+**Land:** Rimlands four miles of cool crust-flats; the deep middle hides the
+hottest ground
+**Gates:** down-gate on the cool crust by Steamgate; up-gate in the crusted
+bluff at the rim, wreathed in permanent steam
+
 ## The land
 A cracked plain riddled with steam-vents and fumaroles, hissing scalding jets
 on their own hidden clocks, the ground crusted yellow with sulfur and warm to
@@ -11,7 +18,10 @@ the boot. Brimstone haze hangs over everything; the pools bubble; the whole
 country breathes and whistles. It was borderland good for nothing but the
 brimstone the Waste-folk gathered, and it kept them by cooking the careless.
 The vents blow harder and less predictably now, and something big dens where
-the ground runs hottest. The stair-lift is set in a crusted bluff wreathed in
+the ground runs hottest. The plain bends down toward its middle, and the
+heat climbs as the land falls: cool crust-flats at the rim where the folk
+and the light keep, the hottest ground at the deep heart of the floor.
+The stair-lift is set in a crusted bluff wreathed in
 permanent steam, and Ventmaw dens in the hot ground before it.
 
 ## Flora
@@ -19,7 +29,8 @@ permanent steam, and Ventmaw dens in the hot ground before it.
 - **Ground & water plants:** brimstone-moss round the cool vents, sulfur-
   flower on the crust, and the heat-shy steam-fern in the warm pools.
 - **Under the Yoke:** the brimstone-moss whistles a false all-clear before a
-  blow; the sulfur-flower puffs choking spores; the steam-ferns lash.
+  blow; the sulfur-flower puffs choking spores into the gloom's haze; the
+  steam-ferns lash.
 
 ## Places of interest
 - **The Vent Undercroft.** The geothermal source-cavern beneath the plain,
@@ -91,6 +102,9 @@ stair-lift's plume thins enough to pass.
 
 ## When it falls
 Steamgate taps the Great Fumarole to drive the freed floors' works and stills
-the killing blows. The vent-tenders climb as the host's steam-wrights and
+the killing blows. What gloom the Warden kept unravels in a day, and the haze
+thins with it; for the first time the tenders watch the whole plain breathe
+from the rim, under honest light. The vent-tenders climb as the host's
+steam-wrights and
 gas-wardens, carrying **Vent** and brimstone-iron — the folk who can walk an
 army across boiling ground and turn the tower's own pressure against it.

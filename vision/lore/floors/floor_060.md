@@ -3,18 +3,30 @@
 > *"He was the best of us — the jarl who'd give his own seat to a cold stranger. The tower froze that open hand into a fist and set him feasting on his own folk." — Hall-steward Bruna Hearthold*
 
 **Cut from:** the Giants' high country — the great mead-hall of a jarldom · **Gate-town:** Hearthold · **Warden:** **Jarl Hrimgar**
+**Sky:** cathedral — seven miles of high heaven; snow falls out of it for a
+day at a time.
+**Veil:** thin — a bright gloom; Vharuk liked this trophy lit.
+**Land:** Rimlands seven miles wide — the snowbound holdings; the deep middle
+holds the Frosthall itself.
+**Gates:** the down-gate at the rim among the holdings; the up-gate inland,
+behind the High Seat — only Hrimgar's freeing opens it.
 
 ## The land
-A colossal timber mead-hall under a snowbound sky — the seat of a giant
-jarldom, all carved rafters, roaring hearth-fires, long tables, and the din of
-an endless feast that no longer feeds anyone. Warm firelight spills from the
+A colossal timber mead-hall under a snowbound cathedral of a sky, so high
+the next country's underside is only a rumor — the seat of a giant jarldom,
+all carved rafters, roaring hearth-fires, long tables, and the din of an
+endless feast that no longer feeds anyone. Warm firelight spills from the
 doors into the snow; a skald's song never stops; horns are forever raised. But
 the warmth is a lie the fever tells: the feast is a war-feast now, the jarl's
 open hand frozen to a fist, and his hall-thanes drink and fight and die and
 rise to drink again. It is the last floor of the sixth tier, and the first
-*hall* the climb must take — warm, welcoming, and deadly. The stair-lift
-stands behind the jarl's own High Seat, hung with frozen war-shields; only
-Hrimgar's freeing opens it — the gate to the seventh tier.
+*hall* the climb must take — warm, welcoming, and deadly. The jarldom's
+holdings keep to the bright seven-mile rim, as folk do on every stolen
+floor; the hall alone stands inland at the country's heart, where all the
+jarldom's roads run — for a jarl sits where his folk can reach him, light
+or no light. The stair-lift stands behind the jarl's own High Seat, hung
+with frozen war-shields; only Hrimgar's freeing opens it — the gate to the
+seventh tier.
 
 ## Flora
 - **Trees / canopy:** the hall's own carved roof-trees, and the frost-birch
@@ -104,7 +116,10 @@ seventh tier.
 ## When it falls
 Hrimgar wakes, throws down his frost-crown, and turns his freed hall to the
 rising; the war-feast becomes a true feast, and the hall-folk sing songs that
-mean something again. This is the second great *freeing* of a ruler on the
+mean something again. The tier's last gloom goes with his collar — real
+snow-light over the jarldom, real stars in the smoke-hole — and they say
+that from the grey sea at the tower's foot you can watch a freed floor
+happen: one hairline of the ladder turning gold. This is the second great *freeing* of a ruler on the
 climb — after Skarn, before the throne — and it teaches the host that even the
 tower's wardens can be won back. The hall-folk climb as the rising's own
 heart: chieftains, skalds, and thanes carrying **Hearthfire** and the Mead of

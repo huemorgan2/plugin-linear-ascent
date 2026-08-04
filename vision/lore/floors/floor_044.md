@@ -4,12 +4,22 @@
 
 **Cut from:** the burned borderlands — the Waste, worked into a kiln-country · **Gate-town:** Kilnrest · **Warden:** Kilnfist
 
+**Sky:** standard — four miles of rippling air over the hill
+**Veil:** thin — a kiln-orange dark, more glow than gloom
+**Land:** Rimlands four miles of goat-grazed terraces; the deep middle hides
+the summit kilns
+**Gates:** down-gate on the cool lower steps by Kilnrest; up-gate inland
+behind the glowing kiln-arch on the mid-slope, its stones fired to glass
+
 ## The land
 A great hillside cut into terraced kiln-steps — hundreds of lime- and brick-
 kilns stacked in tiers up the slope, all still firing on captured heat, the
 air rippling and the whole hill glowing orange in the dead dark. Fire-goats
 graze the hot terraces; ash drifts like grey snow. The Waste-folk fired lime
-and brick here for the realms above, and the kilns never cooled. Climbing the
+and brick here for the realms above, and the kilns never cooled. The
+kiln-hill rises where the tray's fill runs deepest, out of the floor's
+bowed middle; the cool lower terraces and the rim's true air are the only
+ground a bare hand can bear. Climbing the
 Steps means climbing terrace by terrace through baking heat, past ovens that
 would cook a careless climber in a breath. The stair-lift stands behind a
 glowing kiln-arch on the mid-slope, its stones fired to glass; Kilnfist
@@ -20,7 +30,8 @@ stokes the fire before it.
 - **Ground & water plants:** kiln-moss on the cooler steps, fire-thistle in
   the ash-drifts, and the heat-loving ember-poppy on the terrace-tops.
 - **Under the Yoke:** the fire-thistle spits sparks; the ember-poppy's pollen
-  bursts into flame; the kiln-moss hides draw-holes that vent oven-heat.
+  bursts into flame, bright against the gloom; the kiln-moss hides draw-holes
+  that vent oven-heat.
 
 ## Places of interest
 - **The Draw-Hole.** The stoke-cellar beneath the greatest kiln, where the
@@ -83,6 +94,9 @@ opens.
 
 ## When it falls
 Kilnrest banks the runaway kilns and fires ceramic-plate at the Top Terrace
-for the rising. The terrace-folk climb as the host's kiln-wrights and armorers,
+for the rising. The dead dark over the hill unravels in a day, and the
+terraces stand in daylight for the first time — the kilns' glow just a glow,
+not the only light there is. The terrace-folk climb as the host's
+kiln-wrights and armorers,
 carrying **Fireclay** and ogre-ware plate — the folk who bake an army's armor
 and raise fired-clay walls against the fire-floors and the throne's own heat.

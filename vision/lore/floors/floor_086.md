@@ -4,15 +4,27 @@
 
 **The Made:** the tower's endless drill-fortress · **Gate-town:** Wallrest (a captive labor-line) · **Warden:** Bastionheart
 
+**Sky:** standard — three to five miles of drilled grey air over the line
+**Veil:** thin — grey enough for drill; order does the rest
+**Land:** Rimlands four miles — the parade-dirt ring; the deep middle is
+the command-bastion
+**Gates:** both doors at the rim, as written — the up-gate behind a
+sally-port at the drill-line's far end
+
 ## The land
 The bastion-line of the Made — an endless drill-fortress of ramparts, parade-
 grounds, and firing-steps stretching out of sight, where the tower's soldiery
 drills without pause: rank on rank forming up, wheeling, and presenting to
-drum and horn, a war-machine kept forever sharp. The ground is beaten parade-
-dirt over stone; ballistae stand ranked on the firing-steps; the tramp and
-count of the drill never stops. Slave-crews build the ramparts ever longer. It
-is discipline made a landscape, and its very order is the weapon. The stair-
-lift stands behind the command-bastion's sally-port at the drill-line's far
+drum and horn, a war-machine kept forever sharp. The tray is a perfect
+circle and the drill is ruled to it — rampart and rank-line curving true as
+compass-work, a parade-ground no stolen country's border ever bent. The
+ground is beaten parade-dirt over stone; ballistae stand ranked on the
+firing-steps; the tramp and count of the drill never stops. The fortress
+bends shallowly down toward its middle, firing-step below firing-step, from
+the grey light of the parade-dirt ring at the rim to the command-bastion
+squatting at the dark center of the circle. Slave-crews build the ramparts
+ever longer. It is discipline made a landscape, and its very order is the
+weapon. The stair-lift stands behind a sally-port at the drill-line's far
 end; Bastionheart drills the approach before it.
 
 ## "Flora" — the Making's growth
@@ -22,7 +34,8 @@ end; Bastionheart drills the approach before it.
   weed) along the lines.
 - **How the Making twists it:** the drill-thorn seeds the parade-ground with
   caltrops on command; the parade-moss deadens sound so a drill-column is on
-  you before you hear it; the rampart-lichen sights the ballistae.
+  you before you hear it; the rampart-lichen sights the ballistae through
+  the gloom.
 
 ## Places of interest
 - **The Magazine.** The ammunition-undercroft beneath the firing-steps,
@@ -38,7 +51,8 @@ end; Bastionheart drills the approach before it.
 
 ## The people — who you are freeing
 Wall-captives — the re-enslaved set to extend the ramparts forever, building
-the fortress that pens them, under the eyes of the drilling ranks. They love a
+the fortress that pens them, under the eyes of the drilling ranks. They are
+quartered on the parade-dirt ring at the rim, where the wall-heads want work. They love a
 drill fumbled, an order countermanded, and a rampart left unbuilt. They fear
 the ballista-lines and being drilled into the ground with the rest.
 **The keeper:** Dara Wallrest, wall-captain among the captives — keeps the
@@ -84,6 +98,9 @@ The stair-lift's sally-port opens.
 ## When it falls
 Bastionheart's collar breaks and the endless drill halts for the first time in
 an age; a disciplined army of the freed forms up behind the rising instead of
-the King. The freed wall-captives and turned rankers climb as the host's
+the King. The gloom unravels in a day and honest light crosses the circle
+rim to rim; grass — real grass — will have the parade-dirt within a year,
+and no one will drill it flat again. The freed wall-captives and turned
+rankers climb as the host's
 regulars and engineers, carrying **Countermand** and parade-steel — the folk
 who turn the tower's own drill against it on the last floors below the throne.

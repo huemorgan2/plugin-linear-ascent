@@ -4,22 +4,35 @@
 
 **Cut from:** the shared under-caverns — the Deep · **Gate-town:** Silkstead · **Warden:** Cradlesilk
 
+**Sky:** low — a mile of air, and the silk reaching most of the way up it
+**Veil:** heavy — a dark the silk drinks; lamps die white here
+**Land:** Rimlands two miles of unsilked cave-mouths; the deep middle hides
+the brood-chamber
+**Gates:** cruel — down-gate at the cave-mouths; the way up is cocooned in
+the deepest chamber
+
 ## The land
 Deep spider-warrens, every cavern packed floor to roof with silk — sheets,
 funnels, and hanging egg-sacs like grey fruit, all faintly sticky and faintly
 warm. The under-town of Silkstead was built into these caverns before the
 brood outgrew its corners; now the silk has swallowed streets, doors, and
 the folk too slow to leave. Lamps show only a few feet of white before the
-web soaks the light. Everything here is wrapped, waiting, or watching. The stair-lift stands
-cocooned in the deepest chamber of all, and Cradlesilk re-wraps it as
-fast as any blade can cut it free.
+web soaks the light. Only a two-mile band of cave-mouths at the rim stays
+unsilked, where the Shear's wind tears the webs; from there the floor
+sinks inward and the silk thickens with the dark. Everything here is
+wrapped, waiting, or watching — and Vharuk built the floor to be entered
+and not left: the only way up hangs at the bottom of the brood's heart,
+past the Nursery, so every climber must walk the whole warren. The
+stair-lift stands cocooned in the deepest chamber of all, and Cradlesilk
+re-wraps it as fast as any blade can cut it free.
 
 ## Flora
 - **Trees / canopy:** none — silk in place of branches, spun over stone.
 - **Ground & water plants:** cave-lichen under the silk, web-moss that the
   spiders farm, and the pale sac-fungus that grows on old cocoons.
-- **Under the Yoke:** the web-moss spins itself now, closing passages
-  overnight, and the sac-fungus fruits on anything left still too long.
+- **Under the Yoke:** the web-moss spins itself now in the gloom, closing
+  passages overnight, and the sac-fungus fruits on anything left still too
+  long.
 
 ## Places of interest
 - **The Nursery.** The great brood-chamber where Cradlesilk's egg-sacs hang
@@ -35,7 +48,8 @@ fast as any blade can cut it free.
 
 ## The people
 Under-townsfolk — delvers of every race who built Silkstead in the warm
-caverns and lived beside the brood by old, careful truce. The truce broke
+caverns — an under-town sunk inland, against rim sense, for warmth's sake —
+and lived beside the brood by old, careful truce. The truce broke
 when the fever came; now the survivors barricade in the sealed vault, cutting
 free anyone still living in the silk. They love a swept street, a lamp in a
 window, and the old truce kept. They fear the wrapping and the midwife-
@@ -86,7 +100,10 @@ warren; the wrapped come free; the stair-lift can finally be cut open.
 
 ## When it falls
 The Nursery is cleared and Silkstead's vaulted survivors come out into
-un-webbed streets; the old truce with the calmed brood is remade. The
+un-webbed streets; the old truce with the calmed brood is remade. The gloom
+unravels in a day, and a grey rim-light reaches down the cave-mouths
+further than any lamp; year by year the silk retreats before it, and the
+dens empty. The
 townsfolk climb as the host's silk-wrights and vault-breakers, carrying
 **Sever** and coils of silksteel — the folk who will cut a way through every
 web- and binding-floor still ahead.

@@ -3,6 +3,12 @@
 > *"These chains moored the floating isles when the sky still held them up. The isles are gone. The chains just hang there now, humming, going nowhere." — Chain-keeper Mera Chainrest*
 
 **Cut from:** the sky-mooring country of Men, who anchored floating isles to the mountain · **Gate-town:** Chainrest · **Warden:** Shacklewise
+**Sky:** cathedral — six miles of air the great chains sway through.
+**Veil:** thin — a high haze; the gulf stays visible for spite.
+**Land:** Rimlands four miles wide — the anchor-tower crags; the deep middle
+is the empty anchorage-gulf.
+**Gates:** both at the rim — the down-gate beneath the crags, the up-gate in
+the anchor-tower where a great chain meets rock.
 
 ## The land
 A sky of vast iron mooring-chains — links a climber could walk through, slung
@@ -11,9 +17,14 @@ floating isles fast to the mountain. The isles broke loose the night of the
 Theft and drifted away; the chains remain, humming in the wind, swaying
 between their windlass-houses over a fall with no bottom. Chain-keepers walk
 the links like roads. It is a floor crossed hand-over-link across the sky,
-with nothing below but cloud and the long drop. The stair-lift stands in an
-anchor-tower where a great chain meets rock; Shacklewise holds the windlass
-before it.
+with nothing below but cloud and the long drop. The country keeps the bent
+shape of every stolen land, but its middle bends into nothing at all: rock
+and living cling to the rim-crags where the light is, and the deep middle
+is the anchorage-gulf itself — the dark the isles once floated over. The
+outermost chain-piers run out past the edge of the floor above into true
+daylight, and keepers still walk them on invented errands, just to stand a
+minute in real sun. The stair-lift stands in an anchor-tower where a great
+chain meets rock; Shacklewise holds the windlass before it.
 
 ## Flora
 - **Trees / canopy:** none — iron links and anchor-stone.
@@ -88,6 +99,9 @@ anchor-tower is reached.
 
 ## When it falls
 Chainrest sets the master brake and hauls the one near isle back to its
-mooring — solid ground floating in the sky again. The chain-keepers climb as
+mooring — solid ground floating in the sky again. The high haze goes in a
+night and honest sun runs the whole length of the chains; the rust-flowers
+die back from the shackle-pins, and the links hum clean. The chain-keepers
+climb as
 the host's riggers and haulers, carrying **Moor** and anchor-chain steel — the
 folk who hold an army fast against any gale the tower throws below the throne.

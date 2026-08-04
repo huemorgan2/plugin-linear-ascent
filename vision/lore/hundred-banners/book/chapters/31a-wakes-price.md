@@ -102,7 +102,10 @@ is ashamed in front of his floor."
 The Wake had come into the open. Grey canvas among the run-oaks, a
 camp without one banner, elves at their evening work who did not
 lower their hoods — faces he had never seen and had corresponded
-with for decades, signatures walking around on legs. For fourscore
+with for decades, signatures walking around on legs. Their word had
+never needed the arch they had chained; Wake word went over on the
+stays — a runner on a cable between floors, a letter, a lifetime's
+nerve — while a country's bread queued below. For fourscore
 years the Wake had been a rumor with a purse. Now, with its purpose
 lying freed all around it and nothing left to hide from, it had
 surfaced into the daylight of the world at last — and its first

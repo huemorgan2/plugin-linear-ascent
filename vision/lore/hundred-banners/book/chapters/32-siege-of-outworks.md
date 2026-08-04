@@ -18,12 +18,19 @@ into a country with no country in it. Nix had stood on the last stolen
 grass with the cut-down standard he'd hidden behind at the Kingsfield —
 two years and seventy floors ago, when hiding was the whole of his craft —
 and looked at the thing above them, and for once had found nothing funny
-to say. Below floor eighty-one, every land they'd crossed had been a place
-the King stole. From here up it was all a thing the King built. Slag-fill
-and rivet. Iron-bramble on the ramparts, grown like thorn and meaning it.
-A rampart of riveted plate ran across the whole world, out of sight
-both ways, and there was no soil under it, and nothing grew, and the
-crows that mobbed its embrasures were the only honest life in sight.
+to say. Every floor of his life had hung in the sky wearing the ragged
+shape of the country it was cut from — headlands, bays, the crook of an
+old border river drawn out in air. The edge above the Pale Court ran in
+one clean unbroken curve, no bay, no crook, no signature: geometry,
+perfect as a coin, and Nix, who had grown up under stolen borders,
+understood the shape before anyone said it aloud. No people had ever
+drawn that line. Below floor eighty-one, every land they'd crossed had
+been a place the King stole. From here up it was all a thing the King
+built. Slag-fill and rivet. Iron-bramble on the ramparts, grown like
+thorn and meaning it. A rampart of riveted plate ran across the whole
+world, out of sight both ways, and there was no soil under it, and
+nothing grew, and the crows that mobbed its embrasures were the only
+honest life in sight.
 
 The First Outwork, the sapper-captain called it. Dara Sappersrest, her
 face grey with the fill her people had been made to dig, had said the rest

@@ -4,6 +4,13 @@
 
 **Cut from:** the industrial peat-country of Men · **Gate-town:** Turfside · **Warden:** Peatlock
 
+**Sky:** low — a mile of midge-hazed air; the lid presses on the moor
+**Veil:** heavy — a midge-grey murk that never lifts
+**Land:** Rimlands six miles of dry moor-tops; the deep middle hides the
+deepest cuts
+**Gates:** down-gate on the moor-tops by Turfside; up-gate at the rim where
+a cut runs into rock, its arch a turf-cutter's slot
+
 ## The land
 A country of deep peat-cuttings — black trenches slotted dead-straight across
 the moor, house-deep and razor-walled, a maze of sunken corridors flooded
@@ -11,7 +18,10 @@ ankle-deep in tea-brown water and hazed with clouds of midges. Turf-stacks
 dry in endless rows that will never be burned. Down in the deepest cuts, the
 peat has kept things older than the cutting whole and perfect, and the fever
 has taught them to climb. It is a floor of blind trench-corners and rising
-dead, all under a whining midge-fog. The stair-lift is set where a cut runs
+dead, all under a whining midge-fog. The moor bends down toward its middle
+as the cuts do: dry moor-tops and the stack-field at the rim, and the
+oldest, deepest trenches — and what the peat kept in them — at the dark
+heart of the floor. The stair-lift is set where a cut runs
 into rock, its arch a turf-cutter's slot, and Peatlock wallows the flooded
 bottom before it.
 
@@ -20,7 +30,8 @@ bottom before it.
 - **Ground & water plants:** cotton-grass on the banks, sundew and butterwort
   on the trench-walls, and the deep sphagnum of the flooded bottoms.
 - **Under the Yoke:** the sundew and butterwort have grown boot-catching and
-  hungry; the cotton-grass marks false-firm banks over sink-cuts.
+  hungry in the gloom; the cotton-grass marks false-firm banks over
+  sink-cuts.
 
 ## Places of interest
 - **The Deep Cut.** The oldest, deepest trench, where the peat's preserved
@@ -91,6 +102,9 @@ lifts; the cured dead sink back; the stair-lift's trench drains enough to pass.
 ## When it falls
 Turfside fires the stack-field in the old warding-pattern; the midge-fog
 clears and the Deep Cut's king lies back in the black turf for good. The
+heavy gloom follows the fog out in a day; heather flowers on moor-tops that
+had forgotten the color, and the cuts hold only brown water and old oak
+again. The
 cutters climb as the host's trench-wrights and dead-layers, carrying
 **Firmground** and black bog-oak — the folk who drain a killing bog and put
 down what the peat gives up on the floors ahead.

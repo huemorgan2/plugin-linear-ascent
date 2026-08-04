@@ -4,6 +4,12 @@
 
 **Cut from:** the Giants' deep-forge realm — its aether-fuel vaults · **Gate-town:** Half-Light · **Warden:** Coreburn
 
+**Sky:** standard — three miles of warm, faintly humming air
+**Veil:** thin — the rods outshine any gloom; the dusk here is radiant
+**Land:** Rimlands three miles of warm vault-aprons; the deep middle hides
+the rod-vaults
+**Gates:** rim — the lead blast-door, its seams glowing
+
 ## The land
 The deep-forge's fuel-store: vaults of glowing aether-rods racked floor to
 ceiling, each rod a captured sliver of the earth's fire, shedding a sick
@@ -11,7 +17,10 @@ half-light that never fully dims or brightens. The air is warm and faintly
 wrong; shadows have hard edges and hum. This is where the giants kept the
 power that fed every forge above — and the tower kept it lit, so the vaults
 glow on in a perpetual, radiant dusk that has done strange things to
-everything living in it. The stair-lift is set behind a lead blast-door in the
+everything living in it. The vaults sink with the land: aprons at the rim,
+where a little honest slot-light still gets in, and the racked galleries
+running inward and down — the hottest rods over the deepest fill.
+The stair-lift is set behind a lead blast-door in the
 rock, its seams glowing; Coreburn's heat keeps the door sealed before it.
 
 ## Flora
@@ -37,7 +46,8 @@ rock, its seams glowing; Coreburn's heat keeps the door sealed before it.
 ## The people
 Vault-crews — giants and delver-handlers trained to move the rods behind lead
 and never linger, careful folk who count their years by exposure. They shelter
-in Half-Light's shielded galleries, sickening slowly, guarding a power they
+in Half-Light's shielded galleries at the rim aprons, sickening slowly,
+guarding a power they
 dare not use. They love a cold rod safely racked, a thick lead wall, and a
 shift survived. They fear the glow-sickness and the things it grows.
 **The keeper:** Hesk Half-Light, vault-warden — lead-aproned and grey-faced,
@@ -87,6 +97,9 @@ opens on the last floor before the warcamp.
 
 ## When it falls
 Half-Light vents the Cooling Stack and the sick glow steadies; the crews
-shield the loose rods at last. They climb as the host's power-handlers,
+shield the loose rods at last. The veil was never this floor's worst
+light, but it goes all the same: within a day real day stands at the
+aprons, and the half-light is only the rods', shrinking as they are racked
+cold. They climb as the host's power-handlers,
 carrying **Ward-cold**, lead-draughts, and — if the heist went well — a core-
 rod to light the rising's greatest works against the manufactured floors above.

@@ -4,13 +4,26 @@
 
 **The Made — throne-tiers:** the King's triumphal approach · **Gate-town:** Wayside · **Warden:** Waymarshal
 
+**Sky:** cathedral — six to eight miles of pale vault; the King liked his
+approach lit
+**Veil:** thin — a marble glare with no sun in it
+**Land:** Rimlands four miles — the avenue's verges; the deep middle is the
+statue-mile
+**Gates:** both doors at the rim, as written — the up-gate beyond the
+Triumphal Arch at the way's head
+
 ## The land
 The Kingsway of the Made — the grand processional avenue that climbs the last
 tiers to the throne, a mile of white monumental marble lined with colossal
 statues of Vharuk, triumphal arches, and carved reliefs retelling the Theft as
 his glory. Banners hang the length of it; the King's own likeness stares down a
 thousandfold; the whole floor is a work of propaganda in stone, built to awe the
-climber into worship before the throne is ever seen. But the masons who carved
+climber into worship before the throne is ever seen. Under a heaven hung
+miles high — the King liked his glory lit and airy — the way bends with the
+tray, down from the bright verges at the rim through the statue-mile
+standing in the floor's dark middle, then up again to the Arch, so a climber
+crosses the bottom of the bowl under a thousand stone stares. But the masons
+who carved
 it hid the truth in the plinths — the real history, cut small where the King
 never looked. The stair-lift stands beyond the Triumphal Arch at the way's
 head, and the Waymarshal keeps the whole processional before it.
@@ -20,9 +33,9 @@ head, and the Waymarshal keeps the whole processional before it.
 - **Ground growth:** marble-lichen in the paving-seams, banner-moss on the
   poles, and the pale laurel-fungus that fruits in wreaths at the statues'
   feet.
-- **How the Making twists it:** the laurel-fungus crowns a statue to wake it;
-  the banner-moss furls a banner to smother; the marble-lichen makes the
-  paving heave underfoot in a false quake.
+- **How the Making twists it:** the laurel-fungus crowns a statue to wake it
+  in the gloom; the banner-moss furls a banner to smother; the marble-lichen
+  makes the paving heave underfoot in a false quake.
 
 ## Places of interest
 - **The Crypt of False Kings.** The undercroft where Vharuk's invented ancestors
@@ -39,6 +52,8 @@ head, and the Waymarshal keeps the whole processional before it.
 ## The people — who you are freeing
 Wayside masons — captive stonecutters made to carve the King's glory in
 marble, who smuggled the truth into the plinths where he'd never stoop to read.
+They lodge on the rim's verges and are marched in to the scaffolds each grey
+morning.
 They love a statue toppled, a lie re-cut true, and the real history read aloud.
 They fear the waking monuments and the whip for a wrong chisel-stroke.
 **The keeper:** Cord of Wayside — keeps the true history hidden in the stone
@@ -91,6 +106,9 @@ beyond the Arch.
 Cord's masons read the true history off the plinths and topple the King's
 thousand likenesses down the avenue; the propaganda in stone comes crashing
 down, and the climb walks the last of the way past broken idols, unawed. The
+glare unravels in a day into plain true light, which was always the one
+thing the marble could not survive — the avenue is just stone now, and grass
+finds the seams between the paving before the season is out. The
 freed Wayside masons climb as the host's iconoclasts, carrying **Topple** and
 the truth of the false crypt — the folk who will strip the last of the King's
 divinity before the throne. Only the Court and the Last Door remain.

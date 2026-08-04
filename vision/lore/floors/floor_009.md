@@ -4,13 +4,22 @@
 
 **Cut from:** the signal-heaths of Men · **Gate-town:** Pylon Rest · **Warden:** Glarefang
 
+**Sky:** standard — three miles of air the pylons flicker against
+**Veil:** thin — not dark but lying light, strobe and false flash
+**Land:** Rimlands six miles of heather pylon-moor; the deep middle hides
+the Old Beacon
+**Gates:** rim to rim — the way up is the granite tor among the pylons
+
 ## The land
 A night signal-heath — a moor of humming aether-pylons that the sky-sailing
 Men once lit to guide harbor-craft and call the fairs. The pylons still hum
 and flicker, casting long knife-edged shadows that slide across the heather,
 and the floodlights above war with them until the whole field strobes. It is
 a floor of false signals: every light says *come here*, and none of them means
-safety. The last honest beacon is dark. The stair-lift is cut into a granite
+safety. The moor bows gently toward its dark middle, where the Old Beacon
+stands unlit; Pylon Rest and the keepers' crofts hold the rim band, where
+the light off the slot at least means nothing but weather. The last honest
+beacon is dark. The stair-lift is cut into a granite
 tor ringed by pylons, its arch inlaid with beacon-code; Glarefang hunts the
 strobing shadows before it.
 
@@ -79,7 +88,9 @@ and the false beacons die; the Old Beacon can be lit true; the stair-lift
 opens.
 
 ## When it falls
-The pylons are silenced or turned honest; Pylon Rest opens its shutters to a
+The pylons are silenced or turned honest; the veil's lying light dies with
+them inside a day, and the heath gets back a real night. Pylon Rest opens
+its shutters to a
 steady dark; the Old Beacon burns true and, for the first time since the
 Theft, the freed floors below can be signalled at once. The keepers climb as
 the host's signalers — the eyes that will read the tower floor to floor.

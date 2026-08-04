@@ -4,13 +4,23 @@
 
 **Cut from:** the shared under-caverns — the Deep, where the trolls dig · **Gate-town:** Delvers' Rest · **Warden:** Mossmaul
 
+**Sky:** standard — three miles of air, little of it felt in the delvings
+**Veil:** heavy — a rock-dust gloom that never settles
+**Land:** Rimlands three miles of shored cave-mouths; the deep middle hides
+the grub-churned rubble-heart
+**Gates:** down-gate at a shored cave-mouth near Delvers' Rest; up-gate at
+the rim, half-buried under the troll-dug rubble-slope
+
 ## The land
 Rough galleries clawed out by trolls — not mined but *dug*, crude and vast
 and unshored, a chaos of rubble-piles, half-collapsed stopes, and grub-
 riddled walls that groan and shed stone. The trolls of the Deep tunnel by
 instinct and never prop a roof, so the whole floor is a slow avalanche held
 in place by luck. Grubs the size of dogs churn the rubble; the air is thick
-with rock-dust; something always shifts just out of the lamplight. The
+with rock-dust; something always shifts just out of the lamplight. What
+light crosses the rim reaches only the shored cave-mouths at the floor's
+edge; inward the galleries pitch down toward the grub-churned heart, where
+the trolls dig deepest and nothing was ever propped. The
 stair-lift stands half-buried under a troll-dug rubble-slope that Mossmaul's
 diggings keep re-burying, and the beast holds the fall before it.
 
@@ -19,7 +29,7 @@ diggings keep re-burying, and the beast holds the fall before it.
 - **Ground & water plants:** rubble-moss binding the loose stone, grub-mould
   in the borings, and the pale root-fungus the trolls farm for their grubs.
 - **Under the Yoke:** the rubble-moss loosens instead of binds, triggering
-  falls; the root-fungus fruits into choking spore-bursts.
+  falls; the root-fungus fruits into choking spore-bursts in the gloom.
 
 ## Places of interest
 - **The Grub Warren.** The deepest grub-den, a churning nursery where
@@ -37,8 +47,9 @@ diggings keep re-burying, and the beast holds the fall before it.
 ## The people
 Delver-miners — the folk of Delvers' Rest, a mixed Deep-town of proper
 miners who shore, prop, and measure, appalled by the trolls' reckless
-digging next door. They shelter behind their own timbered walls as the
-troll-galleries collapse around them. They love a shored roof, a measured
+digging next door. They shelter behind their own timbered walls at the
+rim's cave-mouths as the troll-galleries collapse around them. They love a
+shored roof, a measured
 drive, and a floor that stays where it's put. They fear the cave-ins and the
 trolls that cause them.
 **The keeper:** Hune Delverest, pick-boss — keeps the town's props true and
@@ -89,6 +100,8 @@ the stair-lift's rubble-slope can be cleared.
 
 ## When it falls
 Delvers' Rest shores the galleries and works the exposed iron in safety; the
-groaning floor finally holds still. The delver-miners climb as the host's
+groaning floor finally holds still. The dust-gloom thins in a day and honest
+light finds the cave-mouths; the delvers swear the rock itself settles
+easier for it. The delver-miners climb as the host's
 shorers and tunnel-wrights, carrying **Stoneshore** and casks of troll-blood
 tonic — the folk who keep an army from being buried, and heal it besides.

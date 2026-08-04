@@ -4,8 +4,9 @@ Three days up from the cages, the freed were learning fires again.
 
 The Burnt Common ran black to every horizon — standing char and
 gorse-skeleton and bracken stopped forever at knee-high, mile on mile
-of it under the
-floor's own deep sky. By day that sky was the pale sourceless glare the
+of it bending slowly down and inland the way every stolen country
+bent, blackest toward its dark middle, under the floor's own deep
+sky. By day that sky was the pale sourceless glare the
 low floors kept. At night it banked down to an ash grey that was not
 darkness and was not anything else either, and there were no stars in
 it, because whatever this stolen country had kept of its nights, it had

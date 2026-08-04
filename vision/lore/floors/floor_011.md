@@ -4,6 +4,12 @@
 
 **Cut from:** the Giants' deep-forge realm — its counting-houses · **Gate-town:** Ledgerstone · **Warden:** Brassbone
 
+**Sky:** standard — three miles of still air the coin-dust hangs in
+**Veil:** thin — a glittering dimness, dust drifting in dead light
+**Land:** Rimlands five miles of coin-dust porticoes; the deep middle hides
+the ledger-vault
+**Gates:** rim — the account-rune rock face, its door a written reckoning
+
 ## The land
 Vast echoing halls of ledger-shelves and coin-dust, where the giants
 reckoned every ounce the forges made. Brass abacuses the size of gates hang
@@ -11,6 +17,9 @@ frozen mid-count; account-scrolls drift like snow in the still air; the
 floodlights catch the coin-dust so the whole hall glitters, and the glitter
 gets in the lungs. It is a monument to a bookkeeping so vast it needed its
 own country — cut off, and still faintly ringing with the sound of tallies.
+The halls follow the bend of the land: porticoes at the rim, where the
+slot-light falls in through the colonnades, and the shelf-stacks running
+inward and down toward the vault beneath the floor's dark middle.
 The stair-lift is set in a rock face carved with account-runes, its door a
 giant ledger-cover that opens to a written reckoning, not a key; Brassbone
 guards the count before it.
@@ -37,8 +46,9 @@ guards the count before it.
 ## The people
 Ledger-clerks and reckoners — giants and delver-scribes who kept the deep-
 forge accounts, precise folk who trust a balanced column more than a promise.
-They hide among the shelves, keeping doomed tallies of a mountain that no
-longer sends ore. They love a clean reckoning, a full vault, and a debt
+They hide among the shelves — inland, past the lit porticoes, because a
+reckoner does not leave the books — keeping doomed tallies of a mountain
+that no longer sends ore. They love a clean reckoning, a full vault, and a debt
 paid. They fear the drifting fungus and the tallies that will never close.
 **The keeper:** Tolla Brasspen, chief reckoner — still tries to balance the
 last ledger, because stopping would mean admitting the count is broken.
@@ -85,6 +95,8 @@ reads its final balance and opens.
 
 ## When it falls
 Ledgerstone's clerks come out and close the last ledger honestly — the count
-finally matches, because the theft it recorded is being undone. They climb
+finally matches, because the theft it recorded is being undone. The
+glittering dimness unravels in a day, and slot-light crosses halls that
+had shone only by their own dust. They climb
 the lift as the host's quartermasters and reckoners, carrying **Reckon** to
 unpick the tower's own false accounts in the floors above.

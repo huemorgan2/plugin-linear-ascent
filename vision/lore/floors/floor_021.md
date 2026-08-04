@@ -4,13 +4,24 @@
 
 **Cut from:** the common-grazing heath of Men · **Gate-town:** Ashfold · **Warden:** Greycinder
 
+**Sky:** standard — four miles of air, grey with old smoke going sweet
+**Veil:** thin — a smoke-grey gloom the green is already arguing with
+**Land:** Rimlands eight miles of green-hazed char; the deep middle hides
+the warm burn-heart
+**Gates:** rim — the fire-cracked bluff, soot-black
+
 ## The land
 A wide common heath caught by wildfire the season it was stolen — a black
 country of burnt gorse and standing char, with a haze of new green bracken
 pushing up through the ash. The floodlights lie grey on the cinders. It is a
 place mid-healing and stopped there: the char never washed away, the green
 never grew past knee-high, the whole common held forever at the moment after
-the burn. Underfoot the ash is soft and still faintly warm. The stair-lift is
+the burn. Underfoot the ash is soft and still faintly warm — warmest going
+inward and down, for the healing follows the light: the green haze runs
+deepest along the rim, where the rain comes in off the slot, and thins
+toward the burn-heart at the middle, where the ash never cooled. The green
+has found the tower itself: bracken sprouts from the stay-knots out past
+the rim, little hanging commons no fire can reach. The stair-lift is
 set in a fire-cracked bluff, its arch soot-black; Greycinder beds in the warm
 ash before it.
 
@@ -20,7 +31,8 @@ ash before it.
 - **Ground & water plants:** new bracken, fireweed (rosebay), and the first
   green of heather returning through the black.
 - **Under the Yoke:** the fireweed smoulders at the root and reseeds in
-  little bursts of ember; the char-birch drops burning bark.
+  little bursts of ember; the char-birch drops burning bark; the returning
+  heather grows pale, light-starved under the gloom.
 
 ## Places of interest
 - **The Cinder Delf.** A burnt-out badger sett under the fire-oak, its earth
@@ -87,6 +99,8 @@ what the burn began.
 
 ## When it falls
 Ashfold plants the saved seed-store across the cooled black, and the common
-greens for real. The commoners climb as the host's foragers and fire-wardens,
+greens for real: the gloom goes within a day, and the burn finally gets
+what healing needs — true light inland, honest rain, the green crossing
+the black like a tide. The commoners climb as the host's foragers and fire-wardens,
 carrying **Quench** and greenshoot tonic — plain folk who know how to bring
 life back to burned ground, which the tower's forge-floors will need badly.

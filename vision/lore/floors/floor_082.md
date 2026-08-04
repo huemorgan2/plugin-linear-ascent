@@ -4,23 +4,35 @@
 
 **The Made:** the tower's chain-forging yards · **Gate-town:** Linkside (a captive forge-camp) · **Warden:** Anchorwrath
 
+**Sky:** standard — three to five miles of steam and smoke-stained air
+**Veil:** thin — what gloom there is, the forges make themselves
+**Land:** Rimlands three miles — the drum-floor ring; the deep middle holds
+the quench-pits
+**Gates:** both doors at the rim, as written — the up-gate at the yard's
+head behind its curtain of unfinished chain
+
 ## The land
 The chain-yards of the Made — vast forging-floors slung over glowing quench-
 pits, where slave-gangs hammer and quench the tower's endless chains: the
 shackles, hoist-chains, and drag-lines that bind every floor above and below.
 Red chain runs on overhead drums into black quench-water that boils and
 hisses; the din of hammer on link never stops; the air is iron-smoke and
-steam. Nothing lives here but forge-vermin. It is a floor whose only product is
-bondage, worked by the bound. The stair-lift hangs at the yard's head behind a
-curtain of unfinished chain; Anchorwrath binds the drum-floor before it.
+steam. The forging-floors bend shallowly down toward the tray's middle,
+every gutter draining inward, so the quench-pits lie black at the bottom of
+the bowl where the rim's grey light never reaches. Nothing lives here but
+forge-vermin. It is a floor whose only product is bondage, worked by the
+bound. Linkside, the forge-camp, is quartered on the drum-floor ring at the
+rim, where the overseers can count their gangs at a glance. The stair-lift
+hangs at the yard's head behind a curtain of unfinished chain; Anchorwrath
+binds the drum-floor before it.
 
 ## "Flora" — the Making's growth
 - **Canopy:** none — chain-drums and gantry.
 - **Ground growth:** quench-scum on the black pits, forge-moss on the cold
   links, and chain-rust flowering orange on the drums.
-- **How the Making twists it:** the chain-rust binds a hand to a link it
-  touches; the quench-scum hides the pit-edge; the forge-moss re-heats cold
-  chain to searing.
+- **How the Making twists it:** the chain-rust flowers in the forge-gloom
+  and binds a hand to a link it touches; the quench-scum hides the pit-edge;
+  the forge-moss re-heats cold chain to searing.
 
 ## Places of interest
 - **The Quench-Sink.** The great cistern-basin under the forging-floor where
@@ -38,7 +50,10 @@ Chain-slaves — the re-enslaved of the freed floors, chained to the forges and
 made to forge the very chains that bind the next captives. Their own shackles
 are their finest work, and they know it. They love a chain broken, a shift
 survived, and a hammer swung at an overseer instead of an anvil. They fear the
-quench-pits and being welded into the drag-lines.
+quench-pits and being welded into the drag-lines. A few are past fearing
+either: out past the rim hangs a bead-town, a hidden street of escaped
+chain-slaves collared to a stay by friction and shape alone — the one
+address in the tower no chain of the yard can reach.
 **The keeper:** Wend Linkside, chain-master among the slaves — keeps the master-
 drain's secret and files at his own shackle in the dark.
 
@@ -86,6 +101,8 @@ link-curtain falls slack.
 ## When it falls
 Linkside drains the quench-pits and the forges die cold; the chain-slaves
 strike their own shackles off with the master's file and the freed **Break-
-chain**. The freed chain-slaves climb as the host's chain-breakers, carrying
+chain**. The forge-gloom unravels in a day, and daylight falls on quench-
+water that never once held a sky; the yards go quiet enough to hear rain —
+and rain comes. The freed chain-slaves climb as the host's chain-breakers, carrying
 quench-steel and the one spell the Made fears most — the word that unbinds —
 into the King's works above.

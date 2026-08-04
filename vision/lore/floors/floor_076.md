@@ -4,12 +4,22 @@
 
 **Cut from:** the Elves' lamp-woods — the hunt's coursing-runs (kin to floors 31, 66) · **Gate-town:** Bayhollow · **Warden:** Foxglove
 
+**Sky:** standard — three to five miles of air over the crow-watched canopy
+**Veil:** thin — a grey coursing-light that flatters the chase
+**Land:** Rimlands five miles — covert-free margins where nothing can stalk;
+the deep middle holds the killing-ground
+**Gates:** both doors at the rim — the up-gate a hunting-arch at a
+coursing-lane's end; the crossing runs the lanes rim to rim
+
 ## The land
 The hunting-runs of the elf-realm — a wood laid out for the chase, with driven
 coursing-lanes, quarry-coverts, viewing-stands, and blind-hides, all crow-
 watched from the high branches. The runs still *remember the chase:* set foot
 on a coursing-lane and the whole wood turns on you as quarry, driving you down
-the runs toward the killing-ground. The coverts hide teeth; the stands hold
+the runs toward the killing-ground. The whole wood bends shallowly down
+toward its middle, so the lanes run from the silver margins at the rim into
+the dark where the killing-ground lies — the land itself drives the quarry
+inward. The coverts hide teeth; the stands hold
 watchers; the crows call the course. It is a floor where the hunt is real and
 you are what's hunted, unless you learn to hunt it back. The stair-lift stands
 at a coursing-lane's end, its arch a hunting-arch; Foxglove courses the runs
@@ -21,8 +31,8 @@ before it.
 - **Ground & water plants:** run-grass streaming down the lanes, covert-
   bramble in the hides, and the pale foxglove that lines the killing-ground.
 - **Under the Yoke:** the covert-bramble drives quarry back onto the lanes;
-  the run-grass shows a false clear path to the killing-ground; the foxglove's
-  pollen slows a fleeing heart.
+  in the Warden's grey coursing-light the run-grass shows a false clear path
+  to the killing-ground; the foxglove's pollen slows a fleeing heart.
 
 ## Places of interest
 - **The Covert.** The quarry's deepest hiding-thicket, a green warren the
@@ -40,7 +50,8 @@ before it.
 ## The people
 Quarry-folk — elves of the coursing-runs: beaters, run-wardens, and quarry-
 keepers who ran and read the hunt. Now the runs hunt them, and they shelter in
-Bayhollow's coverts, learning to move as quarry without being caught. They
+Bayhollow at the rim, in the last coverts before the open margins, learning
+to move as quarry without being caught. They
 love a well-run course, a covert kept safe, and a chase ended clean. They fear
 the turning runs and the course-steward's shade.
 **The keeper:** Nael Bayhollow, quarry-warden — keeps the run-lore and moves
@@ -90,7 +101,10 @@ the stair-lift opens.
 
 ## When it falls
 Bayhollow re-sets the runs from the Vantage Stand and the wood stops hunting
-travelers; the chase is sport again, not slaughter. The quarry-folk climb as
+travelers; the chase is sport again, not slaughter. The gloom unravels in a
+day and true light runs the lanes to their ends; the foxglove pales back to a
+wildflower, and green comes into run-grass that only ever knew the grey. The
+quarry-folk climb as
 the host's trackers and coursers, carrying **Mark** and quarry-bone — the folk
 who run down whatever the Making hides and hunt the tower's own hunters on the
 floors ahead.

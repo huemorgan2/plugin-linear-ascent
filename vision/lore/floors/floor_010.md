@@ -4,6 +4,13 @@
 
 **Cut from:** the muster-meadows of Men — where the old kings raised their hosts · **Gate-town:** Bannerline · **Warden:** **Gnarl, the Goblin King**
 
+**Sky:** cathedral — seven miles of air; Vharuk wanted his joke well lit
+**Veil:** thin — a colorless muster-light, banners grey in the dead air
+**Land:** Rimlands eight miles of trampled muster-greens; the deep middle
+hides Gnarl's banner-pole throne
+**Gates:** rim — the carved triumphal bluff, with the whole field to cross
+before it
+
 ## The land
 A great muster-meadow drowned in banners — the field where Men once gathered
 their armies, cut off mid-muster with a hundred standards still planted and
@@ -11,9 +18,11 @@ rotting on their poles. The banners hang heavy and colorless in the dead
 air; parade-horses wander the churned ground; empty muster-tents flap. It is
 the tenth floor and the first Warden-*king*, and the tower has made a
 spectacle of it: the meadow of hosts, held by a goblin crowned to mock the
-very idea of gathering. The stair-lift is set in a carved bluff shaped like
-a triumphal arch, cut with the marks of ten kings; Gnarl's throne of
-banner-poles blocks it.
+very idea of gathering. The greens run wide at the rim and the field bows
+toward its churned middle, where the Standard-Elm stands. The stair-lift
+is set in a carved bluff shaped like a triumphal arch, cut with the marks
+of ten kings; Gnarl's throne of banner-poles is planted at the field's
+dark heart, and every road to the bluff must cross the meadow past it.
 
 ## Flora
 - **Trees / canopy:** muster-oaks along the field's edge, hung with tattered
@@ -92,6 +101,8 @@ free behind you.
 ## When it falls
 Bannerline raises a true color on the Standard-Elm, and every muster-hand
 still hiding forms up beneath it — the gathering the tower was built to
-prevent, finishing at last on the field made for it. From here the host that
+prevent, finishing at last on the field made for it. The veil goes with
+the joke: within a day seven miles of true sky stand over the field, and
+the colors show their real dyes for the first time since the Theft. From here the host that
 climbs is no longer a handful of climbers: it is a muster, with serjeants,
 colors, and the word **Rally** carried up the lift. The lower tier is won.

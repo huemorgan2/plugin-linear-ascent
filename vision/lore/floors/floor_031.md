@@ -4,6 +4,13 @@
 
 **Cut from:** the Elves' lamp-woods — the old hunting-ways · **Gate-town:** Bridlerest · **Warden:** Tallyhorn
 
+**Sky:** standard — four miles of air over the wood, room for real weather
+**Veil:** thin — a grey riding-light the hunt favors
+**Land:** Rimlands six miles of grey verge-country; the deep middle hides
+the hunt's heart-covert
+**Gates:** down-gate at a verge by Bridlerest; up-gate in the scarp where a
+Ride runs headlong into rock, its arch a grey bridle-arch
+
 ## The land
 A network of grey bridleways cut straight through the elf-forest — the old
 riding-roads of the wood's hunt, lined with lantern-crows on grey posts,
@@ -11,7 +18,10 @@ running arrow-true where every other path winds. The lamps that lit them are
 dead, and a spectral hunt rides the Rides now, grey horse and grey rider,
 coursing the ways forever after quarry that was freed long ago. The forest
 crowds close on either side; the safe ground is the verge, and the verge is
-narrow. The stair-lift stands in a scarp where a Ride runs headlong into
+narrow. The Rides all run inward as the land does, bending down through
+darker and darker wood to the hunt's heart-covert at the deep middle; the
+grey verge-country of the rim is where the living still walk. The
+stair-lift stands in a scarp where a Ride runs headlong into
 rock, its arch a grey bridle-arch; Tallyhorn leads the hunt across it.
 
 ## Flora
@@ -19,8 +29,9 @@ rock, its arch a grey bridle-arch; Tallyhorn leads the hunt across it.
   the crows' grey nests.
 - **Ground & water plants:** ride-moss on the grey road, verge-fern, and the
   hoof-flower that blooms only where the hunt has passed.
-- **Under the Yoke:** the ride-moss drums with phantom hoofbeats; the verge-
-  fern grabs at ankles to spill a walker into the Rides' path.
+- **Under the Yoke:** the ride-moss drums with phantom hoofbeats in the
+  gloom; the verge-fern grabs at ankles to spill a walker into the Rides'
+  path.
 
 ## Places of interest
 - **The Verge Hollow.** A roadside dugout where ride-keepers once sheltered
@@ -86,6 +97,9 @@ hunt reins in and lies down; the Rides go quiet; the stair-lift opens.
 
 ## When it falls
 Bridlerest sounds the recall from the Ride-Head and the grey hunt comes home
-at last, horse and rider laid to rest. The ride-keepers climb as the host's
+at last, horse and rider laid to rest. The riding-gloom lifts in a day and
+morning finds the Rides for the first time in eighty years — grey roads
+through a greening wood, the hoof-flowers blooming white instead of grey.
+The ride-keepers climb as the host's
 outriders and cavalry, carrying **Recall** and bridle-silver — the fastest
 folk in the rising, who can run down anything that flees on the floors above.

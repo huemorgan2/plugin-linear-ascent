@@ -4,13 +4,24 @@
 
 **Cut from:** the Elves' lamp-woods — and dropped, obscenely, among the low farms (the Theft made plain) · **Gate-town:** Lanternroot · **Warden:** Palegleam
 
+**Sky:** standard — three miles of air, though the wood has forgotten it
+**Veil:** heavy — the murdered lamplight; black past the first branches
+**Land:** Rimlands five miles of grey eave-woods; the deep middle hides the
+dark lamp-heart grove
+**Gates:** rim to rim — the way up is the mossed sigil-cliff
+
 ## The land
 An elf-wood where the trees themselves once glowed — aether rising in their
 sap to light the canopy from dusk. The lights are murdered now: the sap runs
 dark, the glimmer-moss is ash-grey, and the wood stands in a black that the
 tower's floodlights can't reach past the first branches. It is stranded a
 single lift above a farm valley, an ancient lit forest buried in the cellar
-of the world. Walking it feels like walking a cathedral after the candles
+of the world. Part of the dark is architecture, not habit: a wider floor
+overhangs this narrow wood, and even its rim gets only a permanent dusk —
+which is why the elves taught their trees to glow at all. The grey
+eave-woods at the rim still know that dusk; the wood blackens by degrees
+going inward and down to the lamp-heart grove at its dark middle. Walking
+it feels like walking a cathedral after the candles
 have been drowned. The stair-lift is set in a mossed cliff carved with
 elf-lamp sigils, each socket dark and empty; Palegleam stalks the black
 wood before it.
@@ -20,8 +31,9 @@ wood before it.
   lamps are snuffed; one alone still burns, in the Snuffed Hollow.
 - **Ground & water plants:** moon-fern, wick-flower (that opened at the
   trees' light), and glimmer-moss gone dark and brittle.
-- **Under the Yoke:** the lamp-eater rot — a black lichen that drinks light
-  — sheets the trunks and spreads toward any flame a climber carries.
+- **Under the Yoke:** the lamp-eater rot — a black lichen that drinks light,
+  fat on the Warden's gloom — sheets the trunks and spreads toward any flame
+  a climber carries.
 
 ## Places of interest
 - **The Snuffed Hollow.** A root-cellar under the great oak where the wood's
@@ -37,8 +49,10 @@ wood before it.
 
 ## The people
 Lamplighters and sap-wrights — elves who spent their lives tending the
-living lights, speaking to the lamps as neighbors. Now they hide in the
-unlit dark they once banished, hoarding the few wicks that still catch.
+living lights, speaking to the lamps as neighbors. Lanternroot keeps to
+the grey eaves at the rim; those who hide deeper in the unlit dark do it
+because they will not leave the trees they tended, hoarding the few wicks
+that still catch.
 They love a clean-burning sap, the hush under a lit canopy, and the old
 lamp-songs. They fear the lamp-eater, and the dark that has their own wood.
 **The keeper:** Ithren of the Wicks, last lamplighter — carries an unlit
@@ -88,6 +102,9 @@ the stair-lift opens on the first honest dark since the Theft.
 
 ## When it falls
 The lamplighters come out with Ithren's lantern finally lit, and floor by
-socket the glade begins to glow again from the inside. They climb the lift
+socket the glade begins to glow again from the inside. The gloom unravels
+within a day — and what comes back is not the sun, for the wider floor
+still overhangs, but the honest dusk the wood was made for, in which its
+own lamps are the stars. They climb the lift
 carrying seed-light in shielded lanterns — the only folk in the host who can
 bring warmth and sight into the lightless floors above, and they know it.

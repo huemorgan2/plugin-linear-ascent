@@ -4,13 +4,23 @@
 
 **Cut from:** the Elves' lamp-woods — an inner wood, stranded among mine and marsh (§3) · **Gate-town:** Hushfall · **Warden:** Hearsay
 
+**Sky:** low — a mile of pressing air; the lid keeps every echo in
+**Veil:** heavy — a hush-grey gloom that holds sound the way fog holds
+smoke
+**Land:** Rimlands five miles of quieter gall-woods; the deep middle hides
+the echo-heart grove
+**Gates:** rim — the gall-knotted scarp at the wood's edge
+
 ## The land
 An elf-wood that learned, over its long lit life, to carry the lamp-songs
 between glades — and now, with the songs dead, it repeats *everything else*:
 footsteps, breath, a whispered curse, thrown back minutes or hours later from
 the wrong direction. The trees are galled and knotted, hung with old wasps'
 nests like grey lanterns. It is a wood full of voices and empty of speakers,
-where your own words hunt you, and the only safety is silence. The
+where your own words hunt you, and the only safety is silence. The wood is
+quietest at its rim, where the Shear's wind scours sound out through the
+slot, and worst inward and down: the echoes pool with the land, thickest
+in the heart-grove at the floor's middle. The
 stair-lift stands in a gall-knotted scarp at the wood's edge that
 murmurs your approach back before you reach it; Hearsay speaks from
 everywhere in front of it.
@@ -20,8 +30,9 @@ everywhere in front of it.
   sound-galls that store and replay noise.
 - **Ground & water plants:** echo-fern, murmur-moss (that carries whispers
   along the ground), and the grey gall-lantern nests.
-- **Under the Yoke:** the murmur-moss now repeats threats in a climber's own
-  voice; the gall-lanterns burst into wasp-swarms when they "hear" fear.
+- **Under the Yoke:** the murmur-moss, grown fat in the gloom, now repeats
+  threats in a climber's own voice; the gall-lanterns burst into wasp-swarms
+  when they "hear" fear.
 
 ## Places of interest
 - **The Hush Hollow.** A dead-sound grotto in the wood's heart where no
@@ -39,7 +50,9 @@ everywhere in front of it.
 ## The people
 Wood-elves — song-keepers and gall-wrights who tended the wood's carrying
 memory and its lamp-songs. Now they live in enforced silence, speaking only
-in the Hush Hollow, because a word in the open comes back armed. They love a
+in the Hush Hollow — an inland refuge no rim-sense argues with, for the
+one dead-sound place on the floor is at its heart — because a word in the
+open comes back armed. They love a
 true-carried song, a quiet glade, and a memory kept faithfully. They fear
 their own voices and the shade that quotes the dead.
 **The keeper:** Sela Hushfall, song-keeper — speaks in signs above ground,
@@ -93,6 +106,8 @@ carries only what is meant. The stair-lift opens on real quiet.
 
 ## When it falls
 Hushfall sings the true lamp-song from the Sounding Oak and the wood carries
-it glade to glade — memory turned back to keeping instead of tormenting. The
+it glade to glade — memory turned back to keeping instead of tormenting.
+The gloom unravels within a day, and under the low lid a pale, honest
+daylight fills the wood; silence stops being the only safety. The
 wood-elves climb as the host's spell-turners and rememberers, carrying
 **Echo-turn** against the mirror- and voice-tricks of the floors near the top.

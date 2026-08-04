@@ -5,13 +5,23 @@
 **The Made — throne-tiers:** the King's assembled court — the willing ·
 **Gate-town:** Courtside (the servants' warren) · **Warden:** the Grand Vizier
 
+**Sky:** standard — three to five miles of candle-hazed dark above the tiers
+**Veil:** thin — candle-light and glamour; the court makes its dusk
+**Land:** Rimlands three miles — the gilded outer tiers; the deep middle is
+the Dais
+**Gates:** down-gate at the rim tiers; the up-gate as written — behind the
+Dais at the court's head, with the whole court in between
+
 ## The land
 The court of the Made — the great gilded audience-tiers below the throne where
 Vharuk's willing gather: the courtiers, favourites, and profiteers who were
 never taken and never collared, who simply *chose* the King and prospered by
 him. It is the one floor of the tower where the enemy is not a victim. Cloth-of-
 gold and cold candle-light, whispered intrigue, the smell of privilege built on
-a world's ruin. The only captives here are the servants in the walls; the court
+a world's ruin. The tiers bend shallowly down toward the tray's middle —
+gilt catching what grey light the rim lets in, then ring below ring of
+candle-glow — until the Dais rises from the dark center where the
+throne-approach begins. The only captives here are the servants in the walls; the court
 itself is guilty, awake, and unrepentant — the human face of the tyranny, and
 the hardest to strike because it looks like people, not monsters. The stair-lift
 stands behind the Dais at the court's head, and the Grand Vizier bars that way
@@ -23,7 +33,7 @@ to the Last Door.
   and the pale flatter-fungus that fruits in the shape of a compliment.
 - **How the Making twists it:** the flatter-fungus breathes a glamour of
   belonging that lulls the judgement; the candle-lichen gutters to plunge the
-  court into scheming dark; the velvet-moss muffles a drawn blade.
+  court into its own scheming dusk; the velvet-moss muffles a drawn blade.
 
 ## Places of interest
 - **The Whispering Gallery.** The servants' undercroft, shaped so that every
@@ -40,7 +50,8 @@ to the Last Door.
 ## The people — who you are freeing
 Only the Courtside servants — the scullions, sweepers, and body-slaves worked
 to the bone in the walls to keep the court gilded, the sole innocents on a
-guilty floor. They love a secret carried to the rising, a candle left to gutter,
+guilty floor. Their warren threads the court's own walls, inland with their
+masters, because the court will not look at what serves it. They love a secret carried to the rising, a candle left to gutter,
 and the day the court is called to account. They fear their masters' whims and
 being blamed for a spilled cup.
 **The keeper:** Bly of Courtside — keeps the Whispering Gallery's secrets and
@@ -96,6 +107,9 @@ The Vizier falls unfree and unmourned, and Bly's servants read the court's long
 ledger of crimes aloud over the gilded ruin — the willing called to account at
 last. This is the climb's hardest moral turn: the recognition that tyranny is
 not only imposed but *chosen,* and that some enemies are not victims to save but
-wrongs to end. The freed Courtside servants climb as the host's witnesses,
+wrongs to end. The court's made dusk unravels in a day; under plain light
+the gilt is thin, the velvet is worn, and the whole floor looks like what it
+was — a small room where comfortable people agreed to a world's ruin. The
+freed Courtside servants climb as the host's witnesses,
 carrying **Silence** and the ledger to the throne — so that when the King
 answers, everyone hears the truth. Only the Last Door remains.

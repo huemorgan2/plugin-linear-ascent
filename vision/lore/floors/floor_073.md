@@ -3,6 +3,12 @@
 > *"We built walls to break the wind, and shutters to let it through when we chose. The tower jammed the shutters open. Now the wind chooses, and it chooses to kill." — Wall-warden Bruna Shuttergate*
 
 **Cut from:** the Giants' high cold country — the great wind-ramparts · **Gate-town:** Shuttergate · **Warden:** Galebone
+**Sky:** standard — four miles of air, and all of it moving.
+**Veil:** thin — the gale never lets a gloom settle.
+**Land:** Rimlands five miles wide — the wind-shadow strips; the deep middle
+is the windless heart.
+**Gates:** both at the rim — the down-gate in a wall-shadow, the up-gate in
+the rampart behind the jammed shutter, its arch a shutter-frame.
 
 ## The land
 A country of colossal wind-walls — ice-and-iron ramparts the giants raised
@@ -11,7 +17,10 @@ they could open or close to let the wind through by measure. The shutters are
 jammed open now, and the gales scream through the wall-gaps hard enough to
 tear a climber off the ramparts. Between the walls lie sheltered wind-shadows;
 atop them, nothing but the shriek. It is a floor climbed along and over vast
-ramparts in a wind that wants you gone. The stair-lift stands in a rampart
+ramparts in a wind that wants you gone. The walled country bows toward its
+middle like every stolen land, and the walls ring it inward, gale by lesser
+gale, to the windless heart at the floor's center — dead still, dead dark,
+where nothing the wind carries ever arrives. The stair-lift stands in a rampart
 behind a jammed wind-shutter, its arch a giant shutter-frame; Galebone slams
 the shutters before it.
 
@@ -95,7 +104,10 @@ the stair-lift opens.
 
 ## When it falls
 Shuttergate frees the jammed shutters from the Rampart-Crown and the wind
-answers to measure again; the walls break the gale as they were built to. The
+answers to measure again; the walls break the gale as they were built to.
+What gloom the gale allowed goes entirely in a day; the gale-flowers spread
+past their old shadows, and the wind-shadow strips grow something worth
+walling at last. The
 wall-folk climb as the host's rampart-wrights and shelter-builders, carrying
 **Bulwark** and rampart-iron — the folk who raise walls against every storm and
 siege the tower throws in the Making-floors ahead.

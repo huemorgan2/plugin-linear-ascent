@@ -4,6 +4,14 @@
 
 **Cut from:** the peat-mire country of Men · **Gate-town:** Cairnside · **Warden:** Mirebone
 
+**Sky:** low — a bare mile of air; the lid presses on the mire
+**Veil:** heavy — a wet grey gloom the corpse-lights swim in
+**Land:** Rimlands four miles of cairned turf-banks; the deep middle hides
+the deep peat-pools
+**Gates:** down-gate at a turf-bank by Cairnside; up-gate out where the peat
+runs deepest, ringed by drowned cairns — the only way off the floor is a
+walk into the mire's black heart
+
 ## The land
 A vast peat mire under a low dead sky — black bog-pools, quaking ground, and
 old stone cairns marking the only safe paths, all drifting now with pale
@@ -11,9 +19,14 @@ corpse-lights that lead the wrong way. The peat preserves everything it
 takes: tools, beasts, and people lie perfect and brown in its depth. It was
 hard country the peat-folk knew by heart, cut off mid-cutting, the turf-
 stacks still drying that will never burn. Step wrong and the mire has you,
-whole, forever. The stair-lift stands in a low rock outcrop ringed by
-drowned cairns, out where the peat runs deepest; Mirebone wallows the
-pool before it.
+whole, forever. The land bends shallowly down from the cairned turf-banks
+at the rim, where the cutting was done and a little silver day still
+falls, into the deep pools of the middle where even the cairns drown. The
+stair-lift stands in a low rock outcrop ringed by drowned cairns, out
+where the peat runs deepest; Mirebone wallows the pool before it. There is
+no way up that does not go in: every safe path threads cairn to cairn
+toward the drowned heart, and the false lights burn brighter the deeper
+you dare.
 
 ## Flora
 - **Trees / canopy:** bog-oak (black, ancient, preserved) breaking the
@@ -21,7 +34,8 @@ pool before it.
 - **Ground & water plants:** sphagnum, cotton-grass, sundew, and the deep
   peat itself.
 - **Under the Yoke:** the sundew has grown to snare a boot; the cotton-grass
-  marks false-firm ground that isn't; the cairn-lights hunt.
+  marks false-firm ground that isn't; the cairn-lights hunt best in the
+  Warden's gloom.
 
 ## Places of interest
 - **The Peat Undercut.** A bank-cave where the peat-folk store cut turf and
@@ -38,8 +52,9 @@ pool before it.
 
 ## The people
 Peat-folk — Men of the mire: turf-cutters, cairn-keepers, and bog-wardens who
-read the quaking ground by the color of the moss. They shelter in Cairnside on
-the firm cairn-islands, poling between them, guarding the true paths. They
+read the quaking ground by the color of the moss. They shelter in Cairnside
+on the firm cairn-islands of the rim's turf-banks, poling between them,
+guarding the true paths. They
 love dry turf, a marked road, and a cairn kept true. They fear the corpse-
 lights, the snaring bog, and the ghoul that walks up out of the peat.
 **The keeper:** Cairn Cairnside, turf-mother — keeps the path-lore and the
@@ -88,6 +103,9 @@ the stair-lift opens.
 
 ## When it falls
 Cairnside relights the Great Cairn true and the corpse-lights lose their pull;
-the mire gives up its old road. The peat-folk climb as the host's bog-wardens
+the mire gives up its old road. The heavy gloom unravels in a day, and real
+light lies on the black pools for the first time in living memory; the mire —
+never a dead land, only a held one — begins to green from the banks inward.
+The peat-folk climb as the host's bog-wardens
 and path-keepers, carrying **Firmground** and bog-oak stave — the folk who can
 find safe footing for an army across any drowned or treacherous floor above.

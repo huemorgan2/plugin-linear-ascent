@@ -4,6 +4,13 @@
 
 **Cut from:** the Elves' lamp-woods — the night-pastures · **Gate-town:** Wickstead · **Warden:** Nightbridle
 
+**Sky:** standard — four miles of star-black air, and no stars in it
+**Veil:** heavy — a bred night, deeper than any lid
+**Land:** Rimlands six miles of blue-black meads; the deep middle hides the
+dream-herd's heart-pasture
+**Gates:** down-gate on the meads by Wickstead; up-gate in the thorn-hung
+scarp at the meadow's far edge
+
 ## The land
 Wide night-pastures under a permanent star-black sky — the meadows where the
 elves bred their fabled nightmares, dream-horses grazed on moonflower and
@@ -11,9 +18,14 @@ sleep itself. The grass is blue-black, the flowers glow, and the herds move
 like drifting shadow. The elves' art let the horses walk into dreams; the
 fever has turned that gift cruel, and now the nightmares graze the dreams of
 the living, feeding on sleep and leaving terror behind. It is a hushed,
-lovely, dreadful country where to close your eyes is dangerous. The stair-lift stands in a
-thorn-hung scarp at the meadow's far edge, its arch woven with black hedge-
-thorn; Nightbridle leads the herd before it.
+lovely, dreadful country where to close your eyes is dangerous. The meadows
+lie in an Undershadow — a wider country overhangs them, and the true dark
+it casts is why the elves bred night-horses here at all; the Warden's gloom
+only deepens a night that was honest first. The meads bend down toward the
+heart-pasture at the middle, where the herds den and the dream-oak stands;
+Wickstead keeps to the rim, where the Shear's thin silver edges the dark.
+The stair-lift stands in a thorn-hung scarp at the meadow's far edge, its
+arch woven with black hedge-thorn; Nightbridle leads the herd before it.
 
 ## Flora
 - **Trees / canopy:** black hedge-thorn round the paddocks, and the great
@@ -21,8 +33,8 @@ thorn; Nightbridle leads the herd before it.
 - **Ground & water plants:** night-grass, glowing moonflower, and the pale
   sleep-poppy the herds graze.
 - **Under the Yoke:** the sleep-poppy's scent drops the waking into dream
-  where the herds can reach them; the moonflower's light lures; the thorn-
-  hedges close on sleepers.
+  where the herds can reach them; the moonflower's light lures in the
+  doubled dark; the thorn-hedges close on sleepers.
 
 ## Places of interest
 - **The Foaling-Cave.** The warm dark grotto where the mares foal, deepest and
@@ -91,7 +103,10 @@ the meadow's dream calms; the stair-lift opens.
 
 ## When it falls
 Wickstead sets the true dream-bridle on the lead stallion and the nightmares
-graze kind again, the meadow's dream turned gentle. The night-herders climb as
+graze kind again, the meadow's dream turned gentle. The Warden's gloom
+unravels in a day, and what remains is the old honest night of the
+Undershadow — real dark, kind to the herds, the rim's silver at its edge —
+and the moonflowers burn the brighter for it. The night-herders climb as
 the host's dream-walkers and cavalry, carrying **Dreamride**, dreamsilver, and
 a herd of gentled nightmares — the folk who fight the tower's terrors in the
 sleep of the whole army.

@@ -3,6 +3,12 @@
 > *"Snow-bridges over drops you can't see the bottom of. The trolls built them, the trolls guard them, and the trolls charge a toll no coin can pay." — Bridge-keeper Orla Bridgeward*
 
 **Cut from:** the Giants' high cold country — a network of glacier-crossings · **Gate-town:** Bridgeward · **Warden:** Spanbreak
+**Sky:** standard — four miles of air the wind moans through.
+**Veil:** thin — a grey the blue ice gives back.
+**Land:** Rimlands three miles wide — the firm glacier shelf; the deep middle
+is the great crevasse-country.
+**Gates:** both at the rim — the down-gate on the firm shelf, the up-gate in
+the ice-cliff at the far end of the great span.
 
 ## The land
 A maze of snow-bridges arcing over bottomless crevasses — spans of wind-packed
@@ -11,17 +17,20 @@ narrow and groaning and hung with icicle-fringe. Gorge-ravens haunt the spans;
 the wind moans up the crevasses; a bridge that held yesterday may be gone
 today. The trolls built these crossings and hold them like toll-gates, and the
 fever has made them jealous. Crossing the floor means trusting a bridge of
-snow over a drop with no floor, with a troll at the far end. The stair-lift
-stands in an ice-cliff at the far end of a great span; Spanbreak holds the
-bridge before it.
+snow over a drop with no floor, with a troll at the far end. The glacier
+bows toward its own middle like every stolen country: the shelf lies firm
+and lit at the rim, and the cracks yawn wider and deeper inland, down to
+the Groaning Chasm over the floor's dark heart. The stair-lift stands in an
+ice-cliff at the far end of a great span; Spanbreak holds the bridge before
+it.
 
 ## Flora
 - **Trees / canopy:** none — snow-spans and ice-cliffs.
 - **Ground & water plants:** ice-lichen fringing the spans, crevasse-moss on
   the shaded walls, and the pale snow-bloom that marks firm snow (usually).
 - **Under the Yoke:** the snow-bloom now marks rotten snow as if it were firm;
-  the ice-lichen weakens the spans it grows on; the crevasse-moss lures with
-  warmth over the drop.
+  the ice-lichen weakens the spans it grows on; the crevasse-moss, bright in
+  the gloom, lures with warmth over the drop.
 
 ## Places of interest
 - **The High Span.** The longest, highest snow-bridge, arcing over the deepest
@@ -93,7 +102,10 @@ at the far end.
 
 ## When it falls
 Bridgeward secures the High Span and the trolls set to mending the crossings
-they once cut; the network holds firm. The bridge-keepers climb as the host's
+they once cut; the network holds firm. The thin gloom lifts in a day and
+real weather comes back to the ice — sun on the spans, honest stars over
+the crevasses, and the snow-bloom marking true again. The bridge-keepers
+climb as the host's
 span-wrights and crossing-crews, carrying **Spanhold** and span-iron — the
 folk who throw a bridge across any crevasse the tower cracks open toward the
 throne.

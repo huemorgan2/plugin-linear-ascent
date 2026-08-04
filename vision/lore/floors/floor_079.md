@@ -4,14 +4,26 @@
 
 **Cut from:** the burned borderlands — the Waste, an ancient wyrm-migration road (kin to floor 50) · **Gate-town:** Moltgate · **Warden:** Moltcrown
 
+**Sky:** standard — three to five miles of hot shimmering air over the road
+**Veil:** thin — a sulfur haze, barely tended
+**Land:** Rimlands four miles — canyon-mouth camps; the deep middle holds
+the deep molt-drifts
+**Gates:** both doors at the rim — the up-gate in the canyon wall behind a
+deep drift; the crossing follows the wyrm-road itself
+
 ## The land
 An ancient wyrm-road — the migration-route the great fire-wyrms have followed
 since before the Ascent, a broad canyon-track drifted deep with a glittering
 dune of shed molt: cast scales, sloughed skins, and spent teeth, layered by
 ages of passing wyrms. The molt-drifts shimmer with heat and shift like sand;
 young wyrms still den in the warm hollows; the whole road smells of sulfur and
-snake. It is a place older than the theft that made the tower, and the wyrms
-that walk it answer to no crown — not even Vharuk's. The stair-lift stands in
+snake. The road bends with the tray, shallowly down toward the middle where
+the oldest molt lies deepest — silver day on the camps at the canyon mouths,
+heat-shimmer and dark down the long descent of the drifts. It is a place
+older than the theft that made the tower, and the wyrms that walk it answer
+to no crown — not even Vharuk's. Fitting, then, that a stay-road leaves this
+rim — a bare thread of strand the road-folk's smugglers walk between floors,
+answering no crown either. The stair-lift stands in
 the canyon wall behind a deep molt-drift; Moltcrown dens in the drift before
 it.
 
@@ -20,8 +32,8 @@ it.
 - **Ground & water plants:** molt-lichen on the shed scale, scale-fern in the
   warm hollows, and the pale sulfur-bloom of the basking-flats.
 - **Under the Yoke:** the scale-fern's edges cut like shed teeth; the molt-
-  lichen shifts the drifts to swallow a foot; the sulfur-blooms puff a
-  choking musk.
+  lichen shifts the drifts to swallow a foot; the sulfur-blooms thicken the
+  thin gloom with a choking musk.
 
 ## Places of interest
 - **The Molt-Drift Hollow.** A shelter dug deep into a dune of shed scale,
@@ -39,8 +51,8 @@ it.
 ## The people
 Road-folk — Waste-folk who live along the wyrm-road, gathering molt for scale-
 mail and reading the migration by the drifts, leathery patient folk who know
-never to stand between a wyrm and its road. They shelter in Moltgate in the
-molt-hollows, sorting scale. They love a full molt-drift, a clean-shed skin,
+never to stand between a wyrm and its road. They shelter in Moltgate among
+the canyon-mouth camps at the rim, sorting scale in the molt-hollows. They love a full molt-drift, a clean-shed skin,
 and a wyrm passed by in peace. They fear the young denning wyrms and the
 scale-picker ogres.
 **The keeper:** Grint Moltgate, road-warden — reads the migration by the molt
@@ -88,6 +100,9 @@ remembers who freed it. The stair-lift opens.
 ## When it falls
 Moltgate raises the intact cast skin and armors the rising in fireproof scale;
 the migrating wyrms pass the road in peace, and word of another freeing
-travels wyrm to wyrm. The road-folk climb as the host's scale-smiths and
+travels wyrm to wyrm. The haze unravels in a day and true sun strikes the
+road for the first time since the theft — a hundred miles of shed scale
+glittering like a river; the scale-fern greens in the hollows, and basking
+is honest work again. The road-folk climb as the host's scale-smiths and
 wyrm-speakers, carrying **Molt** and shed wyrm-scale — the folk who slough off
 the tower's worst and may yet call the free wyrms down on the throne.

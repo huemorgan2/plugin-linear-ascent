@@ -4,11 +4,23 @@
 
 **Cut from:** the burned borderlands — the Waste, at the mouth of a living caldera · **Gate-town:** Lastwater · **Warden:** **Cindermaw the Wyrm**
 
+**Sky:** cathedral — seven miles of ash-falling air; the lid a rumor above
+the plume
+**Veil:** thin — ash-haze; the fire makes its own light
+**Land:** Rimlands three miles of pyre-lined terraces; the deep middle hides
+the fire-lake
+**Gates:** down-gate on the outer terraces at the floor's rim; up-gate
+inland in the caldera's glassed rim, behind a curtain of pyre-flame
+
 ## The land
 The Cindermouth: the mouth of an active caldera, a ring of black glassy
 terraces descending to a lake of slow fire, the whole rim lined with tribute-
 pyres kept burning day and night. Ash falls like grey snow; heat-haze bends
-the air; the fire-lake below pulses like a heart. Here dwells Cindermaw — a
+the air; the fire-lake below pulses like a heart. The Waste bends down from
+the floor's rim only to rise again at its middle, where the caldera stands
+on the deepest fill and the fire-lake fills its throat; overhead the sky is
+vaulted miles high, and the wyrm has all of it to wheel in. Here dwells
+Cindermaw — a
 true wyrm, older than the Ascent, who the fever drove to demand tribute, and
 whom the terrified Waste-folk have appeased for a thousand years by feeding
 her pyres. It is the last floor of the fifth tier, and the first *dragon* the
@@ -20,8 +32,9 @@ opens it, and she coils before it.
 - **Trees / canopy:** none — glass terraces, pyre-stacks, and ash-drifts.
 - **Ground & water plants:** pyre-moss on the cooling stacks, ember-poppy on
   the warm rim, and the fire-lily that blooms only in the caldera's heat.
-- **Under the Yoke:** the ember-poppies burst into flame near warmth; the
-  fire-lilies breathe scalding pollen; the pyre-moss reignites cold pyres.
+- **Under the Yoke:** the ember-poppies burst into flame near warmth, bright
+  in the ash-gloom; the fire-lilies breathe scalding pollen; the pyre-moss
+  reignites cold pyres.
 
 ## Places of interest
 - **The Nest.** Cindermaw's caldera lair above the fire-lake, floored with the
@@ -40,9 +53,11 @@ opens it, and she coils before it.
 ## The people
 Caldera-folk of Lastwater — Waste-folk whose whole society became the tending
 of Cindermaw's pyres, pyre-keepers and tribute-callers who have fed the wyrm
-their own for a thousand years out of terror. They shelter on the cool outer
-rim, sickened by what appeasement has cost them, praying for the day the
-tribute ends. They love the day a pyre stays cold, a life not given, and the
+their own for a thousand years out of terror. They shelter on the caldera's
+cool outer rim — inland folk of necessity, for the pyres must be tended
+where the wyrm can see them — sickened by what appeasement has cost them,
+praying for the day the tribute ends. They love the day a pyre stays cold,
+a life not given, and the
 old story of when the wyrm was only a wyrm. They fear Cindermaw's hunger and
 the tribute-ogres who enforce it.
 **The keeper:** Sira Lastwater, pyre-keeper — tends the pyres she hates, keeps
@@ -97,6 +112,9 @@ sixth tier.
 ## When it falls
 Lastwater douses the tribute-pyres in the old free-rite for the first time in
 a thousand years; no life is given, and the caldera-folk weep at cold stacks.
+The ash-haze gloom burns off in a day, and the caldera stands under honest
+sky — one more hairline of the tower gone gold, seen clear from the
+Girdle-sea.
 The freed Cindermaw wheels once over the caldera and is gone into the dark
 above — and where she passes on the floors to come, she remembers who freed
 her. The caldera-folk climb as the host's pyre-breakers and fire-callers,

@@ -4,6 +4,14 @@
 
 **Cut from:** the shared under-caverns — the Deep, where the old world stored its lore-lattices · **Gate-town:** Faintlight · **Warden:** Echobone
 
+**Sky:** standard — four miles of cold air the halls never taste
+**Veil:** heavy — a signal-blue dark that eats lamplight
+**Land:** Rimlands four miles of dim lattice-halls; the deep middle hides
+the memory-cores
+**Gates:** down-gate in an outer hall at the rim; up-gate at the deeps' cold
+heart, behind the wall of lit lattice — the way up is a march down every
+darkening aisle to the coldest, most echoing hall of all
+
 ## The land
 The signal-deeps: cavern-halls racked floor to roof with aether-lattices —
 the crystalline memory-cores where the old world stored its knowledge, still
@@ -11,16 +19,22 @@ lit with a cold blue glow and humming with dead signal. Every hall echoes;
 whisper once and the deeps answer a hundred times, in a hundred voices, some
 of them true. Cold light, cold air, cold facts. It was the mind of the world
 kept in the dark, cut off and left talking to itself, and now the talk has
-gone strange. The stair-lift stands behind a wall of lit lattice at the
-deeps' cold heart, its arch grown thick with signal-crystal; Echobone
+gone strange. The halls pitch down from the dim outer aisles at the rim
+toward the cold heart, where the oldest memory-cores burn bluest and the
+echoes lie thickest — and that heart holds the only way up: to leave the
+floor you must walk the archive to its most-answering room, and trust
+nothing it says on the way. The stair-lift stands behind a wall of lit
+lattice at the deeps' cold heart, its arch grown thick with signal-crystal;
+Echobone
 floods it with false signal and holds the aisle before it.
 
 ## Flora
 - **Trees / canopy:** none — lattice-racks and cold-light aisles.
 - **Ground & water plants:** signal-lichen on the warm cores, echo-moss in
   the aisles, and the frost-fungus on the coolant-runnels.
-- **Under the Yoke:** the echo-moss throws voices to mislead; the signal-
-  lichen flares false readings; the frost-fungus ices the aisle-floors.
+- **Under the Yoke:** the echo-moss throws voices through the gloom to
+  mislead; the signal-lichen flares false readings; the frost-fungus ices
+  the aisle-floors.
 
 ## Places of interest
 - **The Cold Aisle.** The deepest, coldest rack-aisle, where the oldest and
@@ -39,8 +53,9 @@ floods it with false signal and holds the aisle before it.
 ## The people
 Signal-delvers — lore-keepers of every race who tend the lattices and mine
 them for old knowledge, pale quiet folk who trust a checked answer and nothing
-else. They shelter in Faintlight among the racks, sifting true signal from
-the echo-storm. They love a clean read, a recovered truth, and a hall that
+else. They shelter in Faintlight among the outer racks, nearest the rim's
+honest air, sifting true signal from the echo-storm. They love a clean
+read, a recovered truth, and a hall that
 answers straight. They fear the false signals and the husks the echo makes.
 **The keeper:** Fenn Faintlight, lore-delver — keeps the index to the true
 cores and cross-checks every answer thrice before he trusts it.
@@ -88,7 +103,9 @@ signal dies; the stair-lift reads open.
 
 ## When it falls
 Faintlight restores the Mainframe Spire and the archive answers true again —
-the world's own map of the tower laid bare. The signal-delvers climb as the
+the world's own map of the tower laid bare. The signal-blue gloom unravels in
+a day; for the first time the deeps hold a light that isn't cold, and the
+outer halls learn what weather sounds like. The signal-delvers climb as the
 host's seers and loremasters, carrying **Query** and core-gold — the folk who
 can find the weakness in any floor and see through every lie between here and
 the throne.

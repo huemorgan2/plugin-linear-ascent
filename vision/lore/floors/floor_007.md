@@ -4,23 +4,37 @@
 
 **Cut from:** the orchard country of Men · **Gate-town:** Cider Cross · **Warden:** Applewrath
 
+**Sky:** standard — four miles of soft air, wide enough for weather and
+wasps
+**Veil:** thin — a sweet golden haze, gloom dressed up as harvest light
+**Land:** Rimlands nine miles of old orchard rows; the deep middle hides
+the old press-house
+**Gates:** cruel, sweetly hidden — down-gate at the rim; the way up is in
+the deep windfall behind the press-house
+
 ## The land
 A great cider-orchard taken a week before pressing and never picked — mile on
 mile of planted rows gone to rot, the ground ankle-deep in windfall fermenting
 under the floodlights. The air is thick, sweet, and drunk; wasps hang in it
 like sparks. The trees are old and huge and pruned by nine generations of the
 same families, and now they drop a harvest no one will ever press. Everything
-here is going soft and golden and wrong. The stair-lift is set in a stone
+here is going soft and golden and wrong. The kindest-looking floor in the
+lower tower keeps its one door at its rotten heart: the rows run inward
+and down, mile on sweet mile, the rim's silver day dying by degrees, and
+the last miles are the darkest and the drunkest. The stair-lift is set in a stone
 bluff behind the old press-house, its arch carved with apple-boughs;
-Applewrath beds in the deep windfall before it.
+Applewrath beds in the deep windfall before it. From the outermost rows
+you can see the orchard's one escape: a crooked apple growing sideways out
+of a stay-knot past the rim, self-sown, miles above nothing.
 
 ## Flora
 - **Trees / canopy:** cider-apple and perry-pear in long straight rows, and
   the mother-tree at the crossing that every graft on the floor came from.
 - **Ground & water plants:** windfall mush, orchard-grass, mistletoe in the
   high forks, and nettle where the presses stood.
-- **Under the Yoke:** the windfall ferments into a black cider-rot that gives
-  off a drunkening haze, and the mistletoe has gone grasping.
+- **Under the Yoke:** the windfall ferments into a black cider-rot whose
+  drunkening haze is half the Warden's gloom, and the mistletoe has gone
+  grasping.
 
 ## Places of interest
 - **The Press-Cellar.** The stone cider-cellar under the crossing, its vats
@@ -36,8 +50,10 @@ Applewrath beds in the deep windfall before it.
 
 ## The people
 Orchardists and pressers — families who count their worth in grafts and
-vintages and know every tree by name. They shelter in Cider Cross with the
-shutters closed against the wasps and the haze, guarding the seed-stock. They
+vintages and know every tree by name. They shelter in Cider Cross — built
+inland at the crossing, against all rim sense, because the pressers would
+not settle out of sight of the mother-tree — with the shutters closed
+against the wasps and the haze, guarding the seed-stock. They
 love a clean pressing, a long cellar, and the fair-day taste of the first
 draw. They fear the rot-haze that makes a body forget to run.
 **The keeper:** Cesta Pommet, master-presser — keeps the mother-tree's true
@@ -84,6 +100,8 @@ Break it and the haze lifts from the orchard; the presses can run again.
 
 ## When it falls
 Cider Cross throws its shutters; the true grafts go into the ground; the
-first honest pressing in years runs at the crossing. The pressers climb the
+first honest pressing in years runs at the crossing. The golden haze burns
+off within a day and true light walks the rows all the way in; the old
+trees put out honest green over the rot. The pressers climb the
 lift with billhooks and barrel-staves and a skin of Firstdraw each — plain,
 stubborn, and hard to hurry, like the trees they kept.

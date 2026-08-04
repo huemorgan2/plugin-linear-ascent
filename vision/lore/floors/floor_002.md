@@ -4,13 +4,26 @@
 
 **Cut from:** the Giants' deep-forge realm — a mine-mouth · **Gate-town:** Lampfall · **Warden:** Rustmaw
 
+**Sky:** standard — four miles of air between the benches and the next land
+**Veil:** thin — rust-haze and lamp-smoke more than true gloom
+**Land:** Rimlands four miles of rust-stained ore-benches; the deep middle
+hides the flooded main drift
+**Gates:** rim to rim — the way up is behind the ore-chute at the drift's
+end
+
 ## The land
 A slab of mountainside cut off at the adit — the mine-mouth still open, still
 weeping the orange iron-water that gave the seam its name. Ore-carts sit
 loaded on rails that end in air. Bats hang thick in the roof of the entrance
 hall, and everything not iron is furred with rust. It is the first floor
 that goes *down* into the dark, dropped absurdly above a farm valley: a giant
-industry, stranded a single lift over a hedge. The stair-lift stands behind
+industry, stranded a single lift over a hedge. The workings follow the bend
+of the land: benches ring the rim, where the slot-light still finds the
+rock and Lampfall keeps its lamps, and every drift runs inward and down
+toward the flooded dark at the mountain's heart. Off the bench-edge a
+miners' street hangs in the open air — timber houses collared around a rim
+pillar like beads on a wire, built by crews the mine's ledgers never
+counted. The stair-lift stands behind
 a giant ore-chute cut into the rock at the drift's end; Rustmaw holds the
 flooded main drift before it.
 
@@ -91,6 +104,8 @@ opens, and the mine stops weeping for the first time in years.
 
 ## When it falls
 The pump-wheel of the Headframe turns; the lamps of Lampfall come up
-together; the deep water finds its old level. Bergda's crews come up the
+together; the deep water finds its old level. Within a day the rust-haze
+unravels and honest daylight finds the benches; the sprouting pit-props
+put out real green. Bergda's crews come up the
 lift with hammers and pit-iron — the first giants of the host — and the
 delver-folk with them, who will be needed badly in the Deep floors above.

@@ -4,6 +4,13 @@
 
 **The Made:** the tower's war-chapels · **Gate-town:** Chantside (a captive congregation) · **Warden:** Vespergrim
 
+**Sky:** standard — three to five miles of censer-smoke and iron vaulting
+**Veil:** heavy — gloom thick as incense, tended like a rite
+**Land:** Rimlands three miles — censer-hazed porches; the deep middle
+holds the high altar
+**Gates:** down-gate at the rim porches; the up-gate as written — behind
+the high altar of black iron at the chantry's east end
+
 ## The land
 The iron chantries of the Made — the tower's own dark religion made stone and
 smoke: vast war-chapels of black iron, censer-hazed and candle-less, where the
@@ -11,7 +18,10 @@ Made's soldiery and its slaves are made to worship the King as god and unmaker.
 Choir-imps drone an iron liturgy; furnace-priests swing censers of scorching
 incense; the walls are graven with the King's false scripture of theft and
 order. There is no nature, no light but the censer-glow, no sound but the
-chant. It is the floor that works not on the body but the mind — the Made's
+chant. The chapels bend shallowly down toward the tray's middle, and the
+liturgy walks you with them — censer-hazed porches in the rim's grey light,
+then nave descending into nave until the high altar stands at the dark
+heart of the floor. It is the floor that works not on the body but the mind — the Made's
 attempt to make its captives *believe.* The stair-lift stands behind the high
 altar of black iron at the chantry's east end; Vespergrim officiates before
 it.
@@ -20,9 +30,9 @@ it.
 - **Canopy:** none — iron vaulting and censer-chains.
 - **Ground growth:** censer-moss on the hot brass, candle-lichen on the iron
   pews, and incense-fungus fruiting in the smoke-haze.
-- **How the Making twists it:** the incense-fungus's smoke deepens the
-  compelled devotion; the censer-moss chokes a held breath; the candle-lichen
-  gutters any true light brought in.
+- **How the Making twists it:** the incense-fungus's smoke feeds the heavy
+  gloom and deepens the compelled devotion; the censer-moss chokes a held
+  breath; the candle-lichen gutters any true light brought in.
 
 ## Places of interest
 - **The Reliquary.** The crypt of the King's false relics beneath the high
@@ -38,7 +48,8 @@ it.
 ## The people — who you are freeing
 Chantry-thralls — the re-enslaved forced into the iron congregation, made to
 chant the King's creed until some of them half-believe, which is the cruelty
-of it. They love a service missed, a censer doused, and a morning they woke
+of it. They are kept on the rim's censer-hazed porches between services and
+marched down the naves to kneel. They love a service missed, a censer doused, and a morning they woke
 still themselves. They fear the choir-drone and the day the words stop feeling
 like a lie.
 **The keeper:** Sef Chantside, chantry-thrall — keeps the counter-creed and
@@ -88,7 +99,10 @@ stair-lift opens on cleared air.
 
 ## When it falls
 Chantside rings the Iron Belfry against the liturgy and the whole congregation's
-compulsion cracks; thralls who half-believed wake fully to themselves. This is
+compulsion cracks; thralls who half-believed wake fully to themselves. The
+heavy gloom unravels in a day — the one censer no thrall has to douse — and
+true light comes down the naves for the first time; the incense thins, and
+the words stop sounding like anyone's god. This is
 the floor that arms the rising against the Made's deepest weapon — belief — and
 readies it to free even the King's truest servants above. The freed chantry-
 thralls climb as the host's mind-freers and creed-breakers, carrying **Recant**

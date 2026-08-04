@@ -3,6 +3,12 @@
 > *"A whole sky-fleet came down here the night the world changed. We've been living in the wrecks ever since, and the wrecks have been living things back at us." — Salvage-boss Weld Hullside*
 
 **Cut from:** the sky-faring country of Men, whose aether-ships crashed en masse the night of the Theft · **Gate-town:** Hullside · **Warden:** Keelhaul
+**Sky:** cathedral — seven miles of the open sky the fleet fell out of.
+**Veil:** thin — a grey haze the standing masts poke through.
+**Land:** Rimlands seven miles wide — grassy wreck-plain; the deep middle
+holds the flagship's buried hull.
+**Gates:** both at the rim — the down-gate on the open plain, the up-gate in
+the bluff behind the beached flagship-hull at the field's edge.
 
 ## The land
 A high plain scattered with the wrecks of an entire aether-ship fleet — great
@@ -11,7 +17,11 @@ upturned like whale-ribs across the grass. The ships fell the night the sky
 changed and never flew again; now hull-borers tunnel the timbers, drakes nest
 in the holds, and salvage-harpies pick the rigging. It was a proud sky-nation's
 fleet, and its graveyard is a treasure-house of flight-craft — if you can climb
-the wrecks past the things that live in them. The stair-lift stands in a
+the wrecks past the things that live in them. The plain bows shallowly
+toward its middle, as every stolen country does, and the fleet lies as it
+fell: the greatest hulls drove deepest into the deep fill inland, where the
+dark pools in the holds, and the light grass and the salvage-camps keep to
+the rim. The stair-lift stands in a
 bluff behind a beached flagship-hull at the field's edge; Keelhaul nests in
 the hull before it.
 
@@ -40,7 +50,9 @@ the hull before it.
 Salvagers — Men of the fallen fleet: former sky-sailors, riggers, and lift-
 wrights who now strip the wrecks they once flew, wind-burned and rope-handed.
 They live in Hullside built into a sound hull, salvaging cells and alloy from
-the graveyard. They love a live lift-cell, a sound spar, and a wreck that
+the graveyard; some rigger-families never came down at all, and keep a
+bead-town of collared timber houses clamped to the rim-stays, hung out over
+the open air where no Warden thinks to look. They love a live lift-cell, a sound spar, and a wreck that
 still holds air. They fear the hull-borers, the hold-drakes, and the wreck-
 crews that still walk the decks.
 **The keeper:** Weld Hullside, salvage-boss — knows every wreck by its
@@ -92,6 +104,9 @@ scatter; the stair-lift behind the flagship-hull can be reached.
 ## When it falls
 Hullside raises a live lift-cell from the Hold and re-rigs the Keel-Ridge
 signal; a salved sky-ship lifts off the graveyard for the first time in an
-age. The salvagers climb as the host's lift-wrights and sky-sailors, carrying
+age. The last thin gloom goes with the Warden and the graveyard lies under
+honest sun; grass climbs green to the keels in a season, and the holds
+empty of what denned there. The salvagers climb as the host's lift-wrights
+and sky-sailors, carrying
 **Loft**, lift-plate, and — if the salvage flew — a floating war-craft for the
 sky-tiers and the throne above.

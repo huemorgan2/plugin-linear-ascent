@@ -8,7 +8,11 @@ on the black moraine above the tier-gate with the first true cold of the
 wintering in her teeth. Below, on the floors they had freed, the rising's
 road ran like a lit wick — gate-towns waking, wagons climbing, the freed
 coming up behind their own liberation in numbers Berrin's clerks could
-barely count fast enough. Above, past the boulder-fields and the wheeling
+barely count fast enough. And light. The riders all said it: the freed
+floors had their rims back, farms creeping out to the bright edge of
+the open air, the grey coming off country after country like a lid
+lifted — the world below getting its colors back behind the war that
+freed it. Above, past the boulder-fields and the wheeling
 glare hawks, the tier went on into ice. Forty banners now. A nation
 moving, and stopping soon to breathe.
 

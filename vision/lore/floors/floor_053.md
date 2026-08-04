@@ -3,6 +3,12 @@
 > *"The sand's cool by day and burns by night — the moths bring the fire down when the sun's gone. Travel by dusk, or don't travel." — Dune-mother Sira Duneshade*
 
 **Cut from:** the burned borderlands — the Waste, a high desert · **Gate-town:** Duneshade · **Warden:** Emberback
+**Sky:** standard — three miles of air, and never a star in it.
+**Veil:** heavy — soot-black dark laid over a black desert.
+**Land:** Rimlands four miles wide — the cool sand shore; the deep middle is
+the smouldering dune-heart.
+**Gates:** both at the rim — the down-gate on the cool shore, the up-gate in
+the half-buried outcrop at the desert's low edge.
 
 ## The land
 A sea of rolling sand-dunes under a black sky, where the strange logic runs
@@ -11,7 +17,12 @@ heat by night, when clouds of ember-moths settle and set the dune-crests
 smouldering. Night-adders swim the slipfaces; the dunes march and swallow
 paths; there is no landmark that stays put. It was trackless borderland the
 nomads crossed by star-lore, and now the stars are gone and the sand burns
-when it shouldn't. Only the dune-folk know how to read a moving desert. The
+when it shouldn't. Nor is the black sky all the Warden's doing: a wider
+country overhangs this one, and its underside is the desert's only heaven —
+an Undershadow dusk where the ember-moths stand in for stars. The desert
+bows toward its middle like every stolen land: the sand lies coolest along
+the rim-shore where the caravans keep, and smoulders worst over the deep
+dune-heart inland. Only the dune-folk know how to read a moving desert. The
 stair-lift stands in a rock outcrop the dunes keep half-burying, at the
 desert's low edge; Emberback swims the sand before it.
 
@@ -20,8 +31,8 @@ desert's low edge; Emberback swims the sand before it.
 - **Ground & water plants:** dune-grass on the anchored crests, ember-poppy
   in the slipface-hollows, and the deep-rooted glass-cactus that finds water.
 - **Under the Yoke:** the ember-poppies catch the moth-fire and spread it;
-  the dune-grass hides slip-face collapses; the glass-cactus spits glass
-  needles.
+  the dune-grass, starved grey under the gloom, hides slip-face collapses;
+  the glass-cactus spits glass needles.
 
 ## Places of interest
 - **The Star Dune.** The one great dune that never marches — oldest and
@@ -92,7 +103,10 @@ burying sand.
 
 ## When it falls
 Duneshade plots the safe line from the Star Dune and the caravans cross a
-desert that finally holds a pattern. The dune-nomads climb as the host's
+desert that finally holds a pattern. The Warden's gloom unravels in a day;
+the overhang keeps the desert's long dusk, but it is an honest dusk now,
+lit low and true off the rim, and the ember-nights cool to plain dark. The
+dune-nomads climb as the host's
 desert-guides and glass-cutters, carrying **Sandshift** and desert-glass — the
 folk who lead an army across any trackless burning waste the tower spreads
 below the throne.

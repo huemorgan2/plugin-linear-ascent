@@ -71,6 +71,12 @@ the stair-lift in the cavern's crown stood open, and the first cold air
 any of them had tasted in forty floors came down it like a long drink of
 well-water.
 
+One count did not change. Word came up from Threadneedle's rim-tunnels
+that the gloom over floor forty stood as it had stood for eighty
+years: break a floor's Warden and the grey unravelled in a day — every
+soldier knew that much by now — but the queen lived, and the gloom
+over her country was hers. Kept, like everything she kept.
+
 Winter lived upstairs. The host camped at the mouth of it.
 
 ⁂

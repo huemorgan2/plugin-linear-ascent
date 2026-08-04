@@ -189,9 +189,10 @@ The wood opened into coursing-lanes, broad grass rides walled with run-oak
 and covert-thorn, streaming away downhill so sweetly that tired legs turned
 onto them of their own accord. The grass itself lied: it laid a clear green
 path ahead of them that Rhovan swore was false, a groomed line pointing the
-one way in this wood they must not go — down, always down, toward a clearing
-ringed pale with foxglove where every course on this floor had ended for a
-thousand years. On the high stands along the lanes sat crows in their
+one way in this wood they must not go — down, always down, the way every
+country's ground finally went, down toward its own dark middle, toward a
+clearing ringed pale with foxglove where every course on this floor had
+ended for a thousand years. On the high stands along the lanes sat crows in their
 hundreds, and the crows called the course. Ede learned to hate the crows
 worse than the hounds. The hounds only followed. The crows told the whole
 wood, always, exactly, where the quarry ran.
@@ -301,6 +302,13 @@ whatever he must feed them to keep them climbing."
 
 She said the name and it cost her nothing. Later she would remember that:
 the last hour the name cost her nothing.
+
+It was the shut of the day. Low and level through the run-oaks the
+gold came — the one minute of true sun even this floor was allowed,
+raking in off the world's open edge, a seam of fire far away between
+the trunks. On every floor she had freed, folk gathered for that
+minute; the darkest floors gathered hardest. She let it touch her
+face while it lasted.
 
 She turned toward the horns and walked.
 

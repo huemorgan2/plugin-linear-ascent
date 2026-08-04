@@ -4,12 +4,21 @@
 
 **Cut from:** the water-meadow country of Men · **Gate-town:** Weirsend · **Warden:** Sedgeback
 
+**Sky:** standard — three miles of air, room for real weather over the flood
+**Veil:** heavy — a wet grey lid pressed flat on the water
+**Land:** Rimlands eight miles of willow flood-meadow; the deep middle
+hides the drowned mill-pool
+**Gates:** rim to rim — the way up is the stone weir in its low bluff
+
 ## The land
 A low pasture taken mid-flood and never allowed to drain — a wide sheet of
 grey water with the tops of hedges and half-drowned fences breaking the
 surface. Hay-ricks stand as islands, rotting from the waterline up.
 Willows trail into their own reflections. The floodlights lie flat on the
-water so the whole floor glares like a dropped mirror. Somewhere a sluice
+water so the whole floor glares like a dropped mirror. The flood obeys the
+land's shallow bowl: shallowest along the rim meadows, where the willows
+and the rick-islands stand, deepest over the dark middle where the old
+mill-pool drowned. Somewhere a sluice
 still turns, patiently, keeping the wrong things wet. The stair-lift stands
 in a stone weir cut into a low bluff, water sheeting off its lintel;
 Sedgeback wallows the mill-pool before it.
@@ -20,7 +29,7 @@ Sedgeback wallows the mill-pool before it.
 - **Ground & water plants:** reed-mace, sedge, water-mint, marsh-marigold,
   and the drowned hay going to slime.
 - **Under the Yoke:** a black cutting-reed has taken the shallows, sharp
-  enough to open a hand, and it grows toward warmth.
+  enough to open a hand; it grows toward warmth and fattens in the gloom.
 
 ## Places of interest
 - **The Weir-Undercroft.** A flooded sluice-chamber under the stone weir,
@@ -37,8 +46,9 @@ Sedgeback wallows the mill-pool before it.
 
 ## The people
 Weir-keepers, eel-trappers, and fen-fishers — patient marsh-folk who read
-water the way farmers read weather. They live in punts and on the rick-
-islands, trading dried eel and reed-mat, and they love a still dawn, a full
+water the way farmers read weather. They live in punts and on the rim
+shallows' rick-islands, keeping clear of the deep middle, trading dried
+eel and reed-mat, and they love a still dawn, a full
 eel-trap, and a weir that sings true. They fear the black reed and the
 nights the water rises without rain.
 **The keeper:** Old Nan Sedge, weir-keeper — reads the flood by the pitch of
@@ -87,7 +97,9 @@ Pasture begins, floor by inch, to drain.
 
 ## When it falls
 The drain-cock turns; the water drops; hedges and fences come back into the
-light with the drowned hay steaming. Weirsend's punts run for trade instead
+light with the drowned hay steaming. The grey lid unravels within a day —
+real rain, real sun on open water, the first honest evening in eighty
+years. Weirsend's punts run for trade instead
 of hiding, and the trappers pole up to the lift with fish-spears and net-
 weights, marsh-quiet and hard to surprise — good scouts for the wet floors
 above. The old tortoise stays, and is left in peace.

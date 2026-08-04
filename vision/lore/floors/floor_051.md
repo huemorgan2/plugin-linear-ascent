@@ -3,6 +3,12 @@
 > *"We built a whole city across a chasm on nothing but spider-silk and nerve. The nerve's gone. The silk, somehow, is holding." — City-warden Fenn Skeinside*
 
 **Cut from:** the shared under-caverns — the Deep, over a bottomless chasm · **Gate-town:** Skeinside · **Warden:** Skeinback
+**Sky:** standard — three miles of air between the chasm-lip and the dark.
+**Veil:** heavy — a gloom that swallows lamplight whole.
+**Land:** Rimlands three miles wide — the chasm-lip streets; the deep middle
+is the bottomless chasm itself.
+**Gates:** both at the rim — the down-gate in the lip-streets, the up-gate
+anchored to the chasm-wall behind its curtain of drift-silk.
 
 ## The land
 A city slung across a bottomless chasm on bridges and platforms of woven
@@ -11,9 +17,13 @@ houses, silk-cable streets, and gossamer plazas that sway over a drop with no
 floor. Lamps hang in the void like low stars. The great spiders that spun it
 were the city's partners once; the fever has turned them, and now they drift
 the chasm on balloon-silk, cutting cables and wrapping citizens. It is the
-first of the high tiers, and to cross it is to walk on thread over nothing. The stair-lift
-is anchored to the chasm-wall behind a curtain of drift-silk; Skeinback cuts
-the approach-cables to drop the unwary before it.
+first of the high tiers, and to cross it is to walk on thread over nothing.
+The land bows toward its own dark like every stolen country: the lamp-lit
+lip-streets keep to the rim, where the slot-light greys the stone, but the
+city itself hangs inland over the deep middle — the Deep-folk built where
+the silk could span, not where the light fell. The stair-lift is anchored
+to the chasm-wall behind a curtain of drift-silk; Skeinback cuts the
+approach-cables to drop the unwary before it.
 
 ## Flora
 - **Trees / canopy:** none — silk-cable and hanging platform in place of any
@@ -21,8 +31,8 @@ the approach-cables to drop the unwary before it.
 - **Ground & water plants:** cable-lichen on the silk-lines, drift-moss on the
   platforms, and the pale chasm-fungus that fruits on old wrappings.
 - **Under the Yoke:** the cable-lichen rots the silk it grows on; the drift-
-  moss makes the platforms slick; the chasm-fungus lures with warmth-scent
-  over the drop.
+  moss makes the platforms slick; the chasm-fungus, fat on the Warden's
+  gloom, lures with warmth-scent over the drop.
 
 ## Places of interest
 - **The Undercatch.** The great safety-net cavern slung below the city to
@@ -86,7 +96,9 @@ cables hold; the master anchor can be secured and the stair-lift reached.
 
 ## When it falls
 Skeinside secures the High Spindle and the hanging city stops swaying; the
-Undercatch is emptied of its long-fallen survivors. The city-folk climb as
-the host's bridge-builders and cable-walkers, carrying **Threadwalk** and
-skein-silk — the folk who fling a bridge across any chasm the tower opens
-between the army and the throne.
+Undercatch is emptied of its long-fallen survivors. The gloom unravels in a
+day, and honest rim-light reaches down the chasm-walls farther than any
+lamp ever did; the lamps burn for comfort now, not for seeing. The
+city-folk climb as the host's bridge-builders and cable-walkers, carrying
+**Threadwalk** and skein-silk — the folk who fling a bridge across any
+chasm the tower opens between the army and the throne.

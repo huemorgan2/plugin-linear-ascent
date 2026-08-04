@@ -4,15 +4,30 @@
 
 **The Made:** built, not stolen — the tower's own manufacture · **Gate-town:** Sappersrest (a captive labor-camp) · **Warden:** Rivetgrim
 
+**Sky:** standard — three to five miles of smoke-hazed air over the plate
+**Veil:** thin — little gloom kept; nothing grows here to starve
+**Land:** Rimlands three miles — a riveted rampart ring; the deep middle is
+the bone-fill
+**Gates:** both doors at the rim, as written — the up-gate behind the
+outwork's riveted sally-port
+
 ## The land
 The tower's first siege-outwork — the beginning of the Made, where the stolen
 world ends and Vharuk's own construction begins: a brutal earth-and-iron
 rampart of riveted plate, gun-less embrasures, and sapping-trenches, thrown up
-as the outer defense of the King's works above. There is no nature here at
-all: no soil, no green, only slag-fill, iron, and rivet. Crows and rats infest
+as the outer defense of the King's works above. You know it before anyone
+tells you: every floor below kept the ragged coastline of the country it was
+cut from, and this tray is a perfect circle — geometry where a border should
+be. No people ever drew this shape, and the shape itself is the warning.
+There is no nature here at all: no soil, no green, only slag-fill, iron, and
+rivet. The fill bends shallowly down from the rampart ring toward the
+circle's middle, where it runs deepest and the dead run thickest — grey
+light on the ramparts, dark over the bone-fill. Crows and rats infest
 it as they infest any fortress, but nothing *grows*. It was raised by slave-
 sappers dragged up from the freed floors below, and their bones are in the
-fill. The stair-lift stands behind the outwork's riveted sally-port; Rivetgrim
+fill. Sappersrest, the labor-camp, is penned against the rampart ring at the
+rim — the overseers keep their slaves where the wall wants mending. The
+stair-lift stands behind the outwork's riveted sally-port; Rivetgrim
 holds the port before it.
 
 ## "Flora" — the Making's growth
@@ -21,7 +36,7 @@ holds the port before it.
   and iron-bramble (welded wire grown like thorn) on the ramparts.
 - **How the Making twists it:** the iron-bramble is barbed wire given a
   cruel half-life that grasps; the rust-weed corrodes a climber's gear; the
-  slag-lichen sparks the trench-gas.
+  slag-lichen sparks the trench-gas in the gloom.
 
 ## Places of interest
 - **The Sap-Head.** The forward head of the sapping-tunnel the slave-sappers
@@ -91,5 +106,8 @@ Sappersrest lights the cached charge and the first outwork comes down from
 below; the captive sappers walk out of a wall that was eating them. This is
 where the climb learns the Made's truth — that the tower is built of the
 re-enslaved — and where **Break-collar** from floor 20 becomes the war's whole
-purpose again. The freed sappers climb as the host's breachers and demolition-
+purpose again. The thin veil unravels in a day, and true light crosses the
+circle for the first time since it was riveted shut; within a season there is
+real green in the sap-trenches — weeds, only weeds, but the first things ever
+to grow here unbidden. The freed sappers climb as the host's breachers and demolition-
 crews, carrying **Unrivet** and rivet-steel into the King's works above.

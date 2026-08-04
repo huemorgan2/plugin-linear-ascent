@@ -3,6 +3,12 @@
 > *"A whole fleet became-calmed here and never fell — just stood, masts up, till the crews died in the rigging. Now it's a forest, and we live in the canopy." — Mast-warden Weld Sparside*
 
 **Cut from:** the sky-faring country of Men — a sky-fleet caught and stranded upright · **Gate-town:** Sparside · **Warden:** Mastwrack
+**Sky:** standard — four miles of air over the crosstrees.
+**Veil:** thin — a grey haze hung in the rigging.
+**Land:** Rimlands five miles wide — the rigging-canopy's light edge; the
+deep middle holds the sunken flag-hulls.
+**Gates:** both at the rim — the down-gate at the forest's edge, the up-gate
+in the rock the masts are sunk into, behind its wall of shroud-line.
 
 ## The land
 A forest of ships' masts — an entire sky-fleet that lost its lift the night of
@@ -12,8 +18,14 @@ shroud-lines, ratlines, and rotting sail. The "ground" is the tangle of fallen
 rigging; the "canopy" is the crosstrees far above. Mast-folk live aloft in the
 crowsnests and cross-trees, moving through the forest by the shroud-lines
 without ever touching the wreck-choked floor. It is a floor climbed like a
-forest of rope. The stair-lift is set in the rock the masts are sunk into,
-behind a wall of tangled shroud-line; Mastwrack rigs the way before it.
+forest of rope. The fleet settled as the land beneath it bends: the great
+hulls drove deepest inland, where the dark pools in the Bilge, and the
+canopy thins toward the rim, where the light comes in. And where the
+rim-stays run up toward the country above, the topmen long ago learned that
+a walked shroud is a walked shroud — a stay-road off the floor no Warden
+ever quite closed, by which the first news always came. The stair-lift is
+set in the rock the masts are sunk into, behind a wall of tangled
+shroud-line; Mastwrack rigs the way before it.
 
 ## Flora
 - **Trees / canopy:** the masts and their rigging themselves — spar, shroud,
@@ -21,7 +33,8 @@ behind a wall of tangled shroud-line; Mastwrack rigs the way before it.
 - **Ground & water plants:** shroud-moss on the wet lines, sail-mould on the
   canvas, and the rope-vine that has grown through the rigging.
 - **Under the Yoke:** the rope-vine grips and hauls like living rigging; the
-  sail-mould drops a smothering spore; the shroud-moss rots the handholds.
+  sail-mould drops a smothering spore; the shroud-moss, fat in the damp
+  gloom, rots the handholds.
 
 ## Places of interest
 - **The Bilge.** The great flooded hull-base at the mast-roots where the
@@ -86,7 +99,10 @@ the rigging falls slack; the forest stills; the stair-lift's shroud-wall parts.
 
 ## When it falls
 Sparside re-rigs the Signal-Top and raises the flagship's lift-cell from the
-Bilge; a mast of the dead forest flies again. The mast-folk
+Bilge; a mast of the dead forest flies again. The haze goes out of the
+rigging in a day and sun reaches the mast-roots for the first time since
+the fleet fell; the shroud-moss dries, the handholds hold, and green gets
+into the tangle below. The mast-folk
 climb as the host's riggers and topmen, carrying **Splice** and shroud-cable —
 the folk who rig the army's lines, sails, and grapples for the last sky-floors
 below the throne.

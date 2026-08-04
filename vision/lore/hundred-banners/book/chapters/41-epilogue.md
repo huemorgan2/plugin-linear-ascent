@@ -224,6 +224,12 @@ pitches and bunting and a fiddler, the first in a lifetime — and a dog
 was working a flock along the water-meadow to a whistle, which stopped
 Nix in the road entirely for a while.
 
+The west hedge-banks were still lined with folk come out for the
+rim-gold, the way the valley had walked out twice a day through eighty
+years of the gloom, when that one level blade of true light was all
+the sun they were allowed. The whole day was honest now. They went
+anyway.
+
 Hobb met the wagons at Lamplit Steading with his coat on and his tally
 in his hand, and he made them stand there, the whole train, while he did
 the thing he had been waiting the age of the tower to do. He counted
@@ -241,6 +247,14 @@ out. The counts match."
 He chalked it on the post, and then, being Hobb, he checked it once
 more.
 
+Then he took Nix to the near hedge, for the one count he could not
+chalk. The leaves had come in green — honest green, not the pale
+gloom-color whole floors had taken for the color of leaves — and the
+barley stood heavier than any notch on his post said it had a right
+to. Hobb laid his hand on it the way he had touched the gate-post.
+"We are never going down again," he said. "And up here, for the first
+time in eighty years, things grow."
+
 ⁂
 
 Roothollow had not grown so much as opened. The gate-queue was gone;
@@ -248,11 +262,26 @@ the tower stood at the town's back the way a ladder stands against a
 barn — a hundred thin countries filling the north of the world from
 horizon to horizon, rung over rung up into the blue, its top beyond the
 air — a fact of the country now, its dark doorway propped wide and
-its first stair swept. People went up it to visit their kin on the near
-floors, and came down again for market-day. The Stone of the Climb
-stood where it had always stood, with its thirty names cut by Ede's own
-hand in the bad years — and no one had scratched them out; instead
-someone had cut, beneath the column, in newer letters: CAME HOME.
+its first stair swept.
+
+And it was gold, the whole visible height of it — a thing the town no
+longer looked at twice and had not yet tired of telling. For two years
+the war had been readable from the quay: one grey hairline turning gold
+at a time as the Wardens went down, the fishermen of the Girdle-sea
+calling the count in with the catch. Then, on a day that has its own
+name in Roothollow now, the last grey went all at once — floor above
+floor above floor, the gloom letting go of the topmost countries
+together, the change running up the ladder until the air itself lost
+it — and the town put down its nets and its ledgers and stood in the
+streets looking north for the better part of a day. No courier brought
+the war's end to Roothollow; none was needed. It was written on the
+tower's own face, and the whole port read it off the sky.
+
+People went up it to visit their kin on the near floors, and came down
+again for market-day. The Stone of the Climb stood where it had always
+stood, with its thirty names cut by Ede's own hand in the bad years —
+and no one had scratched them out; instead someone had cut, beneath the
+column, in newer letters: CAME HOME.
 
 The market square was loud the morning the last wagons came in. And at
 the head of the square, in the trampled ground between the aether-forge

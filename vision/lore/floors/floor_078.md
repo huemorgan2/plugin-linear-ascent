@@ -4,11 +4,21 @@
 
 **Cut from:** the sky-realm of Men — the still eye of the storm-queen's tempest (ringing floor 70) · **Gate-town:** Lullside · **Warden:** Stillmark
 
+**Sky:** low — a mile of dead-still air; the lid hangs close over the calm
+**Veil:** thin — a soft gold haze; the peace kills instead
+**Land:** Rimlands five miles — storm-edge scree under the eye-wall's roar;
+the deep middle is the Still Point
+**Gates:** both doors at the rim, in the roar — the up-gate a crag at the
+eye-wall's foot; the crossing dares the calm between
+
 ## The land
 The uncanny calm eye of the great tempest — a wide bowl of dead-still air
 ringed by the roaring eye-wall of Zephyra's storm, where the rain hangs
 suspended, the light is soft and gold, and a warm, drowsy peace lies over
-everything like a drug. After the screaming gales of the outer floors, the
+everything like a drug. The bowl bends shallowly down toward its center —
+hard light and flying spray on the scree at the rim, then the gold hush
+deepening inland, stiller and dimmer, all the way to the Still Point. After
+the screaming gales of the outer floors, the
 stillness is bliss — and lethal, because the eye lulls the will to move, to
 climb, to live, and those who sit to rest in it never rise. It is a floor
 whose danger is not fury but a peace that kills by kindness. The stair-lift
@@ -20,9 +30,9 @@ holds the Still Point before it.
   the drowsing lull-willow at the eye's center.
 - **Ground & water plants:** hush-grass that never stirs, suspended rain-lily
   hanging in the still air, and the pale lull-poppy of the calm.
-- **Under the Yoke:** the lull-poppy's scent deepens the killing peace; the
-  hush-grass muffles all urgency; the rain-lilies hang a drowsing mist that
-  slows the heart.
+- **Under the Yoke:** the lull-poppy's scent thickens the Warden's gold haze
+  into the killing peace; the hush-grass muffles all urgency; the rain-lilies
+  hang a drowsing mist that slows the heart.
 
 ## Places of interest
 - **The Barometer Vault.** The pressure-readers' undercroft, the one built
@@ -41,7 +51,8 @@ holds the Still Point before it.
 ## The people
 Eye-dwellers — Men caught in the calm when the tempest formed: weather-readers,
 rain-wrights, and lull-wardens who fight the drowse by will and habit. They
-shelter in Lullside near the eye-wall's roar, using the noise to stay awake,
+shelter in Lullside on the storm-edge scree, hard by the eye-wall's roar,
+using the noise to stay awake,
 rousing those who sit too long. They love a task to keep the hands busy, a
 read barometer, and a companion kept awake. They fear the lull-poppy peace and
 the pressure-ghosts that welcome you to rest.
@@ -96,6 +107,9 @@ borrowed peace disperses; the captives wake; the stair-lift opens.
 ## When it falls
 Lullside breaks the killing calm at the Still Point and the eye lets its
 drowsing captives go — folk who sat down a thousand years ago rise and walk.
+The gold haze unravels in a day, and for the first time the suspended rain
+falls — a whole floor's weather arriving at once, washing the lull out of the
+grass; real wind crosses the calm, and the hush-grass learns to stir.
 The eye-dwellers climb as the host's wake-keepers and calmers, carrying
 **Lull** and pressure-crystal — the folk who keep an army awake through the
 tower's drugging peace and pacify what can't be fought on the Making-floors

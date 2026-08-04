@@ -4,6 +4,13 @@
 
 **Cut from:** the Giants' high cold country — a great conifer forest · **Gate-town:** Firwatch · **Warden:** Rimehide
 
+**Sky:** standard — four miles of ringing silver air
+**Veil:** thin — a white-silver dim the glass throws back
+**Land:** Rimlands six miles of snowy fir-fringe; the deep middle hides the
+glass-stag heartwood
+**Gates:** down-gate at the fir-fringe by Firwatch; up-gate in the
+glass-sheathed scarp at the wood's edge, its arch hung with icicle-glass
+
 ## The land
 A vast conifer forest flash-frozen where it stood — firs and pines sheathed in
 clear rime-glass, every needle a glittering blade, the whole wood ringing like
@@ -11,7 +18,10 @@ struck crystal when the cold wind moves through it. Snow lies deep and blue;
 frozen stags with antlers of clear glass step between the glass trees; the
 light comes silver-white. It was the giants' timber-forest, taken and frozen in
 a single killing night, and it is achingly beautiful and lethal in equal
-measure — one careless swing and a whole tree of glass needles comes down. The stair-
+measure — one careless swing and a whole tree of glass needles comes down.
+The wood bends down toward its heartwood at the middle, where the oldest
+firs stand thickest-glassed and the stags step; the snowy fir-fringe of the
+rim carries what light the slot lends, and the foresters with it. The stair-
 lift stands in a glass-sheathed scarp at the wood's edge, its arch hung with
 icicle-glass that rings in the wind; Rimehide dens in the deadfall before it.
 
@@ -21,7 +31,8 @@ icicle-glass that rings in the wind; Rimehide dens in the deadfall before it.
 - **Ground & water plants:** frost-fern under the snow, glass-holly, and the
   chime-moss that rings when trodden.
 - **Under the Yoke:** the glass-needles shed like falling knives at a loud
-  sound; the glass-holly cuts; the chime-moss rings alarms to the herds.
+  sound; the glass-holly cuts unseen in the gloom; the chime-moss rings
+  alarms to the herds.
 
 ## Places of interest
 - **The Deadfall Hollow.** A shelter under a jam of frozen fallen timber, out
@@ -39,8 +50,9 @@ icicle-glass that rings in the wind; Rimehide dens in the deadfall before it.
 ## The people
 Foresters — giant timber-wrights and delver-woodfolk who felled and hauled the
 forest, careful quiet folk who now move in silence lest the glass come down.
-They shelter in Firwatch in the deadfall hollows, keeping fires small and
-voices low. They love a straight-grown fir, a clean fell, and a fire that
+They shelter in Firwatch in the deadfall hollows of the fringe, keeping
+fires small and voices low. They love a straight-grown fir, a clean fell,
+and a fire that
 holds against the cold. They fear the shedding glass and the chime-sprites in
 the ringing wood.
 **The keeper:** Hune Firwatch, head forester — keeps the thawing-lore and the
@@ -95,7 +107,10 @@ stops; the glass at the stair-lift melts enough to pass.
 
 ## When it falls
 Firwatch rings the Watch-Fir and the forest thaws in a slow silver harmony,
-the glass returning to needle and sap. The foresters climb as the host's
+the glass returning to needle and sap. The veil goes with the ringing — a
+day's unravelling — and true sun stands in the wood for the first time since
+the freezing night; melt runs bright down every needle. The foresters climb
+as the host's
 timber-wrights and glass-cutters, carrying **Shatter** and rime-glass blades —
 the folk who can bring down any frozen or crystal barrier the tower raises
 toward the throne.

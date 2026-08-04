@@ -4,13 +4,22 @@
 
 **Cut from:** the Giants' deep-forge realm — its machine-halls · **Gate-town:** Sprocket Row · **Warden:** Gearhide
 
+**Sky:** standard — three miles of grease-smoked air over the halls
+**Veil:** thin — smoke-dim rather than dark, a haze the belts keep stirred
+**Land:** Rimlands four miles of belt-yard aprons; the deep middle hides
+the great flywheel
+**Gates:** rim — the cog-wall rock face, meshing open on the right cadence
+
 ## The land
 Machine-halls the size of towns: belt-drives and flywheels the height of
 houses, all still turning on captured aether, driving nothing. The floor
 shakes with the endless rumble of empty machinery; grease-smoke hangs under
 the floodlights; belts run overhead carrying nothing from nowhere. The
 giants built this to move the mountain's ore in rivers. Now it moves only
-noise, and the noise never stops. The stair-lift is set in a rock face behind
+noise, and the noise never stops. The halls follow the bend of the land:
+belt-yard aprons and Sprocket Row at the rim, where the slot-light gets
+in, and the drive-lines running inward and down to the Flywheel Hall over
+the deepest fill. The stair-lift is set in a rock face behind
 a wall of meshing cogs that part only on the right cadence; Gearhide sets the
 wrong one, and holds the mesh before it.
 
@@ -95,6 +104,8 @@ cogs fall into true; the stair-lift meshes open.
 ## When it falls
 Grib's crews throw the master clutch and the endless rumble *stops* — the
 first silence in the halls since the Theft — then set the machines to real
-work. The machinists climb as the host's engineers, carrying **Freewheel**
+work. The smoke-haze unravels with the veil inside a day, and slot-light
+falls the length of halls that had only ever seen grease-smoke.
+The machinists climb as the host's engineers, carrying **Freewheel**
 and tapped flywheel-charge to break the forge-works and war-engines of the
 floors above.

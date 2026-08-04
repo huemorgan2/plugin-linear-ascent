@@ -3,6 +3,12 @@
 > *"She was our sky-queen, and a good one — she read weather like scripture and never lost a flyer. The tower crowned her in a storm that never ends, and now the wind is her law and her prison both." — Court-steward Cole Galesend*
 
 **Cut from:** the sky-realm of Men — the storm-queen's high court · **Gate-town:** Galesend · **Warden:** **Zephyra, the Storm Queen**
+**Sky:** cathedral — seven miles of heaven, and all of it storm.
+**Veil:** thin — the queen's tempest is veil enough.
+**Land:** Rimlands five miles wide — the perch-balcony crags; the deep middle
+holds the storm-crag palace.
+**Gates:** the down-gate at the rim beneath the crags; the up-gate inland in
+the highest crag — only Zephyra's freeing stills the wind to it.
 
 ## The land
 A sky-court built on the highest crag of the sky-realm — an open-air palace of
@@ -12,7 +18,12 @@ weather. The gales scream through the colonnades; lightning stitches the
 clouds below; courtiers cling to their perches in the wind. It was the seat of
 the sky-realm's storm-queen, taken and crowned into a tyrant of tempest, and
 it is the last floor of the seventh tier — a whole court held captive in an
-endless hurricane. The stair-lift is set in the crag behind a wall of
+endless hurricane. The realm below keeps the shape of every stolen country —
+perch-crags ringing the light at the rim, the land climbing inward to the
+storm-crag palace at its heart, for a sky-court builds for height, not for
+light — and Vharuk gave this trophy the tallest heaven on the tier, seven
+miles of it, so the tempest would have room to be enormous. The stair-lift
+is set in the crag behind a wall of
 screaming wind; only Zephyra's freeing stills the gale enough to reach it, and
 it opens onto the eighth tier of stolen realms.
 
@@ -98,7 +109,10 @@ tier of stolen realms.
 
 ## When it falls
 Zephyra throws down the storm-crown and the endless tempest calms to clear
-sky; her freed court comes down off the perches into still air. This is the
+sky; her freed court comes down off the perches into still air. What gloom
+the Yoke kept dies with the gale, and the court stands under seven miles of
+washed blue heaven — the storm-orchids blooming everywhere at once, no eye
+required. This is the
 third ruler won back on the climb — after Skarn and Hrimgar — proof that even a
 crowned tyrant is a captive underneath. The sky-folk climb as the rising's
 storm-fleet: weather-wrights and drake-riders carrying **Stillstorm** and

@@ -4,12 +4,21 @@
 
 **Cut from:** the travelling-fair country of Men · **Gate-town:** Fairstead · **Warden:** Hookmaster
 
+**Sky:** standard — three miles of air the big wheel stands against
+**Veil:** thin — a tawdry grey twilight, show-light with no show
+**Land:** Rimlands seven miles of fairground pitches; the deep middle hides
+the rusting carousel-ring
+**Gates:** rim — the painted sideshow arch, all teeth and peeling gilt
+
 ## The land
 A great travelling-fair caught mid-season and abandoned: rows of empty
 booths, a rusting carousel that still turns, a big wheel frozen against the
 floodlights, and bunting strung everywhere gone grey and rotten. The
 menagerie cages hang open. Music-box tunes wheeze from broken organs on the
-wind. It is a place built for crowds and joy, held forever in the moment
+wind. The fair pitched itself the way the land bends: pitches and
+Fairstead's wagon-lines at the rim, booth-rows running inward and down to
+the carousel turning at the floor's dark middle. It is a place built for
+crowds and joy, held forever in the moment
 after everyone fled — cheerful, tawdry, and deeply wrong in the empty. The stair-lift stands
 in a painted rock-arch got up as a sideshow entrance, all grinning teeth
 and peeling gilt; Hookmaster works the ring before it.
@@ -38,7 +47,10 @@ and peeling gilt; Hookmaster works the ring before it.
 
 ## The people
 Fair-folk — Men of the road-show: barkers, riggers, beast-keepers, sharps,
-and tumblers, a bright loud people who live for the crowd. Now they hide in
+and tumblers, a bright loud people who live for the crowd. Their circuits
+never quite closed: where a stay-cable leaves the rim, the riggers still
+walk a rope-road between floors, and the Wake rides the old show-routes
+along it. Now they hide in
 Fairstead's darkened wagons, the show running on without them. They love a
 full ring, a fair take, a trick landed clean, and a crowd's roar. They fear
 the carousel's pull and the hooks that work the empty games.
@@ -86,6 +98,8 @@ still; the carousel stops; the stair-lift opens.
 
 ## When it falls
 Pol lights the Big Wheel and Fairstead comes out to a fair run honest for the
-first time in years. The fair-folk climb as the host's tricksters and morale-
+first time in years. The grey twilight unravels in a day and the fair
+stands in true light — bunting showing real colors, an honest night behind
+the wheel's new lamps. The fair-folk climb as the host's tricksters and morale-
 keepers, carrying **Sleight** and a wagon of candied tonic — the people who
 keep a frightened army laughing, and pick the tower's locks besides.

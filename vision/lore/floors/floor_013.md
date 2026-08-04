@@ -4,12 +4,22 @@
 
 **Cut from:** the Elves' lamp-woods — the outer eaves, stranded far from the rest of the wood (§3) · **Gate-town:** Lastlamp · **Warden:** Duskhide
 
+**Sky:** standard — three miles of grey air the dead hum carries through
+**Veil:** heavy — border-gloom, a dusk with no evening behind it
+**Land:** Rimlands six miles of thin wood-eaves; the deep middle hides the
+humming heart-glade
+**Gates:** rim — the moss-furred scarp at the wood's ragged end
+
 ## The land
 The dark-wood's edge: a border of old elf-forest where the lit canopy thins
 to gloom, humming faintly with the *dead signals* of a lamp-network long
 snuffed. It is a threshold place — half open eave, half deep wood — and the
 hum sets teeth on edge, a ghost of the elves' old lamp-song looping with no
-one to answer. Dropped a full tier from its own forest, the Eaves stands like
+one to answer. Part of the gloom is architecture, not habit: a wider floor
+overhangs the Eaves, and no broken Warden could ever give this border a
+noon. The wood thins to eaves along the rim, where the watch lives, and
+thickens inward and down to the heart-glade where the dead signal pools
+loudest. Dropped a full tier from its own forest, the Eaves stands like
 a torn edge with nothing beyond it but marsh and mine. The stair-lift is set
 in a moss-furred scarp at the wood's ragged end, its arch woven of living
 root and copper filament; Duskhide dens in the border-gloom before it.
@@ -20,7 +30,8 @@ root and copper filament; Duskhide dens in the border-gloom before it.
 - **Ground & water plants:** dead-nettle, gloom-fern, and the listening-moss
   that once carried the lamp-song underfoot.
 - **Under the Yoke:** the listening-moss repeats snatches of the dead signal;
-  the gloom-fern turns to face warmth and rustles when nothing moves.
+  the gloom-fern, thriving where the gloom starves all else, turns to face
+  warmth and rustles when nothing moves.
 
 ## Places of interest
 - **The Watchpine.** The tallest edge-tree, the elves' old lookout out over
@@ -90,6 +101,8 @@ hum finally stops; the Watchpine's true watch resumes; the stair-lift opens.
 
 ## When it falls
 Lastlamp's watch-fire burns clean and the dead signal dies into real
-silence. The edge-elves climb as the host's scouts and silencers, carrying
+silence. The Warden's share of the gloom unravels in a day; the overhung
+dusk remains — this wood will never own a noon — but it is an honest dusk
+now, with real weather riding in over the torn edge. The edge-elves climb as the host's scouts and silencers, carrying
 **Hush** and dusk-silver — the folk who can move unheard through the shade-
 haunted and dead-signal floors still ahead.

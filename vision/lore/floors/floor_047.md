@@ -4,6 +4,13 @@
 
 **Cut from:** the old megalith-country of Men — the dolmen moor · **Gate-town:** Stonewake · **Warden:** Doorstone
 
+**Sky:** standard — four miles of scoured air, room for real weather
+**Veil:** thin — a wind-torn grey the stones hum under
+**Land:** Rimlands eight miles of wind-scoured heather; the deep middle
+hides the cracked dolmen
+**Gates:** down-gate in the heather near Stonewake; up-gate under the
+three-stone lintel at the moor's edge
+
 ## The land
 A high heather moor studded with standing stones — menhirs, stone rows, and
 great dolmens raised by Men older than the realms, ward-stones set to seal
@@ -11,7 +18,10 @@ what the ancestors feared. Under the Yoke one dolmen has cracked open: a
 portal-tomb the old folk sealed for good reason, now gaping, breathing a cold
 wrong wind across the heather. The moor is wide and wind-scoured and silent
 but for curlew-cry, and every stone hums faintly with old warding — except the
-one that no longer holds. The stair-lift stands under a lintel of three great
+one that no longer holds. The moor bends shallowly down toward its middle,
+where the Ring crowns the deepest ground and the cracked dolmen breathes;
+the heather of the rim, wide and bright by the moor's measure, is where the
+folk keep. The stair-lift stands under a lintel of three great
 standing stones at the moor's edge; Doorstone bars it as it bars every true
 door on the moor.
 
@@ -19,9 +29,9 @@ door on the moor.
 - **Trees / canopy:** none — heather, gorse, and grey stone.
 - **Ground & water plants:** ling-heather, bog-cotton in the flushes, and the
   ward-lichen that only grows on true sealing-stones.
-- **Under the Yoke:** the heather round the open dolmen has blackened; the
-  ward-lichen is peeling from the cracked stone; the gorse points its thorns
-  toward the breach.
+- **Under the Yoke:** the heather round the open dolmen has blackened under
+  the gloom; the ward-lichen is peeling from the cracked stone; the gorse
+  points its thorns toward the breach.
 
 ## Places of interest
 - **The Portal Dolmen.** The opened tomb-chamber itself, the breach in the
@@ -92,6 +102,8 @@ stair-lift unbars.
 
 ## When it falls
 Stonewake re-hallows the Ring, the breach seals, and the wrong thing is shut
-in for good behind sound stone. The moor-folk climb as the host's warders and
+in for good behind sound stone. The gloom lifts in a day; the ling flowers
+purple across eight miles of rim, and the stones hum easier in honest
+weather. The moor-folk climb as the host's warders and
 seal-carvers, carrying **Wardstone** and doorstone-granite — the folk who shut
 the doors the tower opens and keep the throne from summoning worse.

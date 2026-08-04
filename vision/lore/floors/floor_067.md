@@ -3,6 +3,12 @@
 > *"The forges' cold outflow poured off this cliff for a thousand years and never froze. The day the forges died, it froze mid-fall — a whole white river, stopped in the air." — Falls-warden Bruna Milkwater*
 
 **Cut from:** the Giants' deep-forge realm — its coolant outfall · **Gate-town:** Milkwater · **Warden:** Whitefall
+**Sky:** standard — four miles of air the stopped river hangs in.
+**Veil:** thin — cold milk-light off the ice.
+**Land:** Rimlands four miles wide — the spray-ledge shelves; the deep middle
+holds the frozen plunge-pool.
+**Gates:** the down-gate at the rim below the shelves; the up-gate inland,
+behind the frozen curtain, low where the fall once pooled.
 
 ## The land
 A colossal frozen waterfall — the deep-forge's coolant outflow, once a
@@ -12,8 +18,12 @@ and ledges behind the frozen curtain. The light through the ice is a soft
 milky glow; the cold is absolute; martens run the frozen spray-ledges. It was
 a place the falls-folk held half sacred, and pilgrims came to the white water.
 Now it is a cliff of stopped river, climbed behind and through the frozen
-fall. The stair-lift is set in the cliff behind the frozen curtain, low where
-the fall once pooled; Whitefall calves the ice before it.
+fall. The country bends down from its rim like every stolen land, and the
+river obeyed while it ran: the lit spray-shelves keep to the edge, and the
+fall poured inward and down to the plunge-pool at the floor's dark middle —
+frozen now, like everything else. The stair-lift is set in the cliff behind
+the frozen curtain, low where the fall once pooled; Whitefall calves the
+ice before it.
 
 ## Flora
 - **Trees / canopy:** frost-birch on the spray-ledges, and the ancient falls-
@@ -94,7 +104,10 @@ behind it.
 
 ## When it falls
 Milkwater reopens the coolant-source and the white river thaws and *roars*
-again for the first time in an age, giving up its frozen dead. The falls-folk
+again for the first time in an age, giving up its frozen dead. The gloom
+goes with the Warden and true light stands in the spray — rainbows over the
+ledges, the frost-birch greening, the cold caverns emptying of what denned
+there. The falls-folk
 climb as the host's thaw-wrights and cold-rescuers, carrying **Thaw** and
 milk-ice crystal — the folk who free the frozen and melt any barrier of ice
 the tower raises on the way to the throne.

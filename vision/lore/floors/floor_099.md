@@ -4,12 +4,24 @@
 
 **The Made — throne-tiers:** the final threshold below the throne · **Gate-town:** Lastward · **Warden:** the Champion
 
+**Sky:** standard — three to five miles of dim hall-air over the threshold
+**Veil:** thin — one cold vigil-light in a bare dark
+**Land:** Rimlands two miles — the bare threshold-hall; the deep middle is
+the Door
+**Gates:** down-gate at the rim; the up-gate inland, as written — the Door
+itself is the stair-lift, at the hall's heart
+
 ## The land
 The Last Door of the Made — the final floor before the summit, a single
 immense threshold-hall dominated by the Door: a wall of black adamant, King-
 steel, and welded sorrow that seals the throne away from all the world below.
 There is nothing else here — no landscape, only the vast dim hall, the Door,
-and the thing set to guard it. The whole tower narrows to this point. Every
+and the thing set to guard it. The tray is a perfect circle and the hall
+fills it rim to rim — the last geometry of the Made, a floor with nothing on
+it but its own center. Even here the tower's rule holds: the floor bends
+shallowly down from the grey light at the rim toward its middle, so the long
+walk to the Door is a walk downhill into the dark. The whole tower narrows
+to this point. Every
 freed floor, every spell learned, every liberated soul climbing behind the hero
 has been for this last threshold and what waits beyond it. The Last Door is
 itself the stair-lift the whole Ascent has climbed toward; the Champion is
@@ -19,9 +31,9 @@ welded into it, and only her freeing — or her fall — opens it on the throne.
 - **Canopy:** none — the black lintel of the Door overhead.
 - **Ground growth:** adamant-lichen in the door-seams, threshold-moss on the
   sill, and the pale vigil-fungus that fruits in the guard's long shadow.
-- **How the Making twists it:** the vigil-fungus feeds the guard's undying
-  watch; the adamant-lichen seals the Door tighter at a blasphemer's touch;
-  the threshold-moss roots an intruder on the sill.
+- **How the Making twists it:** in the bare gloom the vigil-fungus feeds the
+  guard's undying watch; the adamant-lichen seals the Door tighter at a
+  blasphemer's touch; the threshold-moss roots an intruder on the sill.
 
 ## Places of interest
 - **The Threshold Undercroft.** The vault beneath the sill where the Champion's
@@ -37,8 +49,9 @@ welded into it, and only her freeing — or her fall — opens it on the throne.
   weld among them.*
 
 ## The people — who you are freeing
-Lastward captives — the last handful of the bound, held in the threshold-hall
-to tend the Door that entombs their own greatest hero, kept as living reproach.
+Lastward captives — the last handful of the bound, held at the Door's very
+foot in the hall's dark middle, to tend the metal that entombs their own
+greatest hero — the King wanted them kept close, as living reproach.
 They love the rumor that the Champion still lives inside the weld, a seam in the
 Door found, and the throne-hall glimpsed beyond. They fear that the last hope is
 already dead and that the Door will never open.
@@ -97,6 +110,8 @@ Hollen's captives call the Champion's true name into the Door, and — if the
 climb has learned mercy well enough to reach her — the greatest hero of the age
 steps out of the metal alive, and the rising gains its finest sword for the
 summit. This is the climb's answer to Malgrim: proof that a captive who still
-*wishes* to be free always can be, no matter how deep the weld. The freed
+*wishes* to be free always can be, no matter how deep the weld. The hall's
+thin dark unravels in a day, and true light crosses the threshold with the
+host — the first dawn the Door has ever stood open to. The freed
 Lastward captives and the Champion herself climb the last floor with the whole
 liberated tower at their backs. Beyond the open Door: the throne, and Vharuk.

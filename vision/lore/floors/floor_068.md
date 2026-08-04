@@ -3,6 +3,12 @@
 > *"The warrens spin to trap. The vaults spin to keep. Same silk, gentler purpose — until the fever taught the vaults to keep the living, too." — Spool-master Wend Spoolgate*
 
 **Cut from:** the shared under-caverns — the Deep, its silk-storerooms · **Gate-town:** Spoolgate · **Warden:** Spoolhide
+**Sky:** low — a spun ceiling barely a mile up; the lid presses.
+**Veil:** heavy — a hush-dark the lamps cannot loosen.
+**Land:** Rimlands three miles wide — the clean outer silk-aisles; the deep
+middle holds the inmost vault.
+**Gates:** the down-gate at the rim of the aisles; the up-gate in the deep
+middle — the inmost vault keeps its own door.
 
 ## The land
 The great silk-vaults of the Deep — cold, still, orderly storerooms where the
@@ -10,18 +16,24 @@ under-realm's spider-partners wound and stored the world's finest thread and
 wrapped its treasures for keeping: seed-stores, relics, records, all cocooned
 white and shelved in silence. Unlike the churning Broodwarrens far below,
 these vaults are hushed and clean, aisle on aisle of neat white bundles under
-a soft spun ceiling. The fever has turned the keeping cruel: the vault-spiders
-now wrap the living for "storage," and the shelves have begun to stir. The
-stair-lift stands at the vaults' far end, wound shut behind a wall of neat
-white bundles; Spoolhide re-spools it endlessly before it.
+a soft spun ceiling that hangs low enough to press. The fever has turned the
+keeping cruel: the vault-spiders now wrap the living for "storage," and the
+shelves have begun to stir. The vaults sink with the country they were cut
+from: the outer aisles run clean and cold near the rim, where a grey ghost
+of the slot-light reaches, and the shelving descends aisle by aisle, older
+and darker, to the inmost vault at the floor's heart. The stair-lift stands
+there, in the deep middle — the inmost vault keeps the floor's only door,
+wound shut behind a wall of neat white bundles, so the one way up is a long
+walk down the darkening aisles past shelf after shelf of things that stir;
+Spoolhide re-spools the door endlessly before it.
 
 ## Flora
 - **Trees / canopy:** none — spun-silk vaulting and shelved bundles.
 - **Ground & water plants:** vault-lichen on the cold stone, spool-moss on
   the reels, and the pale keeping-fungus on the oldest bundles.
 - **Under the Yoke:** the spool-moss spins loose thread that trips and binds;
-  the keeping-fungus lures with a scent of the preserved; the vault-lichen
-  muffles all sound to hide a wrapping.
+  the keeping-fungus lures with a scent of the preserved; the vault-lichen,
+  fat on the gloom, muffles all sound to hide a wrapping.
 
 ## Places of interest
 - **The Deep Spool.** The master silk-store at the vaults' heart, where the
@@ -90,7 +102,10 @@ stair-lift unwinds.
 
 ## When it falls
 The Deep Spool is opened and Spoolgate's crews cut free a vault's worth of the
-wrapped-but-living and shelve the true treasures safe. The vault-crews climb as
+wrapped-but-living and shelve the true treasures safe. The hush-dark
+unravels in a day, and grey honest light walks farther down the aisles than
+any lamp ever dared; the vaults keep their cold but not their dread, and
+the long-shelved dead are named and buried at last. The vault-crews climb as
 the host's spinners and preservers, carrying **Spindle** and spun-adamant
 thread — the folk who bind the tower's own snares and keep the army's gear and
 wounded whole on the last floors below the throne.

@@ -3,6 +3,12 @@
 > *"There's a fire here you can't see and can't feel until you're already dying of it. The old world built a sun in a box, and the box broke." — Scar-warden Grint Scarwatch*
 
 **Cut from:** the burned borderlands — the Waste, around a melted-down aether-reactor · **Gate-town:** Scarwatch · **Warden:** Palescorch
+**Sky:** standard — three miles of shimmering, prickling air.
+**Veil:** thin — even the gloom will not pool here.
+**Land:** Rimlands two miles wide — the pale-water fringe; the deep middle is
+the reactor crater.
+**Gates:** the down-gate at the rim by the Palewells; the up-gate in the
+crater wall at the far rim — the crater itself is the crossing.
 
 ## The land
 A vast blast-crater of fused colorless glass — the scar left when one of the
@@ -12,8 +18,13 @@ in the blood. Nothing grows in the crater; the air shimmers with an invisible
 heat; the ground is scar-glass that rings underfoot. It is the deepest wound
 in the stolen world, a place the fever itself seems to pour from — and the few
 who survive here do so by lore, luck, and the pale water that cleanses the
-sickness. The stair-lift is set in the crater wall behind a curtain of
-colorless flame at the scar's far rim; Palescorch burns before it, unseen.
+sickness. The living fringe keeps to the cool rim where the Palewells rise,
+and the land runs down, glass all the way, to the Core Pit at the scar's
+deep middle. The stair-lift is set in the crater wall behind a curtain of
+colorless flame at the scar's far rim — and there is no way around: every
+road to it crosses the crater itself, a passage measured not in miles but
+in how much sickness a body can carry and still walk. Palescorch burns
+before it, unseen.
 
 ## Flora
 - **Trees / canopy:** none — colorless glass and shimmering air.
@@ -99,7 +110,10 @@ and quenched; the stair-lift's flame-curtain shows and parts.
 
 ## When it falls
 Scarwatch draws an intact fuel-slug from the Core Pit under full ward and the
-colorless fire is banked; the crater's sickness eases at the rim. The scar-
+colorless fire is banked; the crater's sickness eases at the rim. What
+little gloom the floor ever held lifts with the Warden, and honest light
+crosses the glass; the pale-ferns green at the fringe, and year by year the
+prickle retreats toward the Pit. The scar-
 survivors climb as the host's flame-seers and cleansers, carrying **Colorward**,
 scar-glass, and casks of palewater — the folk who reveal the tower's unseen
 fires and cure the army of the sickness the throne pours down.

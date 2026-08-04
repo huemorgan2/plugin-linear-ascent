@@ -229,6 +229,14 @@ truth warm for years. It is the trade's one talent.
 They made the next five floors in five weeks, and the war let them be
 small weeks, which the rising had learned to distrust and take anyway.
 
+Every floor asked the same walk of them now: up out of a country's
+ground at one rim, where the gate-towns kept their farms and markets
+close against the light, then the long slow bend of the land down and
+inland and back to the light again, and the next stair always standing
+at the far edge. The tower had set its two doors a country apart, so
+there was no such thing as passing a floor. You crossed it, or you
+stayed.
+
 On the Shearing Downs the chalk lay open under the false light like a
 page, and shear-mad rams came down the wind at the column and were
 cured one by one, shaking their great heads, trotting away ordinary.

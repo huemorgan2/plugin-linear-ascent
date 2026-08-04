@@ -145,6 +145,16 @@ tower's answer had come down through the floors that cheered, methodical
 as rent-day. The fair remembered what the answer had been. He did not
 describe it. His hands described it, going still in his lap.
 
+The light changed while he sat with the telling done: gold, low, a
+blade of it laid level through the slot at the world's edge, kindling
+the dead bunting to its old colors. Down the grey booth-rows there
+were suddenly faces in it, and Pol did not turn to look at his people
+showing themselves. "The gloom can't live at the edge — the wind in
+the slot tears it," he said when the gold had gone. "Twice a day the
+sun gets its blade under the door, and in eighty years no Warden ever
+found how to take that minute off us. Folk too frightened to light a
+lamp will still walk out for that."
+
 "You'll go up," Pol said. "Maybe you'll win. I'll pray so. But if you
 don't — and nobody yet has — the tower will come asking who lit lamps for
 you, and it keeps better books than God. So kill our Warden if you must,
