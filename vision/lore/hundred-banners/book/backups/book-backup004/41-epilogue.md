@@ -239,9 +239,8 @@ the second floor, and he carried the two figures to the gate-post where
 his lifetime of wrong sums was notched, and he set them side by side,
 and looked at them a long time.
 
-"They match," said Hobb Fennick, to the gate-post, to the valley, to
-every climber he had ever counted into the hedges and never counted out.
-He said it the way other men say amen. "Everyone who went in has come
+"They match," said Hobb Fennick, to the gate-post, to the valley. He
+said it the way other men say amen. "Everyone who went in has come
 out. The counts match."
 
 He chalked it on the post, and then, being Hobb, he checked it once
@@ -264,18 +263,15 @@ horizon to horizon, rung over rung up into the blue, its top beyond the
 air — a fact of the country now, its dark doorway propped wide and
 its first stair swept.
 
-And it was gold, the whole visible height of it — a thing the town no
-longer looked at twice and had not yet tired of telling. For two years
-the war had been readable from the quay: one grey hairline turning gold
-at a time as the Wardens went down, the fishermen of the Girdle-sea
-calling the count in with the catch. Then, on a day that has its own
-name in Roothollow now, the last grey went all at once — floor above
-floor above floor, the gloom letting go of the topmost countries
-together, the change running up the ladder until the air itself lost
-it — and the town put down its nets and its ledgers and stood in the
-streets looking north for the better part of a day. No courier brought
-the war's end to Roothollow; none was needed. It was written on the
-tower's own face, and the whole port read it off the sky.
+And it was gold, the whole visible height of it but one rung — a single
+grey hairline at the fortieth, where a queen kept her own dark by
+contract — a thing the town no longer looked at twice, and had not yet
+tired of telling strangers why. The day the last of the King's grey
+went — a day that has its own name in Roothollow now — the town put
+down its nets and its ledgers and stood in the streets looking north
+for the better part of a day. No courier brought the war's end to
+Roothollow; none was needed. It was written on the tower's own face,
+and the whole port read it off the sky.
 
 People went up it to visit their kin on the near floors, and came down
 again for market-day. The Stone of the Climb stood where it had always

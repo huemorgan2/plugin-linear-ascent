@@ -206,14 +206,18 @@ Below the leaded glass the colorless glare folded into itself coil by
 coil, and the dark that came was not the dark of a lamp put out but of a
 *voice* stopping — the Yoke, dying mid-word on a hundred floors at once.
 On ninety freed floors and the six unfreed above, every collar went cold
-in the same breath; every welded thing lost its fire; the fever loosened
-its grip on every beast in the stolen world in one long unclenching, and
-no one on floor ninety-three heard any of it, because what they heard
-was nothing, enormous, everywhere nothing, the first nothing in an age
-and a half.
+in the same breath; every welded thing lost its fire — far below, in the
+eye of the seventieth's own gale, the Storm Queen's crown among them,
+breaking; the fever loosened its grip on every beast in the stolen world
+in one long unclenching, and no one on floor ninety-three heard any of
+it, because what they heard was nothing, enormous, everywhere nothing,
+the first nothing in an age and a half.
 
-What no one in the lead country could see, the Girdle-sea saw: the last
-veils dying together, and the grey rungs of the world going gold at once.
+What no one in the lead country could see, the Girdle-sea saw — the
+fishermen would tell it for the rest of their lives, and the host had it
+from them after, as the world's report: the last veils dying together,
+and the grey rungs of the world going gold at once — every last veil
+that was his. One dark, at the fortieth, being nobody's but hers, stood.
 
 In the gallery mouth, Halflight guttered. The coil-fed demon starved
 standing, its glare going out of it like water out of cupped hands, and

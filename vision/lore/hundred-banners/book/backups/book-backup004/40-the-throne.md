@@ -4,8 +4,12 @@ There was no hundredth floor. There was a summit.
 
 Ede came up the last stair of the world expecting a gate, a wall, a
 warden, one more of the Made's patient horrors — and walked instead out
-under open sky. Black sky, starless, enormous, the lid of everything; and
-under it one hall with no roof but that blackness, iron-floored, so wide
+under open sky. Black sky, enormous, the lid of everything, and burning
+with stars — the summit stood above the last of the air, and above the
+air nothing rations the stars: they crowded the black from rim to rim,
+drifts and shoals of them, blazing without leave, day and night being
+one thing up here and that thing theirs. Under it one hall with no roof
+but that blackness and its fire, iron-floored, so wide
 the eye gave up on it, crowning the hundred floors the way a cold ember
 crowns a heap of ash. This was where the Yoke had gone out from. This was
 where the fever had been sown and the collars drawn and the constructs
@@ -123,6 +127,14 @@ weather; it had been built above all of it, one man's cold room over
 the world. It had weather now. The breath of the gathered peoples went
 up into the black and hung there, a faint drifting mist above the
 banners, the first cloud the top of the tower had ever owned.
+
+Nix, on his bollard, was not watching the hall. He had his head back
+and his mouth open, counting — slowly, for once, the way you pay out a
+debt you are glad of. The ground keeps thousands, Dun had said over the
+banner-hem, a lifetime of floors ago. You'll see them when we've done
+the work; that's in the terms. "In the terms," Nix agreed, to the sky,
+in a quartermaster's voice, and lost the count on purpose, and started
+again.
 
 ⁂
 
@@ -298,12 +310,15 @@ afterward, walking down, gathering the tellings like gleaners — the Theft
 let go. Every remaining collar in the tower fell open in the same breath,
 on floors the rising had freed and floors it had only passed through, in
 back-galleries and larders and forgotten pens, with a sound like frost
-leaving a line. The fever lifted out of every beast on every floor
-between one heartbeat and the next: fenland wolves went quiet mid-snarl
-and were only wolves; the last pack of the Fencerows lay down in the pale
-grass, and one of them, at a whistle from a hedge, turned its head. Every
-construct the King had ever poured drained where it stood to honest dead
-metal. In the Welding Halls the iron on the welded went inert — not
+leaving a line. The fever was dead already — Ulfar's lever had unclenched
+it from every beast in the stolen world — but wherever some pocket of the
+old madness had outlived the scram, in dens too deep or blood too long
+boiled to believe the quiet, it let go now: fenland wolves went quiet
+mid-snarl and were only wolves; the last pack of the Fencerows lay down
+in the pale grass, and one of them, at a whistle from a hedge, turned its
+head. Every construct the King had ever poured drained where it stood to
+honest dead metal. In the Welding Halls the iron on the welded went
+inert — not
 flesh again, never flesh again, but no longer a hand on them, only a
 weight they wore — and Wat Kello, standing under his banner on the summit
 with the light going by him, later told Nix it was the first hour in five

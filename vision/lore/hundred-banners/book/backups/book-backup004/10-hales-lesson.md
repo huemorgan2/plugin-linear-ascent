@@ -101,7 +101,7 @@ and Ede already giving orders — the van to hold the Smelterworks under
 Bruna Stave and the banner, the party down the lifts, now, light, no
 baggage.
 
-Four lifts down. Five days of hard march, through the fair where the
+Four lifts down. A fortnight of hard march, through the fair where the
 great wheel still burned its funeral-light, through the Anvil Commons,
 past sentries of their own rear-guard who would not meet anyone's eye,
 grey pennons over every gate and every gate opening slower than it
@@ -234,7 +234,8 @@ the last man.
 
 The brood had gone deep, past all lamplight, and would not answer the
 knocking — not Nix's, not the vault-folk's, maybe not for a generation,
-said Wend, maybe not ever. The truce was dead. The floor stayed freed;
+said Wend Silkstead, maybe not ever. The truce was dead. The floor
+stayed freed;
 freedom, it turned out, was the kind of thing you could not give back
 even when you wanted to. Silkstead would live. Everything else was
 notches.

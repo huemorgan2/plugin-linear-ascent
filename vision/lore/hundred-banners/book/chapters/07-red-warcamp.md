@@ -378,10 +378,10 @@ for thirty floors, and it would cost the tower more than any army
 did. But here, now, in the wreck of Skarn's camp: her people, alive,
 freed, standing in the firelight in gaoler's plate with their own
 company's grey banner — Nix had planted it at the pens' head, and
-stood by it, small and smoke-black and counting the freed out loud
-because counting was how he wept — coming out of five years of cages
-to find the woman who had led them into this floor standing in the
-ashes of it with a drawn sword and no speech in her at all.
+stood by it, small and smoke-black and counting the freed out
+loud — coming out of five years of cages to find the woman who had
+led them into this floor standing in the ashes of it with a drawn
+sword and no speech in her at all.
 
 A one-armed man came out of the third pen last, slow, unhurried, as
 if cages were a thing that happened to other people. Dun Harrow. Her

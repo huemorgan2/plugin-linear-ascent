@@ -327,8 +327,10 @@ soldier, there is nothing under the collar but the drum,* and ten
 thousand of the freed sat in the yards weeping with their helms off,
 proof it had always been a lie — and still he beat it, kind,
 reasonable, wrong, the one soul in the fortress-square the bell could
-not touch, because his was the one collar in the tower that had been
-put on from the inside. No one stormed the drum-throne. It would not have been
+not touch, because his was a collar put on from the inside, fastened
+afresh every hour by its own wearer — and what a man fastens hourly
+from within, no word said once from without can unfasten. No one
+stormed the drum-throne. It would not have been
 needed. His army had been not defeated but *dismissed*, man by man, by
 a better word than his; the gate below him was already thick with the
 freed unbarring it from within. The Herald of the King beat the muster

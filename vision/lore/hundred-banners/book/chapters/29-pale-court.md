@@ -123,10 +123,10 @@ with its story tagged in fine elvish tally-script, and a trophy-keeper
 walked beside the guests and read the stories out, and the stories were
 all of respect. *Ran four days. Turned at the water and fought. Spared, and
 her line spared after her, for the running's sake.* The far end of the
-gallery held older, stranger honors — trophies of the Master's freed peers,
-tokens of Skarn and Hrimgar and the Storm Queen from the tower's first
-decades, when the crowned captives had hunted each other's borders for
-sport. And on a peg of pale
+gallery held older, stranger honors — trophies of the Master's fellow
+lords, tokens of Skarn and Hrimgar and the Storm Queen from the tower's
+first decades, when the crowned captives had hunted each other's borders
+for sport. And on a peg of pale
 silver between two horn-racks, small and out of place among the grandeur:
 a plain leather hound-collar, cracked with age, its name-tag worn to a
 shine. Ede saw the trophy-keeper's hand hover past it without touching.

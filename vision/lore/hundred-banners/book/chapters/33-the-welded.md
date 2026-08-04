@@ -216,7 +216,7 @@ The man who sold us came to the cages to count us. I marked him. Bread.
 "I know," Ede said.
 
 She said it very low, for him alone, and she watched the two human eyes
-above the iron read everything her face had spent a year hiding from an
+above the iron read everything her face had spent a season hiding from an
 army. She let them read it. Five years he had carried his one word up
 through the dark, and he had earned the truth ahead of every living soul
 but one: that his commander knew the courier's name, had known it since

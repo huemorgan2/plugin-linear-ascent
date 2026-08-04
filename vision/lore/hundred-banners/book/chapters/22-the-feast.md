@@ -226,9 +226,10 @@ At the north door, they tried to close the hall.
 That was the shape of the thing; the fire above, the knives
 within, and the doors — the doors Hrimgar had ordered open —
 swinging to, barred from without by Heralds in the yard, so that
-the gathered world should roast in its own capital. The great
-south door by the kitchens was already booming shut. The north
-door had Dun Harrow in it.
+the gathered world should roast in its own capital. The little
+postern doors between had been chained from the yard-side in the
+same stroke, quietly, first. The great south door by the kitchens
+was already booming shut. The north door had Dun Harrow in it.
 
 He had left her shoulder. Standard-bearer's post is wherever the
 standard is needed, and the standard was needed in a doorway. He

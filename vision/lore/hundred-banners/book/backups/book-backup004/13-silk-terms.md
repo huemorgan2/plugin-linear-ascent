@@ -20,9 +20,9 @@ dead rider, brought down on the open road — Aline had sounded the true
 recall from the Ride-Head crossroads, and the whole grey hunt had come
 home. Horse and rider and hound, laid down at the
 wayshrine, fourscore years late for their own supper. By that dusk the
-Rides' grey lid was fraying off the wood — untended gloom going the way
-it went on every freed floor — and the wayshrine lamps burned that
-night in the first honest dark the Rides had kept in fourscore years.
+Rides' grey lid was fraying off the wood, and the wayshrine lamps
+burned that night in the first honest dark the Rides had kept in
+fourscore years.
 The ride-keepers climbed with the rising now, its outriders and its
 fastest word.
 
@@ -123,7 +123,8 @@ as if her eyes could cut silk.
 ⁂
 
 They went in at noon by the great gallery, under a hundred hanging
-lanterns that were people: Ede, Vega, Rhovan, Wend to read the threads,
+lanterns that were people: Ede, Vega, Rhovan, Wend Threadneedle to read
+the threads,
 and Mereth Wakesend, because after the Kingsbarrow the rising did not
 treat with crowned things without her. Nix came too. Nobody had decided
 that; he was simply there, walking point with the Shieldwall standard,

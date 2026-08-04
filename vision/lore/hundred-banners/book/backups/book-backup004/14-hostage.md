@@ -24,8 +24,9 @@ neither rule: the first was a courtesy, the second a mercy, and he knew
 the difference.
 
 He tried his trade, the first sleeps, out of habit and fear — mapping
-anchor-lines, marking which threads were leashes as Wend had taught
-him. He gave it up inside a week. There was nothing here to steal. The
+anchor-lines, marking which threads were leashes as Wend Threadneedle
+had taught him. He gave it up inside a week. There was nothing here to
+steal. The
 Broodthrone was the only court he had ever entered that kept no secrets
 from itself: every thread catalogued, every captive inventoried, every
 debt entered in the silk-white book. It was the Wake's dream, achieved

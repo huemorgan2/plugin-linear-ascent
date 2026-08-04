@@ -108,7 +108,7 @@ the strips in date-order down the barrel-head like a man laying
 out a hand of cards. The hand had priced a mercenary company's
 route the season of the Red Warcamp. The hand had moved payment
 through the toll-ledgers — his own burglary, the page from floor
-five, matched two of Calyne's intercepts to the week. The hand
+eleven, matched two of Calyne's intercepts to the week. The hand
 had requested extraction once, years back, and been refused —
 *a ledger entry does not retire,* the reply had said, and Calyne
 had kept both halves of that exchange like a pressed flower.

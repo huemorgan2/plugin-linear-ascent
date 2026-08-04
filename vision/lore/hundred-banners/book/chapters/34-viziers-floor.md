@@ -129,7 +129,7 @@ They staged the council on the Herald's Road's last rise, beneath the
 silenced Proclamation Arch, with the muster-gate filling the whole north
 sky. A hundred banners on the poles the King's standards had hung
 from — the last thirty sewn since the outworks by the Made's own freed.
-The charter-table down the middle, the decade of it scarred and ringed;
+The charter-table down the middle, the oak of it scarred and ringed;
 Ede at its head; the keepers and the captains and the freed Wardens in a
 horseshoe five ranks deep. Drums beyond the gate, always, like weather.
 
@@ -261,7 +261,7 @@ Rhovan ever saw of him on the free side of the wall was flour on a cuff
 and the glint of the iron at his throat, and then the gate swallowed
 him, and the drums beyond it did not so much as change their beat, and
 that was the most eloquent thing the tower had ever said. It had priced
-this day in long ago. A ledger entry does not retire.
+this day in long ago.
 
 ⁂
 

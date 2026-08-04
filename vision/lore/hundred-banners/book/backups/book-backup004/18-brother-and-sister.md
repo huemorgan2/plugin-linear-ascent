@@ -174,7 +174,7 @@ hum under every cradle in the world. You have not lived under it. I
 have, floor by floor, for two years. You feel it lift when a relay
 falls — the whole floor breathes, people weep and don't know why. Ask
 any shard what it hears at night, even here, even now, with every
-Warden dead below us. There is a hum under the world's floorboards,
+Warden below us dead or bought. There is a hum under the world's floorboards,
 and your plan keeps it humming for a generation, and calls it mercy."
 
 "Against eighty years in the sky, sister. Weigh it."

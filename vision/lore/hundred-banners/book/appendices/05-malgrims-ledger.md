@@ -1,4 +1,4 @@
-# Malgrim's Ledger, Complete
+# Malgrim's Ledger, as Recovered
 
 *Recovered from the writing-stand of the drum-throne on the day after
 the Battle of the Herald's Gate, and carried down to Roothollow with

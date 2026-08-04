@@ -315,10 +315,9 @@ it from every beast in the stolen world — but wherever some pocket of the
 old madness had outlived the scram, in dens too deep or blood too long
 boiled to believe the quiet, it let go now: fenland wolves went quiet
 mid-snarl and were only wolves; the last pack of the Fencerows lay down
-in the pale grass, and one of them, at a whistle from a hedge, turned its
-head. Every construct the King had ever poured drained where it stood to
-honest dead metal. In the Welding Halls the iron on the welded went
-inert — not
+in the pale grass. Every construct the King had ever poured drained
+where it stood to honest dead metal. In the Welding Halls the iron on
+the welded went inert — not
 flesh again, never flesh again, but no longer a hand on them, only a
 weight they wore — and Wat Kello, standing under his banner on the summit
 with the light going by him, later told Nix it was the first hour in five

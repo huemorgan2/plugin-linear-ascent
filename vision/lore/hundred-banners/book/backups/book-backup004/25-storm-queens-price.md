@@ -86,7 +86,8 @@ particular stillness of people who love a thing that can kill them.
 
 "The rising," Zephyra said. Her voice was mild and enormous, a calm
 built over a gale the way her eye was. "Sixty-nine floors. Nine and
-sixty wardens, mine own outriders among them, and a fleet of patched
+sixty wardens broken or bought, mine own outriders among them, and a
+fleet of patched
 hulls at your chains, and a charter, and a debt of graves. I have
 read you on the wind for two years, general. You are the most
 interesting weather to enter my sky in an age."

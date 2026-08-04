@@ -114,9 +114,10 @@ a mercy, and its elite trained above all else in the touching of an
 enemy's throat *gently.*
 
 The sky, for what it was worth, was empty. The Storm Queen's gales,
-promised by embassy and sworn by treaty-debt, were reported by the
-sky-skiffs to be two floors below and beating upward against their own
-contrary winds. Rhovan, hearing it, had said only: "Of course they are,"
+promised in her own eye the day she scattered the host — wind, when
+the wind profits — and owed double since her cellars stood open, were
+reported by the sky-skiffs to be two floors below and beating upward
+against their own contrary winds. Rhovan, hearing it, had said only: "Of course they are,"
 and gone back to fletching. No promised relief in any tale worth telling
 has ever arrived on time.
 
@@ -341,10 +342,10 @@ made thing she ever heard, and she had heard the Yoke itself.
 The drums were still beating when the sky arrived.
 
 It came over the south wall at mid-afternoon with a sound like the
-world clearing its throat: the gales of the Tempest Court, treaty-sworn
-and two floors tardy, Zephyra's whole unbottled cavalry riding down
-onto a battle that had been over since noon. The banners of the rising
-stood straight out from their poles. The wind swept the fortress-
+world clearing its throat: the gales of the Tempest Court, sworn at
+her own refusal and two floors tardy, Zephyra's whole unbottled
+cavalry riding down onto a battle that had been over since noon. The
+banners of the rising stood straight out from their poles. The wind swept the fortress-
 square from wall to wall exactly once, majestically, gathering up the
 last knots of the deep-collared rearguard still skirmishing at the
 gatehouse stair and depositing them, disarmed and upside down, in a
@@ -365,13 +366,16 @@ The rising buried its own below the south wall, and buried the
 Pressed who had died before noon with the same rites in the same
 earth, because the difference between those two burying-grounds had
 been the entire meaning of the day, and there was to be no difference.
+Shieldwall's grey went before the biers all evening; Wat Kello had
+taken the pole that morning, and no one asked for it back.
 Vega worked the graves with her crews, as smiths did, setting iron
 markers, and the count was cruel enough — the morning's steel had
 cost the rising more than any day since the Frosthall, and cost the
 bound worse — and the count was also this, cried down the lines at
 the lamp-lighting by a goblin voice hoarse as a hinge: the rising had
-marched to the Herald's Gate that dawn some sixty thousand strong,
-and camped that night, inside the taken yards, at more than twice it.
+marched to the Herald's Gate that dawn some sixty thousand strong —
+the Bastion Line's wheeling-over alone had doubled the rolls — and
+camped that night, inside the taken yards, at more than twice it.
 The greatest battle of the age, and the rising had won it by refusing
 to fight nine parts in ten — had won an army, not off a field, but
 out of one. Every history of every war ran the other way. That was

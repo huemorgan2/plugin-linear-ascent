@@ -147,7 +147,7 @@ is freed, and give their kin graves. If we start now we finish never."
 "You know this wood."
 
 "I know its cousins." A fraction. He gave her a little more, walking:
-"The Grey Rides are mine. Floor sixty-six. All the elf-woods in this span
+"The Grey Rides are mine. Floor thirty-one. All the elf-woods in this span
 are the Hunt's country — the Rides, the Kennel Courts, the Quarry Runs, and
 this. Every one takes its law from the pale court above us. I was raised
 under that law." He tested a branch, ducked the wire it hid. "I left before
@@ -237,7 +237,7 @@ does not tire. We do."
 "Then we stand here," Vega said. Slowly; she finished it. "In the thorn,
 where the horse cannot come and the hounds come two abreast, and we make
 the freeing of this floor cost the tower a price it remembers. I have been
-a debt on this climb since floor six. I would rather end as a payment."
+a debt on this climb since floor sixteen. I would rather end as a payment."
 
 "Two abreast, that's good, that's — " Nix's fast count died in his mouth.
 He was looking at his own hands, and his hands would not stop. "Four lanes

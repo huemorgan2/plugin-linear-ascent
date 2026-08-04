@@ -271,8 +271,11 @@ is the wound. Climb with it open. It bleeds less in the wind."*
 In the morning the freed mustered under the banner — sixty-three of them
 in dwarven boots, Vega having mended the old wall-and-star's torn hoist
 with silver forge-wire, one-handed Dun directing the stitching like a man
-conducting music — and when Ede asked, formally, who among them would go
-down to Roothollow and rest, not one soul stepped out of the line, and
+conducting music — and the light they mustered in was new: a grey-silver
+of honest day reaching down the adits from the floor's far rim, where,
+so the gate-towns' word came running with the boots, the grey had gone
+off the sky in the night. When Ede asked, formally, who among them would
+go down to Roothollow and rest, not one soul stepped out of the line, and
 Serle Danner stood at the end of it with his jaw set, daring her to send
 him anywhere but up.
 

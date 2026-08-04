@@ -52,9 +52,8 @@ every road a face didn't take. Step in, and the woman who climbs out
 sleeps sound, hangs what needs hanging, and her armies never see her weep
 over a Herald's carcass like a widow —"
 
-"There it is," Ede said. "That's the flaw in the casting."
-
-"You never wept for Malgrim," Ede said. "You put him down and wiped the
+"There it is," Ede said. "That's the flaw in the casting. You never
+wept for Malgrim. You put him down and wiped the
 blade. And a general who can't grieve the enemy's dead can't mourn a
 barrow-king's precedence, and never wins floor thirty, and never learns
 what the sword *means,* and loses the whole war efficiently. I know your

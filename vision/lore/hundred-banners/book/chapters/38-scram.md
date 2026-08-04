@@ -108,12 +108,15 @@ She looked at his hand on the bar. "Ulfar —"
 "The survey was theory," he said. "The light-table on the ice was
 theory. This room is not. From this Spire, sister, it can be *done* —
 everything I have argued since the Frozen Sea, done gently, done truly.
-Damp the coils to a tenth. A tenth is nothing — the Yoke at a tenth is a
-headache, not a madness; the fever at a tenth is a shiver. And with the
-tenth I keep the engines fed, and I set the floors down." His voice
-never rose. It never had. It was the terrible patient voice of the only
-person in her life who had never once lied to her, and every sentence
-arrived whole. "Thirty-one years, Vega. One generation of a lit core, and I
+Throttle the broadcast to a tenth — the King's voice, the King's
+veils, the coils that carry them, and nothing else. The Yoke at a
+tenth is a headache, not a madness; the fever at a tenth is a shiver.
+And the engines keep the core's full breath — the broadcast never fed
+them, and the Strand needs no feeding — and I set the floors down."
+His voice never rose. It never had. It was the terrible patient voice
+of the only person in her life who had never once lied to her, and
+every sentence arrived whole. "Thirty-one years, Vega. One generation
+of a lit core, and I
 lower a hundred floors onto the earth like a cup onto a table. No fall.
 No world of the freed left standing in the sky for good, whole skies
 above its own stolen ground. And at the end of it, the last coil damped,

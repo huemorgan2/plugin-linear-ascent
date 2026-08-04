@@ -4,7 +4,7 @@ Nix kept his counts on a tally-stick of bog-oak, because paper burned and
 goblins forgot nothing but were believed about everything less than
 sticks.
 
-By the Smelterworks the stick read like this: nine floors since the
+By the Smelterworks the stick read like this: eighteen floors since the
 Kingsfield, notch. One collar thrown down at a banner-meadow, his own,
 deepest notch on the stick, still tender to the thumb. One warren
 yielded whole to one goblin's word, notch with a ring around it, which
@@ -40,7 +40,7 @@ in ladle-shot range being visibly, unmistakably, a goblin.
 
 "Evening," he called. "Look at me. No, properly look. You know what I
 am? I'm the after. There's an after, that's the whole message, I'm the
-proof and the messenger both — collar came off me nine floors down and
+proof and the messenger both — collar came off me eighteen floors down and
 nobody's put one back on, and I eat twice a day, bread in the morning,
 soup at night, sometimes a sausage when morale wants building — you're
 throwing that at me, by the way, you're throwing sausages away every
@@ -243,7 +243,7 @@ notches.
 They buried none of the Cullers on twenty-four — Wend's one condition,
 delivered flat, and no one argued. The grey company wrapped its dead for
 carrying and turned up the stair, bound for the only ground on the climb
-that was made for it: the grave-country three floors above, the Tithe
+that was made for it: the grave-country five floors above, the Tithe
 Barrows, where Men had buried Men since before the Theft, and where — the
 runners said — Voss's Tollmen had already chained the lych-gate and were
 charging silver at the stair, and the Wake's grey bows had taken the

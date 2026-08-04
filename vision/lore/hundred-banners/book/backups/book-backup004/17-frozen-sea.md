@@ -9,7 +9,7 @@ Balanced boulders stood where the ice had set them down. Coldjaw had
 denned before the stair-scarp in a shell of ice and erratic-stone, and
 it had taken the host two days and eleven lives to break the welded
 thing and still the moraine; the floor's white lid came apart in a day,
-untended, and the gravel country lay astonished under a blue sky it had
+and the gravel country lay astonished under a blue sky it had
 not owned since the Theft; and when it was done, Bruna Coldquay came
 out of the Erratic Hollow with the warmth-charm in one fist and the
 ice-road markers in the other, and looked at Vega's forge-wagons the
@@ -208,7 +208,7 @@ floe-roads would carry the host to the stair before they softened. It
 was, Orla said, the exact size of miracle a sealer could trust.
 
 The iron sky went the way the shell had gone. Through the morning it
-unravelled, untended, and the sun came down whole on the pack for the
+cracked and drained, and the sun came down whole on the pack for the
 first time since the sea locked — a white country burning so bright
 the sealers stood out on the floes with their hands over their eyes,
 weeping again, staring anyway.

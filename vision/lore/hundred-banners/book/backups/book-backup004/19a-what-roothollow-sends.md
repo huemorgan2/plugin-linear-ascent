@@ -59,8 +59,8 @@ an artery.
 He rode it for six weeks, and the artery taught him its arithmetic.
 
 A sack of Roothollow barley spent a season getting to the war: lift by
-lift, floor by floor, each floor a country wide, each gate-road a week
-of real weather — rain on the low pastures, frost above the fortieth,
+lift, floor by floor, each floor a country wide, each gate-road real
+weather all its own — rain on the low pastures, frost above the fortieth,
 one stretch of the Grey Rides where the escort changed twice a day out
 of respect for old habits. Way-lofts stood at every gate-town now, and
 every way-loft kept the same fair-copied rolls: what came through, what

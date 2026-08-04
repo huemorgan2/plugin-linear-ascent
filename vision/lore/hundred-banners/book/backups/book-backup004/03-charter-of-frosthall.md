@@ -92,6 +92,6 @@ compilers observe that it is the same hand as the Frosthall seating-
 list, and let the two facts stand beside each other, as a charter would
 want.
 
-Ede Stonhal signed last. Sixty-one banners hung in the rafters over the
+Ede Stonhal signed last. Fifty-eight banners hung in the rafters over the
 wet ink, and the draught from the smoke-hole moved them together, and
 the clerks, having nothing further to record, recorded that.

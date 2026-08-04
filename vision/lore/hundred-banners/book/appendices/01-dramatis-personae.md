@@ -127,7 +127,7 @@ were right.
 
 - **Zephyra** — Storm Queen, Warden of the seventieth. Offered the sky
   at the price of a throne; refused, scattered a third of the host.
-  Paid her treaty-debt in full, one noon late, and wheeled above the
+  Paid her wind-debt in full, one noon late, and wheeled above the
   finished field awaiting applause.
 - **Her bottled court** — kept in storm-glass as the tower's sureties;
   freed unthanked. A queen schedules her own debts.

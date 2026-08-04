@@ -98,7 +98,10 @@ square of mustering-yards under a gatehouse like a cliff, the drums
 beyond it beating men into soldiers, beating the tempo of the whole Made,
 never stopping. Five floors in nineteen days. Behind the rising, the
 warrens fed it, the bastion drilled it, the gardens grew its engines, the
-chantries sang for it. The tower's last approach had been made the
+chantries sang for it — and behind it, tier under tier, five grey lids
+had torn and come down in the wake of their broken wardens, so that the
+Made, which had never once owned weather, was getting its first lesson
+in a changing sky. The tower's last approach had been made the
 rising's own arsenal.
 
 That night Mistress Calyne found him at the picket-line and asked him,

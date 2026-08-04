@@ -191,7 +191,9 @@ Forge-Court's hammer; Voss's crossed keys, which nobody loved and
 everybody fed; the fair-folk's bunting, the Broodwarrens' knot, kobold
 tally-marks on cut tin; the horn-and-heel of the pale court, newest of
 all, sewn in three nights by the trophy-keepers from a thousand years of
-pale-silver thread. Thirty-one peoples. He said their names to himself,
+pale-silver thread. Thirty-one peoples — the Molt's census-wall had
+said nine, and the climb had been re-counting upward ever since. He
+said their names to himself,
 all of them, the way Nix had taught the freed to say their own: Men and
 elves and giants and goblins, kobolds and the fair-folk and the road-folk
 and the rest, thirty-one kinds of stolen, standing in one camp under one
@@ -209,8 +211,9 @@ hunting-horns — sport-horns now, mercy-horns — calling clean and far away
 down the runs, a hundred greens breathing in the dark. The stolen realms,
 every floor of them walked and freed and left living. Ahead, above,
 where the next stair rose: iron. The Made. Black outworks welded to
-black ramparts, floor eighty-one going up into eighty-two like a fist
-into a forearm, no floor-file keeper alive up there to hand them a map,
+black ramparts, floor eighty-one's rim-works climbing toward the iron
+underside of eighty-two until the slot of open sky between the two was
+only a bright seam, no floor-file keeper alive up there to hand them a map,
 nothing up there the tower had stolen. Only what it had built. Rampart
 and rivet, forge-light in the seams, and — faint, when the camp-singing
 lulled — drums. Not Skarn's drums, nor the mine-dark's. Patient drums.

@@ -1,7 +1,8 @@
 # Chapter 42 — Malgrim
 
-The muster-drums of the ninetieth floor had beaten for an age and a half,
-the captives said, and no one living had ever heard them stop. They stopped
+The muster-drums of the ninetieth floor had beaten since the floor was
+poured, the captives said, and no one living had ever heard them stop.
+They stopped
 an hour before dawn, when the last drummer imp was freed of its collar and
 set down its sticks and sat looking at its own hands, and the silence that
 followed was so large that half the host woke where it slept among the
@@ -194,9 +195,10 @@ taking was the crime, and write it plain, so that whoever keeps rolls
 after us knows what the tower could do."
 
 By the time the entry was written, the light over the yards had begun
-to change: the ninetieth's veil going, untended, the grey lid tearing
-far out where the walls stood a day's march off, and a long seam of
-honest brightness walking in over the iron toward the host. The whole
+to change: the ninetieth's veil coming off the books with its keeper,
+the grey lid tearing far out where the walls stood a day's march off,
+and a long seam of honest brightness walking in over the iron toward
+the host. The whole
 muster paused to watch it come — no cheer, no order, thousands of
 faces turned one way. Ninety floors had taught the freed what a
 changing sky meant.
@@ -212,8 +214,10 @@ Berrin Or came bound at the wrists with muster-cord, walking small
 between them, and the year had eaten him: her oldest friend, the man
 whose bread had kept her alive through the drunk years, gray as ash and
 looking at nobody. The willing collar was gone from under his shirt —
-struck in the night when the great Break rolled through. He had not
-fought them, the clerks said. He had not anything.
+not to the great Break, which had rolled through at noon and left that
+one iron unmoved; the freed clerks had struck it off by hand before
+they brought him. He had not fought them, the clerks said. He had not
+anything.
 
 The elder clerk held out a ledger-page, folded once. The last entry, in
 Malgrim's fine hand:

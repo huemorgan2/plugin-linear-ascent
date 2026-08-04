@@ -20,7 +20,7 @@ Three armies were now camped on it, working on that.
 From the Great Yew ridge Rhovan read the fires like a ledger, because a
 ledger was what it was. Southeast, the Cullers: low fires, straight rows,
 grey pennons at half-staff for the twenty silk-wrapped dead they had
-carried up three floors to bury in the only grave-earth of Men on the
+carried up five floors to bury in the only grave-earth of Men on the
 climb. Northwest, the Tollmen: bright fires, good wine, and a chain —
 Voss's factors had come up the freed lifts behind the host like gulls
 behind a plough, and they had found the one gate on the tier worth
@@ -84,7 +84,7 @@ if the ground itself wanted to hear whether the living would really do
 this.
 
 Then a Culler corporal named Dree, who had carried his own brother up
-three floors of stairs, said something short, and took his axe to the
+five floors of stairs, said something short, and took his axe to the
 chain — and a Tollman guard put a halberd through his shoulder — and Hale
 bellowed, too late, into the exact silence where his authority used to
 be — and from the crescent camp on the mounds, honoring the letter of a
