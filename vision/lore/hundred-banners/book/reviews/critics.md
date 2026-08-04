@@ -39,6 +39,16 @@ Consequences, fixed for all ten iterations:
 4. **The Continuity Warden** — canon and internal consistency. Checks facts
    against the outline, style-guide anchors, world-lore, and floor files.
    Lists every contradiction with file and line.
+   FROM ITERATION 3 ON, also polices the world-construction canon (adopted
+   mid-cycle by plan 011; see ../../world-construction.md and the
+   style-guide's Scale/Ladder/Veil blocks): the tower is a ladder of thin
+   country-shaped trays, never an iron wall; the lid is visible, never
+   "too far up to see"; Wardens hold the LIGHT — no structural language at
+   a Warden death, and every on-page Warden death is followed by its
+   veil-lift; the scram kills veils/broadcast, never the standing; lifts
+   survive; freed floors heal; towns default to the Rimlands; the Made
+   trays are perfect circles; the Kindling, the Shear, bead-towns and
+   stay-roads exist and must be used consistently.
 5. **The First-Time Reader** — smart but new; knows nothing of the game.
    Where were they lost? Which names blurred? What did they need one
    sentence earlier?
@@ -82,7 +92,12 @@ that critic believes is the book's best asset. Then a closing synthesis: the
 ## Backups
 
 Before iteration NNN touches anything: copy `book/chapters/` to
-`book/backups/book-backupNNN/`. Backup 001 is the virgin draft. After
-iteration 10: compare backup-001 against the current text (what actually
-got better? anything lost?), then cut the final edition into
-`book/final-edition/` — the 11th version, the one that ships.
+`book/backups/book-backupNNN/`. Backup 001 is the virgin draft.
+
+SCHEDULE AMENDMENT (user directive, 2026-08-04): the cycle runs FIVE
+iterations, not ten — iterations 3-5 follow the plan-011 world
+re-grounding, with iteration 3 doubling as its verification pass, and 5
+converging (line-level polish only). After iteration 5: compare
+backup-001 against the current text (what actually got better? anything
+lost?), then cut the final edition into `book/final-edition/` — the
+version that ships.

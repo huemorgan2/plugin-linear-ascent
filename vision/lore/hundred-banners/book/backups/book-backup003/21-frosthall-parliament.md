@@ -89,6 +89,12 @@ one. Stay. Eat at my table. Be welcome."
 Behind her, at the foot of the dais, Ede heard a goblin blow out a
 breath eleven floors long.
 
+The gloom came off the jarldom the next day, while the hall slept off
+its rescue. Nobody marked the hour it finished; there was only Bruna
+at dusk, stopped among the frost-birches with a shield in her two
+hands, looking up past the eaves at stars — true stars, over a country
+where the grey had stood so long it had passed for sky.
+
 ⁂
 
 They stayed the winter, and the hall became something no floor of

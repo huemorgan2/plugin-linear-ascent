@@ -19,8 +19,12 @@ it. When Tallyhorn broke on the third morning — a courser welded to its
 dead rider, brought down on the open road — Aline had sounded the true
 recall from the Ride-Head crossroads, and the whole grey hunt had come
 home. Horse and rider and hound, laid down at the
-wayshrine, fourscore years late for their own supper. The ride-keepers
-climbed with the rising now, its outriders and its fastest word.
+wayshrine, fourscore years late for their own supper. By that dusk the
+Rides' grey lid was fraying off the wood — untended gloom going the way
+it went on every freed floor — and the wayshrine lamps burned that
+night in the first honest dark the Rides had kept in fourscore years.
+The ride-keepers climbed with the rising now, its outriders and its
+fastest word.
 
 After that the floors ran together the way marching floors do. Ran
 together, and did not shrink. The Deep Drifts were a week of going
@@ -257,7 +261,11 @@ He had been an agent long enough to know that some purses only open all
 the way once. He thought of Calyne — his handler, his examiner, the
 Wake's grey arithmetic in a woman's shape — and of what she would do
 when this reached her, and it would reach her; the Wake marked its
-secrets the way shepherds mark lambs. And he thought: the rising needs
+secrets the way shepherds mark lambs. Nor would it wait on the lifts.
+The Wake's word walked the stays — one runner, one satchel, a hair of
+the tower's own thread underfoot and four miles of air under that —
+which was how the Wake always knew first, and why it never arrived as
+an army. And he thought: the rising needs
 this floor, and this queen's goodwill after it, for years.
 
 Then he paid.

@@ -251,6 +251,12 @@ one felt that a victory had now been *won*, exactly; a victory had been
 listened for, and granted. That was new. The army moved around it
 carefully all the next morning, the way you move around a sleeping child.
 
+The heavy sky went with him. All that day the grey overhead loosened
+and came apart, untended, until rim-light lay along the barrow-grass
+and the nine bowed yews stood in honest weather; and that night there
+were stars in the slot, and Ede watched soldiers wake one another to
+look, and nobody made a speech of it, which was also by the forms.
+
 Mereth Wakesend took up the crown from the causeway with both hands, and
 did not put it on, and never would. Her keepers would climb with the
 rising now — crown-breakers, she called them, the folk who knew how to

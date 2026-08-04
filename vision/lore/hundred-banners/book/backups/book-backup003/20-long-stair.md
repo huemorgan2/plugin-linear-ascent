@@ -75,6 +75,13 @@ Long Stair — though it was lifts and gates like any other stretch of the
 Ascent. It felt like a stair. It felt like climbing a thing that had
 noticed you.
 
+The stair had a shape the legs learned. On every floor you came up out
+of a hole in the country's ground at one bright edge, and the tower to
+the next floor stood at the other, so that between any two lifts lay a
+whole land — rim farms, then the long bend of the country down into
+its dim middle and up again, days of it. Nix's private opinion was
+that the whole Ascent had been laid out by somebody paid by the mile.
+
 The Cloudline was ridges over white nothing, and the squall-drakes came
 sideways out of the weather; a kite of Voss's supply-train went off the
 edge with two of its handlers, and the cliff-goats watched them fall with
@@ -232,6 +239,13 @@ some company nobody knew, who had been down there in the dark keeping
 himself by counting, and when they lit a lamp near his face he asked
 them please to say the number he had reached, because he had lost it,
 and Nix — who understood completely — told him a good one.
+
+They crossed the last miles of the Fields in light. It came on the way
+thaw comes, the flat grey peeling back from the far rim inward until a
+silver brightness lay down the length of the plain, and the dust threw
+shadows — ten thousand shut lids, each with its small slant of shade,
+the first the floor had been dealt in eighty years. Nix walked point
+through them and, for a little while, counted nothing at all.
 
 ⁂
 

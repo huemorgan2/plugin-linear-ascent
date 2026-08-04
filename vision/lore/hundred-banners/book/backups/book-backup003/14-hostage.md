@@ -272,7 +272,9 @@ banners. climb faster* — and a grey slip of
 paper with no seal at all, edges singed in the Wake's plain way of
 saying a channel was burned, five ciphered words long.
 
-He stood in the wind and read it three times.
+He stood in the rim's gale — the wind that squeezed howling through
+the slot between the floors and died ten steps inland — and read it
+three times.
 
 *I am coming up. — C.*
 

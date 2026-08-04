@@ -218,6 +218,12 @@ That night the court lodged them in the kennel-wing, in narrow white
 rooms that had been whips' quarters, and Ede sat on the pallet's edge with
 Sliver dark in her closed hand and did not sleep.
 
+The sky lay close on this floor, closer than any country she had
+climbed. Past the window the Made's underside hung black and low over
+the white wood — not a rumor up here, not a heaven; a fact — and she
+felt the weight of it on the back of her neck: the tower's own
+country, pressing down on the last of the stolen ones.
+
 Say it, she thought, and could not, even soundlessly, even to herself.
 Saying it would make it a thing that had been said. So she counted instead,
 the old discipline, the one that survived when the rest went. The ledger

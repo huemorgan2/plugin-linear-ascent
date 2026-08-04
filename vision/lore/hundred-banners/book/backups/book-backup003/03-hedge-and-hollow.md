@@ -8,7 +8,9 @@ noted it as one.
 entry. He was small and weathered-grey, in a hedger's coat mended with
 four kinds of thread, and behind him the Fencerows ran to the white
 horizon — hedged fields in their old straight lines under a false
-light that never set, hay half-cut and left to grey a lifetime ago,
+light that never set, the whole country tilting gently away from the
+lift-head, down and inland toward the dark it kept at its middle, hay
+half-cut and left to grey a lifetime ago,
 grass gone pale as paper, and no shadow on the whole floor that had
 ever moved. "Hobb Fennick. I count what goes into the hedges, and I count
 what comes out. The counts don't match, and haven't in forty years, and
@@ -143,6 +145,14 @@ it. The false light overhead dimmed by a hair, the whole sky of it at
 once, like a lamp trimmed by a careful hand. Away across the fields, the
 doors of Lamplit Steading began, one by one, to unbar.
 
+By noon the dimming had a direction. The white glare that had lain on
+the Fencerows like a skin was wearing thin in patches, and through the
+first worn place came, plainly, weather — a rag of true cloud, and
+behind it the honest grey-blue of an afternoon no one on this floor
+had been allowed in forty years. At the steading a door that had just
+unbarred banged shut again; Rhovan heard the bar go home. Then it
+opened, slower, wider than before, and stayed so.
+
 There were names on the Stone of the Climb, Rhovan knew, of climbers
 who had broken this same floor before — two generations of them. The
 tower had re-welded its jailer each time within a few winters, a new
@@ -155,8 +165,14 @@ They are *held* freed, or they are lost again — and no lone company,
 however good its counts, holds anything. For that you need the thing
 the tower was built to prevent.
 
-Hobb notched them out at the bluff: "Thirteen up. First time in forty
-years the counts came out ahead." He said it accusingly, as if they'd
+Evening reached the bluff when they did — a true one, the first the
+Fencerows had kept in forty years, come in long and low off the
+country's open edge, and the hedges laid down moving shadows. Hobb
+notched them out at the bluff: "Thirteen up. First time in forty
+years the counts came out ahead. And that" — he tipped his head at
+the deepening sky — "came in with your kill, so I'm counting it
+yours. Every floor up there is owed an evening, captain. Go
+collect." He said it accusingly, as if they'd
 broken something he'd grown fond of, and stood at the lift-head with
 the wall-eyed bitch at his knee, watching them rise, until the chalk
 and the hedges and the old man and the dog were all one pale country
@@ -275,9 +291,15 @@ There are entries a book cannot hold.
 
 The Headframe's great wheel turned that night for the first time in
 forty years, raising crews out of galleries the tower had written off,
-and the lamps of Lampfall came up all together — and if any soul in the
-party thought the low floors would now simply open before them, mercy
-by mercy, cure by cure, the third floor was waiting to correct them.
+and the lamps of Lampfall came up all together. Out at the Cart-End
+the raised crews gathered at the lip of their own country, in the roar
+the rim-wind kept there, and watched the grey glare beyond the rails
+begin to fail as the Fencerows' had — the first true dark coming on,
+and in it, low in the slot, a star. Some wept; some fled back to the
+lamps; the party stood among them and knew, this time, what it was
+watching. And if any soul in the party thought the low floors would
+now simply open before them, mercy by mercy, cure by cure, the third
+floor was waiting to correct them.
 
 ⁂
 
@@ -403,10 +425,14 @@ this man means to storm it by doctrine, kill-all, cull and count. What
 she does in that meadow will tell my employers what they bought. What
 he does there will tell me what she was, before she was ours.*
 
-The false light of the Drowned Pasture never dimmed for night. But at
-the weir-arch, where the freed lift ran its chain up out of sight, the
-clearest air showed a faint dark grain far overhead — the underside of
-the next country, a grain and no more, at the top of miles of sky — and
+The false light of the Drowned Pasture never dimmed for night — though
+since the mill-pool it had begun, in patches, to wear through, the way
+the Fencerows' had. But at the weir-arch, where the freed lift ran
+its chain up out of sight, a stranger who tipped his head back could
+see what the Pasture's folk had
+stopped seeing the way a man stops seeing his own nose: the underside
+of the next country, a smooth dark heaven at the top of miles of sky,
+with the false light laid over it like whitewash on old beams — and
 what hung four floors above that no eye could reach; it came down the
 lifts as rumor instead, a meadow drowned in color that Nan Sedge swore
 was banners.

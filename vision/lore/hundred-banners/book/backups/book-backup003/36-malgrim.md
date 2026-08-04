@@ -193,6 +193,14 @@ man of the forty-third, a tallyman, taken twice. Write that the second
 taking was the crime, and write it plain, so that whoever keeps rolls
 after us knows what the tower could do."
 
+By the time the entry was written, the light over the yards had begun
+to change: the ninetieth's veil going, untended, the grey lid tearing
+far out where the walls stood a day's march off, and a long seam of
+honest brightness walking in over the iron toward the host. The whole
+muster paused to watch it come — no cheer, no order, thousands of
+faces turned one way. Ninety floors had taught the freed what a
+changing sky meant.
+
 ⁂
 
 They brought Berrin to her at noon.

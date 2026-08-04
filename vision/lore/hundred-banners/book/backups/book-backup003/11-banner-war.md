@@ -27,7 +27,10 @@ behind a plough, and they had found the one gate on the tier worth
 owning: the lych-gate stair, the arch of standing lych-stone through
 which every burial on this floor had passed for a thousand years, and
 through which the whole rising must pass to reach the Kingsbarrow above.
-The chain was across it. The toll was posted. *Canon law grants free
+Every floor had two doors — the arch you came up out of at one rim, the
+stair you left by at another, a country's march between — and whoever
+held a door held everything that had to walk between them. The chain
+was across it. The toll was posted. *Canon law grants free
 passage to freed gates*, someone had painted underneath, and someone else
 had painted, in a factor's tidy hand, *the lift is free — the road to it
 is maintained.*
@@ -273,6 +276,12 @@ apart like a settled estate, the tower's scrap of will draining down and
 out of a world it had no claim on — an eviction — while every yew on the
 floor let go its crows at once into a grey and ordinary and unbelievable
 morning.
+
+By the burying, the morning had stopped being grey. The floor's gloom,
+untended now, was coming apart the way it came apart on every freed
+floor — rim-light walking in over the mounds in long slow bars, a wind
+with honest weather in it — and men leaned on their spades to stare up,
+the way the freed always stared, as at a stranger who knew their names.
 
 The mounds were green and shut. The chain was off the lych-gate. Under
 it, in the new peace, three armies buried their dead side by side, in

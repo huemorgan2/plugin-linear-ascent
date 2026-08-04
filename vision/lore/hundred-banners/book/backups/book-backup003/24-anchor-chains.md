@@ -97,6 +97,12 @@ Vega stood by the brake a long time with her palm on the lever.
 "A brake is a promise," she said to Mera. "Whoever built this meant
 it to be kept. We will keep it."
 
+The grey came off the sky through that afternoon, scaling away like
+rust under a wire brush, and for the first time in the keepers' lives
+the chains hung in weather that was only weather — cloud with light in
+it, moving shadows, a wind that meant nothing by it. Mera's folk went
+out along the links just to stand in it, no hammers, listening.
+
 Chainrest kept better than that. With the master brake set and every
 chain on the floor holding fast, the keepers ran out the slack chain
 to the one isle that had never drifted clear — snagged on its mooring
@@ -237,6 +243,11 @@ and the bows finished what obedience had begun. The rigging fell
 slack. The forest went quiet as a chapel. Somewhere under it a drake
 that remembered being a drake climbed out along a yard and flew.
 
+Through the next day the gloom drained out of the air the way bilge
+goes out of a pumped hull, and by evening the wreck-fields stood in
+level amber light, every mast throwing its shadow the same way — a
+fleet's worth of shadows, all sailing east together.
+
 They raised the lift-cell from the Bilge on the third morning, with
 chain-keepers' capstans and topmen's tackle and one giant standing
 hip-deep hauling like a windlass made flesh. They set it in the
@@ -255,7 +266,9 @@ line.
 ⁂
 
 The bridge floors went by like beads told on a string, and every bead
-was a country: the Kennel Courts heard half a day before they were
+was a country worn the same way — farms and gate-towns crowding the
+lit hem of its rim, the land bowing away inland into its own dark:
+the Kennel Courts heard half a day before they were
 seen, and freed almost in passing — the master horn sounded from the
 Mews-Tower, every ungentled pack on the floor heeled at last to its
 own name, and the rising marched out with hounds at its flanks and

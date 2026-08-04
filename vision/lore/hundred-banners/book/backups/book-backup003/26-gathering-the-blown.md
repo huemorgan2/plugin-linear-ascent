@@ -32,7 +32,12 @@ by someone who could read a cocked wood.
 
 Rhovan was who found them. That was the shape of his war, that
 season: down a chain, along a rampart, into the wire, whistling the
-old Rides recall-notes into country that answered with crows. Above
+old Rides recall-notes into country that answered with crows. The
+last ten steps to any rim were the worst of the work: inland a floor
+could half forget its own edges, but at the lip the wind that lived
+in the slot between countries tore at whatever came to it, and he
+finished every approach on his belly, flat under the gale, to look
+over into the sky where his people had gone. Above
 him Vega's eleven skiffs quartered the sky like patient hawks,
 lamps burning the fleet's muster-signal, lifting the stranded off
 ledges no stair could reach; below him the keepers of seven gate-

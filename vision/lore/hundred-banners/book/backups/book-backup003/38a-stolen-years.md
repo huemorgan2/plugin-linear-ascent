@@ -7,17 +7,20 @@ Ede had the tower's grammar by heart now, the way you learn a language
 you are marched through: a stair ends at a gate, a gate gives onto a
 country, a country has a sky. This stair ended on a landing of riveted
 iron broader than Roothollow's whole market, and past the landing there
-was no sky and no country — only the dark going up and the dark going
-out, rib after colossal rib of anchor-iron dwindling toward a vanishing
-point the lanterns could not buy back. Not a floor. The space between
-two floors. They had climbed out of the world's rooms and into its
-timbers.
+was no country — only a bare shelf of dark land running out level and
+unlit, and, far above, where a sky should have stood, a roof of
+darkness: the underside of the next floor, with no false day painted
+across it. A wind moved over the shelf, slow and cold and smelling of
+open air, come from rims too far off to see; the great stays came down
+out of the dark at long intervals, taut as a ship's shrouds, and went
+home into their anchors. Not a floor. The shelf between two floors.
+They had climbed out of the world's rooms and into its timbers.
 
 *Between the heart and the King's waiting-rooms,* Sliver said against
 her breastbone, low, as it had spoken ever since the scram. *Every great
 house has such a space. The builders ran the binding-seams through here,
-and the counterweights, and the warm water off the core. You are inside
-the wall, general.*
+and the counterweights, and the warm water off the core. You are under
+the King's floorboards, general.*
 
 "How far across?"
 
@@ -28,12 +31,12 @@ You will see why.*
 The quiet came with them. It had come with them since Ulfar's hand on
 the bar — the great new silence of a tower with its heart stopped, no
 hum in the iron, no voice under the world, every collar cold — and in
-the galleries of the between it was so whole that the host made all the
-sound there was: boot-leather, cart-axles, the litters of the burned
-crews creaking, the hundred and forty saved out of the Fuel Pens
-breathing carefully in their wagons. An army is never quiet. This one
-came near it. No one ordered the hush; the place collected it, the way
-a church does, or a sickroom.
+the open dark of the between it was so whole that the host made nearly
+all the sound there was: the low wind, boot-leather, cart-axles, the
+litters of the burned crews creaking, the hundred and forty saved out
+of the Fuel Pens breathing carefully in their wagons. An army is never
+quiet. This one came near it. No one ordered the hush; the place
+collected it, the way a church does, or a sickroom.
 
 On the second watch of the first day, far down the run of the road, Ede
 saw green light.
@@ -44,7 +47,7 @@ lit window in a dead town; and beyond it another light, smaller,
 grey-blue, the color of snow falling at dusk; and a third, warm as an
 open door. The vanguard stopped without an order being given. Ede
 walked out ahead of the column, and the smell reached her before the
-understanding did, across four hundred paces of dead iron.
+understanding did, across four hundred paces of the shelf's cold dark.
 
 Cut grass. Blossom. Rain on warm ground.
 
@@ -63,8 +66,8 @@ years, put it in her apron, and got on with her office.
 
 "Pell," she said. "Of the Years. You'll be the rising; we felt your work
 below." She turned her face down the road, to the lights standing one
-after another in the dark, out to where the ribs of the world swallowed
-them. "Come and see what the tower kept."
+after another in the dark, out to where the long night of the shelf
+swallowed them. "Come and see what the tower kept."
 
 The road ran between garths. That was the tenders' word, and it was the
 right one: garden-closes under long vaults of glass and iron, each a

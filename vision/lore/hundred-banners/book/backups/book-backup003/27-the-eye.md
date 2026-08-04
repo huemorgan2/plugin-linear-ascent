@@ -237,6 +237,12 @@ his shoulder, counting sleepers the way a miser counts gold.
 Eleven thousand and some, breathing. Rule one, kept eleven-
 thousandfold: nobody musters alone.
 
+Past middle-night the gold went out. It sank the way embers sink,
+with no hour you could put a finger on — the lull's pale shine, that
+had burned unbroken over the bowl for eighty years — and behind it
+came plain dark, honest dark, the eye's first night. Some of the
+risen woke and wept at it, quietly, the way you weep at a known voice.
+
 He was at the western ring, by the graves, when the horns came.
 
 ⁂

@@ -110,13 +110,13 @@ theory. This room is not. From this Spire, sister, it can be *done* —
 everything I have argued since the Frozen Sea, done gently, done truly.
 Damp the coils to a tenth. A tenth is nothing — the Yoke at a tenth is a
 headache, not a madness; the fever at a tenth is a shiver. And with the
-tenth I keep the grav-engines fed, and I set the floors down." His voice
+tenth I keep the engines fed, and I set the floors down." His voice
 never rose. It never had. It was the terrible patient voice of the only
 person in her life who had never once lied to her, and every sentence
 arrived whole. "Thirty-one years, Vega. One generation of a lit core, and I
 lower a hundred floors onto the earth like a cup onto a table. No fall.
-No dying tower above a world of the freed, waiting an age to come down
-on their children's heads. And at the end of it, the last coil damped,
+No world of the freed left standing in the sky for good, whole skies
+above its own stolen ground. And at the end of it, the last coil damped,
 the Yoke out forever, and every floor a *field* — not a monument, not a
 grave, a country again. That is my whole crime, sister. I want to
 inherit the tower warm." His hand flexed on the bar, and she saw it, the
@@ -211,6 +211,9 @@ its grip on every beast in the stolen world in one long unclenching, and
 no one on floor ninety-three heard any of it, because what they heard
 was nothing, enormous, everywhere nothing, the first nothing in an age
 and a half.
+
+What no one in the lead country could see, the Girdle-sea saw: the last
+veils dying together, and the grey rungs of the world going gold at once.
 
 In the gallery mouth, Halflight guttered. The coil-fed demon starved
 standing, its glare going out of it like water out of cupped hands, and
