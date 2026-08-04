@@ -31,9 +31,8 @@ she thought of Skarn dying in the Warcamp still believing his collar
 was a rank, and she said, "Tell me what you need."
 
 *She is asking you for an army that sings,* Sliver said against her
-palm, dry as always, old as always. *I have carried forty-one climbers
-and not one of them was asked for that before. I find I am glad to
-have lasted.*
+palm, dry as always, old as always. *Not one climber I have carried was
+ever asked for that before. I find I am glad to have lasted.*
 
 They went in at the middle of the night's third course, when the
 war-feast was loudest and the ice skald's harp had the whole hall by

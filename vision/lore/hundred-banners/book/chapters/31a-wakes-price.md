@@ -190,7 +190,8 @@ an instrument the Wake no longer owns. All true. All entered. And
 in the same season it has left the founding ledger in arrears, so I
 have brought the accounts current myself. Enter: the Grey Rides,
 freed. The kennel courts, freed. The Snare Woods, the Quarry Runs,
-the pale court and every green fragment of the stolen wood, freed. Enter: ten thousand snares slacked in one breath by a
+the pale court and every green fragment of the stolen wood,
+freed. Enter: ten thousand snares slacked in one breath by a
 calloff no elf alive could sound. Enter: the Gibbet Glade's dead,
 cut down and laid in green ground. Enter last, and rule it twice:
 the only army in the age of the tower that has ever moved the

@@ -204,8 +204,8 @@ still fighting the King with the only inch he'd left her.
 The armored figure at her side was another matter, and nearly ended
 Rhovan, until Nix went in under its shield with the Break-collar word and
 the chantry-priests sang Recant behind him, and the Champion's own
-lieutenant — taken with her at the last step an age ago, collared to fight
-at her side forever — came free mid-stroke, dropped guard, dropped blade,
+lieutenant — taken with her at the last step, collared to fight at her
+side forever — came free mid-stroke, dropped guard, dropped blade,
 and turned to stand between his welded commander and her own descending
 sword. He took the flat of it and held.
 

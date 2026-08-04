@@ -17,10 +17,11 @@ shadowless, that each Warden kept drawn over its own country, dimming
 the land inland of the rims until only the fever's creatures throve
 in it. The Fencerows' keepers can now confirm the daylight was never
 day at all, their valley having since been shown an honest dark, and
-after it an honest morning. Under all of it ran the hum. Those who lived beneath it called it silence, never having stood
-in the true kind; a smith of the rising testifies that she carried the
-pressure from Roothollow to the Spire in the small bones of her ears
-and only learned its name when it stopped.
+after it an honest morning. Under all of it ran the hum. Those who
+lived beneath it called it silence, never having stood in the true
+kind; a smith of the rising testifies that she carried the pressure
+from Roothollow to the Spire in the small bones of her ears and only
+learned its name when it stopped.
 
 It must be understood that the Yoke was not sorcery in the fireside
 sense, a curse said once and left to work. It was administration. It
@@ -153,16 +154,15 @@ world's old bones, and the last collars everywhere fell open.
 So the Ascent still stands at Roothollow's back and always will: a
 ladder of thin countries fading up into the haze, gold now the whole
 visible height of it but the one contracted rung, clouds walking out
-of one land's rim and across
-the face of the next. No one is going back down to the old ground —
-the pits the countries were cut from are scar-lakes now, and home is
-miles of sky above where home used to be. But the compilers, who
-began this appendix believing they were writing the survey of a
-prison, end it obliged to record what every floor reports in its
-first freed year: the green coming back inland from the Rimlands, the
-harvests heavier than the eldest remember, the dens of the Deep
-Middle emptying one by one. The countries cannot be put back. They
-can heal, and they are healing. What is to be done with the dead core
-is not the compilers' question. It is reserved, by the first article
-of the Charter, to a freed world's own council; and the council, for
-the first time in an age, may meet wherever it likes.
+of one land's rim and across the face of the next. No one is going
+back down to the old ground — the pits the countries were cut from
+are scar-lakes now, and home is miles of sky above where home used to
+be. But the compilers, who began this appendix believing they were
+writing the survey of a prison, end it obliged to record what every
+floor reports in its first freed year: the green coming back inland
+from the Rimlands, the harvests heavier than the eldest remember, the
+dens of the Deep Middle emptying one by one. The countries cannot be
+put back. They can heal, and they are healing. What is to be done
+with the dead core is not the compilers' question. It is reserved, by
+the first article of the Charter, to a freed world's own council; and
+the council, for the first time in an age, may meet wherever it likes.

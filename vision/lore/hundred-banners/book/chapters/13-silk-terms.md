@@ -18,13 +18,11 @@ captains the shape of the thing: you did not fight a hunt, you *recalled*
 it. When Tallyhorn broke on the third morning — a courser welded to its
 dead rider, brought down on the open road — Aline had sounded the true
 recall from the Ride-Head crossroads, and the whole grey hunt had come
-home. Horse and rider and hound, laid down at the
-wayshrine, fourscore years late for their own supper. By that dusk the
-Rides' grey lid was fraying off the wood, and the wayshrine lamps
-burned that night in the first honest dark the Rides had kept in
-fourscore years.
-The ride-keepers climbed with the rising now, its outriders and its
-fastest word.
+home. Horse and rider and hound, laid down at the wayshrine, a lifetime
+late for their own supper. By that dusk the Rides' grey lid was fraying
+off the wood, and the wayshrine lamps burned that night in the first
+honest dark the Rides had kept in fourscore years. The ride-keepers
+climbed with the rising now, its outriders and its fastest word.
 
 After that the floors ran together the way marching floors do. Ran
 together, and did not shrink. The Deep Drifts were a week of going

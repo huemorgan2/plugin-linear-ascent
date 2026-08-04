@@ -2,11 +2,11 @@
 
 The muster-drums of the ninetieth floor had beaten since the floor was
 poured, the captives said, and no one living had ever heard them stop.
-They stopped
-an hour before dawn, when the last drummer imp was freed of its collar and
-set down its sticks and sat looking at its own hands, and the silence that
-followed was so large that half the host woke where it slept among the
-wreckage, certain some new weapon had been loosed against them.
+They stopped an hour before dawn, when the last drummer imp was freed
+of its collar and set down its sticks and sat looking at its own hands,
+and the silence that followed was so large that half the host woke
+where it slept among the wreckage, certain some new weapon had been
+loosed against them.
 
 Ede walked the forming-yards in that silence. The iron squares were sown
 with broken collars, thousands of them, burst in the wave of the great
@@ -276,8 +276,8 @@ Marta Reed said rope too, when the company spoke. So did five others.
 Then it came around the fire to Wat Kello, who had been welded, whose
 face was iron from the jaw down, whose first word in five years — spoken
 in the Welding Halls with his general's name in his eyes — had been
-*Bread.* The speech-slit they had cut him at floor 84 made every word
-cost.
+*Bread.* The speech-slit they had cut him at floor eighty-four made
+every word cost.
 
 "Rope's a wage," Wat said. "Paid once. Done." He worked the iron
 jaw. "He was a provisioner. Twenty years he fed floors to the tower."

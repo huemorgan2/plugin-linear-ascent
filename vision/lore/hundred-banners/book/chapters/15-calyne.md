@@ -209,12 +209,12 @@ questions. She was born in Roothollow and she won't say where she's
 been, and the one story that should have frightened a loyal spy to
 death lit her up like a lamp instead."
 
-*"I have carried forty-one climbers,"* the splinter said, *"and I will
-tell you the only thing four ages taught me about hunting hidden things:
-the creature you can see circling the trap is rarely the one that has
-been eating from it. Rarely,"* it added, dry as old paper, *"is not
-never. I make no defense of the grey woman. I merely decline to make
-the accusation while the ground is dark. So should you."*
+*"I will tell you the only thing four ages taught me about hunting
+hidden things,"* the splinter said. *"The creature you can see circling
+the trap is rarely the one that has been eating from it. Rarely,"* it
+added, dry as old paper, *"is not never. I make no defense of the grey
+woman. I merely decline to make the accusation while the ground is
+dark. So should you."*
 
 "Then what do I do with her?"
 

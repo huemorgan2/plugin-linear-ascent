@@ -116,15 +116,15 @@ them, and the Strand needs no feeding — and I set the floors down."
 His voice never rose. It never had. It was the terrible patient voice
 of the only person in her life who had never once lied to her, and
 every sentence arrived whole. "Thirty-one years, Vega. One generation
-of a lit core, and I
-lower a hundred floors onto the earth like a cup onto a table. No fall.
-No world of the freed left standing in the sky for good, whole skies
-above its own stolen ground. And at the end of it, the last coil damped,
-the Yoke out forever, and every floor a *field* — not a monument, not a
-grave, a country again. That is my whole crime, sister. I want to
-inherit the tower warm." His hand flexed on the bar, and she saw it, the
-future, standing behind his eyes: the Forge-Court's dream, the gentle
-mathematics, the tower not broken but *kept* —
+of a lit core, and I lower a hundred floors onto the earth like a cup
+onto a table. No fall. No world of the freed left standing in the sky
+for good, whole skies above its own stolen ground. And at the end of
+it, the last coil damped, the Yoke out forever, and every floor a
+*field* — not a monument, not a grave, a country again. That is my
+whole crime, sister. I want to inherit the tower warm." His hand
+flexed on the bar, and she saw it, the future, standing behind his
+eyes: the Forge-Court's dream, the gentle mathematics, the tower not
+broken but *kept* —
 
 — and the room made no sound, but the room was listening: Ferro gray and
 still, the freed engineers stopped along their wall of wheels, Ede at
@@ -218,9 +218,9 @@ the first nothing in an age and a half.
 
 What no one in the lead country could see, the Girdle-sea saw — the
 fishermen would tell it for the rest of their lives, and the host had it
-from them after, as the world's report: the last veils dying together,
-and the grey rungs of the world going gold at once — every last veil
-that was his. One dark, at the fortieth, being nobody's but hers, stood.
+from them after: the last veils dying together, and the grey rungs of
+the world going gold at once — every last veil that was his. One dark,
+at the fortieth, being nobody's but hers, stood.
 
 In the gallery mouth, Halflight guttered. The coil-fed demon starved
 standing, its glare going out of it like water out of cupped hands, and

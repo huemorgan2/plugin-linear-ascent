@@ -118,8 +118,7 @@ Thanesrest putting up the whole footsore host in barns the size of
 market-squares. Vega walked among her own folk for three days with her
 shoulders down for the first time since the Frozen Sea. The freeholders
 sent forty scythes up with the army when it moved. Nix counted them too.
-The cord was for the dead but the counting was for everything; counting
-was how he held the world still enough to look at.
+The cord was for the dead but the counting was for everything.
 
 ⁂
 

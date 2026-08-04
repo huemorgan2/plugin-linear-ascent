@@ -1,6 +1,6 @@
 # Chapter 28 — The Anchor Chains
 
-Vega Coalbrow had drawn chain all her life, and she had never feared it
+Chain was Vega Coalbrow's first trade, and she had never feared it
 until she walked upon one above the clouds.
 
 The first link was longer than a mead-hall. It hung in a shallow arc

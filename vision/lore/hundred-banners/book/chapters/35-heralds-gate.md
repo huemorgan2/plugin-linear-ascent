@@ -117,9 +117,9 @@ The sky, for what it was worth, was empty. The Storm Queen's gales,
 promised in her own eye the day she scattered the host — wind, when
 the wind profits — and owed double since her cellars stood open, were
 reported by the sky-skiffs to be two floors below and beating upward
-against their own contrary winds. Rhovan, hearing it, had said only: "Of course they are,"
-and gone back to fletching. No promised relief in any tale worth telling
-has ever arrived on time.
+against their own contrary winds. Rhovan, hearing it, had said only:
+"Of course they are," and gone back to fletching. No promised relief
+in any tale worth telling has ever arrived on time.
 
 The drums quickened. The gates of the forming-yards swung. Vega Coalbrow
 spat on her hands, took up the maul she had forged for her
@@ -345,12 +345,12 @@ It came over the south wall at mid-afternoon with a sound like the
 world clearing its throat: the gales of the Tempest Court, sworn at
 her own refusal and two floors tardy, Zephyra's whole unbottled
 cavalry riding down onto a battle that had been over since noon. The
-banners of the rising stood straight out from their poles. The wind swept the fortress-
-square from wall to wall exactly once, majestically, gathering up the
-last knots of the deep-collared rearguard still skirmishing at the
-gatehouse stair and depositing them, disarmed and upside down, in a
-quench-trough; it snuffed what fires the ballistae had started; and
-then it wheeled above the yards as if awaiting applause.
+banners of the rising stood straight out from their poles. The wind
+swept the fortress-square from wall to wall exactly once, majestically,
+gathering up the last knots of the deep-collared rearguard still
+skirmishing at the gatehouse stair and depositing them, disarmed and
+upside down, in a quench-trough; it snuffed what fires the ballistae had
+started; and then it wheeled above the yards as if awaiting applause.
 
 Rhovan put it best, as he put everything best, watching the gale-
 riders dress their glittering ranks over a field of the sitting freed.

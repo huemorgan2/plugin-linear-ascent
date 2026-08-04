@@ -12,7 +12,7 @@ it. The lore was not long. That was the terrible economy of it. Recall,
 Houndcall, Mark, and over them all one word that gathered the rest the way
 a fist gathers fingers: Calloff, the merciful capstone of the elf-hunt's
 arts, the word that ends any hunt. A child could learn the sounds in an
-evening. What could not be learned in an evening was the meaning them.
+evening. What could not be learned in an evening was meaning them.
 
 "You cannot call off a hunt you would rather win," Hornsend said. "The
 word reads the heart it leaves. That is why the tower could not take it,

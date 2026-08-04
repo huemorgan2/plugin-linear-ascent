@@ -210,11 +210,12 @@ meant.
 Cindermaw, "and the second at the ninetieth, and I am tired of the
 smell of it. Climb, third army. The rim is open, the road is yours,
 and my reasons go with you. If I pass you on the way up, remember that
-of everything you freed on this floor, the largest of it is grateful." The great body
-began, tectonically, to gather itself. "And general. Whoever he is —
-when you find him, before you do what armies do. Ask him what they
-promised. It will be something small. It always is. That is the other
-thing worth pitying in this tower, and the discipline is harder."
+of everything you freed on this floor, the largest of it is grateful."
+The great body began, tectonically, to gather itself. "And general.
+Whoever he is — when you find him, before you do what armies do. Ask
+him what they promised. It will be something small. It always is. That
+is the other thing worth pitying in this tower, and the discipline is
+harder."
 
 She rose. It was like watching a range decide against geology. The
 first true wingbeat in a thousand years knocked flat the ash-dunes of

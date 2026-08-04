@@ -42,12 +42,13 @@ a road there. The sap-head ran in under the outwork's footing, shored by
 dead men's craft, and at its end sat a charge and a cache of
 demolition-lore twenty years in the hoarding. Above it, the
 Furnace-Trench ran with trench-gas and slag-light, and the plan — Vega's
-plan, and Dara's, argued out over a light-table until the lamps guttered
-twice — was simple the way a hammer is simple. Speak the rampart's own
-seams open — *Unrivet*, a breach made of the wall's own craft — and send
-the collar-breakers sweeping through it first, ahead of any spear, to
-free whatever the King drove into the gap. Get the work-gangs clear.
-Fire the gas. Drop the King's first wall into the King's own hole.
+plan, and Dara's, argued out over a light-table until the watch had
+twice changed — was simple the way a hammer is simple. Speak the
+rampart's own seams open — *Unrivet*, a breach made of the wall's own
+craft — and send the collar-breakers sweeping through it first, ahead
+of any spear, to free whatever the King drove into the gap. Get the
+work-gangs clear. Fire the gas. Drop the King's first wall into the
+King's own hole.
 
 Nix's part came before the fire. It always did, now.
 

@@ -1,7 +1,7 @@
 # Chapter 30 — Gathering the Blown
 
-Rhovan had spent a life finding things that did not want to be found,
-and he had never hated the work until the things were his own.
+Rhovan had made his living finding things that did not want to be
+found. He had never hated the work until the things were his own.
 
 The queen's gales had sown the third part of the rising across seven
 floors of sky, and the sky's floors were not kind ground. A company
@@ -43,7 +43,7 @@ lamps burning the fleet's muster-signal, lifting the stranded off
 ledges no stair could reach; below him the keepers of seven gate-
 towns walked their own deadly floors, gathering strangers as if the
 strangers were their own lost isles. He kept the tallies in his head,
-where he kept everything. Found, four hundred and six. Found, six
+where he kept everything. Found, four hundred and eleven. Found, six
 hundred and sixty. Found, nine hundred and one — and every evening
 he brought the numbers to the general's lamp and watched Ede Stonhal
 take them the way a woman takes lashes she has agreed to.

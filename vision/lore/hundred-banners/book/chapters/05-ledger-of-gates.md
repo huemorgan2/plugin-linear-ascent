@@ -75,8 +75,8 @@ end it with iron.
 "No one touches them," Ede said. "We do not pay, and we do not cut. Not
 today."
 
-"The bread pays," Weck observed, mild as milk, nodding at the supply-
-sledges. "Or the bread waits."
+"The bread pays," Weck observed, easy as a posted tariff, nodding at
+the supply-sledges. "Or the bread waits."
 
 Rhovan watched Ede take that, and bank it, and walk away, and he made
 his own tally, in the currency he dealt in. Warrants have ledgers

@@ -55,8 +55,8 @@ years because the Hunt was the tower's own. Ede learned that the first
 night, when the ground they were driven down was suddenly not the Eye's
 drowned terraces but a beaters' stair sunk in the hollow of a black iron
 anchor-root — a hidden run, hound-worn, rank with old scent, that went down
-when every law of the climb said the way was up. Sliver burned cold against her palm the whole
-descent.
+when every law of the climb said the way was up. Sliver burned cold
+against her palm the whole descent.
 
 *"They are not taking you toward the stair-lifts,"* it said. *"They are
 taking you where the running is good. I have carried climbers through this
@@ -195,10 +195,10 @@ path ahead of them that Rhovan swore was false, a groomed line pointing the
 one way in this wood they must not go — down, always down, the way every
 country's ground finally went, down toward its own dark middle, toward a
 clearing ringed pale with foxglove where every course on this floor had
-ended for a thousand years. On the high stands along the lanes sat crows in their
-hundreds, and the crows called the course. Ede learned to hate the crows
-worse than the hounds. The hounds only followed. The crows told the whole
-wood, always, exactly, where the quarry ran.
+ended for a thousand years. On the high stands along the lanes sat
+crows in their hundreds, and the crows called the course. Ede learned
+to hate the crows worse than the hounds. The hounds only followed. The
+crows told the whole wood, always, exactly, where the quarry ran.
 
 And the hounds here did not funnel. They paced. Fresh hounds, run-bred,
 falling in beside them a lane's width off, matching Nix's trot and Vega's

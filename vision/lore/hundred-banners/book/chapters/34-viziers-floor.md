@@ -30,8 +30,8 @@ own collar with his own hands, which no one had ever seen, and his whole
 warren woke behind him. A barracks of the King's army came over in a
 single evening, tier by tier, like a hillside letting go. The rising
 gained a floor, a spell for walking unchallenged in the tower's own
-livery, and four thousand soldiers who knew every corridor of the Made
-from the inside.
+livery — Passfor, the freed called it — and four thousand soldiers who
+knew every corridor of the Made from the inside.
 
 Berrin Or fed them all by midnight. Rhovan stood in the ration-line dark
 and watched the old provisioner move down the cell-tiers with his

@@ -263,10 +263,9 @@ Of all that floor gave the histories, one picture outlived the rest,
 and the freed drew it on hearth-walls for a hundred years: the third
 drum-tower black against the brazier-light, its drums fallen still,
 and on top of it a goblin no bigger than the drum he had silenced,
-holding
-the frame with one hand in the rising smoke — not waving, not crying
-the victory, only counting, lips moving, with the grey banner planted
-small and crooked at the tower's foot below him.
+holding the frame with one hand in the rising smoke — not waving, not
+crying the victory, only counting, lips moving, with the grey banner
+planted small and crooked at the tower's foot below him.
 
 *The shield-wall,* said Sliver. *He is still at the stair, Ede. He
 has not moved. He is waiting for you.*

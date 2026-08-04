@@ -161,12 +161,11 @@ than this one. My company voted me down, and I have had the tiers to
 think about it, so I'll say what the thinking came to." She did not
 orate; Shieldwall had never had an orator; she said it the way you read
 a delivery-bill. "A man of ours said it at that fire: rope's a wage.
-Paid once, and done, and light. That man —" she looked at Corven Dale
-the way you look at weather, "— owes four hundred and six years of
-other people's lives, and I'm not minded to let him settle for one of
-his own. The sentence of Berrin Or stands at the ninetieth floor,
-written by the thirty and sealed by the general. I ask this court to
-cite it, and better it."
+Paid once, and done, and light. That man —" she looked at Corven Dale,
+"— owes four hundred and six years of other people's lives, and I'm not
+minded to let him settle for one of his own. The sentence of Berrin Or
+stands at the ninetieth floor, written by the thirty and sealed by the
+general. I ask this court to cite it, and better it."
 
 So it was cited — read whole into the record by Dara Lastmuster, the
 first precedent of the freed world's law: *he shall live; he shall
