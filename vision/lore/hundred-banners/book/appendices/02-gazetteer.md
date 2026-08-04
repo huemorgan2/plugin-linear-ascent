@@ -140,9 +140,9 @@ crew fused in the slag, a tomb no one reopened.
 and drum-towers of the Red Orc host, the floor's own people caged beneath as
 labor and hostage. Dara Shieldwall passed word between the pens and waited.
 The warden was **Warlord Skarn**, himself first-taken, a conscript made a
-general — freed, not slaughtered, when the pens burst and the drums went
-quiet. Break-collar was learned on this floor, and the war changed its
-meaning.
+general; his caged thousands were freed, not slaughtered, when the pens
+burst and the drums went quiet. Break-collar was learned on this floor,
+and the war changed its meaning.
 
 ## Floors 21–40 · The Banner War
 
@@ -581,6 +581,10 @@ realm, and laid the horn down for good.
 
 ## Floors 81–100 · The Made
 
+*The Made were built, not stolen, and their trays alone keep no
+country's outline: perfect circles, rim to rim — a line no people ever
+drew.*
+
 **81 · The First Outwork.** The first floor of the Made — no soil, no
 green, only slag-fill and riveted plate, a siege-rampart the size of a
 border-country raised by slave-sappers whose bones went into the fill. Dara
@@ -720,8 +724,8 @@ she stepped out of the metal alive, and climbed the last floor beside the
 host.
 
 **100 · The Throne.** The summit — a single hall of cold iron and raw
-aether open to a black sky, built by a King who cut the world into a
-hundred pieces
+aether open to a black sky and its stars, built by a King who cut the
+world into a hundred pieces
 so it could never stand in one room. No town stood here, and no keeper; only
 **Vharuk, the Demon King**, a usurper of nothing, offered no mercy because
 he was the source. When he fell, the stolen aether went home, every collar

@@ -225,9 +225,10 @@ been *issued to the enemy* that morning.
 
 The supply-sleds met them at the gate, hauled up the freed lifts from
 eighty floors of friendly country, and on the third sled were bread-crates
-stamped with Roothollow's mark, the loaves still warm from Berrin Or's own
-ovens at the bottom of the world — that good dense fair-day bread, sweet
-as a feast morning. Nix took his loaf and ate it slowly and thought, as he
+stamped with Roothollow's mark, the loaves out of a gate-town oven two
+floors down that Berrin Or had taught Roothollow's own recipe — that good
+dense fair-day bread, sweet as a feast morning. Nix took his loaf and
+ate it slowly and thought, as he
 always thought, that whatever else the rising had, it had one man who
 never once forgot that an army was made of stomachs. He counted the loaves
 for the new-freed twice, to be sure there were enough.

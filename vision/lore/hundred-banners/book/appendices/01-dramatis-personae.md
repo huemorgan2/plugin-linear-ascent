@@ -22,8 +22,8 @@ short and the grieving was not, and to let the line do both jobs.*
   never afterward found hiding. Counts things; weeps in numbers; holds
   the age's one parole, and counts slow.
 - **Sliver** — a shardmind. Has carried forty-one climbers and chosen
-  nine; last light of its kind; a poor liar, that being a fault of
-  crystal.
+  nine; last light of its kind that walks free; a poor liar, that being
+  a fault of crystal.
 - **Berrin Or** — Roothollow's provisioner. Fed the rising for two
   years and had sold it for twenty. Keeps books still, by sentence of
   the thirty — the open kind only, and a wagon, and a list longer than
@@ -48,12 +48,12 @@ short and the grieving was not, and to let the line do both jobs.*
 - **Marta Reed** — senior after Dun. Called the roll until all thirty
   answered, the quick and the dead; voted rope; was outvoted; enforces
   the better sentence to the letter.
-- **Sefwin** — welded, iron from the jaw down, every word paid for.
-  His first in twenty years was the courier's name; his next four were
-  the sentence: let him feed them back.
-- **Marn** — of the thirty, freed at the Welding Halls; carried the
-  last banner in the world through the Last Door one-handed. The iron,
-  for one hour, weighed nothing at all.
+- **Wat Kello** — of the thirty, freed at the Welding Halls; iron from
+  the jaw down, every word paid for. His first in five years was
+  *Bread* — testimony before his own name; his sentence for the man it
+  named: let him feed them back. Carried the last banner in the world
+  through the Last Door one-handed. The iron, for one hour, weighed
+  nothing at all.
 - **Tam** — of the thirty. Wept when the Champion said his name;
   raised the banner at Roothollow with both hands, having kept them.
 - **Dara Shieldwall** — turned the keys of the twentieth floor's
@@ -75,7 +75,7 @@ short and the grieving was not, and to let the line do both jobs.*
 - **Wend Threadneedle** — thread-cutter of the fortieth floor. Nine
   years of cocoons, one strand at a time; both forearms say so.
 - **Aline Bridlerest** — last ride-master of the Grey Rides. Recalled
-  a hundred-year hunt to its own supper.
+  a fourscore-year hunt to its own supper.
 - **Wend Latchlight** — the Trapdoor Fields. Walked an army across a
   country that was one trap, saying, in the main, "slowly."
 - **Bruna Coldquay** — the Frozen Sea. Taught the drivers Kindle and
@@ -116,7 +116,7 @@ were right.
 ## The Hunt
 
 - **The Pale Huntsman** — Warden of the eightieth. Never spoke, which
-  was worse. Kept eighty years of fair-hand books and was walked
+  was worse. Kept a thousand years of fair-hand books and was walked
   in through one bad clause.
 - **Nael Hornsend** — horn-caller. Kept the calloff-lore against the
   day somebody would need a hunt unsounded, and lived to teach it.

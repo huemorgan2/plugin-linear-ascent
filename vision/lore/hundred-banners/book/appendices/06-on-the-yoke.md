@@ -72,7 +72,7 @@ A clerk of the freed at Lastmuster records that the King's army did
 not break at the ringing; it sat down, and began to say names. The
 limits are also on record: the deep-collared, worn past any single
 word's reach, wanted the Recant sung one at a time through the
-afternoon; the Wrongmade have nothing in them to free; and the one
+afternoon; the Wrongmade have nothing in them to free; and the
 collar the bell could never touch was the collar put on from the
 inside. The Herald heard the bell plainly, and asked, the next
 morning, to hear the word said over his own steel, and heard it, and
@@ -135,7 +135,10 @@ is entered above, in the matter of the shards.
 But the scram did not bring the tower down, and could not — the
 Strand never asked the core's leave to hold, and does not ask now.
 The ledger of what died and what stands is short and every line of it
-has been tested: the veils died, all the last of them in one hour;
+has been tested: the veils died, all the last of them in one hour —
+all, the compilers must enter, that were the King's; the fortieth's
+dark stands yet, being no part of the Yoke since the Molt but a
+queen's, kept by contract, and the reader may see it from any quay;
 the false daylight died with them, and real light means real nights,
 which is why the low floors have gone back to lanterns; the fever
 died mid-word; the welding-fire died. The trays stand. The air of
@@ -149,7 +152,8 @@ world's old bones, and the last collars everywhere fell open.
 
 So the Ascent still stands at Roothollow's back and always will: a
 ladder of thin countries fading up into the haze, gold now the whole
-visible height of it, clouds walking out of one land's rim and across
+visible height of it but the one contracted rung, clouds walking out
+of one land's rim and across
 the face of the next. No one is going back down to the old ground —
 the pits the countries were cut from are scar-lakes now, and home is
 miles of sky above where home used to be. But the compilers, who

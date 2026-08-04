@@ -109,10 +109,9 @@ fresh-welded down one at a time, and Sef's people found the seams, and
 the word was said, and the iron opened.
 
 The morning after the gantry fell, the veil went — untended, the grey
-false day thinning and tearing the way the freed had seen it go above
-every floor whose Warden they had broken — and down through the high
-smoke-vents came the grey-silver of an honest day, lying where only
-arc-light had ever lain. Work stopped, one breath, every hand; nobody
+false day thinning and tearing — and down through the high smoke-vents
+came the grey-silver of an honest day, lying where only arc-light had
+ever lain. Work stopped, one breath, every hand; nobody
 needed it named. Then the word was said again, and the iron went on
 opening, in daylight.
 

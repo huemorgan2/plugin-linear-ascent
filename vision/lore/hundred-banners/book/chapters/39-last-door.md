@@ -269,7 +269,7 @@ company back. Thirty of them are in this hall."
 So Ede gave her the muster-roll — the rebuilt roll, the one she had written
 out of her own memory over a traitor's protests, thumbed and rain-marked
 and carried against her heart from the Cindermouth to the Last Door. The
-Champion read it the way quartermasters read: fast, and twice. Ninety-odd
+Champion read it the way quartermasters read: fast, and twice. A hundred
 banners. Thirty-one peoples and more since. Goblins mustered beside Men,
 keepers and Pressed and Tollmen and giants, column after column of the one
 thing the tower had been built so the world could never make.

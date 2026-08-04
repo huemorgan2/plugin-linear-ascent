@@ -113,7 +113,7 @@ annotation is supplied at no charge, being her own.*
 ## Discharges, in the scrivener's later hand
 
 The first year's story: paid at signature, and handsomely; the Wake's
-declined correspondence of three centuries is regarded as answered.
+declined correspondence of fourscore years is regarded as answered.
 
 The hostage-clause: discharged with the thaw; warranty honored; goods
 returned whole, and, the court notes, reluctant at the gallery's edge,

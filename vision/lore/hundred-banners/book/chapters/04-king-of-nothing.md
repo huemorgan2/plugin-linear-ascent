@@ -286,6 +286,21 @@ banner-wrights walking out toward the elm as if the horns of a thousand
 years had all sounded at once. The gathering the tower had frozen a
 breath too soon stood on the Kingsfield and finished itself.
 
+The wind came while Rung was still in the tree. Nix felt it and did not
+believe it, because dead air was the first fact of the Kingsfield,
+older than the court, older than the crown; but the gloom over the
+meadow was nobody's now, and it was coming apart, and through the first
+tear in it an evening wind walked in off the rim — real wind, miles of
+it, smelling of downs and coming dark — and crossed the field, and the
+banners flew. All of them. The true color on the Standard-Elm and the
+hundred dead ones under it — on the muster-oaks, on the throne-frame,
+half-raised out of the mud on their fallen poles — every cloth on the
+Kingsfield lifted out full together, colors of companies that no longer
+mustered and kings that no longer reigned flying at last over the
+finished muster. Nix stood under them with his head back and thought:
+applause at the end. That was the whole of the contract. The house was
+up.
+
 Nix counted them until he could not.
 
 He kept the grey banner. No one claimed it; the woman — Ede, the

@@ -34,7 +34,9 @@ Wakesend's lamp still burning in it, the crown of the Barrow King
 sitting on the table between them wrapped in sacking, like
 something confiscated.
 
-"Eight toll-houses on four floors," Ede said. "In six nights. The
+"Eight toll-houses on four floors," Ede said. "In six nights — and
+four floors is a season's walking, so it's not one burner, it's a
+burner to a floor, working to one list. The
 riders say nobody's seen who does it. I want someone who reads ash
 the way Voss reads margins. Go down, look, come back. The host
 won't wait — we're through the lych-face and climbing. Catch us
@@ -87,8 +89,9 @@ its lining, and went down.
 
 ⁂
 
-It took him three days to reach the Fairstead gate, on a borrowed
-barrow pony, down gate roads he had walked up a season before, and
+It took him the better part of two weeks to reach the Fairstead gate,
+on a borrowed barrow pony, down gate roads he had walked up a season
+before, and
 the going down was a lesson in what the rising had been building.
 The toll-roads were arteries now. Grain went up them, and
 boot-leather, and arrow-shafts; the mail went up them, and freed

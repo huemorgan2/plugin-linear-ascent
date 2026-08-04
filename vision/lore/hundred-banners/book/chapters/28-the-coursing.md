@@ -48,7 +48,10 @@ dark of the Huntsman's country. Behind them, one glade back, the horns.
 
 ⁂
 
-The Hunt kept its own ways between its floors. Ede learned that the first
+The Hunt kept its own ways between its floors — runs collared around
+the great stays and anchor-roots, gripping by shape and friction the
+way everything built on the tower's bones gripped, winked at for eighty
+years because the Hunt was the tower's own. Ede learned that the first
 night, when the ground they were driven down was suddenly not the Eye's
 drowned terraces but a beaters' stair sunk in the hollow of a black iron
 anchor-root — a hidden run, hound-worn, rank with old scent, that went down
