@@ -252,10 +252,10 @@ prisoner.
 There is no need to write out the whole of it. He confessed to all of
 it, in the flat voice of a man reading a delivery-bill: the route sold
 to Skarn's buyers, the toll-payments, the seating-list of the
-Frosthall, the year and the price of each. Asked why, he said the
-collar had been put on him young, on the night of the Theft, and that
-this was not an excuse but an inventory, since they were counting.
-Asked what he sought, he said rope, and said it hoping.
+Frosthall, the year and the price of each. Asked why, he said he had
+gone up the tower a grown man and knelt for the collar with his eyes
+open, and that this was not an excuse but an inventory, since they
+were counting. Asked what he sought, he said rope, and said it hoping.
 
 Marta Reed said rope too, when the company spoke. So did five others.
 Then it came around the fire to Wat Kello, who had been welded, whose

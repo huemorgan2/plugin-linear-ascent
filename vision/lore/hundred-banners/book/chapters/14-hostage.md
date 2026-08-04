@@ -10,7 +10,7 @@ and the hall's threads carried her weight like a shore carrying tide.
 He learned her tread inside ten sleeps. He could have told her from a
 thousand others with his eyes shut and his ear against a single strand.
 
-Later he would understand that this was the winter's whole lesson, and
+Later he would understand that this was the season's whole lesson, and
 that she had let him learn it on purpose.
 
 They gave him a chamber in the throne-web's second tier — a room of
@@ -81,7 +81,7 @@ worth."
 "I know what your people think they are worth. Play."
 
 He crashed it again — she had eight hands and patience like bedrock,
-and he never won a rally outright all winter, and he came to suspect
+and he never won a rally outright all season, and he came to suspect
 the game could not be won, only lost more slowly, and that this too
 was the lesson. And the
 questions, when he owed them, were nothing his training had braced
@@ -110,7 +110,7 @@ worth having, they will give you for nothing, if you only sit still and
 ask.
 
 When he owed no answer, she took none. When she owed him one — twice
-all winter, twice in hundreds of rallies — she paid in full, to the
+all season, twice in hundreds of rallies — she paid in full, to the
 letter, like the honest instrument she was. The first time, he asked
 about the wrapped knight, her cocooned champion.
 
@@ -129,7 +129,7 @@ between me and the tower."
 ⁂
 
 The second answer she owed him, she paid on the coldest sleep of the
-winter, when Berrin's trains had stopped for the freeze on the tier
+season, when Berrin's trains had stopped for the freeze on the tier
 above and the vault's tide of light ran shallow. She had crashed the
 cradle herself — he never knew whether by mishap or by purchase — and
 instead of waiting for his question she settled lower on the web, all
@@ -228,7 +228,7 @@ tower had reached. The traitor had gone up the tower and asked for it.
 
 "Mm." Eight hands gathered in the crashed silk and began a new
 strand. "A last observation, then, gratis, because it has been a
-tolerable winter and you tell rain well. I have taken tribute from
+tolerable season and you tell rain well. I have taken tribute from
 every kind of creature this tower holds, and the accounting is simple:
 the ones who pay and go are honest, and the ones who pay twice are
 buying something they cannot carry in their hands. He was not buying
@@ -241,9 +241,11 @@ daylight: what has been traveling it since?"
 
 ⁂
 
-The thaw came to the tier above; the trains moved; and on a sleep like
-every other sleep, a thread-page stood at his silk door and unpicked it,
-stitch by stitch, and the clauses let him go.
+The first freeze closed the tier above; the lifts stopped, and the
+trains with them; and — a hostage being surety against traffic, and the
+road now holding none — on a sleep like every other sleep, a thread-page
+stood at his silk door and unpicked it, stitch by stitch, and the
+clauses let him go.
 
 She received his leave-taking at the Throne-Web, enormous and courteous,
 and had the scrivener enter the hostage-clause discharged, warranty
@@ -251,20 +253,20 @@ honored, goods returned whole. He was surprised, and then not
 surprised, to find something in him reluctant at the gallery road's
 edge. It had been the strangest season of a long strange
 life, and the stillest, and no one in it had lied to him even once,
-which he could not say of any other winter he had lived.
+which he could not say of any other season he had lived.
 
 "Clause the third falls due in a year, hostage," said Matriarch Vyx.
 "Bring a better story. You have one; I heard you not telling it, all
-winter, every sleep. Knots carry sound, and untold stories knock."
+season, every sleep. Knots carry sound, and untold stories knock."
 
 "Perhaps by next winter it will be tellable."
 
 "They ripen," she agreed. "Everything I keep does."
 
-At the tier-gate above, in the first true daylight of the young year,
+At the tier-gate above, in the first true daylight of the young winter,
 the ride-keeper courier was waiting for him with the rising's mail: two
 seasons of Ede's dispatches, a wax-sealed note in Nix's furious
-fist-print — *FISH?? we saved you the good boots. the count is 41
+fist-print — *FISH?? we saved you the good boots. the count is 40
 banners. climb faster* — and a grey slip of
 paper with no seal at all, edges singed in the Wake's plain way of
 saying a channel was burned, five ciphered words long.

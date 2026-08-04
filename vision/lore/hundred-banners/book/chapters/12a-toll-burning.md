@@ -299,7 +299,7 @@ man's greed into its line of battle with its eyes open — no oath
 sworn, no heart changed, a wall and a purse agreeing to stand in
 the same shield-ring because the same enemy had priced them both
 for burning. It was the most cynical alliance the climb had yet
-signed, and Rhovan had been three hundred years in the trade of
+signed, and Rhovan had been a long lifetime in the trade of
 cynical arrangements, and he could not stop noticing that this
 one had been made in daylight, at a public table, in front of the
 bread.

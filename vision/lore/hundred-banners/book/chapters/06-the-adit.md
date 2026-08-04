@@ -52,9 +52,12 @@ drove-chain and beast-collars and gate-locks for the low farms, and I
 had lean years and two apprentices to feed, and so I chose — you must
 hear the word, captain, I *chose* — not to wonder why a drover would
 want a lock I could not pick myself." She laid her hand flat over the
-mark, and it covered it entire, and that did not help. "I make things
-that hold. It is the one gift I have. Somebody borrowed it, and I let
-them, and your people are behind it."
+mark, and it covered it entire, and that did not help. "Light no fire I
+cannot quench; keep no fire past its work; and answer for — " she said,
+the oath her mother took of prentices at the anvil, and for once in her
+life did not finish it. "I make things that hold. It is the one gift I
+have. Somebody borrowed it, and I let them, and your people are behind
+it."
 
 The camp had gone quiet around them, hall-quiet, so the flywheel's
 true note ran under everything like water under ice.

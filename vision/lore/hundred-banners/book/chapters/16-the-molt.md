@@ -2,7 +2,9 @@
 
 The fortieth floor fell without an arrow loosed, and Nix counted the
 arrows anyway. None. Naught. Not one. It was his favorite count of the
-whole war, and he said it three ways to make it last.
+whole war, and he said it three ways to make it last. But a count is
+read from its first mark, so the tale walks back here to the morning
+the passage began, to have it whole.
 
 The host went up through the Broodthrone in column, six abreast, under a
 ceiling that had eaten armies. Silk hung from the cavern's throat to its

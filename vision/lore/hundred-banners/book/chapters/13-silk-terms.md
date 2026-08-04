@@ -231,8 +231,11 @@ our forgetting."
 
 "One question first," Ede said. "The hostage. Held how long?"
 
-"Until your rear-guard clears my tier-gate. A season, as your trains
-straggle. The story-clause alone is perpetual." The Matriarch's foreclaw
+"Until your rear-guard clears my tier-gate, or until the first freeze
+stops the lifts — whichever falls first. A hostage is surety against
+traffic, and I do not warehouse surety against a road that cannot move;
+the clause sleeps with your trains. A season, as your trains straggle.
+The story-clause alone is perpetual." The Matriarch's foreclaw
 turned, palm up, a merchant's shrug the size of a wagon. "Well? Who is
 of rank, and expendable enough to hang in my hall, and interesting
 enough that I do not regret the keeping? It is a narrow list, general. I
@@ -260,7 +263,7 @@ this was the most anyone had said of him in forty years.
 
 "An elf of the Wake." Vyx's voice curled with pleasure, silk winding on
 a spindle. "Oh, *accepted.* The Wake has been declining my
-correspondence for three centuries. Clause the second, part the second:
+correspondence for fourscore years. Clause the second, part the second:
 satisfied. Which leaves" — the foreclaw came around, unhurried, and
 pointed at him the way a clerk points at a ledger-line — "part the
 third. The first year's story falls due on signature. It need not be
@@ -317,12 +320,12 @@ He did not write what he had spent. She would know by spring.
 On the third evening the rear-guard's horns sounded from the tier-gate,
 thin and far above, and the last fighting company's lamp went up the
 unwrapped stair and out of sight. But the clause counted wagons and
-stragglers; Berrin's trains would climb this road all winter, and the
-tier behind would keep sending its freed up for a season yet. The great
-web settled — the whole vault breathing one
-long settling breath of silk — and Rhovan of the Grey Rides was alone in
-the Broodthrone with the Matriarch and her kept court and a winter of
-nights to be got through one at a time.
+stragglers; Berrin's trains would climb this road until the freeze
+stopped the lifts, and the tier behind would keep sending its freed up
+while the road held. The great web settled — the whole vault breathing
+one long settling breath of silk — and Rhovan of the Grey Rides was
+alone in the Broodthrone with the Matriarch and her kept court and a
+season of nights to be got through one at a time.
 
 Silk sang, far up in the dark, as something vast and patient descended.
 

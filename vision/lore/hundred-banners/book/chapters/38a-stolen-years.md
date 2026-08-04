@@ -108,9 +108,9 @@ mothers in it. "He kept them because they were his. He never needed to
 see a thing to own it."
 
 The Wyrm had said it of him, a hundred floors ago: *he built the one
-tower tall enough to see the whole world from, and he has never once
-looked.* Ede had not expected to find, one floor under his door, the
-garden of everything he never looked at.
+tower tall enough to see the whole world from, and in eighty years he
+has never once looked.* Ede had not expected to find, one floor under
+his door, the garden of everything he never looked at.
 
 "You should know what your lever did," Pell said then, with no blame in
 it at all, which was worse and better at once. "The hold on the garths
@@ -276,10 +276,10 @@ The host came up out of the country of the Years in column, in the
 dark, in its own lantern-light again, and it did not smell of lead
 anymore, or of ash. It smelled of straw and cut barley and apples; it
 carried a dead world's seed-corn in its baggage-train; and at the head
-of it, furled on Marn's shoulder, the oldest banner in the world went
-up the stair trailing a last thread of harvest-dust from a field that
-no longer existed anywhere at all, and never would again, and had, at
-the very end, been brought in.
+of it, furled on Wat Kello's shoulder, the oldest banner in the world
+went up the stair trailing a last thread of harvest-dust from a field
+that no longer existed anywhere at all, and never would again, and had,
+at the very end, been brought in.
 
 At the head of the stair Ede paused once and looked back down the road
 of small skies — fewer already than four days ago, going out one by one

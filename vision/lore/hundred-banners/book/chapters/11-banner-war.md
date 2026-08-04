@@ -33,7 +33,7 @@ had painted, in a factor's tidy hand, *the lift is free — the road to it
 is maintained.*
 
 And between the two, on the low mounds, his own people. Forty bows of the
-Wake in ride-grey, faces he had known three hundred years, camped in a
+Wake in ride-grey, faces he had known fourscore years, camped in a
 crescent around the Tollmen's chain — because the Wake's masters had
 taken Gilder Voss's fee to guard his tolls. It was, Captain Sael had told
 him, with a courtesy sharpened on both edges, *a
@@ -54,8 +54,8 @@ sleepers now. Spilled blood is a debt, and this floor* — he would slap
 the book — *this floor forecloses.*
 
 Rhovan believed him. Rhovan had been telling the truth in fractions for
-three hundred years and knew a whole truth when one walked past him twice
-a day with a lantern.
+a long lifetime and knew a whole truth when one walked past him twice a
+day with a lantern.
 
 Nobody else believed him at all.
 
@@ -90,7 +90,7 @@ contract signed by people who had never seen this field, the Wake's bows
 loosed.
 
 Rhovan watched his own people's arrows go up. Ride-grey fletching against
-a grey sky, a sight that had meant *home* to him for three centuries,
+a grey sky, a sight that had meant *home* to him his whole long life,
 rising off the burial mounds of Men in defense of a toll-chain. He did
 not remember starting to run.
 
@@ -144,8 +144,8 @@ isn't worth arrows at grocers —"
 
 He drove the lead wagon straight in between the lines — through the
 arrow-fall, at a walk, like weather — and halted it broadside in the
-killing-ground, and stood on the seat-board, a stout man of sixty with
-flour on his sleeves, and possibly the only person in the tower whom no
+killing-ground, and stood on the seat-board, a stout old man with flour
+on his sleeves, and possibly the only person in the tower whom no
 faction on that field could imagine shooting. Behind him the train came
 on: bread, beer, salt, boot-leather, arrow-shafts, lamp-oil, climbing the
 freed tower because one man had spent the whole war making sure it did.
@@ -281,7 +281,7 @@ the Wake, and twenty silk-wrapped soldiers whose serjeant went down the
 row at the end touching each bier, paying something that did not go in
 any book.
 
-Forty-one banners went up the freed stair that afternoon as one host,
+Forty banners went up the freed stair that afternoon as one host,
 under a peace signed on a drumhead, brokered by a grocer.
 
 Rhovan wrote his report to the Wake that night, in cipher: the toll

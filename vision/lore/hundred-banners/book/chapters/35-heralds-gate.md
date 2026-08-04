@@ -314,7 +314,7 @@ then it wheeled above the yards as if awaiting applause.
 
 Rhovan put it best, as he put everything best, watching the gale-
 riders dress their glittering ranks over a field of the sitting freed.
-"One chapter late," he said, to nobody, an elf's reckoning of a debt,
+"A battle late," he said, to nobody, an elf's reckoning of a debt,
 "and they'll want a verse in the song regardless. Give them the verse.
 The wind can have the tidying. The noon belonged to the bell."
 

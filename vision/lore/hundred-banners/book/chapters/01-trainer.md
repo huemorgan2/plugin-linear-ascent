@@ -267,7 +267,7 @@ arithmetic Rhovan had left her with, and hated him for the neatness of
 it.
 
 If it was a sale, there was a seller. If there was a seller, there was a
-buyer, and buyers keep what they pay for. Nine years she had mourned her
+buyer, and buyers keep what they pay for. Five years she had mourned her
 thirty as dead because dead was the worst thing, and she had trained
 herself to believe the worst thing the way you train any recruit: daily,
 until it holds its line. But the page said *goods*. The page said

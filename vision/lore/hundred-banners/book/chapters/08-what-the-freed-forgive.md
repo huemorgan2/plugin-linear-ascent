@@ -17,9 +17,11 @@ Ede walked the cage-rows with the manifest Rhovan had cut from the
 warcamp's counting-tent, and she made the only accounting that mattered.
 
 A hundred and twelve had marched behind her into this floor, in the year
-she did not name anymore. Thirty names she had cut into the Stone of the
-Climb with her own hand, in Roothollow, in the winters after, one name a
-night when the drink let her hold a chisel. The cages had given back
+she did not name anymore — her own thirty-one sworn of Shieldwall, and
+the hired files and follower-folk a company's road gathers. Thirty names
+she had cut into the Stone of the Climb with her own hand, in Roothollow,
+in the winters after, one name a night when the drink let her hold a
+chisel. The cages had given back
 sixty-three. That left nineteen, and the manifest had them too, in a
 clerk's neat fist, in a column headed *sent above*.
 

@@ -102,7 +102,7 @@ is ashamed in front of his floor."
 The Wake had come into the open. Grey canvas among the run-oaks, a
 camp without one banner, elves at their evening work who did not
 lower their hoods — faces he had never seen and had corresponded
-with for decades, signatures walking around on legs. For a thousand
+with for decades, signatures walking around on legs. For fourscore
 years the Wake had been a rumor with a purse. Now, with its purpose
 lying freed all around it and nothing left to hide from, it had
 surfaced into the daylight of the world at last — and its first
@@ -239,7 +239,7 @@ resignation has stood entered in the council's own minute-book
 since before I came down — third gather, left margin, in my hand;
 you will find I dated it the day your letter went up." She gathered
 her papers and was done with the table. "I was the Wake's eyes for
-three hundred years. The eyes are the one part that cannot help
+the whole of my life. The eyes are the one part that cannot help
 seeing which way the ledger actually runs. Keep the woods well,
 elders. It was always the whole of what any of us wanted."
 
@@ -267,7 +267,7 @@ grain like any wagoner, and stood beside her awhile without
 speaking, which he had learned from a better general than either of
 them.
 
-"You spent your seat," he said at last. "Three hundred years, for a
+"You spent your seat," he said at last. "A lifetime's seat, for a
 chain that would have come down in a month regardless, once the
 purse ran dry."
 

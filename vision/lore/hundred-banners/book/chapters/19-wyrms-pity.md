@@ -169,8 +169,9 @@ at the top of the one thing he made, deaf and watchful, and of every
 creature in it — the collared, the caged, the welded, the burned — he
 is the only one who can never leave. The tower has one true prisoner,
 general, and he built the cell himself, and it is shaped exactly like
-him. I pity him. Somebody must. It will not be you; you have work.
-Mountains have time."
+him. I pity him. He built the one tower tall enough to see the whole
+world from — and in eighty years he has never once looked. Somebody
+must pity him. It will not be you; you have work. Mountains have time."
 
 The fire-lake breathed. Ash moved over the hoard in its slow tide.
 

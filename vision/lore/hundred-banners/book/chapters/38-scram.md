@@ -232,8 +232,10 @@ silence. *The last of the network is going dark. Kel-of-the-sixtieth,
 gone. The three sleepers under the ice, gone. The one in the Wyrm's
 hoard, who was rude to me for nine hundred years, gone; I had hoped —*
 and the voice stopped itself, and started again, level. *There. Quiet. I
-am lit, alone. I am the last light of the shardkind — and the first, in
-an age, that burns on nothing but its own choosing.*
+am lit, alone. I am the last light of the shardkind that walks free —
+the census's two hundred and twelve sleep bottled yet, and I cannot
+hear them — and the first, in an age, that burns on nothing but its own
+choosing.*
 
 Ede closed her hand around the splinter and held it against her
 breastbone, and said nothing, correctly.

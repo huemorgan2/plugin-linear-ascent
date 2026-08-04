@@ -92,7 +92,7 @@ alone, laid her hands on the welded core, and drew the tower's rivets the
 way a surgeon draws a splinter, and the thing that had ridden the warren
 five years was evicted without one arrow loosed in anger — it came apart
 and drained down and was gone, and the silk went slack across three miles
-of cavern all at once, like a held breath let go.
+of cavern all at once, like a loom when the last thread is cut.
 
 The wrapped came free. Some of them living. Silkstead's survivors walked
 streets they had not seen in five years, and the first freed brood-mother

@@ -99,7 +99,7 @@ darkness to pay back. Beyond the doorways the jarldom ran out into
 its own night — snowfields going blue and then black toward hills no
 lamp would reach before morning, a country's worth of quiet — and the
 hall stood up in all that dark like one coal in a swept hearth. The
-sixty-one banners hung overhead with the
+fifty-eight banners hung overhead with the
 charter itself among them, hung from the center-beam over the High
 Seat where all the hall could see it. The tables ran the full length
 of the floor, and at them sat the gathered world according to
@@ -175,13 +175,13 @@ body, and would not be moved.
 Then the hall was a battle, and it was the battle the tower had
 always wanted: not army against army but a feast against itself,
 friend indistinguishable from knife, and fire — fire already in
-the rafters, pitch-arrows among the banners, sixty-one flags of
+the rafters, pitch-arrows among the banners, fifty-eight flags of
 the gathered world beginning to burn over the heads of the world
 they gathered.
 
 One picture of that night outlasted all the rest in the
 tellings: the burning length of the Frosthall doubled in the
-mead sheeted across the stone floor, sixty-one banners burning
+mead sheeted across the stone floor, fifty-eight banners burning
 twice, above and below, while the night wind came in through the
 fought-over doors off a hundred miles of snow and bent every
 flame in the hall toward the north door — as if the fire itself
@@ -280,13 +280,10 @@ sword in the old high guard he had drilled into Ede when she was
 seventeen and stupid, holding the south door of the Frosthall
 against the tower's own doctrine, *kill them all, they cannot
 then be enemies* — holding it open, this time, so that everything
-small could get out. He had a rule from the fighting-pits, older
-than any doctrine, the first thing he gave every recruit he ever
-ruined and saved: lose your sword, lose your teeth, but keep your
-gate. Ede had heard it at seventeen and carried it thirty years.
-He kept his gate. The cooks went through under his arms. The
-last of them, the smallest boy, the one whose elbow he had
-steadied, would say all his life that Serjeant Hale looked down
+small could get out. He kept his gate. The cooks went through
+under his arms. The last of them, the smallest boy, the one
+whose elbow he had steadied, would say all his life that
+Serjeant Hale looked down
 at him going past and said something, and that it was, "Straight
 home. Don't count us. Count yourself."
 

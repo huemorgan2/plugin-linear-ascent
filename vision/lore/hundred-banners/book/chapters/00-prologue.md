@@ -97,10 +97,10 @@ ate it. It was good — that was the shame he kept longest, longer than any
 of the rest of it: it was good bread, and he was glad of it, and it cost
 him nothing at all. Nothing is what everything costs, at first.
 
-The clerk watched him eat with an expression he would spend the next
-fifty years learning to make himself — patient, kindly, keeping count —
-and then it closed the book and walked on along the rim, and its lantern
-went away into the dark, and he never told anyone. Not that night, and
+The clerk watched him eat with an expression he would spend a lifetime
+learning to make himself — patient, kindly, keeping count — and then it
+closed the book and walked on along the rim, and its lantern went away
+into the dark, and he never told anyone. Not that night, and
 not any night after, through all the years when telling might still have
 mattered.
 

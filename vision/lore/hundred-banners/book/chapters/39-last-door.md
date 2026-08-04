@@ -31,8 +31,8 @@ her coat, and Vess laughed, a rusted terrible
 sound, the first laugh that floor had heard in an age, and the curators
 began to empty the shelves. The rising armed itself out of the King's own
 museum. Hero-steel with names on it went back into living hands; the failed
-climbers of five ages were named at last and laid to rest; the hoard-thing
-that rose to stop it was evicted with its own exhibits.
+climbers of eighty years were named at last and laid to rest; the
+hoard-thing that rose to stop it was evicted with its own exhibits.
 
 The night gardens Ede would not speak of afterward, and no one who crossed
 them spoke of them either. The ninety-sixth floor was beautiful. That was
@@ -108,8 +108,8 @@ said nothing, which from Rhovan was a whole speech. Some of the names were
 in scripts the census-wall had taught her. Some were in no script anyone
 living knew.
 
-'You're reading them,' said a voice below her elbow. 'Good. Most climbers
-won't. Most climbers look once and go grey and start talking about seams.'
+"You're reading them," said a voice below her elbow. "Good. Most climbers
+won't. Most climbers look once and go grey and start talking about seams."
 
 The keeper of Lastward was a small bent man named Hollen, and his people
 were a handful — the last of the bound, kept in this hall to tend the Door
@@ -130,28 +130,28 @@ died. Ede looked at the open hands and the bent head and knew, the way she
 knew a sleeping sentry from a dead one, that the woman in the metal was
 alive.
 
-'The Champion,' Hollen said. 'The greatest liberator who ever climbed. She
+"The Champion," Hollen said. "The greatest liberator who ever climbed. She
 came up an age ago with the whole tower at her back, same as you, and she
 reached this hall, and at the last step they took her alive.
-He didn't kill her. He made her the lock.' The old man's jaw worked.
-'Everyone says she's gone. I've kept this floor my whole life on the
-belief that everyone is wrong.'
+He didn't kill her. He made her the lock." The old man's jaw worked.
+"Everyone says she's gone. I've kept this floor my whole life on the
+belief that everyone is wrong."
 
-'She fights?' Ede asked.
+"She fights?" Ede asked.
 
-'She fights,' Hollen said. 'With everything she was. The binding drives
+"She fights," Hollen said. "With everything she was. The binding drives
 her. But she doesn't wish it — that's the difference, that's everything.
 Malgrim clutched his chain. The Vizier laughed at you. Her, they had to
-weld.' He looked up at the bent head. 'A captive who still wishes to be
-free always can be. If that's not true, none of this was.'
+weld." He looked up at the bent head. "A captive who still wishes to be
+free always can be. If that's not true, none of this was."
 
 Sliver was warm at Ede's throat, and had been silent since the stair.
 
-'Her name,' Ede said. 'You keep it.'
+"Her name," Ede said. "You keep it."
 
-'I keep where it's buried,' said Hollen. 'Under the sill. They put her
+"I keep where it's buried," said Hollen. "Under the sill. They put her
 name and her own arms in the ground when they welded her, so no one could
-call her back. Come and dig.'
+call her back. Come and dig."
 
 ⁂
 
@@ -166,15 +166,15 @@ its pommel was cut a device she had carried on her own shoulder for twenty
 years and behind her own banner for two: a grey wall, and a single star
 above it.
 
-'Sliver,' she said quietly.
+"Sliver," she said quietly.
 
 The splinter's voice was a long time coming, and when it came it was drier
 than she had ever heard it, which for Sliver was grief.
 
-*'Her name is Aldis Bright,'* Sliver said. *'She founded the first banner of
+*"Her name is Aldis Bright,"* Sliver said. *"She founded the first banner of
 the Shieldwall, an age ago, in a village that is under your Roothollow now.
 I have carried forty-one climbers, Ede Stonhal. She was my fourth. She was
-the first of them stubborn enough to matter.'*
+the first of them stubborn enough to matter."*
 
 Nix, who had come down uninvited because that was how Nix came everywhere,
 looked from the sword to Ede's shoulder and back, said nothing at all for
@@ -209,7 +209,7 @@ at her side forever — came free mid-stroke, dropped guard, dropped blade,
 and turned to stand between his welded commander and her own descending
 sword. He took the flat of it and held.
 
-'Now,' Ede said.
+"Now," Ede said.
 
 Hollen's people had climbed the scaffold at the Lintel, the last handful
 of the bound, and they called her name into the Door. Not
@@ -223,7 +223,7 @@ sang the Recant of the King's hold. Ede stood on the sill with the plain
 notched sword held up hilt-first, and said, herself, last, quietly, into
 the opening metal:
 
-'Aldis Bright. You're stood down. Come out.'
+"Aldis Bright. You're stood down. Come out."
 
 And the greatest hero of a dead age stepped down out of the Last Door
 alive, and put her hand on the offered hilt, and stood swaying on the sill
@@ -242,29 +242,29 @@ which seemed to cost more.
 
 Then she saw the banner.
 
-Marn of the thirty carried it now, the man freed at the Welding Halls,
-iron from the jaw down, who had carried it since the Herald's Gate and let
-no one spell him. He had come to the sill unbidden, because Nix had
+Wat Kello of the thirty carried it now, the man freed at the Welding
+Halls, iron from the jaw down, who had carried it since the Herald's Gate
+and let no one spell him. He had come to the sill unbidden, because Nix had
 fetched him, and the old cloth hung still on its pole: a grey wall, a
 single star.
 
 Aldis Bright looked at it for ten heartbeats. Ede watched an age-old face
 do sums.
 
-'That is my banner,' she said. Her voice was rust and courtesy. 'I sewed
-the star crooked. It is still crooked.' She looked at Marn, at the iron
+"That is my banner," she said. Her voice was rust and courtesy. "I sewed
+the star crooked. It is still crooked." She looked at Wat, at the iron
 jaw, at the way he held the pole one-handed and would plainly die before
 dropping it, and something in her began, very slowly, to stand back up.
-'It never fell, then. All this time.'
+"It never fell, then. All this time."
 
-'It fell twice,' Ede said, because the debt did not deserve a lie. 'It
+"It fell twice," Ede said, because the debt did not deserve a lie. "It
 fell at the Red Warcamp, when I lost the company that bore it. A man with
 one arm carried it out of the cages when we broke them, and bore it up
 forty floors, and died keeping the north door of a burning hall so that
 others could run. I got the
-company back. Thirty of them are in this hall.'
+company back. Thirty of them are in this hall."
 
-'Show me,' said Aldis Bright.
+"Show me," said Aldis Bright.
 
 So Ede gave her the muster-roll — the rebuilt roll, the one she had written
 out of her own memory over a traitor's protests, thumbed and rain-marked
@@ -278,7 +278,7 @@ She was a long time over it. When she looked up, it was not at the roll's
 keeper but down the hall, at the host, at the light on all those faces
 going back farther than light could go.
 
-'Who commands?' she asked.
+"Who commands?" she asked.
 
 And it was not Ede who answered, and not Rhovan, and not the keeper of the
 floor. It was the thirty — the freed of Shieldwall, the ones who had spent
@@ -286,7 +286,7 @@ a winter half-believing their own captain had sold them, standing together
 down the sill the way they had stood in the cages, and they answered as
 one, the way a company answers at roll:
 
-'Stonhal.'
+"Stonhal."
 
 Aldis Bright, founder of the Shieldwall, first soldier of the oldest
 banner in the world, turned to the woman who had lost her company and
@@ -299,7 +299,7 @@ answer down the whole length of the ninety-ninth floor.
 Ede returned it. She did not trust her voice, so she used the one that
 carried.
 
-'Shieldwall,' she said. 'Fall in.'
+"Shieldwall," she said. "Fall in."
 
 Behind them, unbarred, unguarded, open for the first time in an age, the
 Last Door stood on darkness and a rising stair. Somewhere at the top of it

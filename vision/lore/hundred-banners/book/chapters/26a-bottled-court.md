@@ -9,34 +9,34 @@ He stood at the general's lamp with the day's count and did not read
 it out. Ede looked up from the roll. She had learned his silences the
 way she learned ground.
 
-— Say it.
+"Say it."
 
-— A company of the Frosthall levy. Four-and-eighty by the roll,
+"A company of the Frosthall levy. Four-and-eighty by the roll,
 camped in the wind-shadow under the south face of the crag when the
-queen opened her cellars. — He set the tally-slip down. — Nothing
+queen opened her cellars." He set the tally-slip down. "Nothing
 above has seen them. Not the burners, not the drake-keepers, not the
 Walls, not the wire. Nine days, and the wind floors have given back
 some part of everything they took; of these four-and-eighty, not a
 boot. The wind is a bad liar, Ede. Whatever it takes, it puts down,
 and the putting-down is loud. Eighty people are not quiet anywhere.
-Unless they never went up at all.
+Unless they never went up at all."
 
 It was a freed perch-squire who closed the sum — Pye Galesend, a boy
 of the court's perches whose collar Vega had broken at the crag's
 foot on the embassy's first climb. He heard the question at the lamp
 and answered it the way squires answer, terrified and exact.
 
-— The south face is all cellar-mouths, begging it. When Her Majesty
-spent the vaults, the doors stood open after. — He swallowed. — You
+"The south face is all cellar-mouths, begging it. When Her Majesty
+spent the vaults, the doors stood open after." He swallowed. "You
 go to ground, don't you. When the sky is the thing that's wrong, you
-go down.
+go down."
 
 Ede looked at the roll a long moment. Eleven hundred names still
 stood uncrossed on it, strung across seven screaming floors, and
 Rhovan watched her do what she did every evening of that worst
 season: refuse to price one name against another.
 
-— The roll has room, — she said. — Go down and get them.
+"The roll has room," she said. "Go down and get them."
 
 ⁂
 
@@ -48,10 +48,10 @@ with rope and biers. At the crag's foot, waiting on the crawling-
 lines with storm-glass lanterns, stood Cole Galesend, court-steward,
 keeper of the one floor the rising had climbed past unfreed.
 
-— You came back, — he shouted, mouth close, in the roar. — Nobody
-comes back to this floor. I'd have bet the weather on it.
+"You came back," he shouted, mouth close, in the roar. "Nobody
+comes back to this floor. I'd have bet the weather on it."
 
-— We mislaid a company. In your cellars, we think.
+"We mislaid a company. In your cellars, we think."
 
 The steward's face did its lifelong work of apologizing for the sky,
 and he led them along the groove in the rock, bent double, to a mouth
@@ -73,20 +73,20 @@ worth of caught weather against foul days, and empty now, rank on
 rank, the glass of a thousand years' husbandry lying spent and
 shattered on the flags where its own queen had broken it.
 
-— Hood your lamps, and keep your voices under the shelf-line, — Cole
-said, low. — Not all the glass broke clean. There's gales down here
+"Hood your lamps, and keep your voices under the shelf-line," Cole
+said, low. "Not all the glass broke clean. There's gales down here
 with a crack in the bottle and half a storm still in them, sleeping.
-Quick air wakes them. Walk like you're walking a sickroom.
+Quick air wakes them. Walk like you're walking a sickroom."
 
-— And the wind can't follow us in, — Vega said. It was not a
+"And the wind can't follow us in," Vega said. It was not a
 question; a smith knows a made thing when she stands inside one.
 
-— Nothing of hers comes down here. That's the whole craft of the
+"Nothing of hers comes down here. That's the whole craft of the
 place, mistress. It was built to keep weather *in*. It keeps it out
-the same way. — He lifted his lantern, and grief older than the
-griever moved across his face and settled. — Her own cellars, and
+the same way." He lifted his lantern, and grief older than the
+griever moved across his face and settled. "Her own cellars, and
 she's never once stood in them. Remember that, when you're wanting
-to hate her.
+to hate her."
 
 They found the company by chalk.
 
@@ -104,11 +104,11 @@ light when Pye's whistle came down the gallery. Three had come down
 onto the flags too hard the first night, and lay cairned in broken
 storm-glass, named, waiting to be carried home.
 
-— Knew someone would read the chalk, — Hesk said. Nine days under
-the shelf-line had ground her voice low and flat, a cellar voice. —
-Knew it'd be an elf or a goblin. No offense meant.
+"Knew someone would read the chalk," Hesk said. Nine days under
+the shelf-line had ground her voice low and flat, a cellar voice.
+"Knew it'd be an elf or a goblin. No offense meant."
 
-— None held. The goblin was busy.
+"None held. The goblin was busy."
 
 It should have ended there: a found company, a good day in a bad
 season, eighty-one names to cross at the lamp. But Pye led them out
@@ -126,15 +126,15 @@ contempt for the stone around it — and across its face, untouched
 by the loosing that had emptied every shelf behind them, ran seals
 of grey warden-wax stamped with the mark of the King.
 
-— I have kept the lore of this cellar my whole life, — Cole said,
-quietly, to nobody, — and my mother kept it, and hers. There is no
-door here.
+"I have kept the lore of this cellar my whole life," Cole said,
+quietly, to nobody, "and my mother kept it, and hers. There is no
+door here."
 
-— There is a door everywhere the owner wants one. — Rhovan was
+"There is a door everywhere the owner wants one." Rhovan was
 reading the wax. The stamps ran in a clerk's fair column down the
 seam, each with its date-mark, and the first of the dates stood
-within living grief of the Theft itself. — This was cut when the
-crown was. Whatever it keeps, it has kept from the start.
+within living grief of the Theft itself. "This was cut when the
+crown was. Whatever it keeps, it has kept from the start."
 
 The thing at the desk inside had been keeping it too.
 
@@ -156,14 +156,15 @@ Storm-glass, whole. Rank upon rank of it, the only unbroken glass
 on the floor — great sealed vessels a forearm high, corked in lead
 and warden-wax, each with a paper label hung at its neck in that
 same fair hand. And inside each one, small and patient and alive, a
-storm. A snow-squall turning in its jar like a held breath. A
-summer thunderhead the size of two fists, flickering. A grey soft
+storm. A snow-squall turning in its jar the way dust turns in a
+shaft of lantern-light. A summer thunderhead the size of two fists,
+flickering. A grey soft
 rain, falling forever inside a bottle, on nothing. They were
 beautiful, and they were wrong in a way the body knew before the
 mind did, and it was Pye — court-born, storm-born — who said it, in
 a whisper, from the door:
 
-— Those are *people*.
+"Those are *people*."
 
 The manifest lay on the custodian's desk, and Rhovan read it aloud,
 because he had read other people's ledgers all his life and someone
@@ -180,28 +181,28 @@ Eleven of the shelves' places stood empty. The dates of the
 spendings ran down the margin, eighty years of them, none
 within the last forty. The crown had learned.
 
-— She was a good queen, — Cole Galesend said. He had his hat off;
-on his floor a bare head was something you paid the wind. —
-Everyone says it, and nobody asks what the tower does with a good
-queen. A bad one you crown and let run. A good one loves something.
-— He gestured, hand shaking, at the shelves, at the labels, at the
-small turning storms. — There's the surety. There's her eighty
+"She was a good queen," Cole Galesend said. He had his hat off;
+on his floor a bare head was something you paid the wind.
+"Everyone says it, and nobody asks what the tower does with a good
+queen. A bad one you crown and let run. A good one loves something."
+He gestured, hand shaking, at the shelves, at the labels, at the
+small turning storms. "There's the surety. There's her eighty
 years of *conduct*. We thought the weld held her. The weld only
 steers her. This held her — under her own throne, in the one room
 in her realm the wind has never once been allowed to enter, and she
 has sat up there being good above it since before my house had a
-name.
+name."
 
-— The bottles can be opened? — Vega asked. — Say it plain, steward.
+"The bottles can be opened?" Vega asked. "Say it plain, steward."
 
-— Opened, aye. Read backward, poured out into open sky, they come
+"Opened, aye. Read backward, poured out into open sky, they come
 home to themselves; it's their own craft, it was never meant for
-this. — He looked at Rhovan then with a keeper's look, the terrible
-hope that arrives after the hope is over. — But hear me. This is
+this." He looked at Rhovan then with a keeper's look, the terrible
+hope that arrives after the hope is over. "But hear me. This is
 the King's vault, and her leash, and if you spend it the tower has
 lost its hold on the seventieth floor, and what she does then I
 cannot tell you. Nobody has ever been able to tell you what she
-does. That's what a storm is.
+does. That's what a storm is."
 
 Rhovan stood in the still cellar among a hundred shelved people and
 thought, with the part of him that had been a Wake man for twenty
@@ -212,12 +213,12 @@ He heard the thought all the way through in Calyne's voice.
 
 Then he sent it down the stair with the rest of his livery.
 
-— Word goes up to the lamp tonight, — he said. — But I can tell you
+"Word goes up to the lamp tonight," he said. "But I can tell you
 now what the lamp will say, because I have stood at it every
 evening of this season. It will say the rising does not hold people
-against anyone's conduct. It will say the roll has room. — He took
-the manifest off the desk and folded it flat. — We came down for
-four-and-eighty. We carry out a hundred and eighty-two.
+against anyone's conduct. It will say the roll has room." He took
+the manifest off the desk and folded it flat. "We came down for
+four-and-eighty. We carry out a hundred and eighty-two."
 
 ⁂
 
@@ -266,12 +267,12 @@ down through the standing quiet came the queen's voice, mild and
 enormous, threaded along the wind so that it arrived less as sound
 than as pressure on the small bones of the ear.
 
-— Who prices this?
+"Who prices this?"
 
-— No one, — Rhovan said, into the sky. — It was not for sale.
+"No one," Rhovan said, into the sky. "It was not for sale."
 
 The quiet held one breath longer — one breath, on a crag where the
-wind had not rested in a thousand years — and Rhovan understood
+wind had not rested in eighty years — and Rhovan understood
 that he was hearing a ledger fail to balance for the first time in
 its keeper's reign. Then the storm took its roar back and went up
 the sky, and the audience, if it had been one, was over.
@@ -284,17 +285,17 @@ fact for the general that fit in no column at all. Ede heard it
 standing, read the manifest twice, and looked south down the tier
 toward the storm on its crag for a while.
 
-— She'll hate it, — she said at last. — Owing us.
+"She'll hate it," she said at last. "Owing us."
 
-— She doesn't owe us. Nothing was asked; nothing was priced;
+"She doesn't owe us. Nothing was asked; nothing was priced;
 there's no entry for her to pay against. To a crown that keeps a
 book the way she keeps hers, that isn't a debt. It's worse. It's a
-thing in the book that will not close. — He thought of the eleven
-empty bottles, and the four rains that had not risen. — She'll
+thing in the book that will not close." He thought of the eleven
+empty bottles, and the four rains that had not risen. "She'll
 carry it up and down her sky until she finds a way to spend it that
 we never asked for and cannot refuse, at an hour of her own
 choosing, priced to the last breath. That's the only mercy queens
-like her are built for. I wouldn't stand under it.
+like her are built for. I wouldn't stand under it."
 
 Within the week the freed of the bottled court were on the muster-
 lines — weather-wrights and sky-readers who owed the rising nothing

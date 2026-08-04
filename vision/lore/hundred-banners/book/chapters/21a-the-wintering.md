@@ -12,8 +12,8 @@ drawn, one end still in its curl. She set it on the bench where it
 could watch. Then small wood, then coal, then wind from the great
 bellows an arm-stroke at a time, until by noon the chimney remembered
 its trade and the ice let go of the roof-slates over the smithy in one
-long slide, like a held breath let out, and half the yard came to look
-at the smoke as if smoke were a banner.
+long slide, like a season's coal let down the chute at once, and half
+the yard came to look at the smoke as if smoke were a banner.
 
 It was, she thought. That one was.
 

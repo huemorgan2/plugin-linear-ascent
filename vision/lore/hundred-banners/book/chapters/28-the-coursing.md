@@ -129,7 +129,7 @@ They crossed the Gibbet Glade at noon because there was no way around it
 that the hounds would allow.
 
 Ede had seen fields after battle. She had seen the cages under the Red
-Warcamp opened, and what twenty years in them had made of her thirty. She
+Warcamp opened, and what five years in them had made of her thirty. She
 had thought herself past being taught anything new about what the tower did
 to the caught. The glade taught her anyway: a clearing of green light where
 the sprung snares had kept their catch, game and folk together, hanging in
@@ -282,7 +282,9 @@ nights, and it would be one glade behind until their hearts stopped, because
 that was the sport: not the catching, the keeping. And Ede Stonhal, who had
 been kept by one thing or another her whole life — by drink, by grief, by
 thirty names cut in a stone — got her feet under her and stood up out of the
-covert into the open lane.
+covert into the open lane. Out of an ash-lane fifty floors below, thin and
+clear as the fair's children had skipped it, the old counting-rhyme
+surfaced in her: *walk to the horn and the horn falls silent.*
 
 "Ede." Vega's voice. "Ede, the arm I would give to stop you is the bad
 one. Do not make me offer the good one."
@@ -293,7 +295,7 @@ and this was not that feel. "If the law holds, I walk into his court and
 his court must receive me, and I bargain for the army from inside instead
 of dying out here as an afternoon's sport. If the law doesn't hold — " she
 tightened the strap of the shield that wasn't there, an old habit from a
-company twenty years dead " — then I've bought you the length of a hunt's
+company five years dead " — then I've bought you the length of a hunt's
 gloat, and you go through the thorn and you tell Berrin to feed them
 whatever he must feed them to keep them climbing."
 

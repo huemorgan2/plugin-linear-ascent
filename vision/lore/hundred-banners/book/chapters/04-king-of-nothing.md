@@ -206,8 +206,8 @@ counted it, because counting was how he wept: one.
 
 The crown came off with him. It rolled in the mud and lay there, iron
 and thorn-brass, no one's. Under the arch of the ten kings the stair-
-lift's stone split its seam with a sound like a held breath let go, and
-light came down the gap; and everywhere on the field, goblins felt the
+lift's stone split its seam with a sound like a stopper drawn from a
+year-sealed jug, and light came down the gap; and everywhere on the field, goblins felt the
 Yoke go silent and stood in the wreck of their watch-fires, feeling the
 whip lift for the first time in their lives. Most ran for the opened
 lift, up, toward the next Warden's signal, because up was the only

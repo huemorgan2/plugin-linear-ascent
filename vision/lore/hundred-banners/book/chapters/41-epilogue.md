@@ -93,13 +93,13 @@ courtesy. The contract was recited — one true story, never told before,
 annually, in perpetuity — and the clauses examined, and found binding,
 and savored in the finding.
 
-'Well, hostage,' said Vyx. 'What have you brought me this year?'
+"Well, hostage," said Vyx. "What have you brought me this year?"
 
-'The whole of it,' Rhovan said.
+"The whole of it," Rhovan said.
 
-Eight eyes considered him. 'Define the whole.'
+Eight eyes considered him. "Define the whole."
 
-'From the first page,' said Rhovan. 'A farm rising into the dark, and a
+"From the first page," said Rhovan. "A farm rising into the dark, and a
 child watching it go, whose name I will give you in its place in the
 telling. A sealed ledger-page. A woman who trained other people's
 recruits. Everything the Wake did and everything I hid from you the year
@@ -107,13 +107,13 @@ I sat your web and told you fractions. The feast. The shield on the
 trophy wall. What the wyrm smelled. Who it was. What we did with him.
 The Door, the throne, the light going home. All of it, in order, true,
 and never told whole to anyone — not even to her. It will take some
-nights.'
+nights."
 
 Vyx was still for a long moment, the way the web is still.
 
-'You are overpaying,' she said at last, 'by some years.'
+"You are overpaying," she said at last, "by some years."
 
-'I know my clauses,' Rhovan said. 'Call it interest.'
+"I know my clauses," Rhovan said. "Call it interest."
 
 So the spider-queen of the Deep settled herself the way listeners have
 settled since fires were new, and the elf sat cross-legged on the silk
@@ -148,13 +148,13 @@ Voss was at the stage himself that day, weighing freight. He had grown
 no rounder and no kinder coming down; he had simply, as Ede put it,
 moved his whole ledger to the other side of the war and balanced it
 there. Ferry-fares on twenty floors, at a copper a head, honestly
-posted, honestly kept — 'A toll is a wall with a slot in it,' he told
+posted, honestly kept — "A toll is a wall with a slot in it," he told
 Nix, unasked, dropping the family's uncollected coppers into the box
 from his own purse and marking the sum in a book titled GOODWILL,
-'whereas a fare is a road that pays for its own mending. I am in roads
-now. Roads,' said the Tollmaster-General of the rising, with the
+"whereas a fare is a road that pays for its own mending. I am in roads
+now. Roads," said the Tollmaster-General of the rising, with the
 contentment of a man who had finally found a commodity no one could
-liberate, 'go both ways.'
+liberate, "go both ways."
 
 Nix paid his copper. Voss gave him change. Nix kept the change all the
 way down to the first floor, in his cheek-pouch, like a pearl.
@@ -191,9 +191,9 @@ and they watched it go by, and let it.
 It took him until midday. Dara counted the sacks twice and signed the
 slate, and looked at him once, straight, the way you look at weather.
 
-'Same time next season,' she said.
+"Same time next season," she said.
 
-'Yes,' Berrin said.
+"Yes," Berrin said.
 
 That was all. That was always all; and Nix, who held the parole and had
 now watched twenty floors of it, understood better every time why the
@@ -206,7 +206,7 @@ was to be his whole punishment, and would be quite enough.
 He climbed back onto the empty wagon and took up the reins and waited,
 eyes forward, for the word.
 
-'Nineteen to go,' Nix said, and cracked his knuckles, and did not say it
+"Nineteen to go," Nix said, and cracked his knuckles, and did not say it
 unkindly. Nix said very little unkindly anymore. He had counted what it
 cost.
 
@@ -233,10 +233,10 @@ the second floor, and he carried the two figures to the gate-post where
 his lifetime of wrong sums was notched, and he set them side by side,
 and looked at them a long time.
 
-'They match,' said Hobb Fennick, to the gate-post, to the valley, to
+"They match," said Hobb Fennick, to the gate-post, to the valley, to
 every climber he had ever counted into the hedges and never counted out.
-He said it the way other men say amen. 'Everyone who went in has come
-out. The counts match.'
+He said it the way other men say amen. "Everyone who went in has come
+out. The counts match."
 
 He chalked it on the post, and then, being Hobb, he checked it once
 more.
@@ -274,8 +274,8 @@ proposal to plant it on the summit — the summit, she said, had had quite
 enough flags — and so it was done here, in the market, where the whole
 thing had started: a socket of good stone set in the trampled ground by
 Vega's own hands, and the oldest banner in the world raised over the
-drill-yard by Marn's one uncovered hand and Tam's two, the grey wall and
-the crooked star hanging out full in the valley wind over recruits, and
+drill-yard by Wat Kello's one uncovered hand and Tam's two, the grey wall
+and the crooked star hanging out full in the valley wind over recruits, and
 market-stalls, and the forge, and the trough, and the ordinary priceless
 racket of a town with nothing over it but sky.
 
@@ -289,9 +289,10 @@ eat, loudly, the way recruits have always gone to eat, and the square
 filled with lamplight and shout and the smell of bread that meant only
 bread now. And because a drill-yard is a working place and not a shrine,
 the last one off the ground — a farm girl with her hair in a soldier's
-knot, born the year of the Warcamp, who would be tall enough for the
-wall in a season or two — lifted the banner out of its socket at the
-drill's end as she'd been taught, to take it in for the night; and then
+knot, who had been small the year of the Warcamp, and would be tall
+enough for the wall in a season or two — lifted the banner out of its
+socket at the drill's end as she'd been taught, to take it in for the
+night; and then
 supper called her too, the way it calls the young, and she stood the old
 pole down for just a moment, carefully, in the one place in the square
 where a thing may lean and not fall.

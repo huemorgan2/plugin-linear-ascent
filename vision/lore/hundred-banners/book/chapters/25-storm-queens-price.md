@@ -8,7 +8,7 @@ mouth before she could spend it. Beyond the arch there was a country,
 or there had been: an open palace on the highest crag of a stolen
 sky-realm, towers worn round as river-stones, colonnades and perch-
 balconies wreathed in a storm that did not pass over the floor because
-it *was* the floor — a tempest a thousand years old, roaring in place,
+it *was* the floor — a tempest eighty years old, roaring in place,
 lightning stitching the cloud-decks below like a seam being sewn and
 resewn forever.
 
@@ -16,33 +16,33 @@ resewn forever.
 as always. *I carried a climber here once before. He asked the wind to
 negotiate. The wind declined.*
 
-— We're not asking the wind, — Ede said. — We're asking the queen.
+"We're not asking the wind," Ede said. "We're asking the queen."
 
 *That is what he said.*
 
 They went roped, all of them, bent double against the gale along a
-groove in the rock worn by a thousand years of crawling courtiers.
+groove in the rock worn by eighty years of crawling courtiers.
 Cole Galesend came out to meet them at the first wind-shadow with
 storm-glass lanterns and a face like a man who had been apologizing
 for the weather his whole life. Court-steward, he named himself; his
 gate-town huddled in the lee of a broken colonnade, its people lashed
 to the stone by habit and by rope both.
 
-— She knows you've come, — he shouted, mouth close to Ede's ear. —
-She's known since you took the chains. She stilled the lower gales for
+"She knows you've come," he shouted, mouth close to Ede's ear.
+"She's known since you took the chains. She stilled the lower gales for
 your climb. That's her favor, general. Mind it. Everything she gives
-is an entry in a book, and she keeps the book.
+is an entry in a book, and she keeps the book."
 
-— What was she, — Ede asked, — before?
+"What was she," Ede asked, "before?"
 
 The steward's face did a thing that Ede had seen on many floors now,
-on the faces of many keepers: grief older than the griever. — Our
+on the faces of many keepers: grief older than the griever. "Our
 queen. And a good one. She read weather like scripture and never lost
-a flyer. The tower crowned her into *that,* — he nodded at the storm,
-— and the crown is hers and the storm is hers and neither one is her.
-You'll see. She's in the eye. She'll want to bargain. — He hesitated,
-rain running down his lashes. — General. She was a good queen. When
-you deal with her, remember you're dealing with the crown.
+a flyer. The tower crowned her into *that* — " he nodded at the storm
+" — and the crown is hers and the storm is hers and neither one is her.
+You'll see. She's in the eye. She'll want to bargain." He hesitated,
+rain running down his lashes. "General. She was a good queen. When
+you deal with her, remember you're dealing with the crown."
 
 The embassy crawled upward through the roar for half a day: Ede;
 Rhovan, hooded, eyes moving; Vega, the one body on the crag the wind
@@ -75,55 +75,55 @@ read skies and steadied flyers and was still, under the tower's
 work, beautiful the way a cliff is. Around her brow ran the storm-
 crown, and it was not a thing she wore. It went *through* her, the
 way the weld goes through every warden, and from it the whole
-thousand-year tempest unwound like thread off a spindle.
+eighty-year tempest unwound like thread off a spindle.
 
 Her court clung to the perches at the eye's rim, courtiers and
 weather-wrights lashed to stone, watching their queen with the
 particular stillness of people who love a thing that can kill them.
 
-— The rising, — Zephyra said. Her voice was mild and enormous, a calm
-built over a gale the way her eye was. — Sixty-nine floors. Nine and
+"The rising," Zephyra said. Her voice was mild and enormous, a calm
+built over a gale the way her eye was. "Sixty-nine floors. Nine and
 sixty wardens, mine own outriders among them, and a fleet of patched
 hulls at your chains, and a charter, and a debt of graves. I have
 read you on the wind for two years, general. You are the most
-interesting weather to enter my sky in an age.
+interesting weather to enter my sky in an age."
 
-— Then you know what we've come to ask, — Ede said.
+"Then you know what we've come to ask," Ede said.
 
-— No one asks me anything. — It was not a rebuke; it was a
-correction, made kindly, the way one corrects a child's grammar. —
-They price things, or they leave. That is the whole of law, when you
-are a crown. Come. Price what you want of me.
+"No one asks me anything." It was not a rebuke; it was a
+correction, made kindly, the way one corrects a child's grammar.
+"They price things, or they leave. That is the whole of law, when you
+are a crown. Come. Price what you want of me."
 
-— Passage. Your storm stands between my army and the eighth tier.
-Still your gales and let us climb.
+"Passage. Your storm stands between my army and the eighth tier.
+Still your gales and let us climb."
 
-— Small, — said Zephyra. — You disappoint me. Ask the larger thing,
+"Small," said Zephyra. "You disappoint me. Ask the larger thing,
 the one you have carried up my crag unspoken. You have hulls now, and
 charts, and the beginnings of sails. What you do not have is wind
-that loves you. — She leaned forward, and in the walls of the eye the
-lightning quickened. — I am offering to carry you.
+that loves you." She leaned forward, and in the walls of the eye the
+lightning quickened. "I am offering to carry you."
 
 Ede said nothing. The queen smiled and named her goods the way a
 merchant lays cloth on a table, bolt by bolt.
 
-— My gales, harnessed, mine to command as this crown commands me. I
+"My gales, harnessed, mine to command as this crown commands me. I
 will put your whole host upon the air — your skiffs, your giants,
 your goblin with his flag — and I will set you down at the gates of
 the Made in one day. One *day,* general. No Snare Woods. No Pale
 Court; the Huntsman himself does not course quarry down the throat of
 my wind. The season of dying that stands between you and the tower's
 own country — I fold it shut like a fan. Every grave you would have
-dug between here and the iron, undug. You have buried, what — Ede
-felt the number in her own chest before the queen finished — eight
+dug between here and the iron, undug. You have buried, what — " Ede
+felt the number in her own chest before the queen finished " — eight
 hundred and forty, since the hall with two doors? Keep the rest.
-I have priced armies all my life. Yours is worth more than it knows.
+I have priced armies all my life. Yours is worth more than it knows."
 
-— And your price, — Ede said, — for the sky?
+"And your price," Ede said, "for the sky?"
 
-— The throne, — said Zephyra, — his, — and for one breath the mildness
+"The throne," said Zephyra, "his" — and for one breath the mildness
 opened, and what was under it was not rage; it was appetite with
-eighty years of patience, appetite worn smooth. — When your banners
+eighty years of patience, appetite worn smooth. "When your banners
 pull Vharuk down, you will not sit in his seat. You will not break
 it, either — do not pretend to me you know how. Someone will keep the
 tower's crown, general, because a crown does not stop existing when
@@ -131,29 +131,29 @@ it is refused; it only lies where anyone can pick it up. Let it be
 me. I kept a sky-realm well for forty years before the tower made me
 weather. I will keep this one better than the ten thousand fools who
 will otherwise spend a century killing each other for it. Wind is an
-honest ruler. It falls on all roofs alike. — She sat back. — That is
+honest ruler. It falls on all roofs alike." She sat back. "That is
 the bargain. Carriage for a crown. Deliverance now, dominion after.
-I will even let you keep the word 'rising.' I ask only the top of it.
+I will even let you keep the word 'rising.' I ask only the top of it."
 
 *She has thought about this,* Sliver said, very quietly, in Ede's
 palm, *for a very long time.*
 
-— The offer is not mine to answer, — Ede said. — We are a charter,
-not a captain. The banners vote.
+"The offer is not mine to answer," Ede said. "We are a charter,
+not a captain. The banners vote."
 
-— Of course they do. — The queen's smile now was the worst thing on
-the floor, because it was genuinely fond. — I have watched your
+"Of course they do." The queen's smile now was the worst thing on
+the floor, because it was genuinely fond. "I have watched your
 parliament walk up my sky trailing its arguments like a bride's
 train. Vote, then. I give you until the lamps gutter. And general —
 mind the book. I have stilled my gales for your climb and received
 you in my calm and offered you your soldiers' lives in a bundle. All
-entries. Whatever you answer, the book balances. It always balances.
+entries. Whatever you answer, the book balances. It always balances."
 
 ⁂
 
 The parliament met in the Weather-Hall, the court's great open
-colonnade, under charts of winds that had not blown free in a
-thousand years. Fifty-eight banners; by the charter each spoke once
+colonnade, under charts of winds that had not blown free since the
+crown went on. Fifty-eight banners; by the charter each spoke once
 and voted once. The court-captives lit the storm-glass lamps around
 them, and Zephyra, in courtesy or in cunning, kept the eye wide
 enough to hold them all in her stillness — so the rising's parliament
@@ -162,33 +162,33 @@ the very power it was debating, and every voice that spoke knew she
 heard it.
 
 Voss spoke first, and for the bargain, because someone honest about
-his own greed had to say it plainly. — I have priced the long road.
+his own greed had to say it plainly. "I have priced the long road.
 Boots, bread, arrows, biers. One day of wind against a season of
 attrition is not a bargain, it is a rescue, and we would be mad to
-refuse it. Thrones are tomorrow's problem. Corpses are today's.
+refuse it. Thrones are tomorrow's problem. Corpses are today's."
 
 A keeper answered him — Mera Copperpole of the Lightning Fields, her
-voice still pitched to carry over storms. — I harvested the sky forty
+voice still pitched to carry over storms. "I harvested the sky forty
 years. You do not take the storm's gift and owe it nothing after. Ask
-my poles. Ask my dead.
+my poles. Ask my dead."
 
 Then the freed. A woman of the Welded Halls' feeding-cages, sold at
 some floor Ede would never learn, stood up with her hands shaking and
-said only: — We were all of us carried somewhere fast, once, by
-something that had priced us, — and sat down, and the hall was quiet
+said only: "We were all of us carried somewhere fast, once, by
+something that had priced us," and sat down, and the hall was quiet
 for a long time.
 
 The Wake voted no; Calyne gave no reasons, which was her way, and it
 won her no love, which was also her way. The keepers split. The
 Tollmen went yes for the purse; the mast-folk and chain-keepers, sky-
 folk who knew exactly what wind was worth, went no almost as one, and
-old Mera Chainrest said the floor's whole creed in six words: — A
-thing carried is a thing dropped.
+old Mera Chainrest said the floor's whole creed in six words: "A
+thing carried is a thing dropped."
 
 And Ulfar Coalbrow rose last, and Ede watched Vega not look at him.
 
-— I will be the honest one, — Ulfar said, slow and finished, like all
-his people. — I do not fear her crown. I fear the graves. The
+"I will be the honest one," Ulfar said, slow and finished, like all
+his people. "I do not fear her crown. I fear the graves. The
 Reactor's country is ahead of us, and the Welding Halls, and floors
 that make this storm look like a kind aunt, and every one of them
 will eat our people by the hundred while we walk. She offers to lift
@@ -197,7 +197,7 @@ does not yet exist — the governance of a tower we have not taken.
 Sell it. Sell the bear's skin before the bear is dead; if the price
 is delivered first, only a fool refuses. And when the tower falls and
 she comes to collect — she will find that what the Forge-Court keeps,
-it keeps. — He looked at his sister then, only then. — I vote to fly.
+it keeps." He looked at his sister then, only then. "I vote to fly."
 
 The tellers counted. Twenty-seven for the queen's bargain. Twenty-
 seven against. Four banners would not vote at all, their captains
@@ -220,23 +220,23 @@ book where living people stood written as goods.
 
 The rising had not climbed two years to found the next book.
 
-— The vote of the general, — Ede said, — is no. We do not pull down
+"The vote of the general," Ede said, "is no. We do not pull down
 one throne to raise another. We are not a ladder for crowns. We will
 walk, and we will bury too many, and it will be the long way, and it
 will be *ours* — every floor of it freed, not flown over and left
-locked under someone new. — She turned to face the dais, far off
+locked under someone new." She turned to face the dais, far off
 through the gold light, where a shape sat unmoving with the storm
-threaded through its brow. — Tell your book, Majesty: refused, with
+threaded through its brow. "Tell your book, Majesty: refused, with
 thanks, twenty-eight voices to twenty-seven. We'll take the sky the
-slow way. Nobody will hold it over us after.
+slow way. Nobody will hold it over us after."
 
 ⁂
 
 For three breaths the eye stayed gold and still, and Ede allowed
 herself to believe the book of favors would balance gently.
 
-— Thanks, — said Zephyra, from the dais, without rising, — do not
-appear in my ledger. There is no column for them.
+"Thanks," said Zephyra, from the dais, without rising, "do not
+appear in my ledger. There is no column for them."
 
 The stillness died.
 
@@ -247,15 +247,15 @@ stayed mild, stayed reasonable, threaded into the wind itself so that
 there was no place on the floor where it could not be heard keeping
 its accounts.
 
-— You have had of me a stilled climb, a royal audience, and the only
+"You have had of me a stilled climb, a royal audience, and the only
 honest offer this tower has made you. Price of a stilled climb: a
 gale. Price of an audience: a gale. Price of an army's insolence,
 general, priced as armies are priced — by the third part.
 
-— And enter this in your own book, general, against the day you
+"And enter this in your own book, general, against the day you
 will want it: the Court does not refuse custom. When the wind
 profits, you shall have wind. My ledger keeps to the letter. You
-will learn, in time, what that is worth.
+will learn, in time, what that is worth."
 
 Below the court, deep in the crag, in the Windward Undercroft where a
 realm's caught weather had been cellared in storm-glass against foul
@@ -307,13 +307,13 @@ Somewhere below, scattered across seven floors of screaming sky, in
 snare-woods and egg-vaults and the runs of a court that hunted, the
 third part of the rising was landing alone.
 
-— Sound the muster-horns, — Ede said. Her voice came out level, and
+"Sound the muster-horns," Ede said. Her voice came out level, and
 she would pay for that levelness later, in the dark, alone; a general
-always did. — Every skiff aloft. Every chain manned. We go and get
-them back.
+always did. "Every skiff aloft. Every chain manned. We go and get
+them back."
 
-— All of them? — someone asked — meaning it kindly, meaning *it
+"All of them?" someone asked — meaning it kindly, meaning *it
 cannot be done.*
 
-— Every name on the roll, — said Ede Stonhal, and walked into the
+"Every name on the roll," said Ede Stonhal, and walked into the
 wind. The gathering had begun.

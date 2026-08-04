@@ -1,7 +1,7 @@
 # Chapter 36 — Breaking the Hunt
 
-Rhovan had been born under the Huntsman's law and had spent three hundred
-years getting out from under it, and now he knelt in the Pale Kennels
+Rhovan had been born under the Huntsman's law and had spent a long
+lifetime getting out from under it, and now he knelt in the Pale Kennels
 learning it back by lamplight, because the law was the only weapon on this
 floor that would loose.
 
@@ -58,7 +58,7 @@ against another. His law against his collar."
 "is the four welded dead who serve him — the whip, the horse, the horn-
 wight, and the hounds' pale fever. Those we may fight. Those we will
 fight." She had her hammer, and her arm was sewn and fired, and she had
-asked for the remount herself: she had shod horses for four hundred
+asked for the remount herself: she had shod horses for forty
 years, she said, and would not see a good horse ridden dead a stride
 longer than she could help.
 
@@ -98,8 +98,8 @@ Shieldwall pike-woman beside him was weeping straight ahead of herself
 with her spear at rest; on his other hand a kobold matron had her whole
 fist in her mouth and her feet going steady as a drum. Ten strides. Five.
 And the flood of moon-white broke — parted, flowed round the walking army
-hackles-down, ten thousand years of law holding against ten years of
-weld — and the pale hunt came apart on its own mercy like a wave on a
+hackles-down, ten thousand years of law holding against fourscore years
+of weld — and the pale hunt came apart on its own mercy like a wave on a
 sea-wall.
 
 The welded dead did not part. The first whip came through the checked
@@ -111,7 +111,7 @@ it — and Rhovan, who had been given one task and a horn, sounded first.
 
 He had wondered, kneeling in the kennels, what the word would find in
 him — which held-back fraction, which walked-wide loyalty, whether a
-name-broken elf three centuries out from under this law had standing left
+name-broken elf a lifetime out from under this law had standing left
 to speak it. The word took him entire and truthful as an arrow leaving:
 the Rides at lamp-lit evening, his mother whipping-in, every hunt he had
 ever fled ending in one breath of pale-silver sound. Calloff. The

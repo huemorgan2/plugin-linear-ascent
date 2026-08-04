@@ -250,7 +250,7 @@ up at Ede with the smile he had been handing her across a
 counter since she was a drunk nobody in a market town, and said,
 "Your mother would not have believed one word of this."
 
-Ede signed last. Sixty-one banners hung from the rafters above
+Ede signed last. Fifty-eight banners hung from the rafters above
 her head, and the wind from the smoke-hole moved them all
 together, softly, like one cloth.
 

@@ -122,9 +122,9 @@ the way he had come.
 
 The Trapdoor Fields were nothing. That was the first thing you saw: a
 cavern-plain floored in fine grey dust, dead level, dead empty, running
-out past lantern-reach in every direction, quiet as a held breath. The
-second thing you saw was Wend Latchlight's face, and then you knew the
-nothing was a lie.
+out past lantern-reach in every direction, quiet as an unstruck drum.
+The second thing you saw was Wend Latchlight's face, and then you knew
+the nothing was a lie.
 
 "The whole floor's a lid," she told the war-council, up on the Watch-
 Mound, the one honest rise in all that flatness. She was a small hard
@@ -176,7 +176,7 @@ him, reading the ground over his shoulder, her hand-signs small and
 calm: *left, left again, hold.* Behind her the army, two miles of the
 gathered world — men, elves, giants, delvers, freed kobolds, Tollmen,
 Cullers, thanes — walking one behind the other in a silence so complete
-he could hear the lamp-oil move. A hundred banners furled and carried
+he could hear the lamp-oil move. Every banner furled and carried
 flat, because a banner snaps, and snapping brings them up.
 
 Once an hour, somewhere out on the plain, a lid would rise of itself —
@@ -225,8 +225,8 @@ the plain's heart threw itself open to take the gift, and the trick of
 it was done — out of its throat and into the open, where a thing built
 of hinge and hunger met the rising's bows, and Vega's hammer, and the
 end it had been owed since the fever made it. The lids fell still, all
-of them at once, edge to edge across the plain, like a held breath let
-go. Out of the king-burrow's throat the delvers brought up nineteen
+of them at once, edge to edge across the plain, ten thousand doors done
+listening. Out of the king-burrow's throat the delvers brought up nineteen
 packs, six lid-maps that were not Wend's, and one living climber of
 some company nobody knew, who had been down there in the dark keeping
 himself by counting, and when they lit a lamp near his face he asked

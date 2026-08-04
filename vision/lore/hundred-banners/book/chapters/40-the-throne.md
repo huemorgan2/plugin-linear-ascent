@@ -37,8 +37,8 @@ He looked small. She had needed a hundred floors to earn that sight, and
 she stood a moment on the last stair and had it: one man, on one chair,
 alone.
 
-*'Careful,'* Sliver said at her throat, very low. *'A hoard is smallest
-just before it is spent.'*
+*"Careful,"* Sliver said at her throat, very low. *"A hoard is smallest
+just before it is spent."*
 
 She came on. Aldis Bright walked at her right hand with the notched sword
 loose in its sheath, and at the sight of the iron chair the old soldier
@@ -67,8 +67,8 @@ Then the throne-tiers' freed: Bly's servants out of the walls of the
 court, carrying the long ledger of its crimes; Cord's masons with their
 chisels and their true history; Elys's gardeners, soil still on their
 knees from the beds they had emptied; Vess and her curators bearing the
-arms of five ages' fallen heroes back up to the place those heroes had
-been climbing toward; Nib's grey waiting-folk, each with a lifetime's
+arms of fourscore years' fallen heroes back up to the place those heroes
+had been climbing toward; Nib's grey waiting-folk, each with a lifetime's
 petitions in their arms and no token anywhere on them, walking — at last,
 at very long last — through the last door at the head of the queue.
 
@@ -96,7 +96,7 @@ the eighties as the peoples of the Made came on, and the count itself
 began to travel, repeated back down the stair, floor to floor, a number
 climbing a hundred floors of freed gates —
 
-'Ninety-nine,' Nix called, as Mereth Wakesend's grave-banner cleared the
+"Ninety-nine," Nix called, as Mereth Wakesend's grave-banner cleared the
 door.
 
 And then nothing, for the space of three breaths. And then the last
@@ -139,23 +139,23 @@ drawn in to warm a single man. He looked out at the gathered world with
 an expression she knew from ledgers, not from nightmares. He was
 counting.
 
-'You have done the arithmetic, then,' he said. His voice was even, and
+"You have done the arithmetic, then," he said. His voice was even, and
 it carried without effort, and it was neither kind nor cruel; it was the
-voice of a man to whom other voices had never quite been real. 'A
+voice of a man to whom other voices had never quite been real. "A
 hundred floors. More peoples than that. They do not feed themselves,
 general. They never did. Grain-floors and forge-floors, water high and
 low — I portioned all of it. That is what the throne is. Not the chair;
-the portioning.' He let the quiet hold a moment, and then he made the
+the portioning." He let the quiet hold a moment, and then he made the
 offer she had been promised by every tempter since the Storm Queen, the
 offer of the age, the deal at scale, and he made it the way the Wyrm had
 said he would — not as a lie. As the truth, from the source, in the
 source's own voice.
 
-'So take it,' said Vharuk. 'Sit here. Rule them gently — gently is
+"So take it," said Vharuk. "Sit here. Rule them gently — gently is
 within your gift; it was never within mine. Lower the floors over a
 lifetime. Marry the peoples slowly, keep the engines warm, ration the
-light. You have seen what they are when no one holds them apart.' The
-borrowed mail stirred about him. 'Someone must.'
+light. You have seen what they are when no one holds them apart." The
+borrowed mail stirred about him. "Someone must."
 
 Ede said nothing at all.
 
@@ -201,7 +201,7 @@ knock died in the iron underfoot, and then she gave Vharuk, King of the
 Ascent, the whole of her half of the shortest conversation in the book
 of the war:
 
-'You've heard them.'
+"You've heard them."
 
 ⁂
 
@@ -263,8 +263,8 @@ guard the way she had once nearly turned it, and this time there was no
 one behind him to take her alive. Vega spoke Unmake into the mail of
 borrowed light and the light unraveled from him like thread off a spool.
 And Ede Stonhal came up the last three steps of the Ascent with the
-King-steel blade — the Door's own metal, the fallen of five ages folded
-into its grain — and she offered him nothing. She had offered something
+King-steel blade — the Door's own metal, the fallen of eighty years
+folded into its grain — and she offered him nothing. She had offered something
 to every warden since the tenth floor; a collar broken, a name called, a
 mound mourned, a mead of memory. For him there was nothing to offer. No
 collar to break: he had forged them. No fever to cure: he had sown it. No
@@ -305,20 +305,20 @@ grass, and one of them, at a whistle from a hedge, turned its head. Every
 construct the King had ever poured drained where it stood to honest dead
 metal. In the Welding Halls the iron on the welded went inert — not
 flesh again, never flesh again, but no longer a hand on them, only a
-weight they wore — and Marn, standing under his banner on the summit with
-the light going by him, later told Nix it was the first hour in twenty
+weight they wore — and Wat Kello, standing under his banner on the summit
+with the light going by him, later told Nix it was the first hour in five
 years that the iron had weighed nothing at all.
 
 The light fell past Sliver, and Sliver flared in its pouch like a struck
 lamp, and Ede's hand went to it in plain fear.
 
-'Go if you're going,' she said, and her voice cracked on it. 'You've
-carried enough.'
+"Go if you're going," she said, and her voice cracked on it. "You've
+carried enough."
 
-*'I was not stolen,'* Sliver said, and its dryness had never been so
-plainly a kind of love. *'I chose. I have chosen nine times. Mind the
+*"I was not stolen,"* Sliver said, and its dryness had never been so
+plainly a kind of love. *"I chose. I have chosen nine times. Mind the
 step, general; you have been two years climbing and there are a great
-many stairs to go down.'*
+many stairs to go down."*
 
 The last of the light sank through the deepest floors and was gone into
 the world's old bones, and the hall of the summit stood in the plain
@@ -333,10 +333,10 @@ creation where no two of them were ever to have met.
 It was Hollen who said it, at last — the oldest keeper of the highest
 floor, in the hush, to no one and to all of them:
 
-'He built a hundred floors so we would never stand in one room.' The old
-man looked down the hall and began, helplessly, to laugh. 'Look at us.
+"He built a hundred floors so we would never stand in one room." The old
+man looked down the hall and began, helplessly, to laugh. "Look at us.
 Look behind you, look at us — every floor he ever cut apart is standing
-in this one now.'
+in this one now."
 
 The empty chair of cold iron stood over the hall a while longer, and
 then Vega Coalbrow, without any ceremony at all, took it apart with

@@ -23,18 +23,18 @@ It was the most beautiful place he had seen in seventy-eight floors,
 and everything in him that had lived four years under a collar stood
 up in his skull and said, small friend, this is a trap.
 
-— A trap, yes, — said the woman who came out of the trees, cheerful,
+"A trap, yes," said the woman who came out of the trees, cheerful,
 as if agreeing with a thing he'd said aloud. She was grey and brisk
 and small for one of Men, with a rope of little copper bells across
-her chest that made no sound at all when she walked. — The calm is
+her chest that made no sound at all when she walked. "The calm is
 the trap. Out in the wall the wind kills you in a breath, and in
 here nothing kills you at all. You just sit down. Rest your eyes.
 And never get up again. Mera
-Lullside; I keep the eye. You'd be the rising, then. — She looked
+Lullside; I keep the eye. You'd be the rising, then." She looked
 them over: the general grey as ash, the giant, the nameless elf,
-the goblin with a banner twice his height. — Four of you. Ahead of
+the goblin with a banner twice his height. "Four of you. Ahead of
 the whole host. Brave, that. The eye takes the tired first, and I
-never in my life saw anyone tireder.
+never in my life saw anyone tireder."
 
 She gave them the rules on the walk to Lullside, and Nix counted
 those too, because they were rules you counted or died of. One: no
@@ -56,10 +56,10 @@ than Vega — and showed Ede the eye-wall's turning, and the one safe
 seam by which an army could be fed into the calm, stage by stage,
 three days hence.
 
-— They can rest here, — Mera said, and tapped the storm-glass. — I
+"They can rest here," Mera said, and tapped the storm-glass. "I
 mean that two ways, general. It's the only rest on this tier. And
 it wants to be the last one. We'll walk your camps every hour.
-You'll hate my bells before you leave. It'll mean you're alive.
+You'll hate my bells before you leave. It'll mean you're alive."
 
 ⁂
 
@@ -115,9 +115,9 @@ forty floors with one arm, and since the feast Nix had carried it
 because no one else could bear to, and it was twice his height and
 he had never once put it down where anyone could see.
 
-— Can't, — Nix told the Pressed man, hoarse. — It doesn't sit, see.
+"Can't," Nix told the Pressed man, hoarse. "It doesn't sit, see.
 Flags don't. It's the one thing they're for, staying up. I just
-hold on and get carried, me.
+hold on and get carried, me."
 
 They broke the man's collar that evening, Vega's hands and a
 chisel of anchor-chain steel — and the freed courtier fell out of
@@ -260,11 +260,10 @@ they had gathered off the seventy-fourth floor, a snare-folk
 elf of Brambleside, wire-scarred, who had gone white to the
 lips.
 
-— Coursing-horns, — she said. — The Pale Court's. I grew up under
+"Coursing-horns," she said. "The Pale Court's. I grew up under
 those horns. They blow the count of the quarry, always, first
 call. It's the law of their hunt: the quarry is entitled to know
-it is chosen, and to know how many.
-— Listen. They'll confirm it.
+it is chosen, and to know how many. Listen. They'll confirm it."
 
 The horns spoke again through the eye-wall, and Nix, who
 counted everything, counted.
@@ -285,7 +284,7 @@ of roaring dark between this floor and the next, and he hugged
 the banner-staff to his chest and said, to no one, in a voice
 too small for the size of the count:
 
-— Four. It counted us, and it's *polite*. Wake the general.
+"Four. It counted us, and it's *polite*. Wake the general."
 
 Above the eye, in the wood beyond the wall, the hunt was already
 moving.

@@ -140,8 +140,8 @@ down and it came straight, the line was not in front of it. Brom's
 shield turned its shoulder, Rhovan's shaft found the servo-joint from
 the flank, and Ede went in over the wreck of its charge and finished
 it. The false light overhead dimmed by a hair, the whole sky of it at
-once, like a held breath let out. Away across the fields, the doors of Lamplit
-Steading began, one by one, to unbar.
+once, like a lamp trimmed by a careful hand. Away across the fields, the
+doors of Lamplit Steading began, one by one, to unbar.
 
 There were names on the Stone of the Climb, Rhovan knew, of climbers
 who had broken this same floor before — two generations of them. The
@@ -369,7 +369,11 @@ built on.
 Hale's eyes went along the party once, pricing it — lingering a
 half-breath on Rhovan, poacher, which Rhovan chose to find fair — and
 came back to Ede. "That's good work spoiled by luck, and luck's not
-doctrine. This is a writ of the militia charter." He didn't produce it;
+doctrine. Doctrine starts where I started your captain — first rule of
+the pits, and your children may have it free: lose your sword, lose
+your teeth, but keep your gate." He said it at the recruits and did not
+wait to see whether it landed. "This is a writ of the militia charter."
+He didn't produce it;
 men like Hale are their own paper. "The Cullers hold wardship of the
 low floors, one through nineteen, and everything armed that walks them
 walks under my count. There's a muster forming at the Beacon Field for

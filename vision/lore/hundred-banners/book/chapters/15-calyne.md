@@ -9,7 +9,7 @@ wintering in her teeth. Below, on the floors they had freed, the rising's
 road ran like a lit wick — gate-towns waking, wagons climbing, the freed
 coming up behind their own liberation in numbers Berrin's clerks could
 barely count fast enough. Above, past the boulder-fields and the wheeling
-glare hawks, the tier went on into ice. Forty-one banners now. A nation
+glare hawks, the tier went on into ice. Forty banners now. A nation
 moving, and stopping soon to breathe.
 
 "Alone," the ride-keeper said again, as if the word itself needed
@@ -224,7 +224,7 @@ back bare."*
 
 ⁂
 
-So the false winter's-peace settled over the chasm-mouth camps: forty-one
+So the false winter's-peace settled over the chasm-mouth camps: forty
 banners under the black moraine, the cook-fire smoke standing straight
 up in the cold, and at the council fire each evening, in the seat she
 had taken and no one had dared take back, a grey woman writing lace,
@@ -254,7 +254,7 @@ every arrow, every soul this rising has carried up out of the fever —
 we set it all in one book, and come the thaw we will know for the first
 time what we are.
 
-"Nine peoples and forty-one banners," said Ede Stonhal, and the cold
+"Nine peoples and forty banners," said Ede Stonhal, and the cold
 took her breath and made it a standard over the fire. "Come the
 wintering, we find out how big a world we've stolen back."
 

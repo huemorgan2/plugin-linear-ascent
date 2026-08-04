@@ -12,15 +12,15 @@ caught it. She set her hand on the link's worn crown and read the iron
 the way another woman might read a letter. Old. True. Tired in the
 pins.
 
-— This one is sound, — said the chain-keeper beside her. Mera Chainrest
+"This one is sound," said the chain-keeper beside her. Mera Chainrest
 was a woman of Men, small as a child against Vega's knee, grease to
-the elbows, a striking-hammer at her belt. — You hear the hum? A
+the elbows, a striking-hammer at her belt. "You hear the hum? A
 sound link hums. A failing one goes quiet. The moss muffles
 it and the rust-flower eats the pins, so we walk, and we listen. It is
-slow work. It is the only work there is.
+slow work. It is the only work there is."
 
-— I understand slow work, — Vega said. She said everything slowly, and
-she finished it. — Show me a quiet link, and I will mend it.
+"I understand slow work," Vega said. She said everything slowly, and
+she finished it. "Show me a quiet link, and I will mend it."
 
 The rising crossed the Anchor Chains for nine days, and it crossed them
 quietly, because it had not sung since the Frosthall. Two months had
@@ -94,8 +94,8 @@ and glided away down the wind, uncollared, free, small.
 
 Vega stood by the brake a long time with her palm on the lever.
 
-— A brake is a promise, — she said to Mera. — Whoever built this meant
-it to be kept. We will keep it.
+"A brake is a promise," she said to Mera. "Whoever built this meant
+it to be kept. We will keep it."
 
 Chainrest kept better than that. With the master brake set and every
 chain on the floor holding fast, the keepers ran out the slack chain
@@ -115,7 +115,7 @@ know the words. It listened. That was a beginning.
 
 ⁂
 
-— It is a dead engine, — Ulfar said. — That offends me.
+"It is a dead engine," Ulfar said. "That offends me."
 
 Her brother had found the isle's heart by supper: a vault of lift-
 stones under the wild garden, the old buoyancy-craft of the sky-realm,
@@ -123,19 +123,19 @@ cold now, cracked, spent the night of the Theft. He stood over them
 with a lamp, and Vega watched his face and saw the Forge-Court in it,
 the way you see weather coming over ice.
 
-— It is a garden, — Vega said, — with a dead engine under it. The
-garden is the part that matters.
+"It is a garden," Vega said, "with a dead engine under it. The
+garden is the part that matters."
 
-— The garden exists because of the engine. — Ulfar said it without
-heat. He never argued with heat; that was the worst of him. — Sister.
+"The garden exists because of the engine." Ulfar said it without
+heat. He never argued with heat; that was the worst of him. "Sister.
 The folk below us are sleeping on proof that the old world made
 things worth keeping. You would break the tower and let all its
 craft run out on the ground like blood. I would keep the craft and
 pour out only the cruelty. I do not think that makes me the wicked
-one.
+one."
 
-— No, — Vega said slowly. — It makes you the tempted one. Those are
-different, and the second is worse, because it can vote.
+"No," Vega said slowly. "It makes you the tempted one. Those are
+different, and the second is worse, because it can vote."
 
 He laughed, because they were family, and it was not finished between
 them, and both knew where it would finish: higher up, in the tower's
@@ -155,11 +155,11 @@ for no one else. He had brought, for no reason under heaven but
 kindness, a crate of seed-potatoes for a hanging garden nobody had
 known existed a week before.
 
-— How, — Vega asked him, — did you know?
+"How," Vega asked him, "did you know?"
 
-— I didn't. — Berrin smiled tiredly and rubbed his bad shoulder. —
-But it stood to reason somebody up a tower would be missing a garden.
-Somebody always is.
+"I didn't." Berrin smiled tiredly and rubbed his bad shoulder.
+"But it stood to reason somebody up a tower would be missing a garden.
+Somebody always is."
 
 It warmed her, like everyone else. That was what Berrin was for.
 
@@ -192,11 +192,11 @@ between hung a thousand ropes, and mast-folk lived in the crowsnests
 and crossed their whole country hand over line, and the wind in the
 shrouds made the sound of a fleet forever about to sail.
 
-— Don't touch the floor, — said Weld Sparside, by way of welcome. The
+"Don't touch the floor," said Weld Sparside, by way of welcome. The
 mast-warden was lean as a stay and barefoot, and he stood on a line
-thin as Vega's finger as though it were a quay. — The tangle takes.
+thin as Vega's finger as though it were a quay. "The tangle takes.
 Everything you want is up, or down in the Bilge, and the Bilge you go
-to only once, with me, on a day I choose.
+to only once, with me, on a day I choose."
 
 The rising learned to rig. That was the campaign, more than any fight:
 freed sky-folk of Chainrest and Sparside teaching soldiers of nine
@@ -220,11 +220,11 @@ mark of hers. Older. Kinder. A made thing with no cruelty in the
 making, and the first such she had touched since her own collar-steel
 had come back to shame her at the Warcamp cages.
 
-— It can be woken, — she said, and her voice was not quite steady. —
-Nothing in it is broken. It is only unpaid. Craft like this is a debt,
-and lift is how the debt is honored.
+"It can be woken," she said, and her voice was not quite steady.
+"Nothing in it is broken. It is only unpaid. Craft like this is a debt,
+and lift is how the debt is honored."
 
-— Then you'd best deal with the rig first, — Weld said dryly, and
+"Then you'd best deal with the rig first," Weld said dryly, and
 above them, through a hundred fathoms of tangle, something enormous
 began to haul on every rope on the floor at once.
 

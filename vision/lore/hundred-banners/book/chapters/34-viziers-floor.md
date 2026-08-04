@@ -192,10 +192,10 @@ of warm scenes and Rhovan had eaten from his hand that morning, and
 every one of them turned over at once like soil under a plow, and what
 was underneath had been underneath the whole time.
 
-Berrin Or stood up slowly at the charter-table, sixty years old, flour
-on his cuff, the face the entire rising trusted above any face alive,
-and said, mildly, "Wat. Lad. You've been iron five years. Memory's a
-cruel smith, and this cruel woman —"
+Berrin Or stood up slowly at the charter-table, flour on his cuff, the
+face the entire rising trusted above any face alive, and said, mildly,
+"Wat. Lad. You've been iron five years. Memory's a cruel smith, and
+this cruel woman —"
 
 "Open your shirt," said Calyne.
 
