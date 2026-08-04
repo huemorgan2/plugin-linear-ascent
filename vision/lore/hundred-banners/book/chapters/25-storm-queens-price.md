@@ -53,7 +53,10 @@ Berrin they had left below with the host and the stores, his arm
 still slung; he had loaded them down with wax-sealed bread for the
 court-captives — *storm-soaked folk want dry bread, it stands to
 reason* — and waved them up the crag like a man seeing family off at
-a gate.
+a gate. Below and behind the embassy the army lay bedded as Ede had
+ordered it, camps strung down the lee of the tier by companies, every
+fire in a wind-shadow, a country of canvas pitched to the grain of
+the storm.
 
 Then the wind stopped.
 
@@ -287,7 +290,8 @@ like a sower flinging seed, broadcast across the wind floors above,
 the aeries and the ramparts and the wire-woods and the black glass
 forest, wherever the queen's gales tired of carrying them.
 
-It lasted the time a lamp takes to gutter. Then the loosed storms
+It lasted the time a broken storm-glass takes to spend itself. Then
+the loosed storms
 blew themselves ragged and thin and drained away down the tower's
 sky, and the tempest closed back over its court like water over a
 stone, and it was only weather again — and the slopes below were

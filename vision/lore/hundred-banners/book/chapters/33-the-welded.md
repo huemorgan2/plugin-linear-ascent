@@ -219,8 +219,8 @@ open council — because the courier was beloved, and the accusation would
 shatter what the proof must carry whole.
 
 "You're the proof, Wat," she said. "You and a serving-list and a ledger.
-Hold my secret three days more. Then I'll ask you to say your word again,
-where it finishes this."
+Hold my secret five floors more. Then I'll ask you to say your word
+again, where it finishes this."
 
 The iron hand closed careful as a jeweler on the fold of the banner. Above
 the finished mouth the eyes changed, and it took her a heartbeat to

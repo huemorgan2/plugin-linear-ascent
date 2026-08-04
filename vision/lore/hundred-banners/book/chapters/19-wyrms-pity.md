@@ -146,8 +146,9 @@ Nix — filled the silence.
 Ede felt Rhovan go still beside her, the particular stillness of a
 man memorizing.
 
-"The first climbed angry. It reached the fortieth floor in its fury
-and fed the tower's cages for a decade. The second climbed clever —
+"The first climbed angry — no banners on it yet — and reached the
+fortieth floor in its fury and fed the tower's cages for a decade.
+The second climbed clever —
 quiet, patient, well-led. It got higher. Its banners hang in the high
 vaults of the Made, behind glass. The tower keeps what it is proud
 of." The great eye moved over them. "You climb *heavy*. Nine peoples,

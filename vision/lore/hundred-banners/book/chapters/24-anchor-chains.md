@@ -166,19 +166,13 @@ It warmed her, like everyone else. That was what Berrin was for.
 ⁂
 
 Three countries lay between the chains and the fleet, and the army
-was the better part of a month in them. It skirted the Reactor Scar
-along the cool rim, two days' march of fused colorless glass ringing
-under the boots, drinking Grint Scarwatch's palewater at every halt
-while the scar-warden walked ahead of the van reading a fire nobody
-could see by the prickle of his own skin. It crossed the Updrafts on
-Cole Kitegate's re-rigged spanlines, a gorge-country that boomed,
-kite-pilots ferrying the baggage up the thermal columns while the
-ranks went hand over hand above a wind that wanted them. And it came
-up through the Ice Quarries walking canyon-floors of glass-clear
-blocks under Hune Hewnstone's locked gantries, house-sized loads
-hanging dead still overhead, the quarry-master reading each block's
-flaws by the light through it before he would let a company pass
-beneath.
+was the better part of a month in them: the Reactor Scar skirted
+along its cool rim, fused glass ringing underfoot while Grint
+Scarwatch walked ahead of the van reading a fire nobody could see by
+the prickle of his own skin; the Updrafts' booming gorges, crossed on
+Cole Kitegate's re-rigged spanlines; the Ice Quarries' glass-clear
+canyons, walked under Hune Hewnstone's locked gantries with
+house-sized loads hanging dead still overhead.
 
 Floor sixty-five was a fleet.
 
@@ -262,28 +256,21 @@ line.
 
 The bridge floors went by like beads told on a string, and every bead
 was a country: the Kennel Courts heard half a day before they were
-seen, tiered stone yards baying under the mews-yews; the Coolant
-Falls a mile-high cliff of stopped white river, its milk-light
-showing the pilgrims still standing in the curtain; the Silk Vaults
-cold and hushed for two days' walking, aisle on aisle of neat white
-bundles; the Lightning Fields an ozone plain of verdigris poles under
-a ceiling that flashed and never rained. In the Kennel
-Courts the master horn sounded from the Mews-Tower and every ungentled
-pack on the floor heeled at last to its own name, and the rising
-marched out with hounds at its flanks and owls above its banners. At
-the Coolant Falls, Bruna Milkwater opened the source her people had
-kept a thousand years, and the frozen river thawed from the head down
-and *roared* again, giving up its pilgrim dead for burial. In the
-Silk Vaults the crews of Spoolgate read their ledgers by lamplight
-and cut free a
-vault's worth of the wrapped-but-living, and some of the freed had
-been shelved so long they asked after kings dead an age. On the
-Lightning Fields the army crossed by the safe lanes under a sky that
-aimed, and Mera Copperpole threw the master switch in the Ground-
-Vault, and the harvested storm poured into the rising's keeping
-instead of down upon its people. Four floors, four gate-towns, four
-keepers' hands shaken; and behind the host, at every mooring, the
-shipwrights worked.
+seen, and freed almost in passing — the master horn sounded from the
+Mews-Tower, every ungentled pack on the floor heeled at last to its
+own name, and the rising marched out with hounds at its flanks and
+owls above its banners; the Coolant Falls' mile-high cliff of stopped
+white river thawed from the head down and *roaring* again, giving up
+its pilgrim dead for burial; the Silk Vaults cold and hushed for two
+days' walking, where the crews of Spoolgate cut free a vault's worth
+of the wrapped-but-living, some shelved so long they asked after
+kings dead an age. And the Lightning Fields the army crossed by the
+safe lanes, an ozone plain of verdigris poles under a ceiling that
+flashed and never rained, a sky that aimed — until Mera Copperpole
+threw the master switch in the Ground-Vault, and the harvested storm
+poured into the rising's keeping instead of down upon its people.
+Four floors, four gate-towns, four keepers' hands shaken; and behind
+the host, at every mooring, the shipwrights worked.
 
 For that was the turn the sky-campaign made, quietly, while the army
 was busy grieving and climbing and learning knots. The wreck-fields

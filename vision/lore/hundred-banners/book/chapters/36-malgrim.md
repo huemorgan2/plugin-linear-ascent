@@ -252,10 +252,13 @@ prisoner.
 There is no need to write out the whole of it. He confessed to all of
 it, in the flat voice of a man reading a delivery-bill: the route sold
 to Skarn's buyers, the toll-payments, the seating-list of the
-Frosthall, the year and the price of each. Asked why, he said he had
-gone up the tower a grown man and knelt for the collar with his eyes
-open, and that this was not an excuse but an inventory, since they
-were counting. Asked what he sought, he said rope, and said it hoping.
+Frosthall, the year and the price of each. Asked why, he answered
+with the clerk's own creed — word for word as it had been said to him
+over a heel of bread when he was seven, at the bottom of the world,
+and he told them that too, since they were counting: "The tower feeds
+what it counts." He had gone up a grown man and knelt for the collar
+with his eyes open; not an excuse, he said, an inventory. Asked what
+he sought, he said rope, and said it hoping.
 
 Marta Reed said rope too, when the company spoke. So did five others.
 Then it came around the fire to Wat Kello, who had been welded, whose

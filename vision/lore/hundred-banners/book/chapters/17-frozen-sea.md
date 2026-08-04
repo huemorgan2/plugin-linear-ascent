@@ -86,8 +86,8 @@ length of her train with her maul on her shoulder and listened to the
 sea talk under her feet. It groaned like a full hold. It ticked like a
 cooling forge. Once, away north, it made a sound like a door closing,
 and Orla stopped the whole column with one raised fist, stood listening
-for the time a lamp takes to gutter, then moved them all four hundred
-paces west without explaining, and nobody asked.
+for the time a drawn breath takes to turn to frost, then moved them all
+four hundred paces west without explaining, and nobody asked.
 
 The floe-wolves came at dusk on the third day, white out of white. They
 did not attack the sledges. That was the fever's cunning: they came in

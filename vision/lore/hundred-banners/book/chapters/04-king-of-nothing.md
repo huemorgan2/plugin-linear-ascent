@@ -106,7 +106,7 @@ The something was a banner.
 It lay where a guard had dropped it, off the pile of taken climbers'
 colors Gnarl kept nearest the throne. It was grey. It
 had a device Nix had dusted a hundred times and never once asked
-about — a wall of squared stones, and above the wall an open hand — and
+about — a dry-stone wall, and above the wall a crooked star — and
 it was sewn heavy, double-heavy, war-heavy, and when Nix hauled it up
 on its cracked pole and huddled in behind the cloth, an arrow hit it
 and did not come through. He counted his blessings. He arrived at one.
@@ -291,7 +291,8 @@ Nix counted them until he could not.
 He kept the grey banner. No one claimed it; the woman — Ede, the
 militia called her, and something older and harder when they thought
 she couldn't hear — would not look at it long, and would not let anyone
-take it from him either. Wall and open hand. He asked the elf whose it
+take it from him either. Dry-stone wall and crooked star. He asked the
+elf whose it
 had been, and got a fraction: "A company's." He asked the splinter of
 crystal, and got: *Hers.*
 

@@ -44,7 +44,12 @@ up."
 
 "Then you'll tell me what you read," said Ede, "and I'll act on
 it." She had been two years learning how he parceled truth, and it
-had made her exact. He took the paper she slid across the table —
+had made her exact. Something moved in him at that, quiet and
+inconvenient — forty years the Wake had bought his eyes and never
+once trusted his word, and this woman had just handed him both,
+across a plain table, with a crown in sacking between them — and he
+filed the feeling, as he filed everything dangerous, under a name he
+declined to read. He took the paper she slid across the table —
 the square the third rider had carried, singed at one corner.
 "That was on the post at the Fairstead gate. There's one like it
 in every pile of ash so far. Read it on the road."
@@ -66,7 +71,7 @@ You are invited to look at it, and to consider what it kept.*
 
 *Settlement of account.*
 
-Rhovan stood very still for the time a lamp takes to gutter once.
+Rhovan stood very still for the space of three slow breaths.
 
 Settlement of account. He had read that phrase before, in a
 strong-room a mile inside a stolen mountain, under an entry that

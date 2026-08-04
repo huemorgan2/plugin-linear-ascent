@@ -92,13 +92,14 @@ She said it anyway, to Ede, in front of everyone, in the flat voice of
 someone who has decided to be a bell and ring once and fall over:
 
 "They're burning the Nursery. The grey soldiers. The ones your banner
-left to guard our gates. Wend says — Wend says come and see what your
-word is worth."
+left to guard our gates. Wend of Silkstead says — she says come and
+see what your word is worth."
 
 Nix did not remember the next hundred heartbeats honestly, and knew it.
 He remembered noise, and Vega's hand closing his shoulder like a gate,
 and Ede already giving orders — the van to hold the Smelterworks under
-Bruna and the banner, the party down the lifts, now, light, no baggage.
+Bruna Stave and the banner, the party down the lifts, now, light, no
+baggage.
 
 Four lifts down. Five days of hard march, through the fair where the
 great wheel still burned its funeral-light, through the Anvil Commons,

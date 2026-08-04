@@ -95,29 +95,24 @@ Then the willing were called.
 The first called was a woman of Lampfall, Annis Cray, and her case
 taught the court its measure.
 
-She was old, a miner's widow, and the collar-scar at her throat was
-rubbed smooth with years. Nobody had informed on her; the willing
-signed nothing, that was the whole craft of the collar, and she could
-have stood among the freed forever. She came to the table herself,
-first of all the willing in the world, and said the iron had been her
-own asking — taken in the famine winter the tolls trebled, for a
-granary post and a double ration. She stood before her own floor's
-people with
-her hands folded and said the ration had fed three grandchildren whose
-parents the tower had already taken; that she had weighed it at the
-time, her neck against their winter, and would weigh it the same again;
-and that they should do as they liked, since everyone she had made the
-bargain for was grown now, and safe, and here — and she nodded, once,
-at two young miners in the crowd with their caps in their hands.
+She was old, a miner's widow, the collar-scar at her throat rubbed
+smooth with years. Nobody had informed on her; she could have stood
+among the freed forever. She came to the table herself, first of all
+the willing in the world, and said the iron had been her own asking —
+taken in the famine winter the tolls trebled, for a granary post and
+a double ration that fed three grandchildren whose parents the tower
+had already taken. She had weighed it then, her neck against their
+winter, and would weigh it the same again; and they should do as they
+liked, since everyone she had made the bargain for was grown now, and
+safe, and here — and she nodded, once, at two young miners in the
+crowd with their caps in their hands.
 
-The jury of Lampfall was out no time at all. An old digger stood up and
-said what the whole hall needed a first case to say: that the tower had
-built a world where a grandmother's neck was the price of bread, and
-then had the gall to keep her receipt; that the crime was the famine,
-and the famine had an owner, and the owner was dead; and that Annis
-Cray's name was to be struck from the registers of the willing and
-entered in the rolls of the wronged, where it had belonged for twenty
-years.
+The jury of Lampfall was out no time at all: the tower had built a
+world where a grandmother's neck was the price of bread, and then had
+the gall to keep her receipt; the crime was the famine, and the
+famine had an owner, and the owner was dead. Annis Cray's name was
+struck from the registers of the willing and entered in the rolls of
+the wronged, where it had belonged for twenty years.
 
 Ede sealed it and found her voice needed a moment. Somewhere behind her
 eyes a man on a broken drum-throne poured a chain from hand to hand and
@@ -201,6 +196,33 @@ Nix, who held one parole already and had come ready to hold more, took
 a fresh slate from his bag, wrote her name at the top, and handed it
 over, and showed her, leaning close, the way he ruled his columns: once
 for the floor, once for the dead.
+
+The third was a man of Fairstead, Garet Hode, and his was the verdict
+Ede carried away from the whole day's sitting.
+
+No collar, no license, no coin taken. For six years he had whispered
+names at the Fairstead toll-gate — who grumbled at the levy, who
+hoarded seed, who taught their children the old letters — and one in
+three of the named had gone up the lifts. The gate-clerks had held
+his daughter's name over him all six years; men of his own lane stood
+and said so; and the daughter herself stood in the crowd, grown and
+living, and did not look at him. The jury of Fairstead had buried the
+named. It was out a long time, and it came back, and it entered Garet
+Hode in the registers of the willing, at the willing's whole
+reckoning: a year's keeping to every household emptied on his word,
+under the parole of a woman whose brothers he had named.
+
+Ede had weighed him while they were out, the way she had weighed
+Annis Cray, and the beam had come down otherwise. Fear is a collar
+too, she thought; it only leaves no scar for a court to find. Had the
+judgment been hers, his name went to the rolls of the wronged, beside
+the widow's.
+
+It was not hers. That was the whole of what they had built: a court
+she could overrule would only have been her own arm in a longer
+sleeve. She pressed the seal down, slow, and her hand did not shake.
+That night she could not call up the man's face at all — only the
+daughter's, watching the wax.
 
 ⁂
 

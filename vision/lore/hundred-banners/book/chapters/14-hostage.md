@@ -114,7 +114,8 @@ all season, twice in hundreds of rallies — she paid in full, to the
 letter, like the honest instrument she was. The first time, he asked
 about the wrapped knight, her cocooned champion.
 
-"Taken in the Men's wars, four tiers up, ninety years gone," she said.
+"Taken in the Men's wars, four tiers up, fourscore years gone, in the
+tower's first fury," she said.
 "Dead before he reached my floor; I do not warrant what I did not
 break. His skill is in the lines now, not in him. There is no man in
 that mail, hostage. There is only the drill, going on without him. You

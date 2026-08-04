@@ -113,7 +113,7 @@ headache, not a madness; the fever at a tenth is a shiver. And with the
 tenth I keep the grav-engines fed, and I set the floors down." His voice
 never rose. It never had. It was the terrible patient voice of the only
 person in her life who had never once lied to her, and every sentence
-arrived whole. "Sixty years, Vega. One generation of a lit core, and I
+arrived whole. "Thirty-one years, Vega. One generation of a lit core, and I
 lower a hundred floors onto the earth like a cup onto a table. No fall.
 No dying tower above a world of the freed, waiting an age to come down
 on their children's heads. And at the end of it, the last coil damped,
@@ -159,7 +159,8 @@ burns."
 
 "Now do the sum you came up here to do," Vega said. "Not the floors, not
 the engines — you were never wrong about the engines, and I will grieve
-your engines with you. The *hours.* Sixty years of a lit core is what —
+your engines with you. The *hours.* Thirty-one years of a lit core is
+what —
 count it in collar-hours, count it in fever-nights, count it in the
 shifts they'd still be standing down there —" she pointed through the
 glass, at the sluices, at the pens, at the gray generations of Coreside,
@@ -174,10 +175,11 @@ mother finished everything, gently, with the hammer already falling.
 That's what the tower *is.*"
 
 The hum of the core came up through the floor of the Spire, patient,
-enormous, sixty years long.
+enormous, thirty-one years long.
 
-Her brother stood with his hand on the scram-bar for the time a lamp
-takes to gutter. She watched the mathematics behind his face to the end
+Her brother stood with his hand on the scram-bar for the time an
+ingot takes to lose its color. She watched the mathematics behind his
+face to the end
 — the crew-table, the carried digit, the figure that would not balance —
 and she did not help him, because this was his fire, and their mother's
 third clause had a meaning under its meaning that Aud never had to say
@@ -231,10 +233,12 @@ floors. I did not tell you that the riding kept the bones warm.* A
 silence. *The last of the network is going dark. Kel-of-the-sixtieth,
 gone. The three sleepers under the ice, gone. The one in the Wyrm's
 hoard, who was rude to me for nine hundred years, gone; I had hoped —*
-and the voice stopped itself, and started again, level. *There. Quiet. I
-am lit, alone. I am the last light of the shardkind that walks free —
-the census's two hundred and twelve sleep bottled yet, and I cannot
-hear them — and the first, in an age, that burns on nothing but its own
+and the voice stopped itself, and started again, level. *There. Quiet.
+The carried ones burn on — the census's two hundred and twelve, warm
+in pockets and palms the length of this host — but the roads between
+us are gone. The choir is what died. Each of us is a lamp now in a
+country without roads. I am the last of the shardkind that walks
+unbound — and the first, in an age, that burns on nothing but its own
 choosing.*
 
 Ede closed her hand around the splinter and held it against her

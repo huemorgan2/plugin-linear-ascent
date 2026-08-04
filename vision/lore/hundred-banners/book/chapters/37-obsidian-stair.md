@@ -123,8 +123,9 @@ He mastered it with the only weapon the copy could not have learned from
 him, because he had used it exactly once.
 
 "The whole truth, then," Rhovan said. "Since you've never told one, and
-since it's the one move you don't know. I blackmailed her at Roothollow
-on the first morning and loved her before the Broodthrone. I burned my
+since it's the one move you don't know. I blackmailed Ede Stonhal at
+Roothollow on the first morning and loved her before the Broodthrone.
+I burned my
 faction because a spider's contract was more honest than my handler's.
 Calyne died proving Berrin because I was three floors away holding *her*
 faction to *Ede's* war, and if the glass keeps every road, then keep
@@ -226,8 +227,8 @@ collar on, holding a full cup with both hands, safe.
 
 Small. Warm. Alive. The cup-bearer who never dropped the cup.
 
-"You're still there," Nix said. "In the throne-tent. Twenty years of
-floors and you're still —"
+"You're still there," Nix said. "In the throne-tent. Ninety floors
+and you're still —"
 
 "Still pouring," his reflection agreed. It talked fast, like him; it
 counted, like him. "And count it out, go on, you love a count: kings

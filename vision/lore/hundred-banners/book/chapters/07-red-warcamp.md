@@ -235,11 +235,15 @@ armed at the enemy's own fires. The Muster's rams had the gate
 groaning. The drum-storm was tearing at its own rhythm now, orders
 crossing orders.
 
-It was Nix who silenced it. Later she pieced it together from a
-dozen tellings: the goblin at the third drum-tower with the banner
-planted at its foot, scrambling up the lashed frame to the kobold
-drummers collared to their drums — and the working scratched into the
-wall of the Cage Pens, the fragment Vega had found with her hands
+It was Nix who silenced it. Ede saw it from the Paylane in pieces,
+between tent-tops, through the smoke: the third drum-tower black
+over the lanes, a small shape going up its lashed frame quick as a
+rat up rigging, the grey banner tilted at its foot; then a stillness
+spreading among the drummers, one shape bending over another — and
+that tower's drums fell out of the storm, and the storm faltered
+around the hole they left. The how of it she pieced together later
+from a dozen tellings: the working scratched into the wall of the
+Cage Pens, the fragment Vega had found with her hands
 flat on the steel and read aloud once, wondering: *Break-collar,
 written rough, by some caged hand that never got to speak it.* Costly
 still — speaking it over the drum-team's collars one at a time took
@@ -287,10 +291,10 @@ the Red tongue that was not a curse, and let them go.
 
 "Warlord," Ede said.
 
-"Captain." He knew her. Something in her went through ice at it. Two
-years, and the cages, and he knew her at a word. "You climbed short,
-last time. The King said you would come again. The King is never
-wrong about Men; it is his study."
+"Captain." He knew her. Something in her went through ice at it.
+Five years, and the cages, and he knew her at a word. "You climbed
+short, last time. The King said you would come again. The King is
+never wrong about Men; it is his study."
 
 "Your camp's turned. Your garrison's freeing itself by the pen-load.
 It's finished, Skarn." She kept her point low. Behind her she could
@@ -348,10 +352,10 @@ rank, because no one in a hundred floors of the tower's mercy had
 ever been given less reason to believe anything else. She stood over
 him and made herself say it, silently, the way the shardminds taught:
 *a death that should not have been needed.* Then the seam of the
-stair-lift split behind the shield-wall with a sound like a held
-breath let go, and the second tier of the Ascent stood open, and
-Ede Stonhal turned her back on it, because the stair was not the
-thing she had climbed this floor for.
+stair-lift split behind the shield-wall with a sound like one last
+drum-stroke, struck under the floor by no hand, and the second tier
+of the Ascent stood open, and Ede Stonhal turned her back on it,
+because the stair was not the thing she had climbed this floor for.
 
 ⁂
 

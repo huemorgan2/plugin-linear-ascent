@@ -2,7 +2,7 @@
 
 Five floors lay between the dead welding-rigs and the Herald's Gate, and
 the rising took them in nineteen days, and Rhovan of the Grey Rides —
-lately of nowhere, his Wake-token two years broken over his own knee —
+lately of nowhere, his Wake-token half a year broken over his own knee —
 spent those nineteen days doing what he had always done best, which was
 watching everyone, and being wrong about the one that mattered.
 
@@ -124,7 +124,8 @@ anyone, and more than she had ever told him.
 
 They staged the council on the Herald's Road's last rise, beneath the
 silenced Proclamation Arch, with the muster-gate filling the whole north
-sky. A hundred banners on the poles the King's standards had hung from.
+sky. A hundred banners on the poles the King's standards had hung
+from — the last thirty sewn since the outworks by the Made's own freed.
 The charter-table down the middle, the decade of it scarred and ringed;
 Ede at its head; the keepers and the captains and the freed Wardens in a
 horseshoe five ranks deep. Drums beyond the gate, always, like weather.
@@ -138,14 +139,15 @@ said, counted the council's exits.
 It meant nothing to him. He filed it. The target handed him bread that
 very morning.
 
-"Two years ago at the Frosthall," Calyne began, without preamble,
+"A year ago at the Frosthall," Calyne began, without preamble,
 without warmth, without anything a listener could love, as ever, "the
 feast was struck by Heralds seeded through the serving-lines. I said that
 morning there was a collar inside the charter's circle. I was not
 believed, being myself suspected. Here is the serving-list Nix took from
 a dead Herald's boot." She laid it on the charter-table. "The seating it
-follows was settled the night before, by four people. I am one. Two are
-dead at their doors. Attend, please, to the fourth."
+follows was settled in council, five days before the feast, by six
+people. I am one; the rest you trust with your lives, and may keep
+trusting four of them. Attend, please, to the sixth."
 
 The council had gone very quiet. Rhovan had not moved, and could not
 afterward say when his heart had started to slam.

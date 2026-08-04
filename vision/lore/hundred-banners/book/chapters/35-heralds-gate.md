@@ -48,6 +48,32 @@ thought the thought the whole muster was thinking, the one the
 Frosthall had signed and the climb had spent two years proving: not a
 tower. A stair.
 
+At the Anvil she found Serle Danner, and stopped.
+
+He was serjeant of the planted rank now — Shieldwall's own, the freed
+of the Warcamp cages holding the one stretch of ground the whole day
+would lean on — and he was working down his file in the dark with a
+maul and a bag of rivet-pins, checking each shield's foot where it
+socketed the yard-iron, two pins to a socket, kicking every third one
+the way a carter kicks a wheel. Vega knew steel-work when she watched
+it. He had the file's shields lapped like hedge-stakes, each face
+braced on its neighbor's rim, the whole rank one long laid hedge of
+rivet-steel — hedge-fighter's craft, learned in the lanes at the
+bottom of the world, worth more this morning than any drill the tower
+ever beat into anyone.
+
+"Sound?" Vega asked, her hand on the end shield's rim.
+
+"Sound." He kicked the last pin home and straightened. Five years in
+Skarn's cages had left him a long shadow with an edge, and the edge
+was pointed the right way now. "I stood at a fire once and told her
+she sold us. Today I hold her hinge." He said it the way you pay a
+debt at term, exact, asking no discount. "When she looks down the
+line, this is the piece that doesn't move."
+
+Vega left him her second-best maul, which between smiths and
+serjeants is a whole speech, and walked on.
+
 And past the last shield stood the muster-yards of the Herald's Gate,
 and Malgrim's answer.
 
@@ -164,8 +190,9 @@ you drum a soldier back into the collar you are standing on the wrong
 side of? How do you press a man who has, this very hour, been *unpressed*?
 
 By mid-morning the field had settled into a shape, and the shape held
-long enough to be learned: the shield-line bowed across the yards like
-a drawn bow, anchored at the Anvil where its hinge took the weight;
+long enough to be learned: the shield-line bowed across the yards'
+south end like a drawn bow — one stitch of iron in a square that ran
+a day's march — anchored at the Anvil where its hinge took the weight;
 the choir and the bell coming up the Bell-Road behind the bow's grip,
 slow as a tide-mark; the enemy's mass pressed on the line's whole
 outer face, deepest at the hinge, fed by the gatehouse down the Alley;
@@ -178,7 +205,17 @@ long and so hard that his men said the collar had grown a man around it,
 rather than the reverse — wheeled the whole second echelon off the
 center and drove it not at the shield-line but at the bell.
 
-He had seen what the day was, and he spent his legions the way you
+It was Ede's voice that met him. Vega heard the orders come up the
+line by horn and by runner, in the flat muster-yard phrasing the whole
+army had marched two years to learn: *Bastionheart's square to the
+carriage. Forge-Court to the hinge — close the gap walking; you are a
+wall, and walls do not run. Skiffs south, and the breath that echelon
+shows me its flank, I want horns on it.* And last, passed man to man
+down the whole bowed front, the day's entire doctrine said small: *the
+Anvil holds and does not follow. Whatever the drums bid it, it does
+not follow.*
+
+The Marshal had seen what the day was, and he spent his legions the way you
 spend coin you despise: at the choir, at the carriage, at the gantry of
 grown iron, at the two thousand unarmored singers walking a bell into a
 battlefield at a hymn's pace. Ballistae found the range. The carriage

@@ -172,8 +172,9 @@ good order, down the row.
 Serjeant Hale stood over the twelfth with his blade drawn back, and
 between his blade and the kobold stood the goblin.
 
-Nix had no weapon. He had the banner, the grey one, wall and open
-hand, and he had planted it in front of a glow-sick kobold child of a
+Nix had no weapon. He had the banner, the grey one, dry-stone wall
+and crooked star, and he had planted it in front of a glow-sick
+kobold child of a
 conscript race that goblins had no love for, and he was holding the
 pole with both hands, and he was shaking so hard the cloth above him
 shivered as if in wind. His voice, when it came, came fast and
@@ -191,7 +192,7 @@ serves the tower dies, and whether it kneels first is between it and
 whatever gods conscripts keep. Stand off my line."
 
 "Then the doctrine's counted me," said Nix, not moving. "Say it's
-counted me. I wore one twenty years, it's on the floor of the
+counted me. I wore one nine years, it's on the floor of the
 Kingsfield if you want to go and cull it — "
 
 Hale's blade did not waver, and the ash-grey line behind him did not

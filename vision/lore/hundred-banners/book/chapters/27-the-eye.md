@@ -20,7 +20,7 @@ leaf turning. Hush-grass grew silver over everything, and no wind
 had bent it in eighty years.
 
 It was the most beautiful place he had seen in seventy-eight floors,
-and everything in him that had lived four years under a collar stood
+and everything in him that had lived nine years under a collar stood
 up in his skull and said, small friend, this is a trap.
 
 "A trap, yes," said the woman who came out of the trees, cheerful,
@@ -220,8 +220,9 @@ weight returned.
 
 All over the bowl of gold light, the suspended beads let go.
 
-It rained on the rising for the time a lamp takes to gutter —
-warm, real, downward rain — and the seated of the garden rose,
+It rained on the rising for the time a rung bell takes to swing
+itself still — warm, real, downward rain — and the seated of the
+garden rose,
 forty-and-nine of them by Nix's count, tottering, blinking, alive,
 caught by Lullside hands; and the army sang the count around one
 more time for the risen, and Mera Lullside stood in the falling
