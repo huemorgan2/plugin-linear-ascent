@@ -165,7 +165,7 @@ def build() -> None:
     body.extend(chapters_html)
 
     css = """
-    @page { size: 6in 9in; margin: 0.72in 0.62in 0.8in 0.62in; }
+    @page { size: 6in 9in; margin: 0.9in 0.85in 1in 0.85in; }
     html { -webkit-print-color-adjust: exact; }
     body { font-family: Georgia, 'Times New Roman', serif; font-size: 10.6pt;
            line-height: 1.42; color: #111; margin: 0; }
