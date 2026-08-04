@@ -96,8 +96,9 @@ The first called was a woman of Lampfall, Annis Cray, and her case
 taught the court its measure.
 
 She was old, a miner's widow, the collar-scar at her throat rubbed
-smooth with years. Nobody had informed on her; she could have stood
-among the freed forever. She came to the table herself, first of all
+smooth with years. Nobody had informed on her; the willing signed
+nothing, that was the whole craft of the collar, and she could have
+stood among the freed forever. She came to the table herself, first of all
 the willing in the world, and said the iron had been her own asking —
 taken in the famine winter the tolls trebled, for a granary post and
 a double ration that fed three grandchildren whose parents the tower
@@ -107,12 +108,14 @@ liked, since everyone she had made the bargain for was grown now, and
 safe, and here — and she nodded, once, at two young miners in the
 crowd with their caps in their hands.
 
-The jury of Lampfall was out no time at all: the tower had built a
-world where a grandmother's neck was the price of bread, and then had
-the gall to keep her receipt; the crime was the famine, and the
-famine had an owner, and the owner was dead. Annis Cray's name was
-struck from the registers of the willing and entered in the rolls of
-the wronged, where it had belonged for twenty years.
+The jury of Lampfall was out no time at all. An old digger stood up
+and said what the whole hall needed a first case to say: that the
+tower had built a world where a grandmother's neck was the price of
+bread, and then had the gall to keep her receipt; that the crime was
+the famine, and the famine had an owner, and the owner was dead.
+Annis Cray's name was struck from the registers of the willing and
+entered in the rolls of the wronged, where it had belonged for twenty
+years.
 
 Ede sealed it and found her voice needed a moment. Somewhere behind her
 eyes a man on a broken drum-throne poured a chain from hand to hand and

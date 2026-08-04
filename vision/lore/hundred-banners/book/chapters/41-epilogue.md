@@ -239,9 +239,10 @@ the second floor, and he carried the two figures to the gate-post where
 his lifetime of wrong sums was notched, and he set them side by side,
 and looked at them a long time.
 
-"They match," said Hobb Fennick, to the gate-post, to the valley. He
-said it the way other men say amen. "Everyone who went in has come
-out. The counts match."
+"They match," said Hobb Fennick, to the gate-post, to the valley, to
+every climber he had ever counted into the hedges and never counted
+out. He said it the way other men say amen. "Everyone who went in has
+come out. The counts match."
 
 He chalked it on the post, and then, being Hobb, he checked it once
 more.

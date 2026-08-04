@@ -276,12 +276,12 @@ one behind him to take her alive. Vega spoke Unmake into the mail of
 borrowed light and the light unraveled from him like thread off a spool.
 And Ede Stonhal came up the last three steps of the Ascent with the
 King-steel blade — the Door's own metal, the fallen of eighty years
-folded into its grain — and she offered him nothing. She had offered something
-to every warden since the tenth floor; a collar broken, a name called, a
-mound mourned, a mead of memory. For him there was nothing to offer. No
-collar to break: he had forged them. No fever to cure: he had sown it. No
-weld to undo: he was the welder. He was not the tower's prisoner. He was
-the tower.
+folded into its grain — and she offered him nothing. She had offered
+something to every warden since the tenth floor; a collar broken, a
+name called, a mound mourned, a mead of memory. For him there was
+nothing to offer. No collar to break: he had forged them. No fever to
+cure: he had sown it. No weld to undo: he was the welder. He was not
+the tower's prisoner. He was the tower.
 
 She ended him on his own throne-floor, above his own hall, in front of
 everyone.

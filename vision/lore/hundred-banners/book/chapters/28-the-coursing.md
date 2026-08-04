@@ -117,9 +117,9 @@ were welded to it. They will bend us onto the wire like water into a race."
 bending — doubling on their own line, crossing a stream to fool nothing that
 hunted by more than scent, cutting north when every gap invited them west.
 It bought them the night. It cost them the night's strength. And at grey
-dawn, when they lay in a bramble-hollow chewing cold meal, the horn sounded —
-one glade behind, exactly one glade, no nearer for all the hounds could
-plainly have closed, no farther for all Ede's doubling.
+dawn, when they lay in a bramble-hollow chewing cold meal, the horn
+sounded — one glade behind, exactly one glade, no nearer for all the
+hounds could plainly have closed, no farther for all Ede's doubling.
 
 Nix counted on his fingers, lips moving. "Eleven times now. Eleven horns,
 one glade. I had a master who did that with a whip once. Never hit me. Just
@@ -136,9 +136,9 @@ Warcamp opened, and what five years in them had made of her thirty. She
 had thought herself past being taught anything new about what the tower did
 to the caught. The glade taught her anyway: a clearing of green light where
 the sprung snares had kept their catch, game and folk together, hanging in
-the trees season past season — and among the hanging dead, things that moved,
-wire-tangled figures that had died in their own snares and now walked the
-wood setting snares for the living.
+the trees season past season — and among the hanging dead, things that
+moved, wire-tangled figures that had died in their own snares and now
+walked the wood setting snares for the living.
 
 "Don't cut them down," Rhovan said, low, as her hand went to her knife.
 "Not with the horns behind us. The snare-folk cut them down when this floor
@@ -265,10 +265,11 @@ was. Then, flat: "There is one quarry the Hunt does not take."
 "Which?"
 
 "The quarry that turns," Rhovan said, "and walks toward the horns. Not
-runs — walks. It is the first law of the pale court, older than the Huntsman,
-older than the Theft. A hunt is a hunt only while the quarry flees. What
-walks toward the horns is not quarry, and the Hunt may not take what is not
-quarry. Every child of the Rides has it before they have their letters."
+runs — walks. It is the first law of the pale court, older than the
+Huntsman, older than the Theft. A hunt is a hunt only while the quarry
+flees. What walks toward the horns is not quarry, and the Hunt may not
+take what is not quarry. Every child of the Rides has it before they
+have their letters."
 
 "And it holds? Even now? Even welded?"
 
@@ -315,15 +316,16 @@ face while it lasted.
 
 She turned toward the horns and walked.
 
-The lane ran uphill, against the wood's whole design, and the walking was
-the hardest work of her life. Every stride her legs begged to run — anywhere,
-even downhill toward the foxglove, anything but this — and the horns came on,
-and the hounds came with them. They broke from the covert-walls to either
-side, moon-white, silent, at a full course, and her body screamed and her
-step did not change, and at ten strides the pale line — parted. Flowed around
-her like water around a post, hackles down, heads low, and fell in beside
-her at a walk. Behind her she heard the others come out of the thorn and do
-what she did; heard Nix's breath sobbing with the effort of not running;
+The lane ran uphill, against the wood's whole design, and the walking
+was the hardest work of her life. Every stride her legs begged to run —
+anywhere, even downhill toward the foxglove, anything but this — and
+the horns came on, and the hounds came with them. They broke from the
+covert-walls to either side, moon-white, silent, at a full course, and
+her body screamed and her step did not change, and at ten strides the
+pale line — parted. Flowed around her like water around a post, hackles
+down, heads low, and fell in beside her at a walk. Behind her she heard
+the others come out of the thorn and do what she did; heard Nix's
+breath sobbing with the effort of not running;
 heard Vega humming a forge-song slow enough to walk to.
 
 The horns sounded a call she had not heard in three nights — not the drive,
