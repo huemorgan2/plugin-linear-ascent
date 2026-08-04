@@ -11,11 +11,13 @@ and this is what they sent down.*
 The Yoke was a voice. It went out from the core at the ninety-third
 floor and it never stopped, and everything cruel in the tower was one
 of its words. To the beasts it spoke as the fever, which maddens; to
-the Pressed it spoke through the collar, which holds; to the low
-floors it spoke as the false daylight, shadowless and lidded, which
-the Fencerows' keepers can now confirm was never day at all, their
-valley having since been shown an honest dark. Under all of it ran the
-hum. Those who lived beneath it called it silence, never having stood
+the Pressed it spoke through the collar, which holds; to every floor
+it spoke as the veil — the lid of tended cloud and false daylight,
+shadowless, that each Warden kept drawn over its own country, dimming
+the land inland of the rims until only the fever's creatures throve
+in it. The Fencerows' keepers can now confirm the daylight was never
+day at all, their valley having since been shown an honest dark, and
+after it an honest morning. Under all of it ran the hum. Those who lived beneath it called it silence, never having stood
 in the true kind; a smith of the rising testifies that she carried the
 pressure from Roothollow to the Spire in the small bones of her ears
 and only learned its name when it stopped.
@@ -77,38 +79,50 @@ morning, to hear the word said over his own steel, and heard it, and
 was not changed. His ledger is the fifth appendix, and the compilers
 recommend it be read standing.
 
-## Why power, and not stone
+## Why thread, and not stone
 
 The reader who has never left the low floors must now be told what
 every climber learned by walking: a floor of the Ascent is not a room.
-It is a country, the breadth of a whole stolen realm, under kilometers
-of its own sky and its own weather; the rim is a journey, not a
-glance, and the true ceiling shows, on the clearest days, as a faint
-dark grain. No brick that was ever fired could hold one country above
-another. The tower does not stand by masonry and never did.
+It is a country, the breadth of a whole stolen realm, under miles of
+its own sky and its own weather; the rim is a journey, not a glance,
+and the lid — the underside of the next country — hangs plainly
+overhead, a smooth dark heaven the veil's false light painted over
+for eighty years, until whole floors forgot they were looking at
+anything at all. No brick that was ever fired could hold one country
+above another. The tower does not stand by masonry and never did.
 
-It stands by power. The Forge-Court's survey — forty sheets of vellum,
-three generations in the drafting, laid at last on the dead controls
-and since carried down — shows a grav-engine at every weld, the
-thief's own tackle, still rigged: the engines that lifted the floors,
-mid-harvest, mid-flood, without spilling a hay-rick, because the thief
-wanted his takings whole. Binding-spells seam the joints; the black
-iron everywhere is not the strength of the thing but the anchor the
-power is bolted to. And every engine in the column answers to the core
-and to nothing else. The Thane of the Forge-Court, questioned by the
-compilers, answered slowly and finished his sentences: the throne is
-the winch-house; hold the core, and the whole Ascent answers you like
-a bellows-crew; and this, precisely this, is why it could only ever be
-held by one hand, and why one hand was always too many.
+It stands by the Strand. The Forge-Court's survey — forty sheets of
+vellum, three generations in the drafting, laid at last on the dead
+controls and since carried down — shows the loom entire: under every
+country a woven sheet of oath-thread, tight as sailcloth, bearing the
+whole stolen land upon it; at every rim a colonnade of pillars no
+thicker than a keep's tower; between them the triangles of cable that
+hold the stack against the wind; and between each floor and the next,
+one stair-lift spine, counterweighted iron and honest rope, muscle-
+work and water-work, no part of the Yoke at all — which is why the
+lifts turned the morning after the scram exactly as they had turned
+the morning before. The black iron everywhere is not the strength of
+the thing but the fitting the thread is bolted to. The Thane of the
+Forge-Court, questioned by the compilers, answered slowly and
+finished his sentences: the Strand is an oath, said once, whole, at
+the cutting; it does not ask leave of the core, or of the King, or of
+anyone living; the throne was never the winch-house of the standing —
+only of the voice; hold the core and you hold every cruelty in the
+tower, and not one ounce of its weight.
 
 ## What the breakings did
 
-The decade-Wardens were relays. The Herald's own ledger writes off
-"the fortieth relay" with the Broodthrone's fall, and the keepers'
-testimony agrees from below: when a relay fell, the whole span
-breathed — people wept on floors that had not heard the news, and did
-not know why. Each Warden broken was a span of the voice struck dumb.
-By the time the rising stood in the Made, the Yoke was a king shouting
+The decade-Wardens were relays, and each was a keeper of its floor's
+veil. The Herald's own ledger writes off "the fortieth relay" with
+the Broodthrone's fall, and the keepers' testimony agrees from below:
+when a relay fell, the whole span breathed — people wept on floors
+that had not heard the news, and did not know why. And the floor
+itself answered within a day: the veil, untended, unraveled, and the
+country brightened — real weather, real nights, stars in the slot —
+so that from the Girdle-sea the war could be read on the tower's own
+face, one grey rung turning gold at a time. Each Warden broken was a
+span of the voice struck dumb and a country given back its light. By
+the time the rising stood in the Made, the Yoke was a king shouting
 down a stair with the landings knocked out.
 
 The scram ended it. The keeper of Coreside kept the safe shutting his
@@ -118,20 +132,33 @@ cold in the same breath, the fever unclenching from every beast in
 the stolen world, the core's demon starving where it stood. The price
 is entered above, in the matter of the shards.
 
-But the scram did not bring the tower down, and could not. It put out
-the fire; the engines' ears are stopped, the welds are dead iron, and
-dead iron holds — for a century, the Thane says, or four; forever is
-not a figure either. The last of the power, the mail of hoarded light
-the King kept about his own body, outlived the core by two floors and
-died with him, and every survivor of the summit agrees on what it did:
-it went home. Down through the iron as if the iron were not there,
-gently, into the world's old bones, and the last collars everywhere
-fell open, and the false daylight went out of the low floors at last.
+But the scram did not bring the tower down, and could not — the
+Strand never asked the core's leave to hold, and does not ask now.
+The ledger of what died and what stands is short and every line of it
+has been tested: the veils died, all the last of them in one hour;
+the false daylight died with them, and real light means real nights,
+which is why the low floors have gone back to lanterns; the fever
+died mid-word; the welding-fire died. The trays stand. The air of
+every country stays bound and breathable, its stolen weather with it.
+The lifts turn, because a counterweight owes nothing to a demon. And
+the last of the power, the mail of hoarded light the King kept about
+his own body, outlived the core by two floors and died with him, and
+every survivor of the summit agrees on what it did: it went home.
+Down through the iron as if the iron were not there, gently, into the
+world's old bones, and the last collars everywhere fell open.
 
-So the Ascent still stands at Roothollow's back, filling the north of
-the world from horizon to horizon, top beyond the air: a hundred
-countries on dead welds, held now by nothing but what iron remembers.
-What is to be done with the engines is not the compilers' question.
-It is reserved, by the first article of the Charter, to a freed
-world's own council, met on the ground; and the ground, for the first
-time in an age, is where everyone is.
+So the Ascent still stands at Roothollow's back and always will: a
+ladder of thin countries fading up into the haze, gold now the whole
+visible height of it, clouds walking out of one land's rim and across
+the face of the next. No one is going back down to the old ground —
+the pits the countries were cut from are scar-lakes now, and home is
+miles of sky above where home used to be. But the compilers, who
+began this appendix believing they were writing the survey of a
+prison, end it obliged to record what every floor reports in its
+first freed year: the green coming back inland from the Rimlands, the
+harvests heavier than the eldest remember, the dens of the Deep
+Middle emptying one by one. The countries cannot be put back. They
+can heal, and they are healing. What is to be done with the dead core
+is not the compilers' question. It is reserved, by the first article
+of the Charter, to a freed world's own council; and the council, for
+the first time in an age, may meet wherever it likes.

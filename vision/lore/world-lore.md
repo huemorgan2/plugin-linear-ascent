@@ -83,9 +83,11 @@ out of the ground the way a thief cuts a painting from its frame. Realm
 by realm, he carved Aldervale into pieces: a farm taken mid-harvest, a
 marsh taken mid-flood, an orchard taken a week before pressing, a forge
 taken with the fire still lit, a forest taken with its lamps still
-burning. He lifted each stolen slab into the sky and welded it onto the
-one below — black iron, aether-chain, and grav-engines humming — until a
-tower stood where the weather used to be. Fourscore stolen countries and
+burning. He lifted each stolen country into the sky on a woven sheet of
+the Strand and stacked it above the last — needle pillars at the rims,
+triangles of oath-cable between them, black iron only where the magic
+needed a fitting — until a ladder of lands stood where the weather used
+to be. Fourscore stolen countries and
 more, welded in a single column — and above them, where the height grew
 too near the throne to trust to anyone's stolen home, he stopped stealing
 and began to **build**: raising a citadel of his own iron and manufacture,
@@ -106,25 +108,67 @@ them:
   It has mountain ranges, rivers with far banks, roads that take a week.
   Standing in the middle of a floor you cannot see its walls; on most
   floors no living person has ever walked to the rim and back.
-- **Each floor carries its own sky.** Between one floor's ground and the
-  underside of the next stand kilometers of open air — enough for
-  weather to happen. Clouds form, rains come inland off a floor's own
-  cold lakes, winds run the length of the land. What hangs where the sun
-  should be is the Yoke's false light; the true ceiling is too far up to
-  see except on the clearest days, a faint dark grain in the sky like
-  weather that never moves.
-- **No brick could bear it.** Nothing built of stone on stone could hold
-  one country above another, let alone a hundred. The tower stands by
-  **aether** — grav-engines, binding-spells, chained will. The black
-  iron people see at the rims and gates is not structure; it is anchor,
-  the fitting the magic is bolted to. If the engines ever stopped, no
-  wall would matter. This is why breaking the Wardens weakens the tower
-  in a way no sapper ever could: the tower is held up by power, and
-  power can be unbound.
-- **The whole of it cannot be seen.** From Roothollow the tower is not a
-  shape against the sky; it *is* the sky — a cliff-face filling the
-  world from east to west, its curve too slow to notice, its top beyond
-  the air. No one has ever drawn the Ascent whole and been believed.
+- **Each floor carries its own sky — and its sky has a lid.** Between
+  one floor's ground and the underside of the next stand miles of open
+  air, more on the proud floors, cruelly less on the punished ones —
+  enough for weather: clouds form, rains come inland off a floor's own
+  cold lakes, winds run the length of the land. The next floor's
+  underside is visible — a smooth dark heaven that the Yoke's false
+  light paints over, a counterfeit day with no sun in it and no honest
+  night behind it. People stop seeing the lid the way you stop seeing
+  your own nose. Children of the darkest floors do not believe in
+  stars.
+- **The tower is a loom, not a wall.** Nothing built of stone on stone
+  could hold one country above another. Each floor is a tray of land
+  resting on a woven sheet of **the Strand** — will made solid, an
+  oath of holding spun and pulled, on which a country's whole rock and
+  soil is laid. Needle-thin pillars stand at every tray's rim,
+  cross-braced with triangles of Strand-cable; the black iron people
+  see at gates and anchors is only the fitting ordinary matter needs.
+  The oath is unconditional: spoken once, whole, at the cutting — the
+  one honest thing Vharuk ever made — and it holds whether he lives or
+  not. The tower cannot fall. The rising never meant to fell it; a
+  hundred countries are standing on it. They wanted the keys.
+- **The trays are lenses, and the sides are open.** Each floor keeps
+  the ragged outline of the country that was stolen, bent shallowly
+  toward its middle: deepest at the center — mine country, the dark
+  central sea — thinning toward the rim, where the light comes in.
+  People belong to the **Rimlands**: true daylight rakes in off the
+  open slot at dawn and dusk (the **Kindling** — a minute of real gold
+  a day for eighty years), the incoming clouds drop their rain there
+  first, and the gate-towns grow at the two doors of every floor. The
+  interior — the **Deep Middle** — is where the fever dens and the ore
+  waits, and every floor's economy is the same brave errand: inward,
+  down, and back out.
+- **The Wardens hold the light, not the tower.** Each Warden tends its
+  floor's **veil** — a manufactured lid of cloud and false light that
+  keeps the country dim, suits the fever's creatures, and slowly
+  starves everything else. Kill the Warden and the floor does not
+  shake; within a day the veil unravels and the country BRIGHTENS —
+  real weather, real nights, real stars in the slot. From the foot of
+  the tower a freed floor is visible the hour it is freed: one
+  hairline of the ladder turning from grey to gold.
+- **The whole of it cannot be seen — but not for the old reason.**
+  From the Girdle-sea the Ascent is a ladder of paper-thin lands, each
+  floor a hairline of coast and cloud, pillars a silver shimmer at the
+  edges, one thread of a stair-lift spine catching the light between
+  each pair of floors — and the stack fades upward into haze and is
+  gone long before any top. Clouds slide out of one country's rim and
+  drag their shadows across the trays below. No one has ever drawn the
+  Ascent whole and been believed.
+- **The stolen countries can never be put back — but freed, they
+  heal.** The pits where the realms once lay are scar-lakes; the
+  Girdle-sea around the tower's foot is eighty years of rain that
+  never found its old rivers. Home is miles of sky above where home
+  used to be. But lift the veil and the country mends: true light
+  inland, honest green, heavy harvests, the fever's dens emptying year
+  by year. The floors were never dead lands — they were lands held
+  under a thumb.
+
+(The full construction canon — pillars, stays, spines and the two
+doors of every floor, the Shear, the under-rain, bead-towns and
+stay-roads, the scram's ledger, the perfect circles of the Made —
+lives in `vision/lore/world-construction.md`.)
 - **The Theft is within living memory.** The cutting ended fourscore
   years ago — eighty years. The eldest of the trapped still remember
   the true sun and the weather of the whole world; their grandchildren
@@ -343,11 +387,12 @@ When a climber kills a Warden:
    blood at the gate.)
 5. **And still the floor hangs in the sky.** This is the hard truth the
    shardminds tell plainly: breaking a Warden gives a floor back its
-   *life*, but not its *ground*. The black iron answers only to the
-   throne. **The climb gives the floors their days back; only the summit
-   gives them back the earth.** That is why no one stops at the floor that
-   used to be home — and why every freed floor is a promise pointed at
-   floor 100.
+   *light* and its *life*, but not the ground it was cut from — nothing
+   gives that back; the oath that holds the tower holds it forever, and
+   the pits below are scar-lakes now. **The climb gives the floors their
+   days back; only the summit makes the ladder theirs.** That is why no
+   one stops at the floor that used to be home — and why every freed
+   floor is a promise pointed at floor 100.
 
 So each floor's lore, written from this file, must name four things: the
 **land** (what was stolen, and what it looks like now), the **inhabitants**
@@ -414,7 +459,9 @@ it," because the Deep and the Waste were always shared:
   captives are *borderlanders* (ash-nomads, glass-gleaners, vent-tenders)
   and its beasts are fire-bred (salamanders, ogres, wyrmlings).
 - **Made (not stolen at all):** the upper tower Vharuk *built* rather than
-  took (§2), of black iron and forced labor. No realm was robbed for it, so
+  took (§2), of black iron and forced labor — on trays that are perfect
+  circles, the only floors in the cairn without a country's ragged
+  outline. No realm was robbed for it, so
   no free people waits there — only **captives and thralls** dragged up
   from below, garrisoned by the tower's own manufacture (imps, hellknights,
   and the Wrongmade) on the approach to the throne.

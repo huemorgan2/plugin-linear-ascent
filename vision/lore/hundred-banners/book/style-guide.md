@@ -81,16 +81,41 @@ Pressed, a death that should not have been needed.
   (the tower has no weather but what each floor kept).
 - **Scale (hard canon).** Each floor is a country the breadth of a whole
   stolen realm — horizons, mountain ranges, rivers, marches of days
-  between towns. Each floor carries kilometers of its own sky and its own
-  weather; the true ceiling is almost never visible, at most a faint dark
-  grain on the clearest days. Nobody ever sees a floor's far wall from
-  its middle; the rim is a journey, not a glance. From outside, the
-  tower cannot be taken in whole — it fills the world like a cliff-face,
-  top beyond the air. And it is not masonry: no brick could hold one
-  country above another. It stands by aether — grav-engines and binding-
-  spells — with black iron only as the anchor the power is bolted to.
-  Never write the tower as a building you could see all of, and never
-  have a character cross a floor in an afternoon.
+  between towns. Each floor carries miles of its own sky and weather.
+  The LID is visible: the next floor's underside is a smooth dark
+  heaven the Yoke's false light paints over — ignored on standard
+  floors, oppressive on low ones, a rumor on the cathedral-sky floors.
+  Never "too far up to see." Nobody sees a floor's far rim from its
+  middle; the rim is a journey, not a glance. Never have a character
+  cross a floor in an afternoon.
+- **The Ladder (hard canon).** The tower is a loom, not a wall. Each
+  floor is a country-shaped tray of land on a woven sheet of the
+  Strand, held at its rim by needle-thin pillars and triangles of
+  cable; the sides are OPEN — clouds pass between floors, light rakes
+  in off the slots, the Shear howls at every rim. From outside (the
+  Girdle-sea, Roothollow) the Ascent is a ladder of paper-thin lands
+  fading up into haze with no visible top — NEVER an iron wall or
+  cliff-face filling the sky; black iron exists only as fittings at
+  gates and anchors. Each gap has ONE stair-lift spine; every floor
+  has a down-gate and an up-gate, never aligned, so every crossing is
+  a march. Trays are lenses: people and towns live in the Rimlands by
+  default (light, rain, gate-towns); the Deep Middle is mine-and-fever
+  country with the dark central sea. The Made floors (81-100) are
+  perfect circles — the only trays without a country's outline.
+- **The Veil (hard canon).** Wardens hold the LIGHT, not the tower.
+  The Strand's oath is unconditional — the tower cannot fall and is
+  never weakened; NEVER a tremor, shudder, or structural language at
+  a Warden's death. What a Warden tends is its floor's veil: the
+  manufactured gloom that suits the fever's creatures and starves the
+  rest. Kill the Warden and within a day the veil unravels and the
+  floor BRIGHTENS — real weather, real nights, stars in the slot —
+  visible from below as a grey rung turning gold. The scram kills the
+  broadcast and every remaining veil at once, never the standing:
+  lifts are counterweighted machinery and survive; the false daylight
+  dies (real light means real nights). Freed floors HEAL — honest
+  green, heavy harvests, dens emptying. The Kindling: at true sunrise
+  and sunset a blade of gold rakes the Rimlands even through a veil;
+  people gather for it.
 - **The Theft's age (hard canon).** The Theft ended eighty years before
   the rising — within living memory; the eldest freed remember the
   ground. Tower-era spans (waiting in the tower, watching Vharuk,
