@@ -18,12 +18,12 @@ country after, and that no floor climbs alone.
 
 ## The first article — of the engines
 
-The engines of the tower, the grav-engines at its welds and the core
-that feeds them, shall be neither kept nor scrapped by any party to this
-charter, whatever its strength on the day. Their fate shall be decided
-by a freed world's own council, met on the ground, after the throne; and
-until that council sits, nothing is kept, nothing is scrapped, and no
-hand rests on any lever it was not sent to pull.
+The engines of the tower, the lifting-engines at its anchors and the
+core that feeds them, shall be neither kept nor scrapped by any party
+to this charter, whatever its strength on the day. Their fate shall be
+decided by a freed world's own council, met on the ground, after the
+throne; and until that council sits, nothing is kept, nothing is
+scrapped, and no hand rests on any lever it was not sent to pull.
 
 ## The second article — of the gates
 

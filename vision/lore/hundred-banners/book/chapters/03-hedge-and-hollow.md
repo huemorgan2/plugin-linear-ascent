@@ -404,9 +404,11 @@ she does in that meadow will tell my employers what they bought. What
 he does there will tell me what she was, before she was ours.*
 
 The false light of the Drowned Pasture never dimmed for night. But at
-the weir-arch, where the freed lift ran its chain up out of sight, the
-clearest air showed a faint dark grain far overhead — the underside of
-the next country, a grain and no more, at the top of miles of sky — and
+the weir-arch, where the freed lift ran its chain up out of sight, a
+stranger who tipped his head back could see what the Pasture's folk had
+stopped seeing the way a man stops seeing his own nose: the underside
+of the next country, a smooth dark heaven at the top of miles of sky,
+with the false light laid over it like whitewash on old beams — and
 what hung four floors above that no eye could reach; it came down the
 lifts as rumor instead, a meadow drowned in color that Nan Sedge swore
 was banners.

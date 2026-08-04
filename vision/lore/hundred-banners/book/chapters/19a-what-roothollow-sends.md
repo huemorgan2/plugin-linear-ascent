@@ -146,17 +146,22 @@ He came out of the Root Gate queue on the fortieth morning, into
 Roothollow, and did what everyone from the up-floors did in the first
 hour: he looked for the tower, and could not find it.
 
-There was no tower. From the yards of Roothollow there was a wall, and
-the wall was the sky. It went up past the roofs, past the kites, past
-the weather, black iron seamed with faint slow light, and it did not
-narrow and it did not lean and it did not end — you could walk a day
-out into the scrub and turn around and it had not become a shape; it
-had only become more of the world. On clear nights, they told him, you
-could see the undersides of the low floors glimmering far up the face,
-hanging lamps in the black, a country's worth of them, like stars that
-paid rent. Nine years of his life hung somewhere up that face, too
-high to point at; he stood with his head back like any other pilgrim
-and did not try.
+There was no tower. From the yards of Roothollow there was a ladder,
+and the ladder was the sky. It went up past the roofs, past the kites,
+past the weather — floor over floor over floor, each one a country
+seen edge-on, a hairline of coast and cloud riding a shimmer of
+rim-pillars too thin for what they carried, one bright thread of a
+spine slanting between them — and it did not narrow and it did not
+lean and it did not end: you could walk a day out into the scrub and
+turn around and it had not become a shape; it had only become more of
+the world, thin lands fading up into the haze until the air gave out
+before the counting did. Clouds slid out of one land's rim, dragged
+their shadows across the land below, and came apart. On clear nights,
+they told him, you could see the undersides of the low floors
+glimmering far up the stack, hanging lamps in the black, a country's
+worth of them, like stars that paid rent. Nine years of his life hung
+somewhere up that ladder, too high to point at; he stood with his head
+back like any other pilgrim and did not try.
 
 He delivered the list first, because the dead go first, that was the
 whole rule of him. The masons had the Stone of the Climb and a sister-

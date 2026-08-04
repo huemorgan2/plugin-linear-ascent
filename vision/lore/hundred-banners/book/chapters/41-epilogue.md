@@ -244,9 +244,10 @@ more.
 ⁂
 
 Roothollow had not grown so much as opened. The gate-queue was gone;
-the tower stood at the town's back the way a cliff stands over a shore,
-filling the north of the world from horizon to horizon, its top beyond
-the air — a fact of the country now, its dark doorway propped wide and
+the tower stood at the town's back the way a ladder stands against a
+barn — a hundred thin countries filling the north of the world from
+horizon to horizon, rung over rung up into the blue, its top beyond the
+air — a fact of the country now, its dark doorway propped wide and
 its first stair swept. People went up it to visit their kin on the near
 floors, and came down again for market-day. The Stone of the Climb
 stood where it had always stood, with its thirty names cut by Ede's own

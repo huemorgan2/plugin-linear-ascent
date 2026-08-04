@@ -23,17 +23,18 @@ ever the floor you are on; the design does not fit through a human eye,
 nor a giant's. But it fit on forty sheets of vellum, and laid out flat
 under lamplight it was not a horror. That was the first thing that
 frightened her. It was a *work* — the greatest made thing in the world,
-welded joint by joint with a rigor she knew in her own hands, and her
+rigged joint by joint with a rigor she knew in her own hands, and her
 hands, unbidden, respected it.
 
 "Here," said Ulfar. "And here, and here." His finger moved up the
-column, touching the welds between floors, one by one. "At every joint,
-a grav-engine. The engines that lifted the floors. The thief's own
+column, touching the joints between floors, one by one. "At every
+joint, an engine — the engines that lifted the floors. The thief's own
 tackle, still rigged, still sound. We have taken their measure through
-the walls for sixty years — mass, seat, feed, and state. Not one has
-been removed. He built them in, sister. He could not take them out
-without unbuilding his own tower, so he left them, and stopped their
-ears, and trusted nobody would ever hold the throne but him."
+the fittings for sixty years — mass, seat, feed, and state. Not one has
+been removed. He built them into the anchors, sister. He could not take
+them out without unbuilding his own anchors, so he left them, and
+stopped their ears, and trusted nobody would ever hold the throne but
+him."
 
 "And the throne is the winch-house," Vega said slowly.
 
@@ -41,9 +42,9 @@ ears, and trusted nobody would ever hold the throne but him."
 the core and to nothing else. We have tried for three generations to
 wake one locally — the Court's whole cunning, against one engine, on a
 floor we could reach. It cannot be done from below. The feed comes down
-the tower's own spine, and the spine is lit from the core." He spread
-the first overlay across the section, and the spine came alive under
-the lamp, a hair-fine tracery running root to crown through every weld.
+the tower's own bones, and the bones are lit from the core." He spread
+the first overlay across the section, and the feed came alive under
+the lamp, a hair-fine tracery running root to crown through every joint.
 "Hold the core, and every engine in the Ascent answers you like a
 bellows-crew."
 
@@ -67,13 +68,13 @@ country, and a country dropped from the sky arrives as a graveyard. But
 the engines had lifted every one of those countries once, mid-harvest,
 mid-flood, without spilling a hay-rick, because the thief had needed
 his takings whole. What had gone up gently could come down gently. The
-ledgers laid it out: mass by floor, seat-loads at every weld, the order
-of release — lowest floors first, each one borne down and seated into
-the earth before the next unweld began, the column shortening from the
-root like a candle burning in reverse. A chain's length a day, no more,
-each floor's descent read against the strain-figures of every joint
-above it. He gave her the rate tables. He gave her the margins, and the
-margins' margins.
+ledgers laid it out: mass by floor, seat-loads at every anchor, the
+order of release — lowest floors first, each one borne down and seated
+into the earth before the next release began, the column shortening
+from the root like a candle burning in reverse. A chain's length a day,
+no more, each floor's descent read against the strain-figures of every
+joint above it. He gave her the rate tables. He gave her the margins,
+and the margins' margins.
 
 "Thirty-one years," he said. "A generation, bearing the whole world
 down to where it was stolen from. Every field seated back into its own
@@ -88,8 +89,8 @@ understood that she desperately needed it to be wrong.
 
 She tried the couplings first: differential strain across a part-lowered
 column, the live floors' engines bearing against the dead weight of the
-seated ones. His tables had it, with the staging worked out weld by
-weld. She tried the seats: a floor's underside is not a foundation, and
+seated ones. His tables had it, with the staging worked out anchor by
+anchor. She tried the seats: a floor's underside is not a foundation, and
 ground settles. He had bore-samples. He had the *original survey* — the
 thief's own, lifted from a records-floor by two Court agents who had
 spent eleven years on floor thirty-seven as door-wards to get it — every
@@ -153,16 +154,16 @@ is the plan behind the plan — break every Warden, take the throne, and
 put out the fire. And then? The tower stands. Dead iron, root to crown.
 The engines' ears stopped forever, because the only hand that could
 ever wake them again is the fire you killed. A hundred countries
-hanging in the dark on welds that will hold for — what? A century? Four?
-Forever is not a figure either, sister. Your plan ends with the world
-in the sky *for good*. Every farmer you free lives out his days
-whole skies above his own *jorth* —" he caught himself, the old tongue of the
-deep halls rising in him as it only did at the anvil, and set the word
-down gently, like a hammer: "— above his own ground. And his
-grandchildren after him, leaning on a fence in the wind, a world
-above the fields their fields were cut from. The climb
-gives the floors their days back. Only the engines can give back the
-earth. There is no third door. It is my hope, or your never."
+standing in the sky on a binding with no end written into it — forever
+is the one figure his craft was ever good for, sister. Your plan ends
+with the world in the sky *for good*. Every farmer you free lives out
+his days whole skies above his own *jorth* —" he caught himself, the
+old tongue of the deep halls rising in him as it only did at the anvil,
+and set the word down gently, like a hammer: "— above his own ground.
+And his grandchildren after him, leaning on a fence in the wind, a
+world above the fields their fields were cut from. The climb gives the
+floors their days back. Only the engines can give back the earth. There
+is no third door. It is my hope, or your never."
 
 And there it was. She could not refute the mathematics. She had tried;
 it held. She could only name the price, so she named it.
@@ -179,8 +180,8 @@ and your plan keeps it humming for a generation, and calls it mercy."
 "Against eighty years in the sky, sister. Weigh it."
 
 "I am weighing it. Now weigh mine." She flattened her palm on the
-overlay, over the spine, over the small bright thread of the core. "The
-tower's crime is not its height. The crime is that a whole world's
+overlay, over the feed-lines, over the small bright thread of the core.
+"The tower's crime is not its height. The crime is that a whole world's
 ground answers to one throne. Your plan does not end that crime. It
 *staffs* it. For thirty-one years, someone sits the winch-house, and
 every country in the sky hangs from his good intentions — whose floor

@@ -111,11 +111,11 @@ Others found them — from other pits, other shaved valleys, straggling in
 along roads that now ended in air — men and elves and the slab-shouldered
 giants of the mountain forges, delvers, marsh-folk, ash-nomads, everyone
 the theft had spilled and nobody had counted worth taking. The tower grew
-over them ring by ring until it shut out the northern stars, and the camp
-grew under it into a town of every people on the ground, hammered out of
-wreckage, an aether-forge beside a horse trough. It stood at the root of
-the stolen world, in the hollow the theft had left, and the name followed
-of itself.
+over them country by country until it shut out the northern stars, and
+the camp grew under it into a town of every people on the ground,
+hammered out of wreckage, an aether-forge beside a horse trough. It stood
+at the root of the stolen world, in the hollow the theft had left, and
+the name followed of itself.
 
 The boy grew up with the town. He learned his letters, and he learned his
 sums, and he learned — quicker than the hedgers' boys, quicker than the
@@ -125,8 +125,8 @@ ever wholly unlearned: that the world can be taken up like a tray of
 loaves; that somebody keeps the ledger of the taking; and that the ledger
 decides who eats.
 
-On some nights, when the wind came down the black iron and the undersides
-of the low floors glimmered with their hanging lamps, he would stand at
-the edge of the town and look up. Somewhere above him, in a kitchen he
-could have found blindfolded, the oven was long cold, and the loaves were
-still in it.
+On some nights, when the wind came down through the open slots of the
+tower and the undersides of the low floors glimmered with their hanging
+lamps, he would stand at the edge of the town and look up. Somewhere
+above him, in a kitchen he could have found blindfolded, the oven was
+long cold, and the loaves were still in it.
