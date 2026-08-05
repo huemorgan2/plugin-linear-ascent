@@ -610,11 +610,12 @@ def _monster_hit(p: dict, halved: bool = False, least: int = 0) -> dict:
         dmg -= soaked
     p["hp"] -= dmg
     blocked = raw - dmg
-    # 034 §1: armor ticks one use a blow; the shield pays for what it
-    # actually turned — the card already narrates that number.
+    # 034 §1 / 035: both guard pieces met the blow, and both are billed for
+    # what they turned — the card already narrates that number. A blow that
+    # chips straight through still costs each of them its single point.
     broke = [note for note in
              (_wear(p, "shield", _shield_wear(p, blocked)),
-              _wear(p, "armor")) if note]
+              _wear(p, "armor", _armor_wear(p, blocked))) if note]
     return {"dmg": dmg, "raw": raw, "blocked": blocked, "broke": broke,
             "apple": soaked}
 
@@ -623,6 +624,12 @@ def _shield_wear(p: dict, blocked: int) -> int:
     """034 §1: uses the shield spends turning `blocked` of a blow."""
     return economy.shield_wear(blocked, state.gear_bonus(p, "shield"),
                                state.dfs(p))
+
+
+def _armor_wear(p: dict, blocked: int) -> int:
+    """035: uses the plate spends turning `blocked` of a blow."""
+    return economy.armor_wear(blocked, state.gear_bonus(p, "armor"),
+                              state.dfs(p))
 
 
 def _counter_text(p: dict, hit: dict, lead: str = "") -> str:

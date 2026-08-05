@@ -2,10 +2,10 @@
 
 Power becomes a running cost: paid gear carries a use pool that shrinks
 with tier, wear hooks fire once per event, broken means half strength
-(never helpless), and the Forge mends for 20% of price × the missing
-fraction plus a few XP. Staged onboarding: a slot only starts wearing
-after its first PAID purchase. The economy gate proves repairs stay a
-tax, not a wall.
+(never helpless), and the Forge mends for a fraction of price × the
+missing fraction plus a few XP. Staged onboarding: a slot only starts
+wearing after its first PAID purchase. The economy gate proves repairs
+stay a tax, not a wall.
 """
 
 from plugin_linear_ascent import economy
@@ -53,17 +53,20 @@ def _armed(clazz="warrior", weapon="pigsticker", floor_no=1,
 
 # ── the pool (§3.5) ──────────────────────────────────────────────────────
 
-def test_pools_last_about_a_week_and_grow_with_tier():
-    """Tuned in-phase: pools grow with tier (a piece never breaks inside
-    one hunting day) while the GOLD per use still climbs — the running
-    cost lives in the repair bill, not the pool curve."""
+def test_pools_grow_with_tier_and_survive_a_hunting_day():
+    """Tuned in-phase: pools grow with tier while the GOLD per use still
+    climbs — the running cost lives in the repair bill, not the pool
+    curve. 035: the guard slots spend three uses on an evenly-met blow,
+    so the mid-day-break gate has to be measured in THEIR events, not in
+    rounds — a fresh jerkin still has to see the player home."""
     assert economy.durability_pool(1) == 1300
     assert economy.durability_pool(5) == 2600
     assert economy.durability_pool(10) == 4225
     pools = [economy.durability_pool(t) for t in range(1, 11)]
     assert pools == sorted(pools)
     day = 30 * 6                                    # fights × rounds
-    assert all(pool >= 3 * day for pool in pools)   # never mid-day break
+    guard_day = day * max(economy.SHIELD_WEAR_RATE, economy.ARMOR_WEAR_RATE)
+    assert all(pool > guard_day for pool in pools)  # never mid-day break
 
 
 def test_power_still_costs_more_per_swing():
@@ -83,10 +86,14 @@ def test_mid_tiers_sit_between_the_wholes():
             < economy.durability_pool(3))
 
 
-def test_repair_price_is_a_fifth_of_the_missing_fraction():
+def test_repair_price_tracks_the_missing_fraction():
+    """035: the rate came down 20% → 13% to pay for the plate joining the
+    shield on damage-priced wear — same gold a day, a cheaper bench visit
+    far more often."""
     g = economy.FORGE["pigsticker"]          # ◈ 250
-    assert economy.repair_price(g, 1.0) == 50
-    assert economy.repair_price(g, 0.5) == 25
+    assert economy.REPAIR_PRICE_PCT == 0.13
+    assert economy.repair_price(g, 1.0) == 32
+    assert economy.repair_price(g, 0.5) == 16
     assert economy.repair_price(g, 0.0) == 1  # floor, never free
 
 
@@ -134,8 +141,8 @@ def test_a_swing_costs_one_use():
 
 
 def test_a_blow_taken_wears_shield_and_armor_not_weapon():
-    """034 §1: both guard pieces meet the blow, but they are billed in
-    different units — the plate by the round, the shield by the damage."""
+    """035: both guard pieces meet the blow and both are billed by the
+    damage they turned — the blade, which swung at nothing, is not."""
     p, fl = _armed(shield="scrapwood_buckler", armor="padded_jerkin")
     p["encounter"]["range"] = "close"
     w0, s0, a0 = (p["durability"]["weapon"], p["durability"]["shield"],
@@ -143,7 +150,7 @@ def test_a_blow_taken_wears_shield_and_armor_not_weapon():
     combat.resolve_fight_action(p, fl, "stand")    # no swing, one blow
     assert p["durability"]["weapon"] == w0
     assert p["durability"]["shield"] < s0
-    assert p["durability"]["armor"] == a0 - 1
+    assert p["durability"]["armor"] < a0
 
 
 def test_chase_actions_wear_the_shoes():
@@ -361,12 +368,13 @@ def test_repair_tax_stays_under_a_fifth_of_income_every_band():
         armor = next(g for g in economy.gear_rungs("armor")
                      if g.tier == tier and g.rung == float(tier))
         spend = 0.0
-        # 034 §1: the shield spends SHIELD_WEAR_RATE uses on an evenly-met
-        # blow where the blade and the plate still spend one.
+        # 035: both guard pieces spend their rate on an evenly-met blow
+        # where the blade still spends one per swing.
         for g, events in ((weapon, fights * rounds),
                           (shield, fights * rounds
                            * economy.SHIELD_WEAR_RATE),
-                          (armor, fights * rounds)):
+                          (armor, fights * rounds
+                           * economy.ARMOR_WEAR_RATE)):
             pool = economy.durability_pool(g.tier)
             spend += economy.repair_price(g, min(1.0, events / pool))
         frac = spend / income

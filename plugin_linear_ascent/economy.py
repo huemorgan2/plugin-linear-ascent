@@ -1489,31 +1489,41 @@ def hone_price(unlocked_floor: int) -> int:
 
 # ── §6d Durability (005 §3.5) ────────────────────────────────────────────
 # Power is a running cost, not a plateau. Every PAID piece carries a
-# use pool sized so a fresh piece lasts ROUGHLY a week of at-level
-# hunting (≈30 fights × ~6 rounds a day — the same model daily_income
-# anchors on). Pools GROW with tier but repair scales with price, so
-# the gold-per-use climbs anyway: the running-cost tax rises smoothly
-# from ~8% of daily income at T1 to ~12% at T10 and never breaks a
-# piece inside one day. (The pre-plan's "better gear wears faster"
-# pool CURVE failed the ≤20%-of-income gate by up to 14× at T10 —
-# the tax keeps the intent, the pool direction had to flip.)
+# use pool sized against a day of at-level hunting (≈30 fights × ~6
+# rounds — the same model daily_income anchors on): a blade or a pair of
+# boots runs about a week, a guard piece about 2.4 days, and nothing
+# breaks inside a single day at any band. Pools GROW with tier but
+# repair scales with price, so the gold-per-use climbs anyway: the
+# running-cost tax rises smoothly from ~11% of daily income at T1 to
+# ~16% at T10. (The pre-plan's "better gear wears faster" pool CURVE
+# failed the ≤20%-of-income gate by up to 14× at T10 — the tax keeps the
+# intent, the pool direction had to flip.)
 # Basic (tier-0) gear never wears; broken means half strength, never
 # helpless.
 
 DURABILITY_BASE = 1300
 DURABILITY_GROWTH = 0.25
-REPAIR_PRICE_PCT = 0.20        # of item price × missing fraction
 DURABILITY_SLOTS = ("weapon", "shield", "armor", "shoes")
 
-# 034 §1: a shield is spent on DAMAGE, not on rounds. Weapon, armor and
-# boots still tick one use per swing/blow/stride; the shield pays for what
-# it actually turned, so the number the card narrates and the number the
-# bench bills are finally the same thing.
-# 3, not 4: the repair-tax gate below (≤20% of daily income, no
-# step-function between bands) is the ceiling, and 4 tips band 1→2 over
-# the cliff tolerance. 3 still burns a shield ~3× faster than the flat
-# point it replaces — ~72 fights a tier-1 buckler instead of ~216.
+# 035: 0.20 → 0.13. Both guard slots now spend themselves on damage rather
+# than on rounds, which triples their event count; the repair-tax gate
+# (≤20% of daily income, no step-function between bands) is linear in that
+# count, so the price per point has to come down to meet it. 0.13 puts the
+# daily bill on exactly the 034 ceiling (0.161 of income at the worst band)
+# and improves the band step. Same gold a day, a bench visit that is
+# cheaper and far more frequent — which is the point: the bar has to move
+# where the player can see it.
+REPAIR_PRICE_PCT = 0.13        # of item price × missing fraction
+
+# 034 §1 / 035: a guard piece is spent on DAMAGE, not on rounds. Weapon and
+# boots still tick one use per swing and per stride; the shield and the
+# plate pay for what they actually turned, so the number the card narrates
+# and the number the bench bills are finally the same thing.
+# 3, not 4: 4 tips the band 1→2 step over the cliff tolerance even at the
+# lowered repair price. 3 burns a guard ~3× faster than the flat point it
+# replaces — ~2.4 hunting days out of a tier-1 buckler or jerkin.
 SHIELD_WEAR_RATE = 3           # uses per evenly-met blow (was a flat 1)
+ARMOR_WEAR_RATE = 3            # 035: the plate meets every blow — bill it
 
 
 def durability_pool(tier: float) -> int:
@@ -1522,22 +1532,33 @@ def durability_pool(tier: float) -> int:
     return round(DURABILITY_BASE * (1 + DURABILITY_GROWTH * (t - 1)))
 
 
-def shield_wear(blocked: int, shield_bonus: int, total_def: int) -> int:
-    """034 §1: uses spent by a shield that turned `blocked` damage.
+def guard_wear(blocked: int, bonus: int, total_def: int, rate: int) -> int:
+    """034 §1 / 035: uses spent by a guard piece that turned `blocked`.
 
-    The shield's share of the guard is `shield_bonus / DEF`, and that
-    share is priced against the shield's own rating (`shield_bonus / 2`,
-    what a fresh rung turns on an even blow) — the two cancel, which is
-    the point: the pace is the same at tier 1 and tier 10 instead of
-    running 4× hotter at depth, where `blocked` grows with DEF but the
-    pool grows only 25% a tier. A blow that chips straight through costs
-    the floor of one use; a blow fully met costs SHIELD_WEAR_RATE.
+    The piece's share of the guard is `bonus / DEF`, and that share is
+    priced against the piece's own rating (`bonus / 2`, what a fresh rung
+    turns on an even blow) — the two cancel, which is the point: the pace
+    is the same at tier 1 and tier 10 instead of running hotter at depth,
+    where `blocked` grows with DEF but the pool grows only 25% a tier.
+    The cancellation also means shield and plate spend the same on the
+    same blow, which is the honest reading — they met it together.
+
+    A blow that chips straight through costs the floor of one use; a blow
+    fully met costs `rate`.
     """
-    if blocked <= 0 or shield_bonus <= 0 or total_def <= 0:
+    if blocked <= 0 or bonus <= 0 or total_def <= 0:
         return 1
-    blocked_by_shield = blocked * shield_bonus / total_def
-    even_blow = shield_bonus / 2
-    return max(1, round(SHIELD_WEAR_RATE * blocked_by_shield / even_blow))
+    blocked_by_piece = blocked * bonus / total_def
+    even_blow = bonus / 2
+    return max(1, round(rate * blocked_by_piece / even_blow))
+
+
+def shield_wear(blocked: int, shield_bonus: int, total_def: int) -> int:
+    return guard_wear(blocked, shield_bonus, total_def, SHIELD_WEAR_RATE)
+
+
+def armor_wear(blocked: int, armor_bonus: int, total_def: int) -> int:
+    return guard_wear(blocked, armor_bonus, total_def, ARMOR_WEAR_RATE)
 
 
 def item_pool(item: GearItem) -> int:
