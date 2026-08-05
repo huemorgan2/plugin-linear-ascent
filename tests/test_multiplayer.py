@@ -81,14 +81,15 @@ def test_strike_without_energy_is_refused():
                    for e in p.get("_effects", []))
 
 
-def test_below_frontier_keep_is_a_solo_echo_bout():
+def test_below_frontier_keep_is_a_memorial():
+    """034 §3: the echo bout is retired — a Warden dies once."""
     p = playing(world=warden_world(3))
     p["unlocked_floor"] = 3
     core.apply_choice(p, "gate")
     core.apply_choice(p, "floor_1")
     core.apply_choice(p, "keep")
-    assert p["encounter"] and p["encounter"]["kind"] == "warden"
-    assert p["location"] != "warden_keep"
+    assert p.get("encounter") is None
+    assert p["location"] == "memorial"
 
 
 def test_local_mode_keeps_the_solo_warden_fight():

@@ -874,9 +874,11 @@ def milestone_quorum(floor: int, active: int | None = None) -> int:
     return max(base, required_strikers(floor, active))
 
 
-# 022/001: a fallen Warden can be re-fought at its keep as an ECHO —
-# half pay, no world effect, pure training and story.
-WARDEN_ECHO_MULT = 0.5
+# 034 §3: WARDEN_ECHO_MULT is gone. 022/001 let a fallen Warden be
+# re-fought at its keep as an ECHO at half pay — a card that said in as
+# many words that the real one died long ago, and then paid out for
+# killing it again, forever. A Warden dies once; its keep is a memorial
+# afterwards (engine/core._memorial_scene).
 
 
 @dataclass(frozen=True)
@@ -1503,11 +1505,39 @@ DURABILITY_GROWTH = 0.25
 REPAIR_PRICE_PCT = 0.20        # of item price × missing fraction
 DURABILITY_SLOTS = ("weapon", "shield", "armor", "shoes")
 
+# 034 §1: a shield is spent on DAMAGE, not on rounds. Weapon, armor and
+# boots still tick one use per swing/blow/stride; the shield pays for what
+# it actually turned, so the number the card narrates and the number the
+# bench bills are finally the same thing.
+# 3, not 4: the repair-tax gate below (≤20% of daily income, no
+# step-function between bands) is the ceiling, and 4 tips band 1→2 over
+# the cliff tolerance. 3 still burns a shield ~3× faster than the flat
+# point it replaces — ~72 fights a tier-1 buckler instead of ~216.
+SHIELD_WEAR_RATE = 3           # uses per evenly-met blow (was a flat 1)
+
 
 def durability_pool(tier: float) -> int:
     """Uses in a fresh piece of this tier (mids sit between wholes)."""
     t = max(1.0, float(tier))
     return round(DURABILITY_BASE * (1 + DURABILITY_GROWTH * (t - 1)))
+
+
+def shield_wear(blocked: int, shield_bonus: int, total_def: int) -> int:
+    """034 §1: uses spent by a shield that turned `blocked` damage.
+
+    The shield's share of the guard is `shield_bonus / DEF`, and that
+    share is priced against the shield's own rating (`shield_bonus / 2`,
+    what a fresh rung turns on an even blow) — the two cancel, which is
+    the point: the pace is the same at tier 1 and tier 10 instead of
+    running 4× hotter at depth, where `blocked` grows with DEF but the
+    pool grows only 25% a tier. A blow that chips straight through costs
+    the floor of one use; a blow fully met costs SHIELD_WEAR_RATE.
+    """
+    if blocked <= 0 or shield_bonus <= 0 or total_def <= 0:
+        return 1
+    blocked_by_shield = blocked * shield_bonus / total_def
+    even_blow = shield_bonus / 2
+    return max(1, round(SHIELD_WEAR_RATE * blocked_by_shield / even_blow))
 
 
 def item_pool(item: GearItem) -> int:

@@ -205,13 +205,14 @@ def test_solo_first_clear_keeps_its_card_then_plays_the_reel():
 
 
 @reel
-def test_an_echo_earns_no_reel():
+def test_a_memorial_earns_no_reel():
+    """034 §3: below the frontier there is nothing left to kill, so
+    there is no fall to play — the reel belongs to the one real death."""
     p = playing(world=warden_world(3))
     p["unlocked_floor"] = 3
     enter_floor(p)
-    core.apply_choice(p, "keep")        # below the frontier: an echo
-    assert p["encounter"] and p["encounter"].get("echo")
-    kill_current_warden(p)
+    core.apply_choice(p, "keep")        # below the frontier: a monument
+    assert p.get("encounter") is None
     assert p.get("movie_floor") is None
 
 

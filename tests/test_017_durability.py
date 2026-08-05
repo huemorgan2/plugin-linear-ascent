@@ -134,16 +134,16 @@ def test_a_swing_costs_one_use():
 
 
 def test_a_blow_taken_wears_shield_and_armor_not_weapon():
+    """034 §1: both guard pieces meet the blow, but they are billed in
+    different units — the plate by the round, the shield by the damage."""
     p, fl = _armed(shield="scrapwood_buckler", armor="padded_jerkin")
     p["encounter"]["range"] = "close"
     w0, s0, a0 = (p["durability"]["weapon"], p["durability"]["shield"],
                   p["durability"]["armor"])
     combat.resolve_fight_action(p, fl, "stand")    # no swing, one blow
     assert p["durability"]["weapon"] == w0
-    assert p["durability"]["shield"] <= s0
-    assert p["durability"]["armor"] <= a0
-    assert p["durability"]["shield"] == p["durability"]["armor"] \
-        - (a0 - s0)                                # same events for both
+    assert p["durability"]["shield"] < s0
+    assert p["durability"]["armor"] == a0 - 1
 
 
 def test_chase_actions_wear_the_shoes():
@@ -361,8 +361,11 @@ def test_repair_tax_stays_under_a_fifth_of_income_every_band():
         armor = next(g for g in economy.gear_rungs("armor")
                      if g.tier == tier and g.rung == float(tier))
         spend = 0.0
+        # 034 §1: the shield spends SHIELD_WEAR_RATE uses on an evenly-met
+        # blow where the blade and the plate still spend one.
         for g, events in ((weapon, fights * rounds),
-                          (shield, fights * rounds),
+                          (shield, fights * rounds
+                           * economy.SHIELD_WEAR_RATE),
                           (armor, fights * rounds)):
             pool = economy.durability_pool(g.tier)
             spend += economy.repair_price(g, min(1.0, events / pool))

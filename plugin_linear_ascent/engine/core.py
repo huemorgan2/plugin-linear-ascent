@@ -518,6 +518,7 @@ def _build_scene(p: dict) -> Scene:
         "grants": social.grant_scene,
         "boss_keep": _boss_keep_scene,
         "warden_keep": _warden_keep_scene,
+        "memorial": _memorial_scene,
     }
     return builders.get(loc, _town_scene)(p)
 
@@ -532,6 +533,71 @@ def _warden_keep_scene(p: dict) -> Scene:
     from . import social
     fl = schema.get_floor(max(1, p["floor"]))
     return social.warden_scene(p, fl)
+
+
+def _warden_has_fallen(p: dict, fl) -> bool:
+    """034 §3: a Warden dies once, and the world is the record of it.
+    Below the shared frontier the keep is empty; in local dev play (a
+    world of one) the personal unlock says the same thing."""
+    w = p.get("_world") or {}
+    if w:
+        return int(w.get("frontier", 1)) > fl.floor
+    return p["unlocked_floor"] > fl.floor
+
+
+def _fall_record(p: dict, fl) -> dict:
+    """What the world remembers about this keep's fall. Reads the top
+    level first (034), then the map 030 hung under `warden`, so a worldd
+    that has not shipped 034 yet still names the slayers."""
+    w = p.get("_world") or {}
+    rec = (w.get("fallen") or {}).get(str(fl.floor))
+    if isinstance(rec, dict):
+        return rec
+    names = ((w.get("warden") or {}).get("fallen_by") or {}).get(
+        str(fl.floor), "")
+    return {"names": names} if names else {}
+
+
+def _memorial_scene(p: dict) -> Scene:
+    """034 §3: the keep of a Warden that has already died. It used to
+    re-arm as an ECHO bout — a full Warden fight at half pay, repeatable
+    forever, on a card that said in as many words that the real one died
+    long ago. A dead thing does not pay out twice. What stands here now
+    is the story of who killed it and when."""
+    fl = schema.get_floor(max(1, p["floor"]))
+    rec = _fall_record(p, fl)
+    names = rec.get("names") or ""
+    body = []
+    day = rec.get("day")
+    when = ""
+    if isinstance(day, int):
+        ago = state.world_day() - day
+        when = (" today" if ago <= 0 else
+                " yesterday" if ago == 1 else
+                f" — {ago:,} days ago")
+        when = f" on day {day:,}{when}"
+    if names:
+        body.append(f"Cast down{when} by {names}.")
+    elif when:
+        body.append(f"Cast down{when}. The roll of names is lost.")
+    else:
+        body.append("Cast down in the early days of the climb, by "
+                    "climbers whose names the Stone no longer carries.")
+    if rec.get("top") and rec.get("top_dmg"):
+        body.append(f"The deepest cut was {rec['top']}'s: "
+                    f"{int(rec['top_dmg']):,}.")
+    body.append("The lift above has run free ever since. Nothing waits "
+                "in here for you — the wilds outside still do.")
+    return Scene(
+        eyebrow=f"FLOOR {fl.floor} · THE KEEP",
+        headline=f"{fl.warden_name} fell here",
+        support="The doors stand open. Nothing has held them since.",
+        body_lines=body,
+        options=[Option("back", "Back to the camp")],
+        meters=combat.meters(p),
+        banner=f"warden_{fl.floor:03d}",
+        fx="warden_fall",
+    )
 
 
 def _dispatch(p: dict, oid: str) -> Scene:
@@ -894,8 +960,12 @@ def _dispatch_location(p: dict, oid: str) -> Scene:
         p["location"] = oid
         return _build_scene(p)
     if oid == "back":
-        p["location"] = "town" if loc in town_menus + ("grants",) \
-            else p["location"]
+        if loc == "memorial":
+            # 034 §3: the only way out of a monument is back to the camp.
+            p["location"] = "gate_town"
+        else:
+            p["location"] = "town" if loc in town_menus + ("grants",) \
+                else p["location"]
         return _build_scene(p)
     if oid == "vault" and loc == "grants":
         p["location"] = "vault"
@@ -2406,8 +2476,14 @@ def _gate_town_options(p: dict, fl) -> list[Option]:
                 opts.append(Option(f"use_{slug}", f"Use a {item.name}",
                                    f"+{amount} HP · {have} left"))
     # 031 §5: the walk to the keep is free — the swing is the price.
-    opts.append(Option("keep", f"The Warden's keep — {fl.warden_name}",
-                       f"{economy.COST_WARDEN_STRIKE} ⚡ a swing"))
+    # 034 §3: unless the Warden is dead, and then there is no price at
+    # all — the row says monument, not swing, before the click.
+    if _warden_has_fallen(p, fl):
+        opts.append(Option("keep", f"The keep where {fl.warden_name} fell",
+                           "a monument · free"))
+    else:
+        opts.append(Option("keep", f"The Warden's keep — {fl.warden_name}",
+                           f"{economy.COST_WARDEN_STRIKE} ⚡ a swing"))
     # 030 Phase 6: the floor's one voice — floors without an npc block
     # (11-100, until their art pass) simply have no talk row.
     npc = getattr(fl, "npc", None)
@@ -2533,6 +2609,12 @@ def _gate_town_action(p: dict, oid: str) -> Scene:
     # handler moved upstream.
     if oid == "keep":
         w = p.get("_world") or {}
+        # 034 §3: a Warden dies once. Its keep is a memorial afterwards —
+        # checked BEFORE the milestone branch, or a cleared floor 10 goes
+        # on showing a war-party quorum board forever.
+        if _warden_has_fallen(p, fl):
+            p["location"] = "memorial"
+            return _memorial_scene(p)
         # milestone keeps run the quorum flow in the shared world
         if fl.milestone and w:
             from . import social
@@ -2544,17 +2626,9 @@ def _gate_town_action(p: dict, oid: str) -> Scene:
             from . import social
             p["location"] = "warden_keep"
             return social.warden_scene(p, fl)
-        # below the frontier: the ECHO bout — a monument that still
-        # bites, half pay, no world effect (022/001). Local dev play
-        # (no world) keeps the real bout: a world of one.
         # 031 §5: walking into a keep is free — every swing inside
         # costs 3 ⚡, and that is the whole price.
-        s = combat.start_encounter(p, fl, None, "warden")
-        if w:
-            p["encounter"]["echo"] = True
-            s.support = ("An echo of a fallen Warden — half pay, no "
-                         "world effect. The real one died long ago.")
-        return s
+        return combat.start_encounter(p, fl, None, "warden")
     if oid == "gate":
         p["location"] = "gate"
         return _gate_scene(p)

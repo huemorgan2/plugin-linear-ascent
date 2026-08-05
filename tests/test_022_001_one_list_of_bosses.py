@@ -2,8 +2,8 @@
 
 ALL 100 wardens are shared; the keep fight is a real fight whose damage
 persists to the world pool; the personal unlock is deleted in the shared
-world (local dev play is a world of one); fallen wardens re-fight as
-echoes at half pay with no world effect.
+world (local dev play is a world of one). 034 §3 retired this plan's
+echo bout: a fallen Warden is dead, and its keep is a memorial.
 """
 
 from __future__ import annotations
@@ -153,29 +153,25 @@ def test_shared_warden_cannot_be_slept_past():
     assert "does not sleep" in (s.body_lines[0] if s.body_lines else "")
 
 
-# ── echoes and the deleted personal unlock ───────────────────────────────
+# ── the fallen keep and the deleted personal unlock ──────────────────────
 
-def test_below_frontier_kill_is_an_echo_half_pay_no_world_effect():
+def test_below_frontier_the_keep_pays_nothing_because_nothing_lives_there():
+    """034 §3 replaced 022/001's echo bout. The keep of a Warden that has
+    already died is a memorial: no fight, no purse, no world effect."""
     w = warden_world(3)
     p = playing(world=w)
     p["unlocked_floor"] = 3
     core.apply_choice(p, "gate")
     core.apply_choice(p, "floor_1")
-    core.apply_choice(p, "keep")
-    e = p["encounter"]
-    assert e["kind"] == "warden" and e.get("echo")
-    e["hp"] = 1
-    e["range"] = "close"
     xp0 = p["xp"]
-    s = core.apply_choice(p, "attack")
-    assert p["encounter"] is None
-    gained = p["xp"] - xp0
-    full = economy.warden_xp(1)
-    assert 0 < gained < full, f"echo must pay less than {full}, got {gained}"
+    s = core.apply_choice(p, "keep")
+    assert p.get("encounter") is None
+    assert p["location"] == "memorial"
+    assert p["xp"] == xp0
     assert not any(x["kind"] == "warden_strike"
                    for x in p.get("_effects", []))
-    assert p["unlocked_floor"] == 3, "an echo never moves the frontier"
-    assert any("echo" in ln for ln in s.body_lines)
+    assert p["unlocked_floor"] == 3, "a monument never moves the frontier"
+    assert "fell here" in s.headline
 
 
 def test_local_dev_play_is_a_world_of_one():
@@ -184,7 +180,7 @@ def test_local_dev_play_is_a_world_of_one():
     core.apply_choice(p, "floor_1")
     core.apply_choice(p, "keep")
     e = p["encounter"]
-    assert not e.get("echo") and not e.get("shared")
+    assert not e.get("shared")
     e["hp"] = 1
     e["range"] = "close"
     core.apply_choice(p, "attack")

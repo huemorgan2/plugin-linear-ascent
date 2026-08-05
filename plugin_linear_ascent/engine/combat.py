@@ -315,7 +315,7 @@ def _drop_ranges(p: dict, floor) -> dict:
 def _warden_drop_ranges(p: dict, floor) -> dict:
     """031 §6: the Warden [i] declares its purse like every monster —
     from the SAME math the payouts use, so promise and payout can't
-    drift. Solo/echo: the kill purse itself. Shared: your estimated cut
+    drift. Solo: the kill purse itself. Shared: your estimated cut
     for one full exchange of damage (the real cut scales with damage)."""
     e = p["encounter"]
     n = floor.floor
@@ -332,9 +332,6 @@ def _warden_drop_ranges(p: dict, floor) -> dict:
     if floor.milestone:
         x = floor.milestone.xp / 2 * fade
         g = floor.milestone.gold / 2 * fade
-    if e.get("echo"):
-        x *= economy.WARDEN_ECHO_MULT
-        g *= economy.WARDEN_ECHO_MULT
     g, x = max(1, round(g)), max(1, round(x))
     return {"gold": [g, g], "xp": [x, x]}
 
@@ -612,9 +609,20 @@ def _monster_hit(p: dict, halved: bool = False, least: int = 0) -> dict:
         e["apple_hp"] -= soaked
         dmg -= soaked
     p["hp"] -= dmg
-    broke = [note for s in ("shield", "armor") if (note := _wear(p, s))]
-    return {"dmg": dmg, "raw": raw, "blocked": raw - dmg, "broke": broke,
+    blocked = raw - dmg
+    # 034 §1: armor ticks one use a blow; the shield pays for what it
+    # actually turned — the card already narrates that number.
+    broke = [note for note in
+             (_wear(p, "shield", _shield_wear(p, blocked)),
+              _wear(p, "armor")) if note]
+    return {"dmg": dmg, "raw": raw, "blocked": blocked, "broke": broke,
             "apple": soaked}
+
+
+def _shield_wear(p: dict, blocked: int) -> int:
+    """034 §1: uses the shield spends turning `blocked` of a blow."""
+    return economy.shield_wear(blocked, state.gear_bonus(p, "shield"),
+                               state.dfs(p))
 
 
 def _counter_text(p: dict, hit: dict, lead: str = "") -> str:
@@ -850,6 +858,11 @@ def kill_receipt_lines(r: dict) -> list[str]:
     if r.get("xp"):
         share = " — your share of the kill" if r.get("shared") else ""
         lines.append(f"+ {int(r['xp']):,} XP{share}")
+    if r.get("xp_clipped"):
+        # 034 §2: a share bigger than the bar is clipped, and a silent
+        # clip reads as theft — the card says what the bar could not take.
+        lines.append(f"▪ {int(r['xp_clipped']):,} XP ran off a full bar "
+                     "— train at the Guildhall before the next one")
     if r.get("gold"):
         lines.append(f"+ ◈ {int(r['gold']):,} from the Warden's hoard")
     if r.get("loot"):
@@ -919,11 +932,6 @@ def _victory(p: dict, floor) -> Scene:
         if floor.milestone:
             xp = round(floor.milestone.xp / 2 * fade)
             gold = round(floor.milestone.gold / 2 * fade)
-        if e.get("echo"):
-            # 022/001: a fallen Warden re-fought is an ECHO — half pay,
-            # no world effect. Training and story, not progress.
-            xp = round(xp * economy.WARDEN_ECHO_MULT)
-            gold = round(gold * economy.WARDEN_ECHO_MULT)
     else:
         xp = round(state.rng_jitter(p, economy.xp_per_kill(floor.floor), 0.25) * fade)
         # 009: luck is a DAY now — the halfling racial bonus is retired.
@@ -1008,10 +1016,7 @@ def _victory(p: dict, floor) -> Scene:
         # the frontier moves only when the world Warden's pool empties.
         # Local dev play is a world of one: ITS frontier is personal.
         nxt = floor.floor + 1
-        if e.get("echo"):
-            lines.append("▪ an echo of a fallen Warden — half pay, and "
-                         "the tower doesn't so much as creak")
-        elif p.get("_world") is None and p["unlocked_floor"] < nxt:
+        if p.get("_world") is None and p["unlocked_floor"] < nxt:
             old_floor = p["unlocked_floor"]
             p["unlocked_floor"] = nxt
             first_clear = True
@@ -1686,18 +1691,27 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
         e["hp"] -= counter
         if e["hp"] <= 0:
             return _victory(p, floor)
+        # 034 §1: nothing gets through because the SHIELD stops all of it —
+        # the most expensive round in the game for the piece doing the
+        # work. A monster still crossing open ground lands nothing to stop.
+        snap = ""
+        if not at_range:
+            turned = state.rng_int(p, e["atk"] // 2, e["atk"])
+            snap = _wear(p, "shield", _shield_wear(p, turned))
+        tail = f" {snap}" if snap else ""
         chase = _advance_chase(p)
         if counter <= 0 and _profile(p).get("flying"):
             return fight_scene(p, floor, note=(
                 "Shield up — nothing gets through. But your counter "
-                "swings under it: the thing is airborne."))
+                "swings under it: the thing is airborne." + tail))
         if counter <= 0 and at_range:
             return fight_scene(p, floor, note=(
                 "Shield up — nothing gets through. Your counter finds "
                 "only air: it hasn't reached you yet."
-                + (f" {chase}" if chase else "")))
+                + (f" {chase}" if chase else "") + tail))
         return fight_scene(p, floor, note=(
-            f"Shield up — nothing gets through. Your counter takes {counter}."))
+            f"Shield up — nothing gets through. Your counter takes "
+            f"{counter}.{tail}"))
 
     if option_id == "sleep_spell" and p.get("clazz") == "sorcerer":
         # 022/001: the shared Warden never sleeps — there is nothing to

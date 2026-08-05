@@ -116,10 +116,15 @@ def xp_room(p: dict) -> int | None:
     None means uncapped — at LEVEL_CAP the Guildhall refuses training and
     the pool is pure currency (hone / sleep / scan). Below the cap the bar
     is hard: surplus from a kill goes nowhere.
+
+    034 §2: worldd pays every share through gain_xp now, and the docs it
+    settles are loaded straight from the table — a partial one must not
+    raise mid-fall, so the level is defaulted on both reads.
     """
-    if int(p.get("level", 1)) >= economy.LEVEL_CAP:
+    level = int(p.get("level", 1))
+    if level >= economy.LEVEL_CAP:
         return None
-    return max(0, economy.xp_need(int(p["level"])) - int(p.get("xp", 0)))
+    return max(0, economy.xp_need(level) - int(p.get("xp", 0)))
 
 
 def gain_xp(p: dict, amount: int) -> int:

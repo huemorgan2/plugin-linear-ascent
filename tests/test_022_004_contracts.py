@@ -189,10 +189,15 @@ def test_warden_bounty_is_capped_at_the_hands_reach():
 
 
 def test_claim_pays_the_reach_capped_price():
+    # 034 §3: board_for no longer posts the horn job to a hand that
+    # cannot enter the frontier floor, so the reach-capped price is
+    # exercised off the pure board — the pricing guard itself is
+    # unchanged and still has to hold for any job priced past a reach.
     p = create_character(fresh())
     p["level"] = economy.BOARD_LEVEL
     p["_world"] = {"frontier": 15}
-    job = next(j for j in contracts.board_for(p) if j["kind"] == "warden")
+    job = next(j for j in contracts.board(state.world_day(), 15)
+               if j["kind"] == "warden")
     c = contracts.sync(p)
     c["got"][job["id"]] = job["need"]
     gold0 = p["gold"]

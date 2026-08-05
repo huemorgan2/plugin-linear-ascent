@@ -610,7 +610,11 @@ def guild_train(p: dict) -> Scene:
             p, note=f"Training to LEVEL {p['level'] + 1} costs ◈ {fee:,} "
                     f"— you carry ◈ {p['gold']:,}. Come back heavier.")
     p["gold"] -= fee
-    p["xp"] -= need
+    # 034 §2: the bar EMPTIES. Subtracting the need used to carry any
+    # surplus into the next level's bar — and worldd's big payouts (a
+    # milestone boss pays 1,500 into a bar that holds 758) could put real
+    # surplus there. A bar is a bar: full, then empty, never 110%.
+    p["xp"] = 0
     old_level = p["level"]
     p["level"] += 1
     p["hp"] = state.max_hp(p)

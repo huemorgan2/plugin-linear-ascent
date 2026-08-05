@@ -61,12 +61,14 @@ def board(day: int, frontier: int) -> list[dict]:
                            * economy.CONTRACT_CLASS_XP_MULT)),
     })
 
-    # C — answer the horn: one Warden engagement (any keep — the shared
-    # front, an echo, it all counts as showing up).
+    # C — answer the horn: one Warden engagement. 034 §3 retired the echo
+    # bout, so "any keep" now means the ONE keep that still has a Warden
+    # in it — the live front. board_for drops this job for hands that
+    # cannot enter that floor, rather than posting work they cannot do.
     jobs.append({
         "id": f"d{day}-warden",
         "kind": "warden", "need": 1, "floor": fr,
-        "title": "Answer a keep's horn — fight any Warden",
+        "title": f"Answer the horn at floor {fr} — fight the Warden",
         "gold": max(1, round(economy.warden_gold(fr)
                              * economy.CONTRACT_WARDEN_MULT)),
         "xp": max(1, round(economy.warden_xp(fr)
@@ -82,10 +84,26 @@ def board(day: int, frontier: int) -> list[dict]:
 
 def board_for(p: dict) -> list[dict]:
     """The board as THIS doc sees it: world frontier when a world is
-    attached, the player's own frontier in local dev (a world of one)."""
+    attached, the player's own frontier in local dev (a world of one).
+
+    034 §3: the horn job needs a living Warden, and after the echo bout
+    was retired there is exactly one — at the frontier. A hand that
+    cannot walk through that floor's gate cannot answer it, so the job
+    comes off their board instead of sitting there uncompletable.
+    """
     w = p.get("_world") or {}
     frontier = int(w.get("frontier") or 0) or max(1, p.get("unlocked_floor", 1))
-    return board(state.world_day(), frontier)
+    jobs = board(state.world_day(), frontier)
+    if not can_answer_the_horn(p, frontier):
+        jobs = [j for j in jobs if j["kind"] != "warden"]
+    return jobs
+
+
+def can_answer_the_horn(p: dict, frontier: int) -> bool:
+    """Can this hand reach the one keep that still holds a Warden?"""
+    return (int(p.get("unlocked_floor", 1)) >= frontier
+            and int(p.get("level", 1))
+            >= economy.floor_entry_player_level(frontier))
 
 
 # ── progress — counted off kills the engine already scores ──────────────
