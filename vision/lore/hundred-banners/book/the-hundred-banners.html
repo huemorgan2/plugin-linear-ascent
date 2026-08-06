@@ -1,134 +1,250 @@
-<!doctype html><html><head><meta charset="utf-8"><title>The Hundred Banners</title><style>
-    @page { size: 6in 9in; margin: 0.9in 0.85in 1in 0.85in; }
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>The Hundred Banners</title><style>
+    :root { --ink: #111; }
     html { -webkit-print-color-adjust: exact; }
     body { font-family: Georgia, 'Times New Roman', serif; font-size: 10.6pt;
-           line-height: 1.42; color: #111; margin: 0; }
+           line-height: 1.42; color: var(--ink); margin: 0; }
     p { margin: 0; text-indent: 1.25em; text-align: justify; hyphens: auto; }
     h1 + p, figure + p, .scenebreak + p, .partsub + p { text-indent: 0; }
     em { font-style: italic; }
 
-    section { page-break-after: always; }
-    section.chapter, section.interlude { page-break-after: auto;
-      page-break-before: always; }
+    /* ---------- page masters (trim 140 x 216 mm) ---------- */
+    @page { size: 140mm 216mm; }
+    @page body {
+      margin: 0.78in 0.62in 0.88in 0.85in;
+      @bottom-center { content: counter(page); font-family: Georgia, serif;
+        font-size: 9pt; color: #222; }
+    }
+    @page body:left {
+      margin: 0.78in 0.85in 0.88in 0.62in;
+      @top-center { content: "THE HUNDRED BANNERS"; font-family: Georgia,
+        serif; font-size: 8pt; letter-spacing: 0.22em; color: #333; }
+    }
+    @page body:right {
+      @top-center { content: string(chaptitle); font-family: Georgia, serif;
+        font-size: 8pt; letter-spacing: 0.18em; font-variant: small-caps;
+        color: #333; }
+    }
+    @page plain { margin: 0.78in 0.72in 0.88in 0.72in; }
+    @page coverpage { margin: 0; }
 
-    .titlepage { text-align: center; padding-top: 1.6in; }
-    .titlepage .series { letter-spacing: 0.28em; font-size: 8pt; color: #444; }
-    .titlepage h1 { font-size: 30pt; letter-spacing: 0.08em; margin: 0.35in 0 0;
-      font-weight: normal; }
+    section.cover { page: coverpage; }
+    section.chapter, section.interlude, section.appendix, section.artpage
+      { page: body; }
+    section.frontmatter, section.partpage, section.tocpage,
+    section.artpage.frontmatter { page: plain; }
+
+    section { break-after: page; }
+    section.chapter, section.interlude, section.appendix
+      { break-after: auto; break-before: page; }
+    section.partpage { break-before: right; }
+
+    .chapter h1, .interlude h1, .appendix h1
+      { string-set: chaptitle content(text); }
+
+    /* ---------- covers ---------- */
+    section.cover { width: 140mm; height: 216mm; position: relative;
+      overflow: hidden; }
+    .frontcover { background: #e9e5da; }
+    .coverart { position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; }
+    .coverink { position: absolute; top: 0.55in; left: 0; right: 0;
+      text-align: center; text-shadow: 0 0 5px rgba(236,232,222,0.95),
+      0 0 14px rgba(236,232,222,0.8); }
+    .coverseries { text-indent: 0; text-align: center; font-size: 7.5pt;
+      letter-spacing: 0.3em; color: #2b2b2b; }
+    .covertitle { font-size: 34pt; font-weight: normal; line-height: 1.14;
+      letter-spacing: 0.1em; margin: 0.16in 0 0; color: #161616; }
+    .coverrule { width: 1.5in; border-top: 1.5px solid #161616;
+      margin: 0.18in auto; }
+    .coverauthor { text-indent: 0; text-align: center; font-size: 15pt;
+      letter-spacing: 0.42em; color: #161616; }
+    .coverpub { position: absolute; bottom: 0.28in; left: 0; right: 0;
+      text-indent: 0; text-align: center; font-size: 7pt;
+      letter-spacing: 0.34em; color: #ded9cc; }
+
+    .backcover { background: #efece3; }
+    .backinner { position: absolute; inset: 0.55in 0.55in 0.5in;
+      display: flex; flex-direction: column; }
+    .backseries { text-indent: 0; text-align: center; font-size: 7pt;
+      letter-spacing: 0.3em; color: #444; margin-bottom: 0.22in; }
+    .backlead { text-indent: 0; text-align: left; font-size: 11.5pt;
+      line-height: 1.5; margin-bottom: 0.14in; }
+    .backbody { text-indent: 0; text-align: left; font-size: 9.8pt;
+      line-height: 1.5; }
+    .backquotes { margin-top: 0.22in; border-top: 1px solid #999;
+      padding-top: 0.16in; }
+    .backquotes p { text-indent: 0; text-align: left; font-style: italic;
+      font-size: 9pt; line-height: 1.42; margin-bottom: 0.11in; }
+    .backquotes span { font-style: normal; font-size: 8pt;
+      letter-spacing: 0.06em; }
+    .backfoot { margin-top: auto; display: flex;
+      justify-content: space-between; align-items: flex-end;
+      border-top: 1px solid #999; padding-top: 0.12in; }
+    .backfoot p { text-indent: 0; text-align: left; }
+    .backpub { font-size: 8.5pt; letter-spacing: 0.24em; }
+    .backpub span { font-size: 7pt; letter-spacing: 0.18em; color: #555; }
+    .backisbn { text-align: right; font-size: 7.5pt; line-height: 1.6;
+      letter-spacing: 0.08em; color: #333; }
+
+    /* ---------- front matter ---------- */
+    .halftitle { text-align: center; padding-top: 2.7in; }
+    .halftitle h1 { font-size: 16pt; font-weight: normal;
+      letter-spacing: 0.22em; }
+
+    .titlepage { text-align: center; padding-top: 1.1in; }
+    .titlepage .series { letter-spacing: 0.28em; font-size: 8pt; color: #444;
+      text-indent: 0; text-align: center; }
+    .titlepage h1 { font-size: 30pt; letter-spacing: 0.08em;
+      margin: 0.35in 0 0; font-weight: normal; }
     .titlepage .rule { width: 1.4in; border-top: 1px solid #111;
       margin: 0.3in auto; }
     .titlepage .tag { font-style: italic; font-size: 10pt; text-indent: 0;
       text-align: center; }
+    .titlepage .byline { margin-top: 0.55in; font-size: 14pt;
+      letter-spacing: 0.4em; text-indent: 0; text-align: center; }
+    .titlepage .imprint { margin-top: 1.0in; font-size: 9.5pt;
+      letter-spacing: 0.2em; text-indent: 0; text-align: center; }
+    .titlepage .imprint span { font-size: 7.5pt; letter-spacing: 0.16em;
+      color: #444; }
+
+    .copyrightpage { padding-top: 3.6in; font-size: 8pt; line-height: 1.5;
+      color: #222; }
+    .copyrightpage p { text-indent: 0; text-align: center;
+      margin-bottom: 0.55em; }
+
+    .dedication { text-align: center; padding-top: 2.9in; }
+    .dedication p { text-indent: 0; text-align: center; font-size: 11pt; }
 
     .artpage { text-align: center; }
     .maplabel { text-indent: 0; text-align: center; font-variant: small-caps;
       letter-spacing: 0.12em; font-size: 9pt; margin-bottom: 0.15in; }
-    figure { margin: 0.18in 0 0.22in; text-align: center; page-break-inside: avoid; }
+    figure { margin: 0.18in 0 0.22in; text-align: center;
+      break-inside: avoid; }
     figure img { max-width: 100%; }
-    figure.map img { max-height: 7in; }
-    figure.front img { max-height: 6.6in; max-width: 92%; }
-    figure.plate img { max-height: 4.3in; }
+    figure.map img { max-height: 6.1in; }
+    figure.front img { max-height: 6.0in; max-width: 92%; }
+    figure.plate img { max-height: 3.9in; }
 
     .tocpage h1 { text-align: center; font-size: 15pt; font-weight: normal;
-      letter-spacing: 0.2em; font-variant: small-caps; }
-    ul.toc { list-style: none; padding: 0 0.4in; }
-    ul.toc li { text-indent: 0; margin: 0.35em 0; text-align: center;
-      font-size: 9.5pt; }
-    ul.toc li.tocpart { margin-top: 1.1em; font-variant: small-caps;
+      letter-spacing: 0.2em; font-variant: small-caps;
+      margin-bottom: 0.3in; }
+    ul.toc { list-style: none; padding: 0 0.15in; margin: 0; }
+    ul.toc li { text-indent: 0; margin: 0.32em 0; font-size: 9.5pt; }
+    ul.toc li a { text-decoration: none; color: var(--ink); display: block;
+      overflow: hidden; }
+    ul.toc li a::after { content: target-counter(attr(href url), page);
+      float: right; font-size: 8.5pt; }
+    ul.toc li.tocpart { margin-top: 1.05em; font-variant: small-caps;
       letter-spacing: 0.14em; }
+    ul.toc li.tocpart a::after { content: none; }
 
+    /* ---------- body ---------- */
     .partpage { text-align: center; padding-top: 2.4in; }
-    .partpage .partnum { letter-spacing: 0.3em; font-size: 9pt; text-indent: 0;
-      text-align: center; }
-    .partpage h1 { font-size: 21pt; letter-spacing: 0.12em; font-weight: normal;
-      margin: 0.22in 0 0.12in; }
-    .partpage .partsub { font-style: italic; font-size: 9.5pt; text-indent: 0;
-      text-align: center; }
+    .partpage .partnum { letter-spacing: 0.3em; font-size: 9pt;
+      text-indent: 0; text-align: center; }
+    .partpage h1 { font-size: 21pt; letter-spacing: 0.12em;
+      font-weight: normal; margin: 0.22in 0 0.12in; }
+    .partpage .partsub { font-style: italic; font-size: 9.5pt;
+      text-indent: 0; text-align: center; }
 
     .chapter h1, .interlude h1 { font-size: 13.5pt; font-weight: normal;
       text-align: center; font-variant: small-caps; letter-spacing: 0.1em;
       margin: 0.5in 0 0.28in; }
-    .scenebreak { text-align: center; margin: 0.75em 0; letter-spacing: 0.5em; }
+    .scenebreak { text-align: center; margin: 0.75em 0;
+      letter-spacing: 0.5em; }
 
     .interlude { font-style: italic; }
     .interlude p { text-indent: 0; margin-bottom: 0.5em; }
 
-    section.appendix { page-break-after: auto; page-break-before: always;
-      font-size: 9.8pt; }
-    .appendix h1 { font-size: 12.5pt; font-weight: normal; text-align: center;
-      font-variant: small-caps; letter-spacing: 0.1em; margin: 0.5in 0 0.24in; }
+    section.appendix { font-size: 9.8pt; }
+    .appendix h1 { font-size: 12.5pt; font-weight: normal;
+      text-align: center; font-variant: small-caps; letter-spacing: 0.1em;
+      margin: 0.5in 0 0.24in; }
     .appendix h2 { font-size: 10.5pt; font-variant: small-caps;
       font-weight: normal; letter-spacing: 0.08em; margin: 0.9em 0 0.3em; }
     .appendix p { text-indent: 0; margin-bottom: 0.35em; }
     .appendix ul { padding-left: 1.1em; margin: 0.2em 0 0.6em; }
     .appendix li { margin: 0.15em 0; }
-    </style></head><body><section class="titlepage"><p class="series">A NOVEL OF THE LINEAR ASCENT</p><h1>THE HUNDRED<br>BANNERS</h1><div class="rule"></div><p class="tag">The tower was built so the world could never gather.<br>This is the story of the gathering.</p></section>
-<section class="artpage"><figure class="front"><img src="art/_print/front-banner.jpg" alt=""></figure></section>
-<section class="artpage"><p class="maplabel">The Ascent — one hundred stolen floors</p><figure class="map"><img src="art/_print/front-tower.jpg" alt=""></figure></section>
-<section class="artpage"><p class="maplabel">Roothollow, at the foot</p><figure class="front"><img src="art/_print/front-roothollow.jpg" alt=""></figure></section>
-<section class="tocpage"><h1>Contents</h1><ul class="toc"><li>Prologue</li>
-<li class="tocpart">PART I — THE DEBT</li>
-<li>Chapter 1 — The Trainer of Other People's Recruits</li>
-<li>Chapter 2 — The Third Refusal</li>
-<li>Chapter 3 — Hedge and Hollow</li>
-<li>Chapter 4 — The King of Nothing</li>
-<li>Chapter 5 — The Ledger of Gates</li>
-<li>Chapter 6 — The Adit</li>
-<li>Chapter 7 — The Red Warcamp</li>
-<li>Chapter 8 — What the Freed Forgive</li>
-<li>Chapter 9 — The Tale of the First Banner</li>
-<li class="tocpart">PART II — THE BANNER WAR</li>
-<li>Chapter 10 — The Quiet</li>
-<li>Chapter 11 — Hale's Lesson</li>
-<li>Chapter 12 — The Banner War</li>
-<li>Chapter 13 — The Out-Mourned King</li>
-<li>Chapter 14 — The Toll-Burning</li>
-<li>Chapter 15 — Silk Terms</li>
-<li>Chapter 16 — The Hostage Chapter</li>
-<li>Chapter 17 — Calyne</li>
-<li>Chapter 18 — The Molt</li>
-<li class="tocpart">PART III — THE GATHERING</li>
-<li>Chapter 19 — The Frozen Sea</li>
-<li>Chapter 20 — Brother and Sister</li>
-<li>Chapter 21 — The Wyrm's Pity</li>
-<li>Chapter 22 — What Roothollow Sends</li>
-<li>Chapter 23 — The Long Stair</li>
-<li>Chapter 24 — The Frosthall Parliament</li>
-<li>Chapter 25 — The Wintering</li>
-<li>Chapter 26 — The Feast</li>
-<li>Chapter 27 — The Reckoning of Names</li>
-<li class="tocpart">PART IV — THE SCATTERED SKY</li>
-<li>Chapter 28 — The Anchor Chains</li>
-<li>Chapter 29 — The Storm Queen's Price</li>
-<li>Chapter 30 — Gathering the Blown</li>
-<li>Chapter 31 — The Bottled Court</li>
-<li>Chapter 32 — The Eye</li>
-<li>Chapter 33 — The Coursing</li>
-<li>Chapter 34 — The Pale Court</li>
-<li>Chapter 35 — What Ede Carries</li>
-<li>Chapter 36 — Breaking the Hunt</li>
-<li>Chapter 37 — The Wake's Price</li>
-<li class="tocpart">PART V — THE MADE</li>
-<li>Chapter 38 — The Siege of the Outworks</li>
-<li>Chapter 39 — The Welded</li>
-<li>Chapter 40 — The Vizier's Floor</li>
-<li>Chapter 41 — The Battle of the Herald's Gate</li>
-<li>Chapter 42 — Malgrim</li>
-<li>Chapter 43 — The Obsidian Stair</li>
-<li>Chapter 44 — Scram</li>
-<li>Chapter 45 — The Stolen Years</li>
-<li>Chapter 46 — The Last Door</li>
-<li>Chapter 47 — The Throne</li>
-<li>Chapter 48 — The Trials</li>
-<li>Epilogue — The Descent</li>
-<li class="tocpart">APPENDICES</li>
-<li>The Banners, and Who Carried Them</li>
-<li>A Gazetteer of the Hundred Floors</li>
-<li>The Charter of the Frosthall, as Signed</li>
-<li>The Contract of Vyx, in Full</li>
-<li>Malgrim's Ledger, as Recovered</li>
-<li>On the Yoke, the Shards, and the Break-Collar</li></ul></section>
-<section class="chapter"><h1>Prologue</h1><figure class="plate"><img src="art/_print/plate-00.jpg" alt=""></figure>
+
+    .aboutauthor { padding-top: 1.2in; }
+    .aboutauthor h1 { font-size: 12.5pt; font-weight: normal;
+      text-align: center; font-variant: small-caps; letter-spacing: 0.14em;
+      margin-bottom: 0.3in; }
+    .aboutauthor p { text-indent: 0; text-align: justify;
+      margin-bottom: 0.6em; }
+
+    /* keep pagedjs preview honest */
+    .pagedjs_page { background: white; }
+    </style></head><body><section class="halftitle frontmatter"><h1>THE HUNDRED BANNERS</h1></section>
+<section class="artpage frontmatter"><figure class="front"><img src="art/_print/front-banner.jpg" alt=""></figure></section>
+<section class="titlepage frontmatter"><p class="series">A NOVEL OF THE LINEAR ASCENT</p><h1>THE HUNDRED<br>BANNERS</h1><div class="rule"></div><p class="tag">The tower was built so the world could never gather.<br>This is the story of the gathering.</p><p class="byline">RAYLA</p><p class="imprint">Girdlesea Press<br><span>Harrowport</span></p></section>
+<section class="copyrightpage frontmatter"><p>THE HUNDRED BANNERS</p><p>Copyright © 2026 by Rayla<br>All rights reserved. No part of this book may be reproduced, taken apart, lifted whole out of its frame, or stacked above another book without written permission from the publisher, except in the case of brief quotations embodied in reviews.</p><p>Published by Girdlesea Press, Harrowport<br>First Girdlesea Press edition, August 2026</p><p>This is a work of fiction. Names, characters, places, floors, wardens, and events are the products of the author’s imagination. Any resemblance to actual persons, living, dead, or freed, or to actual countries, grounded or otherwise, is coincidental.</p><p>Cover and interior plates drawn in graphite by the author.<br>Set in Georgia. Printed on honest paper.</p><p>ISBN 978-1-84893-407-1</p><p>1&nbsp;&nbsp;3&nbsp;&nbsp;5&nbsp;&nbsp;7&nbsp;&nbsp;9&nbsp;&nbsp;10&nbsp;&nbsp;8&nbsp;&nbsp;6&nbsp;&nbsp;4&nbsp;&nbsp;2</p></section>
+<section class="dedication frontmatter"><p><em>for the keepers —<br>the ones who stayed at their posts</em></p></section>
+<section class="artpage frontmatter"><figure class="map"><figcaption class="maplabel">The Ascent — one hundred stolen floors</figcaption><img src="art/_print/front-tower.jpg" alt=""></figure></section>
+<section class="artpage frontmatter"><figure class="front"><figcaption class="maplabel">Roothollow, at the foot</figcaption><img src="art/_print/front-roothollow.jpg" alt=""></figure></section>
+<section class="tocpage frontmatter"><h1>Contents</h1><ul class="toc"><li><a href="#ch-00-prologue">Prologue</a></li>
+<li class="tocpart"><a href="#part-1">PART I — THE DEBT</a></li>
+<li><a href="#ch-01-trainer">Chapter 1 — The Trainer of Other People's Recruits</a></li>
+<li><a href="#ch-02-third-refusal">Chapter 2 — The Third Refusal</a></li>
+<li><a href="#ch-03-hedge-and-hollow">Chapter 3 — Hedge and Hollow</a></li>
+<li><a href="#ch-04-king-of-nothing">Chapter 4 — The King of Nothing</a></li>
+<li><a href="#ch-05-ledger-of-gates">Chapter 5 — The Ledger of Gates</a></li>
+<li><a href="#ch-06-the-adit">Chapter 6 — The Adit</a></li>
+<li><a href="#ch-07-red-warcamp">Chapter 7 — The Red Warcamp</a></li>
+<li><a href="#ch-08-what-the-freed-forgive">Chapter 8 — What the Freed Forgive</a></li>
+<li><a href="#ch-08a-first-banner">Chapter 9 — The Tale of the First Banner</a></li>
+<li class="tocpart"><a href="#part-9">PART II — THE BANNER WAR</a></li>
+<li><a href="#ch-09-the-quiet">Chapter 10 — The Quiet</a></li>
+<li><a href="#ch-10-hales-lesson">Chapter 11 — Hale's Lesson</a></li>
+<li><a href="#ch-11-banner-war">Chapter 12 — The Banner War</a></li>
+<li><a href="#ch-12-out-mourned-king">Chapter 13 — The Out-Mourned King</a></li>
+<li><a href="#ch-12a-toll-burning">Chapter 14 — The Toll-Burning</a></li>
+<li><a href="#ch-13-silk-terms">Chapter 15 — Silk Terms</a></li>
+<li><a href="#ch-14-hostage">Chapter 16 — The Hostage Chapter</a></li>
+<li><a href="#ch-15-calyne">Chapter 17 — Calyne</a></li>
+<li><a href="#ch-16-the-molt">Chapter 18 — The Molt</a></li>
+<li class="tocpart"><a href="#part-17">PART III — THE GATHERING</a></li>
+<li><a href="#ch-17-frozen-sea">Chapter 19 — The Frozen Sea</a></li>
+<li><a href="#ch-18-brother-and-sister">Chapter 20 — Brother and Sister</a></li>
+<li><a href="#ch-19-wyrms-pity">Chapter 21 — The Wyrm's Pity</a></li>
+<li><a href="#ch-19a-what-roothollow-sends">Chapter 22 — What Roothollow Sends</a></li>
+<li><a href="#ch-20-long-stair">Chapter 23 — The Long Stair</a></li>
+<li><a href="#ch-21-frosthall-parliament">Chapter 24 — The Frosthall Parliament</a></li>
+<li><a href="#ch-21a-the-wintering">Chapter 25 — The Wintering</a></li>
+<li><a href="#ch-22-the-feast">Chapter 26 — The Feast</a></li>
+<li><a href="#ch-23-reckoning-of-names">Chapter 27 — The Reckoning of Names</a></li>
+<li class="tocpart"><a href="#part-24">PART IV — THE SCATTERED SKY</a></li>
+<li><a href="#ch-24-anchor-chains">Chapter 28 — The Anchor Chains</a></li>
+<li><a href="#ch-25-storm-queens-price">Chapter 29 — The Storm Queen's Price</a></li>
+<li><a href="#ch-26-gathering-the-blown">Chapter 30 — Gathering the Blown</a></li>
+<li><a href="#ch-26a-bottled-court">Chapter 31 — The Bottled Court</a></li>
+<li><a href="#ch-27-the-eye">Chapter 32 — The Eye</a></li>
+<li><a href="#ch-28-the-coursing">Chapter 33 — The Coursing</a></li>
+<li><a href="#ch-29-pale-court">Chapter 34 — The Pale Court</a></li>
+<li><a href="#ch-30-what-ede-carries">Chapter 35 — What Ede Carries</a></li>
+<li><a href="#ch-31-breaking-the-hunt">Chapter 36 — Breaking the Hunt</a></li>
+<li><a href="#ch-31a-wakes-price">Chapter 37 — The Wake's Price</a></li>
+<li class="tocpart"><a href="#part-32">PART V — THE MADE</a></li>
+<li><a href="#ch-32-siege-of-outworks">Chapter 38 — The Siege of the Outworks</a></li>
+<li><a href="#ch-33-the-welded">Chapter 39 — The Welded</a></li>
+<li><a href="#ch-34-viziers-floor">Chapter 40 — The Vizier's Floor</a></li>
+<li><a href="#ch-35-heralds-gate">Chapter 41 — The Battle of the Herald's Gate</a></li>
+<li><a href="#ch-36-malgrim">Chapter 42 — Malgrim</a></li>
+<li><a href="#ch-37-obsidian-stair">Chapter 43 — The Obsidian Stair</a></li>
+<li><a href="#ch-38-scram">Chapter 44 — Scram</a></li>
+<li><a href="#ch-38a-stolen-years">Chapter 45 — The Stolen Years</a></li>
+<li><a href="#ch-39-last-door">Chapter 46 — The Last Door</a></li>
+<li><a href="#ch-40-the-throne">Chapter 47 — The Throne</a></li>
+<li><a href="#ch-40a-the-trials">Chapter 48 — The Trials</a></li>
+<li><a href="#ch-41-epilogue">Epilogue — The Descent</a></li>
+<li class="tocpart"><a href="#part-app">APPENDICES</a></li>
+<li><a href="#app-01-dramatis-personae">The Banners, and Who Carried Them</a></li>
+<li><a href="#app-02-gazetteer">A Gazetteer of the Hundred Floors</a></li>
+<li><a href="#app-03-charter-of-frosthall">The Charter of the Frosthall, as Signed</a></li>
+<li><a href="#app-04-vyx-contract">The Contract of Vyx, in Full</a></li>
+<li><a href="#app-05-malgrims-ledger">Malgrim's Ledger, as Recovered</a></li>
+<li><a href="#app-06-on-the-yoke">On the Yoke, the Shards, and the Break-Collar</a></li></ul></section>
+<section class="chapter" id="ch-00-prologue"><h1>Prologue</h1><figure class="plate"><img src="art/_print/plate-00.jpg" alt=""></figure>
 <p>They sent the boy down the valley at dusk with the last two sacks of
 barley, because the miller ground cheapest for whoever came latest and
 his mother would not pay a vain man&rsquo;s price for the sake of an early
@@ -239,8 +355,8 @@ tower and the undersides of the low floors glimmered with their hanging
 lamps, he would stand at the edge of the town and look up. Somewhere
 above him, in a kitchen he could have found blindfolded, the oven was
 long cold, and the loaves were still in it.</p></section>
-<section class="partpage"><p class="partnum">PART I</p><h1>THE DEBT</h1><p class="partsub">Roothollow · floors 1–20</p></section>
-<section class="chapter"><h1>Chapter 1 — The Trainer of Other People's Recruits</h1><figure class="plate"><img src="art/_print/plate-01.jpg" alt=""></figure>
+<section class="partpage" id="part-1"><p class="partnum">PART I</p><h1>THE DEBT</h1><p class="partsub">Roothollow · floors 1–20</p></section>
+<section class="chapter" id="ch-01-trainer"><h1>Chapter 1 — The Trainer of Other People's Recruits</h1><figure class="plate"><img src="art/_print/plate-01.jpg" alt=""></figure>
 <p>The recruits came to the yard at first light, because Ede Stonhal had
 told them the tower kept no honest mornings and they had better bring
 their own. They came yawning out of the lodging-rows with their borrowed
@@ -480,7 +596,7 @@ of pure habit, and did not sleep.</p>
 answers. She knew the shape of the word already. It was small, and it fit
 her mouth, and she had said it to herself so many years running that it
 sounded like her name.</p></section>
-<section class="chapter"><h1>Chapter 2 — The Third Refusal</h1><figure class="plate"><img src="art/_print/plate-02.jpg" alt=""></figure>
+<section class="chapter" id="ch-02-third-refusal"><h1>Chapter 2 — The Third Refusal</h1><figure class="plate"><img src="art/_print/plate-02.jpg" alt=""></figure>
 <p>Rhovan was at the Root Gate before the light was, standing against the
 wall with the patience of a man being paid by the day. Behind him the
 gate-queue was waking: captains kicking their people upright, shields
@@ -716,7 +832,7 @@ the underside of the next stolen land. The day was paint on a lid.</p>
 counting the lift-chain&rsquo;s links by ear, tallying the climbers coming up
 into his fields against the ones who would come back to the gate.</p>
 <p>The counts were about to change.</p></section>
-<section class="chapter"><h1>Chapter 3 — Hedge and Hollow</h1><figure class="plate"><img src="art/_print/plate-03.jpg" alt=""></figure>
+<section class="chapter" id="ch-03-hedge-and-hollow"><h1>Chapter 3 — Hedge and Hollow</h1><figure class="plate"><img src="art/_print/plate-03.jpg" alt=""></figure>
 <p>The farmer was waiting at the lift-head with a tally-stick, and Rhovan
 liked him before he spoke, which in Rhovan&rsquo;s trade was a fault and he
 noted it as one.</p>
@@ -1090,7 +1206,7 @@ what hung four floors above that no eye could reach; it came down the
 lifts as rumor instead, a meadow drowned in color that Nan Sedge swore
 was banners.</p>
 <p>A hundred of them. All stolen. All waiting.</p></section>
-<section class="chapter"><h1>Chapter 4 — The King of Nothing</h1><figure class="plate"><img src="art/_print/plate-04.jpg" alt=""></figure>
+<section class="chapter" id="ch-04-king-of-nothing"><h1>Chapter 4 — The King of Nothing</h1><figure class="plate"><img src="art/_print/plate-04.jpg" alt=""></figure>
 <p>Nix counted cups, because counting was the whole of the work and most of
 the staying alive. Eleven cups on the board that morning: four chipped,
 two mended with wire, one true silver with a swan on it that Gnarl called
@@ -1353,7 +1469,7 @@ open, men of Roothollow had hung chains across them, and the chains
 had a price on.</p>
 <p>Nix had been climbing all his life in one collar or another. He knew
 before anyone said it that the next floor would want paying.</p></section>
-<section class="chapter"><h1>Chapter 5 — The Ledger of Gates</h1><figure class="plate"><img src="art/_print/plate-05.jpg" alt=""></figure>
+<section class="chapter" id="ch-05-ledger-of-gates"><h1>Chapter 5 — The Ledger of Gates</h1><figure class="plate"><img src="art/_print/plate-05.jpg" alt=""></figure>
 <p>Rhovan of the Grey Rides told the truth for a living, in fractions, and
 he had learned the trade in rooms like this one: a hall too large for
 its lamps, full of paper that remembered more than the people did.</p>
@@ -1609,7 +1725,7 @@ the lifts, alone, with documents she would not be parted from and a
 question she asked by name. In his trade that shape had a meaning. In
 his trade, that shape was a confession, walking uphill to be heard.</p>
 <p>He was, for once in his fractional life, entirely right.</p></section>
-<section class="chapter"><h1>Chapter 6 — The Adit</h1><figure class="plate"><img src="art/_print/plate-06.jpg" alt=""></figure>
+<section class="chapter" id="ch-06-the-adit"><h1>Chapter 6 — The Adit</h1><figure class="plate"><img src="art/_print/plate-06.jpg" alt=""></figure>
 <p>While she waited for the captain, Vega Coalbrow mended the bearing.</p>
 <p>It was the great flywheel&rsquo;s outboard bearing, and it had been running
 dry and half a hair out of true for longer than the machinists of
@@ -1840,7 +1956,7 @@ watched the muster begin behind her eyes — three companies, and the
 mine-dark, and twenty years of names — before a word of it was spoken
 aloud.</p>
 <p>&ldquo;Then sleep,&rdquo; the captain said. &ldquo;We open the mountain tomorrow.&rdquo;</p></section>
-<section class="chapter"><h1>Chapter 7 — The Red Warcamp</h1><figure class="plate"><img src="art/_print/plate-07.jpg" alt=""></figure>
+<section class="chapter" id="ch-07-red-warcamp"><h1>Chapter 7 — The Red Warcamp</h1><figure class="plate"><img src="art/_print/plate-07.jpg" alt=""></figure>
 <p>Ede Stonhal had cut thirty names into the Stone of the Climb with her
 own hand, in the winter she stopped drinking, one name a night because
 her wrist would not stay true for more. Five years she had lived below a
@@ -2183,7 +2299,7 @@ tower was built to prevent, rising through the smoke of the Red
 Warcamp like heat off a forge that would not now go out.</p>
 <p>Shieldwall lived. The rest was owed, and morning would come
 collecting.</p></section>
-<section class="chapter"><h1>Chapter 8 — What the Freed Forgive</h1><figure class="plate"><img src="art/_print/plate-08.jpg" alt=""></figure>
+<section class="chapter" id="ch-08-what-the-freed-forgive"><h1>Chapter 8 — What the Freed Forgive</h1><figure class="plate"><img src="art/_print/plate-08.jpg" alt=""></figure>
 <p>The drums had been silent a day and a night, and Ede had not yet learned
 how to hear the quiet.</p>
 <p>The Red Warcamp had been a mine before Skarn pitched his war in it, and
@@ -2419,7 +2535,7 @@ people&rsquo;s cages. Somewhere below, in the streets of home, walked a man who
 smelled of sweet dark bread, counting his money.</p>
 <p>Ede put her hand to the lift-gate, and the freed came up behind her, and
 they climbed.</p></section>
-<section class="chapter"><h1>Chapter 9 — The Tale of the First Banner</h1><figure class="plate"><img src="art/_print/plate-08a.jpg" alt=""></figure>
+<section class="chapter" id="ch-08a-first-banner"><h1>Chapter 9 — The Tale of the First Banner</h1><figure class="plate"><img src="art/_print/plate-08a.jpg" alt=""></figure>
 <p>Three days up from the cages, the freed were learning fires again.</p>
 <p>The Burnt Common ran black to every horizon — standing char and
 gorse-skeleton and bracken stopped forever at knee-high, mile on mile
@@ -2681,7 +2797,7 @@ waller&rsquo;s cold hands had left it an age ago, the only star on that
 whole floor.</p>
 <p>Hold till the star, Ede thought, and went to sleep a general, and
 dreamed, for the first time in five years, of nothing at all.</p></section>
-<section class="interlude"><h1>From Malgrim's Ledger</h1>
+<section class="interlude" id="ch-08x-interlude-1"><h1>From Malgrim's Ledger</h1>
 <p>Item: the Warcamp is spent. Write off the garrison, the drums, and the
 Warlord entire. Skarn priced his collar as a rank and defended it as one;
 this was always the flaw in him, and I enter it here so the flaw is not
@@ -2715,8 +2831,8 @@ Nothing that cannot bear her checking, for she will check. A hope led is a
 hope steered; it is the hauling of it that keeps her ours. And see to it
 you grieve well when the trail warms. You have always grieved beautifully.
 It is why I collared you.</p></section>
-<section class="partpage"><p class="partnum">PART II</p><h1>THE BANNER WAR</h1><p class="partsub">floors 21–40</p></section>
-<section class="chapter"><h1>Chapter 10 — The Quiet</h1><figure class="plate"><img src="art/_print/plate-09.jpg" alt=""></figure>
+<section class="partpage" id="part-9"><p class="partnum">PART II</p><h1>THE BANNER WAR</h1><p class="partsub">floors 21–40</p></section>
+<section class="chapter" id="ch-09-the-quiet"><h1>Chapter 10 — The Quiet</h1><figure class="plate"><img src="art/_print/plate-09.jpg" alt=""></figure>
 <p>They learned the shape of winning on the Burnt Common, and it fit them so
 well it should have frightened her sooner.</p>
 <p>Floor twenty-one was a heath the fire had taken the same season the tower
@@ -2976,7 +3092,7 @@ Commons, the silk-quiet Broodwarrens sleeping on their yielded word.</p>
 held by somebody, and the Cullers held things well. Later — all the rest
 of her life — she would remember that she felt nothing, and count it the
 most expensive nothing she ever felt.</p></section>
-<section class="chapter"><h1>Chapter 11 — Hale's Lesson</h1><figure class="plate"><img src="art/_print/plate-10.jpg" alt=""></figure>
+<section class="chapter" id="ch-10-hales-lesson"><h1>Chapter 11 — Hale's Lesson</h1><figure class="plate"><img src="art/_print/plate-10.jpg" alt=""></figure>
 <p>Nix kept his counts on a tally-stick of bog-oak, because paper burned and
 goblins forgot nothing but were believed about everything less than
 sticks.</p>
@@ -3193,7 +3309,7 @@ arithmetic, into three armies&rsquo; worth of quarrel over one gate.</p>
 and cut a fresh mark of his own invention: a warning-notch, first of its
 kind, for a debt still running.</p>
 <p>Above them, the crows were already gathering over the barrows.</p></section>
-<section class="chapter"><h1>Chapter 12 — The Banner War</h1><figure class="plate"><img src="art/_print/plate-11.jpg" alt=""></figure>
+<section class="chapter" id="ch-11-banner-war"><h1>Chapter 12 — The Banner War</h1><figure class="plate"><img src="art/_print/plate-11.jpg" alt=""></figure>
 <p>Rhovan reached the Tithe Barrows two days ahead of everyone&rsquo;s better
 nature, and spent them the way he spent most days: on a height, in the
 grey, counting other people&rsquo;s fires.</p>
@@ -3459,7 +3575,7 @@ the old forms.&rdquo; He had said the rest very quietly, like a man handing
 over a key. &ldquo;You can&rsquo;t out-fight the forms. But they&rsquo;re <em>forms</em>. They can
 be kept better than he keeps them. Bring your dead&rsquo;s names up that stair
 with you, Captain. All of them. You&rsquo;re going to need every one.&rdquo;</p></section>
-<section class="chapter"><h1>Chapter 13 — The Out-Mourned King</h1><figure class="plate"><img src="art/_print/plate-12.jpg" alt=""></figure>
+<section class="chapter" id="ch-12-out-mourned-king"><h1>Chapter 13 — The Out-Mourned King</h1><figure class="plate"><img src="art/_print/plate-12.jpg" alt=""></figure>
 <p>The third assault died on the causeway like the first two, and Ede called
 it back before the moat could keep any more of her people.</p>
 <p>They came off the stones in good order, shields up, dragging their hurt,
@@ -3698,7 +3814,7 @@ mention: a throne of silk, and a queen who did not kill what she caught.</p>
 <p>She kept what she kept, they said. And she liked to <em>talk terms</em>.</p>
 <p>&ldquo;Then we&rsquo;d best learn what our grief is worth at market,&rdquo; Ede said, and
 stepped onto the stair, and went up.</p></section>
-<section class="chapter"><h1>Chapter 14 — The Toll-Burning</h1><figure class="plate"><img src="art/_print/plate-12a.jpg" alt=""></figure>
+<section class="chapter" id="ch-12a-toll-burning"><h1>Chapter 14 — The Toll-Burning</h1><figure class="plate"><img src="art/_print/plate-12a.jpg" alt=""></figure>
 <p>A host of three thousand does not climb a stair. It queues for one.</p>
 <p>Two days after the Kingsbarrow folded itself shut, the rising was
 still filing up through the lych-face lift by fifties, wagons broken
@@ -3968,7 +4084,7 @@ audit.</p>
 a country-wide sky, and above, at the head of the grey bridleways,
 the wagons were already rolling under new paper. Rhovan sanded the
 page, and pocketed the fraction, and climbed.</p></section>
-<section class="chapter"><h1>Chapter 15 — Silk Terms</h1><figure class="plate"><img src="art/_print/plate-13.jpg" alt=""></figure>
+<section class="chapter" id="ch-13-silk-terms"><h1>Chapter 15 — Silk Terms</h1><figure class="plate"><img src="art/_print/plate-13.jpg" alt=""></figure>
 <p><em>The rising makes good pace,</em> Rhovan wrote. <em>Nine floors in a season. The
 host is fed and its factions hold.</em></p>
 <p>He did not write: the host walked the Grey Rides behind a fourscore-year
@@ -4238,7 +4354,7 @@ alone in the Broodthrone with the Matriarch and her kept court and a
 season of nights to be got through one at a time.</p>
 <p>Silk sang, far up in the dark, as something vast and patient descended.</p>
 <p>&ldquo;Now, hostage,&rdquo; said Vyx, warmly, clause by clause, &ldquo;we keep house.&rdquo;</p></section>
-<section class="chapter"><h1>Chapter 16 — The Hostage Chapter</h1><figure class="plate"><img src="art/_print/plate-14.jpg" alt=""></figure>
+<section class="chapter" id="ch-14-hostage"><h1>Chapter 16 — The Hostage Chapter</h1><figure class="plate"><img src="art/_print/plate-14.jpg" alt=""></figure>
 <p>There was no day in the Broodthrone, and no night, and after the first
 stretch Rhovan stopped pretending to count either. The vault kept its
 own time. The cocoon-lanterns brightened and dimmed together on some
@@ -4470,7 +4586,7 @@ three times.</p>
 <p>Rhovan of the Grey Rides looked up the tier, toward the chasm-mouth
 camps and the wintering army and the friend he had to reach before his
 handler did, and began, at last, to climb faster.</p></section>
-<section class="chapter"><h1>Chapter 17 — Calyne</h1><figure class="plate"><img src="art/_print/plate-15.jpg" alt=""></figure>
+<section class="chapter" id="ch-15-calyne"><h1>Chapter 17 — Calyne</h1><figure class="plate"><img src="art/_print/plate-15.jpg" alt=""></figure>
 <p>The word came up with the ride-keepers, the way all word came up now:
 a grey rider on the Grey Rides, climbing alone.</p>
 <p>Ede was at the chasm-mouth camps when the report reached her, standing
@@ -4691,7 +4807,7 @@ took her breath and made it a standard over the fire. &ldquo;Come the
 wintering, we find out how big a world we&rsquo;ve stolen back.&rdquo;</p>
 <p>Across the fire, without looking up, Mistress Calyne turned to a fresh
 page.</p></section>
-<section class="chapter"><h1>Chapter 18 — The Molt</h1><figure class="plate"><img src="art/_print/plate-16.jpg" alt=""></figure>
+<section class="chapter" id="ch-16-the-molt"><h1>Chapter 18 — The Molt</h1><figure class="plate"><img src="art/_print/plate-16.jpg" alt=""></figure>
 <p>The fortieth floor fell without an arrow loosed, and Nix counted the
 arrows anyway. None. Naught. Not one. It was his favorite count of the
 whole war, and he said it three ways to make it last. But a count is
@@ -4921,7 +5037,7 @@ boots on frozen gravel, and the sound they made on the moraine was not
 the sound of a company on the march. It was the sound of a nation
 moving. Six floors above, at the top of the cold, a frozen sea lay
 waiting to measure the size of the word.</p></section>
-<section class="interlude"><h1>From Malgrim's Ledger</h1>
+<section class="interlude" id="ch-16x-interlude-2"><h1>From Malgrim's Ledger</h1>
 <p>Item: the Kingsbarrow account is closed at a loss. The drowned king was
 not carried by steel; he was carried by grief given precedence. They
 stood at his moat and named their dead until his court conceded the
@@ -4958,8 +5074,8 @@ wept for relief. I remember the feeling. I chose against it once, and
 every year since, the choosing has come easier. Let the record show the
 collar is not heavy. What is heavy is choosing, and the collar ends the
 choosing. In this one respect I envy nobody climbing.</p></section>
-<section class="partpage"><p class="partnum">PART III</p><h1>THE GATHERING</h1><p class="partsub">floors 41–60</p></section>
-<section class="chapter"><h1>Chapter 19 — The Frozen Sea</h1><figure class="plate"><img src="art/_print/plate-17.jpg" alt=""></figure>
+<section class="partpage" id="part-17"><p class="partnum">PART III</p><h1>THE GATHERING</h1><p class="partsub">floors 41–60</p></section>
+<section class="chapter" id="ch-17-frozen-sea"><h1>Chapter 19 — The Frozen Sea</h1><figure class="plate"><img src="art/_print/plate-17.jpg" alt=""></figure>
 <p>Vega Coalbrow learned to forge without fire on the forty-first floor,
 and it humbled her the way only a new craft can humble an old master.</p>
 <p>The Moraine Gates were a country of gravel — ridge upon ridge of it,
@@ -5207,7 +5323,7 @@ show you.&rdquo;</p>
 unlocking, patient, enormous, indifferent — and ahead, past floors of
 moor and meadow and frozen forest, something older than the tower was
 waiting in a ring of fire for whichever of them the mathematics spared.</p></section>
-<section class="chapter"><h1>Chapter 20 — Brother and Sister</h1><figure class="plate"><img src="art/_print/plate-18.jpg" alt=""></figure>
+<section class="chapter" id="ch-18-brother-and-sister"><h1>Chapter 20 — Brother and Sister</h1><figure class="plate"><img src="art/_print/plate-18.jpg" alt=""></figure>
 <p>The survey came to the forge-barge in a strongbox with two locks, and
 Ulfar wore both keys on a chain around his neck, under the shirt, the
 way other men carry a saint.</p>
@@ -5431,7 +5547,7 @@ over. It had merely banked itself, the way a Coalbrow fire does — coals
 under ash, patient, holding its heat for a floor neither of them had
 seen yet, high in the Made, where a lever waits by a light that has no
 color, and every mathematics comes at last to its price.</p></section>
-<section class="chapter"><h1>Chapter 21 — The Wyrm's Pity</h1><figure class="plate"><img src="art/_print/plate-19.jpg" alt=""></figure>
+<section class="chapter" id="ch-19-wyrms-pity"><h1>Chapter 21 — The Wyrm's Pity</h1><figure class="plate"><img src="art/_print/plate-19.jpg" alt=""></figure>
 <p>The ash began two floors below the fire. It greyed the frozen boughs
 of the Rime Forest; it lay on the Black Meadows like a mourning-cloth;
 by the Doorstone Moor it was falling steadily, warm as a lie, and the
@@ -5689,7 +5805,7 @@ sixteen thousand boots, and it was one word long.</p>
 was already walking heel-to-toe along a rope his kobolds had
 stretched between two spears, arms wide, tongue between his teeth,
 counting his steps out loud. Practicing.</p></section>
-<section class="chapter"><h1>Chapter 22 — What Roothollow Sends</h1><figure class="plate"><img src="art/_print/plate-19a.jpg" alt=""></figure>
+<section class="chapter" id="ch-19a-what-roothollow-sends"><h1>Chapter 22 — What Roothollow Sends</h1><figure class="plate"><img src="art/_print/plate-19a.jpg" alt=""></figure>
 <p>The rising ate eleven thousand loaves a day. Nix knew the number because
 he had asked, and he had asked because the number was getting harder to
 find in the wagons: nine thousand mouths, giants counted double, the new
@@ -5944,7 +6060,7 @@ nothing lost, nobody dead, <em>yet</em> retired from the sentence entirely.</p>
 it did not come out that way, so he let it stand. &ldquo;All of it. Now feed
 me, general. There&rsquo;s a city of bridges up ahead wanting walking, and I
 mean to count every one of them twice.&rdquo;</p></section>
-<section class="chapter"><h1>Chapter 23 — The Long Stair</h1><figure class="plate"><img src="art/_print/plate-20.jpg" alt=""></figure>
+<section class="chapter" id="ch-20-long-stair"><h1>Chapter 23 — The Long Stair</h1><figure class="plate"><img src="art/_print/plate-20.jpg" alt=""></figure>
 <p>There were one hundred and eleven bridges in the Hanging City, or one
 hundred and nine if you did not count the two that were only a single rope
 with ideas above its station, and Nix had walked every one of them twice
@@ -6181,7 +6297,7 @@ held a thing still enough to see what it really was.</p>
 <p>&ldquo;Well,&rdquo; he said quietly, to the standard on his back, to the cord, to
 nobody. &ldquo;Either it&rsquo;s supper, or it&rsquo;s us.&rdquo;</p>
 <p>It was both. But that is the next part of the story.</p></section>
-<section class="chapter"><h1>Chapter 24 — The Frosthall Parliament</h1><figure class="plate"><img src="art/_print/plate-21.jpg" alt=""></figure>
+<section class="chapter" id="ch-21-frosthall-parliament"><h1>Chapter 24 — The Frosthall Parliament</h1><figure class="plate"><img src="art/_print/plate-21.jpg" alt=""></figure>
 <p>The hall-steward of Hearthold kept her songs the way other keepers had
 kept weirs and lamps and lid-maps: hidden, mended, and ready. Her name
 was Bruna, and she met Ede in the Frozen Yard at dusk, among frost-birch
@@ -6440,7 +6556,7 @@ would sit down that night among friends.</p>
 <p>&ldquo;Leave the doors open,&rdquo; the jarl told his stewards, weeping,
 happy, his open hand come home. &ldquo;All of them. Let the light out.
 Let anyone come in.&rdquo;</p></section>
-<section class="chapter"><h1>Chapter 25 — The Wintering</h1><figure class="plate"><img src="art/_print/plate-21a.jpg" alt=""></figure>
+<section class="chapter" id="ch-21a-the-wintering"><h1>Chapter 25 — The Wintering</h1><figure class="plate"><img src="art/_print/plate-21a.jpg" alt=""></figure>
 <p>The Frosthall&rsquo;s own smithy had stood cold for eleven years, because a
 feast that never ends has no use for a forge, and Vega Coalbrow spent
 her first free morning on the sixtieth floor bringing it back.</p>
@@ -6671,7 +6787,7 @@ the hall stood open on the winter, all its lamps lit, all its doors
 wide, warm gold clean out to the frost-birches — a hearth the size of
 a country, banked and breathing, keeping its heat for everyone the
 world could send.</p></section>
-<section class="chapter"><h1>Chapter 26 — The Feast</h1><figure class="plate"><img src="art/_print/plate-22.jpg" alt=""></figure>
+<section class="chapter" id="ch-22-the-feast"><h1>Chapter 26 — The Feast</h1><figure class="plate"><img src="art/_print/plate-22.jpg" alt=""></figure>
 <p>On the morning of the feast of the charter, Mistress Calyne came to Ede
 in the Undercroft, among the casks, where the general had gone to be
 alone with the lists and had brought, out of old habit, a lamp and no
@@ -7001,7 +7117,7 @@ a long time.</p>
 <p><em>You are still wearing his blood,</em> Sliver said quietly, against
 her palm. <em>The baker&rsquo;s. You should sleep, Ede.</em></p>
 <p>&ldquo;After the names,&rdquo; she said. &ldquo;Bring me ink.&rdquo;</p></section>
-<section class="chapter"><h1>Chapter 27 — The Reckoning of Names</h1><figure class="plate"><img src="art/_print/plate-23.jpg" alt=""></figure>
+<section class="chapter" id="ch-23-reckoning-of-names"><h1>Chapter 27 — The Reckoning of Names</h1><figure class="plate"><img src="art/_print/plate-23.jpg" alt=""></figure>
 <p>Rhovan of the Grey Rides had spent a long life sorting what people said
 from what was so, and he had learned that the second thing lives in
 small rooms. Proclamations are for halls. Truth keeps to pantries,
@@ -7227,7 +7343,7 @@ even themselves with fractions, but there it was, whole,
 and he let himself keep it: up there, at least, on a road
 one link wide, everybody&rsquo;s hands would be where he could
 see them.</p></section>
-<section class="interlude"><h1>From Malgrim's Ledger</h1>
+<section class="interlude" id="ch-23x-interlude-3"><h1>From Malgrim's Ledger</h1>
 <p>Item: the feast bill comes due and is worth it. Forty servers and
 twelve bows, spent to the last man, as was always the design — a
 willing collar that comes home is a story, and stories are the one
@@ -7269,8 +7385,8 @@ asked for on the night he knelt. To be necessary. He is. No man in
 the tower is more necessary than our friend, and no man will be,
 until the day the account closes.</p>
 <p>Item: they climb for the chains. Advise the sky.</p></section>
-<section class="partpage"><p class="partnum">PART IV</p><h1>THE SCATTERED SKY</h1><p class="partsub">floors 61–80</p></section>
-<section class="chapter"><h1>Chapter 28 — The Anchor Chains</h1><figure class="plate"><img src="art/_print/plate-24.jpg" alt=""></figure>
+<section class="partpage" id="part-24"><p class="partnum">PART IV</p><h1>THE SCATTERED SKY</h1><p class="partsub">floors 61–80</p></section>
+<section class="chapter" id="ch-24-anchor-chains"><h1>Chapter 28 — The Anchor Chains</h1><figure class="plate"><img src="art/_print/plate-24.jpg" alt=""></figure>
 <p>Chain was Vega Coalbrow&rsquo;s first trade, and she had never feared it
 until she walked upon one above the clouds.</p>
 <p>The first link was longer than a mead-hall. It hung in a shallow arc
@@ -7533,7 +7649,7 @@ like weather with a will.</p>
 rail, feeling the woken cell hum under the deck like a sound chain.</p>
 <p>She wondered, watching the lightning stitch the queen&rsquo;s walls, what
 it would cost to mend a storm — and whose price it would be.</p></section>
-<section class="chapter"><h1>Chapter 29 — The Storm Queen's Price</h1><figure class="plate"><img src="art/_print/plate-25.jpg" alt=""></figure>
+<section class="chapter" id="ch-25-storm-queens-price"><h1>Chapter 29 — The Storm Queen's Price</h1><figure class="plate"><img src="art/_print/plate-25.jpg" alt=""></figure>
 <p>The wind hit Ede before the floor did.</p>
 <p>The stair-lift opened onto a crag and a scream — not a voice, the air
 itself, tearing past the arch so hard it pulled the breath out of her
@@ -7799,7 +7915,7 @@ them back.&rdquo;</p>
 cannot be done.</em></p>
 <p>&ldquo;Every name on the roll,&rdquo; said Ede Stonhal, and walked into the
 wind. The gathering had begun.</p></section>
-<section class="chapter"><h1>Chapter 30 — Gathering the Blown</h1><figure class="plate"><img src="art/_print/plate-26.jpg" alt=""></figure>
+<section class="chapter" id="ch-26-gathering-the-blown"><h1>Chapter 30 — Gathering the Blown</h1><figure class="plate"><img src="art/_print/plate-26.jpg" alt=""></figure>
 <p>Rhovan had made his living finding things that did not want to be
 found. He had never hated the work until the things were his own.</p>
 <p>The queen&rsquo;s gales had sown the third part of the rising across seven
@@ -7995,7 +8111,7 @@ before trusting an army to it.</p>
 of everything they loved. It seemed, at the time, merely sensible.</p>
 <p>The wood above was already watching the gap between the shepherds
 and the flock.</p></section>
-<section class="chapter"><h1>Chapter 31 — The Bottled Court</h1><figure class="plate"><img src="art/_print/plate-26a.jpg" alt=""></figure>
+<section class="chapter" id="ch-26a-bottled-court"><h1>Chapter 31 — The Bottled Court</h1><figure class="plate"><img src="art/_print/plate-26a.jpg" alt=""></figure>
 <p>The wind&rsquo;s arithmetic came out wrong on the ninth evening of the
 gathering, and it was Rhovan who caught the error, because catching
 what the world tried to keep was the whole of his use now that his
@@ -8252,7 +8368,7 @@ empty behind a broken door, a stone desk kept its last entry, pen
 laid down mid-line, in a fair clerk&rsquo;s hand, in the ledger of
 eighty years of <em>no change</em>:</p>
 <p>change.</p></section>
-<section class="chapter"><h1>Chapter 32 — The Eye</h1><figure class="plate"><img src="art/_print/plate-27.jpg" alt=""></figure>
+<section class="chapter" id="ch-27-the-eye"><h1>Chapter 32 — The Eye</h1><figure class="plate"><img src="art/_print/plate-27.jpg" alt=""></figure>
 <p>Nix heard the silence before he saw it, which he would have told you
 was impossible, wrong, and exactly what happened.</p>
 <p>For three floors the world had been roar — wind like a mill, wind
@@ -8501,7 +8617,7 @@ too small for the size of the count:</p>
 <p>&ldquo;Four. It counted us, and it&rsquo;s <em>polite</em>. Wake the general.&rdquo;</p>
 <p>Above the eye, in the wood beyond the wall, the hunt was already
 moving.</p></section>
-<section class="chapter"><h1>Chapter 33 — The Coursing</h1><figure class="plate"><img src="art/_print/plate-28.jpg" alt=""></figure>
+<section class="chapter" id="ch-28-the-coursing"><h1>Chapter 33 — The Coursing</h1><figure class="plate"><img src="art/_print/plate-28.jpg" alt=""></figure>
 <p>The horns took them at moonset, on the third night in the eye.</p>
 <p>Ede had gone forward with three because a general who sends scouts to a
 Warden&rsquo;s door has stopped being worth following. That was what she told the
@@ -8778,7 +8894,7 @@ up there past the trees, hung with a thousand years of trophies, where
 whatever a hunt-lord&rsquo;s word was worth would now be tested against the lives
 of everyone she had ever led.</p>
 <p>Ede spat the taste of foxglove into the run-grass, and followed him up.</p></section>
-<section class="chapter"><h1>Chapter 34 — The Pale Court</h1><figure class="plate"><img src="art/_print/plate-29.jpg" alt=""></figure>
+<section class="chapter" id="ch-29-pale-court"><h1>Chapter 34 — The Pale Court</h1><figure class="plate"><img src="art/_print/plate-29.jpg" alt=""></figure>
 <p>The pale court leached the color out of things, and it did it slowly
 enough that you could watch it happen.</p>
 <p>Ede noticed it first on Nix, whose green went grey at the edges as they
@@ -9009,7 +9125,7 @@ allowed in eighty years, bought by four walkers and a boon — and Ede
 Stonhal washed her face in cold water, and hung her grief where the court
 hung its trophies, face-out, and went down to muster her army beside the
 man who had sold the last one.</p></section>
-<section class="chapter"><h1>Chapter 35 — What Ede Carries</h1><figure class="plate"><img src="art/_print/plate-30.jpg" alt=""></figure>
+<section class="chapter" id="ch-30-what-ede-carries"><h1>Chapter 35 — What Ede Carries</h1><figure class="plate"><img src="art/_print/plate-30.jpg" alt=""></figure>
 <p>The trains came in on the fourth day of the truce, and Berrin came with
 them, because Berrin never missed a muster.</p>
 <p>Ede watched the wagons roll up the opened beaters&rsquo; ways with pale hounds
@@ -9172,7 +9288,7 @@ set down before the ninetieth floor.</p>
 under them her army — and the Hunt still to break, the last horn still to
 sound, the stair to the Made still shut behind a welded crown. She stood,
 and banked the fire, and went down to break it.</p></section>
-<section class="chapter"><h1>Chapter 36 — Breaking the Hunt</h1><figure class="plate"><img src="art/_print/plate-31.jpg" alt=""></figure>
+<section class="chapter" id="ch-31-breaking-the-hunt"><h1>Chapter 36 — Breaking the Hunt</h1><figure class="plate"><img src="art/_print/plate-31.jpg" alt=""></figure>
 <p>Rhovan had been born under the Huntsman&rsquo;s law and had spent a long
 lifetime getting out from under it, and now he knelt in the Pale Kennels
 learning it back by lamplight, because the law was the only weapon on this
@@ -9383,7 +9499,7 @@ his fire before a long day&rsquo;s work.</p>
 <p>The tower had stopped losing things it had stolen. What it owned, it
 would spend. Rhovan went down to the fires and began, quietly, to count
 arrows.</p></section>
-<section class="chapter"><h1>Chapter 37 — The Wake's Price</h1><figure class="plate"><img src="art/_print/plate-31a.jpg" alt=""></figure>
+<section class="chapter" id="ch-31a-wakes-price"><h1>Chapter 37 — The Wake's Price</h1><figure class="plate"><img src="art/_print/plate-31a.jpg" alt=""></figure>
 <p>The grain stopped moving on the second day of the muster, and it took
 another day for the reason to climb the gate roads, and when it came
 it came addressed, in part, to a man with no name.</p>
@@ -9649,7 +9765,7 @@ standing, all of it, no fractions; and the last wagons of the
 relieved queue were still coming up through the gates behind the
 army three mornings later, when the rising touched the first
 rampart of the Made, and the war for the tower&rsquo;s own country began.</p></section>
-<section class="interlude"><h1>From Malgrim's Ledger</h1>
+<section class="interlude" id="ch-31x-interlude-4"><h1>From Malgrim's Ledger</h1>
 <p>Item: the Pale Court has fallen. Say rather: has been given away. The
 Huntsman kept better books than the Queen — every course entered, every
 quarry weighed, a thousand years in fair hand — and it availed him
@@ -9688,8 +9804,8 @@ I collared him for exactly this quality. On quiet evenings I confess it
 unsettles even me.</p>
 <p>Item: the siege begins when they touch the first rampart. Open a new
 page. Head it: expenditures.</p></section>
-<section class="partpage"><p class="partnum">PART V</p><h1>THE MADE</h1><p class="partsub">floors 81–100 · and the descent</p></section>
-<section class="chapter"><h1>Chapter 38 — The Siege of the Outworks</h1><figure class="plate"><img src="art/_print/plate-32.jpg" alt=""></figure>
+<section class="partpage" id="part-32"><p class="partnum">PART V</p><h1>THE MADE</h1><p class="partsub">floors 81–100 · and the descent</p></section>
+<section class="chapter" id="ch-32-siege-of-outworks"><h1>Chapter 38 — The Siege of the Outworks</h1><figure class="plate"><img src="art/_print/plate-32.jpg" alt=""></figure>
 <p>Nix counted the squad in the dark, because the dark was where counting
 mattered most.</p>
 <p>&ldquo;Eleven,&rdquo; he said. &ldquo;Eleven, and the eleventh is asleep. Mag. Mag, you
@@ -9950,7 +10066,7 @@ way a man names a disease.</p>
 what the cages below were feeding, all these years.&rdquo;</p>
 <p>Nix stood a long time looking up at the welded seam, and did not count
 anything, and could not think of one funny thing to say.</p></section>
-<section class="chapter"><h1>Chapter 39 — The Welded</h1><figure class="plate"><img src="art/_print/plate-33.jpg" alt=""></figure>
+<section class="chapter" id="ch-33-the-welded"><h1>Chapter 39 — The Welded</h1><figure class="plate"><img src="art/_print/plate-33.jpg" alt=""></figure>
 <p>The seam split at dawn, if the Made had dawns, and Ede Stonhal led the
 rising into the Welding Halls, and after that nobody spoke above a
 murmur for a day and a night, and it was not an order. No order was
@@ -10182,7 +10298,7 @@ away, a quartermaster who smelled of warm bread was tallying loaves for
 an army he had been selling for twenty years, item by item, to the
 patient man behind the drums.</p>
 <p>The rising would come to him presently. It was growing as it climbed.</p></section>
-<section class="chapter"><h1>Chapter 40 — The Vizier's Floor</h1><figure class="plate"><img src="art/_print/plate-34.jpg" alt=""></figure>
+<section class="chapter" id="ch-34-viziers-floor"><h1>Chapter 40 — The Vizier's Floor</h1><figure class="plate"><img src="art/_print/plate-34.jpg" alt=""></figure>
 <p>Five floors lay between the dead welding-rigs and the Herald&rsquo;s Gate, and
 the rising took them in nineteen days, and Rhovan of the Grey Rides —
 lately of nowhere, his Wake-token half a year broken over his own knee —
@@ -10442,7 +10558,7 @@ nowhere, the first breath of a distant unseasonable storm, and beyond
 the wall the muster-drums beat men into soldiers, on and on, as they had
 beaten for an age, and had, though no drummer knew it, one morning left
 to beat.</p></section>
-<section class="chapter"><h1>Chapter 41 — The Battle of the Herald's Gate</h1><figure class="plate"><img src="art/_print/plate-35.jpg" alt=""></figure>
+<section class="chapter" id="ch-35-heralds-gate"><h1>Chapter 41 — The Battle of the Herald's Gate</h1><figure class="plate"><img src="art/_print/plate-35.jpg" alt=""></figure>
 <p>Vega Coalbrow had built many things in a long life, and broken more, and
 she stood in the dark before the battle with her hand flat on the flank
 of the last thing she would ever need to build, and finished her
@@ -10818,7 +10934,7 @@ seam by seam, everything it had been before it was melted, which was
 the tower&rsquo;s story too, and the world&rsquo;s, and would be the morning&rsquo;s
 work, and the next floor&rsquo;s, until the whole stolen country of the sky
 was rung back down to earth.</p></section>
-<section class="chapter"><h1>Chapter 42 — Malgrim</h1><figure class="plate"><img src="art/_print/plate-36.jpg" alt=""></figure>
+<section class="chapter" id="ch-36-malgrim"><h1>Chapter 42 — Malgrim</h1><figure class="plate"><img src="art/_print/plate-36.jpg" alt=""></figure>
 <p>The muster-drums of the ninetieth floor had beaten since the floor was
 poured, the captives said, and no one living had ever heard them stop.
 They stopped an hour before dawn, when the last drummer imp was freed
@@ -11107,7 +11223,7 @@ themselves.</em></p>
 <p>Ede looked at the small door in the great broken gate, and the dark
 going up.</p>
 <p>&ldquo;Then it can meet me,&rdquo; she said. &ldquo;I&rsquo;ve been wanting a word.&rdquo;</p></section>
-<section class="chapter"><h1>Chapter 43 — The Obsidian Stair</h1><figure class="plate"><img src="art/_print/plate-37.jpg" alt=""></figure>
+<section class="chapter" id="ch-37-obsidian-stair"><h1>Chapter 43 — The Obsidian Stair</h1><figure class="plate"><img src="art/_print/plate-37.jpg" alt=""></figure>
 <p>The stair was cut from a single sweep of black volcanic glass, and it was
 the only light on the ninety-first floor: a cold gleam going up into dark,
 polished by captive hands to a perfect mirror, so that every climber went
@@ -11357,7 +11473,7 @@ in the tower was fed from, one floor above.</p>
 <p>&ldquo;Then it&rsquo;s Vega&rsquo;s floor,&rdquo; Ede said, and looked at her armorer, who was
 looking up the shaft with her mother&rsquo;s hammer still in her hand, and her
 brother&rsquo;s mathematics ahead of her in the dark.</p></section>
-<section class="chapter"><h1>Chapter 44 — Scram</h1><figure class="plate"><img src="art/_print/plate-38.jpg" alt=""></figure>
+<section class="chapter" id="ch-38-scram"><h1>Chapter 44 — Scram</h1><figure class="plate"><img src="art/_print/plate-38.jpg" alt=""></figure>
 <p>Vega Coalbrow knew the ninety-third floor for what it was before the
 lift-gate finished opening: not a forge. Forges have color. The light
 that came through the gate-seams was colorless — not white, not pale,
@@ -11609,7 +11725,7 @@ before she was his. Some company&rsquo;s, in the young world.&rdquo;</p>
 <p>Ede went very still. Behind her, on its pole, in the dead heart of the
 quiet tower, the Shieldwall banner stirred — though there was, of
 course, in that deep place, no wind at all.</p></section>
-<section class="chapter"><h1>Chapter 45 — The Stolen Years</h1><figure class="plate"><img src="art/_print/plate-38a.jpg" alt=""></figure>
+<section class="chapter" id="ch-38a-stolen-years"><h1>Chapter 45 — The Stolen Years</h1><figure class="plate"><img src="art/_print/plate-38a.jpg" alt=""></figure>
 <p>The stair out of the reactor country climbed for half a day and came out
 nowhere.</p>
 <p>Ede had the tower&rsquo;s grammar by heart now, the way you learn a language
@@ -11851,7 +11967,7 @@ last of anything.</p>
 <p>Then she climbed toward the doors of the man who owned all of it and
 had never once come to see, and the rising came up the stair behind
 her, quiet as snow.</p></section>
-<section class="chapter"><h1>Chapter 46 — The Last Door</h1><figure class="plate"><img src="art/_print/plate-39.jpg" alt=""></figure>
+<section class="chapter" id="ch-39-last-door"><h1>Chapter 46 — The Last Door</h1><figure class="plate"><img src="art/_print/plate-39.jpg" alt=""></figure>
 <p>They took the antechambers in two days of walking and one blow.</p>
 <p>Ede had feared the ninety-fourth floor the way she had learned to fear all
 the Made&rsquo;s quiet, and it was quiet: a honeycomb of waiting-rooms running
@@ -12105,7 +12221,7 @@ Last Door stood on darkness and a rising stair. Somewhere at the top of it
 a man who had never once been made to wait was waiting.</p>
 <p>The oldest soldier in the world fell in beside Ede Stonhal, and the host
 came on.</p></section>
-<section class="chapter"><h1>Chapter 47 — The Throne</h1><figure class="plate"><img src="art/_print/plate-40.jpg" alt=""></figure>
+<section class="chapter" id="ch-40-the-throne"><h1>Chapter 47 — The Throne</h1><figure class="plate"><img src="art/_print/plate-40.jpg" alt=""></figure>
 <p>There was no hundredth floor. There was a summit.</p>
 <p>Ede came up the last stair of the world expecting a gate, a wall, a
 warden, one more of the Made&rsquo;s patient horrors — and walked instead out
@@ -12418,7 +12534,7 @@ beginning, in forty languages, to argue about supper — alive, unruled,
 loud, and free — and down through the open Last Door lay a hundred freed
 floors and every one of them was on the way home.</p>
 <p>She went down into her people, and the climb was over.</p></section>
-<section class="chapter"><h1>Chapter 48 — The Trials</h1><figure class="plate"><img src="art/_print/plate-40a.jpg" alt=""></figure>
+<section class="chapter" id="ch-40a-the-trials"><h1>Chapter 48 — The Trials</h1><figure class="plate"><img src="art/_print/plate-40a.jpg" alt=""></figure>
 <p>There was no morning on the summit. There would never be one; the black
 sky over the highest hall in creation owed nobody a dawn, and the freed
 world camped beneath it woke instead to a bell.</p>
@@ -12684,7 +12800,7 @@ years.</p>
 <p>Tonight the reading went on into the dark, petition by petition, name
 by name, and the freed world sat up listening under its black sky, and
 nobody anywhere was waiting for a number to be called.</p></section>
-<section class="chapter"><h1>Epilogue — The Descent</h1><figure class="plate"><img src="art/_print/plate-41.jpg" alt=""></figure>
+<section class="chapter" id="ch-41-epilogue"><h1>Epilogue — The Descent</h1><figure class="plate"><img src="art/_print/plate-41.jpg" alt=""></figure>
 <p>Going down took longer than going up, which nobody had thought to expect,
 and which made every kind of sense once you were in it. Climbing, you
 fight a floor. Descending, you meet it.</p>
@@ -12956,8 +13072,8 @@ where a thing may lean and not fall.</p>
 the hundredth banner and the first one, the grey wall and the crooked
 star, furled for the evening in a market square at the bottom of a
 mountain that used to be a prison — leaning against the horse trough.</p></section>
-<section class="partpage"><p class="partnum">APPENDICES</p><h1>MATTER SAVED FROM THE FALL</h1><p class="partsub">compiled at Roothollow, in the first year of the ground</p></section>
-<section class="appendix"><h1>The Banners, and Who Carried Them</h1>
+<section class="partpage" id="part-app"><p class="partnum">APPENDICES</p><h1>MATTER SAVED FROM THE FALL</h1><p class="partsub">compiled at Roothollow, in the first year of the ground</p></section>
+<section class="appendix" id="app-01-dramatis-personae"><h1>The Banners, and Who Carried Them</h1>
 <p><em>Compiled at Roothollow after the fall, from the rebuilt muster-roll,
 the census-wall, the tally-slates, the Herald&rsquo;s ledger, and the mouths
 of the living. One line to a name; the clerks were told the paper was
@@ -13127,7 +13243,7 @@ were right.</p>
 <li><strong>The Kettle</strong> — looms. Carries two bowls. Both facts are
   load-bearing.</li>
 </ul></section>
-<section class="appendix"><h1>A Gazetteer of the Hundred Floors</h1>
+<section class="appendix" id="app-02-gazetteer"><h1>A Gazetteer of the Hundred Floors</h1>
 <p><em>Compiled at Roothollow in the first year after the fall, from the reports of
 climbers and the letters of the keepers, this gazetteer sets down each floor
 of the Ascent as it was found and as it was left. Where the accounts
@@ -13753,7 +13869,7 @@ so it could never stand in one room. No town stood here, and no keeper; only
 he was the source. When he fell, the stolen aether went home, every collar
 opened, and the hundred floors stood together on his throne-floor — the one
 thing the tower was built to prevent. Then the host walked down.</p></section>
-<section class="appendix"><h1>The Charter of the Frosthall, as Signed</h1>
+<section class="appendix" id="app-03-charter-of-frosthall"><h1>The Charter of the Frosthall, as Signed</h1>
 <p><em>The original lies at Roothollow under glass. One corner is scorched, and
 the scorch is three nights younger than the ink. This is the surviving
 fair copy, collated against the original, marks and all. It is short. The
@@ -13832,7 +13948,7 @@ want.</p>
 <p>Ede Stonhal signed last. Fifty-eight banners hung in the rafters over the
 wet ink, and the draught from the smoke-hole moved them together, and
 the clerks, having nothing further to record, recorded that.</p></section>
-<section class="appendix"><h1>The Contract of Vyx, in Full</h1>
+<section class="appendix" id="app-04-vyx-contract"><h1>The Contract of Vyx, in Full</h1>
 <p><em>Taken down at the signing by the Matriarch&rsquo;s scrivener in the silk-
 white book, under the hanging lanterns of the Broodthrone. This copy
 was furnished to the compilers by the Matriarch herself, at posted
@@ -13929,7 +14045,7 @@ runs on by the free choice of both signatories.</p>
 <p>The wrapped court, not being on the table, was not bought, and was not
 forgotten. The cocoons stand empty; the rates for websteel are posted,
 and countersigned, and the Matriarch charges a copper to see them.</p></section>
-<section class="appendix"><h1>Malgrim's Ledger, as Recovered</h1>
+<section class="appendix" id="app-05-malgrims-ledger"><h1>Malgrim's Ledger, as Recovered</h1>
 <p><em>Recovered from the writing-stand of the drum-throne on the day after
 the Battle of the Herald&rsquo;s Gate, and carried down to Roothollow with
 the rest of what the fall left legible. The hand is fine, and never
@@ -14106,7 +14222,7 @@ mine.</em></p>
 <p><em>The muster-rolls of the freed record the keeper of this book, at
 the general&rsquo;s own instruction: a man of the forty-third, a tallyman,
 taken twice; and that the second taking was the crime.</em></p></section>
-<section class="appendix"><h1>On the Yoke, the Shards, and the Break-Collar</h1>
+<section class="appendix" id="app-06-on-the-yoke"><h1>On the Yoke, the Shards, and the Break-Collar</h1>
 <p><em>Compiled at Roothollow after the fall, from the testimony of keepers,
 smiths, priests, freed clerks, one Thane, and one shardmind; with the
 Forge-Court&rsquo;s survey and the Herald&rsquo;s ledger open on the table. The
@@ -14255,4 +14371,5 @@ dens of the Deep Middle emptying one by one. The countries cannot be
 put back. They can heal, and they are healing. What is to be done
 with the dead core is not the compilers&rsquo; question. It is reserved, by
 the first article of the Charter, to a freed world&rsquo;s own council; and
-the council, for the first time in an age, may meet wherever it likes.</p></section></body></html>
+the council, for the first time in an age, may meet wherever it likes.</p></section>
+<section class="aboutauthor frontmatter"><h1>About the Author</h1><p>RAYLA was born in a port town that smells of rain and tar, and grew up listening to sailors argue about lights on the horizon. She has worked as a bell-founder’s clerk, a surveyor’s chain-hand, and a keeper of other people’s ledgers, and she still counts stairs without meaning to.</p><p><em>The Hundred Banners</em> is her first novel. She is at work on the second.</p></section></body></html>
