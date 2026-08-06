@@ -62,11 +62,20 @@ def new_player(luna_user: str) -> dict:
 
 # ── Meters (lazy regen) ──────────────────────────────────────────────────
 
-def _regen(val: float, ts_iso: str, cap: int, minutes_per_point: int,
+def _regen(val: float, ts_iso: str, cap: int, minutes_per_point: float,
            at: dt.datetime) -> float:
     ts = dt.datetime.fromisoformat(ts_iso)
     elapsed_min = max(0.0, (at - ts).total_seconds() / 60.0)
     return min(float(cap), val + elapsed_min / minutes_per_point)
+
+
+def _energy_minutes(p: dict) -> float:
+    """037: minutes per energy point RIGHT NOW. Sleeping runs the clock
+    faster; the snapshot discipline (energy_ts is re-stamped when sleep
+    starts and ends) keeps the fast rate from leaking into waking time."""
+    where = (p.get("sleeping") or {}).get("where", "")
+    return economy.ENERGY_REGEN_MIN / economy.SLEEP_ENERGY_MULT.get(where,
+                                                                    1.0)
 
 
 def gear_band(p: dict) -> int:
@@ -87,13 +96,13 @@ def energy_cap_of(p: dict) -> int:
 def energy_now(p: dict, at: dt.datetime | None = None) -> int:
     at = at or now()
     return int(_regen(p["energy_val"], p["energy_ts"], energy_cap_of(p),
-                      economy.ENERGY_REGEN_MIN, at))
+                      _energy_minutes(p), at))
 
 
 def spend_energy(p: dict, amount: int, at: dt.datetime | None = None) -> bool:
     at = at or now()
     cur = _regen(p["energy_val"], p["energy_ts"], energy_cap_of(p),
-                 economy.ENERGY_REGEN_MIN, at)
+                 _energy_minutes(p), at)
     if cur < amount:
         return False
     p["energy_val"] = cur - amount
@@ -105,9 +114,54 @@ def gain_energy(p: dict, amount: int, at: dt.datetime | None = None) -> None:
     at = at or now()
     cap = energy_cap_of(p)
     cur = _regen(p["energy_val"], p["energy_ts"], cap,
-                 economy.ENERGY_REGEN_MIN, at)
+                 _energy_minutes(p), at)
     p["energy_val"] = min(float(cap), cur + amount)
     p["energy_ts"] = at.isoformat()
+
+
+# ── 037: active sleep — the only pre-dawn healing ────────────────────────
+
+def start_sleep(p: dict, where: str, at: dt.datetime | None = None) -> None:
+    """Lie down in the lodge or the fields. Energy is snapshotted at the
+    waking rate first, so the sleep multiplier only counts slept time."""
+    at = at or now()
+    gain_energy(p, 0, at=at)
+    p["sleeping"] = {"where": where, "since": at.isoformat(),
+                     "hp_ts": at.isoformat()}
+
+
+def wake_up(p: dict, at: dt.datetime | None = None) -> str:
+    """Get up. Banks the slept-rate energy and any HP still owed, then
+    drops the sleep state. Returns where the player slept."""
+    at = at or now()
+    s = p.get("sleeping") or {}
+    apply_sleep_healing(p, at=at)
+    gain_energy(p, 0, at=at)
+    p.pop("sleeping", None)
+    return s.get("where", "")
+
+
+def apply_sleep_healing(p: dict, at: dt.datetime | None = None) -> int:
+    """Lazy HP mend while asleep — a full bar in SLEEP_HP_FULL_MIN minutes,
+    whatever the bar's size. The timestamp is only re-stamped once at
+    least one whole point has accrued, so fractions are never lost.
+    Returns the HP actually mended."""
+    s = p.get("sleeping")
+    if not s:
+        return 0
+    at = at or now()
+    ts = dt.datetime.fromisoformat(s.get("hp_ts") or s["since"])
+    elapsed_min = max(0.0, (at - ts).total_seconds() / 60.0)
+    full_min = economy.SLEEP_HP_FULL_MIN.get(s.get("where", ""), 0)
+    if full_min <= 0:
+        return 0
+    heal = int(elapsed_min * max_hp(p) / full_min)
+    if heal <= 0:
+        return 0
+    s["hp_ts"] = at.isoformat()
+    before = p["hp"]
+    p["hp"] = min(max_hp(p), before + heal)
+    return p["hp"] - before
 
 
 def xp_room(p: dict) -> int | None:

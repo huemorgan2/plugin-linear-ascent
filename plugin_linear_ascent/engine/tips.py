@@ -98,9 +98,31 @@ _TIPS: dict[str, str] = {
              "it for the next blade. When its pool empties the floor "
              "opens for EVERYONE and the spoils split by damage dealt. "
              "Fallen Wardens re-fight as echoes at half pay."),
-    "sleep": ("◈ 10 × your level for the night: ambush-proof sleep and "
-              "+20 HP by dawn. Skip it carrying gold and the fields may "
-              "find you."),
+    "sleep": ("◈ 10 × your level for the night: ambush-proof sleep — "
+              "nobody in the fields can find you before dawn. Skip it "
+              "carrying gold and the fields may find you."),
+
+    # ── 037: active sleep — the fast clock ──
+    "sleep_menu": ("Turn in and actively sleep. Awake, energy returns "
+                   "every 45 min and wounds wait for dawn; asleep, both "
+                   "clocks run faster — ×1.5 in the fields, ×2 at the "
+                   "Lodge, and HP mends as you sleep. Wake whenever "
+                   "you like."),
+    "sleep_lodge": ("Sleep in a Lodge bunk: energy at DOUBLE the waking "
+                    "pace and a full HP bar mends in about 2 hours, with "
+                    "the palisade keeping ambushers off you. Costs the "
+                    "night's bunk price if you haven't paid it yet."),
+    "sleep_fields": ("Sleep rough in the fields: free. Energy at ×1.5 "
+                     "the waking pace and a full HP bar mends in about "
+                     "4 hours — but anyone hunting the fields can still "
+                     "find you while you sleep."),
+    "lie_down": ("Lie down in your bunk and sleep now — energy at double "
+                 "the waking pace and HP mending as you sleep. Pays for "
+                 "the night first if you haven't."),
+    "wake": ("Get up. Everything the clocks earned while you slept — "
+             "energy and mended HP — is already banked."),
+    "doze": ("Stay under. The meters refresh so you can watch the "
+             "energy and HP climb."),
     # 030: people to talk to — the lodge keeper and the floor's voice
     "talk": ("Talking is free. The locals know this ground — what "
              "hunts it, what the Warden really is, and where the coin "

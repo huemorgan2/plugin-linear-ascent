@@ -510,6 +510,7 @@ def _build_scene(p: dict) -> Scene:
         "town": _town_scene, "forge": _forge_scene,
         "arcanum": _arcanum_scene, "medlab": _medlab_scene,
         "lodge": _lodge_scene, "vault": _vault_scene, "pawn": _pawn_scene,
+        "sleep_menu": _sleep_menu_scene, "sleeping": _sleeping_scene,
         "board": _board_scene,
         "stone": _stone_scene, "gate": _gate_scene,
         "gate_town": _gate_town_scene,
@@ -863,6 +864,9 @@ def _town_scene(p: dict) -> Scene:
         Option("lodge", "The Lodge",
                f"◈ {economy.LODGE_PRICE_PER_LEVEL * p['level']}/night",
                badge=_b("lodge")),
+        # 037: active sleep — the only thing that mends wounds before dawn
+        Option("sleep_menu", "Sleep",
+               "mend ⚡ and HP faster — the Lodge or the fields"),
         Option("vault", "The Vault", "bank", badge=_b("vault")),
         Option("pawn", "Pawn shop", "sell"),
         # 012: the Guildhall is core — training (buying levels) lives
@@ -927,7 +931,7 @@ def _dispatch_location(p: dict, oid: str) -> Scene:
         return _town_scene(p)
     town_menus = ("forge", "arcanum", "medlab", "lodge", "vault", "pawn",
                   "stone", "gate", "relay", "fields", "guildhall", "hall",
-                  "board")
+                  "board", "sleep_menu")
     if loc == "town" and oid in town_menus:
         if oid == "arcanum" and not _door_open(p, economy.ARCANUM_LEVEL):
             s = _town_scene(p)
@@ -982,6 +986,10 @@ def _dispatch_location(p: dict, oid: str) -> Scene:
         return _medlab_buy(p, oid)
     if loc == "lodge":
         return _lodge_action(p, oid)
+    if loc == "sleep_menu":
+        return _sleep_action(p, oid)
+    if loc == "sleeping":
+        return _sleeping_action(p, oid)
     if loc == "board":
         return _board_action(p, oid)
     if loc == "vault":
@@ -1630,6 +1638,11 @@ def _lodge_scene(p: dict) -> Scene:
     if p["hp"] < state.max_hp(p):
         opts.append(Option("stew", "Hunter's stew",
                            f"◈ {economy.STEW_PRICE} · +{economy.STEW_HEAL_HP} HP"))
+    # 037: lie down and actively sleep — the clocks run while you do
+    _sp = _sleep_spec("lodge")
+    opts.append(Option("lie_down", "Turn in — sleep now",
+                       f"⚡ ×{_sp['mult']:g} · full HP ~{_sp['hp_h']:g} h"
+                       + ("" if lodged else f" · ◈ {price}")))
     body = [f"A night costs ◈ {price}. Banked gold can't buy it — "
             "carry coin.",
             # 022/004: dawn heals everyone everywhere — the Lodge
@@ -1790,6 +1803,8 @@ def _keeper_scene(p: dict) -> Scene:
 
 
 def _lodge_action(p: dict, oid: str) -> Scene:
+    if oid == "lie_down":
+        return _sleep_action(p, "sleep_lodge")
     if oid == "talk":
         return _keeper_scene(p)
     if oid == "stew":
@@ -1853,6 +1868,137 @@ def _lodge_action(p: dict, oid: str) -> Scene:
     s.headline = "Your bunk is paid through tonight"
     s.body_lines.insert(0, "+ one safe night. Nothing finds you here "
                            "before dawn does its work.")
+    return s
+
+
+# ── 037: active sleep — the fast clock ──────────────────────────────────
+# Awake, ⚡ ticks every ENERGY_REGEN_MIN minutes and wounds wait for dawn.
+# Turning in runs both clocks: the fields free and rough, the Lodge paid,
+# palisaded, and exactly double the waking pace.
+
+def _sleep_spec(where: str) -> dict:
+    mult = economy.SLEEP_ENERGY_MULT[where]
+    return {
+        "mult": mult,
+        "e_min": economy.ENERGY_REGEN_MIN / mult,
+        "hp_h": economy.SLEEP_HP_FULL_MIN[where] / 60.0,
+    }
+
+
+def _sleep_menu_scene(p: dict) -> Scene:
+    price = economy.LODGE_PRICE_PER_LEVEL * p["level"]
+    lodged = p["lodged_until_day"] >= state.world_day() + 1
+    lg, fd = _sleep_spec("lodge"), _sleep_spec("fields")
+    body = [
+        f"Awake, ⚡ returns 1 point every {economy.ENERGY_REGEN_MIN} min "
+        "and wounds wait for dawn. Sleep runs both clocks:",
+        f"· THE LODGE — ⚡ 1 point every {lg['e_min']:g} min "
+        f"(×{lg['mult']:g}, double the waking pace) and a full HP bar "
+        f"mends in about {lg['hp_h']:g} hours. The palisade keeps "
+        "ambushers off you"
+        + (" — your bunk is already paid." if lodged
+           else f" — a bunk costs ◈ {price} carried coin."),
+        f"· THE FIELDS — free. ⚡ 1 point every {fd['e_min']:g} min "
+        f"(×{fd['mult']:g}) and a full HP bar mends in about "
+        f"{fd['hp_h']:g} hours. You sleep rough — anyone hunting the "
+        "fields can still find you.",
+        "Wake whenever you like — the meters bank what the clock earned.",
+    ]
+    return Scene(
+        eyebrow="ROOTHOLLOW · TURNING IN",
+        headline="Where do you sleep?",
+        support="Sleep is the only thing that mends wounds before dawn "
+                "does — and the only way to hurry the energy bar.",
+        body_lines=body,
+        options=[
+            Option("sleep_lodge", "A bunk at the Lodge",
+                   f"⚡ ×{lg['mult']:g} · full HP ~{lg['hp_h']:g} h · "
+                   + ("bunk paid" if lodged else f"◈ {price}") + " · safe"),
+            Option("sleep_fields", "Find a place in the fields",
+                   f"⚡ ×{fd['mult']:g} · full HP ~{fd['hp_h']:g} h · "
+                   "free · ambushers can find you"),
+            Option("back", "Back to the square"),
+        ],
+        meters=combat.meters(p),
+        banner="lodge",
+    )
+
+
+def _sleep_fx(p: dict, where: str) -> str:
+    """One sleeping animation per showcase character per place — the art
+    canon puts every figure on one of the three class silhouettes."""
+    clazz = p.get("clazz") or "warrior"
+    return f"sleep_{where}_{clazz}"
+
+
+def _sleeping_scene(p: dict, note: str = "") -> Scene:
+    state.apply_sleep_healing(p)
+    s = p.get("sleeping") or {}
+    where = s.get("where", "fields")
+    sp = _sleep_spec(where)
+    place = ("in your bunk at the Lodge" if where == "lodge"
+             else "in a hollow in the fields")
+    body = [
+        f"⚡ 1 point every {sp['e_min']:g} min (×{sp['mult']:g} the waking "
+        f"pace) · wounds mend a full bar in ~{sp['hp_h']:g} h.",
+        ("The palisade keeps watch. Nothing finds you here."
+         if where == "lodge" else
+         "You sleep rough — anyone hunting the fields can find you."),
+    ]
+    return Scene(
+        eyebrow="ROOTHOLLOW · ASLEEP",
+        headline="Asleep behind the palisade" if where == "lodge"
+                 else "Asleep under the open sky",
+        support="The clocks work while you don't. Wake whenever you like.",
+        body_lines=body,
+        shard_note=note,
+        activity=f"ASLEEP {place.upper()} — ⚡ and HP mending",
+        options=[Option("doze", "Sleep on", "let the clock work"),
+                 Option("wake", "Wake up")],
+        meters=combat.meters(p),
+        banner="lodge" if where == "lodge" else "roothollow",
+        fx=_sleep_fx(p, where),
+    )
+
+
+def _sleep_action(p: dict, oid: str) -> Scene:
+    if oid == "sleep_fields":
+        state.start_sleep(p, "fields")
+        p["location"] = "sleeping"
+        return _sleeping_scene(p, note="You roll into a hollow out of the "
+                                       "wind and let the fields hold you.")
+    if oid != "sleep_lodge":
+        return _sleep_menu_scene(p)
+    if p["lodged_until_day"] < state.world_day() + 1:
+        price = economy.LODGE_PRICE_PER_LEVEL * p["level"]
+        if p["gold"] < price:
+            s = _sleep_menu_scene(p)
+            s.shard_note = (f"A bunk is ◈ {price} carried coin. The fields "
+                            "are free — or the Vault is on the square.")
+            return s
+        p["gold"] -= price
+        p["lodged_until_day"] = state.world_day() + 1
+        combat._ledger(p, "lodge", gold=-price)
+    state.start_sleep(p, "lodge")
+    p["location"] = "sleeping"
+    return _sleeping_scene(p, note="Wick nods you up the stairs. The bunk "
+                                   "is warm and the palisade stands its "
+                                   "quiet watch.")
+
+
+def _sleeping_action(p: dict, oid: str) -> Scene:
+    if oid != "wake":
+        return _sleeping_scene(p)
+    hp0 = p["hp"]
+    where = state.wake_up(p)
+    healed = p["hp"] - hp0
+    p["location"] = "lodge" if where == "lodge" else "town"
+    s = _build_scene(p)
+    s.shard_note = ("You wake " + ("in your bunk" if where == "lodge"
+                                   else "with dew on your cloak")
+                    + (f" — +{healed} HP mended while you slept."
+                       if healed else " — the bar banked what the clock "
+                                      "earned."))
     return s
 
 

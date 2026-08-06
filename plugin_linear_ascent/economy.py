@@ -19,8 +19,18 @@ from dataclasses import dataclass
 
 # ── §1 Meters ────────────────────────────────────────────────────────────
 
-ENERGY_REGEN_MIN = 45          # 1 energy per 45 minutes
+ENERGY_REGEN_MIN = 45          # 1 energy per 45 minutes — the WAKING pace
 ENERGY_BASE_CAP = 24
+
+# ── 037: active sleep — the fast clock ───────────────────────────────────
+# Awake, the bar ticks at ENERGY_REGEN_MIN and wounds wait for dawn.
+# Sleeping runs the clock faster — and it is the ONLY daytime healing
+# (the 022/004 dawn law stands for the waking). The Lodge bunk is paid
+# and exactly DOUBLE the waking pace; a hollow in the fields is free,
+# slower, and anyone hunting the fields can still find you.
+SLEEP_ENERGY_MULT = {"fields": 1.5, "lodge": 2.0}
+# minutes of sleep to mend one FULL HP bar, whatever the bar's size
+SLEEP_HP_FULL_MIN = {"fields": 240, "lodge": 120}
 
 COST_WILDS_FIGHT = 1
 COST_WARDEN_ATTEMPT = 3

@@ -396,6 +396,55 @@ EVENTS: dict[str, dict] = {
     },
 }
 
+# ── 037: active sleep — one ambient loop per showcase sleeper per place ──
+# fx slugs from core._sleep_fx:
+#   sleep_{lodge|fields}_{warrior|archer|sorcerer}
+# The 009 cast rule holds even lying down — the giant dwarf must still
+# read as a mountain under the blanket.
+_SLEEPERS = {
+    "warrior": (
+        "a female human warrior silhouette asleep on her side — compact "
+        "and athletic, her straight sword and round shield leaned "
+        "within arm's reach"),
+    "archer": (
+        "an elf archer silhouette at rest, wrapped head to toe in a "
+        "heavy wool blanket with only the long sharp ears showing, an "
+        "unstrung longbow and a quiver of arrows set beside the "
+        "sleeping spot"),
+    "sorcerer": (
+        "a giant mountain-folk sorcerer silhouette asleep — a "
+        "slab-built colossus under a heavy blanket that dwarfs the "
+        "sleeping spot, a broad braided beard spilling over the "
+        "blanket's edge, an iron-shod walking staff with a softly "
+        "glowing head propped upright nearby"),
+}
+_SLEEP_PLACES = {
+    "lodge": (
+        "inside a timber lodge bunkroom at night: {who}, in a sturdy "
+        "wooden bunk under a small window, a low stone hearth of "
+        "breathing embers across the room, a lantern turned down low. "
+        "Everything stands PERFECTLY STILL except: the sleeper's chest "
+        "rises and falls slowly and steadily, the hearth embers pulse "
+        "faintly, and the lantern glow breathes almost imperceptibly."),
+    "fields": (
+        "a night meadow outside a palisaded town: {who}, rolled in a "
+        "cloak in a grassy hollow beside a small campfire burned down "
+        "to embers, tall grass around the hollow, stars and a thin "
+        "drifting mist above. Everything stands PERFECTLY STILL "
+        "except: the sleeper's chest rises and falls slowly and "
+        "steadily, the embers pulse faintly, the tall grass stirs "
+        "barely, and the mist drifts very slowly sideways."),
+}
+for _c, _who in _SLEEPERS.items():
+    for _w, _pl in _SLEEP_PLACES.items():
+        EVENTS[f"sleep_{_w}_{_c}"] = {
+            "prompt": (_pl.format(who=_who)
+                       + " Extremely subtle, calm, ambient, continuous "
+                         "motion. Absolutely no zoom, no pan, no camera "
+                         "drift, nobody wakes or moves."),
+            "tint": DIM, "seconds": 8, "loop": True, "crossfade": 1.5,
+        }
+
 # ── 030 Phase 8: the floor arrival reel, floors 1–10 ────────────────────
 # Two ambient loops per floor — the world beat (the fields as the lift
 # doors open) and the keep beat (the Warden holding the stair) — plus one
