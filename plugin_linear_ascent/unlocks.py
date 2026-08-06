@@ -53,9 +53,6 @@ def registry() -> tuple[Unlock, ...]:
                "the fields", "the square",
                f"ambush other climbers — {economy.COST_PVP_ATTACK} ⚡ a raid, "
                f"{economy.PVP_ATTACKS_PER_DAY} a day"),
-        Unlock("receive_grants", "level", economy.GRANT_MIN_RECEIVER_LEVEL,
-               "opens", "receiving grants", "the vault",
-               "other climbers can send you gold at the Vault"),
         Unlock("arcanum", "level", economy.ARCANUM_LEVEL, "opens",
                "the Arcanum", "the square",
                "staves, focuses and caster relics behind the reading door"),

@@ -180,8 +180,8 @@ def start_encounter(p: dict, floor, enc, kind: str = "wilds") -> Scene:
         "atk": atk, "def": dfs, "hp": hp, "hp_max": hp,
         "floor": floor.floor, "shot_used": False,
         # 017 §2.4: fights open at range — bows and spells carry,
-        # steel must close.
-        "range": "at_range",
+        # steel must close. 036: "at range" is gap 1 on the ladder.
+        "range": "at_range", "gap": 1,
     }
     if kind == "warden":
         # 022/004: "answer a keep's horn" counts at the OPEN — showing
@@ -243,9 +243,21 @@ def _mspd(p: dict) -> int:
     return _profile(p).get("speed", economy.SPEED_NORMAL)
 
 
+def _gap(p: dict) -> int:
+    """036: the gap in lengths — 0 is close quarters, 1 is the classic
+    at_range opening, 2–3 are the archer's made ground. Derived from
+    `range` first so every pre-036 doc (and every test that pins `range`
+    by hand) reads correctly."""
+    if _range_state(p) != "at_range":
+        return 0
+    return max(1, int(p["encounter"].get("gap", 1)))
+
+
 def _advance_chase(p: dict) -> str:
     """End of an at-range round: the monster tries to close the gap
-    (§2.4 p_close). Returns the line that tells the player what moved."""
+    (§2.4 p_close). Returns the line that tells the player what moved.
+    036: the gap is a ladder now — each successful close eats ONE length;
+    only the last one puts the monster in your face."""
     e = p["encounter"]
     if e.get("range") != "at_range":
         return ""
@@ -255,8 +267,13 @@ def _advance_chase(p: dict) -> str:
         e.pop("netted", None)
         return f"The {e['name']} tears at the net instead of the ground."
     if state.roll_ok(p, economy.p_close(_mspd(p), economy.player_speed(p))):
-        e["range"] = "close"
-        return f"The {e['name']} closes the gap — it is on you now."
+        gap = _gap(p) - 1
+        e["gap"] = gap
+        if gap <= 0:
+            e["range"] = "close"
+            return f"The {e['name']} closes the gap — it is on you now."
+        return (f"The {e['name']} eats a length of the open ground — "
+                f"{gap} between you now.")
     return f"The {e['name']} comes on across open ground."
 
 
@@ -354,6 +371,7 @@ def _enemy_payload(p: dict, floor) -> dict:
         "profile": prof,
         "tiers": _profile_tiers(prof),
         "range": e.get("range", ""),
+        "gap": _gap(p),
         "lore": _lore(e, floor),
         "specimen": e.get("specimen", ""),
         "pspd": pspd,
@@ -448,9 +466,19 @@ def fight_scene(p: dict, floor, opener: bool = False, note: str = "") -> Scene:
     # the row only shows when your legs actually beat its legs.
     if not at_range and economy.player_speed(p) > _mspd(p):
         opts.append(Option("open_distance", "Open distance"))
+    # 036: the archer's third axis — give ground on purpose. Always
+    # offered (speed shapes the PRICE, not the permission); the shot
+    # grows with every length made.
+    if clazz == "archer" and _damage_type(p) == "ranged" \
+            and _gap(p) < economy.GAP_MAX:
+        nxt = _gap(p) + 1
+        opts.append(Option(
+            "create_distance", "Create distance",
+            f"class · shot ×{economy.bow_gap_mult(nxt):g} "
+            f"at {nxt} length{'s' if nxt > 1 else ''}"))
     opts += [
         Option("stand", "Stand your ground"),
-        Option("run", "Run"),
+        Option("run", "Run away"),
     ]
     if clazz == "warrior":
         opts.append(Option("shield_wall", "Shield wall", "class", aether=True))
@@ -568,7 +596,8 @@ def _wear(p: dict, slot: str, n: int = 1) -> str:
             "strength until the Forge repairs it.")
 
 
-def _monster_hit(p: dict, halved: bool = False, least: int = 0) -> dict:
+def _monster_hit(p: dict, halved: bool = False, least: int = 0,
+                 no_dodge: bool = False) -> dict:
     """013: armor blunts, it never nullifies — every landed hit chips at
     least ⌈raw/4⌉ (min 1) through any DEF. Returns the breakdown so the
     card can SAY what the armor did instead of silently eating hits.
@@ -586,7 +615,7 @@ def _monster_hit(p: dict, halved: bool = False, least: int = 0) -> dict:
     if e.get("veiled"):
         return {"dmg": 0, "raw": 0, "blocked": 0, "veiled": True}
     dodge = economy.dodge_pct(economy.player_speed(p), _mspd(p))
-    if dodge and state.roll_ok(p, dodge / 100):
+    if not no_dodge and dodge and state.roll_ok(p, dodge / 100):
         return {"dmg": 0, "raw": 0, "blocked": 0, "dodged": True}
     if _range_state(p) == "at_range":
         halved = True
@@ -721,10 +750,11 @@ def _player_hit(p: dict, mult: float = 1.0, pierce: bool = False) -> int:
     # eat the armor tier. Whatever CAN hit chips ≥1; melee vs flying is
     # the one legal zero.
     e = p["encounter"]
-    # 002: a bow in close quarters is half a weapon; magic and steel
-    # keep full strength at both ranges.
-    if _damage_type(p) == "ranged" and _range_state(p) == "close":
-        mult *= economy.BOW_CLOSE_MULT
+    # 002/036: a bow in close quarters is half a weapon, and a bow with
+    # made ground behind it is more than one — the gap ladder prices the
+    # draw. Magic and steel keep full strength at every distance.
+    if _damage_type(p) == "ranged":
+        mult *= economy.bow_gap_mult(_gap(p))
     # 004 §3.2: an off-class weapon is a stopgap — half strength always.
     if _off_class(p):
         mult *= economy.OFF_CLASS_DMG_MULT
@@ -798,9 +828,10 @@ def _apply_shot_effect(p: dict, effect: str) -> str:
 # fight actions that spend a round — the venom ticks and the golden
 # shell rots exactly once per each.
 _ROUND_ACTIONS = frozenset({
-    "attack", "close_in", "open_distance", "run", "stand", "shield_wall",
-    "sleep_spell", "treeline_shot", "drink_tonic", "use_oil", "throw_net",
-    "use_hook", "use_strip", "use_curse", "use_veil", "use_apple"})
+    "attack", "close_in", "open_distance", "create_distance", "run",
+    "stand", "shield_wall", "sleep_spell", "treeline_shot", "drink_tonic",
+    "use_oil", "throw_net", "use_hook", "use_strip", "use_curse",
+    "use_veil", "use_apple"})
 
 
 def _fx_tick(p: dict) -> bool:
@@ -1595,6 +1626,7 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
         # −50% while you cross the open ground. A bare "attack" from a
         # melee player at range IS the crossing — steel can't swing yet.
         e["range"] = "close"
+        e["gap"] = 0
         snap = _wear(p, "shoes")       # 005: crossing spends shoe tread
         hit = _monster_hit(p, halved=True)
         if p["hp"] <= 0:
@@ -1618,6 +1650,7 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
         if state.roll_ok(p, economy.p_open(economy.player_speed(p),
                                            _mspd(p))):
             e["range"] = "at_range"
+            e["gap"] = 1
             chase = _advance_chase(p)
             return fight_scene(p, floor, note=(
                 "You break contact and put ground between you. "
@@ -1630,6 +1663,40 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
             + _counter_text(p, hit,
                             lead=f"The {e['name']} punishes the turn")
             + (f" {snap}" if snap else "")))
+
+    if option_id == "create_distance" and p.get("clazz") == "archer" \
+            and _damage_type(p) == "ranged":
+        # 036: the archer's third axis — give ground ON PURPOSE. It
+        # always works (this is the trade, not a gamble): the question
+        # is only whether the monster collects a parting blow on the
+        # way out, and THAT is what your legs are for. Every length of
+        # gap is draw-time, and draw-time is power on the next shot.
+        gap = _gap(p)
+        if gap >= economy.GAP_MAX:
+            return fight_scene(p, floor, note=(
+                f"Any more ground and you'd be out of the fight — "
+                f"{economy.GAP_MAX} lengths is the long edge of a kill."))
+        snap = _wear(p, "shoes")       # 005: made ground spends tread
+        e["range"] = "at_range"
+        e["gap"] = gap + 1
+        shot = (f"The gap is {e['gap']} length"
+                f"{'s' if e['gap'] > 1 else ''} now — your bow hits "
+                f"×{economy.bow_gap_mult(e['gap']):g} from here.")
+        if state.roll_ok(p, economy.p_gap_hit(economy.player_speed(p),
+                                              _mspd(p))):
+            # speed already had its say in p_gap_hit — no second dodge
+            hit = _monster_hit(p, no_dodge=True)   # at range → halved
+            if p["hp"] <= 0:
+                return _death(p, floor)
+            return fight_scene(p, floor, note=(
+                "You give ground and it collects the toll — "
+                + _counter_text(p, hit,
+                                lead=f"the {e['name']} rakes you as "
+                                     "you pull away")
+                + f" {shot}" + (f" {snap}" if snap else "")))
+        return fight_scene(p, floor, note=(
+            "You break clean — your legs beat its lunge and nothing "
+            f"touches you. {shot}" + (f" {snap}" if snap else "")))
 
     if option_id == "run":
         # §2.4: the flat 60% is gone — speed decides the getaway.

@@ -27,7 +27,6 @@ def test_every_level_gate_constant_has_a_registry_entry():
         "BOARD_LEVEL": economy.BOARD_LEVEL,
         "NIGHT_SLOT_LEVEL": economy.NIGHT_SLOT_LEVEL,
         "STRONGBOX_LEVEL": economy.STRONGBOX_LEVEL,
-        "GRANT_MIN_RECEIVER_LEVEL": economy.GRANT_MIN_RECEIVER_LEVEL,
         "FOUND_MIN_LEVEL": social.FOUND_MIN_LEVEL,
         # protections register at the level they EXPIRE
         "BEGINNER_MERCY_MAX_LEVEL": economy.BEGINNER_MERCY_MAX_LEVEL + 1,
@@ -45,7 +44,7 @@ def test_no_gate_constant_was_forgotten_by_this_test():
     either in the guard or explicitly exempted here."""
     known = {"ARCANUM_LEVEL", "RELAY_LEVEL", "FIELDS_LEVEL", "BOARD_LEVEL",
              "NIGHT_SLOT_LEVEL", "STRONGBOX_LEVEL",
-             "GRANT_MIN_RECEIVER_LEVEL", "BEGINNER_MERCY_MAX_LEVEL",
+             "BEGINNER_MERCY_MAX_LEVEL",
              "BEGINNER_PROTECTION_MAX_LEVEL", "DEATH_NO_PARDON_LEVEL"}
     exempt = {"LODGE_PRICE_PER_LEVEL", "GRANT_DAILY_CAP_PER_LEVEL"}
     found = {n for n in dir(economy)

@@ -182,9 +182,8 @@ def grant_scene(p: dict, note: str = "") -> Scene:
     return Scene(
         eyebrow="ROOTHOLLOW · THE VAULT · GRANTS DESK",
         headline="Move money, lose a tithe",
-        support=f"Receivers must be level "
-                f"{economy.GRANT_MIN_RECEIVER_LEVEL}+ — the Vault "
-                "doesn't fund cradles.",
+        support="Any climber can receive, first-day or frontier — "
+                "the Vault only takes its tithe.",
         body_lines=lines,
         options=opts,
         meters=meters(p),

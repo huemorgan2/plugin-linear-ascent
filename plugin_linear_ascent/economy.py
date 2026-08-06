@@ -355,8 +355,32 @@ WARDEN_PROFILE_FLOOR = 21      # band 3+: wardens get low/low tiers
 
 PLAYER_BASE_SPEED = 5
 ALPHA_SPEED_BONUS = 1          # alphas run +1 on the 1–10 scale
-BOW_CLOSE_MULT = 0.6           # bow damage in close quarters
+BOW_CLOSE_MULT = 0.5           # bow damage in close quarters (036: 0.6 →
+                               # 0.5 — the gap ladder pays it back)
 DODGE_CAP_PCT = 12             # speed never becomes the main defense
+
+# ── 036: the gap ladder — an archer's fight has a THIRD axis ─────────────
+# "close" is gap 0; a fight opens at gap 1 (the old "at_range"). An archer
+# can keep giving ground: every length of gap is draw-time, and draw-time
+# is power. The price of making ground is a parting blow whose CHANCE is
+# what speed buys — faster legs, cleaner break.
+GAP_MAX = 3
+BOW_GAP_MULT = {1: 1.0, 2: 1.25, 3: 1.5}
+
+
+def bow_gap_mult(gap: int) -> float:
+    """Bow damage by gap. Close quarters cramp the draw; a long field
+    lets the archer use the whole arc of the shot."""
+    if gap <= 0:
+        return BOW_CLOSE_MULT
+    return BOW_GAP_MULT.get(min(int(gap), GAP_MAX), 1.0)
+
+
+def p_gap_hit(pspd: int, mspd: int) -> float:
+    """Chance the monster lands its parting blow while you make ground.
+    Every point of speed advantage is a cleaner break; a faster monster
+    almost always collects."""
+    return _clamp(0.65 - 0.12 * (pspd - mspd), 0.05, 0.95)
 
 # Shoes ship in 004 (the Forge ladder). The speed hook lands with the
 # chase model so 004 only adds catalog rows here.
@@ -1800,7 +1824,8 @@ PRESENT_TABLE = [
 
 GRANT_BURN_PCT = 0.10
 GRANT_DAILY_CAP_PER_LEVEL = 150
-GRANT_MIN_RECEIVER_LEVEL = 5
+# 036: the receiver level gate is gone — any climber can be granted gold.
+# The burn and the sender's daily cap remain the anti-funnel valves.
 LETTER_PRICE = 0        # 004 §C.1: talking is free if collaboration is the game
 BOARD_PRICE = 10        # 022/004: the broker's stamp — off the top of payouts
 
