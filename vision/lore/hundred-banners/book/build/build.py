@@ -334,6 +334,10 @@ def build() -> None:
         font-size: 8pt; letter-spacing: 0.18em; font-variant: small-caps;
         color: #333; }
     }
+    /* no running head on chapter-opener pages */
+    @page body:first {
+      @top-center { content: none; }
+    }
     @page plain { margin: 0.78in 0.72in 0.88in 0.72in; }
     @page coverpage { margin: 0; }
 
