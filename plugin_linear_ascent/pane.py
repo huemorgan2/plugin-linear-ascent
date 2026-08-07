@@ -140,6 +140,10 @@ select.ti{{background:{INK};color:{TEXT};border:1px solid {BORDER};
 _JS = r"""
 (() => {
 const API = '__API__';
+/* 005 web play: served at linearascent.net/play the pane keeps no token —
+   the session cookie rides every same-origin fetch, and a 401 walks back
+   to the door instead of asking a Luna shell that isn't there. */
+const WEB = __WEB__;
 let token = new URLSearchParams(location.search).get('token') || '';
 let sceneId = '';
 let loading = false;
@@ -147,23 +151,26 @@ let loading = false;
 /* ── auth handshake (PluginIframe contract) ─────────────────────────── */
 window.addEventListener('message', (e) => {
   const d = e.data || {};
-  if (d.type === 'luna-auth' && d.token) {
+  if (!WEB && d.type === 'luna-auth' && d.token) {
     const fresh = d.token !== token;
     token = d.token;
     if (fresh && !sceneId) loadScene(true);
   }
 });
-try { parent.postMessage({type: 'luna-ui-ready'}, '*'); } catch (e) {}
+if (!WEB) {
+  try { parent.postMessage({type: 'luna-ui-ready'}, '*'); } catch (e) {}
+}
 
 function hdrs() {
   return {'Content-Type': 'application/json',
-          ...(token ? {'Authorization': 'Bearer ' + token} : {})};
+          ...(!WEB && token ? {'Authorization': 'Bearer ' + token} : {})};
 }
 async function call(path, body) {
   const r = await fetch(API + path, body === undefined
     ? {headers: hdrs()}
     : {method: 'POST', headers: hdrs(), body: JSON.stringify(body)});
   if (r.status === 401) {
+    if (WEB) { location.href = '/#door-signin'; throw new Error('auth'); }
     try { parent.postMessage({type: 'luna-request-auth'}, '*'); } catch (e) {}
     throw new Error('auth');
   }
@@ -320,7 +327,7 @@ function wireOptions() {
   }));
 }
 async function loadScene(force) {
-  if (loading || (!token && !force)) return;
+  if (loading || (!WEB && !token && !force)) return;
   loading = true;
   try { showScene(await call('/pane/scene', {})); }
   catch (err) { if (err.message !== 'auth') showErr(err.message); }
@@ -329,7 +336,7 @@ async function loadScene(force) {
 
 /* ── freshness: chat-driven acts and world events reach the pane ────── */
 async function peek() {
-  if (!token || document.hidden || loading) return;
+  if ((!WEB && !token) || document.hidden || loading) return;
   try {
     const d = await call('/pane/peek');
     if (d.scene_id && sceneId && d.scene_id !== sceneId) loadScene(true);
@@ -755,14 +762,18 @@ function renderBoard(d) {
   return h;
 }
 
-if (token) loadScene();
+if (token || WEB) loadScene();
 })();
 """
 
 
-def render_pane() -> str:
+def render_pane(api_base: str = _API, web: bool = False) -> str:
+    """The pane. Defaults are the Luna iframe (bearer token, postMessage
+    auth); web=True is linearascent.net/play — same HTML, cookie auth,
+    401 walks back to the site's door. 005: one pane, two doors."""
+    title = "<title>LINEAR ASCENT</title>" if web else ""
     return f"""<!doctype html><html><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">{title}
 <style>{_CSS}</style></head><body>
 <div class="wrap">
   <div class="tabs" role="tablist">
@@ -778,6 +789,8 @@ def render_pane() -> str:
     <div class="eyebrow">the guildhall</div>unrolling the charters…</div></div>
 </div>
 <script>{INTERACT_JS}</script>
-<script>{_JS.replace("__API__", _API).replace("__SWAP_JS__", SWAP_JS)
+<script>{_JS.replace("__API__", api_base)
+           .replace("__WEB__", "true" if web else "false")
+           .replace("__SWAP_JS__", SWAP_JS)
            .replace("__COIN__", icons.icon_data_url("coin"))}</script>
 <script>{TIP_JS}</script></body></html>"""

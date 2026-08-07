@@ -754,6 +754,10 @@ def _creation_pick_class(p: dict, oid: str) -> Scene:
     # rusted sword, archers a basic bow (arrows never run out),
     # sorcerers a worn staff. It never breaks and is never lost.
     p["gear"]["weapon"] = economy.class_starter(oid).slug
+    if p.get("name"):
+        # 005 web play: the door already carved this name at signup —
+        # the registrar recognizes the account and waves them through.
+        return _creation_welcome(p)
     p["stage"] = "creation_name"
     return _creation_name_scene(p)
 
@@ -796,18 +800,23 @@ def _creation_set_name(p: dict, text: str) -> Scene:
                         "another and the registrar writes it down.")
         return s
     p["name"] = name
+    s = _creation_welcome(p)
+    if names.joined_words(text, name):
+        s.body_lines = [f"+ the registrar closes the gaps — you climb as "
+                        f"{name}"] + list(s.body_lines)
+    return s
+
+
+def _creation_welcome(p: dict) -> Scene:
     p["stage"] = "playing"
     p["location"] = "town"
     s = _town_scene(p)
-    s.headline = f"Welcome to Roothollow, {name}"
+    s.headline = f"Welcome to Roothollow, {p['name']}"
     s.support = ("Tarps over titanium, a plasma forge next to a horse "
                  "trough. Home.")
     s.shard_note = ("We carry ◈ 50 and a rusted shiv — the Forge's cheapest "
                     "real blade wants ◈ 250. The tower gate first: hunt "
                     "floor 1 until steel is affordable.")
-    if names.joined_words(text, name):
-        s.body_lines = [f"+ the registrar closes the gaps — you climb as "
-                        f"{name}"] + list(s.body_lines)
     return s
 
 
