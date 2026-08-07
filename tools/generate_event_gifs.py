@@ -58,7 +58,7 @@ W, H = 320, 112  # same native grid as the scene banners
 FPS = 12         # GIF playback rate; Veo footage is resampled down to this
 
 API_ROOT = "https://generativelanguage.googleapis.com/v1beta"
-VIDEO_MODEL = "veo-3.1-generate-preview"
+VIDEO_MODEL = os.environ.get("VEO_MODEL", "veo-3.1-generate-preview")
 
 FAL_QUEUE = "https://queue.fal.run"
 FAL_MODELS = {
@@ -84,6 +84,14 @@ STYLE = (
     "midtones. LOCKED-OFF STATIC CAMERA on a tripod, no camera movement, "
     "no pans, no zooms. Wide cinematic shot, low horizon, all action kept "
     "in the central horizontal band of the frame. No color, no text, no "
+    "watermark. Scene: "
+)
+
+# 038 mercy reels render photoreal color (no 1-bit poster style) — the
+# raw mp4 is the asset of record; keep the prefix tiny (xAI caps the
+# whole prompt at 4096 chars).
+MERCY_PREFIX = (
+    "LOCKED-OFF static camera, no pans or zooms, no text, no "
     "watermark. Scene: "
 )
 
@@ -668,42 +676,354 @@ for _fam, (_scene, _noun) in _KILL_MONSTERS.items():
 # any creature whose own GIF hasn't landed yet.
 
 _MERCY_FREED = (
-    "A WIDE shot. {scene} The huge fevered creature stands alone "
-    "mid-frame, breathing hard, its movements wrong and jerky. Then "
-    "the possession breaks: a shudder runs the length of it, thin "
-    "dark motes lift off its hide and scatter like ash on wind, and "
-    "the oversized wrong shape collapses in on itself like a dropped "
-    "cloak — and out of the settling dark steps {was}, small and "
-    "ordinary and unhurt. It shakes itself once and walks away toward "
-    "the edge of the frame. The FINAL TWO SECONDS are a perfectly "
-    "still tableau: the small plain animal paused at the frame's "
-    "edge, looking back once, absolutely nothing moving — a frozen "
-    "closing frame.")
+    "An EXTREMELY WIDE shot, camera pulled far back — both figures "
+    "SMALL against the landscape, wide open ground between them. "
+    "{scene} From the very FIRST frame to the last there is "
+    "exactly ONE creature and ONE defender in the frame — never a "
+    "pack, never a second animal, never another person. The "
+    "landscape around them is completely EMPTY and DESERTED: no "
+    "bystanders, no distant figures on the horizon, nobody and "
+    "nothing else anywhere, however small or far away. The video "
+    "BEGINS with the single creature already mid-charge on the "
+    "LEFT side of the frame and the single defender on the RIGHT. "
+    "The shot OPENS MID-ATTACK: the huge fevered creature "
+    "is ALREADY sprinting flat-out straight AT the defender — jaws "
+    "wide, ears pinned back, real animal gait, dust kicking up. "
+    "FIRST EXCHANGE — the monster gets ITS blow in: it closes the "
+    "whole distance and LUNGES, one full committed strike, jaws "
+    "snapping shut on empty air as the defender SPRINGS BACK one "
+    "step at the last instant, staying UPRIGHT ON THEIR FEET — "
+    "never falling, diving, or rolling — the blow tears up the "
+    "ground, dirt flying. Nobody is ever knocked down or lying "
+    "on the ground in this fight. The creature overshoots, "
+    "wheels around snarling, and immediately charges AGAIN from "
+    "across the frame. SECOND EXCHANGE — the same defender, back "
+    "on their feet, answers mid-charge: {strike} The projectile "
+    "or blade is a SHORT solid object of fixed size and shape: it "
+    "visibly LEAVES the weapon and CROSSES the gap, its position "
+    "changing every frame — NEVER a long line, beam, rope, or "
+    "streak stretching between the two figures, NEVER hovering "
+    "in place, and it keeps one shape the whole flight. It is "
+    "loosed while the creature is still on the FAR half of the "
+    "frame, with clear empty air on BOTH sides of it mid-flight. "
+    "The strike connects EARLY, while the creature is still far "
+    "from the defender at full speed — and the INSTANT it "
+    "touches, an ON-THE-SPOT "
+    "TRANSFORMATION: the dark fevered bulk shatters off the "
+    "creature like a dry husk, motes scattering, and revealed "
+    "INSIDE it — at the EXACT same spot, mid-stride, one "
+    "continuous body — is {was}: TINY, CAT-SIZED — no bigger "
+    "than a house cat, a small fraction of the monster's bulk. The huge "
+    "dark shape was all fever — a hollow inflated shell MANY "
+    "times larger than the true animal inside it — so the size "
+    "drop at the burst is drastic and obvious, and it is "
+    "PERMANENT: the revealed animal stays this tiny for every "
+    "remaining frame and NEVER grows back. "
+    "ONE animal the whole time: the big dark shape and the small "
+    "animal are the SAME creature before and after the burst. "
+    "NOTHING new ever enters the frame. TIMING IS STRICT: the "
+    "ENTIRE fight — first lunge, dodge, second charge, shot, and "
+    "burst — is over within the FIRST FOUR SECONDS of the video. "
+    "Never stretch or pad the action to fill time. All the remaining "
+    "seconds are the calm afterwards: the revealed animal skids "
+    "to a stop, shakes itself once, then "
+    "SITS DOWN facing the defender, calm and content, wagging "
+    "its tail (or settling its wings) — and just stays there, "
+    "sitting and wagging, under a clean clear sky while the "
+    "defender lowers the weapon and stands at ease. A long, "
+    "quiet, happy ending. Physical, documentary-real motion "
+    "throughout — the fight part is a fight, not a pose.")
+
+# Second freed fight shape — the distant ONE-SHOT standoff: no melee
+# exchange, a vast gap, the defender calmly takes a single decisive
+# ranged strike mid-charge. Rotated with the two-exchange shape so the
+# set stays varied. Ranged strikes only (archer / wizard).
+_MERCY_FREED_FAR = (
+    "An EXTREMELY WIDE landscape shot, camera pulled very far back "
+    "— both figures TINY against a vast open expanse, the full "
+    "width of the frame between them. {scene} From the very FIRST "
+    "frame to the last there is exactly ONE creature and ONE "
+    "defender in the frame — never a pack, never a second animal, "
+    "never another person. The landscape is completely EMPTY and "
+    "DESERTED: no bystanders, no distant figures on the horizon, "
+    "nobody and nothing else anywhere, however small or far away. "
+    "The video BEGINS with the single creature far away on the "
+    "LEFT edge of the frame and the single defender small on the "
+    "RIGHT. The huge fevered creature is ALREADY charging "
+    "flat-out across the vast distance, straight AT the defender "
+    "— real animal gait, dust trailing behind it. This is a "
+    "SINGLE-SHOT standoff, not a melee: the defender never runs "
+    "and never dodges — they calmly stand their ground, small and "
+    "steady, as the charge eats up the ground between them. When "
+    "the creature has crossed about HALF the gap — still far "
+    "away, still small in the frame — the defender takes ONE "
+    "single decisive strike: {strike} The projectile is a SHORT "
+    "solid object of fixed size and shape: it visibly LEAVES the "
+    "weapon and CROSSES the long gap, its position changing every "
+    "frame — NEVER a long line, beam, rope, or streak stretching "
+    "between the two figures, NEVER hovering in place, and it "
+    "keeps one shape the whole flight, clear empty air on BOTH "
+    "sides of it. The strike connects while the creature is still "
+    "FAR from the defender, at full speed — and the INSTANT it "
+    "touches, an ON-THE-SPOT TRANSFORMATION: the dark fevered "
+    "bulk shatters off the creature like a dry husk, motes "
+    "scattering, and revealed INSIDE it — at the EXACT same spot, "
+    "mid-stride, one continuous body — is {was}: TINY, CAT-SIZED "
+    "— no bigger than a house cat, knee-high AT MOST, a small "
+    "fraction of the monster's "
+    "bulk. The huge dark shape was all fever — a hollow inflated "
+    "shell MANY times larger than the true animal inside it — so "
+    "the size drop at the burst is drastic and obvious, and it is "
+    "PERMANENT: the revealed animal stays this tiny for every "
+    "remaining frame and NEVER grows back. ONE animal the whole "
+    "time: the big dark shape and the small animal are the SAME "
+    "creature before and after the burst. NOTHING new ever enters "
+    "the frame. TIMING IS STRICT: the charge, the shot, and the "
+    "burst are ALL over within the FIRST FOUR SECONDS of the "
+    "video; never stretch or pad the action to fill time. All the "
+    "remaining seconds are the calm afterwards: the revealed "
+    "animal slows, trots the rest of the way toward the defender, "
+    "then SITS DOWN facing them, calm and content, wagging its "
+    "tail (or settling its wings) — and just stays there, sitting "
+    "and wagging, under a clean clear sky while the defender "
+    "lowers the weapon and stands at ease. A long, quiet, happy "
+    "ending. Physical, documentary-real motion throughout.")
 
 _MERCY_FALL = (
-    "A WIDE shot. {scene} The small armed figure stands alone "
-    "mid-frame. It staggers once, its weapon slips from its hands "
-    "and drops to the ground, it sinks to its knees and falls, and "
-    "lies completely still. No flash, no sparks, no light — only "
-    "dust settling around it. The FINAL TWO SECONDS are a perfectly "
-    "still tableau: the small fallen figure and its dropped weapon "
-    "beside it, absolutely nothing moving — a frozen closing frame.")
+    "An EXTREMELY WIDE shot, camera pulled far back — both figures "
+    "SMALL against the landscape, wide open ground between them. "
+    "{scene} There are EXACTLY TWO figures in the entire video "
+    "and never a third: the ATTACKER (the pressed conscript "
+    "described above, on one side of the frame) and the DEFENDER "
+    "(on the far side). No other person, soldier, animal, or "
+    "creature ever appears, and BOTH figures stay fully visible "
+    "in EVERY frame from first to last. The landscape around "
+    "them is completely EMPTY and DESERTED — no bystanders, no "
+    "distant figures, however small or far away. The shot OPENS "
+    "MID-ATTACK: the attacker is ALREADY charging flat-out "
+    "straight AT the defender, weapon raised. FIRST EXCHANGE — "
+    "the attacker's blow: it closes the whole distance and SWINGS "
+    "its weapon in one full committed arc; the defender SPRINGS "
+    "BACK a single step at the last instant, staying UPRIGHT ON "
+    "THEIR FEET the whole time — never falling, diving, or "
+    "rolling on the ground — as the blow bites into the ground, "
+    "dirt flying. Nobody is ever knocked down or lying on the "
+    "ground in this exchange. The attacker "
+    "wheels around and charges AGAIN from across the frame. "
+    "SECOND EXCHANGE — the same defender answers mid-charge: "
+    "{strike} The 'charging creature' being struck IS the "
+    "attacker — the only enemy in the frame. The projectile or blade is a SHORT solid "
+    "object of fixed size and shape: it visibly LEAVES the weapon "
+    "and CROSSES the gap, its position changing every frame — "
+    "NEVER a long line, beam, rope, or streak stretching between "
+    "the two figures, NEVER hovering in place, and it keeps one "
+    "shape the whole flight. The blow lands MID-CHARGE, while the "
+    "attacker is still on the FAR half of the frame, and it is "
+    "over in that one exchange. TIMING IS STRICT: the ENTIRE "
+    "fight — first swing, dodge, second charge, strike, and fall "
+    "— is over within the FIRST FOUR SECONDS of the video; never "
+    "stretch or pad the action to fill time. All the remaining seconds are the quiet "
+    "afterwards: no flash, no sparks, no glory — the struck "
+    "figure staggers, its weapon slips from its hands, it sinks "
+    "to its knees and falls, and lies completely still, dust "
+    "settling around it, while the defender lowers the weapon "
+    "and stands motionless. A long, still, sober ending — "
+    "absolutely nothing moving. Physical, documentary-real "
+    "motion throughout — the fight part is a fight, not a pose.")
 
 _MERCY_EVICTED = (
-    "A WIDE shot. {scene} The made thing — a creature that was never "
-    "alive — stands alone mid-frame. It shudders; its joined parts "
-    "lose their hold on one another and the whole shape comes apart, "
-    "pieces dropping inert to the ground, while a ribbon of black "
-    "smoke pours out of the wreck and drains DOWNWARD into the "
-    "ground like water into a crack, and is gone. The FINAL TWO "
-    "SECONDS are a perfectly still tableau: the scattered inert "
-    "pieces on empty ground, absolutely nothing moving — a frozen "
-    "closing frame.")
+    "An EXTREMELY WIDE shot, camera pulled far back — both figures "
+    "SMALL against the landscape, wide open ground between them. "
+    "{scene} From the very FIRST frame to the last there are "
+    "exactly TWO figures: the made thing and the defender — "
+    "never another person or animal, and the landscape around "
+    "them is completely EMPTY and DESERTED, no bystanders or "
+    "distant figures however small. The shot OPENS MID-ATTACK: "
+    "the made thing — a creature that was never alive — is "
+    "ALREADY lurching fast and crooked straight AT the defender. "
+    "FIRST EXCHANGE — the thing gets its blow in: it closes the "
+    "whole distance and SWIPES, one full committed strike; the "
+    "defender SPRINGS BACK a single step at the last instant, "
+    "staying UPRIGHT ON THEIR FEET the whole time — never "
+    "falling, diving, or rolling on the ground — as the blow "
+    "gouges the ground, debris flying. Nobody is ever knocked "
+    "down or lying on the ground in this exchange. "
+    "The thing wheels around and comes on AGAIN from "
+    "across the frame. SECOND EXCHANGE — the same defender "
+    "answers mid-lunge: {strike} The projectile "
+    "or blade is a SHORT solid object of fixed size and shape: it "
+    "visibly LEAVES the weapon and CROSSES the gap, its position "
+    "changing every frame — NEVER a long line, beam, rope, or "
+    "streak stretching between the two figures, NEVER hovering "
+    "in place, and it keeps one shape the whole flight. The blow "
+    "lands MID-LUNGE, while the thing is still on the FAR half "
+    "of the frame, and stops it dead: its joined parts lose "
+    "their hold on one another and the whole shape comes apart "
+    "ON THE SPOT, pieces dropping inert to the ground, while a "
+    "gush of BLACK LIQUID — heavy, ink-like — spills out of the "
+    "wreck and soaks straight DOWN into the ground, gone in a "
+    "second. Nothing rises from the wreck: no smoke, no vapor, "
+    "no column in the air. TIMING IS STRICT: the ENTIRE fight — first swipe, "
+    "dodge, second lunge, strike, and collapse — is over within "
+    "the FIRST FOUR SECONDS of the video; never stretch or pad "
+    "the action to fill time. All the remaining seconds are the quiet afterwards: "
+    "the scattered inert pieces lying on the ground, the black "
+    "liquid gone, the defender lowering the weapon and standing "
+    "at ease under a clean sky — a long, still ending, "
+    "absolutely nothing moving. Physical, documentary-real "
+    "motion throughout — the fight part is a fight, not a pose.")
+
+# The monster attacks; the player, small on the far side of the wide
+# frame, holds ground and stops the charge with one counter-blow.
+# Rotated per creature so the set stays varied; generics pin one each.
+_MERCY_STRIKES = (
+    (f"On the far side of the frame {CAST_WARRIOR} stands "
+     "ready, and at the last instant sidesteps and meets the "
+     "charge with one clean full-arc sword stroke."),
+    (f"On the far side of the frame {CAST_ARCHER} plants his "
+     "feet: he nocks an arrow, draws the string fully to his "
+     "cheek with the arrow LEVEL and aimed straight at the "
+     "charging creature, and RELEASES IMMEDIATELY — no long hold "
+     "at full draw — the bowstring snaps forward, the arrow "
+     "LEAVES the bow and flies flat and fast, point-first, and "
+     "strikes the creature dead center while it is still far "
+     "away."),
+    (f"On the far side of the frame {CAST_WIZARD} plants his feet "
+     "and snaps his staff forward, HURLING a single fist-sized "
+     "ball of light: the compact glowing orb LEAVES the staff and "
+     "flies flat and fast across the gap — a small discrete "
+     "projectile with empty air on both sides of it, NEVER a "
+     "beam, ray, or line from the staff — and strikes the "
+     "charging creature dead center."),
+)
 
 _MERCY_BEATS = {
     "native": ("freed", _MERCY_FREED, GOLD),
     "pressed": ("fall", _MERCY_FALL, DIM),
     "wrongmade": ("evicted", _MERCY_EVICTED, VIOLET),
+}
+
+# Per-slug scene additions for the fail families that survived the v6
+# templates. Applied only to the named slugs so the byte cap stays
+# clear of the already-passing prompts.
+_MERCY_SOLO = ("The whole world holds exactly ONE creature and ONE "
+               "human - no companion, no second animal, no other "
+               "figure ever, from the very first frame.")
+_MERCY_DOWN = ("When the beast breaks apart every piece and drop "
+               "falls STRAIGHT DOWN and soaks into the ground - "
+               "nothing flies upward, no egg, no shell, and nothing "
+               "solid remains.")
+_MERCY_EMPTY_END = ("The drained pieces melt away entirely; at the "
+                    "end the ground is EMPTY - no body, no bones, no "
+                    "skull, only a dark damp stain that fades.")
+_MERCY_SCENE_EXTRA = {
+    "guano_vole": _MERCY_SOLO + (" Warm lantern-browns and umber in "
+                                 "the roost cave - a full-color "
+                                 "photograph, never monochrome."),
+    "rabid_boar": _MERCY_SOLO + (" When the beast breaks apart every "
+                                 "piece falls STRAIGHT DOWN and soaks "
+                                 "away - nothing dry, nothing flying "
+                                 "upward."),
+    "shadow_wolf": ("The whole world holds exactly ONE creature and "
+                    "ONE human - no second animal ever. When the "
+                    "beast breaks apart every piece falls STRAIGHT "
+                    "DOWN and soaks into the ground - nothing flies "
+                    "upward, no egg, no shell."),
+    "pylon_adder": ("Rich NIGHT COLOR: deep blue dusk sky, warm amber "
+                    "beacon-lights on the pylons, green heath grass - "
+                    "a full-color photograph, never monochrome."),
+    "windfall_crow": ("Deep green orchard rows heavy with red "
+                      "apples. Every piece of the broken beast "
+                      "falls STRAIGHT DOWN and soaks away."),
+    "night_hawk": ("Deep blue moonlit heath, warm firelight tones on "
+                   "the defender - full color, never monochrome."),
+    "shellback_tortoise": _MERCY_SOLO,
+    "wire_eel": _MERCY_SOLO,
+    "vault_weaver": _MERCY_SOLO,
+    "silk_broodling": _MERCY_SOLO + (" Warm torchlit color - amber "
+                                     "light, colored silks - a "
+                                     "full-color photograph, never "
+                                     "monochrome."),
+    "courier_hound": ("Late-afternoon color: golden light, green "
+                      "verges, red courier-livery tatters - a "
+                      "full-color photograph, never monochrome."),
+    "banner_wolf": _MERCY_SOLO + (" Rich full COLOR film: warm amber "
+                                  "late-afternoon light, faded "
+                                  "red-and-gold banner cloth, dusty "
+                                  "tan ground - never gray, never "
+                                  "black-and-white."),
+    "lane_boar": _MERCY_SOLO,
+    "bailer_kobold": _MERCY_SOLO,
+    "miner_husk": _MERCY_SOLO + " " + _MERCY_EMPTY_END,
+    "lamp_eater": _MERCY_SOLO + " " + _MERCY_EMPTY_END,
+    "windfall_wight": _MERCY_SOLO + " " + _MERCY_EMPTY_END,
+    "flicker_wight": _MERCY_SOLO + " " + _MERCY_EMPTY_END,
+    "muster_wight": ("The muster-field is DESERTED - the muster is "
+                     "long gone, not one other soul in sight. ")
+                    + _MERCY_SOLO + " " + _MERCY_EMPTY_END,
+    "lamptree_wight": _MERCY_SOLO + " " + _MERCY_EMPTY_END,
+}
+# Per-slug reveal additions, appended after the species clauses.
+_MERCY_WAS_EXTRA = {}
+# Slugs forced to the two-exchange melee shape regardless of parity —
+# pylon_adder's one-shot archer kept rendering a bow-to-monster tether
+# (3 of 6 takes) while ash_adder proved snake+sword works.
+_MERCY_FORCE_MELEE = {"pylon_adder"}
+# Full reveal replacements — skip the baby transform and species
+# clauses entirely (crow chicks render as big fledged gulls; only the
+# naked-nestling wording is left to try).
+_MERCY_WAS_REPLACE = {
+    "shadow_wolf": ("a newborn wolf pup no bigger than a loaf of "
+                    "bread, eyes barely open, wobbling on unsteady "
+                    "legs - it stays newborn-tiny in every frame, "
+                    "absolutely NOT a grown wolf"),
+    "night_hawk": ("a tiny shapeless ball of pale down - a nightjar "
+                   "hatchling with NO visible wings, only stubby "
+                   "wing-nubs, no feather pattern anywhere, small "
+                   "enough to sit in an open palm, staying that "
+                   "tiny in every frame"),
+    "windfall_crow": ("a naked pink crow NESTLING no bigger than one "
+                      "of the fallen apples on the ground beside it, "
+                      "blind and featherless, two thin legs and a "
+                      "tiny beak - in EVERY frame to the very end it "
+                      "stays apple-sized next to that apple, never "
+                      "growing, absolutely NOT a fledged or "
+                      "full-grown bird"),
+    # Spider reveals: zero cat tokens anywhere (even negated "NOT a
+    # cat" is left out) — the shared CAT-SIZED framing seeded kitten
+    # chimeras 6/6 across both spider slugs.
+    "silk_broodling": ("a pale young spiderling of the corner-silk - "
+                       "a real SPIDER: eight thin jointed legs, one "
+                       "small rounded glossy body, no fur, no ears, "
+                       "no tail, no whiskers"),
+    "vault_weaver": ("a small ambush-weaver of the vault - a real "
+                     "SPIDER: eight thin jointed legs, one small "
+                     "rounded glossy body, no fur, no ears, no tail, "
+                     "no whiskers"),
+}
+
+# Post-composition substitutions on the fully composed prompt —
+# surgical de-tokenizing where shared template words seed artifacts:
+# the CAT-SIZED/house-cat/wagging framing pulled spider reveals into
+# kitten chimeras (6/6), and the cast rule's "taller than a human"
+# comparison drew a literal reference human into banner_wolf's frame
+# (2/3). Referents are swapped for objects already in each scene.
+_SPIDER_SUBS = [
+    ("TINY, CAT-SIZED — no bigger than a house cat",
+     "TINY — its whole body smaller than the defender's boot"),
+    ("wagging its tail (or settling its wings)",
+     "quietly folding its thin legs beneath it"),
+    ("sitting and wagging", "sitting still"),
+]
+_MERCY_PROMPT_SUB = {
+    "silk_broodling": _SPIDER_SUBS,
+    "vault_weaver": _SPIDER_SUBS,
+    "banner_wolf": [
+        ("two heads taller than a human and visibly wider",
+         "slab-built and immense, twice the height of the ragged "
+         "tents around him"),
+        ("wolf of the muster", "wolf"),
+    ],
 }
 
 
@@ -716,15 +1036,84 @@ def _load_mercy_jobs() -> None:
         if not os.path.isfile(path):
             continue
         raw = _yaml.safe_load(open(path))
-        for e in raw.get("encounters") or []:
+        for i, e in enumerate(raw.get("encounters") or []):
             kind = str(e.get("kind") or "").strip()
             if kind not in _MERCY_BEATS:
                 continue
             suffix, beat, tint = _MERCY_BEATS[kind]
             scene = f"The creature: {e['name']}. {e['prose']}"
+            extra = _MERCY_SCENE_EXTRA.get(e["id"])
+            if extra:
+                scene += " " + extra
             was = str(e.get("was") or "the small true animal underneath")
+            was = was.rstrip(" .")
+            was = was[:1].lower() + was[1:]
+            if e["id"] in _MERCY_WAS_REPLACE:
+                was = _MERCY_WAS_REPLACE[e["id"]]
+            # "wolf"/"boar" reveals render adult-sized no matter how the
+            # template begs — "baby X" is the only phrasing Grok obeys.
+            if was.startswith("a "):
+                was = "a baby " + was[2:]
+            elif was.startswith("an "):
+                was = "a baby " + was[3:]
+            # Moth reveals render as winged CATS under "baby" phrasing
+            # (6/6 fails on two slugs) — spell out insect anatomy.
+            # Bird reveals render adult- or dog-scale; spell out the
+            # chick (cinder_vulture's downy-chick take is the one pass).
+            # Checked before "moth" — night_hawk is a "moth-hunting
+            # nightjar" and must land here, not in the insect branch.
+            if e["id"] in _MERCY_WAS_REPLACE:
+                pass  # replacement text carries its own anatomy
+            elif any(w in was for w in ("owl", "crow", "kite",
+                                        "nightjar", "hawk", "vulture",
+                                        "bird")):
+                was += (" - a real newly-hatched BIRD chick: downy "
+                        "fluff, two thin legs, a tiny beak, small "
+                        "enough to sit in an open palm, absolutely NOT "
+                        "a cat or any four-legged animal")
+            elif "moth" in was:
+                was = ("an ordinary little gray moth - a real INSECT "
+                       "with six thin legs, feathery antennae, and "
+                       "powdery triangular wings, small enough to sit "
+                       "in a palm, absolutely NOT a cat or any furry "
+                       "four-legged animal")
+            # Snake reveals render as legged cats/weasels without
+            # explicit anatomy (reed_adder passed, ash/pylon did not).
+            elif any(w in was for w in ("adder", "viper", "snake")):
+                was += (" - a real SNAKE: one slender legless coil no "
+                        "longer than a man's forearm, no legs at all, "
+                        "absolutely NOT a cat, weasel, or any legged "
+                        "animal")
+            # Eels chimera into cat-headed quadrupeds the same way
+            # snakes did; spell out the fish.
+            elif "eel" in was:
+                was += (" - a real EEL: a slender legless FISH with "
+                        "smooth glistening skin, no longer than a "
+                        "man's forearm, no legs, no fur, no ears, "
+                        "absolutely NOT a cat or any legged animal")
+            # Boars drift back to full adult size on some scenes;
+            # anchor the scale in concrete terms.
+            elif "boar" in was:
+                was += (", a tiny piglet no bigger than a loaf of "
+                        "bread, barely knee-high")
+            was += _MERCY_WAS_EXTRA.get(e["id"], "")
+            # Sword or bow only in melee and duels — the wizard orb
+            # keeps rendering as a sustained beam at close range.
+            strike = _MERCY_STRIKES[(n + i) % 2]
+            # Freed reels alternate fight shapes: two-exchange melee
+            # vs the distant one-shot standoff (ranged strikes only).
+            if kind == "native" and (n + i) % 2 == 1:
+                beat = _MERCY_FREED_FAR
+                strike = _MERCY_STRIKES[1 + ((n + i) // 2) % 2]
+            if e["id"] in _MERCY_FORCE_MELEE:
+                beat = _MERCY_FREED
+                strike = _MERCY_STRIKES[0]
+            prompt = beat.format(scene=scene, was=was, strike=strike)
+            for old, new in _MERCY_PROMPT_SUB.get(e["id"], ()):
+                prompt = prompt.replace(old, new)
             EVENTS[f"{e['id']}_{suffix}"] = {
-                "prompt": beat.format(scene=scene, was=was),
+                "prompt": prompt,
+                "prefix": MERCY_PREFIX,
                 "tint": tint, "seconds": 8, "loop": False,
                 "hold_ms": 2000, "trim": (0.0, 6.0),
             }
@@ -733,27 +1122,33 @@ def _load_mercy_jobs() -> None:
 _load_mercy_jobs()
 
 EVENTS["native_freed"] = {
+    "prefix": MERCY_PREFIX,
     "prompt": _MERCY_FREED.format(
         scene=("The creature: a huge gaunt fevered beast, part wolf part "
                "shadow, ribs showing, in a dark field under a grey "
                "lidded sky."),
-        was="a small plain grey animal"),
+        was="a small plain grey animal",
+        strike=_MERCY_STRIKES[1]),
     "tint": GOLD, "seconds": 8, "loop": False, "hold_ms": 2000,
     "trim": (0.0, 6.0),
 }
 EVENTS["pressed_fall"] = {
+    "prefix": MERCY_PREFIX,
     "prompt": _MERCY_FALL.format(
         scene=("The creature: a small long-eared conscript in scavenged "
                "plate armor, an iron collar at its neck, holding a "
-               "notched blade, in a dark camp of stacked crates.")),
+               "notched blade, in a dark camp of stacked crates."),
+        strike=_MERCY_STRIKES[0]),
     "tint": DIM, "seconds": 8, "loop": False, "hold_ms": 2000,
     "trim": (0.0, 6.0),
 }
 EVENTS["wrongmade_evicted"] = {
+    "prefix": MERCY_PREFIX,
     "prompt": _MERCY_EVICTED.format(
         scene=("The creature: a man-shaped snarl of black thorn, dead "
                "wood and scrap iron, standing in a hedgerow gap under "
-               "a flickering pale light.")),
+               "a flickering pale light."),
+        strike=_MERCY_STRIKES[1]),
     "tint": VIOLET, "seconds": 8, "loop": False, "hold_ms": 2000,
     "trim": (0.0, 6.0),
 }
@@ -825,9 +1220,10 @@ def veo_generate(prompt: str, seconds: int, api_key: str, out_mp4: str,
             "aspectRatio": "16:9",
             "resolution": "720p",
             "durationSeconds": seconds,
-            "negativePrompt": NEGATIVE,
         },
     }
+    if "lite" not in VIDEO_MODEL:   # lite rejects negativePrompt (400)
+        body["parameters"]["negativePrompt"] = NEGATIVE
     req = urllib.request.Request(
         f"{API_ROOT}/models/{VIDEO_MODEL}:predictLongRunning?key={api_key}",
         data=json.dumps(body).encode(),
@@ -853,6 +1249,74 @@ def veo_generate(prompt: str, seconds: int, api_key: str, out_mp4: str,
     with urllib.request.urlopen(dl) as r, open(out_mp4, "wb") as f:
         f.write(r.read())
     print(f"  saved {out_mp4} ({os.path.getsize(out_mp4) // 1024} KB)", flush=True)
+
+
+# ── OpenAI Sora 2 ────────────────────────────────────────────────────────
+
+def sora_generate(prompt: str, seconds: int, api_key: str,
+                  out_mp4: str) -> None:
+    model = os.environ.get("SORA_MODEL", "sora-2")
+    body = {"model": model, "prompt": prompt,
+            "seconds": str(seconds), "size": "1280x720"}
+    req = urllib.request.Request(
+        "https://api.openai.com/v1/videos",
+        data=json.dumps(body).encode(),
+        headers={"Content-Type": "application/json",
+                 "Authorization": f"Bearer {api_key}"})
+    vid = json.load(urllib.request.urlopen(req))
+    vid_id = vid["id"]
+    print(f"  sora video {vid_id} [{model}]", flush=True)
+    while vid.get("status") in ("queued", "in_progress"):
+        time.sleep(10)
+        vid = json.load(urllib.request.urlopen(urllib.request.Request(
+            f"https://api.openai.com/v1/videos/{vid_id}",
+            headers={"Authorization": f"Bearer {api_key}"})))
+        print(f"  ...{vid.get('status')} {vid.get('progress', '')}",
+              flush=True)
+    if vid.get("status") != "completed":
+        raise RuntimeError(f"sora error: {json.dumps(vid)[:500]}")
+    dl = urllib.request.Request(
+        f"https://api.openai.com/v1/videos/{vid_id}/content",
+        headers={"Authorization": f"Bearer {api_key}"})
+    with urllib.request.urlopen(dl) as r, open(out_mp4, "wb") as f:
+        f.write(r.read())
+    print(f"  saved {out_mp4} ({os.path.getsize(out_mp4) // 1024} KB)",
+          flush=True)
+
+
+# ── xAI Grok Imagine ─────────────────────────────────────────────────────
+
+def grok_generate(prompt: str, seconds: int, api_key: str,
+                  out_mp4: str) -> None:
+    model = os.environ.get("GROK_VIDEO_MODEL", "grok-imagine-video-1.5")
+    # xAI caps the prompt at 4096 UTF-8 *bytes*, not chars; em dashes are
+    # 3 bytes each, so fold them to plain hyphens before submitting.
+    prompt = prompt.replace("—", "-")
+    body = {"model": model, "prompt": prompt, "duration": seconds,
+            "aspect_ratio": "16:9"}
+    req = urllib.request.Request(
+        "https://api.x.ai/v1/videos/generations",
+        data=json.dumps(body).encode(),
+        headers={"Content-Type": "application/json",
+                 "Authorization": f"Bearer {api_key}"})
+    rid = json.load(urllib.request.urlopen(req))["request_id"]
+    print(f"  grok request {rid} [{model}]", flush=True)
+    while True:
+        time.sleep(10)
+        st = json.load(urllib.request.urlopen(urllib.request.Request(
+            f"https://api.x.ai/v1/videos/{rid}",
+            headers={"Authorization": f"Bearer {api_key}"})))
+        status = st.get("status")
+        print(f"  ...{status} {st.get('progress', '')}", flush=True)
+        if status == "done":
+            break
+        if status not in ("pending",):
+            raise RuntimeError(f"grok error: {json.dumps(st)[:500]}")
+    with urllib.request.urlopen(st["video"]["url"]) as r, \
+            open(out_mp4, "wb") as f:
+        f.write(r.read())
+    print(f"  saved {out_mp4} ({os.path.getsize(out_mp4) // 1024} KB)",
+          flush=True)
 
 
 # ── fal.ai (Kling 2.5 Turbo Pro) ─────────────────────────────────────────
@@ -1167,7 +1631,7 @@ def main() -> None:
         i = args.index("--fal-model")
         fal_model = args[i + 1]
         args = args[:i] + args[i + 2:]
-    if backend not in ("fal", "veo"):
+    if backend not in ("fal", "veo", "sora", "grok"):
         sys.exit(f"unknown backend: {backend}")
     if fal_model not in FAL_MODELS:
         sys.exit(f"unknown fal model: {fal_model}; have {list(FAL_MODELS)}")
@@ -1191,15 +1655,28 @@ def main() -> None:
                 image = os.path.join(_HERE, "..", image)
             # image-conditioned events stay on Veo (image-to-video)
             use = "veo" if image else backend
+            styled = cfg.get("prefix", STYLE) + cfg["prompt"]
             print(f"gen  {slug} [{use}]...", flush=True)
             if use == "fal":
-                fal_generate(STYLE + cfg["prompt"], cfg["seconds"],
+                fal_generate(styled, cfg["seconds"],
                              _fal_key(), mp4, fal_model)
+            elif use == "sora":
+                key = os.environ.get("LUNA_OPENAI_API_KEY", "").strip()
+                if not key:
+                    sys.exit("LUNA_OPENAI_API_KEY not set")
+                sora_generate(styled, cfg["seconds"], key,
+                              mp4)
+            elif use == "grok":
+                key = os.environ.get("LUNA_XAI_API_KEY", "").strip()
+                if not key:
+                    sys.exit("LUNA_XAI_API_KEY not set")
+                grok_generate(styled, cfg["seconds"], key,
+                              mp4)
             else:
                 api_key = os.environ.get("LUNA_GEMINI_API_KEY", "").strip()
                 if not api_key:
                     sys.exit("LUNA_GEMINI_API_KEY not set")
-                veo_generate(STYLE + cfg["prompt"], cfg["seconds"], api_key,
+                veo_generate(styled, cfg["seconds"], api_key,
                              mp4, image)
         print(process(slug, mp4), flush=True)
 
