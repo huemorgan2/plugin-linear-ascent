@@ -218,9 +218,11 @@ EVENTS: dict[str, dict] = {
     },
     "ascent_title": {
         "prompt": (
-            "the title screen stands PERFECTLY STILL — the huge blocky "
-            "'LINEAR ASCENT' lettering, the colossal banded tower, its two "
-            "great anchor chains, the village of shacks, the dirt road, "
+            "the website title screen stands PERFECTLY STILL — the solid "
+            "filled 'LINEAR ASCENT' lettering (smaller, with sky above it), "
+            "the SUPER MASSIVE stacked megastructure tower of dozens of "
+            "thin Scotland-sized realm-bands on the right, its highway-thick "
+            "anchor chains, the open left plain, the tiny refugee shacks, "
             "the ground and the sun do not move or change AT ALL, frozen "
             "solid. The ONLY motion in the entire shot: the cloud deck "
             "around the tower's waist and the far cloud banks drift very "
