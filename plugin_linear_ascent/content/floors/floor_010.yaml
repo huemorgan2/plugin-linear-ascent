@@ -1,76 +1,113 @@
 floor: 10
 tier: 1
-biome: Greenreach
+biome: Men
 zone: The Kingsfield
 gate_town: Bannerline
 banner: gnarl
 arrival: >-
-  The last meadow before the lift is a parade ground now. Goblin banners
-  in their hundreds, rifle crates stacked into walls, and every path
-  raked clean for the King's inspection. They know you're coming.
+  A great muster-meadow drowned in banners — the field where Men
+  gathered their armies, cut off mid-muster, a hundred standards
+  rotting on their poles. The banners hang colorless in the dead air.
+  They crowned a goblin to guard it. They know you're coming.
 encounters:
   - id: kings_guard
-    name: Goblin king's guard
+    name: Goblin guard
+    kind: pressed
     lore: >-
-      Gnarl armors his own in tower-scrap, plate over plate. Under it
-      beats a heart loyal past sense.
+      Goblins have no business on a muster-meadow of Men. Gnarl's
+      honor-watch was posted here as mockery doubled, and knows it.
     weight: 3
     traits: [armor_med]
     prose: >-
-      Two crossed scrap-rifles bar the path — a king's guard in salvaged
-      breastplate, better fed than any goblin below, and prouder. Old
-      arrows lie snapped in the gravel where its plate turned them.
+      A goblin of the honor-watch bars the path in overlapped tower
+      plate, collared, better armed than anything below. It guards a
+      king it despises, and old arrows lie snapped where its plate
+      turned them.
   - id: banner_wolf
     name: Banner-broken wolf
+    kind: native
+    was: >-
+      A camp-follower wolf of the muster.
     lore: >-
-      It carried the king's standard until the standard burned. It
-      fights like it still owes the debt.
+      Tangled in dragging colors, it hunts the tent-lanes.
     weight: 2
     traits: [frail, feeble]
     prose: >-
-      A wolf on a chain guards the crate-wall, banner-cloth knotted at
-      its collar. It has stopped fighting the chain. It waits for you.
-  - id: drill_sergeant
-    name: Goblin drill sergeant
+      A wolf comes down the tent-lane dragging six feet of rotted
+      standard tangled at its neck, half-starved and past caring what
+      the colors used to mean.
+  - id: courier_hound
+    name: Courier-hound
+    kind: native
+    was: >-
+      A message-dog of the muster line.
     lore: >-
-      It taught a thousand goblins where to put a spear. It has no
-      plans to be out-taught by you.
-    weight: 3
-    traits: [sturdy, fierce]
-    prose: >-
-      A goblin sergeant halts its squad's drill, hands you one long
-      look, and sends the recruits to lunch. This one it keeps.
-  - id: kings_courier
-    name: King's courier
-    lore: >-
-      It runs the king's word between camps and has never once been
-      caught. It would rather die than be late.
+      It runs its dead routes forever, savaging what it finds on them.
     weight: 2
     traits: [fast, lean, savage]
     prose: >-
-      A goblin courier in cut-down harness sprints the raked paths
-      with the King's dispatches — and swerves at you, because a
-      climber's head is worth more than any letter it carries.
+      A courier-hound rounds the horse-lines at a dead run, satchel
+      long rotted off its harness. Its route runs through where you
+      stand. It does not reroute.
+  - id: parade_horse
+    name: Parade-horse
+    kind: native
+    was: >-
+      A war-horse of the line.
+    lore: >-
+      Riderless and fever-wild, it tramples the churned field.
+    weight: 2
+    traits: [hulking, fierce]
+    prose: >-
+      A war-horse stands riderless among the muster-tents, tack rotted
+      to straps, eyes white. It has waited eighty years for a rider,
+      and it has stopped wanting one.
+  - id: bunting_kite
+    name: Banner-kite
+    kind: native
+    was: >-
+      A scavenging kite of the camps.
+    lore: >-
+      Nesting in the standards, it stoops on anything bright.
+    weight: 2
+    traits: [flying, frail]
+    prose: >-
+      A kite drops off a banner-pole and opens wide over you — a
+      scavenger grown king-sized in the standards, stooping at the
+      brightest thing on the field.
+  - id: muster_wight
+    name: Muster-wight
+    kind: wrongmade
+    lore: >-
+      The field's dead, aether pooled in the trampled mire. A rank that
+      forms and marches nowhere.
+    weight: 1
+    traits: [resist_med, slow]
+    prose: >-
+      Across the churned field a rank of half-there soldiers forms up
+      out of the mire, dresses its line on a rotted standard, and
+      wheels toward you, marching nowhere else.
 warden:
   name: Gnarl, the Goblin King
   prose: >-
-    On a throne of stacked rifle crates slouches Gnarl, crowned in salvage
-    and fat with tribute. He raises one hand, and the parade ground goes
-    quiet enough to hear the lift humming behind the throne.
+    On a throne of banner-poles and broken spears slouches Gnarl,
+    crowned as the tower's own joke, a notched sword too big for him
+    across his knees. He raises a hand, and the field goes quiet enough
+    to hear the lift humming behind the throne.
 npc:
-  name: Vail
-  role: watch sergeant
+  name: Serjeant Mella Rung
+  role: muster-serjeant
   greet: >-
-    A climber in patched colors watches the parade ground through a
-    slit in the palisade. "Sergeant Vail — what's left of the last
-    push. We counted the banners. Then we counted our dead. Sit down
-    before they see you."
+    A serjeant in patched levy colors looks you over from boots up.
+    "Serjeant Mella Rung. They crowned a goblin to guard the meadow
+    where kings were made — that's the whole joke, and nobody here is
+    laughing. Fall in."
   lore: >-
-    "Every path out there is raked for inspection and walked by guards
-    in tower-scrap plate. The couriers run the gaps — fast, and they
-    scream when they see you. Take them quiet or the whole field knows
-    your name."
+    "The honor-watch hates the king it guards; the ones who throw down
+    the collar hate him most of all. Keep off the raked paths, move
+    tent-line to tent-line, and leave the horses be — they've earned
+    it."
   warn: >-
-    "The King holds the lift and no blade takes him alone. This is
-    war-party work — pledge at the Guildhall and come back with
+    "Gnarl holds the field's dark heart and no blade takes him alone.
+    This is war-party work — pledge at the Guildhall and come back with
     numbers. The banners come down together or not at all."

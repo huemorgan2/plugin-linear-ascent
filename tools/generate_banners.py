@@ -163,6 +163,63 @@ SCENES: dict[str, tuple[str, str]] = {
         "floodlight tower sweeping a gradient beam across the grass, a "
         "lone wolf silhouette on a crest, birds as sparse specks — open, "
         "hopeful, the world feels enormous.", DIM),
+    # 038: per-floor identity banners for floors 2-9, prompts drawn from
+    # each lore floor's "The land" (vision/lore/floors/floor_00N.md).
+    "floor_002": (
+        "a mine adit cut into a mountainside at dusk — the dark mine-mouth "
+        "arch as the focal subject, ore-carts on rails that end in open "
+        "air, iron-water streaking from the mouth in pale gradient "
+        "ribbons, bats scattering as sparse specks into a huge luminous "
+        "gradient sky, a tiny lamplit miners' street hanging off the rim, "
+        "every surface furred with rust reading as rough dither.", DIM),
+    "floor_003": (
+        "a pasture drowned in flat grey floodwater — a wide sheet of "
+        "still water mirroring a huge gradient sky like a dropped mirror, "
+        "tops of hedges and half-drowned fence lines breaking the surface "
+        "in receding rows, hay-rick islands rotting at the waterline, "
+        "willows trailing into their own reflections, one distant stone "
+        "weir with water sheeting off its lintel in a soft glow.", DIM),
+    "floor_004": (
+        "a dead elf glow-wood in permanent dusk — enormous ancient trees "
+        "whose sap once lit the canopy now standing pitch black, the "
+        "outer eave-woods in soft grey gradient light that dies by "
+        "degrees into total darkness at the wood's heart, one faint "
+        "lamp-tree deep in with a last small radial halo among the black "
+        "trunks, ash-grey moss as sparse dither.", DIM),
+    "floor_005": (
+        "a drowned mine gallery — dead-flat black water filling a vast "
+        "pillared hall, great pump wheels half-submerged, drowned tools "
+        "hanging on drowned pegs, one dry adit high in the rock face "
+        "spilling a narrow gradient shaft of grey light down onto the "
+        "flood, its reflection doubled in the still water, the far "
+        "galleries swallowed in darkness.", DIM),
+    "floor_006": (
+        "a vast cave-mouth cavern at the edge of true dark — a thin slot "
+        "of daylight high at the rim throwing one knife of gradient light "
+        "across dripping stone, the terraced lamps of a tiny rim town as "
+        "small radial halos, sheets of pale silk webbing the high "
+        "corners, the floor descending into absolute black, bats thick "
+        "in the vault as sparse specks.", DIM),
+    "floor_007": (
+        "a great cider-orchard gone to rot at golden dusk — huge old "
+        "pruned apple trees in planted rows receding mile on mile, the "
+        "ground deep in windfall fruit reading as soft dither, wasps "
+        "hanging in the thick air as sparse sparks, a luminous gradient "
+        "sky glowing behind the boughs, the deepest rows dissolving into "
+        "fermented dark.", DIM),
+    "floor_008": (
+        "grey ash dunes to the horizon under floodlight glare — slow "
+        "sheets of wind-blown ash as drifting dither bands, a lone jackal "
+        "silhouette working a dune-shadow, vultures wheeling as sparse "
+        "specks, a cinder-cone flank half-buried in ash-drift, heat-glare "
+        "rising off the dunes into a huge luminous gradient sky.", DIM),
+    "floor_009": (
+        "a night signal-heath — a moor of tall humming aether-pylons "
+        "casting long knife-edged shadows across the heather, pylon lamps "
+        "flickering with small radial halos, the field strobing in hard "
+        "gradient bands of light and dark, one great unlit beacon tower "
+        "standing dark at the moor's middle, a granite tor on the "
+        "horizon.", DIM),
     "town_lamplit_steading": (
         "a lively frontier gate-town street at warm lamplit dusk — timber "
         "houses with glowing gradient windows either side, strings of "
@@ -173,7 +230,7 @@ SCENES: dict[str, tuple[str, str]] = {
         "sky, the tower gate looming far at the street's end.", DIM),
     "gnarl": (
         "a goblin warlord's throne room, throne CENTERED in frame: a "
-        "throne built from stacked rifle crates, a fat crowned goblin "
+        "throne built from broken spears and siege-scrap, a fat crowned goblin "
         "silhouette slouched on it, ragged banners on both sides, two "
         "torches whose glow rises in narrow gradient ramps behind the "
         "throne — the background stays mostly dark, no large bright "
@@ -266,7 +323,7 @@ SCENES: dict[str, tuple[str, str]] = {
     "hellmarch": (
         "demon siege outworks — a rampart wall of welded black iron "
         "crossing the frame, one huge horned gate as the focal subject, "
-        "furnace light leaking through gun-slits in thin bright gradient "
+        "furnace light leaking through arrow-slits in thin bright gradient "
         "ramps, chimney stacks against a smoke sky rendered in smooth "
         "dithered gradients, sparks drifting upward.", DIM),
     "malgrim": (

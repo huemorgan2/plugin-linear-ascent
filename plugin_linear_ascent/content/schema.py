@@ -66,6 +66,14 @@ class ContentError(ValueError):
     pass
 
 
+# 038: the three kinds of monster (world-lore.md §5). A kill FREES what it
+# strikes — which kind decides what the kill card shows: a native is CURED
+# (the fever's shape drops away, the true animal walks off), a wrongmade is
+# EVICTED (the made thing comes apart and drains downward), and the pressed
+# are the tragic ones — a real death, written plainly.
+KINDS = ("native", "pressed", "wrongmade")
+
+
 @dataclass(frozen=True)
 class Encounter:
     id: str
@@ -74,6 +82,8 @@ class Encounter:
     weight: int
     traits: tuple[str, ...] = ()
     lore: str = ""      # 003: dossier flavor — optional, ≤ LORE_CAP
+    kind: str = ""      # 038: native | pressed | wrongmade ("" = legacy floor)
+    was: str = ""       # 038: the true creature under the fever (natives)
 
 
 @dataclass(frozen=True)
@@ -164,9 +174,20 @@ def _load_floor_file(path: str) -> Floor:
                 raise ContentError(
                     f"{where}/{e['id']}: lore over {LORE_CAP} chars")
             _check_prose(lore, f"{where}/{e['id']}/lore")
+        kind = str(e.get("kind") or "").strip()
+        if kind and kind not in KINDS:
+            raise ContentError(
+                f"{where}/{e['id']}: unknown kind {kind!r} — one of {KINDS}")
+        was = str(e.get("was") or "").strip()
+        if was:
+            if len(was) > LORE_CAP:
+                raise ContentError(
+                    f"{where}/{e['id']}: was over {LORE_CAP} chars")
+            _check_prose(was, f"{where}/{e['id']}/was")
         encounters.append(Encounter(
             id=e["id"], name=e["name"], prose=e["prose"],
-            weight=int(e.get("weight", 1)), traits=traits, lore=lore))
+            weight=int(e.get("weight", 1)), traits=traits, lore=lore,
+            kind=kind, was=was))
     if not encounters:
         raise ContentError(f"{where}: no encounters")
     _check_prose(raw["arrival"], f"{where}/arrival")
@@ -322,6 +343,17 @@ def lint_floors() -> list[str]:
                 errors.append(
                     f"floor {fl.floor}: missing npc block (030 — a voice "
                     "in every fields, floors 1-10)")
+            # 038: the story-revamped floors speak the mercy system —
+            # every encounter tagged, every native carries its true form.
+            for e in fl.encounters:
+                if not e.kind:
+                    errors.append(
+                        f"floor {fl.floor}/{e.id}: missing kind (038 — "
+                        "native/pressed/wrongmade, floors 1-10)")
+                if e.kind == "native" and not e.was:
+                    errors.append(
+                        f"floor {fl.floor}/{e.id}: native without 'was' "
+                        "(038 — the true creature the cure sets free)")
         # 008: floors ≥ 11 speak the full language — lore on every
         # encounter (the [i] dossier's one breath) and a 4-5 shelf.
         if fl.floor >= 11:

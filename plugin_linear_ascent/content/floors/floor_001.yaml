@@ -1,6 +1,6 @@
 floor: 1
 tier: 1
-biome: Greenreach
+biome: Men
 zone: The Fencerows
 gate_town: Lamplit Steading
 banner: greenreach
@@ -11,6 +11,9 @@ arrival: >-
 encounters:
   - id: grey_wolf
     name: Grey wolf
+    kind: native
+    was: >-
+      The shy grey wolf the farm dogs kept past the fences.
     lore: >-
       Farm dogs once kept them past the fences. The dogs are gone; the
       wolves remember the gap in the third hedge.
@@ -20,6 +23,9 @@ encounters:
       coat. It has learned that climbers carry meat.
   - id: feral_boar
     name: Feral boar
+    kind: native
+    was: >-
+      Sty stock, escaped — an ordinary boar under the fever.
     lore: >-
       Sty stock gone wild in two generations. It charges first and
       decides why later.
@@ -28,19 +34,11 @@ encounters:
     prose: >-
       A boar the size of a cart tears up the turf between you and the
       path, tusks yellowed and one ear ragged from old fights.
-  - id: goblin_straggler
-    name: Goblin straggler
-    lore: >-
-      Left behind when the war-band moved up. Too proud to drop the
-      sword, too small to lift it right.
-    weight: 2
-    traits: [lean, savage]
-    prose: >-
-      A lone goblin in a stitched rag-coat drags a notched longsword
-      through the grass, too heavy for it by half. It sees you, sets
-      its feet behind the sword anyway, and grins.
   - id: hedge_rat
     name: Hedgerow rat
+    kind: native
+    was: >-
+      A granary rat that ate its fill in the dark and kept growing.
     lore: >-
       Granary doors stood open the night the farms fell. What ate its
       fill in the dark kept growing.
@@ -49,6 +47,45 @@ encounters:
     prose: >-
       Something the size of a dog bursts from the fencerow in a spray
       of leaves — a rat grown fat on abandoned granaries, teeth first.
+  - id: lane_wolf
+    name: The last pack
+    kind: native
+    was: >-
+      The steading's own sheepdogs — the very dogs that once kept the
+      wolves out.
+    lore: >-
+      The steading's sheepdogs, feral now, hunting in a silent ring.
+      One of them still turns its head at a whistle.
+    weight: 2
+    traits: [lean, fast, savage]
+    prose: >-
+      Shapes fold out of the hedges on every side — the steading's own
+      sheepdogs, feral and silent, working you the way they once worked
+      sheep.
+  - id: goblin_straggler
+    name: Goblin straggler
+    kind: pressed
+    lore: >-
+      Marched down from the warrens to hold the low gate, then left
+      behind sick when the war-band climbed on. Nobody pays its wage.
+    weight: 2
+    traits: [lean, feeble]
+    prose: >-
+      A lone goblin in a stitched rag-coat drags a notched longsword
+      through the grass, too heavy for it by half. It sees you, sets
+      its feet behind the sword anyway, and grins.
+  - id: ember_shade
+    name: Hedge-wight
+    kind: wrongmade
+    lore: >-
+      Spilled aether soaked into a rotten stile. Nothing living was
+      ever in it.
+    weight: 1
+    traits: [sturdy]
+    prose: >-
+      At the floodlights' flicker a man-shape stands up out of the
+      hedge — blackthorn snarled into shoulders and arms, walking the
+      fence line it grew from.
 warden:
   name: Warden Brackjaw
   prose: >-

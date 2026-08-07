@@ -226,7 +226,13 @@ def test_every_floor_1_to_3_family_ships_all_three_types():
             tokens = enc.id.replace("_", " ").split()
             fam = next((f for f in combat._KILL_FAMILIES
                         if any(t.startswith(f) for t in tokens)), None)
-            assert fam, f"floor {n} encounter {enc.id} has no kill family"
+            if fam is None:
+                # 038: kinded creatures play per-kind reels (freed/fall/
+                # evicted), never the family kill art — only legacy
+                # wilds without a kind still need a family here.
+                assert enc.kind, \
+                    f"floor {n} encounter {enc.id} has no kill family"
+                continue
             families.add(fam)
     for fam in families:
         for suffix in ("melee", "arrow", "magic"):

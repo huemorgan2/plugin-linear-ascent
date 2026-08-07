@@ -1,71 +1,99 @@
 floor: 3
 tier: 1
-biome: Greenreach
-zone: The Orchard Rows
-gate_town: Cider Cross
-banner: greenreach
+biome: Men
+zone: The Drowned Pasture
+gate_town: Weirsend
+banner: floor_003
 arrival: >-
-  An orchard in perfect rows, gone wild at the crowns. Windfall apples rot
-  sweet in the grass. Between the trunks, wire has been strung at ankle
-  height — someone hunts here, and not with teeth.
+  A pasture taken mid-flood and never drained — grey water to the
+  horizon, hedge-tops and half-drowned fences breaking the surface.
+  Hay-ricks stand as islands. Somewhere a sluice still turns, keeping
+  the wrong things wet.
 encounters:
-  - id: orchard_wolfpack
-    name: Orchard wolf
+  - id: sluice_wolf
+    name: Marsh wolf
+    kind: native
+    was: >-
+      A fen-edge wolf that hunted the drier islands.
     lore: >-
-      The pack splits around the apple rows and folds back in behind
-      you. One wolf is never one wolf.
+      Web-footed now, wading the channels between the ricks. It swims
+      better than you pole.
     weight: 3
     traits: [lean, fast]
     prose: >-
-      A wolf steps out between the rows ahead — and you hear a second one
-      behind you stop moving. The pack has done this before.
-  - id: snare_goblin
-    name: Snare-line goblin
+      A wolf breasts the grey water between two hay-ricks, web-footed
+      and low, only its eyes and shoulders showing. It has learned that
+      punts tip.
+  - id: reed_adder
+    name: Marsh adder
+    kind: native
+    was: >-
+      A shy grass-snake of the banks.
     lore: >-
-      It seeds the grass with wire and waits. The limp in its walk is
-      an old lesson from its own line.
+      Fever-bold now, striking from the reed at anything warm.
     weight: 3
     traits: [frail, feeble]
     prose: >-
-      A goblin drops from a bough, trailing the snare-wire it was laying.
-      It levels a scrap-pistol with both hands and shrieks for its due.
-  - id: rabid_boar
-    name: Cider-mad boar
+      The sedge parts without wind. A marsh adder rides the shallow
+      water in slow curves, tongue reading your warmth, no longer shy
+      of anything.
+  - id: mire_boar
+    name: Mire boar
+    kind: native
+    was: >-
+      A pasture boar that fed along the drowned hay.
     lore: >-
-      It ate the fermented windfalls by the barrel. There is no plan
-      in it now, only speed and spit.
+      Mud-armored to the eyes, it beds in the reed and bursts out at a
+      punt's shadow.
     weight: 2
-    traits: [hulking, savage]
+    traits: [sturdy, savage]
     prose: >-
-      A boar reels out of the windfalls, drunk on rot and mean with it,
-      foam at the tusks and no interest in going around you.
-  - id: windfall_haunt
-    name: Windfall haunt
+      The reed-bank explodes and a boar comes through it mud-armored to
+      the eyes, throwing a bow-wave. It heard your pole touch bottom.
+  - id: wire_eel
+    name: Fence-wire eel
+    kind: native
+    was: >-
+      A fen eel that hunted along the flooded fence-lines.
     lore: >-
-      Rot-light over the orchard floor. Blades stir it like smoke;
-      it drinks a little of every cast.
+      Grown long around the drowned fence-wire until wire and eel are
+      one barbed length.
+    weight: 2
+    traits: [armor_low, lean]
+    prose: >-
+      What looks like drowned fence-wire moves — an eel grown through
+      the barbs until steel and muscle are one length, sawing the water
+      toward your legs.
+  - id: windfall_haunt
+    name: Drowned lantern
+    kind: wrongmade
+    lore: >-
+      A trapper's lamp lost in the flood, aether soaked into the dead
+      flame. It calls punts onto the black reed.
     weight: 2
     traits: [resist_low, sturdy]
     prose: >-
-      The sweet rot between two rows thickens into a shape — a haunt
-      fed on spoiled harvest, wearing the orchard's shimmer like a
-      coat. Spellwork slides off it the way light slides off cider.
+      A cold light drifts over the water, patient as a ferryman, and
+      swings your way. There is no hand carrying it. There never was.
 warden:
-  name: Warden Applewrath
+  name: Warden Sedgeback
   prose: >-
-    In the press-house, the Warden waits among the vats: a great ape-frame
-    of orchard timber and engine parts, cider steaming from its joints.
+    The mill-pool heaves and Sedgeback wades out of it — a mire boar
+    under a weir-iron carapace of green bronze, shedding water like a
+    roof. It charges the shallows in a bow-wave that hides its feet.
 npc:
-  name: Old Perry
-  role: orchard keeper
+  name: Old Nan Sedge
+  role: weir-keeper
   greet: >-
-    A stooped figure racks cider under a tarp. "Perry. This was my
-    family's orchard nine generations. Have a cup — then mind the wire
-    between the trunks. It isn't mine."
+    An old woman sits the weir-sill with her boots in the spill. "Nan
+    Sedge, weir-keeper — for what that's worth. The weir works. That's
+    the joke of it: the weir works, and everything it kept dry is
+    under. Tie your punt and talk."
   lore: >-
-    "The goblins strung snare-line at ankle height through the good
-    rows, and the wolves learned to drive prey onto it. Walk the mown
-    strips, and watch the windfalls — some of them hum."
+    "The old drove-road runs just under the surface, rim to rim — the
+    one dry-footed line across, if you can read where it bends. The
+    black reed opens a hand to the bone. Stay off it."
   warn: >-
-    "Applewrath nests in the press-house by the lift. It has taken the
-    harvest for its own, and it prunes trespassers same as branches."
+    "Sedgeback wallows the drowned mill-pool, the deepest water on the
+    floor. You'll see the bow-wave before you ever see the boar. Fight
+    it in the shallows or don't fight it at all."

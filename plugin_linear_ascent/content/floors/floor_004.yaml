@@ -1,72 +1,115 @@
 floor: 4
 tier: 1
-biome: Greenreach
-zone: The Beacon Field
-gate_town: Pylon Rest
-banner: greenreach
+biome: Elves
+zone: The Lightless Glade
+gate_town: Lanternroot
+banner: floor_004
 arrival: >-
-  A floodlight pylon has toppled here, and its beam still burns along the
-  ground, a river of white across black grass. Goblins have built a camp
-  in the light. They think nothing hunts what stands in it. Wrong.
+  An elf-wood whose trees once lit themselves, snuffed in a single
+  night. The sap runs dark, the glimmer-moss is ash-grey, and past the
+  first branches the floodlights fail. Whatever moves in there moves by
+  sound.
 encounters:
-  - id: beacon_goblin
-    name: Beacon-camp goblin
+  - id: glade_stag
+    name: Pale stag
+    kind: native
+    was: >-
+      A wood-stag that grazed the lit glades.
     lore: >-
-      It tends the signal fires that called the horde down. It will
-      die keeping one lit.
+      Colorless and blind-white, it walks the dark by sound and gores
+      at light.
     weight: 3
-    traits: [sturdy, fierce]
+    traits: [lean, fierce]
     prose: >-
-      A goblin sentry steps into the beam's edge, scrap-rifle raised,
-      squinting past the glare at your silhouette.
-  - id: shadow_wolf
-    name: Shadow-line wolf
+      Antlers the color of bone swing out of the black — a stag gone
+      blind-white, head cocked to your footfall. It charges the sound,
+      and the sound is you.
+  - id: dusk_hare
+    name: Dusk-hare
+    kind: native
+    was: >-
+      A shy twilight hare of the wood's edge.
     lore: >-
-      It has learned the lamplight's edges and hunts one step
-      outside them.
+      Fever-fast and fearless, it bolts from the dark straight at the
+      eyes.
     weight: 3
-    traits: [lean, savage]
+    traits: [frail, feeble, fast]
     prose: >-
-      Along the dark edge of the beam a wolf keeps pace with you,
-      appearing and vanishing at the light's border like a blade drawn
-      and sheathed.
-  - id: goblin_lampwright
-    name: Goblin lampwright
-    lore: >-
-      Half artisan, half arsonist. The lamps it hangs burn green and
-      mark the paths its kin avoid.
-    weight: 2
-    traits: [frail, feeble]
-    prose: >-
-      A goblin in a harness of stolen lenses is prying glass from the
-      fallen pylon. It draws a shard like a knife, unwilling to share.
+      Something small and quick circles you in the black, closer with
+      each pass. A hare — fearless, fever-fast, aimed at your eyes.
   - id: glare_moth
-    name: Glare moth
+    name: Lamp moth
+    kind: native
+    was: >-
+      The palm-sized moths that pollinated the wick-flowers by
+      lamplight.
     lore: >-
-      It rides the beacon updrafts above spear-height. Nothing on the
-      ground has touched it in years.
+      Grown to a hand-span and starving, they swarm any flame and
+      smother it.
     weight: 2
     traits: [flying, frail]
     prose: >-
-      Out of the beam drops a moth with a wingspan like a barn door,
-      scales throwing the floodlight back in knives. It circles above
-      sword-reach, waiting for you to look up into the glare.
+      Your lamp gutters and the dark grows wings — moths broad as two
+      hands, starving for the light, smothering the flame with their
+      own bodies.
+  - id: wick_owl
+    name: Wick-owl
+    kind: native
+    was: >-
+      A lamplighter's companion owl that watched for guttering lamps.
+    lore: >-
+      Silent and over-large now, hunting warmth instead of watching
+      flames.
+    weight: 2
+    traits: [flying, frail, feeble]
+    prose: >-
+      The dark above you goes soft with wingbeat — an owl broad as a
+      door, silent past sense, riding your lamp-heat down.
+  - id: lamp_eater
+    name: The lamp-eater
+    kind: wrongmade
+    lore: >-
+      The black lichen that drinks light, gathered into a slow crawling
+      shape. Nothing living is in it.
+    weight: 1
+    traits: [resist_low, sturdy, slow]
+    prose: >-
+      The dark ahead is darker than it should be, and crawling. A shape
+      of black lichen drags itself toward your flame — not to warm
+      itself. To drink it.
+  - id: lamptree_wight
+    name: Glade-wight
+    kind: wrongmade
+    lore: >-
+      A dead lamp-tree, aether pooled in its rot. It walks with a cold
+      false glow.
+    weight: 1
+    traits: [sturdy, savage]
+    prose: >-
+      A snarl of black branch unbends from the treeline, tall as two
+      men, lit from inside by a cold false glow. The light shows
+      nothing. That is its purpose.
 warden:
-  name: Warden Glarefang
+  name: Warden Palegleam
   prose: >-
-    At the pylon's broken head crouches Glarefang, a wolf remade in
-    chrome, one eye a burning floodlamp. Its shadow is thrown a mile long.
+    A pale stag crowned in a welded lamp-cage steps into its own cold
+    blue glare — light that shows nothing and blinds everything near
+    it. Palegleam stalks the edge of the light it carries, and charges
+    out of it.
 npc:
-  name: Sella
-  role: beam-watcher
+  name: Ithren of the Wicks
+  role: last lamplighter
   greet: >-
-    A climber gone grey sits with her back to the fallen pylon, eyes on
-    the beam. "Sella. I watch the light. Stand in it and everything
-    sees you. Stand out of it and you see everything. Choose."
+    An elf waits at the eave of the wood, an unlit lantern hung from
+    his staff. "Ithren, of the Wicks. Last lamplighter of a wood that
+    lit itself for a thousand years. They put it out in a night. I
+    carry the lantern anyway."
   lore: >-
-    "The goblins camp in the beam because they think light is armor.
-    The wolves hunt the shadow-line where it breaks. And don't look at
-    the moths when they open their wings — that's how they eat."
+    "Past the first branches the dark is total — the trees' own
+    murdered light, not night. The stags charge at sound and the moths
+    come for flame. Keep your light shuttered and your feet quiet."
   warn: >-
-    "Glarefang lairs where the beam dies at the lift-house. Its eyes
-    throw the light back at you, and it strikes while you're blinking."
+    "Palegleam wears a crown of cold false light. If you can see it,
+    you're already blinded, and it charges from the edge of its own
+    glare. Shut your eyes when the blue comes — the one honest advice
+    this floor has left."

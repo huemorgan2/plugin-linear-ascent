@@ -1,72 +1,111 @@
 floor: 7
 tier: 1
-biome: Greenreach
-zone: The Millrace
-gate_town: Wheelhouse
-banner: greenreach
+biome: Men
+zone: The Orchard Rows
+gate_town: Cider Cross
+banner: floor_007
 arrival: >-
-  A river runs the wrong way here, pumped uphill through a captured
-  millrace to feed the tower's coolant veins. The old watermill still
-  turns, grinding nothing. Goblins fish the race with nets of fence wire.
+  Mile on mile of planted rows gone to rot, the ground ankle-deep in
+  windfall fermenting under the floodlights. The air is thick, sweet,
+  and drunk; wasps hang in it like sparks. Nine generations pruned
+  these trees. Nobody will pick them.
 encounters:
-  - id: race_goblin
-    name: Millrace goblin
+  - id: orchard_wolfpack
+    name: Orchard wolf
+    kind: native
+    was: >-
+      A wolf that denned in the windbreak rows.
     lore: >-
-      It runs the sluice-tops like a towpath. Wet planks are its home
-      ground and your bad footing.
+      It hunts the rows in silent packs, drunk-bold on the haze.
     weight: 3
-    traits: [frail, feeble]
+    traits: [lean, fast]
     prose: >-
-      A goblin hauls its wire net from the race, finds it empty again,
-      and decides you will make a better catch.
-  - id: sluice_wolf
-    name: Sluice wolf
+      Grey shapes flow between the trunks on both sides, keeping your
+      pace — an orchard pack, drunk-bold on the haze, herding you
+      toward the deeper rows.
+  - id: rabid_boar
+    name: Cider-mad boar
+    kind: native
+    was: >-
+      A windfall-fed boar of the rows.
     lore: >-
-      It waits below the weir where the water pushes you. The current
-      does half its hunting.
-    weight: 3
-    traits: [lean, fast, fierce]
-    prose: >-
-      A wolf drinks at the sluice gate, unbothered — until its head
-      comes up dripping and its ears go flat.
-  - id: wheel_boar
-    name: Wheelhouse boar
-    lore: >-
-      It shelters in the dead wheelhouse and defends it like a den.
-      The doorway is exactly boar-shaped.
+      Reeling, furious, and fearless on fermented mush.
     weight: 2
-    traits: [hulking, fierce]
+    traits: [hulking, savage]
     prose: >-
-      A boar has made its wallow in the wheelhouse shade. It rises out
-      of the mud like a landslide changing its mind.
-  - id: coolant_crab
-    name: Coolant crab
+      A boar the size of a hay-wain reels out of the windfall, soaked
+      in rot-cider, furious at nothing and now at you. It does not feel
+      the branches it breaks.
+  - id: hornet_swarm
+    name: Hornet swarm
+    kind: native
+    was: >-
+      The orchard's wasps, before the harvest rotted.
     lore: >-
-      Grown vast in the warm outflow. Its shell is machine-fed
-      mineral, laid on in rings.
+      A single-minded swarm the size of a cart, following warmth and
+      sweat.
     weight: 2
-    traits: [armor_low, sturdy, slow]
+    traits: [flying, frail, fierce]
     prose: >-
-      A crab the size of a millstone climbs out of the race, shell
-      grown around scraps of pump-iron until beast and machine armor
-      are the same thing. Its claws open with a hydraulic sigh.
+      The hum you took for the presses sharpens and swings toward you —
+      a swarm the size of a cart, moving as one mind, reading your
+      sweat on the sweet air.
+  - id: windfall_crow
+    name: Windfall crow
+    kind: native
+    was: >-
+      A scrumping crow of the high forks.
+    lore: >-
+      Bloated on rot, mobbing in drunk spirals, going for the eyes.
+    weight: 2
+    traits: [flying, frail, feeble]
+    prose: >-
+      The flock lifts off the windfall in a drunken spiral and folds
+      onto you all at once — crows bloated on rot, mobbing for the
+      eyes.
+  - id: orchard_hare
+    name: Orchard hare
+    kind: native
+    was: >-
+      A bark-nibbling hare of the rows.
+    lore: >-
+      Fever-swift, bolting between the rows into shins and ankles.
+    weight: 2
+    traits: [frail, feeble, fast]
+    prose: >-
+      Something small tears down the row at shin height, fever-swift,
+      and does not swerve. It has stopped swerving for anything.
+  - id: windfall_wight
+    name: Windfall haunt
+    kind: wrongmade
+    lore: >-
+      A presser drowned in a vat, aether soaked into the black cider.
+      It offers a cup.
+    weight: 1
+    traits: [resist_low, sturdy]
+    prose: >-
+      A reeling, dripping figure waits between the rows, black cider
+      running from it like sweat. One hand offers a cup. Watch the
+      other hand.
 warden:
-  name: Warden Milldrown
+  name: Warden Applewrath
   prose: >-
-    Milldrown waits under the wheel — a sodden mass of wolf and weed and
-    pump-iron, water running from it in ropes as it stands to full height.
+    The deep windfall heaves and Applewrath comes up out of it charging
+    — a cider-mad boar under press-iron and barrel-hoops, black cider
+    dripping from the seams, the haze thick around it.
 npc:
-  name: Ganny
-  role: the miller
+  name: Cesta Pommet
+  role: master-presser
   greet: >-
-    A broad woman feathers the wheel-brake as you pass. "Ganny. My
-    family ground flour here; now the race feeds the tower's veins and
-    I grind nothing. Still my wheel, though. Still my river."
+    A woman meets you at the shuttered nursery door, graft-knife in her
+    belt. "Cesta Pommet, master-presser. Nine generations planted these
+    rows; the tenth is picking the fruit for the wasps. State your
+    business quick — the haze drifts."
   lore: >-
-    "The race runs uphill — trust nothing the water does here. Goblins
-    net the sluices, and the crabs come up with the coolant, warm as
-    fresh bread and twice as mean. Keep your feet dry and your back to
-    the wheel."
+    "The rot-haze makes a body forget to run — chew willow-bark and
+    keep moving. The rows run inward and down, and the last miles are
+    the darkest and the drunkest. Never follow fruit that looks whole."
   warn: >-
-    "Milldrown holds the wheelhouse pool by the lift. It pulls climbers
-    under the race and holds them there till the wheel stops counting."
+    "Applewrath beds in the deep windfall behind the press-house. It
+    charges in a spray of rotten fruit and the haze comes with it. Hold
+    the upwind row or you'll fight it drunk."

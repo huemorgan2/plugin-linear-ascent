@@ -1,73 +1,112 @@
 floor: 8
 tier: 1
-biome: Greenreach
-zone: The Burnt Common
-gate_town: Ashfold
-banner: greenreach
+biome: Waste
+zone: The Ashline
+gate_town: Greywell
+banner: floor_008
 arrival: >-
-  The common burned when the land was taken, and the grass never came
-  back right — silver-grey, brittle, whispering. Goblin scavenger crews
-  rake the ash for anything the fire left. Their rakes have stopped.
+  Grey ash dunes to the horizon — the burned frontier no crown ever
+  wanted. The wind moves the ash in slow sheets, jackals work the
+  dune-shadows, and the first hot floor of the climb bakes under
+  floodlights that only add glare. Water here is a secret.
 encounters:
-  - id: ash_goblin
-    name: Ash-crew goblin
-    lore: >-
-      It rakes the burn-lines for anything metal. The rake is taller
-      than it is and sharpened on both edges.
-    weight: 3
-    traits: [frail, feeble]
-    prose: >-
-      A goblin in a mask of soot and bottle glass straightens from its
-      rake. It taps the rake twice on the ground — a signal, or a threat.
   - id: cinder_wolf
-    name: Cinder wolf
+    name: Ashline jackal
+    kind: native
+    was: >-
+      A dune scavenger that followed the caravans.
     lore: >-
-      Its coat is singed to wire. It drives prey toward the hot
-      ground and waits at the cool edge.
+      Pack-bold and fever-lean, coursing warmth across the flats.
     weight: 3
     traits: [lean, fast, fierce]
     prose: >-
-      A wolf the color of the burnt field rises from where it was
-      invisible, ash sliding from its back like grey snow.
-  - id: charred_boar
-    name: Char-tusk boar
+      Lean shapes rise out of the dune-shadows one by one, ash sliding
+      from their backs — jackals coursing your warmth, pack-bold and
+      patient no longer.
+  - id: dune_hare
+    name: Glass-hare
+    kind: native
+    was: >-
+      A pale desert hare of the strike-fields.
     lore: >-
-      It survived the burn that took the floor. What's left doesn't
-      feel much, and remembers the fire's side.
-    weight: 2
-    traits: [hulking, savage]
+      Razor-swift over the fulgurite, kicking up glass-dust.
+    weight: 3
+    traits: [frail, feeble, fast]
     prose: >-
-      A boar blackened from rooting in the burn charges through its own
-      dust cloud, tusks scorched to points.
-  - id: ember_shade
-    name: Ember shade
+      A pale blur crosses the flat in a spray of glass-dust, doubles,
+      and comes through your legs — a hare running strike-glass at a
+      speed no fever should allow.
+  - id: cinder_salamander
+    name: Ash salamander
+    kind: native
+    was: >-
+      A heat-loving rock salamander.
     lore: >-
-      Heat-ghost off the cinder beds. Spellwork feeds it a little
-      before it bites.
+      Ember-veined, it beds in warm ash and lashes with a scalding
+      tail.
     weight: 2
-    traits: [resist_low, lean, fierce]
+    traits: [resist_low, sturdy]
     prose: >-
-      The grey grass exhales, and the exhale has eyes — a shade of old
-      fire that never finished going out. Spells reach it dimmed, the
-      way a shout reaches the bottom of a well.
+      The warm ash you were about to cross opens an orange eye. A
+      salamander unbeds itself, ember-veined, tail dragging a line of
+      smoke.
+  - id: cinder_vulture
+    name: Cinder vulture
+    kind: native
+    was: >-
+      A carrion bird of the frontier.
+    lore: >-
+      Huge and ash-caked, it stoops on anything that slows.
+    weight: 2
+    traits: [flying, frail]
+    prose: >-
+      A shadow crosses you twice. The vulture riding it is ash-caked
+      and huge, and it has decided you are slowing.
+  - id: ash_adder
+    name: Dune adder
+    kind: native
+    was: >-
+      A sand-swimming viper of the dunes.
+    lore: >-
+      Fever-fast, it strikes from under the ash at a footfall.
+    weight: 2
+    traits: [lean, fierce]
+    prose: >-
+      The dune's surface pours toward your boot — an adder swimming the
+      ash just under the crust, striking at the footfall before the
+      foot has landed.
+  - id: greywell_ogre
+    name: Dune ogre
+    kind: pressed
+    lore: >-
+      Waste-born and collared, set to hold the one deep spring against
+      the nomads it once shared water with.
+    weight: 1
+    traits: [hulking, savage, slow]
+    prose: >-
+      An ogre stands up from the spring-mouth with an ash-glass boulder
+      on its shoulder, sun-mad, collared. It was born to these dunes.
+      The collar holds it to the cruelest posting on them.
 warden:
-  name: Warden Greycinder
+  name: Warden Cinderhide
   prose: >-
-    Greycinder stands in the field's dead center, a stag-tall frame of
-    charcoal and grate-iron, embers still alive somewhere in its chest.
+    The ash-bowl before the lift stirs and Cinderhide stands out of it
+    — a dune ogre welded into slag-plate and ash-glass, collar fused to
+    its skull, a molten boulder already in hand. The tower made this
+    one un-savable.
 npc:
-  name: Smoor
-  role: charcoal burner
+  name: Kesh of the Grey Wells
+  role: water-finder
   greet: >-
-    A soot-black figure tends a mound that smokes without fire. "Smoor.
-    I burned charcoal on this common before the common burned itself.
-    The ash keeps what the fire left. I rake carefully."
+    A wiry figure crouches at a reed-line with a divining-reed in one
+    hand and a knife in the other, and watches you a long moment.
+    "Kesh. I find water and I keep it found. No crown ever wanted this
+    ground — that's why it's still ours."
   lore: >-
-    "The grass came back wrong — silver, brittle, whispering when there
-    is no wind. The goblin crews rake for salvage, and the shades rake
-    for the goblins. If your shadow warms, drop and roll before you
-    look."
+    "Follow the greywell reeds and you follow the buried water; the
+    deeper in, the richer it runs — which is why the ogres dug in at
+    the middle. Share water by the law here, or expect none."
   warn: >-
-    "Greycinder beds down in the old fire-heart by the lift. Every step
-    near it wakes an ember. It doesn't roar — it smolders, and then the
-    field is alight behind you."
+    "Cinderhide dens in the ash-bowl at the cinder-cone — slag-plated,
+    collar fused to the skull. There's no freeing that one; the tower
+    saw to it. Strike from the dune-crests, and mourn it after."

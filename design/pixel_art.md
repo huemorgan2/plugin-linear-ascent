@@ -43,7 +43,7 @@ Rule of thumb: a banner marks **arriving somewhere or a moment that stops the ga
 | `stone` | Stone of the Climb | monolith with glowing name-lines, small crowd of silhouettes |
 | `gate` | tower gate / floor select | massive doorframe, lift cage, chain and cable running out of frame |
 | `greenreach` | tier-1 zone entry | rolling meadow, dead tree, floodlight tower with beam, wolf on the crest |
-| `gnarl` (violet) | floor 10 boss arrival | throne of rifle crates, fat crowned silhouette, goblin banners |
+| `gnarl` (violet) | floor 10 boss arrival | throne of broken spears and siege-scrap, fat crowned silhouette, goblin banners |
 | `death` (red) | death card | cracked skull in an ash field, broken shard floating above, faint rays |
 | `present` (gold) | return present | strapped crate on the doorstep at dawn, cable bow, long shadows |
 

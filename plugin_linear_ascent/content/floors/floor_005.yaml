@@ -1,71 +1,116 @@
 floor: 5
 tier: 1
-biome: Greenreach
-zone: The Shearing Downs
-gate_town: Woolgate
-banner: greenreach
+biome: Giants
+zone: The Flooded Mine
+gate_town: Pumpstead
+banner: floor_005
 arrival: >-
-  Sheep country once — the downs still carry their paths, worn deep by
-  generations of flocks that are all eaten now. Goblin banners fly from a
-  shearing shed, and the grass between is churned by boar and worse.
+  Gallery after gallery runs down into dead-black water. The great
+  pumps that held it back are drowned with the deep they kept dry, and
+  drowned gear hangs on drowned pegs. The flat water goes down further
+  than any lamp will show.
 encounters:
-  - id: downs_boar
-    name: Downs boar
+  - id: blind_shoal
+    name: Blind cave-fish
+    kind: native
+    was: >-
+      Pallid schooling fish of the drowned galleries.
     lore: >-
-      Downland turf made it heavy; downhill charges made it
-      confident. It is usually right.
-    weight: 3
-    traits: [sturdy]
-    prose: >-
-      A boar with a broken spear-shaft healed into its shoulder crests
-      the down and comes straight on, remembering the spear.
-  - id: goblin_drover
-    name: Goblin drover
-    lore: >-
-      It herded the stolen flocks up-tower. The crook doubles as a
-      hook for climbers' ankles.
+      Massed and biting, they boil the surface wherever warmth touches
+      it.
     weight: 3
     traits: [frail, feeble]
     prose: >-
-      A goblin drover cracks a wire whip, driving two leashed wolves
-      ahead of it like dogs. It looses the leashes when it sees you.
-  - id: shed_raider
-    name: Shed raider
+      The water around your boots begins to boil — a shoal of pallid,
+      eyeless fish, massed and biting at the first warmth this gallery
+      has known in years.
+  - id: drift_eel
+    name: Sump eel
+    kind: native
+    was: >-
+      A blind drift-eel of the deep water.
     lore: >-
-      It strips shearing sheds of iron and wool alike. The shears it
-      carries were not made as a weapon. It doesn't care.
+      Fever-long, it strikes up from the flat black at a lamp's
+      reflection.
     weight: 2
-    traits: [lean, savage]
+    traits: [lean, fierce]
     prose: >-
-      From the shearing shed a goblin emerges wearing an entire fleece,
-      scrap-rifle poking out of the wool. It bleats, then fires.
+      The dead-flat water breaks without warning — a blind eel long as
+      a hoist-rope, striking up at your lamp's reflection with your
+      face behind it.
   - id: downs_courser
-    name: Downs courser
+    name: Drift courser
+    kind: native
+    was: >-
+      A winder's hound that ran messages between the galleries.
     lore: >-
-      Bred from hounds to run down deserters. Open ground is its
-      answer to everything, and here it is all open ground.
+      It still runs the dry drifts end to end, fever-fast, coursing
+      anything that carries a light.
     weight: 2
     traits: [fast, lean, fierce]
     prose: >-
-      A hound built like a greyhound crossed with a rumor comes over
-      the down flat-out, faster than anything has a right to run on
-      turf. Distance is not going to be your friend here.
+      Claws hammer the dry gallery behind you, gaining — a mine-hound
+      running its old message-route at fever pace, and you are standing
+      on the route.
+  - id: coolant_crab
+    name: Sump-crawler
+    kind: native
+    was: >-
+      A cave-crab of the flooded drifts.
+    lore: >-
+      Shield-backed and many-legged, it scuttles the drowned floors
+      underfoot.
+    weight: 2
+    traits: [armor_low, sturdy, slow]
+    prose: >-
+      The floor of the flooded drift moves under your boot — a
+      shield-backed crawler the size of a cart-wheel, sidling up out of
+      the black with its arms open.
+  - id: bailer_kobold
+    name: Bilge kobold
+    kind: pressed
+    lore: >-
+      First-taken from the warrens and set to bail the deep by hand.
+      The collar keeps it at it.
+    weight: 2
+    traits: [lean, feeble]
+    prose: >-
+      A kobold stands waist-deep in the black water with a bailing-hook,
+      wet to the bone, collared. It swings at your lamp because the
+      lamp found it.
+  - id: miner_husk
+    name: Drowned-miner husk
+    kind: wrongmade
+    lore: >-
+      A drift-crew's lost lamp and gear, aether pooled in the flood
+      over them. It wades in the shape of a working man.
+    weight: 1
+    traits: [resist_low, sturdy, slow]
+    prose: >-
+      A lamp comes wading up the flooded gallery at shift-pace, hung on
+      a shape like a working man. The shape is water and old gear. The
+      lamp is real.
 warden:
-  name: Warden Ramsteel
+  name: Warden Sumplock
   prose: >-
-    Ramsteel stands at the stair — a great horned frame of shearing
-    blades and ram's skull, pawing sparks from the flint of the downs.
+    The flood stands dead-flat, then jets — Sumplock, a giant sump-eel
+    welded through with a pump-valve maw, takes the gallery's water in
+    and fires it back hard enough to sweep your feet, striking from the
+    wave.
 npc:
-  name: Maun
-  role: shepherd of nothing
+  name: Durn Sumphand
+  role: master of pumps
   greet: >-
-    A shepherd leans on a crook with no flock in sight. "Maun. I walked
-    these downs before the banners came. The sheep are all eaten. The
-    paths remember though — use them, they're worn safe and quiet."
+    A giant stands watch on the drowned engine-house, arms folded over
+    the frozen beam. "Durn Sumphand, master of pumps. We built them to
+    keep the deep dry. Now the pumps are drowned too. Say your piece —
+    I'm listening for the beam."
   lore: >-
-    "Goblin drovers run the shearing shed like they invented wool. The
-    boars churned the low ground — stay off it after rain. And the
-    courser is faster than you. Don't test that twice."
+    "Dry mouths at the rim, flood at the middle — every drift dives
+    inward, so count your steps back. The sump-weed closes on whatever
+    stirs the surface, and the glow that draws you to it is fungus, not
+    a lamp."
   warn: >-
-    "Ramsteel paces the lift paddock, horns like bent girders. It rams
-    what stands still and tramples what runs straight. Move sideways."
+    "Sumplock rules the drowned galleries, and its own element hides
+    it. It sweeps your feet with the wave before it ever strikes. Fight
+    it from the high dry ledges or feed it."

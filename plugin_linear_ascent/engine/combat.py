@@ -50,12 +50,35 @@ _KILL_FAMILIES = ("brackjaw", "tortoise", "haunt", "goblin", "boar",
                   "wolf", "rat")
 _KILL_SUFFIX = {"melee": "melee", "ranged": "arrow", "magic": "magic"}
 
+# 038: a kinded creature's ending shows what the kill MEANS — a cure,
+# a death, or an eviction — never a generic kill reel.
+_BREED_FX_VERB = {"native": "freed", "pressed": "fall",
+                  "wrongmade": "evicted"}
+
 
 def _kill_fx(e: dict, name: str, first_clear: bool, dtype: str = "") -> str:
     """011/009: event animation slug for a victory scene. A typed kill
     GIF (family × landing damage type) wins; the family's untyped kill
     is the fallback; a first floor clear plays the gate opening. The
-    renderer silently skips slugs with no shipped art."""
+    renderer silently skips slugs with no shipped art.
+
+    038: kinded creatures (world-lore §5) resolve by what the kill
+    means instead of the family table — {id}_{verb} first, then the
+    kind's generic {kind}_{verb}, then nothing. The family kill reels
+    are deliberately NOT a fallback here: a death animation on a cured
+    Native would tell the wrong story. Legacy floors (kind == "") keep
+    the family logic exactly."""
+    breed = e.get("breed", "")
+    if breed in _BREED_FX_VERB:
+        if first_clear:
+            return "ascent_open"
+        verb = _BREED_FX_VERB[breed]
+        slug = e.get("id", "")
+        if slug and _event_art(f"{slug}_{verb}"):
+            return f"{slug}_{verb}"
+        if _event_art(f"{breed}_{verb}"):
+            return f"{breed}_{verb}"
+        return ""
     tokens = f"{e.get('id', '')} {name}".lower().replace("_", " ").split()
     for family in _KILL_FAMILIES:
         if not any(t.startswith(family) for t in tokens):
@@ -175,6 +198,16 @@ def start_encounter(p: dict, floor, enc, kind: str = "wilds") -> Scene:
     p["encounter"] = {
         "kind": kind, "name": name, "prose": prose,
         "id": (enc.id if enc is not None else ""),
+        # 038: the three kinds of monster (world-lore §5) — what a kill
+        # MEANS. Runtime key is "breed" because "kind" on this dict
+        # already means wilds/warden. A Warden is Wrongmade by
+        # definition; "" is a legacy floor and keeps today's copy.
+        "breed": ("wrongmade" if kind == "warden"
+                  else (getattr(enc, "kind", "") or "")
+                  if enc is not None else ""),
+        # 038: the true creature under the fever — set for natives.
+        "was": ((getattr(enc, "was", "") or "")
+                if kind != "warden" and enc is not None else ""),
         "specimen": specimen, "traits": list(traits),
         "profile": prof,
         "atk": atk, "def": dfs, "hp": hp, "hp_max": hp,
@@ -300,13 +333,33 @@ def _profile_line(prof: dict) -> str:
     return " · ".join(_profile_tiers(prof))
 
 
+def _breed_line(e: dict) -> str:
+    """038: one dossier line naming WHAT the thing is (world-lore §5),
+    so the [i] card says what the kill will mean before it lands."""
+    breed = e.get("breed", "")
+    if breed == "native":
+        was = e.get("was", "") or "an animal"
+        return f"Fevered — a possession riding {was}."
+    if breed == "pressed":
+        return "A conscript of the tower. Killing it is a death, not a cure."
+    if breed == "wrongmade":
+        return "A made thing. Breaking it is eviction, not killing."
+    return ""
+
+
 def _lore(e: dict, floor) -> str:
-    """003: the dossier's flavor line, from content by encounter id."""
+    """003: the dossier's flavor line, from content by encounter id.
+    038: kinded creatures get one more line naming what they are."""
     slug = e.get("id", "")
+    base = ""
     for enc in getattr(floor, "encounters", ()):
         if enc.id == slug:
-            return getattr(enc, "lore", "") or ""
-    return ""
+            base = getattr(enc, "lore", "") or ""
+            break
+    line = _breed_line(e)
+    if base and line:
+        return f"{base} {line}"
+    return base or line
 
 
 def _drop_ranges(p: dict, floor) -> dict:
@@ -373,6 +426,10 @@ def _enemy_payload(p: dict, floor) -> dict:
         "range": e.get("range", ""),
         "gap": _gap(p),
         "lore": _lore(e, floor),
+        # 038: additive keys — the three-kinds read, for renderers that
+        # want to badge it (old renderers drop them, wire law).
+        "breed": e.get("breed", ""),
+        "was": e.get("was", ""),
         "specimen": e.get("specimen", ""),
         "pspd": pspd,
         "mspd": prof.get("speed", economy.SPEED_NORMAL),
@@ -1083,12 +1140,47 @@ def _victory(p: dict, floor) -> Scene:
                              "loot": economy.APOTHECARY[loot].name}
         _slain_reel(p, floor, beat=-2)   # the reel starts NEXT click
         opts = [Option("next", "Next"), Option("skip", "Skip")]
+    # 038: the kill card speaks per kind (world-lore §5) — a Native is
+    # CURED, a Pressed conscript DIES, a Wrongmade is EVICTED. Legacy
+    # floors (breed == "") keep the old card word for word.
+    breed = e.get("breed", "")
+    if e["kind"] == "warden":
+        # Wardens are Wrongmade by definition — breaking one is the
+        # mercy, and the veil it tended starts to come down.
+        headline = (f"{e['name']} — evicted"
+                    + (" — the floor is opened" if first_clear else ""))
+        support = ("The made shape comes apart; what ran it drains back "
+                   "below. Overhead the veil frays, and the floor "
+                   "brightens.")
+    elif breed == "native":
+        # A cure, not a kill — the blade ended the possession, and the
+        # true animal underneath walks off. Never "defeated".
+        headline = f"{e['name']} — freed"
+        was = e.get("was", "")
+        support = (f"The fever's shape drops away. "
+                   f"{was[:1].upper()}{was[1:]} shakes itself loose and "
+                   "slips back to the wild edges." if was else
+                   "The fever's shape drops away. The animal underneath, "
+                   "cured, slips back to the wild edges.")
+    elif breed == "pressed":
+        # The hard one. A conscript killed is simply dead — the card
+        # stays plain and takes no bow.
+        headline = f"{e['name']} falls"
+        support = ("No ghost leaves it. A collared conscript lies where "
+                   "it stood, and that is the whole of it.")
+    elif breed == "wrongmade":
+        headline = f"{e['name']} — evicted"
+        support = ("The made shape comes apart. The scrap of will that "
+                   "ran it drains downward, back to the country it was "
+                   "poured from.")
+    else:
+        headline = (f"{e['name']} defeated"
+                    + (" — the floor is opened" if first_clear else ""))
+        support = "The wilds go quiet around you."
     return Scene(
         eyebrow=_eyebrow(p, floor),
-        headline=(f"{e['name']} defeated"
-                  + (" — the floor is opened" if first_clear else "")),
-        support="The wilds go quiet around you." if e["kind"] == "wilds"
-                else "The Warden's frame ticks as it cools.",
+        headline=headline,
+        support=support,
         body_lines=lines,
         options=opts,
         meters=meters(p),

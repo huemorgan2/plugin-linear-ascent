@@ -1,71 +1,110 @@
 floor: 2
 tier: 1
-biome: Greenreach
-zone: The Drowned Pasture
-gate_town: Weirsend
-banner: greenreach
+biome: Giants
+zone: The Rustwater Adit
+gate_town: Lampfall
+banner: floor_002
 arrival: >-
-  The meadow dips into flooded pasture, the old drainage cut when the land
-  was torn skyward. Floodlight beams lie across the water in long white
-  bars. Things wade out there, unhurried.
+  A slab of mountainside ends at a mine-mouth still weeping orange
+  iron-water. Ore-carts sit loaded on rails that run off the cut edge
+  into open air. Somewhere down the dark drift, water is moving.
 encounters:
   - id: marsh_wolf
-    name: Marsh wolf
+    name: Rust hound
+    kind: native
+    was: >-
+      A pit-dog that hauled carts and slept warm by the forge.
     lore: >-
-      It hunts where the ground lies. Half its kills never fought
-      back — they just sank.
+      Iron-scale coats it and its jaws lock half-open. The packs still
+      run the rails, hauling nothing.
     weight: 3
     traits: [lean, fast]
     prose: >-
-      A wolf lopes through the shallows without a sound, coat slicked
-      dark, eyes catching the floodlight like two coins.
-  - id: mire_boar
-    name: Mire boar
+      A hound coated in rust-scale comes down the rails at a working
+      trot, jaws locked half-open. It has run this line all its life.
+      Now it runs it at you.
+  - id: cave_cricket
+    name: Cave cricket
+    kind: native
+    was: >-
+      A harmless roof-cricket of the entrance hall.
     lore: >-
-      Wallow mud dries on it in plates. Most of the year that's
-      vanity; in a fight it's luck.
-    weight: 2
-    traits: [sturdy, savage]
-    prose: >-
-      A mud-caked boar heaves itself off a drowned hay rick, shaking
-      water in sheets, and squares up in the reeds.
-  - id: goblin_wader
-    name: Goblin wader
-    lore: >-
-      Stilt-legged and patient, it spears eels all day. You are
-      slower than an eel.
+      Fist-sized now, it springs man-high and strips leather and
+      lamp-wick down to nothing.
     weight: 3
     traits: [frail, feeble]
     prose: >-
-      Two lamps on a pole — no, a goblin on stilts, scrap-rifle slung
-      high, picking through the flood for anything worth stealing.
+      The roof rustles and a fist-sized cricket lands on your pack,
+      then another — springing shapes that strip leather, wick, anything
+      that once was soft.
   - id: shellback_tortoise
     name: Shellback tortoise
+    kind: native
+    was: >-
+      A sump-pool tortoise the pit crews kept for luck.
     lore: >-
-      Old enough to remember the marsh as farmland. Its shell has
-      turned harder arguments than yours.
+      Grown door-broad in the flooded drift, shell crusted to
+      rust-plate. It holds the narrow ways like a gate.
     weight: 2
     traits: [armor_low, hulking, slow]
     prose: >-
-      The hay rick you took for an island stands up. A tortoise broad
-      as a cart bed, shell scarred white where blades have tried it
-      before, wades toward you with terrible patience.
+      Something the width of a cart door drags itself out of the orange
+      water — a tortoise in a shell of rust-crusted plate, older than
+      the flood and slower than patience.
+  - id: kobold_digger
+    name: Kobold digger
+    kind: pressed
+    lore: >-
+      First-taken from the warrens far below and set to cut the giants'
+      seams. The collar does the deciding.
+    weight: 2
+    traits: [lean, feeble]
+    prose: >-
+      A kobold in a collar swings its mattock at your lamp, half-blind
+      from years in the dark. It was never asked whether it wanted to
+      dig.
+  - id: orc_overseer
+    name: Red Orc outrider
+    kind: pressed
+    lore: >-
+      A pressed veteran of Skarn's warcamp, sent down to keep the
+      diggers digging. No one pays the wage it kills for.
+    weight: 1
+    traits: [sturdy, savage]
+    prose: >-
+      A scarred Red Orc steps from the drift with a drover's whip and
+      an underfed look. It hates this posting, this mine, and whatever
+      interrupts the count. Today that is you.
+  - id: rust_seep
+    name: The Seep
+    kind: wrongmade
+    lore: >-
+      Spilled aether pooled in the rust-water. It was never alive; it
+      only moves.
+    weight: 1
+    traits: [sturdy, slow]
+    prose: >-
+      An orange stain crawls up the drift wall against the run of the
+      water, spreading fingers. Where it has passed, the rock is eaten
+      smooth.
 warden:
-  name: Warden Sedgeback
+  name: Warden Rustmaw
   prose: >-
-    The keep is a drowned barn, and Sedgeback rises out of it — a boar
-    grown wrong, plated in rusted field-tin, water pouring off its back.
+    The flooded main drift goes quiet. Then the water heaves and Rustmaw
+    stands up in it — a pit hound welded into a war-engine, an
+    ore-crusher's jaw grafted over its head, dragging the rails behind.
 npc:
-  name: Mirel
-  role: weir keeper
+  name: Bergda Ironkettle
+  role: pit-foreman
   greet: >-
-    A woman stands knee-deep at the sluice gate, eels in a fence-wire
-    trap. "Mirel. I keep the weir. The water tells me what's wading
-    long before the floodlights do."
+    A giant woman fills the lamp-room door, a dead safety-lamp in one
+    fist. "Bergda Ironkettle, foreman of this pit. The mountain still
+    weeps where they cut it. We drink what it weeps. Mind your lamp."
   lore: >-
-    "Everything out there moves slow and hits like a flood coming in.
-    The pasture drowned when they tore the land skyward — what lived
-    through it learned patience. You should too."
+    "Every seam runs inward and down, and the water owns the low
+    galleries. Taste the water before you trust a drift — sweet means
+    sound rock, sour means the Seep has walked there."
   warn: >-
-    "Sedgeback sits the deep water by the lift like a sunk barge. It
-    doesn't chase. It waits for the water to bring you close."
+    "Rustmaw hunts the flooded main drift, where the water hides its
+    footing. It bites like a stamp-mill. If you hear rails dragging,
+    climb — it cannot take a bench at speed."

@@ -484,7 +484,7 @@ _FLOOR_WORLDS = {
         "carousel of painted horses frozen mid-turn, goblin lanterns "
         "strung between the gallows poles"),
     10: ("the last meadow before the lift turned parade ground — goblin "
-         "banners in their hundreds, rifle crates stacked into walls, "
+         "banners in their hundreds, broken spears and shield-stacks raised into walls, "
          "every path raked by watch-fires"),
 }
 _FLOOR_WARDENS = {
@@ -507,7 +507,7 @@ _FLOOR_WARDENS = {
     9: ("a lanky engine of crane chain and carnival brass hanging "
         "above a fairground gate, unfolding downward hook first"),
     10: ("a fat crowned goblin king slouched on a throne of stacked "
-         "rifle crates, raising one hand as watch-fires gutter"),
+         "broken spears and siege-scrap, raising one hand as watch-fires gutter"),
 }
 for _n in range(1, 11):
     EVENTS[f"floor{_n}_world"] = {
@@ -655,6 +655,108 @@ for _fam, (_scene, _noun) in _KILL_MONSTERS.items():
             "tint": DIM, "seconds": 8, "loop": False, "hold_ms": 2000,
             "trim": (0.0, 5.5),
         }
+
+# ── 038 mercy kills: a kill FREES what it strikes ───────────────────────
+# One GIF per creature, keyed by kind (combat._kill_fx resolution):
+#   native    {id}_freed   — the fever's shape drops away; the true
+#                            animal underneath walks off. A cure.
+#   pressed   {id}_fall    — a real death, kept somber. No triumph.
+#   wrongmade {id}_evicted — the made thing comes apart; the dark that
+#                            ran it drains DOWNWARD, back below.
+# Jobs are built from the floors' own YAML (kind/was/prose), so the
+# floor rewrite is the single source of truth. Per-kind generics cover
+# any creature whose own GIF hasn't landed yet.
+
+_MERCY_FREED = (
+    "A WIDE shot. {scene} The huge fevered creature stands alone "
+    "mid-frame, breathing hard, its movements wrong and jerky. Then "
+    "the possession breaks: a shudder runs the length of it, thin "
+    "dark motes lift off its hide and scatter like ash on wind, and "
+    "the oversized wrong shape collapses in on itself like a dropped "
+    "cloak — and out of the settling dark steps {was}, small and "
+    "ordinary and unhurt. It shakes itself once and walks away toward "
+    "the edge of the frame. The FINAL TWO SECONDS are a perfectly "
+    "still tableau: the small plain animal paused at the frame's "
+    "edge, looking back once, absolutely nothing moving — a frozen "
+    "closing frame.")
+
+_MERCY_FALL = (
+    "A WIDE shot. {scene} The small armed figure stands alone "
+    "mid-frame. It staggers once, its weapon slips from its hands "
+    "and drops to the ground, it sinks to its knees and falls, and "
+    "lies completely still. No flash, no sparks, no light — only "
+    "dust settling around it. The FINAL TWO SECONDS are a perfectly "
+    "still tableau: the small fallen figure and its dropped weapon "
+    "beside it, absolutely nothing moving — a frozen closing frame.")
+
+_MERCY_EVICTED = (
+    "A WIDE shot. {scene} The made thing — a creature that was never "
+    "alive — stands alone mid-frame. It shudders; its joined parts "
+    "lose their hold on one another and the whole shape comes apart, "
+    "pieces dropping inert to the ground, while a ribbon of black "
+    "smoke pours out of the wreck and drains DOWNWARD into the "
+    "ground like water into a crack, and is gone. The FINAL TWO "
+    "SECONDS are a perfectly still tableau: the scattered inert "
+    "pieces on empty ground, absolutely nothing moving — a frozen "
+    "closing frame.")
+
+_MERCY_BEATS = {
+    "native": ("freed", _MERCY_FREED, GOLD),
+    "pressed": ("fall", _MERCY_FALL, DIM),
+    "wrongmade": ("evicted", _MERCY_EVICTED, VIOLET),
+}
+
+
+def _load_mercy_jobs() -> None:
+    import yaml as _yaml
+    floors_dir = os.path.join(_HERE, "..", "plugin_linear_ascent",
+                              "content", "floors")
+    for n in range(1, 11):
+        path = os.path.join(floors_dir, f"floor_{n:03d}.yaml")
+        if not os.path.isfile(path):
+            continue
+        raw = _yaml.safe_load(open(path))
+        for e in raw.get("encounters") or []:
+            kind = str(e.get("kind") or "").strip()
+            if kind not in _MERCY_BEATS:
+                continue
+            suffix, beat, tint = _MERCY_BEATS[kind]
+            scene = f"The creature: {e['name']}. {e['prose']}"
+            was = str(e.get("was") or "the small true animal underneath")
+            EVENTS[f"{e['id']}_{suffix}"] = {
+                "prompt": beat.format(scene=scene, was=was),
+                "tint": tint, "seconds": 8, "loop": False,
+                "hold_ms": 2000, "trim": (0.0, 6.0),
+            }
+
+
+_load_mercy_jobs()
+
+EVENTS["native_freed"] = {
+    "prompt": _MERCY_FREED.format(
+        scene=("The creature: a huge gaunt fevered beast, part wolf part "
+               "shadow, ribs showing, in a dark field under a grey "
+               "lidded sky."),
+        was="a small plain grey animal"),
+    "tint": GOLD, "seconds": 8, "loop": False, "hold_ms": 2000,
+    "trim": (0.0, 6.0),
+}
+EVENTS["pressed_fall"] = {
+    "prompt": _MERCY_FALL.format(
+        scene=("The creature: a small long-eared conscript in scavenged "
+               "plate armor, an iron collar at its neck, holding a "
+               "notched blade, in a dark camp of stacked crates.")),
+    "tint": DIM, "seconds": 8, "loop": False, "hold_ms": 2000,
+    "trim": (0.0, 6.0),
+}
+EVENTS["wrongmade_evicted"] = {
+    "prompt": _MERCY_EVICTED.format(
+        scene=("The creature: a man-shaped snarl of black thorn, dead "
+               "wood and scrap iron, standing in a hedgerow gap under "
+               "a flickering pale light.")),
+    "tint": VIOLET, "seconds": 8, "loop": False, "hold_ms": 2000,
+    "trim": (0.0, 6.0),
+}
 
 PANEL = (0x11, 0x15, 0x1F)
 

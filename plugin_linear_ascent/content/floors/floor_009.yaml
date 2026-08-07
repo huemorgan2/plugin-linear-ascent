@@ -1,73 +1,115 @@
 floor: 9
 tier: 1
-biome: Greenreach
-zone: The Gallows Fair
-gate_town: Fairstead
-banner: greenreach
+biome: Men
+zone: The Beacon Field
+gate_town: Pylon Rest
+banner: floor_009
 arrival: >-
-  A fairground seized mid-festival: stalls still bunted, a carousel of
-  painted horses frozen mid-turn. The goblins hold their own fair here
-  now, and the prizes on the hook are things climbers used to own.
+  A night signal-heath — miles of humming aether-pylons flickering
+  against the dark, their knife-edged shadows sliding across the
+  heather until the whole moor strobes. Every light out there says come
+  here. None of them means safety.
 encounters:
-  - id: fair_barker
-    name: Goblin barker
+  - id: beacon_moth
+    name: Glare moth
+    kind: native
+    was: >-
+      A heath-moth drawn to the beacons.
     lore: >-
-      It still works the crowd, though the crowd is gone. The pitch
-      ends with a knife every time.
+      Plate-sized and blinding-pale, it swarms the eyes and smothers
+      lamps.
+    weight: 3
+    traits: [flying, frail, feeble]
+    prose: >-
+      The strobe fills with wings — moths broad as plates,
+      blinding-pale, swarming your eyes at the exact moment the field
+      goes black.
+  - id: moor_hare
+    name: Bog-cotton hare
+    kind: native
+    was: >-
+      A moor hare of the heather.
+    lore: >-
+      Strobe-maddened, bolting in blind zigzags.
     weight: 3
     traits: [frail, feeble]
     prose: >-
-      A goblin barker spreads its arms in welcome from a stall of
-      stolen boots. The two behind it with scrap-rifles aren't smiling.
-  - id: carousel_wolf
-    name: Carousel wolf
+      A hare bolts through the strobing light in blind zigzags,
+      straight across you — maddened past any sense of what it is
+      running from.
+  - id: night_hawk
+    name: Night-hawk
+    kind: native
+    was: >-
+      A moth-hunting nightjar of the heath.
     lore: >-
-      It circles by habit, sun-wise, always. Break the circle and you
-      break the wolf.
-    weight: 3
-    traits: [lean, savage]
-    prose: >-
-      Among the painted horses one shape isn't painted. The wolf steps
-      down off the carousel deck with terrible patience.
-  - id: prize_boar
-    name: Prize boar
-    lore: >-
-      Blue rosette still stapled to one ear. It won its class by
-      weight, and the weight is all muscle now.
+      Over-large now, stooping silent out of the strobe.
     weight: 2
-    traits: [hulking, fierce]
+    traits: [flying, hulking, fierce]
     prose: >-
-      The pen says GRAND CHAMPION in old letters. The bar is bent. The
-      champion has opinions about being looked at.
-  - id: bunting_kite
-    name: Bunting kite
+      Between one flash and the next, something crosses the gap — a
+      nightjar grown wrong, stooping silent out of the strobe with its
+      mouth open.
+  - id: shadow_wolf
+    name: Shadow-line wolf
+    kind: native
+    was: >-
+      A heath wolf that hunted the pylon-shadows.
     lore: >-
-      It nests in the flag-lines above the stalls and stoops on
-      whatever glitters. Your buckles glitter.
+      It hunts inside the moving shadows, unseen until it crosses a
+      light.
     weight: 2
-    traits: [flying, frail]
+    traits: [lean, fast, savage]
     prose: >-
-      Something has been living in the flag-lines above the fair — a
-      kite-bird stitched with stolen bunting, wheeling down between
-      the stall roofs where no blade can follow it.
+      A pylon-shadow slides across the heather and something keeps pace
+      inside it, using the dark like cover. You see the wolf only when
+      the light moves.
+  - id: pylon_adder
+    name: Pylon adder
+    kind: native
+    was: >-
+      A warmth-seeking adder that basked on the cables.
+    lore: >-
+      Charged and fever-bold, striking from the cable-runs.
+    weight: 2
+    traits: [lean, fast, fierce]
+    prose: >-
+      The cable-run beside the path spits a blue spark, and the spark
+      has a body — an adder charged from years on the lines, striking
+      faster than the light changes.
+  - id: flicker_wight
+    name: Flicker-wight
+    kind: wrongmade
+    lore: >-
+      A keeper electrocuted at a junction, aether caught in the arc. It
+      exists only between flashes.
+    weight: 1
+    traits: [resist_med]
+    prose: >-
+      In the dark between two flashes there is a man-shape at the
+      junction box. In the light there is nothing. The dark comes
+      again, and the shape is closer.
 warden:
-  name: Warden Hookmaster
+  name: Warden Glarefang
   prose: >-
-    Above the fair's gate hangs the Hookmaster — a lanky engine of crane
-    chain and carnival brass that unfolds down to meet you, hook first.
+    The field goes black and stays black. Glarefang is already moving —
+    a shadow-line wolf maned in pylon-lamps that strobe blinding-bright,
+    seen only in the dark between its own flashes, rushing when the
+    light dies.
 npc:
-  name: Nan
-  role: fairwright
+  name: Wick Harlow
+  role: chief keeper
   greet: >-
-    A woman oils the frozen carousel, horse by painted horse. "Nan. I
-    built half this fair. I wind what still winds and I keep the music
-    box shut — trust me on the music box."
+    A man with a keeper's staff cups a hand to his ear as you approach.
+    "Wick Harlow, chief keeper — speak up, the hum's had half my
+    hearing. The beacons were how we called each other across the dark.
+    Now they call the moths."
   lore: >-
-    "The goblins run the fair now, and the prizes on the hooks were
-    ours. The barker calls marks in, the kites cut down from the
-    bunting, and the carousel wolves hunt in a circle. Never follow one
-    — it's leading you around."
+    "Read the field by pattern, not by light — a true signal repeats, a
+    false one begs. The Old Beacon at the middle is dark, and dark is
+    the only honest thing out there. The wolves hunt inside the moving
+    shadows."
   warn: >-
-    "The Hookmaster holds the gallows stage by the lift, and it weighs
-    every climber like a prize. Cut the hook lines first if you can
-    reach them. It hates that."
+    "Glarefang hunts the strobe at the granite tor, and it rushes when
+    the field goes black. Keep your lamp shuttered, put your back to a
+    pylon, and swing at the dark, not the flash."
