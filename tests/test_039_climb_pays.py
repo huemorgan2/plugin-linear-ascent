@@ -35,6 +35,20 @@ def create_character(p, race="human", clazz="warrior", name="Testa"):
     return p
 
 
+def at_gate_town(p, floor=1):
+    p["unlocked_floor"] = max(p.get("unlocked_floor", 1), floor)
+    p["level"] = max(p["level"], economy.floor_entry_player_level(floor))
+    choose(p, "gate")
+    return choose(p, f"floor_{floor}")
+
+
+def pin_specimen(monkeypatch, specimen="common"):
+    real = state.rng_pick
+    monkeypatch.setattr(state, "rng_pick", lambda p, table: (
+        specimen if any(k in economy.SPECIMENS for _, k in table)
+        else real(p, table)))
+
+
 # ── prey fade ────────────────────────────────────────────────────────────
 
 def test_prey_mult_full_through_three_then_fades_to_a_quarter():
@@ -211,3 +225,127 @@ def test_floor_six_expected_pay_leaves_floor_one_far_behind():
                    * economy.gold_per_kill(f) for e in fl.encounters) \
             * economy.SPECIMENS["runt"]["gold"]
     assert worst(6) >= 1.5 * worst(1), (worst(1), worst(6))
+
+
+# ═══ phase 2 — the deep hunt (⚡2, floor 4+) ═════════════════════════════
+
+def test_deep_option_absent_on_floor_three_present_on_four():
+    p = create_character(fresh("039-gate3"))
+    s = at_gate_town(p, 3)
+    assert not any(o.id == "hunt_deep" for o in s.options)
+    p2 = create_character(fresh("039-gate4"))
+    s = at_gate_town(p2, 4)
+    row = next(o for o in s.options if o.id == "hunt_deep")
+    assert "2 ⚡" in row.hint                     # the price is on the row
+
+
+def test_deep_hunt_spends_two_and_marks_the_encounter():
+    p = create_character(fresh("039-spend"))
+    at_gate_town(p, 5)
+    before = state.energy_now(p)
+    choose(p, "hunt_deep")
+    assert before - state.energy_now(p) == economy.COST_WILDS_DEEP == 2
+    e = p["encounter"]
+    assert e is not None and e["deep"] is True
+    assert "never hunted thin" in e["prose"]     # the opener says so
+    assert {"kind": "energy", "gold": 0, "xp": 0,
+            "note": "wilds deep"} in p["_ledger"]
+
+
+def test_deep_hunt_refuses_short_energy_without_lying():
+    p = create_character(fresh("039-short"))
+    at_gate_town(p, 5)
+    p["energy_val"] = 1                          # short for deep, not spent
+    p["energy_ts"] = state.now().isoformat()
+    s = choose(p, "hunt_deep")
+    assert p.get("encounter") is None
+    assert state.energy_now(p) == 1              # nothing was taken
+    assert "⚡ 2" in s.shard_note
+
+
+def test_deep_table_drops_prey_and_skips_the_rubber_band(monkeypatch):
+    monkeypatch.setattr(combat, "would_probably_kill",
+                        lambda p, fl, e: True)   # band would cut EVERYTHING
+    p = create_character(fresh("039-deeptable"))
+    fl = schema.get_floor(6)
+    table = dict((slug, w) for w, slug in combat.hunt_table(p, fl, deep=True))
+    for e in fl.encounters:
+        if "feeble" in (e.traits or ()):
+            assert e.id not in table, f"prey {e.id} drawn on a deep hunt"
+        else:
+            assert table[e.id] == e.weight * 100  # full weight — no mercy
+
+
+def test_deep_specimens_have_no_runts():
+    assert economy.DEEP_SPECIMENS["runt"]["weight"] == 0
+    assert sum(s["weight"] for s in economy.DEEP_SPECIMENS.values()) == 100
+    for k, s in economy.DEEP_SPECIMENS.items():   # mults/tags shared
+        base = economy.SPECIMENS[k]
+        assert all(s[key] == base[key] for key in ("hp", "atk", "gold", "tag"))
+    # 300 seeded deep draws: never a runt, never a feeble opponent
+    for i in range(300):
+        p = create_character(fresh(f"039-draw-{i}"))
+        p["unlocked_floor"], p["floor"] = 6, 6
+        fl = schema.get_floor(6)
+        enc_id = state.rng_pick(p, combat.hunt_table(p, fl, deep=True))
+        enc = next(e for e in fl.encounters if e.id == enc_id)
+        assert "feeble" not in (enc.traits or ())
+        combat.start_encounter(p, fl, enc, "wilds", deep=True)
+        assert p["encounter"]["specimen"] != "runt", i
+
+
+def test_deep_primes_atk_and_speed_never_hp(monkeypatch):
+    pin_specimen(monkeypatch, "common")
+    fl = schema.get_floor(5)
+    enc = next(e for e in fl.encounters if "feeble" not in (e.traits or ()))
+
+    def fight(deep):
+        p = create_character(fresh(f"039-prime-{deep}"))
+        p["unlocked_floor"] = 5
+        combat.start_encounter(p, fl, enc, "wilds", deep=deep)
+        e = p["encounter"]
+        return e["atk"], e["profile"]["speed"], e["hp"]
+
+    atk0, spd0, hp0 = fight(False)
+    atk1, spd1, hp1 = fight(True)
+    assert atk1 == round(atk0 * economy.DEEP_ATK_MULT)
+    assert spd1 == spd0 + economy.DEEP_SPEED_BONUS
+    assert hp1 == hp0, "deep must scare, not stall — HP never moves"
+
+
+def test_deep_pays_the_premium_and_the_dossier_promises_it(monkeypatch):
+    pin_specimen(monkeypatch, "common")
+    monkeypatch.setattr(state, "rng_jitter", lambda p, base, pct: base)
+    fl = schema.get_floor(5)
+    enc = schema.Encounter(id="_d", name="Thing", weight=1,
+                           prose="A thing arrives.", traits=())
+
+    def kill(deep):
+        p = create_character(fresh(f"039-pay-{deep}"))
+        p["unlocked_floor"], p["level"] = 5, 10   # room in the XP bar
+        combat.start_encounter(p, fl, enc, "wilds", deep=deep)
+        promised = combat._drop_ranges(p, fl)
+        p["encounter"]["range"] = "close"
+        p["encounter"]["hp"] = 1
+        g0, x0 = p["gold"], p["xp"]
+        combat.resolve_fight_action(p, fl, "attack")
+        return p["gold"] - g0, p["xp"] - x0, promised
+
+    gold0, xp0, prom0 = kill(False)
+    gold1, xp1, prom1 = kill(True)
+    assert gold1 == round(gold0 * economy.DEEP_REWARD_MULT)
+    assert xp1 == round(xp0 * economy.DEEP_REWARD_MULT)
+    # the dossier's promise scales with the payout — same math, no drift
+    assert prom1["gold"][0] == round(prom0["gold"][0] * 2.25)
+    assert prom1["gold"][1] == round(prom0["gold"][1] * 2.25)
+    assert prom0["gold"][0] <= gold0 <= prom0["gold"][1]
+    assert prom1["gold"][0] <= gold1 <= prom1["gold"][1]
+
+
+def test_normal_hunt_is_untouched_by_the_deep_flag():
+    p = create_character(fresh("039-normal"))
+    at_gate_town(p, 5)
+    before = state.energy_now(p)
+    choose(p, "hunt")
+    assert before - state.energy_now(p) == economy.COST_WILDS_FIGHT == 1
+    assert p["encounter"]["deep"] is False

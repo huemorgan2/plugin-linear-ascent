@@ -410,6 +410,22 @@ def specimen_gold_expectation(floor: int) -> float:
     return sum(s["weight"] * s["gold"] for s in t.values()) / total
 
 
+# ── 039 §2: the deep hunt — ⚡2, floor 4+ ────────────────────────────────
+# An informed opt-in to the dangerous end of the roster: opponents
+# harder in ATK and SPEED, NEVER in HP — the fight gets scarier, not
+# longer. No prey, no runts, no rubber band (choosing this IS the
+# consent), and a clear per-energy premium on the way out.
+COST_WILDS_DEEP = 2
+DEEP_HUNT_MIN_FLOOR = 4
+DEEP_ATK_MULT = 1.3
+DEEP_SPEED_BONUS = 2       # on the 1–10 scale; stacks with alpha's +1
+DEEP_REWARD_MULT = 2.25    # gold AND xp; sim-final in phase 3
+
+_DEEP_WEIGHTS = {"runt": 0, "common": 45, "tough": 35, "alpha": 20}
+DEEP_SPECIMENS = {k: {**s, "weight": _DEEP_WEIGHTS[k]}
+                  for k, s in SPECIMENS.items()}
+
+
 # ── 017 §2: damage types & defense profiles ──────────────────────────────
 # Three professions, three damage types. Every monster carries a defense
 # profile derived from qualitative content traits — content never carries

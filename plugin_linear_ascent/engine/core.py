@@ -2608,12 +2608,18 @@ def _gate_town_art(fl) -> dict:
     on the choice ITSELF — the hunt row carries the floor's fields, the
     keep row its warden. Rides beside options on the wire (option_art);
     old clients drop the unknown top-level key and lose only decoration."""
-    return {"hunt": fl.banner, "keep": f"warden_{fl.floor:03d}"}
+    return {"hunt": fl.banner, "hunt_deep": fl.banner,
+            "keep": f"warden_{fl.floor:03d}"}
 
 
 def _gate_town_options(p: dict, fl) -> list[Option]:
     heal_price = economy.HEALER_TENT_PER_FLOOR * fl.floor
     opts = [Option("hunt", "Hunt the wilds", "1 ⚡")]
+    # 039 §2: from floor 4 the wilds have a dangerous end — an informed
+    # opt-in, priced on the row before the click.
+    if fl.floor >= economy.DEEP_HUNT_MIN_FLOOR:
+        opts.append(Option("hunt_deep", "Hunt deep — off the lit paths",
+                           f"{economy.COST_WILDS_DEEP} ⚡ · harder, richer"))
     if _live_flare(p):
         opts.insert(0, Option("answer_flare", "Answer the flare",
                               "1 ⚡ · run toward the light"))
@@ -2745,6 +2751,20 @@ def _gate_town_action(p: dict, oid: str) -> Scene:
         enc = next(e for e in fl.encounters if e.id == enc_id)
         combat._ledger(p, "energy", note="wilds")
         return combat.start_encounter(p, fl, enc, "wilds")
+    if oid == "hunt_deep":
+        # 039 §2: the deep hunt — ⚡2, floor 4+, no prey, no rubber band
+        if fl.floor < economy.DEEP_HUNT_MIN_FLOOR:
+            return _gate_town_scene(p)
+        if not state.spend_energy(p, economy.COST_WILDS_DEEP):
+            s = _gate_town_scene(p)
+            s.shard_note = (f"The deep wants ⚡ {economy.COST_WILDS_DEEP} "
+                            "in hand — you're short. One point returns "
+                            "every 45 minutes.")
+            return s
+        enc_id = state.rng_pick(p, combat.hunt_table(p, fl, deep=True))
+        enc = next(e for e in fl.encounters if e.id == enc_id)
+        combat._ledger(p, "energy", note="wilds deep")
+        return combat.start_encounter(p, fl, enc, "wilds", deep=True)
     if oid == "heal":
         price = economy.HEALER_TENT_PER_FLOOR * fl.floor
         if p["gold"] < price:
