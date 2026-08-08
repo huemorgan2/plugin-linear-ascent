@@ -131,7 +131,7 @@ def test_runt_pays_less_gold(monkeypatch):
     # 025: the archetype's threat multiplier rides on top of the specimen
     expect = round(economy.gold_per_kill(1)
                    * economy.SPECIMENS["runt"]["gold"])
-    expect = max(1, round(expect * economy.kill_reward_mult(traits)))
+    expect = max(1, round(expect * economy.kill_reward_mult(1, traits)))
     assert p["gold"] - gold_before == expect
 
 

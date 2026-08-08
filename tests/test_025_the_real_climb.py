@@ -150,16 +150,17 @@ def test_the_opener_names_the_shape_before_you_commit():
 @pytest.mark.parametrize("floor_no", BAND)
 def test_pay_varies_at_least_fourfold_inside_one_floor(floor_no):
     fl = schema.get_floor(floor_no)
-    mults = [economy.kill_reward_mult(e.traits) for e in fl.encounters]
+    mults = [economy.kill_reward_mult(floor_no, e.traits)
+             for e in fl.encounters]
     assert max(mults) >= 4 * min(mults), (
         f"floor {floor_no}: pay spread only {max(mults)/min(mults):.1f}×")
 
 
 def test_the_hard_ones_pay_and_the_prey_does_not():
-    assert economy.kill_reward_mult(("frail", "feeble")) < 0.5
-    assert economy.kill_reward_mult(()) == 1.0
-    assert economy.kill_reward_mult(("sturdy", "fierce")) >= 3.0
-    assert economy.kill_reward_mult(("hulking", "savage")) \
+    assert economy.kill_reward_mult(1, ("frail", "feeble")) < 0.5
+    assert economy.kill_reward_mult(1, ()) == 1.0
+    assert economy.kill_reward_mult(1, ("sturdy", "fierce")) >= 3.0
+    assert economy.kill_reward_mult(1, ("hulking", "savage")) \
         <= economy.REWARD_MULT_CAP
 
 
@@ -197,7 +198,7 @@ def test_a_lethal_draw_keeps_a_fifth_of_its_weight_never_zero():
     assert cut, "a one-HP climber sees no reduced draws at all"
     for slug in cut:
         assert table[slug] == max(1, round(content[slug] * 100
-                                          * economy.RUBBER_BAND_CUT))
+                                          * economy.rubber_band_cut(1)))
         assert table[slug] > 0, "the band may cut a draw, never ban it"
 
 

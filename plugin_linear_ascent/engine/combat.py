@@ -150,12 +150,19 @@ def would_probably_kill(p: dict, floor, enc) -> bool:
 
 def hunt_table(p: dict, floor) -> list[tuple[int, str]]:
     """The floor's roster, weighted for THIS player. Content weights are
-    scaled up first so the 80% cut still has resolution."""
+    scaled up first so the cuts still have resolution. 039: prey draws
+    fade with altitude and the lethal-draw mercy loosens — the floor
+    shapes the table, not just the costumes."""
     table = []
+    fade = economy.prey_weight_mult(floor.floor)
+    cut = economy.rubber_band_cut(floor.floor)
     for e in floor.encounters:
         w = e.weight * 100
+        traits = tuple(getattr(e, "traits", ()) or ())
+        if "feeble" in traits:
+            w = max(1, round(w * fade))
         if would_probably_kill(p, floor, e):
-            w = max(1, round(w * economy.RUBBER_BAND_CUT))
+            w = max(1, round(w * cut))
         table.append((w, e.id))
     return table
 
@@ -184,11 +191,14 @@ def start_encounter(p: dict, floor, enc, kind: str = "wilds") -> Scene:
         hp = round(hp * economy.BULWARK_HP_MULT)
     specimen = "common"
     if kind == "wilds":
-        # 008: specimen roll — same averages, real variance. Visible on
-        # the opener so fighting an alpha is an informed choice.
+        # 008: specimen roll — real variance, visible on the opener so
+        # fighting an alpha is an informed choice. 039: weights are
+        # floor-shaped — runts thin out at altitude.
+        spec_table = economy.specimen_table(floor.floor)
         specimen = state.rng_pick(
-            p, [(s["weight"], k) for k, s in economy.SPECIMENS.items()])
-        spec = economy.SPECIMENS[specimen]
+            p, [(s["weight"], k) for k, s in spec_table.items()
+                if s["weight"] > 0])
+        spec = spec_table[specimen]
         atk = round(atk * spec["atk"])
         hp = round(hp * spec["hp"])
         if spec["tag"]:
@@ -370,7 +380,7 @@ def _drop_ranges(p: dict, floor) -> dict:
     profile × threat), so the promise and the payout can't drift."""
     e = p["encounter"]
     fade = economy.fade_multiplier(p["unlocked_floor"], floor.floor)
-    threat = economy.kill_reward_mult(e.get("traits") or ())
+    threat = economy.kill_reward_mult(floor.floor, e.get("traits") or ())
     g_mult = (economy.SPECIMENS[e.get("specimen", "common")]["gold"]
               * economy.profile_gold_mult(_profile(p)) * threat * fade)
     g = economy.gold_per_kill(floor.floor)
@@ -1044,7 +1054,7 @@ def _victory(p: dict, floor) -> Scene:
         # XP carried no threat modifier at all — a limping runt and a
         # hulking savage were worth the same aether, which is why every
         # kill on a floor felt identical.
-        threat = economy.kill_reward_mult(e.get("traits") or ())
+        threat = economy.kill_reward_mult(floor.floor, e.get("traits") or ())
         xp = max(1, round(xp * threat))
         gold = max(1, round(gold * threat))
     if p.get("race") == "elf":

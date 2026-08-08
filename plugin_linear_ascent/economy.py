@@ -307,13 +307,59 @@ BITE_PAY = {"feeble": 0.6, "fierce": 2.0, "savage": 3.0}
 RUBBER_BAND_CUT = 0.20
 LETHAL_SHARE = 0.90       # a fight costing this much of your CURRENT HP
 
+# ── 039: the floor shapes the draw ───────────────────────────────────────
+# Flat knobs made floor 6 feel like floor 1 with different costumes: the
+# same prey share, the same runt odds, the same 80% mercy on lethal
+# draws, the same reward ceiling. From floor 4 the tower stops being
+# polite — prey thins out, the rubber band loosens, and the ceiling on
+# what a hard kill may pay climbs.
 
-def kill_reward_mult(traits) -> float:
+PREY_FADE_START = 3        # last floor with the full prey share
+PREY_FADE_SLOPE = 0.15     # weight lost per floor past the start
+PREY_FADE_FLOOR = 0.25     # the moths never vanish — lore still walks
+
+
+def prey_weight_mult(floor: int) -> float:
+    """039 §1: prey (feeble-bite) draw weight fades with altitude —
+    1.0 through floor 3, then −0.15/floor to 0.25 at floor 8+."""
+    if floor <= PREY_FADE_START:
+        return 1.0
+    return max(PREY_FADE_FLOOR,
+               1.0 - PREY_FADE_SLOPE * (floor - PREY_FADE_START))
+
+
+def rubber_band_cut(floor: int) -> float:
+    """039 §3: the mercy ladder. Low floors keep 025's 80% cut on
+    probably-lethal draws; the band loosens as the tower stops
+    apologizing — 0.35 on floors 4–6, half weight kept from floor 7."""
+    if floor <= 3:
+        return RUBBER_BAND_CUT
+    return 0.35 if floor <= 6 else 0.50
+
+
+# The archetype product tops out at hulking·savage = 2.4·3.0 = 7.2, so a
+# ceiling above that never binds; 7.5 keeps the ladder honest about it.
+REWARD_MULT_CAP_CEIL = 7.5
+
+
+def reward_mult_cap(floor: int) -> float:
+    """039 §4: the reward ceiling climbs with the danger — 6.0 through
+    floor 3, +0.5/floor after, ceiling 7.5 (floors 6+ are effectively
+    uncapped for real archetypes). Stays under warden_gold/gold_per_kill
+    through floor 20; past floor 20 the band income jump has ALWAYS
+    outrun warden_gold (pre-existing, tracked by the 004 gate)."""
+    if floor <= 3:
+        return REWARD_MULT_CAP
+    return min(REWARD_MULT_CAP_CEIL,
+               REWARD_MULT_CAP + 0.5 * (floor - 3))
+
+
+def kill_reward_mult(floor: int, traits) -> float:
     """XP and gold multiplier for a creature's archetype: the rounds it
-    costs you times what it charges for them. Capped so one lucky draw
-    can never outpay a Warden."""
+    costs you times what it charges for them. Capped per floor so one
+    lucky draw still never outpays that floor's Warden."""
     body, bite = _archetype(traits)
-    return min(REWARD_MULT_CAP,
+    return min(reward_mult_cap(floor),
                BODY_ROUNDS.get(body, 1.0) * BITE_PAY.get(bite, 1.0))
 
 
@@ -331,6 +377,37 @@ SPECIMENS: dict[str, dict] = {
                "tag": "an alpha, twice the size — worth a fortune or a "
                       "funeral"},
 }
+
+# 039 §2: the runt fade. Specimen WEIGHTS become floor-shaped (stat/gold
+# multipliers and tags never move): runts thin out from floor 4 and the
+# freed weight goes to the paying end. The 008 "expectation ≈ 1.0"
+# promise is deliberately relaxed at altitude — the roll's gold
+# expectation climbs 1.00 → 1.20 by floor 8, which IS part of "higher
+# floors pay more"; specimen_gold_expectation() states the designed
+# curve so the sim asserts drift against design, not against 1.0.
+_SPECIMEN_LADDER = {
+    4: {"runt": 22, "common": 51, "tough": 21, "alpha": 6},
+    5: {"runt": 18, "common": 53, "tough": 22, "alpha": 7},
+    6: {"runt": 15, "common": 52, "tough": 24, "alpha": 9},
+    7: {"runt": 11, "common": 54, "tough": 25, "alpha": 10},
+    8: {"runt": 8,  "common": 55, "tough": 26, "alpha": 11},
+}
+
+
+def specimen_table(floor: int) -> dict[str, dict]:
+    """The specimen roll for THIS floor — SPECIMENS with floor-shaped
+    weights. Floors 1–3 are exactly the 008 table."""
+    if floor <= 3:
+        return SPECIMENS
+    w = _SPECIMEN_LADDER[min(floor, 8)]
+    return {k: {**s, "weight": w[k]} for k, s in SPECIMENS.items()}
+
+
+def specimen_gold_expectation(floor: int) -> float:
+    """The designed gold expectation of the specimen roll at `floor`."""
+    t = specimen_table(floor)
+    total = sum(s["weight"] for s in t.values())
+    return sum(s["weight"] * s["gold"] for s in t.values()) / total
 
 
 # ── 017 §2: damage types & defense profiles ──────────────────────────────
