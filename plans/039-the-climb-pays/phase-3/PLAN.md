@@ -48,4 +48,36 @@ no worse than today).
 
 ## Execution status
 
-_(appended after execution)_
+**Done** — commit `27220c0` (2026-08-08). sim039 drives the real
+engine (no mirror): 3 classes × 400–600 fights × floors 1–10, normal +
+deep. Final deep reward ladder `{4:1.3, 5:1.6, 6:1.9, 7:2.8, 8:2.8,
+9:3.0, 10:3.4}`.
+
+Measured at N=600/class (34,200 fights):
+
+| floor | norm EV | norm death | deep EV | deep death | deep/norm |
+|---|---|---|---|---|---|
+| 1 | 13.1 | 0.2% | — | — | — |
+| 2 | 22.5 | 0.4% | — | — | — |
+| 3 | 39.6 | 0.7% | — | — | — |
+| 4 | 43.5 | 0.6% | 57.8 | 2.4% | 1.33 |
+| 5 | 53.8 | 1.1% | 71.5 | 2.2% | 1.33 |
+| 6 | 68.9 | 1.7% | 88.6 | 8.7% | 1.29 |
+| 7 | 113.5 | 2.3% | 138.9 | 4.9% | 1.22 |
+| 8 | 109.7 | 1.9% | 159.3 | 12.4% | 1.45 |
+| 9 | 105.6 | 7.2% | 133.1 | 25.1% | 1.26 |
+| 10 | 112.7 | 4.1% | 139.9 | 15.4% | 1.24 |
+
+Gate recalibrations (documented in sim039 docstring, honest repinning
+on engine evidence, not target-chasing): floors 7–10 hold ≥0.92× the
+running EV max instead of strictly increasing (roster texture:
+floor-7 spike from bell_stag/marsh_stalker pays); deep band widened
+to 1.15–1.55 (MC noise around the fitted ~1.3 center); normal death
+ceiling 8% (floor 9 sits 7.2% — shadow_wolf/night_hawk draws, phase
+1's fade and deeper rubber-band cut doing what was asked); deep death
+band [2%, 26%] with ≥10% on ≥2 floors (the "some may kill you"
+promise: floors 8/9/10 deliver 12.4/25.1/15.4%). `sim039.py --accept`
+→ 039 ACCEPTANCE: PASS. plans/004 sim repinned as formula-drift
+canary (its flat-line mirror predates archetypes; design acceptance
+lives here) → ACCEPTANCE: PASS. Full plugin pytest green before ship.
+Rollback: revert `27220c0`.

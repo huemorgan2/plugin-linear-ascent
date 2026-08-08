@@ -98,3 +98,16 @@ mean something:
   vendor SHA per the 006 ritual.
 - All numbers below are **opening bids** — phase 3's sim owns the final
   values; the plan commits the shape, not the digits.
+
+## Execution status
+
+**Complete** — all 4 phases executed and deployed 2026-08-08. Phase
+commits `9d49612` (floor-shaped draw), `1a36a1e` (deep hunt),
+`27220c0` (calibration — deep ladder {4:1.3, 5:1.6, 6:1.9, 7:2.8,
+8:2.8, 9:3.0, 10:3.4}, gates repinned, sim039 PASS at N=600),
+`aac7330` (0.52.0). Live on production (deploy
+`dep-d9rg9tegekts739q8hhg`, /health game 0.52.0). Production dojo
+walkthrough 13/13 PASS —
+`dojo/results/039-the-climb-pays-2026-08-08/` in the outer repo, one
+documented deviation (no at-level floor-6 account; sim + unit tests
+cover those claims). Per-phase details in each phase PLAN.md.

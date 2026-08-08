@@ -51,4 +51,11 @@ changes.
 
 ## Execution status
 
-_(appended after execution)_
+**Done** — commit `9d49612` (2026-08-08). Prey fade + runt fade land in
+`combat.hunt_table` (prey weight ×(1−fade), fade 0 below floor 4 rising
+to 1 at floor 7+; runt/feeble specimen weights fade on the same ramp);
+rubber-band ladder `{0.20, 0.35, 0.50}` and reward-cap ladder
+(6.0→7.5) in economy. Verified by the phase's unit tests inside
+`test_039_climb_pays.py` (pass) and downstream by sim039 at N=600:
+normal EV strictly increasing floors 1–6 (13.1→68.9), floor-6 p10 kill
+pay > floor-1 p50. Rollback: revert `9d49612`.

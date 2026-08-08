@@ -58,4 +58,13 @@ encounter dict).
 
 ## Execution status
 
-_(appended after execution)_
+**Done** — commit `1a36a1e` (2026-08-08). `hunt_deep` option at floor
+4+ towns (⚡2, "harder, richer"), deep prime in `start_encounter`:
+ATK ×1.2, speed +1, HP untouched — scarier, not longer. Deep table
+drops prey species and feeble/frail specimens. Refusal short of 2⚡
+returns the shard note and spends nothing. Verified: phase unit tests
+pass; production walkthrough 2026-08-08 observed 2⚡ per deep hunt on
+all 9 draws, the lit-paths opener, no prey/runts in the deep, and the
+1⚡ refusal with energy intact
+(`dojo/results/039-the-climb-pays-2026-08-08/`). Rollback: revert
+`1a36a1e`.
