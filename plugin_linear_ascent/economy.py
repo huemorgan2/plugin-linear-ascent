@@ -417,9 +417,21 @@ def specimen_gold_expectation(floor: int) -> float:
 # consent), and a clear per-energy premium on the way out.
 COST_WILDS_DEEP = 2
 DEEP_HUNT_MIN_FLOOR = 4
-DEEP_ATK_MULT = 1.3
-DEEP_SPEED_BONUS = 2       # on the 1–10 scale; stacks with alpha's +1
-DEEP_REWARD_MULT = 2.25    # gold AND xp; sim-final in phase 3
+DEEP_ATK_MULT = 1.2
+DEEP_SPEED_BONUS = 1       # on the 1–10 scale; stacks with alpha's +1
+
+# The premium tracks the blood. Deep-roster brutality is CONTENT — floor
+# 4 is stag country (avg threat 1.8, deep death ~2%), floor 9 is the
+# night floor (avg threat 2.6, deep death ~25%) — so a flat premium
+# made deep a strictly bad deal exactly where it is scariest. Ladder
+# sim-fitted (plans/039-the-climb-pays/sim039.py) so deep EV/⚡ lands
+# ≈1.2–1.5× the same-floor normal hunt on every floor. Gold AND xp.
+_DEEP_REWARD_LADDER = {4: 1.3, 5: 1.6, 6: 1.9, 7: 2.8, 8: 2.8,
+                       9: 3.0, 10: 3.4}
+
+
+def deep_reward_mult(floor: int) -> float:
+    return _DEEP_REWARD_LADDER.get(min(max(floor, 4), 10), 3.4)
 
 _DEEP_WEIGHTS = {"runt": 0, "common": 45, "tough": 35, "alpha": 20}
 DEEP_SPECIMENS = {k: {**s, "weight": _DEEP_WEIGHTS[k]}

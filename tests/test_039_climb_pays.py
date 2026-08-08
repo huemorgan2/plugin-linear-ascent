@@ -270,7 +270,7 @@ def test_deep_table_drops_prey_and_skips_the_rubber_band(monkeypatch):
     fl = schema.get_floor(6)
     table = dict((slug, w) for w, slug in combat.hunt_table(p, fl, deep=True))
     for e in fl.encounters:
-        if "feeble" in (e.traits or ()):
+        if {"feeble", "frail"} & set(e.traits or ()):
             assert e.id not in table, f"prey {e.id} drawn on a deep hunt"
         else:
             assert table[e.id] == e.weight * 100  # full weight — no mercy
@@ -289,7 +289,7 @@ def test_deep_specimens_have_no_runts():
         fl = schema.get_floor(6)
         enc_id = state.rng_pick(p, combat.hunt_table(p, fl, deep=True))
         enc = next(e for e in fl.encounters if e.id == enc_id)
-        assert "feeble" not in (enc.traits or ())
+        assert not {"feeble", "frail"} & set(enc.traits or ())
         combat.start_encounter(p, fl, enc, "wilds", deep=True)
         assert p["encounter"]["specimen"] != "runt", i
 
@@ -333,11 +333,12 @@ def test_deep_pays_the_premium_and_the_dossier_promises_it(monkeypatch):
 
     gold0, xp0, prom0 = kill(False)
     gold1, xp1, prom1 = kill(True)
-    assert gold1 == round(gold0 * economy.DEEP_REWARD_MULT)
-    assert xp1 == round(xp0 * economy.DEEP_REWARD_MULT)
+    mult = economy.deep_reward_mult(5)
+    assert gold1 == round(gold0 * mult)
+    assert xp1 == round(xp0 * mult)
     # the dossier's promise scales with the payout — same math, no drift
-    assert prom1["gold"][0] == round(prom0["gold"][0] * 2.25)
-    assert prom1["gold"][1] == round(prom0["gold"][1] * 2.25)
+    assert prom1["gold"][0] == round(prom0["gold"][0] * mult)
+    assert prom1["gold"][1] == round(prom0["gold"][1] * mult)
     assert prom0["gold"][0] <= gold0 <= prom0["gold"][1]
     assert prom1["gold"][0] <= gold1 <= prom1["gold"][1]
 

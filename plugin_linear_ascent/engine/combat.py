@@ -153,10 +153,12 @@ def hunt_table(p: dict, floor, deep: bool = False) -> list[tuple[int, str]]:
     scaled up first so the cuts still have resolution. 039: prey draws
     fade with altitude and the lethal-draw mercy loosens — the floor
     shapes the table, not just the costumes. A DEEP hunt drops prey
-    entirely and skips the rubber band: the player chose this."""
+    entirely — feeble bites AND frail bodies — and skips the rubber
+    band: the player chose this."""
     if deep:
         table = [(e.weight * 100, e.id) for e in floor.encounters
-                 if "feeble" not in (tuple(getattr(e, "traits", ()) or ()))]
+                 if not {"feeble", "frail"}
+                 & set(tuple(getattr(e, "traits", ()) or ()))]
         # a roster of nothing but prey (none exist today) falls back
         return table or [(e.weight * 100, e.id) for e in floor.encounters]
     table = []
@@ -398,7 +400,7 @@ def _drop_ranges(p: dict, floor) -> dict:
     e = p["encounter"]
     fade = economy.fade_multiplier(p["unlocked_floor"], floor.floor)
     threat = economy.kill_reward_mult(floor.floor, e.get("traits") or ())
-    deep = economy.DEEP_REWARD_MULT if e.get("deep") else 1.0
+    deep = economy.deep_reward_mult(floor.floor) if e.get("deep") else 1.0
     g_mult = (economy.SPECIMENS[e.get("specimen", "common")]["gold"]
               * economy.profile_gold_mult(_profile(p)) * threat * fade
               * deep)
@@ -1078,8 +1080,9 @@ def _victory(p: dict, floor) -> Scene:
         gold = max(1, round(gold * threat))
         if e.get("deep"):
             # 039 §2: the deep hunt pays its premium in BOTH currencies
-            xp = max(1, round(xp * economy.DEEP_REWARD_MULT))
-            gold = max(1, round(gold * economy.DEEP_REWARD_MULT))
+            mult = economy.deep_reward_mult(floor.floor)
+            xp = max(1, round(xp * mult))
+            gold = max(1, round(gold * mult))
     if p.get("race") == "elf":
         xp = round(xp * (1 + economy.ELF_XP_BONUS))
     buff = state.faction_buff_pct(p, "xp")
