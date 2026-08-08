@@ -1510,9 +1510,15 @@ def render_scene_fragment(scene: Scene) -> str:
     else:
         parts.append(_inventory_html(scene))
 
-    # 042: the sound layer flavors the hit by the fighter's damage type
+    # 042: the sound layer's stamps — the hit flavored by damage type,
+    # the room keyed for music, the fight marked wilds or warden.
     dtype = str((getattr(scene, "enemy", None) or {}).get("dtype", ""))
     dt = f' data-dtype="{_e(dtype)}"' if dtype else ""
+    loc = str(getattr(scene, "location", "") or "")
+    dt += f' data-loc="{_e(loc)}"' if loc else ""
+    if getattr(scene, "enemy", None):
+        fight = "warden" if scene.event_kind == "boss" else "wilds"
+        dt += f' data-fight="{fight}"'
     return (f'<div class="card" data-scene="{_e(scene.scene_id)}"{dt}>'
             + "".join(parts) + "</div>")
 

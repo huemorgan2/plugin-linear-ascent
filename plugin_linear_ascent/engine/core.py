@@ -33,6 +33,7 @@ def _stamp(p: dict, scene: Scene) -> Scene:
     while idempotent reads never do. 014: the pack strip rides every
     playing scene the same way. 027: so does the notice board, in town."""
     scene.scene_id = f"s{p.get('act_seq', 0)}"
+    scene.location = str(p.get("location") or "")   # 042: the music key
     scene.inventory = _pack_strip(p)
     if (not scene.notices and not scene.enemy
             and p.get("location") in _NOTICE_ROOMS):

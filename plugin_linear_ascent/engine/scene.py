@@ -137,6 +137,10 @@ class Scene:
     activity: str = ""              # 031 §11: the lodge's evening state,
                                     # drawn as a filled band under the
                                     # options. "" = no band.
+    location: str = ""              # 042: the room the player stands in
+                                    # (p["location"] verbatim) — the sound
+                                    # layer keys its music on it. A new
+                                    # TOP-LEVEL key: old clients drop it.
 
     def to_text(self) -> str:
         """Plain-text fallback — always works, cards are enhancement."""
@@ -239,6 +243,7 @@ class Scene:
             "grid": self.grid,
             "npc": self.npc,
             "activity": self.activity,
+            "location": self.location,
         }
 
     @staticmethod
@@ -283,4 +288,5 @@ class Scene:
             grid=bool(d.get("grid", False)),
             npc=(dict(d["npc"]) if d.get("npc") else None),
             activity=d.get("activity", ""),
+            location=d.get("location", ""),
         )
