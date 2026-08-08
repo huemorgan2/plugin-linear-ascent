@@ -86,14 +86,15 @@ def test_local_dev_hall_shows_the_same_locked_row():
 
 # ── the "Join a banner" door ─────────────────────────────────────────────
 
-def test_hall_ledger_row_counts_the_world_and_points_at_the_tab():
+def test_hall_ledger_row_counts_the_world_and_opens_the_directory():
     p = playing(world=hall_world())
     s = core.apply_choice(p, "guildhall")
     row = next(o for o in s.options if o.id == "hall_ledger")
-    assert "533" in row.hint and "Community tab" in row.hint
+    assert "533" in row.hint and "directory" in row.hint
     s = core.apply_choice(p, "hall_ledger")
-    assert p["location"] == "guildhall"        # a signpost, not a warp
-    assert any("Community tab" in ln for ln in s.body_lines)
+    assert p["location"] == "guildhall"        # a sub-state, not a warp
+    assert p["guild_dir"] == {"page": 0, "q": ""}
+    assert s.headline == "Every banner that flies"
 
 
 def test_no_ledger_row_when_no_banners_fly():
@@ -110,5 +111,7 @@ def test_pane_ships_the_cta_join_buttons_and_tab_walks():
     assert "renderCta" in html                 # the pitch to the unbannered
     assert "ASK TO JOIN" in html               # inline on the ledger rows
     assert "ctahall" in html                   # CTA → the Guildhall card
-    assert "hall_ledger" in html               # guildhall row → Community
-    assert "switchTab('community')" in html
+    # 042: hall_ledger is a real door now (the in-game directory) —
+    # the pane must NOT hijack it into a tab switch.
+    assert "hall_ledger" not in html
+    assert "switchTab('community')" in html    # the topbar walk survives

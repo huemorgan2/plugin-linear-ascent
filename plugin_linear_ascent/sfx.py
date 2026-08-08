@@ -306,6 +306,7 @@ const TRACKS = {
 /* which room hears which track; combat overrides in __laScene */
 const LOC2TRACK = {town: 'town', stone: 'town', board: 'town',
   gate: 'town', relay: 'town', fields: 'town', memorial: 'town',
+  profile: 'town',
   muster: 'town',
   lodge: 'lodge', sleep_menu: 'lodge', sleeping: 'lodge',
   vault: 'vault', grants: 'vault',

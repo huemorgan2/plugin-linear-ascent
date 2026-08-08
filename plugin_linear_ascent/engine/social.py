@@ -93,14 +93,22 @@ def relay_action(p: dict, oid: str) -> Scene:
 
 
 def relay_compose(p: dict, text: str) -> Scene:
+    # 042: the compose flow serves two doors now — the Relay Office and
+    # a climber's profile page. The answer card returns to whichever one
+    # the letter was started from.
+    def _answer(note: str) -> Scene:
+        if p.get("location") == "profile":
+            from . import profile as profile_mod
+            return profile_mod.profile_scene(p, note=note)
+        return relay_scene(p, note=note)
     target = p.pop("compose_to", "")
     body = text.strip()[:400]
     if not target or not body:
-        return relay_scene(p, note="The clerk waits, pen up. Nothing came.")
+        return _answer("The clerk waits, pen up. Nothing came.")
     p["gold"] -= economy.LETTER_PRICE
     _ledger(p, "letter", gold=-economy.LETTER_PRICE, note=f"to {target}")
     _effect(p, "send_letter", to_name=target, body=body)
-    return relay_scene(p, note=f"+ sealed and slotted for {target}")
+    return _answer(f"+ sealed and slotted for {target}")
 
 
 # ── The fields (PvP) ─────────────────────────────────────────────────────
@@ -255,6 +263,10 @@ def guildhall_scene(p: dict, note: str = "") -> Scene:
         return _donate_prompt(p, note)
     if p.get("faction_kicking"):
         return _kick_prompt(p, note)
+    if isinstance(p.get("guild_dir"), dict):
+        return _guild_dir_scene(p, note)
+    if p.get("door_rules"):
+        return _door_rules_scene(p, note)
     if p.get("banner_page"):
         return _banner_page_scene(p, note)
     w = world(p) or {}
@@ -303,6 +315,10 @@ def guildhall_scene(p: dict, note: str = "") -> Scene:
             # an older worldd injects no hall — the 010 member panel holds
             _member_panel(p, fac, lines, opts)
             headline = f"The {fac['name']} table"
+        if fac.get("role") == "steward":
+            # 042: the steward paints the door's terms — the directory
+            # shows them to every climber
+            opts.append(Option("door_rules", "The door — joining terms"))
         if fac.get("banner"):
             banner = str(fac["banner"])
     elif w.get("factions") is not None:
@@ -446,7 +462,7 @@ def _hall_list(p: dict, factions: list, lines: list,
     total = int(w.get("factions_total", len(factions)))
     if total:
         opts.append(Option("hall_ledger", "Join a banner",
-                           f"{total} flying · the Community tab"))
+                           f"{total} flying · the directory"))
     if p["level"] < FOUND_MIN_LEVEL:
         opts.append(Option("found_guild", "Raise a new banner",
                            f"🔒 level {FOUND_MIN_LEVEL} · "
@@ -516,7 +532,7 @@ def _join_rows(p: dict, w: dict, lines: list, opts: list) -> None:
     total = int(w.get("factions_total", len(w.get("factions") or [])))
     if total:
         opts.append(Option("hall_ledger", "Join a banner",
-                           f"{total} flying · the Community tab"))
+                           f"{total} flying · the directory"))
     if p["level"] < FOUND_MIN_LEVEL:
         opts.append(Option("found_guild", "Raise a new banner",
                            f"🔒 level {FOUND_MIN_LEVEL} · "
@@ -524,6 +540,273 @@ def _join_rows(p: dict, w: dict, lines: list, opts: list) -> None:
     else:
         opts.append(Option("found_guild", "Raise a new banner",
                            f"◈ {GUILD_FOUND_FEE}"))
+
+
+# ── 042: the Guild Directory — every banner, searchable, joinable ────────
+
+DIR_PAGE = 20                  # rows per page; worldd caps the pull at 100
+
+
+def _dir_rows(p: dict) -> tuple[list[dict], int]:
+    """(rows for the current query, world total). worldd injects
+    w['guild_dir'] = {rows: [≤100], total} — the search box narrows
+    server-side on the next act, and locally right away."""
+    w = world(p) or {}
+    gd = w.get("guild_dir") if isinstance(w.get("guild_dir"), dict) else {}
+    rows = [r for r in (gd.get("rows") or []) if isinstance(r, dict)]
+    q = str((p.get("guild_dir") or {}).get("q") or "").strip().lower()
+    if q:
+        rows = [r for r in rows if q in str(r.get("name", "")).lower()]
+    return rows, int(gd.get("total", len(rows)) or 0)
+
+
+def _dir_gate(p: dict, r: dict) -> str:
+    """Why this banner's door is shut to the viewer — '' when it opens."""
+    req = r.get("requirements") if isinstance(r.get("requirements"),
+                                              dict) else {}
+    min_level = int(req.get("min_level", 0) or 0)
+    cap = int(req.get("member_cap", 0) or 0)
+    if min_level and p["level"] < min_level:
+        return f"requires L{min_level}"
+    if cap and int(r.get("members", 0) or 0) >= cap:
+        return "full"
+    return ""
+
+
+def _guild_dir_scene(p: dict, note: str = "") -> Scene:
+    st = p.get("guild_dir") or {}
+    if st.get("asking"):
+        return Scene(
+            eyebrow="ROOTHOLLOW · THE GUILDHALL · THE DIRECTORY",
+            headline="Search the banners",
+            support="A name, or part of one.",
+            options=[Option("gdir_clear", "Never mind")],
+            meters=meters(p),
+            awaits_text="the banner name to search for",
+            ask={"kind": "text", "max": 24, "label": "search the banners",
+                 "placeholder": "part of a name", "submit": "SEARCH"},
+        )
+    rows, total = _dir_rows(p)
+    pages = max(1, -(-len(rows) // DIR_PAGE))
+    page = max(0, min(int(st.get("page", 0) or 0), pages - 1))
+    st["page"] = page
+    lines = note.split("\n") if note else []
+    q = str(st.get("q") or "")
+    w = world(p) or {}
+    requested = w.get("faction_requested", "")
+    mine = bool(w.get("faction")) or bool(p.get("guild"))
+    if q:
+        lines.append(f"showing banners matching '{q}' — "
+                     f"{len(rows)} found")
+    else:
+        lines.append(f"{total} banner{'s' if total != 1 else ''} fly in "
+                     "the world")
+    if mine:
+        lines.append("you already sit at a table — leave it before "
+                     "joining another")
+    gallery: list[dict] = []
+    for r in rows[page * DIR_PAGE:(page + 1) * DIR_PAGE]:
+        nm = str(r.get("name", "?"))
+        req = r.get("requirements") if isinstance(r.get("requirements"),
+                                                  dict) else {}
+        n = int(r.get("members", 0) or 0)
+        gate = _dir_gate(p, r)
+        bits = [f"{n} at the table"]
+        fee = int(r.get("join_fee", 0) or 0)
+        if fee:
+            bits.append(f"join ◈ {fee}")
+        if int(req.get("min_level", 0) or 0):
+            bits.append(f"L{int(req['min_level'])}+")
+        if req.get("invite_only"):
+            bits.append("invite only")
+        if nm == requested:
+            bits = ["your request waits at their desk"]
+        elif gate:
+            bits.append(gate.upper())
+        gallery.append({"opt": f"gjoin_{nm}",
+                        "slug": str(r.get("banner") or ""),
+                        "label": nm, "sub": " · ".join(bits)})
+    if not rows:
+        lines.append("no banner answers that name — the wall is bare")
+    opts = [Option("gdir_search", "Search by name",
+                   f"'{q}'" if q else "")]
+    if q:
+        opts.append(Option("gdir_clear", "Clear the search"))
+    if page > 0:
+        opts.append(Option("gdir_prev", "Earlier banners",
+                           f"page {page}/{pages}"))
+    if page < pages - 1:
+        opts.append(Option("gdir_next", "More banners",
+                           f"page {page + 2}/{pages}"))
+    opts.append(Option("gdir_back", "Back to the hall"))
+    opts.append(Option("town", "Back to the square"))
+    return Scene(
+        eyebrow="ROOTHOLLOW · THE GUILDHALL · THE DIRECTORY",
+        headline="Every banner that flies",
+        support="Meet a banner's terms and its table seats you today — "
+                "invite-only desks take a request instead.",
+        body_lines=lines,
+        options=opts,
+        meters=meters(p),
+        banner="guildhall",
+        gallery=gallery,
+    )
+
+
+def guild_dir_search(p: dict, text: str) -> Scene:
+    """The typed search line (core routes it via the guild_dir flag)."""
+    st = p.get("guild_dir")
+    if not isinstance(st, dict):
+        return guildhall_scene(p)
+    st.pop("asking", None)
+    st["q"] = text.strip()[:24]
+    st["page"] = 0
+    return _guild_dir_scene(p)
+
+
+def _guild_dir_action(p: dict, oid: str) -> Scene:
+    st = p.get("guild_dir")
+    if not isinstance(st, dict):
+        return guildhall_scene(p)
+    if oid == "gdir_back":
+        p.pop("guild_dir", None)
+        return guildhall_scene(p)
+    if oid == "gdir_search":
+        st["asking"] = True
+        return _guild_dir_scene(p)
+    if oid == "gdir_clear":
+        st.pop("asking", None)
+        st["q"] = ""
+        st["page"] = 0
+        return _guild_dir_scene(p)
+    if oid == "gdir_prev":
+        st["page"] = max(0, int(st.get("page", 0)) - 1)
+        return _guild_dir_scene(p)
+    if oid == "gdir_next":
+        st["page"] = int(st.get("page", 0)) + 1
+        return _guild_dir_scene(p)
+    if oid.startswith("gjoin_"):
+        return _dir_join(p, oid.removeprefix("gjoin_"))
+    return _guild_dir_scene(p)
+
+
+def _dir_join(p: dict, name: str) -> Scene:
+    w = world(p) or {}
+    if bool(w.get("faction")) or p.get("guild"):
+        return _guild_dir_scene(
+            p, note="One banner per climber — leave your table first.")
+    rows, _ = _dir_rows(p)
+    r = next((x for x in rows if str(x.get("name")) == name), None)
+    if r is None:
+        return _guild_dir_scene(
+            p, note="That banner came down while you read the wall.")
+    if w.get("faction_requested", "") == name:
+        return _guild_dir_scene(
+            p, note=f"Your request already waits at the {name} desk.")
+    gate = _dir_gate(p, r)
+    if gate:
+        return _guild_dir_scene(
+            p, note=f"The {name} door reads: {gate}. "
+                    + ("Train first." if gate.startswith("requires")
+                       else "No chair left at that table."))
+    req = r.get("requirements") if isinstance(r.get("requirements"),
+                                              dict) else {}
+    if req.get("invite_only"):
+        _effect(p, "faction_request", guild=name)
+        w["faction_requested"] = name
+        return _guild_dir_scene(
+            p, note=f"+ {name} keeps an invite-only desk — your name "
+                    "goes to their admins.")
+    fee = int(r.get("join_fee", 0) or 0)
+    if fee and not _take_gold(p, fee):
+        return _guild_dir_scene(
+            p, note=f"The join fee is ◈ {fee} — you can't cover it.")
+    if fee:
+        _ledger(p, "faction_join", gold=-fee, note=name)
+    p.pop("guild_dir", None)
+    p["guild"] = name
+    _effect(p, "faction_join", guild=name)
+    return Scene(
+        eyebrow="ROOTHOLLOW · THE GUILDHALL",
+        headline=f"The {name} banner takes you",
+        support="Milestone Wardens fall to war parties, not heroes.",
+        body_lines=[
+            f"+ your chair scrapes in at the {name} table"
+            + (f" — ◈ {fee} into their store" if fee else ""),
+            "The store funds the war party and the armory. Show up — "
+            "attendance pays the week.",
+        ],
+        options=[Option("guildhall", "The hall"),
+                 Option("town", "Back to the square")],
+        meters=meters(p),
+        banner=str(r.get("banner") or "") or "guildhall",
+    )
+
+
+# ── 042: the door rules — a steward sets who the table seats ─────────────
+
+_DOOR_LEVELS = (0, 5, 10, 15, 20)
+
+
+def _door_rules_scene(p: dict, note: str = "") -> Scene:
+    w = world(p) or {}
+    fac = w.get("faction") or {}
+    req = fac.get("requirements") if isinstance(fac.get("requirements"),
+                                                dict) else {}
+    min_level = int(req.get("min_level", 0) or 0)
+    invite = bool(req.get("invite_only"))
+    lines = note.split("\n") if note else []
+    lines.append("the door now reads: "
+                 + (f"level {min_level}+ · " if min_level else "open · ")
+                 + ("invite only" if invite else "walk-ins seat "
+                    "themselves"))
+    opts = []
+    for lv in _DOOR_LEVELS:
+        mark = "▪ " if lv == min_level else ""
+        opts.append(Option(f"dr_lv_{lv}",
+                           f"{mark}" + (f"Require level {lv}+" if lv
+                                        else "Open to any level")))
+    opts.append(Option("dr_invite",
+                       ("Open the door — take walk-ins" if invite
+                        else "Invite only — requests need your desk")))
+    opts.append(Option("dr_back", "Back to the hall"))
+    return Scene(
+        eyebrow="ROOTHOLLOW · THE GUILDHALL · THE DOOR",
+        headline=f"Who does the {fac.get('name', '?')} door seat?",
+        support="The directory shows these terms to every climber.",
+        body_lines=lines,
+        options=opts,
+        meters=meters(p),
+    )
+
+
+def _door_rules_action(p: dict, oid: str) -> Scene:
+    w = world(p) or {}
+    fac = w.get("faction") or {}
+    if oid == "dr_back" or fac.get("role") != "steward":
+        p.pop("door_rules", None)
+        return guildhall_scene(p)
+    req = fac.setdefault("requirements", {})
+    if not isinstance(req, dict):
+        req = fac["requirements"] = {}
+    if oid.startswith("dr_lv_"):
+        try:
+            lv = int(oid.removeprefix("dr_lv_"))
+        except ValueError:
+            return _door_rules_scene(p)
+        if lv not in _DOOR_LEVELS:
+            return _door_rules_scene(p)
+        req["min_level"] = lv
+        _effect(p, "faction_rules", min_level=lv,
+                invite_only=bool(req.get("invite_only")))
+        return _door_rules_scene(p, note="+ the door repaints itself")
+    if oid == "dr_invite":
+        req["invite_only"] = not bool(req.get("invite_only"))
+        _effect(p, "faction_rules",
+                min_level=int(req.get("min_level", 0) or 0),
+                invite_only=bool(req["invite_only"]))
+        return _door_rules_scene(p, note="+ the door repaints itself")
+    return _door_rules_scene(p)
 
 
 def _banner_page_scene(p: dict, note: str = "") -> Scene:
@@ -749,6 +1032,11 @@ def guildhall_action(p: dict, oid: str, text: str = "") -> Scene:
             st["step"] = "fee"
             return _founding_scene(p, st)
         return _founding_scene(p, st)
+    if isinstance(p.get("guild_dir"), dict):
+        # 042: the directory owns its own ids while it is open
+        return _guild_dir_action(p, oid)
+    if p.get("door_rules"):
+        return _door_rules_action(p, oid)
     if p.get("faction_donating"):
         p.pop("faction_donating", None)
         return guildhall_scene(p, note="The box stays shut.")
@@ -793,12 +1081,15 @@ def guildhall_action(p: dict, oid: str, text: str = "") -> Scene:
     if oid == "guild_train":
         return guild_train(p)
     if oid == "hall_ledger":
-        # 019: the door to the board — the pane switches tabs on this
-        # id client-side; the chat path gets told where the ledger is.
-        return guildhall_scene(
-            p, note="The full ledger hangs in the Community tab — "
-                    "every banner, every desk. Ask to join from there, "
-                    "or raise your own right here.")
+        # 042: the dead-end note grew into the Guild Directory — every
+        # banner, searchable, 20 to a page, joinable on the spot when
+        # you meet a table's terms. Older worldds inject no guild_dir;
+        # the directory scene just shows a bare wall there.
+        p["guild_dir"] = {"page": 0, "q": ""}
+        return _guild_dir_scene(p)
+    if oid == "door_rules" and fac and fac.get("role") == "steward":
+        p["door_rules"] = True
+        return _door_rules_scene(p)
     if oid == "found_guild":
         if fac or p.get("guild"):
             # 019: one banner per climber — leaving first is the path
@@ -1107,6 +1398,35 @@ def _hour_roll(strikers: list[dict]) -> str:
     return f"{names}{tail} struck this hour"
 
 
+def _striker_board(strikers: list[dict]) -> list[dict]:
+    """042: the live board — every blade against this Warden as an
+    avatar tile, damage TAKEN from it under each face (the live board
+    shows what the fight is costing; the memorial ranks what it paid).
+    One tile per climber, strikes summed."""
+    by: dict[str, dict] = {}
+    for s in strikers:
+        nm = s.get("name")
+        if not nm:
+            continue
+        row = by.setdefault(nm, {
+            "opt": f"pv:{nm}", "name": nm,
+            "level": int(s.get("level", 1) or 1),
+            "race": str(s.get("race") or ""),
+            "armor": str(s.get("armor") or ""),
+            "dmg": 0, "taken": 0})
+        row["dmg"] += int(s.get("dmg", 0) or 0)
+        row["taken"] += int(s.get("taken", 0) or 0)
+        # the newest strike knows the newest shape of the climber
+        for k in ("level", "race", "armor"):
+            if s.get(k):
+                row[k] = s[k] if k != "level" else int(s[k])
+    tiles = sorted(by.values(), key=lambda r: -r["dmg"])
+    for t in tiles:
+        t["sub"] = f"{t.pop('taken'):,} taken"
+        t.pop("dmg", None)
+    return tiles
+
+
 def _war_standings(strikers: list[dict]) -> list[str]:
     """Faction damage standings — top banners by total cut."""
     by: dict[str, int] = {}
@@ -1206,6 +1526,8 @@ def warden_scene(p: dict, fl, note: str = "") -> Scene:
         meters=meters(p),
         event_kind="boss",
         banner=_warden_banner(fl),
+        players_here=_striker_board(strikers),
+        players_title="BLADES AGAINST IT" if strikers else "",
     )
 
 

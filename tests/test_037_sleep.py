@@ -120,10 +120,9 @@ def test_healing_fractions_are_never_lost():
 
 def test_the_square_has_a_sleep_door_and_the_menu_names_both_rates():
     p = create_character(fresh("menu"), name="Drowsy")
-    # 040: a rested climber has nothing to sleep for — no door.
+    # 042: the door is always on the square — rested or dry.
     s = core.current_scene(p)
-    assert not any(o.id == "sleep_menu" for o in s.options)
-    # drain the bar dry and the door appears
+    assert any(o.id == "sleep_menu" for o in s.options)
     p["energy_val"] = 0.0
     p["energy_ts"] = state.now().isoformat()
     s = core.current_scene(p)

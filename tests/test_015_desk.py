@@ -87,7 +87,7 @@ def test_hall_points_at_the_full_ledger_when_deep():
     p = playing(world=w)
     s = core.apply_choice(p, "guildhall")
     row = next(o for o in s.options if o.id == "hall_ledger")
-    assert "8" in row.hint and "Community" in row.hint
+    assert "8" in row.hint and "directory" in row.hint
     assert sum(o.id.startswith("join_") for o in s.options) == 5
 
 

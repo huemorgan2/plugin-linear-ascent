@@ -105,6 +105,7 @@ def meters(p: dict) -> Meters:
         level=p["level"],
         atk=state.atk(p),
         dfs=state.dfs(p),
+        spd=economy.player_speed(p),
         # 031 §4: the header line — who is climbing
         name=p.get("name") or "",
         race=p.get("race") or "",
@@ -737,6 +738,10 @@ def _monster_hit(p: dict, halved: bool = False, least: int = 0,
         e["apple_hp"] -= soaked
         dmg -= soaked
     p["hp"] -= dmg
+    if e.get("shared"):
+        # 042: the live board bills the Warden's side of the exchange —
+        # what this fight has cost the climber, summed per strike.
+        e["taken"] = int(e.get("taken", 0)) + dmg
     blocked = raw - dmg
     # 034 §1 / 035: both guard pieces met the blow, and both are billed for
     # what they turned — the card already narrates that number. A blow that
@@ -975,7 +980,7 @@ def _report_shared_strike(p: dict) -> int:
     e["strike_sent"] = True
     p.setdefault("_effects", []).append({
         "kind": "warden_strike", "floor": int(e.get("floor", 0)),
-        "damage": dealt})
+        "damage": dealt, "taken": int(e.get("taken", 0))})
     _ledger(p, "warden_strike", note=f"floor {e.get('floor')} · {dealt}")
     # optimistic pool update so the next keep card reads right
     w = p.get("_world") or {}

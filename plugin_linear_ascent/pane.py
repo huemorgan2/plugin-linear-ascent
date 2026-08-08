@@ -334,13 +334,10 @@ function wireOptions() {
   /* 027: everything that carries a data-opt acts the same way — menu rows,
      notice-board shortcuts, sigil tiles and the pack popup's actions. */
   const btns = [...game.querySelectorAll('button.opt, button.nrow, '
-    + 'button.gtile, button.pclose')];
+    + 'button.gtile, button.ptile, button.pclose')];
   const hint = game.querySelector('.reply');
   btns.forEach(b => b.addEventListener('click', async () => {
     if (loading) return;
-    // 019: the Guildhall's "Join a banner" row IS the Community tab —
-    // no server round trip, the door just opens.
-    if (b.dataset.opt === 'hall_ledger') { switchTab('community'); return; }
     if (window.__laSfx) window.__laSfx('click');   // 042
     loading = true;
     btns.forEach(x => { x.disabled = true;

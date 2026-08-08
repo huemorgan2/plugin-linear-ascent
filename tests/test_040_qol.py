@@ -42,10 +42,12 @@ def _enc(floor_no, slug):
 
 # ── 1. the sleep door ────────────────────────────────────────────────────
 
-def test_sleep_door_only_when_the_bar_is_dry():
+def test_sleep_door_always_open():
+    # 042: the door is always there — rested or dry, sleep is the
+    # player's call.
     p = create_character(fresh("qol-sleep"), name="Rested")
     ids = [o.id for o in core.current_scene(p).options]
-    assert "sleep_menu" not in ids
+    assert "sleep_menu" in ids
     _drain(p)
     ids = [o.id for o in core.current_scene(p).options]
     assert "sleep_menu" in ids

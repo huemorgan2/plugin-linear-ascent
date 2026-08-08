@@ -38,6 +38,10 @@ def _stamp(p: dict, scene: Scene) -> Scene:
     if (not scene.notices and not scene.enemy
             and p.get("location") in _NOTICE_ROOMS):
         scene.notices = notices.pending(p)
+    # 042: the presence grid rides every ordinary room card — scenes
+    # that brought their own grid (warden boards, memorials) keep it.
+    from . import presence
+    presence.mount(p, scene)
     # 027: every pack cell carries what it can do HERE — the strip stops
     # being a hover-only display and becomes the place you use a thing.
     for cell in scene.inventory:
@@ -222,6 +226,10 @@ def apply_choice(p: dict, option_id: str, text: str = "") -> Scene:
         # the banner's new name
         from . import hall
         return _stamp(p, hall.hall_text(p, text))
+    if (isinstance(p.get("guild_dir"), dict)
+            and p["guild_dir"].get("asking") and text and not option_id):
+        # 042: the directory's typed search line
+        return _stamp(p, social.guild_dir_search(p, text))
 
     # 027: two surfaces act from OUTSIDE the menu — the pack popup and the
     # notice board. Their ids are validated by the engine that owns them,
@@ -255,8 +263,13 @@ def apply_choice(p: dict, option_id: str, text: str = "") -> Scene:
 
     # 027: a picture tile is a row — the sigil grid's ids are as valid as
     # any option's, they just look like what they choose.
+    # 042: so is a face on the presence grid — mount it first so its
+    # pv: targets count (the response scene mounts again in _stamp).
+    from . import presence
+    presence.mount(p, scene)
     valid = ({o.id for o in scene.options}
-             | {str(g.get("opt", "")) for g in scene.gallery})
+             | {str(g.get("opt", "")) for g in scene.gallery}
+             | presence.valid_opts(scene))
     if option_id not in valid:
         # numbered fallback: "1".."9" resolve positionally
         if option_id.isdigit() and 1 <= int(option_id) <= len(scene.options):
@@ -270,6 +283,11 @@ def apply_choice(p: dict, option_id: str, text: str = "") -> Scene:
                 f"That isn't one of the paths in front of us. "
                 f"Pick one of: {', '.join(sorted(valid))}.")
             return _stamp(p, scene)
+    # 042: a face is a door — clicking any avatar opens that climber's
+    # page, from any room, any board.
+    if option_id.startswith("pv:") and p.get("location") != "profile":
+        from . import profile as profile_mod
+        return _stamp(p, profile_mod.open_profile(p, option_id[3:]))
     return _stamp(p, _dispatch(p, option_id))
 
 
@@ -521,8 +539,14 @@ def _build_scene(p: dict) -> Scene:
         "boss_keep": _boss_keep_scene,
         "warden_keep": _warden_keep_scene,
         "memorial": _memorial_scene,
+        "profile": _profile_scene,
     }
     return builders.get(loc, _town_scene)(p)
+
+
+def _profile_scene(p: dict) -> Scene:
+    from . import profile as profile_mod
+    return profile_mod.profile_scene(p)
 
 
 def _boss_keep_scene(p: dict) -> Scene:
@@ -590,6 +614,17 @@ def _memorial_scene(p: dict) -> Scene:
                     f"{int(rec['top_dmg']):,}.")
     body.append("The lift above has run free ever since. Nothing waits "
                 "in here for you — the wilds outside still do.")
+    # 042: the honored fallen — everyone who cut this Warden, ranked by
+    # damage dealt, faces on the wall forever.
+    board = []
+    for i, r in enumerate([x for x in (rec.get("roll") or [])
+                           if isinstance(x, dict) and x.get("name")][:70]):
+        board.append({"opt": f"pv:{r['name']}", "name": str(r["name"]),
+                      "level": int(r.get("level", 1) or 1),
+                      "race": str(r.get("race") or ""),
+                      "armor": str(r.get("armor") or ""),
+                      "rank": i + 1,
+                      "sub": f"{int(r.get('dmg', 0) or 0):,} dealt"})
     return Scene(
         eyebrow=f"FLOOR {fl.floor} · THE KEEP",
         headline=f"{fl.warden_name} fell here",
@@ -599,6 +634,8 @@ def _memorial_scene(p: dict) -> Scene:
         meters=combat.meters(p),
         banner=f"warden_{fl.floor:03d}",
         fx="warden_fall",
+        players_here=board,
+        players_title="THE HONORED FALLEN" if board else "",
     )
 
 
@@ -875,13 +912,13 @@ def _town_scene(p: dict) -> Scene:
                f"pay ◈ {economy.LODGE_PRICE_PER_LEVEL * p['level']}/night",
                badge=_b("lodge")),
         # 037: active sleep — the only thing that mends wounds before dawn.
-        # 040: the door shows only when the bar is DRY — a climber who can
-        # still afford a hunt has nothing to sleep for, and the always-on
-        # row read as noise. (The Lodge's own bunk stays for planned rest.)
-        *([Option("sleep_menu", "Sleep",
-                  "mend ⚡ and HP faster — the Lodge or the fields")]
-          if state.energy_now(p) < economy.COST_WILDS_FIGHT else []),
-        Option("vault", "The Vault", "bank", badge=_b("vault")),
+        # 042: always on — the player sleeps whenever they want, not only
+        # when the bar is dry.
+        Option("sleep_menu", "Sleep",
+               "mend ⚡ and HP faster — the Lodge or the fields"),
+        Option("vault", "The Vault",
+               f"deposited ◈ {p['bank']:,}" if p["bank"] > 0 else "bank",
+               badge=_b("vault")),
         Option("pawn", "Pawn shop", "sell"),
         # 012: the Guildhall is core — training (buying levels) lives
         # there, so it must exist even without a connected world.
@@ -944,7 +981,9 @@ def _dispatch_location(p: dict, oid: str) -> Scene:
         # 032: stepping onto the square drops any hall or banner-page
         # sub-state — the doors reopen fresh
         for k in ("hall_area", "hall_ask", "hall_putting", "hall_kicking",
-                  "hall_promoting", "banner_page"):
+                  "hall_promoting", "banner_page", "guild_dir",
+                  "door_rules", "profile_view", "profile_back",
+                  "profile_pay", "profile_gift", "profile_loot"):
             p.pop(k, None)
         return _town_scene(p)
     town_menus = ("forge", "arcanum", "medlab", "lodge", "vault", "pawn",
@@ -985,6 +1024,11 @@ def _dispatch_location(p: dict, oid: str) -> Scene:
         p["location"] = oid
         return _build_scene(p)
     if oid == "back":
+        if loc == "profile":
+            # 042: the page closes back onto wherever it was opened from
+            from . import profile as profile_mod
+            profile_mod.close_profile(p)
+            return _build_scene(p)
         if loc == "memorial":
             # 034 §3: the only way out of a monument is back to the camp.
             p["location"] = "gate_town"
@@ -1037,6 +1081,9 @@ def _dispatch_location(p: dict, oid: str) -> Scene:
     if loc == "warden_keep":
         return social.warden_action(
             p, schema.get_floor(max(1, p["floor"])), oid)
+    if loc == "profile":
+        from . import profile as profile_mod
+        return profile_mod.profile_action(p, oid)
     return _build_scene(p)
 
 

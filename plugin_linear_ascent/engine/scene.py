@@ -51,6 +51,8 @@ class Meters:
     dfs: int = 0        # can draw pip rows without reading the player doc.
                         # Defaults 0 = "not sent" (older engine): the
                         # profile block simply omits the rows.
+    spd: int = 0        # speed on the same wire — base plus footwear.
+                        # 0 = not sent (older engine): row omitted.
     name: str = ""      # 031 §4: the profile header — who is climbing.
     race: str = ""      # "" = not sent (older engine): the header line
     clazz: str = ""     # simply omits the missing parts.
@@ -141,6 +143,19 @@ class Scene:
                                     # (p["location"] verbatim) — the sound
                                     # layer keys its music on it. A new
                                     # TOP-LEVEL key: old clients drop it.
+    players_here: list[dict] = field(default_factory=list)
+                                    # 042: who else stands in this room —
+                                    # the presence grid, 7 tiles per row.
+                                    # Entries: {opt, name, level, race,
+                                    # armor, sleeping, gold, energy, sub,
+                                    # rank}. opt is the click target
+                                    # ("pv:<name>"); sub is an optional
+                                    # line under the tile (warden boards
+                                    # write damage there). A new TOP-LEVEL
+                                    # key: old clients drop it.
+    players_title: str = ""         # 042: heading over the grid — "" hides
+                                    # it ("PLAYERS HERE", "THE STRIKERS",
+                                    # "THE HONORED FALLEN").
 
     def to_text(self) -> str:
         """Plain-text fallback — always works, cards are enhancement."""
@@ -194,9 +209,20 @@ class Scene:
         # 031 §11: the evening state reads as words on every surface
         if self.activity:
             lines.append(self.activity)
+        # 042: the presence grid reads as words — the agent names who is
+        # here the same way the card draws them.
+        if self.players_here:
+            lines.append(self.players_title or "PLAYERS HERE")
+            for pl in self.players_here:
+                tag = " (sleeping)" if pl.get("sleeping") else ""
+                sub = f" — {pl['sub']}" if pl.get("sub") else ""
+                rank = (f"{pl['rank']}. " if pl.get("rank") else "")
+                lines.append(f"· {rank}{pl.get('name', '?')} "
+                             f"L{pl.get('level', 1)}{tag}{sub}")
         if self.meters:
             m = self.meters
             stats = (f"   ATK {m.atk}   DEF {m.dfs}"
+                     + (f"   SPD {m.spd}" if getattr(m, "spd", 0) else "")
                      if getattr(m, "atk", 0) else "")
             lines.append(
                 f"HP {m.hp}/{m.hp_max}   ⚡ {m.energy}/{m.energy_max}   "
@@ -244,6 +270,8 @@ class Scene:
             "npc": self.npc,
             "activity": self.activity,
             "location": self.location,
+            "players_here": self.players_here,
+            "players_title": self.players_title,
         }
 
     @staticmethod
@@ -289,4 +317,6 @@ class Scene:
             npc=(dict(d["npc"]) if d.get("npc") else None),
             activity=d.get("activity", ""),
             location=d.get("location", ""),
+            players_here=list(d.get("players_here", [])),
+            players_title=d.get("players_title", ""),
         )

@@ -523,6 +523,58 @@ def _gallery_html(gallery: list[dict]) -> str:
     return f'<div class="gal later">{"".join(tiles)}</div>'
 
 
+# ── 042: the presence grid — who else stands in this room ───────────────
+# Seven faces to a row, the same derived portraits the profile rail
+# wears (armor tier + race, never stored art). A sleeping climber wears
+# a Zzz chip; hover carries coin and energy; every face is a door to
+# that climber's page (data-opt="pv:<name>").
+
+def _tile_portrait_url(race: str, armor: str) -> str | None:
+    slug = armor if armor in ("rags", "leather", "chain", "scale",
+                              "plate", "aegis") else "rags"
+    if race:
+        url = _portrait_data_url(f"{race}_{slug}")
+        if url:
+            return url
+    return _portrait_data_url(slug)
+
+
+def _players_here_html(scene: Scene) -> str:
+    tiles = getattr(scene, "players_here", None) or []
+    if not tiles:
+        return ""
+    title = _e(str(getattr(scene, "players_title", "") or "PLAYERS HERE"))
+    cells = []
+    for t in tiles:
+        if not isinstance(t, dict) or not t.get("name"):
+            continue
+        name = str(t["name"])
+        url = _tile_portrait_url(str(t.get("race") or ""),
+                                 str(t.get("armor") or ""))
+        face = (f'<img class="pface" src="{url}" alt="">' if url
+                else '<span class="pface none"></span>')
+        zzz = ('<span class="pzzz">Zzz</span>'
+               if t.get("sleeping") else "")
+        rank = (f'<span class="prank">{int(t["rank"])}</span>'
+                if t.get("rank") else "")
+        sub = (f'<span class="psub">{_et(str(t["sub"]))}</span>'
+               if t.get("sub") else "")
+        tip = (f"◈ {int(t.get('gold', 0)):,} carried · "
+               f"⚡ {int(t.get('energy', 0))}")
+        cells.append(
+            f'<button type="button" class="ptile" '
+            f'data-opt="{_e(str(t.get("opt", "pv:" + name)))}" '
+            f'data-tip="{_e(tip)}">'
+            f'<span class="pfbox">{face}{zzz}{rank}</span>'
+            f'<span class="pname">{_e(name)}</span>'
+            f'<span class="plvl">L{int(t.get("level", 1) or 1)}</span>'
+            f"{sub}</button>")
+    if not cells:
+        return ""
+    return (f'<div class="phere later"><div class="phead">{title}</div>'
+            f'<div class="pgrid">{"".join(cells)}</div></div>')
+
+
 def _blocks(cur: int, cap: int, cells: int = 10) -> str:
     cur = max(0, min(cur, cap))
     filled = round(cells * cur / cap) if cap else 0
@@ -614,6 +666,8 @@ _TIP_ATK = ("ATK — your total attack: class base plus weapon and honing. "
             "Every 3 points fills half a sword.")
 _TIP_DEF = ("DEF — your total defense: shield, armor and honing. "
             "Every 3 points fills half an icon.")
+_TIP_SPD = ("SPD — your speed: class base plus footwear. Decides dodges, "
+            "chases and getaways. Every point fills a bolt.")
 
 
 def _portrait_slug(scene: Scene) -> str:
@@ -648,8 +702,9 @@ def _portrait_data_url(slug: str) -> str | None:
     return None
 
 
-def _pip_row(key: str, label: str, stat: int, tint: str, tip: str) -> str:
-    halves = max(0, min(20, round(stat / 3)))
+def _pip_row(key: str, label: str, stat: int, tint: str, tip: str,
+             per_half: float = 3) -> str:
+    halves = max(0, min(20, round(stat / per_half)))
     pips = []
     for i in range(10):
         left = halves - 2 * i
@@ -672,10 +727,14 @@ def _profile_html(scene: Scene) -> str:
     m = scene.meters
     right = _meters_html(m)
     if getattr(m, "atk", 0):
+        spd_row = (_pip_row("bolt", "SPD", m.spd, AETHER, _TIP_SPD,
+                            per_half=0.5)
+                   if getattr(m, "spd", 0) else "")
         right += ('<div class="piprows later">'
                   + _pip_row("sword", "ATK", m.atk, ORANGE, _TIP_ATK)
                   + _pip_row("armor", "DEF", getattr(m, "dfs", 0), DIM,
                              _TIP_DEF)
+                  + spd_row
                   + "</div>")
     # the pack lives in the profile's right column — portrait on the
     # left, everything the climber carries to its right, never below.
@@ -747,14 +806,14 @@ def _active_mods(en: dict) -> list[str]:
     return mods
 
 
-_TIP_EHEAD = ("The enemy's sheet — HP, then attack and defense on the "
-              "same scale as your own rows. Everything else is in the "
+_TIP_EHEAD = ("The enemy's sheet — HP, then attack, defense and speed on "
+              "the same scale as your own rows. Everything else is in the "
               "[i] dossier.")
 
 
 def _enemy_head_html(en: dict) -> str:
-    """One line on one ink plate: HP · ATK · DEF. Nothing more rides the
-    art — range, modifiers and the story live in the [i] dossier.
+    """One line on one ink plate: HP · ATK · DEF · SPD. Nothing more rides
+    the art — range, modifiers and the story live in the [i] dossier.
     041: no `later` class — the sheet must read the moment the scene
     lands, not after the typewriter finishes."""
     hp, cap = int(en.get("hp", 0)), max(1, int(en.get("hp_max", 1)))
@@ -762,6 +821,14 @@ def _enemy_head_html(en: dict) -> str:
     hp_col = RED if low else VIOLET_SOFT
     sw = icons.icon_data_url("sword")
     ar = icons.icon_data_url("armor")
+    spd = ""
+    if "mspd" in en:
+        bt = icons.icon_data_url("bolt")
+        spd = (f'<span class="st" style="color:{AETHER}">'
+               f'<span class="eg" aria-hidden="true" '
+               f"style=\"-webkit-mask-image:url('{bt}');"
+               f"mask-image:url('{bt}')\"></span>"
+               f'SPD {int(en.get("mspd", 0))}</span>')
     return (f'<div class="ehead">'
             f'<span class="echip" data-tip="{_e(_TIP_EHEAD)}">'
             f'<span class="st" style="color:{hp_col}">HP {hp}/{cap}</span>'
@@ -775,7 +842,7 @@ def _enemy_head_html(en: dict) -> str:
             f"style=\"-webkit-mask-image:url('{ar}');"
             f"mask-image:url('{ar}')\"></span>"
             f'DEF {int(en.get("def", 0))}</span>'
-            f"</span></div>")
+            f"{spd}</span></div>")
 
 
 def _dossier_html(en: dict) -> str:
@@ -1290,7 +1357,8 @@ let d=0;for(const el of later){setTimeout(()=>el.classList.add('shown'),d);d+=fa
    input all act through the same one door (window.__laAct). */
 (function () {
   var btns = Array.prototype.slice.call(document.querySelectorAll(
-    'button.opt, button.nrow, button.gtile, button.pclose'));
+    'button.opt, button.nrow, button.gtile, button.ptile, '
+    + 'button.pclose'));
   var acted = false;
   var hint = document.querySelector('.reply');
   function setHint(t) { if (hint) hint.textContent = t; }
@@ -1505,6 +1573,11 @@ def render_scene_fragment(scene: Scene) -> str:
         parts.append(f'<div class="actband later">{_ep(scene.activity)}'
                      "</div>")
 
+    # 042: the presence grid rides under the options — who else stands
+    # in this room, seven faces to a row, every face a door.
+    if getattr(scene, "players_here", None):
+        parts.append(_players_here_html(scene))
+
     if scene.meters:
         parts.append(_profile_html(scene))   # pack rides its right column
     else:
@@ -1670,6 +1743,35 @@ SCENE_CSS = f"""
 .gtile:hover .gpic{{background-color:{TEXT};}}
 .gtile .glab{{color:{TEXT};}}
 .gtile .gsub{{color:{FAINT};font-size:12px;}}
+/* ── 042: the presence grid — seven faces to a row ── */
+.phere{{margin:12px 0 0;}}
+.phere .phead{{color:{FAINT};text-transform:uppercase;
+ letter-spacing:.1em;font-size:11px;margin-bottom:6px;}}
+.pgrid{{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;}}
+.ptile{{display:flex;flex-direction:column;align-items:center;gap:2px;
+ background:{PANEL2};border:1px solid {BORDER};border-radius:0;
+ padding:5px 2px 4px;font:inherit;color:{TEXT};cursor:pointer;
+ min-width:0;}}
+.ptile:hover:not(:disabled){{border-color:{AETHER};}}
+.ptile:focus-visible{{outline:1px solid {AETHER};outline-offset:1px;}}
+.ptile .pfbox{{position:relative;display:block;height:56px;}}
+.ptile .pface{{display:block;height:56px;width:auto;
+ image-rendering:pixelated;}}
+.ptile .pface.none{{display:block;height:56px;width:28px;
+ background:{BORDER};}}
+.ptile .pzzz{{position:absolute;top:-2px;right:-14px;background:{INK};
+ border:1px solid {AETHER};color:{AETHER};font-size:9px;
+ padding:0 3px;letter-spacing:.06em;}}
+.ptile .prank{{position:absolute;top:-2px;left:-14px;background:{INK};
+ border:1px solid {BORDER};color:{DIM};font-size:9px;padding:0 3px;
+ font-variant-numeric:tabular-nums;}}
+.ptile .pname{{max-width:100%;overflow:hidden;text-overflow:ellipsis;
+ white-space:nowrap;font-size:11px;color:{TEXT};}}
+.ptile .plvl{{font-size:10px;color:{FAINT};
+ font-variant-numeric:tabular-nums;}}
+.ptile .psub{{max-width:100%;overflow:hidden;text-overflow:ellipsis;
+ white-space:nowrap;font-size:10px;color:{DIM};
+ font-variant-numeric:tabular-nums;}}
 /* ── 027: the pack popup — click an item, act on it ── */
 .pmenu{{position:fixed;z-index:100;min-width:220px;max-width:300px;
  background:{INK};border:1px solid {AETHER};
