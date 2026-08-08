@@ -16,6 +16,7 @@ encounters:
       Wax-pale and eyeless three generations down. In the dark you are the
       one at the disadvantage, and it knows it.
     weight: 3
+    traits: [frail, feeble]
     prose: >-
       A kobold pale as candle-wax feels its way along the drift, pick
       swinging in easy time. It stops. It heard you breathe, and down
@@ -26,7 +27,7 @@ encounters:
       A winch head climbing on its own cable, hand over iron hand. It has
       never hurried and never let go.
     weight: 3
-    traits: [slow, armor_low]
+    traits: [slow, armor_low, frail, fierce]
     prose: >-
       A winch head has pulled itself off its mounts and climbs the
       drift on its own cable, hand over iron hand. It pays out a loop
@@ -37,7 +38,7 @@ encounters:
       The deep shafts bred the rust hounds longer and quieter. By the time
       you hear it, it has counted your paces.
     weight: 2
-    traits: [fast]
+    traits: [fast, sturdy, fierce]
     prose: >-
       The rust hounds that went down the shafts bred stranger — longer,
       quieter, eyes gone milky and ears gone huge. This one has been
@@ -48,7 +49,7 @@ encounters:
       It feeds on lamp-oil and dust, and it likes its meals lit. Miners
       learned to work dark for a reason.
     weight: 2
-    traits: [flying]
+    traits: [flying, sturdy, savage]
     prose: >-
       Your lamp gutters as a moth the span of two hands settles out of the
       drift's ceiling dark, wings shedding grey powder, drawn to the flame

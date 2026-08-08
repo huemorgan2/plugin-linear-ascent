@@ -399,17 +399,18 @@ def _lore(e: dict, floor) -> str:
 def _drop_ranges(p: dict, floor) -> dict:
     """030 Phase 7: the dossier says the odds — coin and XP ranges from
     the SAME math _victory rolls (jitter band × fade × specimen ×
-    profile × threat), so the promise and the payout can't drift."""
+    profile), so the promise and the payout can't drift. 043: base pay
+    keys off the creature's BAR — toughness is priced once, by the
+    anchor, and the old threat multiplier is gone."""
     e = p["encounter"]
     fade = economy.fade_multiplier(p["unlocked_floor"], floor.floor)
-    threat = economy.kill_reward_mult(floor.floor, e.get("traits") or ())
+    bar = economy.creature_bar(floor.floor, e.get("traits") or ())
     deep = economy.deep_reward_mult(floor.floor) if e.get("deep") else 1.0
     g_mult = (economy.SPECIMENS[e.get("specimen", "common")]["gold"]
-              * economy.profile_gold_mult(_profile(p)) * threat * fade
-              * deep)
-    g = economy.gold_per_kill(floor.floor)
-    x = economy.xp_per_kill(floor.floor)
-    x_mult = threat * fade * deep
+              * economy.profile_gold_mult(_profile(p)) * fade * deep)
+    g = economy.gold_per_kill(bar)
+    x = economy.xp_per_kill(bar)
+    x_mult = fade * deep
     return {
         "gold": [max(1, round(g * 0.5 * g_mult)),
                  max(1, round(g * 1.5 * g_mult))],
@@ -1075,23 +1076,21 @@ def _victory(p: dict, floor) -> Scene:
             xp = round(floor.milestone.xp / 2 * fade)
             gold = round(floor.milestone.gold / 2 * fade)
     else:
-        xp = round(state.rng_jitter(p, economy.xp_per_kill(floor.floor), 0.25) * fade)
+        # 043: pay keys off the creature's BAR — the F+1 terror out-pays
+        # the F−2 snack from the base formula, no threat multiplier.
+        bar = economy.creature_bar(floor.floor, e.get("traits") or ())
+        xp = round(state.rng_jitter(p, economy.xp_per_kill(bar), 0.25) * fade)
         # 009: luck is a DAY now — the halfling racial bonus is retired.
         lucky = p["flags"].get("luck_day") == state.world_day()
-        gold = round(state.rng_jitter(p, economy.gold_per_kill(floor.floor),
+        gold = round(state.rng_jitter(p, economy.gold_per_kill(bar),
                                       0.50 if not lucky else 0.25) * fade)
         # 008: hard specimens pay more, runts pay less
         gold = round(
             gold * economy.SPECIMENS[e.get("specimen", "common")]["gold"])
         # 017: a hard profile pays for the diagnosis it demands
         gold = round(gold * economy.profile_gold_mult(_profile(p)))
-        # 025 §2: danger pays, and it pays in BOTH currencies. Until now
-        # XP carried no threat modifier at all — a limping runt and a
-        # hulking savage were worth the same aether, which is why every
-        # kill on a floor felt identical.
-        threat = economy.kill_reward_mult(floor.floor, e.get("traits") or ())
-        xp = max(1, round(xp * threat))
-        gold = max(1, round(gold * threat))
+        xp = max(1, xp)
+        gold = max(1, gold)
         if e.get("deep"):
             # 039 §2: the deep hunt pays its premium in BOTH currencies
             mult = economy.deep_reward_mult(floor.floor)

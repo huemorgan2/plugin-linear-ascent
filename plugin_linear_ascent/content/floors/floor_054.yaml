@@ -16,7 +16,7 @@ encounters:
       It doubled its rates for the season and glued the detour shut. The
       deed is in one fist, in case you argue.
     weight: 3
-    traits: [armor_low]
+    traits: [armor_low, lean, fierce]
     prose: >-
       The troll under the third span has doubled its rates for the
       season and glued the detour shut with new ice. It comes up over
@@ -28,7 +28,7 @@ encounters:
       customers fall off. The trolls call it undignified. It calls it
       lunch.
     weight: 3
-    traits: [fast]
+    traits: [fast, lean, savage]
     prose: >-
       The wolves cross without paying, which the trolls tolerate
       because catching them is undignified. This one has learned to
@@ -39,7 +39,7 @@ encounters:
       Not everyone who fell short on the toll hit the bottom. It climbs
       with its grudge in both hands.
     weight: 2
-    traits: [slow, resist_low]
+    traits: [slow, resist_low, hulking, fierce]
     prose: >-
       Not everyone who fell short on the toll hit the bottom.
       Something climbs out of the blue depth on fingers of ice,
@@ -50,7 +50,7 @@ encounters:
       It nests under the spans and audits every crossing. Whatever falls,
       it files.
     weight: 4
-    traits: [flying]
+    traits: [flying, lean, feeble]
     prose: >-
       A raven drops off the underside of the bridge and hangs on the gorge
       wind at your eye level, head tilted, deciding whether you are

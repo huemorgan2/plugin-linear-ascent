@@ -17,7 +17,7 @@ encounters:
       Spark-drunk, several strikes in, and spells just read as more
       applause.
     weight: 3
-    traits: [flying, resist_med]
+    traits: [flying, resist_med, feeble]
     prose: >-
       A harpy lands on a live pole, takes the strike across her
       banded feathers like applause, and comes down at you glowing
@@ -29,6 +29,7 @@ encounters:
       Hatched on this moor and never left — why would it. Every pole it
       passes fires in salute.
     weight: 3
+    traits: [frail, feeble]
     prose: >-
       A storm drake hatched on this moor and never left — why would
       it. It walks the pole rows like an heir touring the estate,
@@ -39,7 +40,7 @@ encounters:
       The thing that moves the white lane-stones. Under the hood is old
       lightning, coiled and patient. It has been farming climbers.
     weight: 2
-    traits: [slow, resist_med]
+    traits: [slow, resist_med, fierce]
     prose: >-
       You find the thing that moves the white stones: a bent figure
       in a farmer's storm coat, rearranging the safe lane with slow
@@ -51,6 +52,7 @@ encounters:
       It gnaws the pole-farm's wiring for the taste and has been struck
       more times than the poles.
     weight: 2
+    traits: [hulking, fierce]
     prose: >-
       A rat with a coat gone verdigris-green works the base of a singing
       pole, whiskers smoking faintly, and breaks off its meal to defend

@@ -16,7 +16,7 @@ encounters:
       You are game, walking the master's ride. The one low note is it
       logging the flush.
     weight: 3
-    traits: [fast]
+    traits: [fast, lean, feeble]
     prose: >-
       A gloom hound stands at the ride's edge, marking the verge the
       way a gamekeeper marks a covert. You are game, walking the
@@ -27,7 +27,7 @@ encounters:
       One of the Huntsman's whips, grey from hat to boot. The lean as it
       passes is a fitting — for the next hunt's card.
     weight: 3
-    traits: [fast, armor_low]
+    traits: [fast, armor_low, lean, fierce]
     prose: >-
       A rider comes up the ride at a canter that makes no hoofbeats
       — one of the Huntsman's whips, grey from hat to boot, face
@@ -39,7 +39,7 @@ encounters:
       Once quarry, still running the verge on hunt nights, unable to stop.
       Behind it the ride goes cold, remembering.
     weight: 2
-    traits: [resist_low]
+    traits: [resist_low, lean, savage]
     prose: >-
       Something that was once quarry still runs the verge on hunt
       nights, unable to stop. It bursts past you in rags of shadow,
@@ -50,7 +50,7 @@ encounters:
       It follows the hunts the way its kind follow armies, and it has
       learned the calendar better than the towns.
     weight: 2
-    traits: [flying]
+    traits: [flying, hulking, fierce]
     prose: >-
       A crow drops from the black canopy to the ride's grey turf ahead of
       you, checks the empty avenue both ways like a connoisseur, and

@@ -16,6 +16,7 @@ encounters:
       It poles the flooded galleries by lamp-hiss and habit. Climbers
       float face down eventually; it just keeps the schedule.
     weight: 3
+    traits: [frail, feeble]
     prose: >-
       A kobold poles past on a raft of crate-lids, spear in hand. It has
       fished these galleries long enough to know that climbers float
@@ -26,7 +27,7 @@ encounters:
       Dwarf-plate seized over six legs of ore-cart iron. Slow as the flood
       and about as easy to argue with.
     weight: 3
-    traits: [slow, armor_high]
+    traits: [slow, armor_high, feeble]
     prose: >-
       An ore-hauler wades out of the flood on six seized legs, lamps
       shorting under a skin of silt. Its bed is empty. It has decided
@@ -37,7 +38,7 @@ encounters:
       A sealed warframe keeps the water out and some of the steel in.
       Salvage pays; you pay better.
     weight: 2
-    traits: [armor_low]
+    traits: [armor_low, sturdy, fierce]
     prose: >-
       An orc surfaces in a sealed warframe, water sheeting off the
       plate. It was down there stripping dwarf-steel, but a climber
@@ -48,6 +49,7 @@ encounters:
       It came up the pump-lines when the water came back, and it has been
       growing ever since.
     weight: 2
+    traits: [sturdy, savage]
     prose: >-
       The black water folds and something long crosses the gallery at knee
       depth — a pale-bellied eel thick as a hawser, mouthing the current

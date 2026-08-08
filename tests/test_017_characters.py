@@ -53,7 +53,7 @@ def test_halfling_is_not_choosable_at_the_gate():
 
 
 def test_new_docs_are_current():
-    assert fresh()["version"] == 5
+    assert fresh()["version"] == 6
 
 
 # ── doc v4 migration: halfling → human ───────────────────────────────────

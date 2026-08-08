@@ -60,7 +60,7 @@ encounters:
       Fever-quick now, it drops on a shielded lamp from the unseen
       roof.
     weight: 2
-    traits: [lean, savage]
+    traits: [sturdy, savage]
     prose: >-
       Your lamp's glow finds eight points of light in the roof,
       arranged in a pattern, descending. The vault's old ambush-weaver

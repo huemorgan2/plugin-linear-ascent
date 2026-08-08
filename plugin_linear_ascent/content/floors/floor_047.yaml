@@ -16,7 +16,7 @@ encounters:
       The canyon nests come out changed — translucent, bright inside,
       wrong in the joints. Its shadow runs a half-second behind.
     weight: 2
-    traits: [resist_high]
+    traits: [resist_high, feeble]
     prose: >-
       The salamanders that nest in the canyon come out changed —
       translucent, bright inside, wrong in the joints. This one moves
@@ -27,7 +27,7 @@ encounters:
       Cloaked head to foot in hammered lead sheeting. It has stayed alive
       by tolerating no visitors, and its record is unbroken.
     weight: 3
-    traits: [armor_med]
+    traits: [armor_med, fierce]
     prose: >-
       An ogre lives alone in the scar wall, cloaked head to foot in
       hammered lead sheeting. It has stayed alive down here by
@@ -38,7 +38,7 @@ encounters:
       A flame with no color and no fuel, casting shadows in the wrong
       directions. Spells go into it and do not come out.
     weight: 1
-    traits: [resist_high]
+    traits: [resist_high, savage]
     prose: >-
       A flame the color of nothing walks up the canyon path, burning
       without fuel, casting shadows in the wrong directions. The heat
@@ -49,6 +49,7 @@ encounters:
       Everything in the canyon is a little wrong, and the rats are wrong
       in the direction of bigger.
     weight: 2
+    traits: [frail, feeble]
     prose: >-
       A rat comes up the lead-lined path with patchy fur and too many
       teeth, dragging a hind leg that has healed twice its size, entirely

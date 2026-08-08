@@ -16,7 +16,7 @@ encounters:
       It counts by touch, bundle by bundle. You are unlabeled, unwrapped,
       unaccounted for — an error it was made to correct.
     weight: 3
-    traits: [resist_med]
+    traits: [resist_med, feeble]
     prose: >-
       A gaunt spider moves down the rows, touching each bundle once,
       counting. It reaches you — unlabeled, unwrapped, unaccounted for
@@ -27,6 +27,7 @@ encounters:
       Still warm and very determined. One arm free, one knife, and no
       questions left about how to use either.
     weight: 3
+    traits: [lean, feeble]
     prose: >-
       One of the hanging shapes is still warm and very determined. It
       has worked one arm free, and what the arm is holding is a knife,
@@ -37,7 +38,7 @@ encounters:
       It came in the honest way, through the wall, and it eats down the
       rows like a man at a market stall. It will take a while to stop.
     weight: 2
-    traits: [bulwark, slow]
+    traits: [bulwark, slow, fierce]
     prose: >-
       A deep troll has broken into the vaults the honest way, through
       the wall, and is eating its way down a row like a man at a
@@ -48,6 +49,7 @@ encounters:
       A vault of catalogued provisions is, from a rat's side of the
       ledger, simply a granary with opinions.
     weight: 2
+    traits: [sturdy, savage]
     prose: >-
       A rat drops from a hanging bundle with somebody's dried rations in
       its teeth, lands between you and the row, and declines — visibly —

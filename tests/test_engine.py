@@ -414,8 +414,9 @@ def test_elf_learns_faster():
     p["encounter"]["traits"] = []            # 025: pin threat ×1 — the
     # daily draw may be a low-pay archetype, and this test is about race
     choose(p, "attack")
-    # base 4 ±25% then ×1.05: minimum possible is round(round(4·0.75)·1.05)
-    assert p["xp"] >= round(round(4 * 0.75) * 1.05)
+    # base xp_per_kill(1) ±25% then ×1.05: min is round(round(b·0.75)·1.05)
+    base = economy.xp_per_kill(1)
+    assert p["xp"] >= round(round(base * 0.75) * 1.05)
 
 
 # ── 017: encounter traits → defense profiles ─────────────────────────────

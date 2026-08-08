@@ -16,7 +16,7 @@ encounters:
       Custom entitles you to give your name and have it spoken at your
       defeat. The custom is observed; so is the plate.
     weight: 3
-    traits: [armor_high]
+    traits: [armor_high, feeble]
     prose: >-
       A frost giant in the Jarl's colors bars the road with a
       halberd of ice and iron. Custom entitles you to give your name
@@ -27,7 +27,7 @@ encounters:
       Whatever it reports back decides how much of the garrison you meet.
       It circles once, taking notes.
     weight: 3
-    traits: [fast]
+    traits: [fast, frail, feeble]
     prose: >-
       A white wolf in a silver road-collar has been sent down to
       look at you. Whatever it reports back will decide how much of
@@ -38,6 +38,7 @@ encounters:
       Nine generations of trolls have held the lamp post, all of them it.
       Brawling on the road is its second duty.
     weight: 2
+    traits: [lean, savage]
     prose: >-
       The troll that tends the road-lamps has held the post for nine
       generations of trolls, all of them it. It sets down the oil
@@ -48,7 +49,7 @@ encounters:
       The Jarl's road-post flies ahead of every traveler. Interfering with
       the mail is a listed offense.
     weight: 2
-    traits: [flying]
+    traits: [flying, hulking, fierce]
     prose: >-
       A raven in a small silver road-band drops from lamp to lamp ahead of
       you, keeping exact pace, and finally lands in your path with the

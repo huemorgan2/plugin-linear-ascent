@@ -15,6 +15,7 @@ encounters:
       Generations in the warm dark under the ladles made it big, and none
       of them made it timid.
     weight: 3
+    traits: [lean, feeble]
     prose: >-
       A rat the size of a hound noses out of a cooled ladle, coat
       shingled with flakes of black glass. Generations in the warm dark
@@ -25,6 +26,7 @@ encounters:
       Three kobolds, one crank, and a firm belief that whatever the ladle
       lands on had it coming.
     weight: 3
+    traits: [lean, fierce]
     prose: >-
       Three kobolds work a hand-crank to swing a full ladle over the
       walkway you are on. They wave down at you, helpfully, so you know
@@ -35,7 +37,7 @@ encounters:
       Quota is short and the plate is thick with spatter no chisel will
       shift. Everything here is salvage to it, you included.
     weight: 2
-    traits: [armor_med]
+    traits: [armor_med, fierce]
     prose: >-
       The orc who claims this floor's metal wears a warframe caked in
       spatter and carries a tapping-rod like a spear. Quota is short.
@@ -46,7 +48,7 @@ encounters:
       The shimmer over the slag-runs sometimes stands up and walks. The
       old smelter crews would not work alone.
     weight: 2
-    traits: [resist_low]
+    traits: [resist_low, hulking, fierce]
     prose: >-
       The air over the slag channel gathers into a standing shimmer, man-
       shaped and patient, warping the gallery behind it. It closes the

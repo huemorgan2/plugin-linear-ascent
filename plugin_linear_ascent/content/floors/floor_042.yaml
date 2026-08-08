@@ -16,7 +16,7 @@ encounters:
       It suns itself under a yard of black glass like a fish under ice.
       The fresh cracks are how it says it has seen you.
     weight: 3
-    traits: [resist_low]
+    traits: [resist_low, frail, feeble]
     prose: >-
       A salamander suns itself under the surface of the flats, visible
       through a yard of black glass like a fish under ice. The cracks
@@ -27,7 +27,7 @@ encounters:
       Its hands are past scarring and its hide has gone the way of its
       hands. Setting the hammer down is not an improvement.
     weight: 3
-    traits: [armor_low]
+    traits: [armor_low, frail, fierce]
     prose: >-
       An ogre works the flats with a hammer, prying up sheets of glass
       to sell at the gate towns. Its hands are past scarring. It sets
@@ -38,7 +38,7 @@ encounters:
       The heat makes shapes, and this one stopped obeying the wind. Spells
       warp around it like more heat.
     weight: 2
-    traits: [resist_med]
+    traits: [resist_med, fierce]
     prose: >-
       Out on the flats the heat makes shapes, and one of the shapes
       has stopped obeying the wind. It walks toward you across the
@@ -49,7 +49,7 @@ encounters:
       A lizard that hunts on the singing glass, faster than the cracks it
       causes.
     weight: 2
-    traits: [fast]
+    traits: [fast, sturdy, savage]
     prose: >-
       Something crosses the flats toward you in a sound like a struck
       wineglass — a lizard low to the glass, legs a blur, riding its own

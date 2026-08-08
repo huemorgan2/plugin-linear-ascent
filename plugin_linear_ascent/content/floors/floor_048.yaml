@@ -16,7 +16,7 @@ encounters:
       It hunts by holding still against the trunks and being, briefly, the
       wrong tree.
     weight: 3
-    traits: [resist_low]
+    traits: [resist_low, frail, feeble]
     prose: >-
       A salamander has gone black to match the forest, invisible until
       it opens its mouth. It hunts by holding still against the trunks
@@ -27,6 +27,7 @@ encounters:
       It rips stumps with no rope and no wedge, only opinion. The opinion
       transfers.
     weight: 3
+    traits: [frail, fierce]
     prose: >-
       An ogre works the forest floor, ripping stumps for the charcoal
       trade. It uses no rope and no wedge, only opinion. It transfers
@@ -37,7 +38,7 @@ encounters:
       It has stood in the row long enough to fool the birds. Burned wood
       does not hurry, and does not bruise.
     weight: 2
-    traits: [slow, armor_low]
+    traits: [slow, armor_low, hulking, fierce]
     prose: >-
       One of the burned trunks is not a trunk. It has stood in the row
       long enough to fool the birds, waiting with the patience of
@@ -48,7 +49,7 @@ encounters:
       It nests in the hollow trunks and hunts the organ-note wind. Silent,
       except for the forest holding its breath.
     weight: 3
-    traits: [flying]
+    traits: [flying, lean, savage]
     prose: >-
       The low pipe-note of the wind cuts off — an owl the color of burned
       paper is already over you, wings spread wider than the trunks it

@@ -16,7 +16,7 @@ encounters:
       It asked the room's leave to answer the horn, formally, and the room
       granted it like an avalanche starting.
     weight: 3
-    traits: [armor_med]
+    traits: [armor_med, feeble]
     prose: >-
       A thane of the Jarl's table stands from the bench, formally,
       and asks the room's leave to answer the horn. The room grants
@@ -26,6 +26,7 @@ encounters:
     lore: >-
       The barrel it set down was for you. It is not, now.
     weight: 3
+    traits: [lean, feeble]
     prose: >-
       The troll that carries the hall's mead barrels has been given
       leave to warm up before the main event. It sets down the
@@ -37,7 +38,7 @@ encounters:
       The Jarl's own, with first claim on challengers by right of
       seniority. No thane disputes it.
     weight: 2
-    traits: [fast]
+    traits: [fast, sturdy, fierce]
     prose: >-
       The Jarl's own wolf uncurls from beside the cold fire, white
       as the hall and nearly as large. It has first claim on
@@ -48,7 +49,7 @@ encounters:
       It sings the hall's cold fire brighter, and verses this old shrug
       off newer magic.
     weight: 2
-    traits: [resist_med]
+    traits: [resist_med, savage]
     prose: >-
       A skald rises from the bench nearest the cold fire, beard hung with
       hoarfrost bells, and begins the verse that turns the fire-trench
