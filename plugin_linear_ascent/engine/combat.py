@@ -241,6 +241,8 @@ def start_encounter(p: dict, floor, enc, kind: str = "wilds",
         "profile": prof,
         "atk": atk, "def": dfs, "hp": hp, "hp_max": hp,
         "floor": floor.floor, "shot_used": False,
+        # 040: the treeline shot is an opener — any attack burns it.
+        "attacked": False,
         # 017 §2.4: fights open at range — bows and spells carry,
         # steel must close. 036: "at range" is gap 1 on the ladder.
         "range": "at_range", "gap": 1,
@@ -552,20 +554,22 @@ def fight_scene(p: dict, floor, opener: bool = False, note: str = "") -> Scene:
         opts = [Option("close_in", "Close in", "cross the ground")]
     else:
         opts = [Option("attack", "Attack", strike_hint)]
-    # 031 §7: you cannot open ground from something as fast as you —
-    # the row only shows when your legs actually beat its legs.
-    if not at_range and economy.player_speed(p) > _mspd(p):
-        opts.append(Option("open_distance", "Open distance"))
-    # 036: the archer's third axis — give ground on purpose. Always
-    # offered (speed shapes the PRICE, not the permission); the shot
-    # grows with every length made.
-    if clazz == "archer" and _damage_type(p) == "ranged" \
-            and _gap(p) < economy.GAP_MAX:
+    # 040: one verb for making ground. The archer's gap ladder (036) and
+    # the footwork break (031 §7) read as duplicates on the menu, so only
+    # one "Open distance" row ever shows: the archer's — always works,
+    # the monster may collect a toll — replaces the gamble outright.
+    archer_gap = (clazz == "archer" and _damage_type(p) == "ranged"
+                  and _gap(p) < economy.GAP_MAX)
+    if archer_gap:
         nxt = _gap(p) + 1
         opts.append(Option(
-            "create_distance", "Create distance",
+            "create_distance", "Open distance",
             f"class · shot ×{economy.bow_gap_mult(nxt):g} "
             f"at {nxt} length{'s' if nxt > 1 else ''}"))
+    # 031 §7: you cannot open ground from something as fast as you —
+    # the row only shows when your legs actually beat its legs.
+    elif not at_range and economy.player_speed(p) > _mspd(p):
+        opts.append(Option("open_distance", "Open distance"))
     opts += [
         Option("stand", "Stand your ground"),
         Option("run", "Run away"),
@@ -577,9 +581,14 @@ def fight_scene(p: dict, floor, opener: bool = False, note: str = "") -> Scene:
                            f"class · {economy.sleep_xp_cost(floor.floor)} XP",
                            aether=True))
     elif clazz == "archer" and not e["shot_used"] \
+            and not e.get("attacked") and at_range \
             and _damage_type(p) == "ranged":
         # 004: the long shot needs a bow in hand — an archer swinging
         # off-class steel has no string to draw.
+        # 040: it is the OPENING move — taken from the distance, before
+        # the first attack. Once you have attacked, the cover is blown
+        # and the row is gone for the rest of the fight; in close
+        # quarters there is no treeline to shoot from.
         opts.append(Option(
             "treeline_shot", "Treeline shot",
             f"class · {strike_hint}" if strike_hint else "class",
@@ -1947,8 +1956,10 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
             meters=meters(p))
 
     if option_id == "treeline_shot" and p.get("clazz") == "archer" \
-            and not e["shot_used"]:
+            and not e["shot_used"] and not e.get("attacked") \
+            and _range_state(p) == "at_range":
         e["shot_used"] = True
+        e["attacked"] = True
         if e.get("shared") and e["kind"] == "warden":
             # 033: a Warden you have fled remembers you — where the
             # wounds persist, so does its memory. The shot from cover
@@ -1990,6 +2001,7 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
     # but an archer, and every off-class swing misses 25% of the time
     # (the miss eats the round; the monster answers).
     # 006: a nocked special arrow IS the ammo for this shot.
+    e["attacked"] = True           # 040: the first swing burns the treeline
     special_ready = bool(e.get("nocked")
                          and p["inventory"].get(e["nocked"], 0) > 0)
     if _off_class(p):

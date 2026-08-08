@@ -123,8 +123,10 @@ def pending(p: dict, w: dict | None = None) -> list[dict]:
             })
     if w:
         letters = int(w.get("inbox_count") or 0)
-        if letters and (p["level"] >= economy.RELAY_LEVEL
-                        or state.prestige(p) > 0):
+        # 040: no level gate — held post (a grant's gold rides in a
+        # letter) must reach a level-1 climber too; the letter itself
+        # opens the Relay door (core._town_scene).
+        if letters:
             out.append({
                 "door": "relay", "opt": "relay", "n": letters,
                 "kind": "collect",

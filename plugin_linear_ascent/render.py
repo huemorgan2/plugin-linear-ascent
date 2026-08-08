@@ -1173,12 +1173,22 @@ INTERACT_JS = """(function () {
 
   /* ── the portrait fills the profile column's height; setting an
      explicit px height lets the img's own 1:2 ratio give the width —
-     the one proportional-scaling rule every webview honors ── */
+     the one proportional-scaling rule every webview honors.
+     040: on a phone the full-height portrait ate half the card and
+     squeezed the meters off — small screens pin it small and let the
+     numbers have the width (the media query owns the layout there). ── */
   function sizePortrait(root) {
+    var phone = window.matchMedia
+      && window.matchMedia('(max-width: 520px)').matches;
     root.querySelectorAll('.profile').forEach(function (pr) {
       var img = pr.querySelector('.portrait');
       var col = pr.querySelector('.pcol');
       if (!img || !col) return;
+      if (phone) {
+        img.style.height = '132px';
+        img.style.width = 'auto';
+        return;
+      }
       img.style.height = Math.max(200, col.offsetHeight) + 'px';
       img.style.width = 'auto';
     });
@@ -1835,6 +1845,24 @@ SCENE_CSS = f"""
 @keyframes blink{{50%{{opacity:0;}}}}
 .later.waiting{{opacity:0;transition:opacity .3s ease;}}
 .later.shown{{opacity:1;}}
+/* ── 040: the phone layout — the player area must be SEEN. The portrait
+   stops stretching to the column's height (sizePortrait pins it small),
+   the meters keep the full width beside it, and the pack's fixed 40px
+   grid relaxes so six slots never overflow a 360px screen. ── */
+@media (max-width: 520px){{
+ .profile{{gap:1.5ch;align-items:flex-start;}}
+ .profile .portrait{{align-self:flex-start;min-height:0;height:132px;}}
+ .ident{{flex-wrap:wrap;row-gap:2px;}}
+ .ident .idr{{margin-left:auto;}}
+ .rail{{gap:.5ch 1.5ch;}}
+ .piprow .pips{{grid-template-columns:repeat(10,minmax(12px,18px));}}
+ .pip{{width:100%;max-width:16px;}}
+ .slotgrid{{grid-template-columns:repeat({_PACK_COLS},minmax(32px,40px));
+  max-width:100%;}}
+ .slot{{width:auto;min-width:32px;aspect-ratio:1;height:auto;}}
+ .hcell .slot{{width:44px;height:44px;}}
+ .picon{{width:24px;height:24px;}}
+}}
 @media (prefers-reduced-motion: reduce){{
  .type.pending{{visibility:visible;}}
  .later.waiting{{opacity:1;transition:none;}}

@@ -187,9 +187,14 @@ _TIPS: dict[str, str] = {
                      "Guildhall only take carried coin — but only "
                      "carried coin can be lost. Spend it, then bank the "
                      "change."),
-    "grants": ("Send gold to another climber (they must be level 5+). "
-               "The Vault burns 10% of every transfer; your daily cap "
-               "is ◈ 150 × level. How veterans pull friends up the "
+    # 036 dropped the receiver gate; 040 fixes the stale copy — any
+    # level can receive. The gold rides in a Relay letter, and the
+    # letter opens the Relay door for them whatever their level.
+    "grants": ("Send gold to another climber — ANY level can receive. "
+               "It arrives as a Relay letter with the coin enclosed, "
+               "and the letter itself opens their Relay door. The Vault "
+               "burns 10% of every transfer; your daily cap is "
+               "◈ 150 × level. How veterans pull friends up the "
                "tower."),
 
     # ── the fight card ──
@@ -216,6 +221,15 @@ _TIPS: dict[str, str] = {
                       "it gets a free half-power hit. At range a bow "
                       "shoots full and nothing reaches you back — until "
                       "it closes the gap."),
+    # 040: the archer's gap ladder wears the same "Open distance" label
+    # on the card — one verb for making ground; this tip is the [i].
+    "create_distance": ("Give ground on purpose — archer craft. It "
+                        "ALWAYS works: you step back one length and "
+                        "your bow hits harder from there (×1.25 at 2 "
+                        "lengths, ×1.5 at 3 — the cap). The price is "
+                        "the monster may rake you once as you pull "
+                        "away; faster legs shrink that chance. Costs "
+                        "the round."),
     "scout": ("Your shard scans the enemy — exact ATK, DEF and HP. "
               "Free on an optics charge, otherwise it burns XP. Knowing "
               "when to press and when to run saves more than it "
@@ -232,10 +246,11 @@ _TIPS: dict[str, str] = {
                     "past. Costs the fight's XP price and forfeits its "
                     "loot — but spends no HP at all. Cheap when your "
                     "health is worth more than the purse."),
-    "treeline_shot": ("Archer craft: one free arrow before the fight is "
-                      "joined — damage the enemy never answers. Once "
-                      "per encounter; every fight it shortens is HP "
-                      "saved."),
+    "treeline_shot": ("Archer craft: one free arrow from the distance, "
+                      "before the fight is joined — damage the enemy "
+                      "never answers. It is the OPENING move: once you "
+                      "attack, the cover is blown and the shot is gone "
+                      "for the rest of the fight."),
 
     # ── keeps ──
     "strike": ("Join the fight — 3 energy for a FULL fight against the "

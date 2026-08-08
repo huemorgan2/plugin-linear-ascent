@@ -18,6 +18,13 @@ def fresh(name):
     return state.new_player(name)
 
 
+def _dry(p):
+    """040: the Sleep door only shows on a dry bar — drain it first."""
+    p["energy_val"] = 0.0
+    p["energy_ts"] = state.now().isoformat()
+    return p
+
+
 def create_character(p, race="human", clazz="warrior", name="Nap"):
     core.current_scene(p)
     while p["stage"] == "intro":
@@ -113,6 +120,12 @@ def test_healing_fractions_are_never_lost():
 
 def test_the_square_has_a_sleep_door_and_the_menu_names_both_rates():
     p = create_character(fresh("menu"), name="Drowsy")
+    # 040: a rested climber has nothing to sleep for — no door.
+    s = core.current_scene(p)
+    assert not any(o.id == "sleep_menu" for o in s.options)
+    # drain the bar dry and the door appears
+    p["energy_val"] = 0.0
+    p["energy_ts"] = state.now().isoformat()
     s = core.current_scene(p)
     assert any(o.id == "sleep_menu" for o in s.options)
     s = core.apply_choice(p, "sleep_menu")
@@ -134,7 +147,7 @@ def test_the_lodge_offers_turning_in():
 # ── the flows ────────────────────────────────────────────────────────────
 
 def test_sleeping_in_the_fields_is_free_and_animated():
-    p = create_character(fresh("fields-flow"), clazz="archer", name="Rough")
+    p = create_character(_dry(fresh("fields-flow")), clazz="archer", name="Rough")
     core.apply_choice(p, "sleep_menu")
     s = core.apply_choice(p, "sleep_fields")
     assert p["location"] == "sleeping"
@@ -147,7 +160,7 @@ def test_sleeping_in_the_fields_is_free_and_animated():
 
 
 def test_the_lodge_bunk_is_paid_once_and_wakes_in_the_lodge():
-    p = create_character(fresh("lodge-flow"), name="Paid")
+    p = create_character(_dry(fresh("lodge-flow")), name="Paid")
     price = economy.LODGE_PRICE_PER_LEVEL * p["level"]
     p["gold"] = price
     core.apply_choice(p, "sleep_menu")
@@ -164,7 +177,7 @@ def test_the_lodge_bunk_is_paid_once_and_wakes_in_the_lodge():
 
 
 def test_a_broke_climber_is_turned_toward_the_fields():
-    p = create_character(fresh("broke"), name="Skint")
+    p = create_character(_dry(fresh("broke")), name="Skint")
     p["gold"] = 0
     core.apply_choice(p, "sleep_menu")
     s = core.apply_choice(p, "sleep_lodge")
@@ -174,7 +187,7 @@ def test_a_broke_climber_is_turned_toward_the_fields():
 
 
 def test_dozing_applies_the_accrued_healing():
-    p = create_character(fresh("doze"), name="Dozer")
+    p = create_character(_dry(fresh("doze")), name="Dozer")
     p["gold"] = 0
     core.apply_choice(p, "sleep_menu")
     core.apply_choice(p, "sleep_fields")

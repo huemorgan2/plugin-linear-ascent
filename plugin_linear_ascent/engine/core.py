@@ -873,9 +873,13 @@ def _town_scene(p: dict) -> Scene:
         Option("lodge", "The Lodge",
                f"◈ {economy.LODGE_PRICE_PER_LEVEL * p['level']}/night",
                badge=_b("lodge")),
-        # 037: active sleep — the only thing that mends wounds before dawn
-        Option("sleep_menu", "Sleep",
-               "mend ⚡ and HP faster — the Lodge or the fields"),
+        # 037: active sleep — the only thing that mends wounds before dawn.
+        # 040: the door shows only when the bar is DRY — a climber who can
+        # still afford a hunt has nothing to sleep for, and the always-on
+        # row read as noise. (The Lodge's own bunk stays for planned rest.)
+        *([Option("sleep_menu", "Sleep",
+                  "mend ⚡ and HP faster — the Lodge or the fields")]
+          if state.energy_now(p) < economy.COST_WILDS_FIGHT else []),
         Option("vault", "The Vault", "bank", badge=_b("vault")),
         Option("pawn", "Pawn shop", "sell"),
         # 012: the Guildhall is core — training (buying levels) lives
@@ -894,13 +898,17 @@ def _town_scene(p: dict) -> Scene:
                                    str(fac.get("name", "")),
                                    badge=_b("hall")))
     if w:
-        inbox = w.get("inbox_count", 0)
+        inbox = int(w.get("inbox_count") or 0)
+        # 040: post with your name on it opens the clerk's window at ANY
+        # level — a level-1 climber granted gold must be able to collect
+        # it, not stare at a lock.
+        relay_open = _door_open(p, economy.RELAY_LEVEL) or inbox > 0
         opts.append(Option(
             "relay", "The Relay Office",
             (f"{inbox} letter{'s' if inbox != 1 else ''}" if inbox
-             else "post") if _door_open(p, economy.RELAY_LEVEL)
+             else "post") if relay_open
             else f"🔒 level {economy.RELAY_LEVEL}",
-            locked=not _door_open(p, economy.RELAY_LEVEL),
+            locked=not relay_open,
             badge=_b("relay")))
         opts.append(Option(
             "fields", "The fields",
@@ -951,7 +959,10 @@ def _dispatch_location(p: dict, oid: str) -> Scene:
             return s
         # 007: the other locked doors follow the Arcanum's grammar —
         # a level, a reason, no scene change.
-        if oid == "relay" and not _door_open(p, economy.RELAY_LEVEL):
+        if oid == "relay" and not _door_open(p, economy.RELAY_LEVEL) \
+                and not int((p.get("_world") or {})
+                            .get("inbox_count") or 0):
+            # 040: held post opens the door at any level (see _town_scene)
             s = _town_scene(p)
             s.shard_note = (
                 "The Relay clerk sorts post for names the Stone knows — "
