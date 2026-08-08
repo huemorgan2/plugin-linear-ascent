@@ -98,10 +98,6 @@ _TIPS: dict[str, str] = {
              "it for the next blade. When its pool empties the floor "
              "opens for EVERYONE and the spoils split by damage dealt. "
              "Fallen Wardens re-fight as echoes at half pay."),
-    "sleep": ("◈ 10 × your level for the night: ambush-proof sleep — "
-              "nobody in the fields can find you before dawn. Skip it "
-              "carrying gold and the fields may find you."),
-
     # ── 037: active sleep — the fast clock ──
     "sleep_menu": ("Turn in and actively sleep. Awake, energy returns "
                    "every 45 min and wounds wait for dawn; asleep, both "
@@ -155,12 +151,13 @@ _TIPS: dict[str, str] = {
                      "for showing up. The climb remembers who came."),
 
     # ── the interest stubs (023) ──
-    "collect_interest": ("Your banked gold earns 5% a day, each day a "
+    "collect_interest": ("Your banked gold earns 5% a day, dripped in "
+                         "1% slices every 24/5 hours — each slice a "
                          "stub on the counter. This stamps the whole "
                          "pile into the bank — collected interest "
                          "compounds, uncollected stubs don't, and the "
                          "clerk keeps only a month of them. Come by "
-                         "daily and the vault works for you."),
+                         "often and the vault works for you."),
 
     # ── the strongbox picks (022/005) ──
     "pick_gold": ("The strongbox's sure slot: a lump of gold, about "

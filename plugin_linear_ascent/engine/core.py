@@ -871,7 +871,7 @@ def _town_scene(p: dict) -> Scene:
                locked=p["level"] < economy.BOARD_LEVEL,
                badge=_b("board")),
         Option("lodge", "The Lodge",
-               f"◈ {economy.LODGE_PRICE_PER_LEVEL * p['level']}/night",
+               f"pay ◈ {economy.LODGE_PRICE_PER_LEVEL * p['level']}/night",
                badge=_b("lodge")),
         # 037: active sleep — the only thing that mends wounds before dawn.
         # 040: the door shows only when the bar is DRY — a climber who can
@@ -1071,8 +1071,8 @@ def _rack(p: dict, items: list, opts: list, lines: list) -> None:
     # 031 §14: the stat rides IN the hint now — the Forge's card grid
     # has no body lines to carry it, and richer hints hurt no shop
     for g in show:
-        hint = (f"◈ {g.price:,} · {_stat(g)} · worn — spare"
-                if g.slug == worn else f"◈ {g.price:,} · {_stat(g)}")
+        hint = (f"pay ◈ {g.price:,} · {_stat(g)} · worn — spare"
+                if g.slug == worn else f"pay ◈ {g.price:,} · {_stat(g)}")
         opts.append(Option(f"buy_{g.slug}", g.name, hint))
         flavor = f", {g.flavor}" if g.flavor else ""
         lines.append(f"{g.name}{flavor} — {_stat(g)}")
@@ -1082,7 +1082,7 @@ def _rack(p: dict, items: list, opts: list, lines: list) -> None:
         if g is show[-1]:
             for v in economy.gear_styles(g):
                 opts.append(Option(f"buy_{v.slug}", v.name,
-                                   f"◈ {v.price:,} · {_stat(v)} · "
+                                   f"pay ◈ {v.price:,} · {_stat(v)} · "
                                    f"{economy.STYLE_WORD[v.style]}"))
                 lines.append(f"{v.name} — {_stat(v)}, {v.flavor}")
     if nxt is not None:
@@ -1093,7 +1093,7 @@ def _rack(p: dict, items: list, opts: list, lines: list) -> None:
                 else f"level {economy.rung_player_level_req(nxt)}")
         opts.append(Option(
             f"buy_{nxt.slug}", nxt.name,
-            f"🔒 {gate} · ◈ {nxt.price:,} · {_stat(nxt)}", locked=True))
+            f"🔒 {gate} · pay ◈ {nxt.price:,} · {_stat(nxt)}", locked=True))
         lines.append(f"{nxt.name} — {_stat(nxt)}, "
                      "the rung you're saving for")
 
@@ -1125,7 +1125,7 @@ def _relic_rows(p: dict, shop: str, opts: list, lines: list) -> None:
     for r in stock:
         price = economy.relic_price(r.slug, p["unlocked_floor"])
         owned = p["inventory"].get(r.slug, 0)
-        hint = f"◈ {price:,}" + (f" · ×{r.count}" if r.count > 1 else "")
+        hint = f"pay ◈ {price:,}" + (f" · ×{r.count}" if r.count > 1 else "")
         opts.append(Option(f"buy_{r.slug}", r.name, hint))
         lines.append(f"{r.name} — {r.effect}. The catch: {r.limit}."
                      + (f" (you hold {owned})" if owned else ""))
@@ -1191,13 +1191,13 @@ def _forge_scene(p: dict) -> Scene:
         if g:
             price = economy.off_class_price(g)
             opts.append(Option(f"buy_{g.slug}", g.name,
-                               f"◈ {price:,} · off-class"))
+                               f"pay ◈ {price:,} · off-class"))
             lines.append(f"{g.name} — not your weapon: ×3 the coin, "
                          "half the bite, and one shot in four goes wide")
     if clazz != "archer":
         opts.append(Option(
             "buy_arrow_pack", "Arrow pack",
-            f"◈ {economy.ARROW_PACK_PRICE} · {economy.ARROW_PACK_SIZE} "
+            f"pay ◈ {economy.ARROW_PACK_PRICE} · {economy.ARROW_PACK_SIZE} "
             "arrows"))
     _relic_rows(p, "forge", opts, lines)      # 006: quivers and tools
     for g in _wearable_pack(p):
@@ -1218,7 +1218,7 @@ def _forge_scene(p: dict) -> Scene:
         if slug and lvl < cap:
             name = economy.FORGE[slug].name
             opts.append(Option(f"hone_{slot}", f"Hone {name} +{lvl + 1}",
-                               f"◈ {price:,} + {hone_xp} XP"))
+                               f"pay ◈ {price:,} · +{hone_xp} XP"))
     # 005: the repair bench — every worn PAID piece on the body gets a
     # row; price scales with the missing fraction, XP mirrors honing.
     # 0.29.4: a held repair token adds a FREE row per worn piece — the
@@ -1236,7 +1236,7 @@ def _forge_scene(p: dict) -> Scene:
         opts.append(Option(
             f"repair_{slot}",
             f"Repair {g.name}" + (" — broken" if left <= 0 else ""),
-            f"◈ {rprice:,} + {hone_xp} XP"))
+            f"pay ◈ {rprice:,} · +{hone_xp} XP"))
         if tokens > 0:
             opts.append(Option(
                 f"token_{slot}",
@@ -1518,7 +1518,7 @@ def _arcanum_scene(p: dict) -> Scene:
                                     p["unlocked_floor"])
         if g:
             opts.append(Option(f"buy_{g.slug}", g.name,
-                               f"◈ {economy.off_class_price(g):,} · "
+                               f"pay ◈ {economy.off_class_price(g):,} · "
                                "off-class"))
             lines.append(f"{g.name} — not your weapon: ×3 the coin, "
                          "half the bite, and one cast in four fizzles")
@@ -1653,16 +1653,17 @@ def _lodge_scene(p: dict) -> Scene:
     price = economy.LODGE_PRICE_PER_LEVEL * p["level"]
     lodged = p["lodged_until_day"] >= state.world_day() + 1
     opts = []
-    if not lodged:
-        opts.append(Option("sleep", "Pay for the night", f"◈ {price}"))
+    # 041: one door to a bunk — "Turn in" pays the night itself, so the
+    # separate "Pay for the night" row only read as a second sleep.
     if p["hp"] < state.max_hp(p):
         opts.append(Option("stew", "Hunter's stew",
-                           f"◈ {economy.STEW_PRICE} · +{economy.STEW_HEAL_HP} HP"))
+                           f"pay ◈ {economy.STEW_PRICE} · "
+                           f"+{economy.STEW_HEAL_HP} HP"))
     # 037: lie down and actively sleep — the clocks run while you do
     _sp = _sleep_spec("lodge")
     opts.append(Option("lie_down", "Turn in — sleep now",
                        f"⚡ ×{_sp['mult']:g} · full HP ~{_sp['hp_h']:g} h"
-                       + ("" if lodged else f" · ◈ {price}")))
+                       + ("" if lodged else f" · pay ◈ {price}")))
     body = [f"A night costs ◈ {price}. Banked gold can't buy it — "
             "carry coin.",
             # 022/004: dawn heals everyone everywhere — the Lodge
@@ -1710,8 +1711,8 @@ def _lodge_scene(p: dict) -> Scene:
         if plan != "work":
             opts.append(Option(
                 "night_work", f"JOB OFFER: {shift}",
-                f"◈ {work_pay} at dawn — paid work, no rested-XP "
-                "bonus"))
+                f"receive ◈ {work_pay} at dawn — paid work, no "
+                "rested-XP bonus"))
     # 022/008: the long fire — canned words only, no free chat.
     fire = (p.get("_world") or {}).get("fire")
     if fire is not None:
@@ -1728,7 +1729,7 @@ def _lodge_scene(p: dict) -> Scene:
                for f in fire):
             opts.append(Option(
                 "fire_stew", "Stand a stranger a stew",
-                f"◈ {economy.FIRE_STEW_GOLD} · a letter with it"))
+                f"pay ◈ {economy.FIRE_STEW_GOLD} · a letter with it"))
     # 031 §9: the keeper has a face and a name now — Wick.
     opts.append(Option("talk", "Talk with Wick", "the keeper · free"))
     opts.append(Option("back", "Back to the square"))
@@ -1786,7 +1787,7 @@ def _keeper_scene(p: dict) -> Scene:
          "I was a rusty one.”"],
         [f"“Asha kept every coin she won in the Vault — "
          f"{round(economy.BANK_INTEREST_RATE * 100)}% a day it pays, "
-         "stubs at dawn, regular as bells. Little numbers. She let "
+         "stubs dripping in all day, regular as bells. Little numbers. She let "
          "them stack a hundred days while the fools carried their "
          "purses into the wilds and fed the grave-robbers. Her stubs "
          "bought the Guild a war banner. Patience is a weapon too.”"],
@@ -1873,22 +1874,8 @@ def _lodge_action(p: dict, oid: str) -> Scene:
         s.shard_note = ("The night is planned. Dawn settles it — one "
                         "action a night, no more.")
         return s
-    if oid != "sleep":
-        return _lodge_scene(p)
-    price = economy.LODGE_PRICE_PER_LEVEL * p["level"]
-    if p["gold"] < price:
-        s = _lodge_scene(p)
-        s.shard_note = "Not enough carried coin. The fields it is — unless " \
-                       "you visit the Vault."
-        return s
-    p["gold"] -= price
-    p["lodged_until_day"] = state.world_day() + 1
-    combat._ledger(p, "lodge", gold=-price)
-    s = _lodge_scene(p)
-    s.headline = "Your bunk is paid through tonight"
-    s.body_lines.insert(0, "+ one safe night. Nothing finds you here "
-                           "before dawn does its work.")
-    return s
+    # 041: "Pay for the night" folded into lie_down — one door to a bunk
+    return _lodge_scene(p)
 
 
 # ── 037: active sleep — the fast clock ──────────────────────────────────
@@ -1933,7 +1920,8 @@ def _sleep_menu_scene(p: dict) -> Scene:
         options=[
             Option("sleep_lodge", "A bunk at the Lodge",
                    f"⚡ ×{lg['mult']:g} · full HP ~{lg['hp_h']:g} h · "
-                   + ("bunk paid" if lodged else f"◈ {price}") + " · safe"),
+                   + ("bunk paid" if lodged else f"pay ◈ {price}")
+                   + " · safe"),
             Option("sleep_fields", "Find a place in the fields",
                    f"⚡ ×{fd['mult']:g} · full HP ~{fd['hp_h']:g} h · "
                    "free · ambushers can find you"),
@@ -2048,7 +2036,7 @@ def _board_scene(p: dict) -> Scene:
                      f"{xp} XP{bonus} · {tail}")
         if contracts.claimable(p, job):
             opts.append(Option(f"claim_{job['id']}", f"Collect: {job['title']}",
-                               f"◈ {max(0, gold - economy.BOARD_PRICE)}"))
+                               f"receive ◈ {max(0, gold - economy.BOARD_PRICE)}"))
     lines.append(f"The broker's stamp is ◈ {economy.BOARD_PRICE}, off the "
                  "top of every payout. Jobs expire at dawn — no rerolls.")
     opts.append(Option("back", "Back to the square"))
@@ -2103,7 +2091,7 @@ def _vault_scene(p: dict) -> Scene:
             "collect_interest",
             f"Collect interest ({len(stubs)} "
             f"stub{'s' if len(stubs) != 1 else ''})",
-            f"◈ {total:,} to the bank"))
+            f"receive ◈ {total:,} to the bank"))
     # 022/005: the weekly strongbox. 0.29.1: below the level it is
     # SHOWN and locked — the clerk polishes a box you can't open yet.
     if p["level"] < economy.STRONGBOX_LEVEL:
@@ -2142,8 +2130,8 @@ def _vault_scene(p: dict) -> Scene:
         eyebrow="ROOTHOLLOW · THE VAULT",
         headline="A lodge for your money",
         support="Deposits survive death, theft, and bad decisions. "
-                "Interest lands daily as stubs — collect them and it "
-                "compounds.",
+                "Interest drips in through the day as stubs — collect "
+                "them and it compounds.",
         body_lines=lines,
         options=opts,
         meters=combat.meters(p),
@@ -2238,17 +2226,20 @@ def _pawn_scene(p: dict) -> Scene:
         offer = _pawn_offer(p, g)
         frac = _pawn_frac(p, g)
         worn = f", worn to {round(frac * 100)}%" if frac < 1.0 else ""
-        opts.append(Option(f"sell_{slug}", f"Sell {g.name}", f"◈ {offer:,}"))
+        opts.append(Option(f"sell_{slug}", f"Sell {g.name}",
+                           f"receive ◈ {offer:,}"))
         lines.append(f"{g.name} ×{p['inventory'][slug]}{worn} — "
                      f"offers ◈ {offer:,}")
     for slug in relics_in_pack:
         r = economy.RELICS[slug]
         offer = _pawn_relic_offer(p, slug)
-        opts.append(Option(f"sell_{slug}", f"Sell {r.name}", f"◈ {offer:,}"))
+        opts.append(Option(f"sell_{slug}", f"Sell {r.name}",
+                           f"receive ◈ {offer:,}"))
         lines.append(f"{r.name} ×{p['inventory'][slug]} — offers ◈ {offer:,}")
     for slug in sundries:
         name, offer = _pawn_sundry(p, slug)
-        opts.append(Option(f"sell_{slug}", f"Sell {name}", f"◈ {offer:,}"))
+        opts.append(Option(f"sell_{slug}", f"Sell {name}",
+                           f"receive ◈ {offer:,}"))
         lines.append(f"{name} ×{p['inventory'][slug]} — offers ◈ {offer:,}")
     if not gear_in_pack and not relics_in_pack and not sundries:
         lines.append("Empty pack. The broker buys ANYTHING you carry — "
@@ -2636,8 +2627,10 @@ def _gate_town_options(p: dict, fl) -> list[Option]:
                               "1 ⚡ · run toward the light"))
     if p["hp"] < state.max_hp(p):
         opts.append(Option("stew", "Hunter's stew",
-                           f"◈ {economy.STEW_PRICE} · +{economy.STEW_HEAL_HP} HP"))
-        opts.append(Option("heal", "The healer's tent", f"◈ {heal_price}"))
+                           f"pay ◈ {economy.STEW_PRICE} · "
+                           f"+{economy.STEW_HEAL_HP} HP"))
+        opts.append(Option("heal", "The healer's tent",
+                           f"pay ◈ {heal_price}"))
         # 014: the pack heals finally have a mouth — usable at the camp
         # fire (the tonic stays the only MID-fight heal, per 013).
         for slug in ("medgel", "trauma_kit"):

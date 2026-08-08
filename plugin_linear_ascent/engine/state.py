@@ -26,6 +26,14 @@ def world_day(at: dt.datetime | None = None) -> int:
     return (shifted - _EPOCH.replace(hour=0)).days
 
 
+def world_day_f(at: dt.datetime | None = None) -> float:
+    """Fractional day count on the same clock — the 041 interest slices
+    need partial days."""
+    at = at or now()
+    shifted = at - dt.timedelta(hours=WORLD_DAY_UTC_HOUR)
+    return (shifted - _EPOCH.replace(hour=0)) / dt.timedelta(days=1)
+
+
 def new_player(luna_user: str) -> dict:
     ts = now().isoformat()
     return {
@@ -536,22 +544,37 @@ def prestige(p: dict) -> int:
 
 
 def interest_sync(p: dict) -> list[dict]:
-    """023: materialize the vault's interest STUBS — one per elapsed day,
-    priced off the principal as it stood. Uncollected interest is SIMPLE;
-    collecting re-banks it, so the hand who shows up daily still
-    compounds — the compounding is the daily hook. Lazy (runs when the
-    doc loads a scene, absent players cost nothing) and bounded (the
-    clerk keeps a month of stubs, oldest dropped)."""
-    day = world_day()
+    """023/041: materialize the vault's interest STUBS. The 5%-a-day
+    rate drips in slices — BANK_INTEREST_TICKS per day, so 1% lands
+    every 24/5 hours — one stub per slice, priced off the principal as
+    it stood. Fractions carry between slices, so small banks lose
+    nothing to rounding. Uncollected interest is SIMPLE; collecting
+    re-banks it, so the hand who shows up still compounds — the
+    compounding is the hook. Lazy (runs when the doc loads a scene,
+    absent players cost nothing) and bounded (the clerk keeps a month
+    of slices, oldest dropped)."""
+    day_f = world_day_f()
     stubs = p.setdefault("interest_due", [])
-    days = day - p.get("bank_day", day)
-    if days > 0:
-        per = round(p.get("bank", 0) * economy.BANK_INTEREST_RATE)
-        if per >= 1:
-            start = day - min(days, economy.INTEREST_STUB_CAP) + 1
-            stubs.extend({"day": d, "gold": per}
-                         for d in range(start, day + 1))
-        p["bank_day"] = day
+    # pre-041 docs stamped whole day numbers — a float mark reads both
+    mark = float(p.get("bank_day", day_f))
+    per_day = economy.BANK_INTEREST_TICKS
+    ticks = int((day_f - mark) * per_day)
+    if ticks > 0:
+        kept = min(ticks, economy.INTEREST_STUB_CAP)
+        # 6-decimal quantum kills float drift — 0.3 stays 0.3, ten of
+        # them reach 3.0, and the third coin actually lands
+        per = round(p.get("bank", 0) * economy.BANK_INTEREST_RATE
+                    / per_day, 6)
+        carry = float(p.get("interest_frac", 0.0))
+        for t in range(ticks - kept + 1, ticks + 1):
+            carry = round(carry + per, 6)
+            gold = int(carry)
+            if gold >= 1:
+                carry -= gold
+                stubs.append({"day": int(mark + t / per_day), "gold": gold})
+        p["interest_frac"] = round(carry, 6)
+        # advance by whole slices only — partial-slice time is never lost
+        p["bank_day"] = mark + ticks / per_day
         del stubs[:-economy.INTEREST_STUB_CAP]
     return stubs
 

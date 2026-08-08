@@ -1306,7 +1306,7 @@ def _death(p: dict, floor) -> Scene:
                        "like this again.",
             body_lines=save_lines,
             options=[Option("heal", "The healer's tent",
-                            f"◈ {economy.HEALER_TENT_PER_FLOOR * floor.floor}"),
+                            f"pay ◈ {economy.HEALER_TENT_PER_FLOOR * floor.floor}"),
                      Option("town", "Limp back to Roothollow")],
             meters=meters(p),
             event_kind="death",

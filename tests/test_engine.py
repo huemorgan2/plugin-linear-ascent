@@ -235,14 +235,14 @@ def test_death_save_fires_once_per_day():
 
 
 def test_vault_interest_lands_as_stubs_and_collects_once():
-    # 023: interest is never a silent credit — two days away leave two
-    # stubs; collecting banks the pile
+    # 023/041: interest is never a silent credit — two days away leave
+    # ten 1% slices; collecting banks the pile
     p = create_character(fresh())
     p["bank"] = 1000
-    p["bank_day"] = state.world_day() - 2
+    p["bank_day"] = state.world_day_f() - 2
     s = choose(p, "vault")
     assert p["bank"] == 1000                       # nothing silent
-    assert len(p["interest_due"]) == 2             # 2 × ◈ 50
+    assert len(p["interest_due"]) == 10            # 10 × ◈ 10
     assert any("collect_interest" == o.id for o in s.options)
     choose(p, "collect_interest")
     assert p["bank"] == 1100
@@ -289,8 +289,9 @@ def test_lodge_and_medlab_daily_caps():
     p = create_character(fresh())
     p["gold"] = 1000
     choose(p, "lodge")
-    choose(p, "sleep")
+    choose(p, "lie_down")               # 041: turning in pays the bunk
     assert p["lodged_until_day"] == state.world_day() + 1
+    choose(p, "wake")
     choose(p, "back")
     choose(p, "medlab")
     choose(p, "buy_energy_cell")

@@ -45,9 +45,9 @@ def kinds(scene, door_name):
 def test_every_count_on_a_door_also_gets_a_sentence():
     """The whole complaint: a number with no words is a riddle."""
     p = playing("sentence")
-    p["bank"], p["bank_day"] = 300, state.world_day() - 2
+    p["bank"], p["bank_day"] = 300, state.world_day_f() - 2
     s = core.current_scene(p)
-    assert door(s, "vault").badge == 2
+    assert door(s, "vault").badge == 10          # 041: 2 days × 5 slices
     said = [n for n in s.notices if n["door"] == "vault"]
     assert len(said) == 1
     assert "Vault" in said[0]["text"] and "stub" in said[0]["text"]
@@ -336,9 +336,9 @@ def test_a_scene_from_this_engine_still_parses_on_an_older_install():
     INSIDE each option dict, so every copy older than it raised TypeError on
     every scene and read the whole world as "the signal is gone"."""
     p = playing("wire")
-    p["bank"], p["bank_day"] = 300, state.world_day() - 2
+    p["bank"], p["bank_day"] = 300, state.world_day_f() - 2
     d = core.current_scene(p).to_dict()
-    assert d["option_badges"]["vault"] == 2      # the count still crosses
+    assert d["option_badges"]["vault"] == 10     # the count still crosses
     assert all("badge" not in o for o in d["options"])
     old = _v032_scene_from_dict(d)               # must not raise
     assert any(o.id == "vault" for o in old)
@@ -347,9 +347,9 @@ def test_a_scene_from_this_engine_still_parses_on_an_older_install():
 def test_the_count_survives_the_round_trip_for_a_current_install():
     from plugin_linear_ascent.engine.scene import Scene
     p = playing("trip")
-    p["bank"], p["bank_day"] = 300, state.world_day() - 2
+    p["bank"], p["bank_day"] = 300, state.world_day_f() - 2
     back = Scene.from_dict(core.current_scene(p).to_dict())
-    assert door(back, "vault").badge == 2
+    assert door(back, "vault").badge == 10       # 041: 2 days × 5 slices
     assert back.notices and back.inventory
 
 

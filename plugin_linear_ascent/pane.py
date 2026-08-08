@@ -224,6 +224,10 @@ tabs.forEach(t => t.addEventListener('click',
 /* ── scene grammar FX: the mock's typewriter, scoped to the pane ────── */
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const sleep = ms => new Promise(r => setTimeout(r, ms));
+/* 041: any click while the ink is still wet quadruples the pen — the
+   flag resets when the next scene lands, so every card starts slow. */
+let fast = false;
+document.addEventListener('pointerdown', () => { fast = true; });
 async function runFX(root) {
   const typed = [...root.querySelectorAll('.type')];
   const later = [...root.querySelectorAll('.later')];
@@ -244,7 +248,7 @@ async function runFX(root) {
       const n = ns[i], t = full[i];
       n.parentNode.insertBefore(cur, n.nextSibling);
       for (let c = 1; c <= t.length; c++) {
-        n.nodeValue = t.slice(0, c); await sleep(7);
+        n.nodeValue = t.slice(0, c); await sleep(fast ? 2 : 7);
         if (!el.isConnected) { cur.remove(); return; }
       }
     }
@@ -252,7 +256,7 @@ async function runFX(root) {
   }
   let d = 0;
   for (const el of later) {
-    setTimeout(() => el.classList.add('shown'), d); d += 90;
+    setTimeout(() => el.classList.add('shown'), d); d += fast ? 22 : 90;
   }
 }
 
@@ -263,7 +267,15 @@ function swapFX() { __SWAP_JS__ }
 const game = document.getElementById('game');
 function showScene(d) {
   sceneId = d.scene_id || '';
+  fast = false;             // 041: every fresh card starts at ink speed
   game.innerHTML = d.fragment;
+  // 041: on the phone a new scene walks the page back up to its art —
+  // without this the player lands mid-card and reads bottom-first.
+  if (matchMedia('(max-width: 520px)').matches) {
+    const art = game.querySelector('.bwrap, .banner') || game;
+    requestAnimationFrame(() =>
+      art.scrollIntoView({behavior: 'smooth', block: 'start'}));
+  }
   // 015: the Guildhall opens straight onto the faction desk
   if ((d.fragment || '').indexOf('THE GUILDHALL') !== -1) {
     const bar = document.createElement('div');
@@ -326,6 +338,18 @@ function wireOptions() {
     } finally { loading = false; }
   }));
 }
+/* 041: the number row presses the menu — 1 clicks the first option row,
+   2 the second, and so on. Quiet while any input owns the keyboard. */
+document.addEventListener('keydown', (e) => {
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  const tag = (document.activeElement || {}).tagName;
+  if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+  if (e.key.length !== 1 || e.key < '1' || e.key > '9') return;
+  const btns = [...game.querySelectorAll('button.opt')]
+    .filter(b => !b.disabled && b.offsetParent !== null);
+  const b = btns[e.key - 1];
+  if (b) { e.preventDefault(); b.click(); }
+});
 async function loadScene(force) {
   if (loading || (!WEB && !token && !force)) return;
   loading = true;

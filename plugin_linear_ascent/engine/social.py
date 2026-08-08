@@ -153,7 +153,8 @@ def fields_action(p: dict, oid: str) -> Scene:
 def _grant_amount_scene(p: dict) -> Scene:
     amounts = [a for a in (100, 500, p["gold"] // 2) if 0 < a <= p["gold"]]
     opts = [Option(f"grantamt_{a}", f"◈ {a:,}",
-                   f"burn ◈ {int(a * economy.GRANT_BURN_PCT):,}")
+                   f"pay ◈ {a:,} — ◈ {int(a * economy.GRANT_BURN_PCT):,} "
+                   "of it burns")
             for a in sorted(set(amounts))]
     opts.append(Option("grants", "Back"))
     return Scene(

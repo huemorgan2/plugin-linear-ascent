@@ -750,13 +750,15 @@ _TIP_EHEAD = ("The enemy's sheet — HP, then attack and defense on the "
 
 def _enemy_head_html(en: dict) -> str:
     """One line on one ink plate: HP · ATK · DEF. Nothing more rides the
-    art — range, modifiers and the story live in the [i] dossier."""
+    art — range, modifiers and the story live in the [i] dossier.
+    041: no `later` class — the sheet must read the moment the scene
+    lands, not after the typewriter finishes."""
     hp, cap = int(en.get("hp", 0)), max(1, int(en.get("hp_max", 1)))
     low = hp * 10 <= cap * 3
     hp_col = RED if low else VIOLET_SOFT
     sw = icons.icon_data_url("sword")
     ar = icons.icon_data_url("armor")
-    return (f'<div class="ehead later">'
+    return (f'<div class="ehead">'
             f'<span class="echip" data-tip="{_e(_TIP_EHEAD)}">'
             f'<span class="st" style="color:{hp_col}">HP {hp}/{cap}</span>'
             f'<span class="st" style="color:{ORANGE}">'
@@ -1022,16 +1024,33 @@ TIP_JS = """(function () {
     box.style.top = Math.max(4, y) + 'px';
   }
   function hide() { cur = null; box.style.display = 'none'; }
+  /* 041: touch — a tap on the [i] toggles the tip; the synthetic
+     mouseover/focusin the browser fires right after must not undo the
+     toggle, so hover wiring goes quiet for a beat after any touch. */
+  var touchT = 0;
+  document.addEventListener('pointerdown', function (e) {
+    if (e.pointerType !== 'touch') return;
+    touchT = Date.now();
+    var t = e.target.closest ? e.target.closest('[data-tip]') : null;
+    if (!t) return hide();
+    if (t === cur && box.style.display === 'block') hide();
+    else show(t);
+  });
   document.addEventListener('mouseover', function (e) {
+    if (Date.now() - touchT < 800) return;
     var t = e.target.closest ? e.target.closest('[data-tip]') : null;
     if (t && t !== cur) show(t);
     else if (!t && cur) hide();
   });
   document.addEventListener('focusin', function (e) {
+    if (Date.now() - touchT < 800) return;
     var t = e.target.closest ? e.target.closest('[data-tip]') : null;
     if (t) show(t);
   });
-  document.addEventListener('focusout', hide);
+  document.addEventListener('focusout', function () {
+    if (Date.now() - touchT < 800) return;
+    hide();
+  });
   window.addEventListener('scroll', hide, true);
 })();"""
 
@@ -1224,6 +1243,8 @@ const later=[...document.querySelectorAll('.later')];
 typed.forEach(e=>e.classList.add('pending'));
 later.forEach(e=>e.classList.add('waiting'));
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+/* 041: a click anywhere quadruples the pen */
+let fast=false;document.addEventListener('pointerdown',()=>{fast=true});
 const textNodes=el=>{const w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);
 const a=[];let n;while((n=w.nextNode()))a.push(n);return a};
 async function typeEl(el){const ns=textNodes(el);const full=ns.map(n=>n.nodeValue);
@@ -1232,10 +1253,10 @@ const cur=document.createElement('span');cur.className='cursor';
 cur.setAttribute('aria-hidden','true');
 for(let i=0;i<ns.length;i++){const n=ns[i],t=full[i];
 n.parentNode.insertBefore(cur,n.nextSibling);
-for(let c=1;c<=t.length;c++){n.nodeValue=t.slice(0,c);await sleep(7)}}
+for(let c=1;c<=t.length;c++){n.nodeValue=t.slice(0,c);await sleep(fast?2:7)}}
 cur.remove()}
 (async()=>{for(const el of typed)await typeEl(el);
-let d=0;for(const el of later){setTimeout(()=>el.classList.add('shown'),d);d+=90}})();
+let d=0;for(const el of later){setTimeout(()=>el.classList.add('shown'),d);d+=fast?22:90}})();
 })();
 /* luna:embed:height — hosts that support it auto-size the iframe so the
    card never scrolls internally; harmless where nobody listens. */

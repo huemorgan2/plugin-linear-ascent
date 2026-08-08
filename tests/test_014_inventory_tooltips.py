@@ -109,7 +109,7 @@ STATIC_IDS = [
     "forge", "medlab", "lodge", "vault", "pawn", "relay", "fields",
     "guildhall", "stone", "gate",
     # gate town + lodge + vault
-    "hunt", "heal", "stew", "keep", "sleep",
+    "hunt", "heal", "stew", "keep",
     "deposit_all", "deposit_half", "withdraw_all", "grants",
     # fight
     "attack", "stand", "run", "scout", "drink_tonic",
