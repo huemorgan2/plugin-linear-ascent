@@ -397,11 +397,15 @@ _HIT_DMG = re.compile(
 
 
 def _combat_html(line: str) -> str:
+    # 042: the classes are the sound layer's ears — chp is HP lost,
+    # chit damage dealt. Purely semantic; the color still paints.
     s = _e(line)
     s = _HIT_HP.sub(
-        lambda m: f'<span style="color:{RED}">{m.group(0)}</span>', s)
+        lambda m: f'<span class="chp" style="color:{RED}">'
+                  f"{m.group(0)}</span>", s)
     s = _HIT_DMG.sub(
-        lambda m: f'<span style="color:{ORANGE}">{m.group(0)}</span>', s)
+        lambda m: f'<span class="chit" style="color:{ORANGE}">'
+                  f"{m.group(0)}</span>", s)
     return _sub_glyphs(_paint_amounts(s))
 
 
@@ -1178,7 +1182,16 @@ INTERACT_JS = """(function () {
     root.querySelectorAll('.mv[data-m]').forEach(function (el) {
       var k = el.dataset.m, v = parseInt(el.dataset.v, 10);
       seen[k] = v;
-      if (reduced || !(k in last) || last[k] === v) return;
+      if (!(k in last) || last[k] === v) return;
+      /* 042: the meters speak — before the reduced-motion return so a
+         still card still sounds. hurt trails the weapon hit a beat. */
+      if (window.__laSfx) {
+        if (k === 'gold') window.__laSfx(v > last[k] ? 'coin' : 'spend');
+        else if (k === 'hp') window.__laSfx(
+          v > last[k] ? 'heal' : 'hurt', v < last[k] ? 0.18 : 0);
+        else if (k === 'xp' && v > last[k]) window.__laSfx('xp');
+      }
+      if (reduced) return;
       var from = last[k], cap = el.dataset.max
         ? parseInt(el.dataset.max, 10) : 0;
       el.textContent = from.toLocaleString('en-US');
@@ -1497,7 +1510,10 @@ def render_scene_fragment(scene: Scene) -> str:
     else:
         parts.append(_inventory_html(scene))
 
-    return (f'<div class="card" data-scene="{_e(scene.scene_id)}">'
+    # 042: the sound layer flavors the hit by the fighter's damage type
+    dtype = str((getattr(scene, "enemy", None) or {}).get("dtype", ""))
+    dt = f' data-dtype="{_e(dtype)}"' if dtype else ""
+    return (f'<div class="card" data-scene="{_e(scene.scene_id)}"{dt}>'
             + "".join(parts) + "</div>")
 
 

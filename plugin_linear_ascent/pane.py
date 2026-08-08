@@ -25,6 +25,7 @@ from . import icons
 from .render import (AETHER, BORDER, DIM, FAINT, INK, INTERACT_JS, PANEL,
                      PANEL2, SCENE_CSS, SWAP_JS, TEXT, TIP_JS, VIOLET,
                      VIOLET_SOFT)
+from .sfx import SFX_JS
 
 _API = "/api/p/plugin-linear-ascent"
 
@@ -34,7 +35,7 @@ html,body{{margin:0;padding:0;background:{INK};min-height:100%;}}
 body{{color:{TEXT};
  font:14px/1.6 ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
  font-variant-numeric:tabular-nums;}}
-.wrap{{max-width:760px;margin:0 auto;padding:14px 12px 40px;}}
+.wrap{{max-width:760px;margin:0 auto;padding:14px 12px 64px;}}
 .tabs{{display:flex;gap:2px;margin-bottom:12px;border:1px solid {BORDER};
  background:{PANEL};}}
 .tab{{flex:1;background:none;border:0;border-right:1px solid {BORDER};
@@ -134,6 +135,20 @@ select.ti{{background:{INK};color:{TEXT};border:1px solid {BORDER};
 .deskbar:hover{{color:{TEXT};border-color:{VIOLET};}}
 .savebar{{display:flex;gap:6px;margin-top:6px;}}
 .savebar input{{flex:1;}}
+/* ── 042: the sound bar — pinned under everything, ANSI like the rest */
+.sndbar{{position:fixed;left:0;right:0;bottom:0;z-index:40;
+ background:{PANEL};border-top:1px solid {BORDER};
+ display:flex;justify-content:center;gap:8px;padding:6px 12px;}}
+.sndbtn{{display:flex;align-items:center;gap:1ch;background:none;
+ border:1px solid {BORDER};color:{TEXT};font:inherit;font-size:12px;
+ letter-spacing:.14em;text-transform:uppercase;padding:5px 1.5ch;
+ cursor:pointer;border-radius:0;}}
+.sndbtn:hover{{border-color:{VIOLET};}}
+.sndbtn.off{{color:{DIM};}}
+.sndbtn.off .sndico{{opacity:.35;}}
+.sndico{{width:16px;height:16px;background:currentColor;flex:none;
+ mask-size:100% 100%;-webkit-mask-size:100% 100%;mask-repeat:no-repeat;
+ -webkit-mask-repeat:no-repeat;image-rendering:pixelated;}}
 """
 
 # Plain string on purpose: real braces everywhere — no f-string doubling.
@@ -288,6 +303,9 @@ function showScene(d) {
   wireOptions();
   runFX(game);
   swapFX();               // 016: split banner art settles into its loop
+  // 042: the stings and the weapon hit — before __laWire so a loot
+  // fanfare can squelch the meter blips its own tweens would fire.
+  if (window.__laScene) window.__laScene(d, game);
   // 027: the pack popup, the card's input box and the rail count-up
   if (window.__laWire) window.__laWire(game);
 }
@@ -323,6 +341,7 @@ function wireOptions() {
     // 019: the Guildhall's "Join a banner" row IS the Community tab —
     // no server round trip, the door just opens.
     if (b.dataset.opt === 'hall_ledger') { switchTab('community'); return; }
+    if (window.__laSfx) window.__laSfx('click');   // 042
     loading = true;
     btns.forEach(x => { x.disabled = true;
       x.classList.add(x === b ? 'busy' : 'stale'); });
@@ -796,6 +815,8 @@ def render_pane(api_base: str = _API, web: bool = False) -> str:
     auth); web=True is linearascent.net/play — same HTML, cookie auth,
     401 walks back to the site's door. 005: one pane, two doors."""
     title = "<title>LINEAR ASCENT</title>" if web else ""
+    spk = icons.icon_data_url("speaker")
+    note = icons.icon_data_url("note")
     return f"""<!doctype html><html><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">{title}
 <style>{_CSS}</style></head><body>
@@ -812,9 +833,18 @@ def render_pane(api_base: str = _API, web: bool = False) -> str:
   <div id="community" class="pane"><div class="placeholder">
     <div class="eyebrow">the guildhall</div>unrolling the charters…</div></div>
 </div>
+<div class="sndbar">
+  <button id="sndfx" class="sndbtn" aria-pressed="true"><span class="sndico"
+    style="mask-image:url('{spk}');-webkit-mask-image:url('{spk}')"
+    aria-hidden="true"></span><span class="sndlab">sound on</span></button>
+  <button id="sndmus" class="sndbtn" aria-pressed="true"><span class="sndico"
+    style="mask-image:url('{note}');-webkit-mask-image:url('{note}')"
+    aria-hidden="true"></span><span class="sndlab">music on</span></button>
+</div>
 <script>{INTERACT_JS}</script>
 <script>{_JS.replace("__API__", api_base)
            .replace("__WEB__", "true" if web else "false")
            .replace("__SWAP_JS__", SWAP_JS)
            .replace("__COIN__", icons.icon_data_url("coin"))}</script>
-<script>{TIP_JS}</script></body></html>"""
+<script>{TIP_JS}</script>
+<script>{SFX_JS}</script></body></html>"""

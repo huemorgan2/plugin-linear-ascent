@@ -43,8 +43,9 @@ def test_combat_numbers_are_colored():
             "shrug off. The Feral boar answers — your Scrapwood Buckler "
             "soak almost all of it: only −1 HP gets through.")
     html = _combat_html(line)
-    assert f'<span style="color:{ORANGE}">9 damage</span>' in html
-    assert f'<span style="color:{RED}">−1 HP</span>' in html
+    # 042: the spans carry classes too — the sound layer's ears
+    assert f'<span class="chit" style="color:{ORANGE}">9 damage</span>' in html
+    assert f'<span class="chp" style="color:{RED}">−1 HP</span>' in html
     # the other strike/counter phrasings
     assert f'color:{ORANGE}">14' in _combat_html("Your blade takes it for 14.")
     assert f'color:{ORANGE}">3' in _combat_html("Your counter takes 3.")
