@@ -14,7 +14,7 @@ encounters:
     name: Ashline jackal
     kind: native
     was: >-
-      A dune scavenger that followed the caravans.
+      a dune scavenger that followed the caravans
     lore: >-
       Pack-bold and fever-lean, coursing warmth across the flats.
     weight: 3
@@ -27,7 +27,7 @@ encounters:
     name: Glass-hare
     kind: native
     was: >-
-      A pale desert hare of the strike-fields.
+      a pale desert hare of the strike-fields
     lore: >-
       Razor-swift over the fulgurite, kicking up glass-dust.
     weight: 3
@@ -40,7 +40,7 @@ encounters:
     name: Ash salamander
     kind: native
     was: >-
-      A heat-loving rock salamander.
+      a heat-loving rock salamander
     lore: >-
       Ember-veined, it beds in warm ash and lashes with a scalding
       tail.
@@ -54,7 +54,7 @@ encounters:
     name: Cinder vulture
     kind: native
     was: >-
-      A carrion bird of the frontier.
+      a carrion bird of the frontier
     lore: >-
       Huge and ash-caked, it stoops on anything that slows.
     weight: 2
@@ -66,7 +66,7 @@ encounters:
     name: Dune adder
     kind: native
     was: >-
-      A sand-swimming viper of the dunes.
+      a sand-swimming viper of the dunes
     lore: >-
       Fever-fast, it strikes from under the ash at a footfall.
     weight: 2

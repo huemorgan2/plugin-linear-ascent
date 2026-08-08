@@ -11,24 +11,24 @@ arrival: >-
   here. None of them means safety.
 encounters:
   - id: beacon_moth
-    name: Glare moth
+    name: Glare vole
     kind: native
     was: >-
-      A heath-moth drawn to the beacons.
+      a heath-vole that nested warm at the pylon-feet
     lore: >-
-      Plate-sized and blinding-pale, it swarms the eyes and smothers
-      lamps.
+      It came to the beacons for warmth. Plate-broad and blinding-pale
+      now, it smothers lamps.
     weight: 3
     traits: [flying, frail, feeble]
     prose: >-
-      The strobe fills with wings — moths broad as plates,
-      blinding-pale, swarming your eyes at the exact moment the field
-      goes black.
+      Something runs the heather at your feet — a vole broad as a
+      plate, blinding-pale, climbing for your lamp at the exact moment
+      the field goes black.
   - id: moor_hare
     name: Bog-cotton hare
     kind: native
     was: >-
-      A moor hare of the heather.
+      a moor hare of the heather
     lore: >-
       Strobe-maddened, bolting in blind zigzags.
     weight: 3
@@ -38,23 +38,23 @@ encounters:
       straight across you — maddened past any sense of what it is
       running from.
   - id: night_hawk
-    name: Night-hawk
+    name: Night-shrew
     kind: native
     was: >-
-      A moth-hunting nightjar of the heath.
+      a dusk-hunting shrew of the heather
     lore: >-
-      Over-large now, stooping silent out of the strobe.
+      Over-large now, lunging silent out of the strobe.
     weight: 2
     traits: [flying, hulking, fierce]
     prose: >-
       Between one flash and the next, something crosses the gap — a
-      nightjar grown wrong, stooping silent out of the strobe with its
-      mouth open.
+      shrew grown wrong and huge, lunging silent out of the strobe
+      with its mouth open.
   - id: shadow_wolf
     name: Shadow-line wolf
     kind: native
     was: >-
-      A heath wolf that hunted the pylon-shadows.
+      a heath wolf that hunted the pylon-shadows
     lore: >-
       It hunts inside the moving shadows, unseen until it crosses a
       light.
@@ -68,7 +68,7 @@ encounters:
     name: Pylon adder
     kind: native
     was: >-
-      A warmth-seeking adder that basked on the cables.
+      a warmth-seeking adder that basked on the cables
     lore: >-
       Charged and fever-bold, striking from the cable-runs.
     weight: 2

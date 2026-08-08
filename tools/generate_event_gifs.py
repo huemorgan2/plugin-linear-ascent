@@ -92,7 +92,9 @@ STYLE = (
 # whole prompt at 4096 chars).
 MERCY_PREFIX = (
     "LOCKED-OFF static camera, no pans or zooms, no text, no "
-    "watermark. Scene: "
+    "watermark. High-contrast cinematic grade: deep shadows, figures "
+    "reading a shade DARKER than the background, crisp silhouettes. "
+    "Scene: "
 )
 
 DIM, VIOLET, GOLD, RED = "#8b93a7", "#8b5cf6", "#f5a524", "#f4645f"
@@ -857,19 +859,18 @@ _MERCY_EVICTED = (
     "streak stretching between the two figures, NEVER hovering "
     "in place, and it keeps one shape the whole flight. The blow "
     "lands MID-LUNGE, while the thing is still on the FAR half "
-    "of the frame, and stops it dead: its joined parts lose "
-    "their hold on one another and the whole shape comes apart "
-    "ON THE SPOT, pieces dropping inert to the ground, while a "
-    "gush of BLACK LIQUID — heavy, ink-like — spills out of the "
-    "wreck and soaks straight DOWN into the ground, gone in a "
-    "second. Nothing rises from the wreck: no smoke, no vapor, "
-    "no column in the air. TIMING IS STRICT: the ENTIRE fight — first swipe, "
+    "of the frame, and stops it dead: the thing is a DRY HOLLOW "
+    "HUSK and the blow caves it in — it sags, folds and "
+    "topples, crumbling as it falls into dry brittle flakes "
+    "like dead autumn leaves, a soft puff of pale dust where it "
+    "lands, every flake drifting DOWN and settling into one low "
+    "loose heap on the ground. TIMING IS STRICT: the ENTIRE fight — first swipe, "
     "dodge, second lunge, strike, and collapse — is over within "
     "the FIRST FOUR SECONDS of the video; never stretch or pad "
     "the action to fill time. All the remaining seconds are the quiet afterwards: "
-    "the scattered inert pieces lying on the ground, the black "
-    "liquid gone, the defender lowering the weapon and standing "
-    "at ease under a clean sky — a long, still ending, "
+    "the low flat heap of dry flakes and pale ash lying "
+    "settled and still, the defender lowering the weapon and "
+    "standing at ease under a clean sky — a long, still ending, "
     "absolutely nothing moving. Physical, documentary-real "
     "motion throughout — the fight part is a fight, not a pose.")
 
@@ -913,9 +914,9 @@ _MERCY_DOWN = ("When the beast breaks apart every piece and drop "
                "falls STRAIGHT DOWN and soaks into the ground - "
                "nothing flies upward, no egg, no shell, and nothing "
                "solid remains.")
-_MERCY_EMPTY_END = ("The drained pieces melt away entirely; at the "
-                    "end the ground is EMPTY - no body, no bones, no "
-                    "skull, only a dark damp stain that fades.")
+_MERCY_EMPTY_END = ("What settles where the husk came down is only a "
+                    "low flat heap of dry leaf-flakes and pale ash, "
+                    "like swept-up dead leaves lying flat.")
 _MERCY_SCENE_EXTRA = {
     "guano_vole": _MERCY_SOLO + (" Warm lantern-browns and umber in "
                                  "the roost cave - a full-color "
@@ -939,6 +940,21 @@ _MERCY_SCENE_EXTRA = {
                    "the defender - full color, never monochrome."),
     "shellback_tortoise": _MERCY_SOLO,
     "wire_eel": _MERCY_SOLO,
+    # retry round: color anchors for the scenes that rendered
+    # grayscale 2-3/3 despite the photoreal prefix (anchors proven
+    # near-100% on banner_wolf), plus a monster-species anchor for
+    # coolant_crab (rendered wolf/rat 2/3 without one).
+    "grave_moth": ("Warm AMBER lamplight, rust-brown guano banks, "
+                   "the defender's deep-red cloak - a full-color "
+                   "photograph, never monochrome."),
+    "coolant_crab": ("The creature is a huge pale SALAMANDER - "
+                     "smooth glossy hairless pale-pink skin, blunt "
+                     "round head, squat legs, flat tail, no fur "
+                     "anywhere. Warm amber lamplight, teal glints "
+                     "on the wet rails - full color, never "
+                     "monochrome."),
+    "drift_eel": ("Warm gold lamp-beam on the black water - full "
+                  "color, never monochrome."),
     "vault_weaver": _MERCY_SOLO,
     "silk_broodling": _MERCY_SOLO + (" Warm torchlit color - amber "
                                      "light, colored silks - a "
@@ -957,10 +973,17 @@ _MERCY_SCENE_EXTRA = {
     "miner_husk": _MERCY_SOLO + " " + _MERCY_EMPTY_END,
     "lamp_eater": _MERCY_SOLO + " " + _MERCY_EMPTY_END,
     "windfall_wight": _MERCY_SOLO + " " + _MERCY_EMPTY_END,
-    "flicker_wight": _MERCY_SOLO + " " + _MERCY_EMPTY_END,
+    "flicker_wight": _MERCY_SOLO + " " + _MERCY_EMPTY_END
+                     + (" Every pylon flash floods the heath warm "
+                        "ORANGE; the junction-box lamp burns amber - "
+                        "full color, never monochrome."),
     "muster_wight": ("The muster-field is DESERTED - the muster is "
                      "long gone, not one other soul in sight. ")
-                    + _MERCY_SOLO + " " + _MERCY_EMPTY_END,
+                    + _MERCY_SOLO + " " + _MERCY_EMPTY_END
+                    + (" Full color film: faded RED and GOLD cloth "
+                       "on the rotted standards, warm brown mire, "
+                       "deep red on the defender - never grey "
+                       "monochrome."),
     "lamptree_wight": _MERCY_SOLO + " " + _MERCY_EMPTY_END,
 }
 # Per-slug reveal additions, appended after the species clauses.
@@ -973,22 +996,12 @@ _MERCY_FORCE_MELEE = {"pylon_adder"}
 # clauses entirely (crow chicks render as big fledged gulls; only the
 # naked-nestling wording is left to try).
 _MERCY_WAS_REPLACE = {
-    "shadow_wolf": ("a newborn wolf pup no bigger than a loaf of "
-                    "bread, eyes barely open, wobbling on unsteady "
-                    "legs - it stays newborn-tiny in every frame, "
-                    "absolutely NOT a grown wolf"),
-    "night_hawk": ("a tiny shapeless ball of pale down - a nightjar "
-                   "hatchling with NO visible wings, only stubby "
-                   "wing-nubs, no feather pattern anywhere, small "
-                   "enough to sit in an open palm, staying that "
-                   "tiny in every frame"),
-    "windfall_crow": ("a naked pink crow NESTLING no bigger than one "
-                      "of the fallen apples on the ground beside it, "
-                      "blind and featherless, two thin legs and a "
-                      "tiny beak - in EVERY frame to the very end it "
-                      "stays apple-sized next to that apple, never "
-                      "growing, absolutely NOT a fledged or "
-                      "full-grown bird"),
+    # night_hawk and windfall_crow left OUT on purpose — phase C
+    # swapped their floor-YAML reveals to shrew/dormouse; the YAML
+    # text must flow through unoverridden.
+    "shadow_wolf": ("a newborn wolf pup, eyes barely open, wobbling "
+                    "on unsteady legs - it stays newborn-tiny in "
+                    "every frame"),
     # Spider reveals: zero cat tokens anywhere (even negated "NOT a
     # cat" is left out) — the shared CAT-SIZED framing seeded kitten
     # chimeras 6/6 across both spider slugs.
@@ -1008,22 +1021,294 @@ _MERCY_WAS_REPLACE = {
 # kitten chimeras (6/6), and the cast rule's "taller than a human"
 # comparison drew a literal reference human into banner_wolf's frame
 # (2/3). Referents are swapped for objects already in each scene.
-_SPIDER_SUBS = [
+# Absolute size cue — comparative anchors (apple/palm/loaf/boot)
+# literalize as props; "disappears inside one cupped hand" + kneel-and-
+# cup staging prove the scale by blocking instead. Also drops the
+# "house cat" token (kitten-chimera seed).
+_SUB_CUP_SIZE = [
     ("TINY, CAT-SIZED — no bigger than a house cat",
-     "TINY — its whole body smaller than the defender's boot"),
-    ("wagging its tail (or settling its wings)",
-     "quietly folding its thin legs beneath it"),
-    ("sitting and wagging", "sitting still"),
+     "TINY — small enough to disappear inside one cupped hand"),
+    (", knee-high AT MOST", ""),  # FAR template only; no-op on melee
+]
+# Byte-budget + de-negation trim: the bystander list names the very
+# things we don't want, and the fever-shell sentence restates the size
+# drop. Applied to the stubborn slugs and the over-cap lore-swaps so
+# the landscape clause + grade prefix fit under 4096 bytes.
+_SUB_TRIM = [
+    ("completely EMPTY and DESERTED: no bystanders, no distant "
+     "figures on the horizon, nobody and nothing else anywhere, "
+     "however small or far away",
+     "completely EMPTY and DESERTED"),
+    ("The huge dark shape was all fever — a hollow inflated shell "
+     "MANY times larger than the true animal inside it — so the size "
+     "drop at the burst is drastic and obvious, and it is PERMANENT: "
+     "the revealed animal stays this tiny for every remaining frame "
+     "and NEVER grows back.",
+     "All that bulk was fever — a hollow shell — so the size drop "
+     "at the burst is drastic and PERMANENT: the animal stays this "
+     "tiny in every remaining frame."),
+]
+# Structural smallness: the defender kneels and cups the reveal.
+_SUB_CUP_END = [
+    ("calm and content, wagging its tail (or settling its wings) — and "
+     "just stays there, sitting and wagging, under a clean clear sky "
+     "while the defender lowers the weapon and stands at ease",
+     "and the defender lowers the weapon, walks over, KNEELS on one "
+     "knee and gently CUPS the tiny animal in both hands — it "
+     "disappears completely inside the cupped hands — and stays "
+     "kneeling, holding it close, under a clean clear sky"),
+]
+_SPIDER_SUBS = _SUB_CUP_SIZE + _SUB_TRIM + [
+    ("calm and content, wagging its tail (or settling its wings) — and "
+     "just stays there, sitting and wagging, under a clean clear sky "
+     "while the defender lowers the weapon and stands at ease",
+     "quietly folding its thin legs beneath it — and the defender "
+     "lowers the weapon, KNEELS, and gently cups it in both hands, "
+     "where it disappears completely, under a clean clear sky"),
 ]
 _MERCY_PROMPT_SUB = {
     "silk_broodling": _SPIDER_SUBS,
     "vault_weaver": _SPIDER_SUBS,
-    "banner_wolf": [
-        ("two heads taller than a human and visibly wider",
-         "slab-built and immense, twice the height of the ragged "
-         "tents around him"),
-        ("wolf of the muster", "wolf"),
+    "rabid_boar": _SUB_CUP_SIZE + _SUB_TRIM + _SUB_CUP_END + [
+        # kill the loaf simile from the boar branch
+        (", a tiny piglet no bigger than a loaf of bread, barely "
+         "knee-high", ", a tiny piglet"),
     ],
+    "shadow_wolf": _SUB_CUP_SIZE + _SUB_TRIM + _SUB_CUP_END,
+    "shellback_tortoise": _SUB_CUP_SIZE + _SUB_TRIM + _SUB_CUP_END,
+    "pylon_adder": _SUB_CUP_SIZE + _SUB_TRIM + [
+        # forearm simile + negated cat/weasel tokens out; absolute in
+        ("no longer than a man's forearm, no legs at all, absolutely "
+         "NOT a cat, weasel, or any legged animal",
+         "small enough to curl up whole inside one cupped hand, no "
+         "legs at all"),
+        # snake staging: it curls in a bootprint (forced-melee FREED)
+        ("skids to a stop, shakes itself once, then SITS DOWN facing "
+         "the defender, calm and content, wagging its tail (or "
+         "settling its wings)",
+         "glides to a stop and CURLS UP whole inside one of the "
+         "defender's fresh bootprints in the dirt"),
+        ("sitting and wagging", "coiled and still"),
+    ],
+    "banner_wolf": _SUB_CUP_SIZE + _SUB_TRIM + _SUB_CUP_END + [
+        # GIANT framing drew a reference human 3/3 — strip it whole,
+        # keep the dwarf ordinary-sized (replaces the old tent sub)
+        ("a dwarf wizard silhouette rendered as a GIANT — slab-built "
+         "mountain folk, two heads taller than a human and visibly "
+         "wider, a huge bearded mass that looms over the frame, "
+         "holding",
+         "a lone dwarf wizard silhouette — stocky, broad and heavily "
+         "bearded, holding"),
+        ("wolf of the muster", "wolf"),
+        # all-alone clause, positive form — zero second-figure tokens
+        ("The whole world holds exactly ONE creature and ONE human - "
+         "no companion, no second animal, no other figure ever, from "
+         "the very first frame.",
+         "The whole world holds exactly ONE creature and ONE "
+         "defender, utterly alone together on the deserted field "
+         "from the very first frame."),
+    ],
+    "native_freed": _SUB_CUP_SIZE + _SUB_TRIM + _SUB_CUP_END,
+    "bailer_kobold": [
+        # pacing: strike landed at 60-80% of runtime — front-load
+        ("the attacker is ALREADY charging flat-out",
+         "the attacker is ALREADY halfway across the gap, charging "
+         "flat-out"),
+        ("TIMING IS STRICT: the ENTIRE fight — first swing, dodge, "
+         "second charge, strike, and fall — is over within the FIRST "
+         "FOUR SECONDS of the video; never",
+         "TIMING IS FRONT-LOADED: the first swing lands inside second "
+         "ONE, the counter-strike lands by second THREE, and the fall "
+         "is done before second FOUR; never"),
+    ],
+    # byte-budget trims for the over-cap lore-swap slugs
+    "windfall_crow": _SUB_TRIM,
+    "night_hawk": _SUB_TRIM,
+    "lane_boar": _SUB_TRIM,
+    # retry round (wave-1 fails). Fish reveals grew legs 6/6 when the
+    # reveal ended sitting on dry land (walking-fish prior) — end them
+    # IN the shallow water instead, plus a hard no-limbs clause.
+    "hornet_swarm": _SUB_TRIM + _SUB_CUP_SIZE + _SUB_CUP_END,
+    "grave_moth": _SUB_TRIM,
+    "drift_eel": _SUB_TRIM + [
+        ("a baby blind cave-fish of the deep water",
+         "a baby blind cave-fish - a smooth slick legless FISH, fins "
+         "only, NO legs, NO feet, NO limbs of any kind"),
+        ("skids to a stop, shakes itself once, then SITS DOWN facing "
+         "the defender, calm and content, wagging its tail",
+         "drops with a tiny splash into the shallow black water and "
+         "swims a slow calm circle at the defender's boots, just its "
+         "smooth back and tail-fin breaking the surface"),
+        ("slows, trots the rest of the way toward the defender, then "
+         "SITS DOWN facing them, calm and content, wagging its tail",
+         "drops with a tiny splash into the shallow black water and "
+         "swims a slow calm circle at the defender's boots, just its "
+         "smooth back and tail-fin breaking the surface"),
+        ("sitting and wagging", "circling slowly"),
+    ],
+    "wire_eel": _SUB_TRIM + [
+        ("a baby blind white fish the flood carried up from some "
+         "deep cellar",
+         "a baby blind white fish - smooth, slick and LEGLESS, fins "
+         "only, NO legs, NO limbs of any kind"),
+        ("skids to a stop, shakes itself once, then SITS DOWN facing "
+         "the defender, calm and content, wagging its tail",
+         "slips with a tiny splash into the shallow floodwater and "
+         "swims a slow calm circle at the defender's legs, just its "
+         "smooth white back breaking the surface"),
+        ("slows, trots the rest of the way toward the defender, then "
+         "SITS DOWN facing them, calm and content, wagging its tail",
+         "slips with a tiny splash into the shallow floodwater and "
+         "swims a slow calm circle at the defender's legs, just its "
+         "smooth white back breaking the surface"),
+        ("sitting and wagging", "circling slowly"),
+    ],
+    "coolant_crab": _SUB_TRIM + _SUB_CUP_END + [
+        ("jaws wide, ears pinned back, real animal gait, dust "
+         "kicking up",
+         "mouth wide, low slithering amphibian gait, water spraying"),
+    ],
+    # evicted wights: the negated-noun SOLO list correlated with
+    # third-figure spawns (windfall 3/3, lamptree 2/3, flicker 2/3) —
+    # positive-form alone/single-body wording instead (banner_wolf
+    # pattern: PASS t1, zero background figures).
+    "lamptree_wight": [
+        (_MERCY_SOLO,
+         "The made thing and the defender are utterly alone together "
+         "from the very first frame to the last - two figures only "
+         "in the whole wide frame."),
+        ("pale ash lying settled and still, the defender",
+         "pale ash lying settled and still, FLAT and ankle-high, "
+         "with nothing standing or crouched where the thing fell, "
+         "the defender"),
+    ],
+    "windfall_wight": [
+        (_MERCY_SOLO,
+         "ONE single one-piece made thing and ONE defender, utterly "
+         "alone together from the very first frame - the husk is one "
+         "solid body that never splits, sheds, or spills a second "
+         "shape."),
+    ],
+    "flicker_wight": [
+        (_MERCY_SOLO,
+         "ONE single one-piece made thing and ONE defender, utterly "
+         "alone together from the very first frame - the husk is one "
+         "solid body that never splits, sheds, or spills a second "
+         "shape."),
+        ("pale ash lying settled and still, the defender",
+         "pale ash lying settled and still, FLAT and ankle-high, "
+         "with nothing standing or crouched where the thing fell, "
+         "the defender"),
+    ],
+    "muster_wight": [
+        (_MERCY_SOLO,
+         "The made thing and the defender are utterly alone together "
+         "on the deserted field from the very first frame to the "
+         "last - two figures only in the whole wide frame."),
+    ],
+}
+# The lore-swap slugs are all non-winged now — drop the template's
+# "(or settling its wings)" aside so no wing token survives in their
+# prompts (scene tokens bleed into the reveal species).
+_SUB_NO_WINGS = [(" (or settling its wings)", "")]
+for _sid in ("glare_moth", "grave_moth", "beacon_moth", "hornet_swarm",
+             "coolant_crab", "drift_eel", "wire_eel", "night_hawk",
+             "windfall_crow"):
+    _MERCY_PROMPT_SUB[_sid] = (list(_MERCY_PROMPT_SUB.get(_sid, ()))
+                               + _SUB_NO_WINGS)
+# Non-mammal reveals also lose the CAT-SIZED/house-cat framing — cat
+# tokens chimera non-mammals (proven on spiders); mammal reveals keep
+# it (proven safe and it anchors their size).
+for _sid in ("glare_moth", "coolant_crab", "drift_eel", "wire_eel"):
+    _MERCY_PROMPT_SUB[_sid] = (list(_MERCY_PROMPT_SUB.get(_sid, ()))
+                               + _SUB_CUP_SIZE)
+# One short clause per event grounding the shot in its floor's own
+# zone landscape (from the floor YAML zone/arrival prose).
+_MERCY_LANDSCAPE = {
+    # floor 2 — The Rustwater Adit
+    "shellback_tortoise_freed": (
+        "A mine-mouth weeps orange iron-water; loaded ore-carts sit "
+        "on rails at the cut mountainside edge."),
+    # floor 3 — The Drowned Pasture
+    "wire_eel_freed": (
+        "Grey floodwater to the horizon; hedge-tops and half-drowned "
+        "fence-lines break the still surface."),
+    # floor 4 — The Lightless Glade
+    "glare_moth_freed": (
+        "A snuffed elf-wood: black unlit trees, ash-grey moss, one "
+        "guttering lamp against the dark."),
+    "lamp_eater_evicted": (
+        "A snuffed elf-wood, sap run dark, ash-grey glimmer-moss "
+        "underfoot, the last floodlight failing."),
+    "lamptree_wight_evicted": (
+        "The treeline of the dark elf-wood, black branches overhead, "
+        "ash-grey moss on the ground."),
+    # floor 5 — The Flooded Mine
+    "drift_eel_freed": (
+        "A flooded mine gallery: dead-flat black water, drowned gear "
+        "on drowned pegs, one lamp-beam."),
+    "coolant_crab_freed": (
+        "A drowned mine drift, shallow black water over stone, "
+        "lamplight glinting on wet rails."),
+    "bailer_kobold_fall": (
+        "A flooded mine gallery, black water at the boots, drowned "
+        "pumps and gear hanging on pegs."),
+    "miner_husk_evicted": (
+        "Gallery after gallery of dead-black floodwater, drowned "
+        "pump-gear on pegs, one lamp-beam."),
+    # floor 6 — The Threshold Dark
+    "grave_moth_freed": (
+        "A cavern floored deep in pale guano, silk in the high "
+        "corners, cold air, one lamp-beam."),
+    "silk_broodling_freed": (
+        "A lightless guano-floored cavern, silk drifted in the high "
+        "corners, one small lamp-glow."),
+    "vault_weaver_freed": (
+        "A vast dark stone vault, roof lost in blackness, pale silk "
+        "banked in the corners, lamplight pooling."),
+    # floor 7 — The Orchard Rows
+    "rabid_boar_freed": (
+        "Rotting orchard rows under floodlights, ground deep in "
+        "fermenting windfall apples, sweet haze."),
+    "hornet_swarm_freed": (
+        "Orchard rows gone to rot, air thick and sweet, idle presses "
+        "in the haze, windfall underfoot."),
+    "windfall_crow_freed": (
+        "Deep orchard rows, red windfall apples thick on the ground, "
+        "floodlights hazy overhead."),
+    "windfall_wight_evicted": (
+        "Rotting orchard rows under floodlights, black cider pooling "
+        "among the fermenting windfall."),
+    # floor 9 — The Beacon Field
+    "beacon_moth_freed": (
+        "A night signal-heath, aether-pylons flickering against the "
+        "dark, heather strobing light to dark."),
+    "night_hawk_freed": (
+        "A moonless signal-heath, pylon-beacons flickering, "
+        "knife-edged shadows sliding over heather."),
+    "shadow_wolf_freed": (
+        "A night heath of humming aether-pylons, knife-edged shadows "
+        "sliding across strobing heather."),
+    "pylon_adder_freed": (
+        "A dark heather moor under flickering aether-pylons, "
+        "cable-runs sparking blue along the path."),
+    "flicker_wight_evicted": (
+        "A strobing beacon-heath at night, aether-pylons flashing, a "
+        "junction box at the path edge."),
+    # floor 10 — The Kingsfield
+    "banner_wolf_freed": (
+        "Empty tent-lanes on a muster-meadow, rotted colorless "
+        "standards hanging on leaning poles."),
+    "muster_wight_evicted": (
+        "A churned muster-field of wet mire, rotted standards on "
+        "their poles in the dead grey air."),
+    # generics
+    "native_freed": (
+        "A wide bare fallow field under a grey lidded sky, open "
+        "ground to the horizon."),
+    "wrongmade_evicted": (
+        "A dark field lane at a hedgerow gap, one flickering pale "
+        "light overhead."),
 }
 
 
@@ -1045,6 +1330,9 @@ def _load_mercy_jobs() -> None:
             extra = _MERCY_SCENE_EXTRA.get(e["id"])
             if extra:
                 scene += " " + extra
+            land = _MERCY_LANDSCAPE.get(f"{e['id']}_{suffix}")
+            if land:
+                scene += " " + land
             was = str(e.get("was") or "the small true animal underneath")
             was = was.rstrip(" .")
             was = was[:1].lower() + was[1:]
@@ -1152,6 +1440,19 @@ EVENTS["wrongmade_evicted"] = {
     "tint": VIOLET, "seconds": 8, "loop": False, "hold_ms": 2000,
     "trim": (0.0, 6.0),
 }
+
+# The generics are hand-written literals, so the landscape clause and
+# prompt subs are folded in after the fact (the loader only covers
+# floor-built events).
+for _gid in ("native_freed", "pressed_fall", "wrongmade_evicted"):
+    _p = EVENTS[_gid]["prompt"]
+    _land = _MERCY_LANDSCAPE.get(_gid)
+    if _land:
+        _p = _p.replace(" From the very FIRST",
+                        " " + _land + " From the very FIRST", 1)
+    for _old, _new in _MERCY_PROMPT_SUB.get(_gid, ()):
+        _p = _p.replace(_old, _new)
+    EVENTS[_gid]["prompt"] = _p
 
 PANEL = (0x11, 0x15, 0x1F)
 

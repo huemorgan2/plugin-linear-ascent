@@ -338,7 +338,9 @@ def _breed_line(e: dict) -> str:
     so the [i] card says what the kill will mean before it lands."""
     breed = e.get("breed", "")
     if breed == "native":
-        was = e.get("was", "") or "an animal"
+        # `was` is a noun phrase by contract; shed a stray final period
+        # so the splice never doubles up.
+        was = (e.get("was", "") or "an animal").rstrip(" .")
         return f"Fevered — a possession riding {was}."
     if breed == "pressed":
         return "A conscript of the tower. Killing it is a death, not a cure."
@@ -1156,7 +1158,7 @@ def _victory(p: dict, floor) -> Scene:
         # A cure, not a kill — the blade ended the possession, and the
         # true animal underneath walks off. Never "defeated".
         headline = f"{e['name']} — freed"
-        was = e.get("was", "")
+        was = e.get("was", "").rstrip(" .")
         support = (f"The fever's shape drops away. "
                    f"{was[:1].upper()}{was[1:]} shakes itself loose and "
                    "slips back to the wild edges." if was else

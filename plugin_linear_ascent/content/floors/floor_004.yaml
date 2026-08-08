@@ -14,7 +14,7 @@ encounters:
     name: Pale stag
     kind: native
     was: >-
-      A wood-stag that grazed the lit glades.
+      a wood-stag that grazed the lit glades
     lore: >-
       Colorless and blind-white, it walks the dark by sound and gores
       at light.
@@ -28,7 +28,7 @@ encounters:
     name: Dusk-hare
     kind: native
     was: >-
-      A shy twilight hare of the wood's edge.
+      a shy twilight hare of the wood's edge
     lore: >-
       Fever-fast and fearless, it bolts from the dark straight at the
       eyes.
@@ -38,25 +38,24 @@ encounters:
       Something small and quick circles you in the black, closer with
       each pass. A hare — fearless, fever-fast, aimed at your eyes.
   - id: glare_moth
-    name: Lamp moth
+    name: Lamp newt
     kind: native
     was: >-
-      The palm-sized moths that pollinated the wick-flowers by
-      lamplight.
+      a glade-newt that dozed in the moss under the wick-flowers
     lore: >-
-      Grown to a hand-span and starving, they swarm any flame and
-      smother it.
+      It slept in lamplight once. Hand-span and starving now, it
+      smothers any flame.
     weight: 2
     traits: [flying, frail]
     prose: >-
-      Your lamp gutters and the dark grows wings — moths broad as two
-      hands, starving for the light, smothering the flame with their
-      own bodies.
+      Your lamp gutters as something wet climbs the glass — a newt
+      broad as two hands, starving for the light, smothering the flame
+      with its own body.
   - id: wick_owl
     name: Wick-owl
     kind: native
     was: >-
-      A lamplighter's companion owl that watched for guttering lamps.
+      a lamplighter's companion owl that watched for guttering lamps
     lore: >-
       Silent and over-large now, hunting warmth instead of watching
       flames.

@@ -11,24 +11,24 @@ arrival: >-
   light or bring nothing.
 encounters:
   - id: grave_moth
-    name: Grave-moth
+    name: Grave-rat
     kind: native
     was: >-
-      A pallid cave-moth of the roosts.
+      a pallid rat-pup of the guano beds
     lore: >-
-      Palm-broad and drawn to breath, it powders the eyes with
-      scale-dust.
+      Drawn to warm breath even then. Palm-broad now, it powders the
+      eyes with grave-dust.
     weight: 3
     traits: [flying, frail, feeble]
     prose: >-
-      Something soft strikes your cheek in the dark, then again —
-      palm-broad moths drawn to your breathing, powdering your eyes
-      with blinding dust.
+      Something soft drops onto your shoulder in the dark, then clings
+      — a palm-broad rat drawn to your breathing, kicking blinding
+      grave-dust into your eyes.
   - id: guano_vole
     name: Guano vole
     kind: native
     was: >-
-      A blind vole of the roost-floor.
+      a blind vole of the roost-floor
     lore: >-
       Bloated and bold, it gnaws boots, rope, and whatever the rope
       holds.
@@ -42,7 +42,7 @@ encounters:
     name: Cave broodling
     kind: native
     was: >-
-      A spiderling of the corner-silk.
+      a spiderling of the corner-silk
     lore: >-
       Dog-sized and hunting in threads — the first of many broods
       above.
@@ -55,7 +55,7 @@ encounters:
     name: Sentinel spider
     kind: native
     was: >-
-      The vault's big ambush-weaver.
+      the vault's big ambush-weaver
     lore: >-
       Fever-quick now, it drops on a shielded lamp from the unseen
       roof.
@@ -69,8 +69,8 @@ encounters:
     name: Vault boar
     kind: native
     was: >-
-      A drover's boar that followed the delver road down and never
-      came back up.
+      a drover's boar that followed the delver road down and never
+      came back up
     lore: >-
       Blind and guano-crusted, it plugs the narrow ways and gives you
       only its front. The one road on is through.

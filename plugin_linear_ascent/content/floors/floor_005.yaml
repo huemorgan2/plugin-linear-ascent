@@ -14,7 +14,7 @@ encounters:
     name: Blind cave-fish
     kind: native
     was: >-
-      Pallid schooling fish of the drowned galleries.
+      a shoal of pallid fish from the drowned galleries
     lore: >-
       Massed and biting, they boil the surface wherever warmth touches
       it.
@@ -25,24 +25,24 @@ encounters:
       eyeless fish, massed and biting at the first warmth this gallery
       has known in years.
   - id: drift_eel
-    name: Sump eel
+    name: Sump lamprey
     kind: native
     was: >-
-      A blind drift-eel of the deep water.
+      a blind cave-fish of the deep water
     lore: >-
-      Fever-long, it strikes up from the flat black at a lamp's
+      Fever-long now, it strikes up from the flat black at a lamp's
       reflection.
     weight: 2
     traits: [lean, fierce]
     prose: >-
-      The dead-flat water breaks without warning — a blind eel long as
-      a hoist-rope, striking up at your lamp's reflection with your
+      The dead-flat water breaks without warning — a blind fish long
+      as a hoist-rope, striking up at your lamp's reflection with your
       face behind it.
   - id: downs_courser
     name: Drift courser
     kind: native
     was: >-
-      A winder's hound that ran messages between the galleries.
+      a winder's hound that ran messages between the galleries
     lore: >-
       It still runs the dry drifts end to end, fever-fast, coursing
       anything that carries a light.
@@ -56,16 +56,16 @@ encounters:
     name: Sump-crawler
     kind: native
     was: >-
-      A cave-crab of the flooded drifts.
+      a pale cave salamander of the flooded drifts
     lore: >-
-      Shield-backed and many-legged, it scuttles the drowned floors
-      underfoot.
+      Soft-skinned once. Shield-backed and many-legged now, it scuttles
+      the drowned floors underfoot.
     weight: 2
     traits: [armor_low, sturdy, slow]
     prose: >-
-      The floor of the flooded drift moves under your boot — a
-      shield-backed crawler the size of a cart-wheel, sidling up out of
-      the black with its arms open.
+      The floor of the flooded drift moves under your boot — a pale
+      salamander the size of a cart-wheel, hauling up out of the black
+      with its mouth open.
   - id: bailer_kobold
     name: Bilge kobold
     kind: pressed

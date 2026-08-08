@@ -14,7 +14,7 @@ encounters:
     name: Marsh wolf
     kind: native
     was: >-
-      A fen-edge wolf that hunted the drier islands.
+      a fen-edge wolf that hunted the drier islands
     lore: >-
       Web-footed now, wading the channels between the ricks. It swims
       better than you pole.
@@ -28,7 +28,7 @@ encounters:
     name: Marsh adder
     kind: native
     was: >-
-      A shy grass-snake of the banks.
+      a shy grass-snake of the banks
     lore: >-
       Fever-bold now, striking from the reed at anything warm.
     weight: 3
@@ -41,7 +41,7 @@ encounters:
     name: Mire boar
     kind: native
     was: >-
-      A pasture boar that fed along the drowned hay.
+      a pasture boar that fed along the drowned hay
     lore: >-
       Mud-armored to the eyes, it beds in the reed and bursts out at a
       punt's shadow.
@@ -51,19 +51,19 @@ encounters:
       The reed-bank explodes and a boar comes through it mud-armored to
       the eyes, throwing a bow-wave. It heard your pole touch bottom.
   - id: wire_eel
-    name: Fence-wire eel
+    name: Fence-wire pike
     kind: native
     was: >-
-      A fen eel that hunted along the flooded fence-lines.
+      a blind white fish the flood carried up from some deep cellar
     lore: >-
-      Grown long around the drowned fence-wire until wire and eel are
-      one barbed length.
+      Grown long through the drowned fence-wire until steel and muscle
+      are one barbed length.
     weight: 2
     traits: [armor_low, lean]
     prose: >-
-      What looks like drowned fence-wire moves — an eel grown through
-      the barbs until steel and muscle are one length, sawing the water
-      toward your legs.
+      What looks like drowned fence-wire moves — a white fish grown
+      through the barbs until steel and muscle are one length, sawing
+      the water toward your legs.
   - id: windfall_haunt
     name: Drowned lantern
     kind: wrongmade

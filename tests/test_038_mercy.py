@@ -237,6 +237,21 @@ def test_kill_fx_legacy_family_logic_is_untouched():
                            False) == ""
 
 
+# ── content contract: `was` is a bare singular noun phrase ──────────────
+# The kill card splices it mid-sentence ("{Was} shakes itself loose…"),
+# so a trailing period or a leading capital reads as a broken sentence.
+
+def test_was_values_are_bare_noun_phrases():
+    for n in range(1, 11):
+        fl = schema.get_floor(n)
+        for enc in fl.encounters:
+            w = getattr(enc, "was", "") or ""
+            if not w:
+                continue
+            assert not w.rstrip().endswith("."), (n, enc.id, w)
+            assert not w[:1].isupper(), (n, enc.id, w)
+
+
 # ── the [i] dossier names what the thing is ─────────────────────────────
 
 def test_dossier_lines_per_kind():

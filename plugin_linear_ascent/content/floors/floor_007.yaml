@@ -14,7 +14,7 @@ encounters:
     name: Orchard wolf
     kind: native
     was: >-
-      A wolf that denned in the windbreak rows.
+      a wolf that denned in the windbreak rows
     lore: >-
       It hunts the rows in silent packs, drunk-bold on the haze.
     weight: 3
@@ -27,7 +27,7 @@ encounters:
     name: Cider-mad boar
     kind: native
     was: >-
-      A windfall-fed boar of the rows.
+      a windfall-fed boar of the rows
     lore: >-
       Reeling, furious, and fearless on fermented mush.
     weight: 2
@@ -37,37 +37,37 @@ encounters:
       in rot-cider, furious at nothing and now at you. It does not feel
       the branches it breaks.
   - id: hornet_swarm
-    name: Hornet swarm
+    name: Mouse-tide
     kind: native
     was: >-
-      The orchard's wasps, before the harvest rotted.
+      a single field mouse from under the press-house floor
     lore: >-
-      A single-minded swarm the size of a cart, following warmth and
-      sweat.
+      The wrongness would not let one small thing stay one. It follows
+      warmth and sweat as a hundred now.
     weight: 2
     traits: [flying, frail, fierce]
     prose: >-
-      The hum you took for the presses sharpens and swings toward you —
-      a swarm the size of a cart, moving as one mind, reading your
-      sweat on the sweet air.
+      The rustle you took for the presses sharpens and turns toward
+      you — a boiling carpet of mice the size of a cart, moving as one
+      mind, reading your sweat on the sweet air.
   - id: windfall_crow
-    name: Windfall crow
+    name: Windfall dormouse
     kind: native
     was: >-
-      A scrumping crow of the high forks.
+      a fat dormouse that slept in the high forks
     lore: >-
-      Bloated on rot, mobbing in drunk spirals, going for the eyes.
+      Bloated on rot, reeling in drunk spirals, going for the eyes.
     weight: 2
     traits: [flying, frail, feeble]
     prose: >-
-      The flock lifts off the windfall in a drunken spiral and folds
-      onto you all at once — crows bloated on rot, mobbing for the
+      Something heavy drops out of the high forks and comes reeling
+      across the windfall — a dormouse bloated on rot, going for the
       eyes.
   - id: orchard_hare
     name: Orchard hare
     kind: native
     was: >-
-      A bark-nibbling hare of the rows.
+      a bark-nibbling hare of the rows
     lore: >-
       Fever-swift, bolting between the rows into shins and ankles.
     weight: 2

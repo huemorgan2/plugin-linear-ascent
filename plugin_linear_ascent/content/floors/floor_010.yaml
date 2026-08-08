@@ -27,7 +27,7 @@ encounters:
     name: Banner-broken wolf
     kind: native
     was: >-
-      A camp-follower wolf of the muster.
+      a camp-follower wolf of the muster
     lore: >-
       Tangled in dragging colors, it hunts the tent-lanes.
     weight: 2
@@ -40,7 +40,7 @@ encounters:
     name: Courier-hound
     kind: native
     was: >-
-      A message-dog of the muster line.
+      a message-dog of the muster line
     lore: >-
       It runs its dead routes forever, savaging what it finds on them.
     weight: 2
@@ -53,7 +53,7 @@ encounters:
     name: Parade-horse
     kind: native
     was: >-
-      A war-horse of the line.
+      a war-horse of the line
     lore: >-
       Riderless and fever-wild, it tramples the churned field.
     weight: 2
@@ -66,7 +66,7 @@ encounters:
     name: Banner-kite
     kind: native
     was: >-
-      A scavenging kite of the camps.
+      a scavenging kite of the camps
     lore: >-
       Nesting in the standards, it stoops on anything bright.
     weight: 2

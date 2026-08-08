@@ -13,7 +13,7 @@ encounters:
     name: Grey wolf
     kind: native
     was: >-
-      The shy grey wolf the farm dogs kept past the fences.
+      the shy grey wolf the farm dogs kept past the fences
     lore: >-
       Farm dogs once kept them past the fences. The dogs are gone; the
       wolves remember the gap in the third hedge.
@@ -25,7 +25,7 @@ encounters:
     name: Feral boar
     kind: native
     was: >-
-      Sty stock, escaped — an ordinary boar under the fever.
+      an ordinary sty boar, escaped, under the fever
     lore: >-
       Sty stock gone wild in two generations. It charges first and
       decides why later.
@@ -38,7 +38,7 @@ encounters:
     name: Hedgerow rat
     kind: native
     was: >-
-      A granary rat that ate its fill in the dark and kept growing.
+      a granary rat that ate its fill in the dark and kept growing
     lore: >-
       Granary doors stood open the night the farms fell. What ate its
       fill in the dark kept growing.
@@ -51,8 +51,8 @@ encounters:
     name: The last pack
     kind: native
     was: >-
-      The steading's own sheepdogs — the very dogs that once kept the
-      wolves out.
+      one of the steading's own sheepdogs — the very dogs that once
+      kept the wolves out
     lore: >-
       The steading's sheepdogs, feral now, hunting in a silent ring.
       One of them still turns its head at a whistle.

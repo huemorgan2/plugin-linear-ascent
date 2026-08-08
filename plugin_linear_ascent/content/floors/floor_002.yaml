@@ -13,7 +13,7 @@ encounters:
     name: Rust hound
     kind: native
     was: >-
-      A pit-dog that hauled carts and slept warm by the forge.
+      a pit-dog that hauled carts and slept warm by the forge
     lore: >-
       Iron-scale coats it and its jaws lock half-open. The packs still
       run the rails, hauling nothing.
@@ -27,7 +27,7 @@ encounters:
     name: Cave cricket
     kind: native
     was: >-
-      A harmless roof-cricket of the entrance hall.
+      a harmless roof-cricket of the entrance hall
     lore: >-
       Fist-sized now, it springs man-high and strips leather and
       lamp-wick down to nothing.
@@ -41,7 +41,7 @@ encounters:
     name: Shellback tortoise
     kind: native
     was: >-
-      A sump-pool tortoise the pit crews kept for luck.
+      a sump-pool tortoise the pit crews kept for luck
     lore: >-
       Grown door-broad in the flooded drift, shell crusted to
       rust-plate. It holds the narrow ways like a gate.
