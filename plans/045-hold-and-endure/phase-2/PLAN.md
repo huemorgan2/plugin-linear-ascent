@@ -49,3 +49,18 @@ Then the phase-relevant suite: `pytest tests/test_014_inventory_tooltips.py test
 `git revert` the phase commit — `wear_*` from the pack simply stops
 being offered; state written by it (gear/durability swaps) is exactly
 what the Forge path writes, so no cleanup.
+
+## Execution status
+
+**Done** — commit `00cb26f` (2026-08-09). `pack_actions` FORGE branch
+offers `wear_<slug>` (weapon "Use this", shield "Use as shield" /
+sorcerer "Hold this focus", armor "Wear this", shoes "Wear these");
+equipped spare refuses with "Already in your hand."/"Already worn." —
+an improvement over the old silent no-op that reset honing.
+`_pack_use` routes `wear_*` to `_wear_from_pack`; refused mid-fight.
+Unit tests: equips + durability travels via `durability_pack`, old
+piece back to pack + hone reset, no promotion mid-fight, equipped-spare
+refusal. Production dojo 2026-08-10: `wear_scrapwood_buckler` promoted
+the packed spare ("+ Scrapwood Buckler back on — the Warded Scrapwood
+Buckler goes to your pack"), gear flip confirmed via `/v1/character`,
+and its wear (END 1,035/1,083) traveled through the pack intact.

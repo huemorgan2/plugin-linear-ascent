@@ -54,3 +54,15 @@ time (never hand-edit vendor).
 `git revert` the phase commit. No data migration in either direction —
 stale `scout_charges` keys in saves are inert and re-created (at 0) by
 `new_player` if the revert restores the field.
+
+## Execution status
+
+**Done** — commit `31fa497` (2026-08-09). Scout option + handler out of
+combat.py; `scan_xp_cost`/`scout_optics` out of economy.py; medlab buy
+branch, sidekick `scout_charges`, tips, and the 16×16 icon removed;
+prose scans→mending in economy/plugin/social. 5 test files trimmed,
+4 scenario .mds rewritten. Targeted tests green at commit time; full
+suite 987 passed on the merged tree (see plan-level status).
+Production dojo 2026-08-10: fight card rows
+`['close_in','stand','run','shield_wall']`, medlab shelf without
+Scout optics, string `scout` absent from every payload probed.

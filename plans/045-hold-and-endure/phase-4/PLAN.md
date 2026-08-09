@@ -45,3 +45,18 @@ Then `pytest tests/test_engine.py tests/test_031_the_shape_of_things.py tests/te
 
 `git revert` the phase commit — pure option-list construction, no
 state.
+
+## Execution status
+
+**Done** — commit `66133c0` (2026-08-09). `_after_fight_options`
+delegates to `core._gate_town_options` (hunt row relabeled "Hunt the
+wilds again"; `gate` row inserted when `unlocked_floor > floor`); all
+four exit sites already set `location = "gate_town"` first, so every
+borrowed id round-trips through the normal dispatch. Victory card
+carries `option_art` floor tiles (first-clear reel branch keeps its
+bare next/skip). Unit tests: full menu incl. hunt_deep/stew/heal/
+use_medgel/keep/talk/town, gate iff frontier above floor, monument
+keep wording below the frontier, and a deepcopy round-trip of every
+offered id. Production dojo 2026-08-10: victory card rows
+`['hunt','gate','stew','heal','keep','talk','town']` with hunt/
+hunt_deep/keep tiles riding option_art.

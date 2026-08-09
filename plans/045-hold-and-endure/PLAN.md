@@ -107,3 +107,34 @@ None needed — nothing is down; these are UX defects.
   stage only files this plan touches; never `git add -A`.
 - `scout_charges` stays as a stale key in live saves; nothing reads it,
   and state.py does not prune unknown sidekick keys. Harmless.
+
+## Execution status
+
+**Shipped 0.59.0** — 2026-08-09/10.
+
+- Phases 1–4 executed and committed in order: `31fa497`, `00cb26f`,
+  `c50888c` (+`03724ad`), `66133c0`; per-phase status appended in each
+  phase PLAN.md.
+- Mid-ship, `origin/main` held the live 043 kill-bar line (0.58.0) that
+  this checkout lacked — merged as `4773e1e` (conflicts: two version
+  stamps kept at 0.59.0; test_economy took 043's numbers minus the
+  scan row). Full suite on the merged tree: **987 passed, 1 skipped,
+  0 failed** (the merge also replaced two date-flaky tests that failed
+  on both sides before it).
+- Difficulty gate: output byte-identical to the live 043 tip
+  (`dcf5172`), including its pre-existing `ACCEPTANCE: FAIL (early
+  game)` — floors 1–5 median 7.0 mirror-days. 045 adds zero drift
+  (display + option-list only). The early-game miss is 043's, was live
+  before this ship, and is left for a 043 follow-up.
+- Deploy: plugin `4773e1e` pushed (huemorgan2); vendored via
+  `worldd/tools/vendor_game.sh`; outer commit `c9c75de` pushed;
+  Render auto-deploy was stale so `render deploys create
+  srv-d9ha3csvikkc73ff5rg0 --confirm --wait` ran →
+  `dep-d9sek2pt0dsc73bihirg` live; `/health` → `"game":"0.59.0"`.
+- Marketplace: 0.59.0 packaged (1071 files) and published to
+  `official`; index checked immediately before (0.57.1) and after
+  (0.59.0, sha256 `af16be23…a472bd8a` == local zip). The 0.57.1→0.59.0
+  jump also closes the marketplace-vs-vendor skew.
+- Production dojo walkthrough: **7/7 PASS** —
+  `dojo/results/045-hold-and-endure-2026-08-10/summary.md` (outer
+  repo). No regressions filed.

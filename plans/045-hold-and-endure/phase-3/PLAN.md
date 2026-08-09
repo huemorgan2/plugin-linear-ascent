@@ -59,3 +59,30 @@ Inheritance: vendored at ship time.
 ## Rollback
 
 `git revert` the phase commit — display-only; no state written.
+
+## Execution status
+
+**Done** — commit `c50888c` + test follow-up `03724ad` (2026-08-09).
+`economy.endurance(item, left=None)` — pool·bonus/(2·rate) for
+shield/armor, pool for the rest; display-only, no combat math or save
+change. Forge buy hints, style rows, locked rows, repair rows
+(`END left → total`), pack strip (`dur_left`/`dur_max` incl. packed
+gear), hover (`END left/total`, falls back to % against older
+servers), item tips, and the sheet all speak END.
+
+The numbers as shipped (plain style, warrior-visible lines):
+
+| Tier | Shield | ◈ | DEF | END | Armor | ◈ | DEF | END |
+|---|---|---|---|---|---|---|---|---|
+| T1 | Scrapwood Buckler | 100 | +5 | 1,083 | Padded Jerkin | 200 | +7 | 1,517 |
+| T2 | Ironbound Targe | 320 | +15 | 4,062 | Riveted Leather | 640 | +23 | 6,229 |
+| T3 | Dwarven Wall | 2,600 | +25 | 8,125 | Chain Hauberk | 5,200 | +39 | 12,675 |
+| T4 | Elfmirror | 8,000 | +35 | 13,271 | Silverthread Mail | 16,500 | +55 | 20,854 |
+| T5 | Drakescale Barrier | 18,500 | +45 | 19,500 | Wyrmhide Coat | 37,500 | +71 | 30,767 |
+
+Styles at one rung: keen 845 < base 1,083 < warded 1,896 (shield T1) —
+patience is paid for. Unit tests pin END monotone with price per
+slot+line ladder, style ordering, and displayed END falling by the
+damage turned (±bonus). Production dojo 2026-08-10: all 20 forge rows
+with DEF carried END; sheet read `Scrapwood Buckler (END 1,035/1,083)`
+after 48 damage-units absorbed.
