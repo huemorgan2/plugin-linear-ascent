@@ -343,7 +343,11 @@ def test_sheet_names_worn_and_broken():
     p = create_character(fresh("sheeted"))
     p["gear"]["weapon"] = "pigsticker"
     p["durability"]["weapon"] = economy.durability_pool(1) // 2
-    assert "worn to 50%" in character_sheet(p)["gear"]["weapon"]
+    # 045 §3: the sheet says the wear in END, the unit the forge sells
+    half = economy.durability_pool(1) // 2
+    g = economy.FORGE["pigsticker"]
+    want = f"END {economy.endurance(g, half):,}/{economy.endurance(g):,}"
+    assert want in character_sheet(p)["gear"]["weapon"]
     p["durability"]["weapon"] = 0
     assert "BROKEN" in character_sheet(p)["gear"]["weapon"]
 
