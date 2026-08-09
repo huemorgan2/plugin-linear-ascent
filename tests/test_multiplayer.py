@@ -65,7 +65,7 @@ def test_strike_joins_a_full_fight_whose_wounds_persist():
     assert p["encounter"] is None, "the getaway must eventually work"
     fx = [x for x in p["_effects"] if x["kind"] == "warden_strike"]
     assert fx == [{"kind": "warden_strike", "floor": 1, "damage": 37,
-                   "taken": 23}]
+                   "taken": 15}]
     # optimistic display: the pool the next card reads already dropped
     assert p["_world"]["warden"]["hp"] == hp_before - 37
 

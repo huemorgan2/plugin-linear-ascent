@@ -17,7 +17,7 @@ encounters:
       congregation. The litany turns spellwork back like heat off a
       firebox.
     weight: 3
-    traits: [resist_med]
+    traits: [resist_med, feeble]
     prose: >-
       A priest of the down-going faith turns from its altar, censer
       streaming coal-smoke, firebox heart glowing through the
@@ -29,7 +29,7 @@ encounters:
       Heresy duty is the only part of the liturgy they enjoy, and you are
       unmistakably not in the hymnal.
     weight: 3
-    traits: [fast]
+    traits: [fast, lean, feeble]
     prose: >-
       The choir loft empties as one — a dozen imps in singed
       surplices, still holding the note. Heresy duty is the only
@@ -41,7 +41,7 @@ encounters:
       Chained to the pew by its own request. Absolution, in the March, is
       worked off in single combat.
     weight: 2
-    traits: [armor_med]
+    traits: [armor_med, fierce]
     prose: >-
       A hellknight kneels in the nave doing penance for some sin no
       one will name, chained to the pew by its own request. It looks
@@ -53,7 +53,7 @@ encounters:
       Enough coal-smoke has been swung at the King's name that some of it
       stayed to listen.
     weight: 2
-    traits: [flying, resist_low]
+    traits: [flying, resist_low, sturdy, savage]
     prose: >-
       The censer-smoke over the nave stops rising and starts deciding — a
       haunt of grey coils drifting down the aisle toward you, keeping

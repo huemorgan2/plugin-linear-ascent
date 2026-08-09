@@ -15,7 +15,7 @@ encounters:
       It was in the breach when the doors came down, and the warframe
       still carries the dwarf-fire scars. It is owed, it feels.
     weight: 3
-    traits: [armor_med]
+    traits: [armor_med, feeble]
     prose: >-
       A veteran of the breach, warframe scarred by dwarf-fire, patrols
       the fallen doors it helped fell. It remembers this floor costing
@@ -26,6 +26,7 @@ encounters:
       A keg under each arm and a fuse for a scarf. It has outlived every
       crew it ever served, which should worry the crews.
     weight: 3
+    traits: [frail, feeble]
     prose: >-
       A kobold in a scorched apron trots past with a keg under each
       arm, fuse-cord looped around its neck like a scarf. It grins and
@@ -36,7 +37,7 @@ encounters:
       One door-engine survived the breach and never accepted it. It cannot
       be argued past — only outlasted.
     weight: 2
-    traits: [bulwark, slow]
+    traits: [bulwark, slow, fierce]
     prose: >-
       One dwarven door-engine survived the breach, and it has not
       accepted the news. It holds a doorway with no door, halberd-arms
@@ -47,7 +48,7 @@ encounters:
       It followed the Red Orcs up-tower the way crows have always followed
       armies. The breach was the best day of its life.
     weight: 2
-    traits: [flying]
+    traits: [flying, sturdy, fierce]
     prose: >-
       A crow the size of a dog drops off a fallen door-slab and beats up
       into the scorched dark, circling — it has watched enough battles
@@ -58,6 +59,7 @@ encounters:
       The breach cooked everything in the hall but the rats, and the rats
       took notes.
     weight: 2
+    traits: [sturdy, savage]
     prose: >-
       A rat with burn-bald patches works the seam of a fallen door, prying
       at old rations. It looks up with the flat calm of a survivor and

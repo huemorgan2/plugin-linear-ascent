@@ -16,7 +16,7 @@ encounters:
       Nine climbers' names recited as introduction and warning. The
       speech-runed plate has turned everything they tried.
     weight: 3
-    traits: [armor_high]
+    traits: [armor_high, feeble]
     prose: >-
       A hellknight of the Herald's own guard steps into the road,
       armor chased in speech-runes that mutter as it moves. It has
@@ -28,6 +28,7 @@ encounters:
       It refuses, absolutely, to set the banner down — the banner is the
       post.
     weight: 3
+    traits: [frail, feeble]
     prose: >-
       An imp staggers under a procession banner three times its
       height and refuses, absolutely, to set it down — the banner
@@ -39,7 +40,7 @@ encounters:
       The proclamation is your death notice, read in advance, at a volume
       that loosens rivets.
     weight: 2
-    traits: [slow]
+    traits: [slow, lean, savage]
     prose: >-
       A welded hulk built as a walking loudspeaker wheels onto the
       road and opens every horn on its chassis. The proclamation is
@@ -51,7 +52,7 @@ encounters:
       It roosts in the proclamation horns between readings. The readings
       have made it deaf and fearless.
     weight: 2
-    traits: [flying]
+    traits: [flying, hulking, fierce]
     prose: >-
       When the horns fall silent a bat spills out of the largest bell-
       mouth, flying by memory instead of ear, and its memory says the road

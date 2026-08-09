@@ -16,7 +16,7 @@ encounters:
       It leans into the gale holding a shield the size of a barn door —
       shelter for travelers, for a fee. You are past due.
     weight: 3
-    traits: [armor_med]
+    traits: [armor_med, feeble]
     prose: >-
       A frost giant leans into the gale at the third wall, holding a
       shield the size of a barn door for travelers to shelter behind
@@ -27,7 +27,7 @@ encounters:
       It runs with the gale at its back and arrives at twice a wolf's
       honest speed. The bell rings once.
     weight: 3
-    traits: [fast]
+    traits: [fast, lean, feeble]
     prose: >-
       The wolves here have learned to run with the gale at their
       backs, arriving at twice a wolf's honest speed. The bell rings
@@ -38,6 +38,7 @@ encounters:
       Paid in fish heads and deference. Today the shutters stay down, and
       its back is against them.
     weight: 2
+    traits: [hulking, fierce]
     prose: >-
       An ice troll operates the storm shutters at the crossing, paid
       in fish heads and deference. Today it has decided the shutters
@@ -48,7 +49,7 @@ encounters:
       It is the only thing that flies the pass by choice, and it uses the
       wind the way an angler uses a river.
     weight: 3
-    traits: [flying]
+    traits: [flying, lean, savage]
     prose: >-
       Something rides the pass wind without a single wingbeat — a kite-
       shape holding station over the crossing slot, waiting for the sprint

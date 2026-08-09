@@ -17,7 +17,7 @@ encounters:
       tire, it does not move fast, and it does not need to — the fire does
       the waiting.
     weight: 1
-    traits: [bulwark, slow]
+    traits: [bulwark, slow, savage]
     prose: >-
       The ogre who keeps this terrace comes to the edge of its kiln
       light, a rake of welded rebar over one shoulder. It points at
@@ -28,7 +28,7 @@ encounters:
       Somebody's prize mouser, collared in copper, sleek with heat, and
       off its rope. Spells break on it like spray on a kiln door.
     weight: 3
-    traits: [resist_med]
+    traits: [resist_med, feeble]
     prose: >-
       The ogres keep salamanders the way farmers keep barn cats, and
       this one is somebody's prize mouser — collared in copper, sleek
@@ -39,7 +39,7 @@ encounters:
       It is working out why the fire died and whether the answer is
       edible. Its head keeps you in view all the way around.
     weight: 2
-    traits: [flying]
+    traits: [flying, lean, savage]
     prose: >-
       A cinder vulture squats on a cold kiln, working out why the fire
       died and whether the answer is edible. It turns its scorched
@@ -50,6 +50,7 @@ encounters:
       The clans keep goats on the terraces for milk and temper. Mostly
       temper.
     weight: 4
+    traits: [frail, feeble]
     prose: >-
       A goat with singed horns and a chewed copper collar takes the
       terrace steps in two jumps and lowers its head — the clans breed

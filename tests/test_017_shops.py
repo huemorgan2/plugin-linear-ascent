@@ -362,7 +362,7 @@ def test_focus_refused_to_non_casters():
     ids = {o.id for o in s.options}
     assert "buy_sootglass_bead" not in ids
     s = choose(p, "buy_sootglass_bead")
-    assert p["gear"]["shield"] is None
+    assert p["gear"]["shield"] == economy.GATE_SHIELD.slug
     # the off-class staff IS on the rack, one rung back, ×3
     staves = {g.slug for g in economy.weapon_line("sorcerer")}
     staff = next((o for o in s.options

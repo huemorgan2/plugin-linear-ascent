@@ -16,7 +16,7 @@ encounters:
       Whatever it dreams while it grazes, you have just walked into it,
       and it objects.
     weight: 3
-    traits: [resist_low]
+    traits: [resist_low, lean, feeble]
     prose: >-
       A nightmare lifts its head from the black grass and considers
       you with eyes like banked coals. Whatever it dreams while it
@@ -28,7 +28,7 @@ encounters:
       and the herd and hopes you will insist — you will not wear it down
       before dark.
     weight: 3
-    traits: [bulwark]
+    traits: [bulwark, feeble]
     prose: >-
       The stallion comes over at a walk, which the herd-boys will
       tell you is the bad sign — a tower of black muscle and slow
@@ -40,7 +40,7 @@ encounters:
       Chosen for patience. It watched you cross half a mile of meadow
       without moving. Now it moves.
     weight: 2
-    traits: [fast]
+    traits: [fast, lean, savage]
     prose: >-
       The hounds that mind the herd are chosen for patience, and
       this one has been watching you cross the meadow for half a
@@ -51,7 +51,7 @@ encounters:
       It nests in the whispering grass and screams the herd's alarms. The
       herd-boys hate it more than the herd.
     weight: 2
-    traits: [flying]
+    traits: [flying, hulking, fierce]
     prose: >-
       The black grass detonates a wingspan from your boot — a crake going
       up in a clatter of dark feathers, circling back at head height to

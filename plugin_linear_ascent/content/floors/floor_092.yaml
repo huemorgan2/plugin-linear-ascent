@@ -16,7 +16,7 @@ encounters:
       A century against its own reflection, and the reflection finally let
       it win. Dueling here is how the court says hello.
     weight: 3
-    traits: [fast]
+    traits: [fast, frail, feeble]
     prose: >-
       A demon of the lesser court has been practicing against its
       own reflection for a century, and the reflection finally let
@@ -28,7 +28,7 @@ encounters:
       Its owner died at some forgotten intrigue. It has found a body it
       likes, and spells slide off the glass it lives behind.
     weight: 3
-    traits: [resist_med]
+    traits: [resist_med, feeble]
     prose: >-
       A reflection whose owner died at some forgotten intrigue still
       walks the black glass, hall to hall, looking out. It has found
@@ -40,7 +40,7 @@ encounters:
       All silk and sympathy until the third sentence, when the sympathy
       runs out and the silk turns out to be wire.
     weight: 2
-    traits: [resist_low]
+    traits: [resist_low, sturdy, fierce]
     prose: >-
       A courtier falls into step beside you, all silk and sympathy,
       trading rumors you did not ask for. Somewhere in the third
@@ -52,6 +52,7 @@ encounters:
       It tends the gallery lamps and taxes every shadow they throw. Yours
       arrived unregistered.
     weight: 2
+    traits: [sturdy, savage]
     prose: >-
       An imp swings down from a lamp-sconce with a taper-snuffer held like
       a halberd, counts your reflections in the black glass, and presents

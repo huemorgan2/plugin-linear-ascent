@@ -16,7 +16,7 @@ encounters:
       It looks you over as stock, checks the feeding book, and unclips the
       first lead. The apron has seen use.
     weight: 3
-    traits: [resist_med]
+    traits: [resist_med, feeble]
     prose: >-
       The kennel-master comes out wiping its hands on a leather
       apron that has seen use. It looks you over as stock, checks
@@ -27,7 +27,7 @@ encounters:
       She does not run with the hunts anymore; she trains what does. The
       whole court goes quiet to watch the lesson.
     weight: 3
-    traits: [slow]
+    traits: [slow, frail, feeble]
     prose: >-
       The oldest hound in the kennels does not run with the hunts
       anymore; she trains what does. She comes off her stone bench
@@ -39,7 +39,7 @@ encounters:
       Stabled for re-breaking, and the door is open again. It wears its
       freedom like a dare.
     weight: 2
-    traits: [fast]
+    traits: [fast, lean, savage]
     prose: >-
       A nightmare is stabled here for re-breaking, and it has
       gotten the door open again. It comes across the court trailing
@@ -50,7 +50,7 @@ encounters:
       The winged things in the mews are hooded for a reason. This one
       worked its hood off.
     weight: 2
-    traits: [flying]
+    traits: [flying, hulking, fierce]
     prose: >-
       Something leaves the mews' dark through a gap no wider than a hymnal
       — an owl in a torn hood, climbing fast, and the first stoop is for

@@ -16,7 +16,7 @@ encounters:
       Little more than vestments and wind, still making its rounds. The
       fines are old law, and old law does not haggle.
     weight: 3
-    traits: [resist_med]
+    traits: [resist_med, feeble]
     prose: >-
       The keeper of the yards still makes its rounds, keys at its belt,
       little more than vestments and wind. It finds a gate you left
@@ -27,7 +27,7 @@ encounters:
       With the birds gone the ghouls took over the sky-burial work. This
       one is lean, fast, and behind on quota.
     weight: 3
-    traits: [fast]
+    traits: [fast, frail, feeble]
     prose: >-
       With the birds gone, the ghouls have taken over the work, and
       they resent the workload. This one comes over the garth wall
@@ -38,7 +38,7 @@ encounters:
       The laid-out dead grew tired of waiting for a sky that never comes.
       Together they are patient, and slow, and many.
     weight: 2
-    traits: [slow]
+    traits: [slow, lean, savage]
     prose: >-
       One of the laid-out dead has grown tired of waiting for the sky
       and gathered its neighbors for company. The heap moves like a
@@ -49,6 +49,7 @@ encounters:
       The rats do the birds' old work now, badly. The garths have never
       been so crowded.
     weight: 1
+    traits: [hulking, fierce]
     prose: >-
       A rat the size of a terrier works along a burial platform with a
       tradesman's confidence, sees you watch, and takes offense at the

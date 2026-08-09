@@ -204,15 +204,17 @@ def monster_stats(floor: int) -> tuple[int, int, int]:
 # The PEER (no bite word) is left exactly as calibrated in 004/008/022 —
 # 025 adds the range around it, it does not re-tune the middle.
 
-BODY_ROUNDS = {"frail": 0.45, "lean": 0.75, "sturdy": 1.8, "hulking": 2.4}
-# MEASURED against the 017 fight sim, not derived on paper. The paper
-# figures (0.35/0.70 of the pool) read as lethal and played as harmless:
-# fights open AT RANGE, where a monster strikes at −50% while it closes,
-# so a short fight lands one halved blow and the killer archetype still
-# won 88% of the time. At 0.5/1.0 the sim gives brutes a 92% mean win and
-# killers 74% — fight a killer to the end and one time in four it buries
-# you, which is what "you will have to run from some of them" means.
-BITE_COST = {"feeble": 0.05, "fierce": 0.50, "savage": 1.00}
+# 043: the body stretches or shrinks the fight around the anchor; the
+# spread narrowed (was 0.45–2.4) because length no longer carries threat
+# — the bar does. Values shape texture, never difficulty.
+BODY_ROUNDS = {"frail": 0.6, "lean": 0.8, "sturdy": 1.35, "hulking": 1.7}
+# 043: the bite is a MULTIPLIER on the bar's calibrated lethality κ —
+# a feeble thing at its bar is a slightly kind fight, a savage one
+# slightly cruel, both inside the ±5% win tolerance. Which BAR a
+# creature stands on (the real difficulty) is BITE_OFFSET/BODY_OFFSET
+# below; pre-043 these values were absolute pool shares (0.05–1.0) and
+# feeble prey stayed harmless on every floor forever.
+BITE_COST = {"feeble": 0.85, "fierce": 1.0, "savage": 1.1}
 
 WILDS_ROUNDS_HARD_MAX = 11.0    # the longest any wilds body may run
 # No wilds creature may take more than this share of the pool in ONE
@@ -229,6 +231,57 @@ def _archetype(traits) -> tuple[str, str]:
         elif t in BITE_COST:
             bite = t
     return body, bite
+
+
+# ── 043: the bar — one difficulty ladder for a hundred floors ────────────
+# Bar B = the design's reference loadout of floor B (level min(B, 30),
+# reference rung + hone of floor B). Below 30 it climbs mostly by
+# levels; above, entirely by steel. Every creature is anchored to a
+# target bar T = floor + offset, offset read off the archetype and
+# clamped to [−2, +1]: the floor's easiest kill rises with the floor
+# (the 043 minimum bar), and something always stands one bar above you.
+# "Anchored" is a measurement, not a metaphor: the bar-T reference
+# player beats the creature ~90% of the time in the /mechanics
+# Monte-Carlo; κ below is calibrated against that sim, not on paper.
+
+BAR_MAX = 101                  # bar 101 = floor-101 steel, the ceiling
+
+BODY_OFFSET = {"frail": -1, "lean": -1, "sturdy": 0, "hulking": 1}
+BITE_OFFSET = {"feeble": -1, "fierce": 0, "savage": 1}
+BAR_OFFSET_MIN, BAR_OFFSET_MAX = -2, 1
+
+# κ: total damage a creature deals across its whole fight, as a share
+# of its BAR's reference HP pool — the knob that puts the at-bar win at
+# ~90%. Interpolated by bar: short low-bar fights are high-variance and
+# need a lower share for the same win rate. CALIBRATED (tools/
+# calibrate_bars.py), warrior model, plain profile.
+_KAPPA_TABLE: dict[int, float] = {
+    1: 0.732, 5: 0.781, 10: 0.806, 20: 0.795, 40: 0.778, 70: 0.780,
+    101: 0.762,
+}
+
+
+def _kappa(bar: int) -> float:
+    """Lethality share for `bar`, linear between calibration probes."""
+    pts = sorted(_KAPPA_TABLE.items())
+    if bar <= pts[0][0]:
+        return pts[0][1]
+    for (b0, k0), (b1, k1) in zip(pts, pts[1:]):
+        if bar <= b1:
+            return k0 + (k1 - k0) * (bar - b0) / (b1 - b0)
+    return pts[-1][1]
+
+
+def bar_offset(traits) -> int:
+    """How far from its floor this archetype stands, in bars."""
+    body, bite = _archetype(traits)
+    off = BODY_OFFSET.get(body, 0) + BITE_OFFSET.get(bite, 0)
+    return max(BAR_OFFSET_MIN, min(BAR_OFFSET_MAX, off))
+
+
+def creature_bar(floor: int, traits) -> int:
+    """The bar this creature is anchored to — stats AND pay key off it."""
+    return max(1, min(BAR_MAX, floor + bar_offset(traits)))
 
 # What the opener says about a shape you must read BEFORE committing —
 # running is only a real choice if the card tells you what walked in.
@@ -253,51 +306,59 @@ def archetype_note(traits) -> str:
 
 
 def creature_rounds(floor: int, traits) -> float:
-    """Rounds-to-kill for THIS creature — the calibrated floor target
-    stretched by its body, capped so nothing is ever a slog."""
+    """Rounds-to-kill for THIS creature at its own bar — the bar's
+    calibrated target stretched by its body, capped: never a slog."""
     body, _ = _archetype(traits)
     return min(WILDS_ROUNDS_HARD_MAX,
-               wilds_rounds(floor) * BODY_ROUNDS.get(body, 1.0))
+               wilds_rounds(creature_bar(floor, traits))
+               * BODY_ROUNDS.get(body, 1.0))
+
+
+# 043: bar 1 is the tutorial rung. Its fight cost is softened so the
+# gate-issue kit (weapon 5 vs the reference 8) still farms prey ≥90%
+# and meets the at-bar shapes near the design 90% — calibrated with
+# tools/calibrate_bars.py's fight model against the fresh sheet.
+WILDS_BAR1_SOFT = 0.75
 
 
 def creature_stats(floor: int, traits) -> tuple[int, int, int]:
-    """(ATK, DEF, HP) for THIS creature on `floor`. DEF stays flat — the
-    defense axis (armor/resist tiers) is how content varies durability;
-    the archetype varies the body and the bite."""
-    base_atk, dfs, base_hp = monster_stats(floor)
+    """(ATK, DEF, HP) for THIS creature on `floor` — 043: everything is
+    derived from its BAR, not its floor. DEF stays flat per bar; the
+    defense axis (armor/resist tiers) remains the class-matchup layer on
+    top and is deliberately NOT bar-neutralized."""
+    bar = creature_bar(floor, traits)
+    body, bite = _archetype(traits)
+    dfs = 3 * bar
+    # HP: what the bar's reference player grinds through in `rounds`.
+    p_atk, p_def = _at_level_loadout(bar)
+    p_dmg = max(1, round(0.75 * p_atk) - dfs // 2)
     rounds = creature_rounds(floor, traits)
-    hp = max(1, round(base_hp * rounds / wilds_rounds(floor)))
-    _, bite = _archetype(traits)
-    if not bite:
-        return base_atk, dfs, hp
-    pool = reference_player_hp(floor)
-    _, p_def = _at_level_loadout(floor)
-    # A killer spends its whole cost inside its OWN body: a lean savage
-    # has fewer rounds to do it in, which is what makes it a glass cannon.
-    # A starved animal is budgeted over the calibrated peer length
-    # instead — otherwise a frail body (0.45× the rounds) divides the
-    # small cost by a small number and the prey bites like its peer again,
-    # which is exactly what it looked like on screen.
-    span = wilds_rounds(floor) if bite == "feeble" else rounds
-    per_round = min(BITE_COST[bite] * pool / span, WILDS_ROUND_CAP * pool)
+    hp = max(1, round(p_dmg * rounds))
+    # ATK: across the whole fight the creature deals κ(bar) — nudged by
+    # its bite — of the bar's reference pool. Short bodies spend it in
+    # fewer rounds and hit harder per round: the glass cannon, at equal
+    # anchored lethality.
+    pool = reference_player_hp(bar)
+    cost = _kappa(bar) * BITE_COST.get(bite, 1.0) * pool
+    if bar == 1:
+        # the on-ramp, wilds edition (wardens have their own at floors
+        # 1–5): a fresh climber carries the gate-issue kit but not the
+        # forge weapon, so bar 1 bites softer than its κ. Bars 2+ are
+        # the honest ladder.
+        cost *= WILDS_BAR1_SOFT
+    per_round = min(cost / rounds, WILDS_ROUND_CAP * pool)
     # Invert the damage rule, BOTH branches: a landed blow deals
     # max(raw/CHIP_DIVISOR, raw − DEF/2), so the raw roll that lands
-    # exactly `per_round` is the smaller of the two solutions. Solving the
-    # DEF branch alone leaves a starved animal still chipping for four —
-    # which is how a "feeble" prey ends up hitting as hard as its peer.
+    # exactly `per_round` is the smaller of the two solutions.
     raw = min(CHIP_DIVISOR * per_round, per_round + p_def // 2)
     atk = max(1, round(raw / 0.75))
-    # the bite word says which way from the calibrated peer it moves
-    return (min(base_atk, atk) if bite == "feeble" else max(base_atk, atk),
-            dfs, hp)
+    return atk, dfs, hp
 
 
-# 025 §2: danger pays. Threat is mostly the body (the rounds it costs you)
-# and partly the bite (the HP it costs you). Before 025 XP had NO threat
-# modifier at all — a limping runt and an alpha paid identical XP — and
-# gold moved only on the specimen and profile axes.
-REWARD_MULT_CAP = 6.0
-BITE_PAY = {"feeble": 0.6, "fierce": 2.0, "savage": 3.0}
+# 043: danger pays THROUGH THE BAR now. xp_per_kill/gold_per_kill take
+# the creature's bar, so a floor's terror out-pays its snack from the
+# same one formula — the 025/039 threat-multiplier stack (BITE_PAY ×
+# BODY_ROUNDS, floor-capped) is retired with its caps.
 
 # 025 §5: the rubber band. A draw the player would probably not survive
 # keeps a FIFTH of its weight — an 80% cut, never a ban. The tower must
@@ -337,30 +398,10 @@ def rubber_band_cut(floor: int) -> float:
     return 0.35 if floor <= 6 else 0.50
 
 
-# The archetype product tops out at hulking·savage = 2.4·3.0 = 7.2, so a
-# ceiling above that never binds; 7.5 keeps the ladder honest about it.
-REWARD_MULT_CAP_CEIL = 7.5
-
-
-def reward_mult_cap(floor: int) -> float:
-    """039 §4: the reward ceiling climbs with the danger — 6.0 through
-    floor 3, +0.5/floor after, ceiling 7.5 (floors 6+ are effectively
-    uncapped for real archetypes). Stays under warden_gold/gold_per_kill
-    through floor 20; past floor 20 the band income jump has ALWAYS
-    outrun warden_gold (pre-existing, tracked by the 004 gate)."""
-    if floor <= 3:
-        return REWARD_MULT_CAP
-    return min(REWARD_MULT_CAP_CEIL,
-               REWARD_MULT_CAP + 0.5 * (floor - 3))
-
-
-def kill_reward_mult(floor: int, traits) -> float:
-    """XP and gold multiplier for a creature's archetype: the rounds it
-    costs you times what it charges for them. Capped per floor so one
-    lucky draw still never outpays that floor's Warden."""
-    body, bite = _archetype(traits)
-    return min(reward_mult_cap(floor),
-               BODY_ROUNDS.get(body, 1.0) * BITE_PAY.get(bite, 1.0))
+# (043: reward_mult_cap / kill_reward_mult lived here — retired. A
+# creature's pay now comes from gold_per_kill(bar)/xp_per_kill(bar); the
+# bar offset is clamped to [−2, +1], so the cap's job — one lucky draw
+# never outpaying the Warden — is structural.)
 
 
 # 008: per-encounter specimen roll — same averages, real variance.
@@ -605,15 +646,22 @@ def warden_profile(floor: int) -> dict:
     return profile_from_traits(())
 
 
-def xp_per_kill(floor: int) -> int:
-    """012: XP is scarce — always below the kill's gold (8·floor and up)."""
-    return 4 * floor           # ±25% applied by the roller
+XP_PER_KILL_SLOPE = 2.4        # 043: was 4 — a 40% cut, the bar filled
+                               # in a single day at every level
 
 
-def gold_per_kill(floor: int) -> int:
-    """Base gold per kill; the same work pays visibly better each band."""
-    tier = gear_tier_for_floor(floor)
-    return round(8 * floor * BAND_INCOME_JUMP ** (tier - 1))
+def xp_per_kill(bar: int) -> int:
+    """012: XP is scarce — always below the kill's gold. 043: takes the
+    creature's BAR (== floor for a common at-floor kill)."""
+    return max(1, round(XP_PER_KILL_SLOPE * bar))   # ±25% by the roller
+
+
+def gold_per_kill(bar: int) -> int:
+    """Base gold per kill; the same work pays visibly better each band.
+    043: takes the creature's BAR — coin follows toughness, so a floor's
+    F+1 terror out-pays its F−2 snack from this one formula."""
+    tier = gear_tier_for_floor(bar)
+    return round(8 * bar * BAND_INCOME_JUMP ** (tier - 1))
 
 
 def daily_income(floor: int) -> int:
@@ -796,7 +844,8 @@ def warden_stats(floor: int) -> tuple[int, int, int]:
 
 
 def warden_xp(floor: int) -> int:
-    return 25 * floor          # 012: below warden_gold — XP is scarce
+    return 15 * floor          # 012: below warden_gold — XP is scarce
+                               # (043: 25 → 15, the global −40% XP cut)
 
 
 def warden_gold(floor: int) -> int:
@@ -1032,18 +1081,19 @@ class MilestoneBoss:
     gold: int
 
 
-# 012: milestone XP = 0.3 × gold — XP scarcer than gold, in all places.
+# 012: milestone XP scarcer than gold, in all places. 043: XP column cut
+# ×0.6 with the rest of the world (now 0.18 × gold).
 MILESTONES: dict[int, MilestoneBoss] = {m.floor: m for m in [
-    MilestoneBoss(10, "Gnarl, the Goblin King", 60, 50, 900, 2, 1_500, 5_000),
-    MilestoneBoss(20, "Warlord Skarn", 120, 100, 1_800, 3, 3_000, 10_000),
-    MilestoneBoss(30, "The Barrow King", 180, 150, 2_700, 4, 4_500, 15_000),
-    MilestoneBoss(40, "Matriarch Vyx", 240, 200, 3_600, 5, 6_000, 20_000),
-    MilestoneBoss(50, "Cindermaw the Wyrm", 300, 250, 4_500, 6, 7_500, 25_000),
-    MilestoneBoss(60, "Jarl Hrimgar", 360, 300, 5_400, 7, 9_000, 30_000),
-    MilestoneBoss(70, "Zephyra, the Storm Queen", 420, 350, 6_300, 8, 10_500, 35_000),
-    MilestoneBoss(80, "The Pale Huntsman", 480, 400, 7_200, 9, 12_000, 40_000),
-    MilestoneBoss(90, "Malgrim, Herald of the King", 540, 450, 8_100, 10, 13_500, 45_000),
-    MilestoneBoss(100, "Vharuk, the Demon King", 650, 550, 12_000, 12, 15_000, 50_000),
+    MilestoneBoss(10, "Gnarl, the Goblin King", 60, 50, 900, 2, 900, 5_000),
+    MilestoneBoss(20, "Warlord Skarn", 120, 100, 1_800, 3, 1_800, 10_000),
+    MilestoneBoss(30, "The Barrow King", 180, 150, 2_700, 4, 2_700, 15_000),
+    MilestoneBoss(40, "Matriarch Vyx", 240, 200, 3_600, 5, 3_600, 20_000),
+    MilestoneBoss(50, "Cindermaw the Wyrm", 300, 250, 4_500, 6, 4_500, 25_000),
+    MilestoneBoss(60, "Jarl Hrimgar", 360, 300, 5_400, 7, 5_400, 30_000),
+    MilestoneBoss(70, "Zephyra, the Storm Queen", 420, 350, 6_300, 8, 6_300, 35_000),
+    MilestoneBoss(80, "The Pale Huntsman", 480, 400, 7_200, 9, 7_200, 40_000),
+    MilestoneBoss(90, "Malgrim, Herald of the King", 540, 450, 8_100, 10, 8_100, 45_000),
+    MilestoneBoss(100, "Vharuk, the Demon King", 650, 550, 12_000, 12, 9_000, 50_000),
 ]}
 
 
@@ -1475,6 +1525,23 @@ CLASS_STARTERS: dict[str, GearItem] = {
 }
 for _g in CLASS_STARTERS.values():
     FORGE[_g.slug] = _g
+
+# 043: the gate issues the whole kit, not just the blade. Bar 1 is
+# defined as "level 1 in the floor's reference gear" — so a fresh
+# climber must BE bar 1, or floor 1's animals (tuned against that
+# reference) would eat every newcomer before their first coin. The
+# pieces match the rung-1.0 forge bonuses (shield 5, armor 7), tier 0:
+# never sold, never wear, worth nothing at the pawn desk.
+GATE_SHIELD = GearItem(
+    "gate_buckler", "Gate-Issue Buckler",
+    "armory plank, scuffed by a hundred hands before yours",
+    "shield", 0, 5, 0)
+GATE_ARMOR = GearItem(
+    "gate_jerkin", "Gate-Issue Jerkin",
+    "quilted in the standard cut — it has met wolves before",
+    "armor", 0, 7, 0)
+FORGE[GATE_SHIELD.slug] = GATE_SHIELD
+FORGE[GATE_ARMOR.slug] = GATE_ARMOR
 
 
 def class_starter(clazz: str) -> GearItem:

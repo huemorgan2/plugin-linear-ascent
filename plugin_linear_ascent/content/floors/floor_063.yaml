@@ -16,7 +16,7 @@ encounters:
       You walked under somebody's nest, which is either a toll or a
       proposal. She is here to settle which.
     weight: 3
-    traits: [flying]
+    traits: [flying, lean, feeble]
     prose: >-
       A matron harpy drops onto the path with the weight of office —
       wing-feathers banded in salvaged brass. You have walked under
@@ -28,7 +28,7 @@ encounters:
       Eleven of them, dared to touch you. The arithmetic of being twelve
       is the whole of harpy education.
     weight: 3
-    traits: [fast]
+    traits: [fast, lean, fierce]
     prose: >-
       A crowd of half-grown harpies has been dared to touch you.
       Individually they would not. There are eleven of them, and the
@@ -39,7 +39,7 @@ encounters:
       Penned like a town bull, resented, and prayed to. The prayers soaked
       in; spells break against them.
     weight: 3
-    traits: [resist_high]
+    traits: [resist_high, fierce]
     prose: >-
       The harpies keep a storm drake the way a town keeps a bull —
       penned, resented, and prayed to. The pen is rigging. The
@@ -50,6 +50,7 @@ encounters:
       It raids the nests for eggs and trinkets, and it has learned to work
       while the owners are out on you.
     weight: 2
+    traits: [hulking, fierce]
     prose: >-
       A marten pours down a nest-pole with somebody's brass band still in
       its teeth, hits the path in front of you, and decides you are
