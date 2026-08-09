@@ -162,6 +162,29 @@ def pack_actions(p: dict, slug: str) -> tuple[list[Option], str]:
     if slug in economy.RELICS:
         return [], "Carried into the fight — it offers itself when it can act."
     if slug in economy.FORGE:
+        # 045: gear promotes itself from the pack — one weapon held, one
+        # shield, one armour; the slot decides which.
+        g = economy.FORGE[slug]
+        if g.slot in economy.DURABILITY_SLOTS and have:
+            if p["gear"].get(g.slot) == slug:
+                return [], ("Already in your hand."
+                            if g.slot in ("weapon", "shield")
+                            else "Already worn.")
+            if g.slot == "weapon":
+                label = "Use this"
+            elif g.slot == "shield":
+                label = ("Hold this focus" if g.line == "sorcerer"
+                         else "Use as shield")
+            elif g.slot == "armor":
+                label = "Wear this"
+            else:
+                label = "Wear these"
+            worn = p["gear"].get(g.slot)
+            hint = (f"swap out the {economy.FORGE[worn].name}"
+                    if worn and worn in economy.FORGE else "from your pack")
+            if (p.get("hone") or {}).get(g.slot):
+                hint += " · honing resets"
+            return [Option(f"wear_{slug}", label, hint)], ""
         return [], "The Forge swaps gear in and out of the pack."
     return [], ""
 
@@ -169,14 +192,18 @@ def pack_actions(p: dict, slug: str) -> tuple[list[Option], str]:
 def _pack_use(p: dict, oid: str) -> Scene | None:
     """027: a pack action taken from the strip — legal in any room, never
     in a fight. Returns None when the id isn't a pack action."""
-    if oid not in PACK_USE_IDS or p.get("encounter"):
+    wearing = oid.startswith("wear_")
+    if (oid not in PACK_USE_IDS and not wearing) or p.get("encounter"):
         return None
-    slug = oid.removeprefix("use_")
+    slug = oid.removeprefix("wear_" if wearing else "use_")
     acts, why = pack_actions(p, slug)
     if not any(o.id == oid for o in acts):
         s = _build_scene(p)
         s.shard_note = why or "Nothing happens."
         return s
+    if wearing:
+        # 045: promote from the pack — same swap the Forge row performs.
+        return _wear_from_pack(p, slug, _build_scene)
     if slug == "luck_charm":
         p["flags"]["luck_day"] = state.world_day()
         note = ("+ the charm cracks in your fist — fortune leans your way "
