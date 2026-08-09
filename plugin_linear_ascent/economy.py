@@ -1706,6 +1706,24 @@ def item_pool(item: GearItem) -> int:
     return pool
 
 
+def endurance(item: GearItem, left: int | None = None) -> int:
+    """045: the END number on the card — one honest unit per slot.
+
+    Guard pieces (shield/armor) show the DAMAGE the piece can still turn:
+    wear per blow is `rate · blocked_by_piece / (bonus/2)` pool-uses, so
+    `pool · bonus / (2·rate)` is damage — the number falls by what the
+    piece absorbs, which is how a player reads "endurance 100, blows of
+    54+36+10, broken". Weapons/shoes already wear one use per
+    swing/stride, so their pool IS the count.
+    """
+    pool = item_pool(item) if left is None else max(0, left)
+    if item.slot == "shield":
+        return round(pool * item.bonus / (2 * SHIELD_WEAR_RATE))
+    if item.slot == "armor":
+        return round(pool * item.bonus / (2 * ARMOR_WEAR_RATE))
+    return pool
+
+
 def repair_price(item: GearItem, missing_frac: float) -> int:
     """The Forge mends for a fraction of what the smith charged."""
     return max(1, round(REPAIR_PRICE_PCT * item.price

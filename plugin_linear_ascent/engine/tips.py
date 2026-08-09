@@ -562,16 +562,19 @@ def item_tip(slug: str, equipped: bool = False) -> str:
     g = economy.FORGE.get(slug)
     if g:
         stat = "ATK" if g.slot == "weapon" else "DEF"
+        # 045: END on the tip — fresh-piece endurance; the pack cell's
+        # hover carries the live left/total.
+        end = (f", END {economy.endurance(g):,}" if g.price > 0 else "")
         if equipped:
             doing = ("every blow you land rides it"
                      if g.slot == "weapon"
                      else "it blunts every blow that lands on you")
-            return (f"{g.name} — your worn {g.slot}, {stat} +{g.bonus}: "
-                    f"{doing}. The Forge sells the next tier; honing "
-                    "pushes this one further.")
-        return (f"{g.name} — {g.slot}, {stat} +{g.bonus}, riding in "
-                f"your pack since you outgrew it. Dead weight: the "
-                "pawn shop pays the day's rate (25–55%) toward your "
-                "next tier — worth checking on a good day.")
+            return (f"{g.name} — your worn {g.slot}, {stat} +{g.bonus}"
+                    f"{end}: {doing}. The Forge sells the next tier; "
+                    "honing pushes this one further.")
+        return (f"{g.name} — {g.slot}, {stat} +{g.bonus}{end}, riding "
+                "in your pack. Click it to put it on, or let the pawn "
+                "shop pay the day's rate (25–55%) toward your next "
+                "tier.")
     return ("Something the climb put in your pack. The pawn shop will "
             "tell you what it's worth.")

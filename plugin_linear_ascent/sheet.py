@@ -20,7 +20,8 @@ def character_sheet(p: dict) -> dict:
             if left <= 0:
                 name += " (BROKEN — half strength)"
             elif pool and left < pool:
-                name += f" (worn to {round(100 * left / pool)}%)"
+                name += (f" (END {economy.endurance(g, left):,}"
+                         f"/{economy.endurance(g):,})")
         return name
 
     gear = {slot: _piece(slot, slug) for slot, slug in p["gear"].items()}

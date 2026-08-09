@@ -993,9 +993,14 @@ def _slot_cell(it: dict) -> str:
         durbar = (f'<span class="dur"><span class="durf" '
                   f'style="width:{max(pct, 4)}%;'
                   f'background-color:{col};"></span></span>')
+        # 045: name the number when the scene ships it (older servers
+        # send only the fraction — keep the % fallback for the skew).
+        left, total = it.get("dur_left"), it.get("dur_max")
+        wear = (f"END {left:,}/{total:,}" if left is not None
+                and total else f"{pct}%")
         tip = (f"{tip} · " if tip else "") + (
             "broken — half strength until the Forge repairs it"
-            if dur <= 0 else f"{pct}% — repair at the Forge")
+            if dur <= 0 else f"{wear} — repair at the Forge")
     # 027: the cell is a button — the popup lists what this thing can
     # do HERE, or says where it can be done. `acts` come from the
     # engine (core.pack_actions), never guessed client-side.
