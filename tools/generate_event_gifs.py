@@ -97,6 +97,17 @@ MERCY_PREFIX = (
     "Scene: "
 )
 
+# 007-art-add phase 2: photoreal footage dithers to mush — drawn frames
+# survive the Bayer pass (bold outlines, flat shading planes, no
+# photographic noise). Same byte discipline as MERCY_PREFIX.
+# Selected with --style drawn (default for this plan's retakes).
+MERCY_DRAWN_PREFIX = (
+    "Hand-drawn 2D animation, shaded storybook style: bold black "
+    "ink outlines, flat grey-wash shading, NOT photographic, no 3D "
+    "render. Monochrome, figures DARKER than the pale ground, crisp "
+    "silhouettes. LOCKED-OFF camera, no text, no watermark. Scene: "
+)
+
 DIM, VIOLET, GOLD, RED = "#8b93a7", "#8b5cf6", "#f5a524", "#f4645f"
 
 # ── 009 art canon: the three showcase characters ─────────────────────────
@@ -1312,6 +1323,35 @@ _MERCY_LANDSCAPE = {
 }
 
 
+def _scrub_color_anchors(text: str) -> str:
+    # Drawn mode is monochrome by definition. The per-slug color
+    # anchors ("full color, never monochrome" etc. — added to fight
+    # photoreal grayscale drift) contradict the drawn prefix head-on,
+    # so drop any anchor sentence that names color. Only sentences
+    # from the anchor dicts are touched — YAML prose is left alone.
+    for extra in (list(_MERCY_SCENE_EXTRA.values())
+                  + list(_MERCY_LANDSCAPE.values())):
+        for sent in extra.split("."):
+            sent = sent.strip()
+            low = sent.lower()
+            if sent and ("color" in low or "colour" in low
+                         or "monochrome" in low):
+                text = text.replace(" " + sent + ".", "")
+                text = text.replace(sent + ".", "")
+    # The templates' documentary-real closer is photoreal language
+    # that reads against the drawn style; keep the weight, drop the
+    # documentary claim (also buys back prompt bytes). Longer variant
+    # first — the short one is its prefix.
+    text = text.replace(
+        "Physical, documentary-real motion throughout — the fight "
+        "part is a fight, not a pose.",
+        "Weighty drawn motion — the fight is a fight, not a pose.")
+    text = text.replace(
+        "Physical, documentary-real motion throughout.",
+        "Weighty drawn motion throughout.")
+    return text
+
+
 def _load_mercy_jobs() -> None:
     import yaml as _yaml
     floors_dir = os.path.join(_HERE, "..", "plugin_linear_ascent",
@@ -1932,6 +1972,15 @@ def main() -> None:
         i = args.index("--fal-model")
         fal_model = args[i + 1]
         args = args[:i] + args[i + 2:]
+    # 007 phase 2: --style drawn swaps the photoreal mercy prefix for
+    # the ink-and-wash drawn one on every event that uses MERCY_PREFIX.
+    style = "photo"
+    if "--style" in args:
+        i = args.index("--style")
+        style = args[i + 1]
+        args = args[:i] + args[i + 2:]
+    if style not in ("photo", "drawn"):
+        sys.exit(f"unknown style: {style}")
     if backend not in ("fal", "veo", "sora", "grok"):
         sys.exit(f"unknown backend: {backend}")
     if fal_model not in FAL_MODELS:
@@ -1956,7 +2005,12 @@ def main() -> None:
                 image = os.path.join(_HERE, "..", image)
             # image-conditioned events stay on Veo (image-to-video)
             use = "veo" if image else backend
-            styled = cfg.get("prefix", STYLE) + cfg["prompt"]
+            prefix = cfg.get("prefix", STYLE)
+            if style == "drawn" and prefix is MERCY_PREFIX:
+                prefix = MERCY_DRAWN_PREFIX
+            styled = prefix + cfg["prompt"]
+            if style == "drawn":
+                styled = _scrub_color_anchors(styled)
             print(f"gen  {slug} [{use}]...", flush=True)
             if use == "fal":
                 fal_generate(styled, cfg["seconds"],
