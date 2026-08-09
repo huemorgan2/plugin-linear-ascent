@@ -29,9 +29,8 @@ distance to shoot full". Screenshot.
 
 ## D — scout intent
 
-Mid-fight at range, use the shard scan. PASS when: the scan names exact
-numbers AND "it will try to close this round — N%" with N matching
-p_close for the matchup.
+(Removed in 045 — the shard scan is gone; the `[i]` dossier carries the
+numbers for free.)
 
 ## E — glance test
 

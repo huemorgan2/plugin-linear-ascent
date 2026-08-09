@@ -10,7 +10,7 @@ Fresh character (any race/class) on a QA Luna with the 006 plugin build.
      No regenerating mana meter anywhere.
    - Hover/read the ✦ tooltip: it must describe crystallized experience,
      "full bar = next level", "levels are forever", and spending on
-     honing/spells/scans. No mention of regeneration per minutes.
+     honing/spells/mending. No mention of regeneration per minutes.
 3. Enter the tower gate → floor 1 → hunt → win one fight.
    - **Expect:** the ✦ meter moved (e.g. `✦ 11/60`), blocks partially filled.
 4. Ask for the character sheet ("show my character").

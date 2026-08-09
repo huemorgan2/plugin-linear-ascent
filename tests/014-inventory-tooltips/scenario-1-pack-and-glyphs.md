@@ -28,7 +28,7 @@ achieves and how it advances the climb — town places most thoroughly.
 6. Click an [i] itself. **Expect:** NOTHING happens — the option does
    not fire.
 7. Walk: gate → floor 1 → hunt. **Expect:** fight options (Attack /
-   Stand / Run / class move / scan) all carry glyphs; hovering Stand
+   Stand / Run / class move) all carry glyphs; hovering Stand
    explains halved damage; the pack strip still renders under the rail
    mid-fight.
 8. Visit the Forge and hover a `buy_` option's [i]. **Expect:** the tip

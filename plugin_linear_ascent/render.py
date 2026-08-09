@@ -592,7 +592,7 @@ _TIP_EN = ("Energy — actions spend it: wilds hunt 1, Warden attempt 3, "
 _TIP_XP = ("XP — experience. Fills as you fight, up to the bar for the "
            "next level — surplus goes nowhere. A full bar is your license "
            "to train: buy the next level with gold at the Guildhall. "
-           "Honing, spells, and shard scans burn XP from the bar.")
+           "Honing, spells, and mending burn XP from the bar.")
 _TIP_LV = ("LV — your level. Levels are bought at the Guildhall: a full "
            "XP bar plus the training fee in gold.")
 _TIP_GOLD = ("Carried gold — spendable anywhere but lost when you die. "

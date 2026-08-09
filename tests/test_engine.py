@@ -355,25 +355,6 @@ def test_sleep_spell_burns_kill_xp_and_awards_nothing():
     assert "XP" in "\n".join(s.body_lines)
 
 
-def test_scan_prefers_charges_then_falls_back_to_xp():
-    p = create_character(fresh())
-    choose(p, "gate")
-    choose(p, "floor_1")
-    choose(p, "hunt")
-    scan_cost = economy.scan_xp_cost(1)
-    p["sidekick"]["scout_charges"] = 1
-    p["xp"] = scan_cost
-    s = choose(p, "scout")
-    assert p["sidekick"]["scout_charges"] == 0
-    assert p["xp"] == scan_cost                  # charge used, ✦ untouched
-    s = choose(p, "scout")                       # falls back to the pool
-    assert p["xp"] == 0
-    assert "scan" in "\n".join(s.body_lines)
-    s = choose(p, "scout")                       # broke: refused, fight lives
-    assert p["encounter"] is not None
-    assert "XP" in "\n".join(s.body_lines)
-
-
 def test_forge_tier_gated_by_level():
     # 004: the shop only RACKS what your level unlocks — the next rung
     # shows greyed with its level, and a forced buy is refused unpaid.

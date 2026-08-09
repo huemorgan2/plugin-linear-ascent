@@ -282,7 +282,7 @@ def guildhall_scene(p: dict, note: str = "") -> Scene:
             lines.append(f"LEVEL {economy.LEVEL_CAP} — the drillmaster "
                          "has nothing left to teach you. From here the "
                          "steel, the honing bench and the war carry you; "
-                         "your ✦ buys spells, scans and edges now.")
+                         "your ✦ buys spells, mending and edges now.")
     else:
         fee = economy.levelup_gold(p["level"])
         need = economy.xp_need(p["level"])
@@ -1588,7 +1588,7 @@ def warden_action(p: dict, fl, oid: str) -> Scene:
     e["hp"] = max(1, int(wd.get("hp", e["hp"])))
     e["hp_max"] = max(e["hp"], int(wd.get("hp_max", e["hp"])))
     # 026: where THIS blade found the body. hp_max is the body's size (the
-    # war bar, the scan, "bites deep" all read it); the strike this fight
+    # war bar, the dossier, "bites deep" all read it); the strike this fight
     # reports has to be measured from the join, or a climber who walks
     # into a half-cut gate is credited with everyone else's work and the
     # pool collapses on his first swing.

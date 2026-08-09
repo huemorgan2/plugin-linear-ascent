@@ -108,7 +108,6 @@ def test_xp_pool_costs_scale_with_floor():
     assert economy.hone_xp(1) == 2            # half of 4
     assert economy.hone_xp(17) == 34          # half of 68
     assert economy.sleep_xp_cost(5) == 20     # exactly the kill skipped
-    assert economy.scan_xp_cost(5) == 10      # half a kill
 
 
 def test_level_gates():

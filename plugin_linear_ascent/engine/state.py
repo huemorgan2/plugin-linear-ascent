@@ -63,7 +63,7 @@ def new_player(luna_user: str) -> dict:
         "flags": {},
         "daily": {"day": world_day(), "pvp_used": 0, "energy_cell": False,
                   "death_save": False},
-        "sidekick": {"insight": 1, "carried": None, "scout_charges": 0},
+        "sidekick": {"insight": 1, "carried": None},
         "telemetry_day": world_day(),
     }
 
@@ -176,7 +176,7 @@ def xp_room(p: dict) -> int | None:
     """How much XP still fits in this level's bar.
 
     None means uncapped — at LEVEL_CAP the Guildhall refuses training and
-    the pool is pure currency (hone / sleep / scan). Below the cap the bar
+    the pool is pure currency (hone / sleep / mend). Below the cap the bar
     is hard: surplus from a kill goes nowhere.
 
     034 §2: worldd pays every share through gain_xp now, and the docs it

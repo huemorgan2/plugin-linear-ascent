@@ -220,14 +220,6 @@ def test_opener_names_the_profile():
     assert "plate medium" in opener.to_text().lower()
 
 
-def test_scan_includes_the_profile():
-    p, fl, _ = _fight("warrior", 4, "glare_moth")
-    p["sidekick"]["scout_charges"] = 1
-    s = combat.resolve_fight_action(p, fl, "scout")
-    joined = " ".join(s.body_lines)
-    assert "AIRBORNE" in joined
-
-
 # ── the matchup sim gate ─────────────────────────────────────────────────
 
 def reference_player(clazz, floor):

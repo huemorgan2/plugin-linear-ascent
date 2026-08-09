@@ -112,7 +112,7 @@ STATIC_IDS = [
     "hunt", "heal", "stew", "keep",
     "deposit_all", "deposit_half", "withdraw_all", "grants",
     # fight
-    "attack", "stand", "run", "scout", "drink_tonic",
+    "attack", "stand", "run", "drink_tonic",
     "shield_wall", "sleep_spell", "treeline_shot",
     # keeps
     "strike", "boss_commit",

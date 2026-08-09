@@ -605,12 +605,6 @@ def fight_scene(p: dict, floor, opener: bool = False, note: str = "") -> Scene:
             f"{economy.FLARE_AETHER} XP · every hot blade sees it",
             aether=True))
     opts += _relic_options(p)
-    charges = p["sidekick"]["scout_charges"]
-    opts.append(Option(
-        "scout", "Ask the shard to scan it",
-        f"{charges} charges" if charges > 0
-        else f"{economy.scan_xp_cost(floor.floor)} XP",
-        aether=True))
 
     body = [e["prose"]] if opener else []
     if opener:
@@ -1697,33 +1691,6 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
         s.body_lines.insert(0, "You speak the Severing Word once, "
                             "quietly, and the fight is simply over.")
         return s
-
-    if option_id == "scout":
-        if p["sidekick"]["scout_charges"] > 0:
-            p["sidekick"]["scout_charges"] -= 1
-        elif not state.spend_xp(p, economy.scan_xp_cost(floor.floor)):
-            return fight_scene(p, floor, note=(
-                f"The shard needs {economy.scan_xp_cost(floor.floor)} XP of "
-                "what you've learned — you haven't learned enough yet."))
-        pline = _profile_line(_profile(p))
-        # 003: the scan's edge over the free dossier — exact numbers
-        # plus the monster's NEXT INTENT, odds named.
-        intent = ""
-        if _range_state(p) == "at_range":
-            pc = round(100 * economy.p_close(_mspd(p),
-                                             economy.player_speed(p)))
-            intent = (f" It will try to close this round — "
-                      f"{pc}% it makes it.")
-        elif _profile(p).get("speed",
-                             economy.SPEED_NORMAL) >= economy.SPEED_FAST:
-            intent = " It is faster than you — it will stay on you."
-        return fight_scene(
-            p, floor,
-            note=f"◆ scan: {e['name']} — ATK {e['atk']} / DEF {e['def']} / "
-                 f"HP {e['hp']}/{e['hp_max']}"
-                 + (f" · {pline}" if pline else "")
-                 + f". Your ATK {state.atk(p)} / DEF {state.dfs(p)}."
-                 + intent)
 
     if option_id == "flare":
         # 022/008: doesn't spend the round — the burst startles the

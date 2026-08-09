@@ -338,25 +338,6 @@ _GRIDS: dict[str, list[str]] = {
         ".##..........##.",
         "................",
     ],
-    # the shard's lens pair
-    "scout_optics": [
-        "................",
-        "................",
-        "................",
-        "................",
-        "..####....####..",
-        ".######..######.",
-        ".##..##..##..##.",
-        ".##..######..##.",
-        ".##..##..##..##.",
-        ".######..######.",
-        "..####....####..",
-        "................",
-        "................",
-        "................",
-        "................",
-        "................",
-    ],
     # ── 025 §6: the pay marks. A kill's gold and aether are DRAWN, one
     # mark per point, up to 99 — "have the coin icon repeated so it'll be
     # visually clear you received a lot". A number cannot show a haul; a

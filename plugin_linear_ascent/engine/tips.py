@@ -43,10 +43,10 @@ _TIPS: dict[str, str] = {
                 "sorcerers."),
     "medlab": ("The shelf that keeps a hunting run going: Medgel +25 HP, "
                "Trauma kit +80 HP, Trollblood tonic full heal usable "
-               "MID-fight, Energy cell +5 energy (one a day), Luck charm for "
-               "better loot until tomorrow, Scout optics for 3 enemy "
-               "scans. Healing on the road means more hunts per day — "
-               "and hunts are where gold and XP come from."),
+               "MID-fight, Energy cell +5 energy (one a day), Luck charm "
+               "for better loot until tomorrow. Healing on the road means "
+               "more hunts per day — and hunts are where gold and XP "
+               "come from."),
     "lodge": ("A paid bunk, ◈ 10 × your level: one safe night — fields "
               "ambushes can't touch you, and you wake +20 HP. Sleep here "
               "whenever you carry gold worth stealing. The stew pot "
@@ -227,10 +227,6 @@ _TIPS: dict[str, str] = {
                         "the monster may rake you once as you pull "
                         "away; faster legs shrink that chance. Costs "
                         "the round."),
-    "scout": ("Your shard scans the enemy — exact ATK, DEF and HP. "
-              "Free on an optics charge, otherwise it burns XP. Knowing "
-              "when to press and when to run saves more than it "
-              "costs."),
     "drink_tonic": ("Trollblood tonic — the ONLY heal that works "
                     "mid-fight: full HP, the round keeps going. Carried "
                     "for exactly the moment a Warden has you at the "
@@ -545,9 +541,6 @@ _ITEM_TIPS: dict[str, str] = {
                    "better loot and present rolls. Click it to crack one "
                    "(once a day is all it does); alphas and Wardens drop "
                    "them about one time in ten."),
-    "scout_optics": ("Scout optics — 3 shard scans: exact enemy ATK, "
-                     "DEF and HP before you commit. Fights you can "
-                     "read are fights you don't lose."),
     "arrows": ("Bought arrows — every off-class bow shot burns one. "
                "When they run out mid-fight your own weapon comes "
                "back out. Archers never need these; their basic "

@@ -1660,9 +1660,6 @@ def _medlab_buy(p: dict, oid: str) -> Scene:
     elif slug == "luck_charm":
         p["flags"]["luck_day"] = state.world_day()
         note += " — fortune leans your way until tomorrow"
-    elif slug == "scout_optics":
-        p["sidekick"]["scout_charges"] += 3
-        note += " — your shard can scan 3 enemies"
     else:
         p["inventory"][slug] = p["inventory"].get(slug, 0) + 1
     s = _medlab_scene(p)

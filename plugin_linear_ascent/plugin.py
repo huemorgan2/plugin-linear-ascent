@@ -90,7 +90,7 @@ _SHARED_RULES = (
     "there is NO mana in this world — never say the word. The XP bar is "
     "experience inside the current level. It fills by fighting up to the "
     "bar for the next level — surplus goes nowhere; it is burned by "
-    "honing, spells, and shard scans. "
+    "honing, spells, and mending. "
     "LEVELS ARE BOUGHT, never automatic: a full XP bar plus a gold fee "
     "at the Guildhall's Train option (first level ◈ 200, rising with "
     "level). Nothing refills XP but fighting. "

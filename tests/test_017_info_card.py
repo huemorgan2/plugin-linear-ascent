@@ -2,7 +2,7 @@
 
 The counter system becomes READABLE: scene.enemy payload, the always-on
 HP bar, the range chip, named damage modifiers (the 002 retro), trait
-icons, lore, and the scout's intent upgrade.
+icons, and lore.
 """
 
 import itertools
@@ -194,26 +194,6 @@ def test_icon_grids_are_16_wide():
     for key, grid in icons._GRIDS.items():
         for i, row in enumerate(grid):
             assert len(row) == 16, (key, i)
-
-
-# ── the scout upgrade ────────────────────────────────────────────────────
-
-def test_scan_names_the_next_intent_at_range():
-    p, fl, _ = _fight("archer", 5, "downs_courser")
-    p["sidekick"]["scout_charges"] = 1
-    p["encounter"]["range"] = "at_range"
-    s = combat.resolve_fight_action(p, fl, "scout")
-    joined = " ".join(s.body_lines)
-    assert "try to close this round" in joined
-    assert "%" in joined                  # odds are named
-
-
-def test_scan_warns_about_the_fast_in_close():
-    p, fl, _ = _fight("archer", 5, "downs_courser")
-    p["sidekick"]["scout_charges"] = 1
-    p["encounter"]["range"] = "close"
-    s = combat.resolve_fight_action(p, fl, "scout")
-    assert "faster than you" in " ".join(s.body_lines)
 
 
 def test_headline_keeps_atk_def_but_never_hp():

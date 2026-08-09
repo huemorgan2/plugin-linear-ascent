@@ -1,7 +1,10 @@
-# Scenario 04 — Sleep Spell and shard scan burn experience
+# Scenario 04 — Sleep Spell burns experience
+
+(045: the shard scan and Scout optics were removed — the free `[i]`
+dossier carries the enemy numbers. This scenario now covers Sleep only.)
 
 ## Setup
-A sorcerer with a small XP pool; scout optics NOT purchased.
+A sorcerer with a small XP pool.
 
 ## Steps
 1. Hunt floor 1 until a fight card is up. Read the class option hint.
@@ -13,14 +16,10 @@ A sorcerer with a small XP pool; scout optics NOT purchased.
 3. Hunt again with pool < cost and cast Sleep.
    - **Expect:** refusal note quoting the ✦ shortfall; fight continues;
      pool unchanged.
-4. In a fight with 0 optics charges, find the scan option.
-   - **Expect:** scan offered with a `✦` price (half a kill). Using it
-     spends pool XP and prints the enemy stat line. With pool short, it
-     refuses and the fight continues.
-5. Buy Scout optics at the Medlab, fight again.
-   - **Expect:** scan hint shows charges; using it consumes a charge and
-     spends NO XP.
+4. Read the fight card's rows and the Medlab shelf.
+   - **Expect:** no "Ask the shard to scan it" row anywhere; no Scout
+     optics on the shelf; the `[i]` dossier still shows ATK/DEF/HP free.
 
 ## Pass
-Sleep = skip-for-its-price with zero award; scan prefers charges, falls
-back to XP; refusals never end the fight or charge anything.
+Sleep = skip-for-its-price with zero award; refusals never end the
+fight or charge anything; no scan row or optics item exists.
