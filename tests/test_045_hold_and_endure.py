@@ -6,6 +6,8 @@ is a number the player can read; §4 the floor's full menu comes back
 after a fight.
 """
 
+import copy
+
 from plugin_linear_ascent import economy
 from plugin_linear_ascent.content import schema
 from plugin_linear_ascent.engine import combat, core, state
@@ -147,3 +149,64 @@ def test_forge_cards_show_def_and_end():
     assert all("END" in h for h in gear_hints), gear_hints
     repair_free = [o for o in s.options if o.id.startswith("repair_")]
     assert repair_free == []                         # fresh gear: no rows
+
+
+# ── §4: the floor comes back after a fight ───────────────────────────────
+
+def _hunt_victory(p, floor_n):
+    """Walk to floor_n, start a hunt, pin the kill, swing once."""
+    core.apply_choice(p, "gate")
+    s = core.apply_choice(p, f"floor_{floor_n}")
+    if any(o.id == "skip" for o in s.options):       # arrival reel
+        s = core.apply_choice(p, "skip")
+    core.apply_choice(p, "hunt")
+    p["encounter"]["range"] = "close"
+    p["encounter"]["hp"] = 1
+    p["encounter"]["traits"] = []
+    p["encounter"]["profile"] = {}                   # no flying/bulwark
+    return core.apply_choice(p, "attack")
+
+
+def test_after_fight_menu_is_the_floor_menu():
+    p = _character("Rue")
+    p["unlocked_floor"] = 4                          # frontier == floor
+    p["level"] = 8
+    p["hp"] = economy.player_max_hp(8) - 25          # hurt → heal rows
+    p["inventory"]["medgel"] = 1
+    s = _hunt_victory(p, 4)
+    ids = [o.id for o in s.options]
+    for want in ("hunt", "hunt_deep", "stew", "heal",
+                 "use_medgel", "keep", "talk", "town"):
+        assert want in ids, (want, ids)
+    assert "gate" not in ids                         # frontier floor
+    hunt = next(o for o in s.options if o.id == "hunt")
+    assert hunt.label == "Hunt the wilds again"
+    fl = schema.get_floor(4)
+    assert s.option_art.get("hunt") == fl.banner     # tiles ride along
+
+
+def test_gate_row_and_monument_keep_below_the_frontier():
+    p = _character("Wren")
+    p["unlocked_floor"] = 5                          # floor 4 is conquered
+    p["level"] = 8
+    p["hp"] = economy.player_max_hp(8)
+    s = _hunt_victory(p, 4)
+    ids = [o.id for o in s.options]
+    assert ids.index("gate") == ids.index("hunt") + 1
+    keep = next(o for o in s.options if o.id == "keep")
+    assert "fell" in keep.label                      # monument, not a swing
+    assert "monument" in keep.hint
+    assert "⚡" not in keep.hint
+
+
+def test_every_offered_id_survives_apply_choice():
+    p = _character("Nix")
+    p["unlocked_floor"] = 5
+    p["level"] = 8
+    p["hp"] = economy.player_max_hp(8) - 25
+    p["inventory"]["medgel"] = 1
+    s = _hunt_victory(p, 4)
+    for o in s.options:
+        q = copy.deepcopy(p)
+        out = core.apply_choice(q, o.id)
+        assert out is not None and out.headline, o.id

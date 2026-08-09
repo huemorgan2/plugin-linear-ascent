@@ -1236,16 +1236,33 @@ def _victory(p: dict, floor) -> Scene:
         # one shard per point of XP so a big kill looks like a big kill.
         tally=[{"kind": "gold", "n": gold},
                {"kind": "aether", "n": xp_landed}],
+        # 045: the exit card carries the floor's tiles like the gate
+        # town does — the reel branch keeps its two bare buttons.
+        option_art=(None if first_clear else _floor_art(floor)),
         fx=_kill_fx(e, e["name"], first_clear, _damage_type(p)),
     )
 
 
+def _floor_art(floor) -> dict:
+    from . import core
+    return core._gate_town_art(floor)
+
+
 def _after_fight_options(p: dict, floor) -> list[Option]:
-    opts = [Option("hunt", "Hunt the wilds again", "1 ⚡")]
-    if p["unlocked_floor"] > floor.floor:
-        opts.append(Option("gate", "Back to the tower gate"))
-    opts.append(Option("keep", "The Warden's keep", "3 ⚡"))
-    opts.append(Option("town", "Return to Roothollow"))
+    """045: a fight's exit card shows the floor's REAL menu. This was a
+    hand-rolled copy of four rows — no deep hunt, no stew or pack heals
+    right when they matter most, and a stale keep label after the Warden
+    fell. The gate town owns the list; borrow it."""
+    from . import core
+    opts = core._gate_town_options(p, floor)
+    for i, o in enumerate(opts):
+        if o.id == "hunt":
+            opts[i] = Option("hunt", "Hunt the wilds again", o.hint)
+            # the gate row is the gate-town SCENE's affordance, not part
+            # of its option list — keep it for the climber passing through
+            if p["unlocked_floor"] > floor.floor:
+                opts.insert(i + 1, Option("gate", "Back to the tower gate"))
+            break
     return opts
 
 
