@@ -126,9 +126,10 @@ def test_gear_carries_the_late_game():
 
 
 def test_days_to_cap_lands_in_the_first_weeks():
-    """An all-energy hunter reaches LEVEL_CAP in 2–5 weeks: every day
+    """An all-energy hunter reaches LEVEL_CAP in 3–6 weeks: every day
     the full passive energy income goes into frontier kills at the
-    leash pace (frontier ≈ level)."""
+    leash pace (frontier ≈ level). 043 cut XP 40%, so the cap moved
+    out from ~3 weeks — levelling is meant to be slower now."""
     daily_energy = 24 * 60 / economy.ENERGY_REGEN_MIN
     day, level, xp = 0, 1, 0.0
     while level < economy.LEVEL_CAP and day < 100:
@@ -139,7 +140,7 @@ def test_days_to_cap_lands_in_the_first_weeks():
         while level < economy.LEVEL_CAP and xp >= economy.xp_need(level):
             xp -= economy.xp_need(level)
             level += 1
-    assert 14 <= day <= 35, day
+    assert 21 <= day <= 42, day
 
 
 # ── the era-length model ─────────────────────────────────────────────────

@@ -85,7 +85,7 @@ encounters:
       A drift-crew's lost lamp and gear, aether pooled in the flood
       over them. It wades in the shape of a working man.
     weight: 1
-    traits: [resist_low, sturdy, slow]
+    traits: [resist_low, hulking, slow]
     prose: >-
       A lamp comes wading up the flooded gallery at shift-pace, hung on
       a shape like a working man. The shape is water and old gear. The

@@ -16,6 +16,7 @@ encounters:
       It strips cogs the way other things strip carcasses — patiently,
       from the edges in, wrench-first.
     weight: 3
+    traits: [frail, feeble]
     prose: >-
       A kobold rides a slow-turning wheel down from the dark, wrench in
       its belt, prying off cogs as it goes. It hops off at your level
@@ -26,7 +27,7 @@ encounters:
       A millstone of drive-iron that shook off its axle years ago. It only
       knows one direction at a time.
     weight: 3
-    traits: [slow, armor_high]
+    traits: [slow, armor_high, feeble]
     prose: >-
       A flywheel the size of a millstone has shaken off its axle and
       rolls the gallery lengthwise, hunting by echo. It has worn its own
@@ -37,6 +38,7 @@ encounters:
       Chalk ring, house rules, no plate above the waist. It wins bets
       here, and you are the odds.
     weight: 2
+    traits: [sturdy, fierce]
     prose: >-
       Between two meshing wheels an orc has chalked out a fighting
       ring. It steps over the line, cracks its warframe's knuckles, and
@@ -47,7 +49,7 @@ encounters:
       Something marten-quick lives on the drive belts and has never once
       touched the floor.
     weight: 2
-    traits: [fast]
+    traits: [fast, sturdy, savage]
     prose: >-
       A sleek shape flickers along the moving belts overhead, riding the
       machinery like a current, and comes off the last pulley at your

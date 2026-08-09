@@ -16,7 +16,7 @@ encounters:
       Its coat of frozen coolant is white armor. It shatters its own
       casing to charge, and arrives in a burst of glass.
     weight: 3
-    traits: [armor_med]
+    traits: [armor_med, fierce]
     prose: >-
       A wolf that hunts the spray-line wears a coat of frozen
       coolant like white armor. It shatters its own casing to charge,
@@ -27,7 +27,7 @@ encounters:
       It stands under the cataract for pleasure, growing a second hide.
       The silhouette under-promises.
     weight: 2
-    traits: [bulwark, slow]
+    traits: [bulwark, slow, feeble]
     prose: >-
       An ice troll stands under the cataract for pleasure, growing a
       second hide. It steps out of the white curtain at you, steaming
@@ -38,7 +38,7 @@ encounters:
       People come to see the Falls, and some stand too long in the spray.
       This one is still patient under a finger of glass.
     weight: 1
-    traits: [slow, resist_low]
+    traits: [slow, resist_low, sturdy, savage]
     prose: >-
       People come to see the Falls, and some stand too long in the
       spray. One of the white statues along the viewing path turns
@@ -49,6 +49,7 @@ encounters:
       It dens in the dry pocket behind the cataract and robs the viewing
       path at its leisure.
     weight: 2
+    traits: [frail, feeble]
     prose: >-
       A marten flows out from behind the white curtain, coat beaded with
       frozen spray, and cuts across the path with its eyes already on the

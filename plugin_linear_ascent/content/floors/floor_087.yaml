@@ -16,7 +16,7 @@ encounters:
       Contamination of the beds is the one sin the head gardener flogs
       for, and you are tracking in pollen from ninety floors of elsewhere.
     weight: 3
-    traits: [fast]
+    traits: [fast, lean, feeble]
     prose: >-
       A gardener imp is grafting a fresh arm onto a young ram when
       you interrupt. Contamination of the beds is the one sin the
@@ -28,6 +28,7 @@ encounters:
       Green, unbalanced, and eager — a colt with a battering head, ruining
       the rows to reach you.
     weight: 3
+    traits: [lean, fierce]
     prose: >-
       A ram not due for another season tears loose of its trellis at
       your scent, dragging root-cables. It is green, unbalanced, and
@@ -39,7 +40,7 @@ encounters:
       The gardeners forgot to tell it the war it fell in is over. It comes
       off the frame with the nails still in.
     weight: 2
-    traits: [armor_high, slow]
+    traits: [armor_high, slow, fierce]
     prose: >-
       What keeps the carrion birds off the beds is a hellknight
       crucified on a trellis, still running. The gardeners forgot
@@ -51,7 +52,7 @@ encounters:
       What the scarecrow is for. It has been testing the scarecrow's
       patience for years, and yours looks shorter.
     weight: 2
-    traits: [flying]
+    traits: [flying, hulking, fierce]
     prose: >-
       A kite wheels down off the trellis-rows where the scarecrow cannot
       reach, bone-meal dust in its primaries, and makes its approach run

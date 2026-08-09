@@ -161,39 +161,34 @@ def test_lethal_draws_keep_more_weight_on_high_floors(monkeypatch):
             assert table[e.id] == max(1, round(w * cut)), (f, e.id)
 
 
-# ── reward-cap ladder ────────────────────────────────────────────────────
+# ── the bar clamp (043: it replaced the reward-cap ladder) ───────────────
 
-def test_reward_cap_climbs_and_never_exceeds_the_archetype_ceiling():
-    assert economy.reward_mult_cap(1) == 6.0
-    assert economy.reward_mult_cap(3) == 6.0
-    assert economy.reward_mult_cap(4) == 6.5
-    assert economy.reward_mult_cap(6) == 7.5
-    assert economy.reward_mult_cap(100) == 7.5
-    caps = [economy.reward_mult_cap(f) for f in range(1, 40)]
-    assert caps == sorted(caps)
-    assert max(caps) == economy.REWARD_MULT_CAP_CEIL == 7.5
-    # 7.5 sits just over hulking·savage = 7.2 — the ladder's top rung
-    # uncaps every real archetype without inventing pay from nowhere
-    assert max(economy.BODY_ROUNDS.values()) \
-        * max(economy.BITE_PAY.values()) == pytest.approx(7.2)
+def test_the_bar_offset_is_clamped_to_the_promise():
+    """043: toughness is priced once, by the bar, and the offset clamp
+    [−2, +1] IS the old reward cap — the richest draw on a floor can
+    only ever be one bar up, so it can never invent pay from nowhere."""
+    assert economy.bar_offset(()) == 0
+    assert economy.bar_offset(("frail", "feeble")) == -2
+    assert economy.bar_offset(("lean", "feeble")) == -2
+    assert economy.bar_offset(("hulking", "savage")) == 1   # 2, clamped
+    assert economy.BAR_OFFSET_MIN == -2 and economy.BAR_OFFSET_MAX == 1
+    for body in ("frail", "lean", "sturdy", "hulking", ""):
+        for bite in ("feeble", "fierce", "savage", ""):
+            traits = tuple(t for t in (body, bite) if t)
+            assert -2 <= economy.bar_offset(traits) <= 1, traits
+    # the ladder is floored and capped: floor 1 has no bar-0 prey, and
+    # nothing stands above the floor-101 loadout
+    assert economy.creature_bar(1, ("frail", "feeble")) == 1
+    assert economy.creature_bar(101, ("hulking", "savage")) \
+        == economy.BAR_MAX
 
 
 def test_one_lucky_draw_never_outpays_the_warden_in_the_live_bands():
-    """cap · gold_per_kill < warden_gold through floor 20. Past floor 20
-    the band income jump has always outrun warden_gold (pre-existing,
-    documented on reward_mult_cap) — the gate tracks, not hides, it."""
+    """gold_per_kill(F+1) < warden_gold(F) through floor 20 — the clamp
+    makes the old cap structural. Past floor 20 the band income jump has
+    always outrun warden_gold (pre-existing) — the gate tracks it."""
     for f in range(1, 21):
-        assert (economy.reward_mult_cap(f) * economy.gold_per_kill(f)
-                < economy.warden_gold(f)), f
-
-
-def test_kill_reward_mult_is_floor_aware():
-    hulk = ("hulking", "savage")
-    assert economy.kill_reward_mult(1, hulk) == 6.0     # floor-1 cap binds
-    assert economy.kill_reward_mult(6, hulk) == pytest.approx(7.2)
-    # prey pays the same misery everywhere — the cap never binds it
-    assert economy.kill_reward_mult(1, ("frail", "feeble")) \
-        == economy.kill_reward_mult(9, ("frail", "feeble"))
+        assert economy.gold_per_kill(f + 1) < economy.warden_gold(f), f
 
 
 # ── the headline number ──────────────────────────────────────────────────
@@ -211,18 +206,18 @@ def test_floor_six_expected_pay_leaves_floor_one_far_behind():
             w = e.weight * 100
             if "feeble" in (e.traits or ()):
                 w = max(1, round(w * fade))
-            threat = economy.kill_reward_mult(f, e.traits or ())
+            bar = economy.creature_bar(f, e.traits or ())
             total += w
-            pay += w * economy.gold_per_kill(f) * threat * spec_e
+            pay += w * economy.gold_per_kill(bar) * spec_e
         return pay / total
 
     assert ev(6) >= 2 * ev(1), (ev(1), ev(6))
     # and the bottom rises with the floor: floor 6's worst possible kill
-    # (weakest threat draw, runt) beats floor 1's worst by ≥ 50%
+    # (lowest-bar draw, runt) beats floor 1's worst by ≥ 50%
     def worst(f):
         fl = schema.get_floor(f)
-        return min(economy.kill_reward_mult(f, e.traits or ())
-                   * economy.gold_per_kill(f) for e in fl.encounters) \
+        return min(economy.gold_per_kill(economy.creature_bar(
+            f, e.traits or ())) for e in fl.encounters) \
             * economy.SPECIMENS["runt"]["gold"]
     assert worst(6) >= 1.5 * worst(1), (worst(1), worst(6))
 

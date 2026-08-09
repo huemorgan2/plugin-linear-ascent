@@ -16,7 +16,7 @@ encounters:
       The wake comes first, quick as a skipped stone. The breach comes
       last, jaws open, gloriously happy.
     weight: 3
-    traits: [fast]
+    traits: [fast, frail, feeble]
     prose: >-
       The wake comes first — a ridge of disturbed ash running at you
       through the dune, quick as a skipped stone. The salamander
@@ -27,6 +27,7 @@ encounters:
       Blind from staring into too many years of ember-glow. It navigates
       by smell now, and it has found yours.
     weight: 2
+    traits: [frail, fierce]
     prose: >-
       An ogre wanders the dunes at night with its eyes wrapped, blind
       from staring into too many years of ember-glow. It navigates by
@@ -37,7 +38,7 @@ encounters:
       Each one carries a live cinder in its belly, drawn to anything
       warmer than the desert. You qualify.
     weight: 2
-    traits: [flying]
+    traits: [flying, sturdy, fierce]
     prose: >-
       A drift of moths rises off a glowing dune face, each one carrying
       a live cinder in its belly. They are drawn to anything warmer
@@ -48,6 +49,7 @@ encounters:
       It hunts the glowing dune faces at night, striking at whatever
       blocks the light.
     weight: 2
+    traits: [sturdy, savage]
     prose: >-
       Between two slow bands of dune-glow a length of shadow uncoils — an
       adder the color of cold cinder, head up, reading the heat of you

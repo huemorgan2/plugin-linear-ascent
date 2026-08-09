@@ -323,8 +323,11 @@ def test_matchup_gate_floors_1_to_10():
     the time — which is exactly the flatness the rebalance removes. What
     still has to hold:
 
-    • anything without a real bite (prey, peer, wall) stays farmable at
-      ≥80% for the class it doesn't counter;
+    • prey — anything standing BELOW its floor's bar — stays farmable
+      at ≥80% for the class it doesn't counter (043: a creature AT the
+      bar pays the full fierce-grade fight cost even with no bite trait,
+      so at-bar and above-bar shapes are the floor's real fights and are
+      measured by the danger law instead);
     • every class keeps ≥2 farmable targets on every floor (the 008 pool
       rule, now measured and not just linted);
     • a hard counter still walls (<30%) or drags (≥1.6× plain rounds);
@@ -359,9 +362,10 @@ def test_matchup_gate_floors_1_to_10():
                 full = mult >= 1.0 and not profile["bulwark"] \
                     and not speed_hard
                 where = f"floor {floor_no} {clazz} vs {enc.id}"
+                at_or_above = economy.bar_offset(enc.traits) >= 0
                 if winrate >= 0.80:
                     farmable += 1
-                if bite in ("fierce", "savage"):
+                if bite in ("fierce", "savage") or at_or_above:
                     danger = min(danger, winrate)
                 elif full:
                     assert winrate >= 0.80, f"{where}: win {winrate:.0%}"
@@ -381,6 +385,10 @@ def test_matchup_gate_floors_1_to_10():
         # wolves (§7), and death itself got dearer — §8 taxes every
         # death, no pardons past level 6 — so a ≥15% chance of dying
         # is still ruinous EV. The bar moves 80→85, not away.
-        assert danger <= 0.85, (
-            f"floor {floor_no}: the worst fight on the floor is won "
-            f"{danger:.0%} of the time — nothing here is frightening (025)")
+        # 043.2: the tutorial floors are exempt — FLOOR_ATK_SOFT divides
+        # their bite on purpose, so nothing there is frightening BY LAW.
+        if floor_no not in economy.FLOOR_ATK_SOFT:
+            assert danger <= 0.85, (
+                f"floor {floor_no}: the worst fight on the floor is won "
+                f"{danger:.0%} of the time — nothing here is frightening "
+                "(025)")

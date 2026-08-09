@@ -37,15 +37,17 @@ def world_day_f(at: dt.datetime | None = None) -> float:
 def new_player(luna_user: str) -> dict:
     ts = now().isoformat()
     return {
-        "version": 5,
+        "version": 6,
         "luna_user": luna_user,
         "stage": "intro",              # intro → creation_race → creation_class → creation_name → playing
         "name": None, "race": None, "clazz": None,
-        "level": 1, "xp": 0, "hp": economy.player_max_hp(1),
+        "level": 1, "xp": 0,
+        "hp": economy.player_max_hp(1, economy.GATE_ARMOR.bonus),
         "gold": 50, "bank": 0, "bank_day": world_day(),
         "floor": 0, "location": "town",
         "gear": {"weapon": economy.STARTER_WEAPON.slug,
-                 "shield": None, "armor": None, "shoes": None},
+                 "shield": economy.GATE_SHIELD.slug,
+                 "armor": economy.GATE_ARMOR.slug, "shoes": None},
         "hone": {s: 0 for s in economy.HONE_SLOTS},
         # 005: staged onboarding — a slot gets a durability entry only
         # when its first PAID piece is bought (free gear never wears).
@@ -369,6 +371,16 @@ def ensure_current(p: dict) -> None:
                     event_kind="present",
                 ).to_dict())
         p["version"] = 5
+    if p.get("version", 1) < 6:
+        # 043: the gate issues the whole kit now — a fresh climber IS
+        # bar 1 (level 1 in the floor's reference gear). Docs with a
+        # bare shield or armor slot get the gate piece; anything the
+        # player already bought stays.
+        if not p["gear"].get("shield"):
+            p["gear"]["shield"] = economy.GATE_SHIELD.slug
+        if not p["gear"].get("armor"):
+            p["gear"]["armor"] = economy.GATE_ARMOR.slug
+        p["version"] = 6
     # Soft clamp: XP used to bank past a full bar. Anyone already over
     # is brought back to the bar — surplus never bought a level anyway.
     if xp_room(p) is not None:

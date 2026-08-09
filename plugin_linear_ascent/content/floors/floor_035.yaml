@@ -17,7 +17,7 @@ encounters:
       warmth. Its eyes reflect your lamp in rows, like little status
       lights.
     weight: 3
-    traits: [resist_low]
+    traits: [resist_low, lean, feeble]
     prose: >-
       A spider has webbed an entire engine-rack into its nest and grown
       strange on the warmth. Its eyes reflect your lamp in rows, like
@@ -29,7 +29,7 @@ encounters:
       should have, and spells blur against whatever is being computed
       inside.
     weight: 3
-    traits: [resist_med]
+    traits: [resist_med, feeble]
     prose: >-
       A husk hangs wired into the racks, and the engines have been
       using it — it walks toward you with a purpose nothing dead should
@@ -40,7 +40,7 @@ encounters:
       It sleeps pressed to the warmest rack like a cat against a stove.
       Your footstep landed wrong.
     weight: 2
-    traits: [slow]
+    traits: [slow, lean, savage]
     prose: >-
       A deep troll sleeps pressed against the warmest rack like a cat
       against a stove. Your footstep lands wrong. It is not asleep
@@ -51,7 +51,7 @@ encounters:
       Bred lean by generations of hunting the warm aisles. The racks light
       up as it passes, row by row.
     weight: 2
-    traits: [fast]
+    traits: [fast, hulking, fierce]
     prose: >-
       Down the long aisle every rack flickers in sequence, faster and
       faster — and then the spider making them flicker is already at your

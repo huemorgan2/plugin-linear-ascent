@@ -17,7 +17,7 @@ encounters:
       this size do not lose arguments on their own land — they last them
       out.
     weight: 3
-    traits: [bulwark, slow]
+    traits: [bulwark, slow, feeble]
     prose: >-
       A frost giant straightens up from mending a fence of whole
       trees, hammer dangling. You are on the near field. The near
@@ -28,7 +28,7 @@ encounters:
       Bred to giant scale, it clears the pine fence without touching it.
       It is not angry. It is on the clock.
     weight: 3
-    traits: [fast]
+    traits: [fast, frail, feeble]
     prose: >-
       The giants breed their hounds to giant scale, and this one
       clears the pine fence without touching it. It is not angry.
@@ -38,6 +38,7 @@ encounters:
     lore: >-
       It was stealing hay until you arrived and became the better idea.
     weight: 2
+    traits: [lean, savage]
     prose: >-
       An ice troll is stealing hay by the armload, pursued by nobody
       yet. Your arrival gives it a better idea than hay, and it drops
@@ -48,6 +49,7 @@ encounters:
       Cattle bred for owners four men tall. It does not recognize fences,
       seasons, or you.
     weight: 2
+    traits: [hulking, fierce]
     prose: >-
       A bull the size of a barn door tears free of the near-field herd
       with a fence rail still roped to one horn, and commits to the

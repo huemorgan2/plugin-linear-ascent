@@ -16,7 +16,7 @@ encounters:
       The spiders here do not hunt; they garrison. The challenge phrase is
       real, and there is no right answer.
     weight: 3
-    traits: [armor_med]
+    traits: [armor_med, feeble]
     prose: >-
       The spiders here do not hunt; they garrison. A sentinel drops
       into the aisle with drilled precision, mouthparts moving in what
@@ -27,6 +27,7 @@ encounters:
       Newborn and knee-high, it knows the two facts of its life: it is
       hungry, and you are near.
     weight: 3
+    traits: [frail, feeble]
     prose: >-
       An egg-sac beside you splits with a sound like wet canvas. What
       spills out is newborn and knee-high and already knows the two
@@ -37,6 +38,7 @@ encounters:
       Paid for guard duty in whatever fails inspection. It takes the work
       seriously; the work is you.
     weight: 2
+    traits: [lean, savage]
     prose: >-
       A deep troll has been given the run of the galleries in exchange
       for guard duty, paid in whatever fails inspection. It takes its
@@ -47,7 +49,7 @@ encounters:
       The glow that moves inside the eggs sometimes moves outside them.
       Vyx counts those too.
     weight: 2
-    traits: [flying, resist_low]
+    traits: [flying, resist_low, hulking, fierce]
     prose: >-
       One of the egg-glows slips its sac and drifts the gallery like a
       lantern looking for its keeper, and whatever it lights leans toward

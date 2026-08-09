@@ -18,7 +18,7 @@ encounters:
       to the stone, token worn smooth. You will tire before it does;
       everyone has.
     weight: 3
-    traits: [bulwark, slow]
+    traits: [bulwark, slow, fierce]
     prose: >-
       The thing on the bench beside the door has waited so long it
       has become part of the protocol — robes fused to the stone,
@@ -30,7 +30,7 @@ encounters:
       Your paperwork is fatally out of order. The regret is genuine. The
       fatality is procedural.
     weight: 3
-    traits: [resist_med]
+    traits: [resist_med, feeble]
     prose: >-
       An under-chamberlain sweeps toward you, a demon of ledgers
       and closed doors, robes hissing on the glass floor. Your
@@ -42,7 +42,7 @@ encounters:
       A century of the queue, voided, and the recalled tokens want their
       holders. Yours is getting warmer.
     weight: 2
-    traits: [fast]
+    traits: [fast, frail, feeble]
     prose: >-
       Somewhere a clerk voids a century of the queue, and the
       recalled tokens come looking for their holders — a drift of
@@ -54,6 +54,7 @@ encounters:
       Its master's number was never called. It holds the bench, and the
       grudge, on his behalf.
     weight: 2
+    traits: [sturdy, savage]
     prose: >-
       A hound rises from beneath an empty bench where somebody's robes
       still sit, stretches a century out of its joints, and crosses the

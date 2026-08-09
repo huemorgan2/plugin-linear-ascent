@@ -83,14 +83,28 @@ def test_no_two_creatures_on_a_floor_are_the_same_monster(floor_no):
 
 @pytest.mark.parametrize("floor_no", BAND)
 def test_every_floor_owes_prey_and_a_thing_that_can_kill_you(floor_no):
+    """043 moved both ends of this law. The cheapest kill sits at bar
+    F−2 now, not in a basement — it costs a real bite of the pool, just
+    a clearly smaller one (floor 1 has no basement at all: its prey IS
+    bar 1). And the worst draw is a bar-F+1 animal: its whole fight
+    costs MORE than the at-floor pool — met carelessly, it kills."""
     fl = schema.get_floor(floor_no)
     costs = sorted(_fight_cost(floor_no, e) for e in fl.encounters)
-    assert costs[0] <= 0.15, (
+    cheap = 0.90 if floor_no == 1 else 0.55
+    assert costs[0] <= cheap, (
         f"floor {floor_no}: the cheapest kill still costs "
         f"{costs[0]:.0%} of the pool — no prey to farm")
-    assert costs[-1] >= 0.55, (
-        f"floor {floor_no}: the worst fight costs only {costs[-1]:.0%} "
-        "of the pool — nothing here is frightening")
+    # 043.2: the tutorial floors are EXEMPT from fright — FLOOR_ATK_SOFT
+    # divides their bite on purpose. The worst draw there still stands
+    # clearly above the prey; everywhere else the old law holds.
+    if floor_no in economy.FLOOR_ATK_SOFT:
+        assert costs[-1] >= 0.25, (
+            f"floor {floor_no}: even the tutorial owes a worst fight "
+            f"({costs[-1]:.0%} of the pool)")
+    else:
+        assert costs[-1] >= 1.0, (
+            f"floor {floor_no}: the worst fight costs only {costs[-1]:.0%} "
+            "of the pool — nothing here is frightening")
 
 
 @pytest.mark.parametrize("floor_no", BAND)
@@ -105,16 +119,17 @@ def test_the_spread_is_wide_and_the_body_is_never_a_slog(floor_no):
 
 
 def test_a_starved_prey_is_always_the_cheaper_fight():
-    """Through band 1 the PEER's blow is already the ⌈raw/4⌉ chip — its
-    ATK sits under half the player's DEF — so "feeble" has almost no room
-    to lower the bite and must never raise it. What makes prey prey is
-    the body: it dies in a round or two, so the fight costs a fraction."""
+    """043: prey is anchored two bars down, so its WHOLE fight always
+    costs less than the plain peer's. Its per-round ATK may now exceed
+    the peer's — the frail body spends its (smaller) budget in far fewer
+    rounds, the glass-cannon texture — so the law is the total, not the
+    blow."""
     plain = schema.Encounter(id="_p", name="P", weight=1, prose="p")
     for floor_no in BAND:
         prey = schema.Encounter(id="_q", name="Q", weight=1, prose="p",
                                 traits=("frail", "feeble"))
-        assert (economy.creature_stats(floor_no, prey.traits)[0]
-                <= economy.creature_stats(floor_no, ())[0]), floor_no
+        assert (economy.creature_bar(floor_no, prey.traits)
+                <= economy.creature_bar(floor_no, ())), floor_no
         assert _fight_cost(floor_no, prey) < _fight_cost(floor_no, plain), \
             floor_no
 
@@ -148,25 +163,36 @@ def test_the_opener_names_the_shape_before_you_commit():
 # ── B. danger pays — in BOTH currencies ──────────────────────────────────
 
 @pytest.mark.parametrize("floor_no", BAND)
-def test_pay_varies_at_least_fourfold_inside_one_floor(floor_no):
+def test_pay_follows_the_bar_inside_one_floor(floor_no):
+    """043: kill_reward_mult is retired — pay is gold_per_kill(bar), so
+    inside a floor the payout ladder IS the bar ladder: strictly more
+    gold per bar, and the roster spans at least three bars."""
     fl = schema.get_floor(floor_no)
-    mults = [economy.kill_reward_mult(floor_no, e.traits)
-             for e in fl.encounters]
-    assert max(mults) >= 4 * min(mults), (
-        f"floor {floor_no}: pay spread only {max(mults)/min(mults):.1f}×")
+    bars = sorted({economy.creature_bar(floor_no, e.traits)
+                   for e in fl.encounters})
+    assert len(bars) >= (2 if floor_no <= 2 else 3), (floor_no, bars)
+    pays = [economy.gold_per_kill(b) for b in bars]
+    assert pays == sorted(pays) and pays[-1] > pays[0], (floor_no, pays)
 
 
 def test_the_hard_ones_pay_and_the_prey_does_not():
-    assert economy.kill_reward_mult(1, ("frail", "feeble")) < 0.5
-    assert economy.kill_reward_mult(1, ()) == 1.0
-    assert economy.kill_reward_mult(1, ("sturdy", "fierce")) >= 3.0
-    assert economy.kill_reward_mult(1, ("hulking", "savage")) \
-        <= economy.REWARD_MULT_CAP
+    """Floor 5: the prey sits two bars down, the terror one bar up, and
+    the coin follows the bar in that same order."""
+    prey_bar = economy.creature_bar(5, ("frail", "feeble"))
+    hard_bar = economy.creature_bar(5, ("hulking", "savage"))
+    assert prey_bar == 3 and hard_bar == 6
+    assert (economy.gold_per_kill(prey_bar)
+            < economy.gold_per_kill(economy.creature_bar(5, ()))
+            < economy.gold_per_kill(hard_bar))
 
 
-def test_xp_follows_the_threat_and_not_just_gold():
-    """Before 025 the specimen and profile multipliers moved gold only —
-    XP was 4·floor for a limping runt and for an alpha alike."""
+def test_xp_follows_the_threat_and_not_just_gold(monkeypatch):
+    """Before 025 the specimen and profile multipliers moved gold only.
+    043: BOTH currencies now key off the creature's bar — on floor 1 the
+    hulking savage stands at bar 2 and out-pays the bar-1 prey in xp and
+    gold alike. Jitter pinned: the bar gap (1 vs 2) is real but small."""
+    monkeypatch.setattr(state, "rng_jitter", lambda p, base, pct: base)
+
     def _kill(traits, user):
         p = at_gate_town(create_character(fresh(user)))
         fl = schema.get_floor(1)
@@ -182,8 +208,10 @@ def test_xp_follows_the_threat_and_not_just_gold():
 
     prey_xp, prey_gold = _kill(("frail", "feeble"), "r25-prey")
     hard_xp, hard_gold = _kill(("hulking", "savage"), "r25-hard")
-    assert hard_xp > prey_xp * 3, (prey_xp, hard_xp)
-    assert hard_gold > prey_gold * 3, (prey_gold, hard_gold)
+    assert hard_xp > prey_xp, (prey_xp, hard_xp)
+    assert hard_gold > prey_gold, (prey_gold, hard_gold)
+    assert hard_xp == economy.xp_per_kill(economy.creature_bar(
+        1, ("hulking", "savage")))
 
 
 # ── C. the rubber band ───────────────────────────────────────────────────

@@ -16,7 +16,7 @@ encounters:
       It announces you to the barrow in a note you feel in your fillings,
       which is worse than an ambush.
     weight: 3
-    traits: [resist_low]
+    traits: [resist_low, frail, feeble]
     prose: >-
       A wight in the wreck of royal livery bars the tribute-road,
       horn raised. It winds a note you feel in your fillings, and
@@ -27,6 +27,7 @@ encounters:
       Dropping the offering would shame it before the King. It sets the
       body down carefully, first.
     weight: 3
+    traits: [frail, fierce]
     prose: >-
       A ghoul struggles toward the moat under a dead soldier in full
       rig, tribute for the King. Dropping the offering would shame it.
@@ -37,7 +38,7 @@ encounters:
       Buried in their mail, buried with their rigs. Rust and bone move as
       one thing, and the plate remembers its trade.
     weight: 2
-    traits: [armor_med]
+    traits: [armor_med, fierce]
     prose: >-
       The King's own guard wear the mail they were buried in and the
       exo-rigs they were buried with, rust and bone moving as one
@@ -48,7 +49,7 @@ encounters:
       A century of tribute sank into the black moat, and something grew
       fond of the collection.
     weight: 2
-    traits: [slow]
+    traits: [slow, sturdy, savage]
     prose: >-
       The moat's skin of black water bulges and a watcher rises draped in
       sunken tribute — crowns, sword-belts, rig-plate — wearing the hoard

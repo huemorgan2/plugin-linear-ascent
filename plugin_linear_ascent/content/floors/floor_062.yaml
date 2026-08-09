@@ -16,7 +16,7 @@ encounters:
       The clan matriarch wears three captains' coats at once. Everything
       on this peak is claimed, including, as of now, your gear.
     weight: 3
-    traits: [flying]
+    traits: [flying, frail, feeble]
     prose: >-
       A harpy clan has stripped this hull to the ribs, and the clan
       matriarch lands on the keel above you wearing three captains'
@@ -28,7 +28,7 @@ encounters:
       Brooding a clutch on a bed of trade silver — possessive, charged,
       and recently a parent.
     weight: 3
-    traits: [resist_med]
+    traits: [resist_med, feeble]
     prose: >-
       A storm drake has nested in a cargo hold, brooding a clutch on
       a bed of trade silver. The hull groans under it as it comes
@@ -39,7 +39,7 @@ encounters:
       They rise in harness and oilskin, moving with the roll of a deck
       that stopped rolling years ago.
     weight: 2
-    traits: [slow]
+    traits: [slow, sturdy, fierce]
     prose: >-
       Below decks, the crew never left their stations. They rise from
       the ribs of the hull in harness and oilskin, moving with the
@@ -51,7 +51,7 @@ encounters:
       lapped ship-iron doing it. Cutting it down is a shipwright's job,
       not a soldier's.
     weight: 2
-    traits: [bulwark, slow]
+    traits: [bulwark, slow, savage]
     prose: >-
       The keel above you flexes and a borer backs out of the timber — a
       grub gone the size of a longboat, plated in the iron it could not

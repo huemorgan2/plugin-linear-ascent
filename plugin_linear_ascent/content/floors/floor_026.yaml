@@ -16,7 +16,7 @@ encounters:
       A thousand years in the peat tanned him tough as boat leather. Every
       wound closes with a wet brown sound — outlast him if you can.
     weight: 1
-    traits: [bulwark, slow, resist_med]
+    traits: [bulwark, slow, resist_med, savage]
     prose: >-
       A bog king climbs from the cut-bank, tanned black by a thousand
       years of peat, torc still bright. He was somebody once, and being
@@ -27,6 +27,7 @@ encounters:
       It works the banks with a peat-cutter's blade and a harvester's
       patience. You are standing on its next cut.
     weight: 3
+    traits: [lean, feeble]
     prose: >-
       A ghoul works a peat-cutter's blade along the bank with terrible
       patience, harvesting things the diggers missed. It marks where
@@ -37,6 +38,7 @@ encounters:
       Packed peat and root in the shape of loyalty. Thrown stones just
       improve it.
     weight: 2
+    traits: [lean, fierce]
     prose: >-
       A hound of packed peat and root shakes itself apart and back
       together, coming up the cut. Thrown stones just improve it.
@@ -46,7 +48,7 @@ encounters:
       Marsh midges in a swarm dense enough to have opinions. The cuts
       breed them by the ton.
     weight: 2
-    traits: [flying]
+    traits: [flying, lean, savage]
     prose: >-
       The fog line detaches a piece of itself and hums toward you — a
       midge cloud thick enough to blot the cut-banks, moving with one slow

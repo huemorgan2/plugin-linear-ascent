@@ -16,6 +16,7 @@ encounters:
       It is not repairing the bridge you are standing on. It is adjusting
       the load rating.
     weight: 3
+    traits: [frail, feeble]
     prose: >-
       A spider re-strings a sagging silk bridge ahead of you, working
       backward, watching you the whole time. You realize it is not
@@ -26,7 +27,7 @@ encounters:
       Arranged at a silk window with care, one arm raised. As you pass,
       the arm finishes the gesture.
     weight: 3
-    traits: [slow]
+    traits: [slow, frail, fierce]
     prose: >-
       A husk sits at a silk window in a silk chair, arranged with
       care, one arm raised in something like a wave. As you pass, the
@@ -37,7 +38,7 @@ encounters:
       Too heavy for any street, it climbs the city's underside, tearing
       handholds in other people's architecture.
     weight: 2
-    traits: [armor_low]
+    traits: [armor_low, sturdy, fierce]
     prose: >-
       A deep troll climbs the city's underside, too heavy for any
       street, tearing handholds in other people's architecture. It
@@ -48,7 +49,7 @@ encounters:
       It balloons between the silk towers on threads of its own casting,
       and it boards passing climbers like cargo.
     weight: 2
-    traits: [flying]
+    traits: [flying, sturdy, savage]
     prose: >-
       Above the swaying street a small shape casts a thread to the wind
       that does not blow, and rides it down toward your shoulders with the

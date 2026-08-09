@@ -16,7 +16,7 @@ encounters:
       It works a two-troll saw alone, which is against the gang rules,
       which it ate.
     weight: 3
-    traits: [armor_low]
+    traits: [armor_low, frail, feeble]
     prose: >-
       An ice troll works a two-troll saw alone, which is against the
       gang rules, which it ate. It leaves the saw singing in the cut
@@ -27,7 +27,7 @@ encounters:
       The deep blocks were not left unfinished by accident. It has been
       sawing from its side, and it is nearly out.
     weight: 2
-    traits: [slow, resist_med]
+    traits: [slow, resist_med, fierce]
     prose: >-
       One of the deep blocks has a shape inside it, and the shape has
       been sawing from its side. Your lamp is the first light it has
@@ -38,7 +38,7 @@ encounters:
       It patrols the top gantry like a foreman and comes down the ramps
       collecting the pack as it comes.
     weight: 2
-    traits: [fast]
+    traits: [fast, hulking, fierce]
     prose: >-
       A wolf patrols the top gantry like a foreman, looking down the
       terraces at you. It starts down the ramps at a trot, unhurried,
@@ -49,7 +49,7 @@ encounters:
       Every work site feeds its crows. This quarry's crows have opinions
       about who counts as site waste.
     weight: 3
-    traits: [flying]
+    traits: [flying, frail, fierce]
     prose: >-
       A crow lifts off the idle gantry crane and rides the cold down the
       terraces toward you, wings set, calling the count of you to the

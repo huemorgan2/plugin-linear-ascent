@@ -16,7 +16,7 @@ encounters:
       It has run down warmer things than you and eaten them mid-stride.
       The frost coat is from never slowing.
     weight: 3
-    traits: [fast]
+    traits: [fast, frail, fierce]
     prose: >-
       A wolf comes over the moraine wall furred in frost, breath
       hanging behind it in a long unbroken banner. It has run down
@@ -27,7 +27,7 @@ encounters:
       Being a boulder is a toll practice older than the tower, and it has
       never lost this game.
     weight: 3
-    traits: [armor_low]
+    traits: [armor_low, sturdy, fierce]
     prose: >-
       An ice troll sits in the boulder-field being one of the
       boulders, a toll practice older than the tower. It stands up
@@ -38,7 +38,7 @@ encounters:
       One of last winter's climbers, ice to the bone. The cold in it
       drinks spellwork like it drank the man.
     weight: 2
-    traits: [slow, resist_low]
+    traits: [slow, resist_low, sturdy, savage]
     prose: >-
       A climber stands off the path, mid-stride, ice to the bone —
       one of last winter's. As you pass, the frost on it cracks along
@@ -49,7 +49,7 @@ encounters:
       It hunts down-sun of the sunless glare, and it has learned that
       climbers look up too late.
     weight: 4
-    traits: [flying]
+    traits: [flying, frail, feeble]
     prose: >-
       Off the moraine wall a hawk drops out of the white glare with its
       shadow folded under it, talons first, committed from a height you

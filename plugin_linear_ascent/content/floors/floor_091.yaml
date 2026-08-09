@@ -16,7 +16,7 @@ encounters:
       The Crown does not garrison its doorstep with soldiers. It casts
       them, and glass casts thick.
     weight: 3
-    traits: [armor_med]
+    traits: [armor_med, fierce]
     prose: >-
       A figure detaches from the balustrade — black glass in the
       shape of a swordsman, faceless, flawless. The Crown does not
@@ -27,7 +27,7 @@ encounters:
       It wears your stance, your gear, and a much better night's sleep.
       Spells recognize themselves in it and hesitate.
     weight: 3
-    traits: [resist_med]
+    traits: [resist_med, feeble]
     prose: >-
       The climber in the polished riser ahead has stopped matching
       you. It steps out of the glass wearing your stance and your
@@ -39,6 +39,7 @@ encounters:
       Refusing a royal summons is death. Accepting is death with better
       lighting. It waits, professionally, while you choose.
     weight: 2
+    traits: [lean, feeble]
     prose: >-
       An imp in Crown livery — silk, not soot — descends the stair
       with a silver tray and a summons. Refusing a royal summons is
@@ -50,7 +51,7 @@ encounters:
       It lays its eggs in reflections. The stair-keepers polish against
       it, and lose ground yearly.
     weight: 2
-    traits: [flying]
+    traits: [flying, hulking, fierce]
     prose: >-
       A moth with wings of near-perfect mirror lifts off the balustrade,
       and as it circles you it flashes back small crooked pieces of your

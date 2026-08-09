@@ -46,7 +46,10 @@ def test_no_gate_constant_was_forgotten_by_this_test():
              "NIGHT_SLOT_LEVEL", "STRONGBOX_LEVEL",
              "BEGINNER_MERCY_MAX_LEVEL",
              "BEGINNER_PROTECTION_MAX_LEVEL", "DEATH_NO_PARDON_LEVEL"}
-    exempt = {"LODGE_PRICE_PER_LEVEL", "GRANT_DAILY_CAP_PER_LEVEL"}
+    # DEATH_FREE_MAX_LEVEL is not a gate — it's the 043.2 free-death
+    # window inside the mercy band, invisible in the unlock registry.
+    exempt = {"LODGE_PRICE_PER_LEVEL", "GRANT_DAILY_CAP_PER_LEVEL",
+              "DEATH_FREE_MAX_LEVEL"}
     found = {n for n in dir(economy)
              if re.search(r"_LEVEL$", n) and n.isupper()}
     unknown = found - known - exempt
