@@ -314,11 +314,21 @@ def creature_rounds(floor: int, traits) -> float:
                * BODY_ROUNDS.get(body, 1.0))
 
 
-# 043: bar 1 is the tutorial rung. Its fight cost is softened so the
-# gate-issue kit (weapon 5 vs the reference 8) still farms prey ≥90%
-# and meets the at-bar shapes near the design 90% — calibrated with
-# tools/calibrate_bars.py's fight model against the fresh sheet.
-WILDS_BAR1_SOFT = 0.75
+# 043.1: the gentle start. κ concentrated a low bar's whole kill budget
+# into 2–3 rounds, so a floor-1 rat swung for a third of a fresh body's
+# pool per blow — correct on the ladder, unplayable at the gate. These
+# caps bound the FELT blow instead: per-round damage may not exceed this
+# share of the bar's reference pool, ramping to the standard
+# WILDS_ROUND_CAP by bar 5. At bars 1–2 the cap binds almost always, so
+# the early fights cost less total than κ asks — that discount IS the
+# on-ramp (it replaces the old WILDS_BAR1_SOFT). Bars 5+ are the honest
+# ladder, untouched.
+WILDS_LOW_BAR_CAPS = {1: 0.08, 2: 0.14, 3: 0.22, 4: 0.33}
+
+
+def wilds_round_cap(bar: int) -> float:
+    """Per-round damage ceiling for `bar`, as a share of its pool."""
+    return WILDS_LOW_BAR_CAPS.get(bar, WILDS_ROUND_CAP)
 
 
 def creature_stats(floor: int, traits) -> tuple[int, int, int]:
@@ -340,13 +350,7 @@ def creature_stats(floor: int, traits) -> tuple[int, int, int]:
     # anchored lethality.
     pool = reference_player_hp(bar)
     cost = _kappa(bar) * BITE_COST.get(bite, 1.0) * pool
-    if bar == 1:
-        # the on-ramp, wilds edition (wardens have their own at floors
-        # 1–5): a fresh climber carries the gate-issue kit but not the
-        # forge weapon, so bar 1 bites softer than its κ. Bars 2+ are
-        # the honest ladder.
-        cost *= WILDS_BAR1_SOFT
-    per_round = min(cost / rounds, WILDS_ROUND_CAP * pool)
+    per_round = min(cost / rounds, wilds_round_cap(bar) * pool)
     # Invert the damage rule, BOTH branches: a landed blow deals
     # max(raw/CHIP_DIVISOR, raw − DEF/2), so the raw roll that lands
     # exactly `per_round` is the smaller of the two solutions.

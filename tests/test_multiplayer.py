@@ -64,8 +64,13 @@ def test_strike_joins_a_full_fight_whose_wounds_persist():
             break
     assert p["encounter"] is None, "the getaway must eventually work"
     fx = [x for x in p["_effects"] if x["kind"] == "warden_strike"]
-    assert fx == [{"kind": "warden_strike", "floor": 1, "damage": 37,
-                   "taken": 15}]
+    # `taken` rides the day-seeded roll stream — assert the shape, not
+    # the exact toll, or the test fails by the calendar.
+    assert len(fx) == 1
+    assert fx[0]["kind"] == "warden_strike"
+    assert fx[0]["floor"] == 1
+    assert fx[0]["damage"] == 37
+    assert fx[0]["taken"] > 0
     # optimistic display: the pool the next card reads already dropped
     assert p["_world"]["warden"]["hp"] == hp_before - 37
 

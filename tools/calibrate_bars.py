@@ -45,7 +45,7 @@ def _creature(bar: int, kappa: float) -> tuple[int, int, int]:
     rounds = min(eco.WILDS_ROUNDS_HARD_MAX, eco.wilds_rounds(bar))
     hp = max(1, round(p_dmg * rounds))
     pool = eco.reference_player_hp(bar)
-    per_round = min(kappa * pool / rounds, eco.WILDS_ROUND_CAP * pool)
+    per_round = min(kappa * pool / rounds, eco.wilds_round_cap(bar) * pool)
     raw = min(eco.CHIP_DIVISOR * per_round, per_round + p_def // 2)
     return max(1, round(raw / 0.75)), dfs, hp
 

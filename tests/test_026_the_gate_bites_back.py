@@ -235,7 +235,14 @@ def test_a_caught_getaway_costs_real_blood_not_a_chip():
     caught = 0
     for _ in range(40):
         if p.get("encounter") is None:
+            # the getaway worked — walk back in and try again; the rolls
+            # are day-seeded, so one lucky escape must not fail the test
+            _at_keep(p)
+            p["energy_val"] = 24
+            core.apply_choice(p, "strike")
+        if p.get("encounter") is None:
             break
+        p["hp"] = state.max_hp(p)
         p["encounter"]["rounds"] = 0
         before = p["hp"]
         core.apply_choice(p, "run")

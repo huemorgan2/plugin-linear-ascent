@@ -96,6 +96,28 @@ fights against the calibrated κ). Two moves close it:
   (band-warned), the F+1 hulk walls — and ≥3 of floor 1's six table
   weights stay uncut for a full-HP fresh character.
 
+### 043.1 — the gentle start (post-ship correction)
+
+Live play (the first web signups, 2026-08-09) showed the on-ramp
+above wasn't one: κ concentrates a low bar's whole kill budget into
+2–3 rounds, so floor-1 shapes swung ATK 27–43 — a third of the fresh
+pool per blow. Winning 99% of fights while losing half your body per
+win reads as a slaughter, and it was.
+
+`WILDS_BAR1_SOFT` is replaced by `WILDS_LOW_BAR_CAPS` — a per-round
+damage ceiling as a share of the bar's pool, ramping to the standard
+`WILDS_ROUND_CAP` (0.45) by bar 5: `{1: 0.08, 2: 0.14, 3: 0.22,
+4: 0.33}`. At bars 1–2 the cap binds nearly always, so the early
+fights also cost less in total — that discount IS the on-ramp; bars
+5+ are untouched.
+
+Measured (fresh warrior, gate kit, real engine, floor 1): ATK 18 on
+every bar-1 shape (was 27–43), avg blow 5.9 (max 23, the bar-2
+hulk), avg fight cost 13–27 of 80 by shape (was 16–79). Kill-bar
+side effects: floor 3 gains a second bar-1 kill, floor 4 one (its
+frail bar-2 prey now dies to bar-1 steel) — accepted: the low floors
+are the tutorial, the taper holds from floor 5.
+
 The /mechanics kill bar reads the FAIR class per shape — physical
 (bow for flyers) unless armor out-halves resist, then the staff —
 never magic's DEF-shaving shortcut against unarmored shapes.
