@@ -63,6 +63,19 @@ until the sheet passes. Engine untouched — no runtime change to verify.
 **Rollback.** Delete `content/art/events/stills/` and the tool. Nothing
 ships in the plugin zip; no engine code changes in this phase.
 
+## Execution status (phase 1)
+
+2026-08-09 — 18/18 stills generated (nano-banana-pro, one call each, no
+retries needed) and pixelised; ink coverage 23–62%. Contact sheets
+written to `content/art/events/stills/sheet_raw.jpg` / `sheet_pixel.png`
+(dir gitignored as regenerable reference). Self-review flags four for
+possible retake, pending owner validation: `guano_vole_kill_magic`
+(staff renders as open torch flame, off canon), `silk_broodling_kill_magic`
+(spider very small vs the giant wizard), `vault_weaver_kill_arrow`
+(silk-bright field, ink 62% — tonally inverted vs the set),
+`wrapped_husk_kill_magic` (husk faint at 1-bit). Remaining 14 read
+clean in both forms.
+
 ## Operational notes
 
 - The engine's 038 kind-based fx resolution (`combat._kill_fx`) does NOT
