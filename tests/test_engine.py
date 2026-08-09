@@ -129,7 +129,8 @@ def test_beginner_death_mercy_keeps_gear_and_half_gold():
     # 004 §A.2: levels 1–3 keep armor/shield and lose only half gold
     p = create_character(fresh())
     p["daily"]["death_save"] = True
-    p["gold"] = 500
+    p["level"] = 2               # 043.2: level 1 dies for free — the
+    p["gold"] = 500              # halving starts once you've levelled
     p["gear"]["armor"] = "padded_jerkin"
     p["gear"]["shield"] = "scrapwood_buckler"
     choose(p, "gate")
@@ -142,6 +143,25 @@ def test_beginner_death_mercy_keeps_gear_and_half_gold():
     assert p["gear"]["armor"] == "padded_jerkin"      # gear survives
     assert p["gear"]["shield"] == "scrapwood_buckler"
     assert s.event_kind == "death"
+
+
+def test_level_one_death_costs_nothing_at_all():
+    """043.2: the first stumble is free — both death paths. A level-1
+    body keeps every coin through the daily save AND the mercy death."""
+    for death_save_spent in (False, True):
+        p = create_character(fresh())
+        p["daily"]["death_save"] = death_save_spent
+        p["gold"] = 500
+        choose(p, "gate")
+        choose(p, "floor_1")
+        choose(p, "hunt")
+        p["hp"] = 1
+        p["encounter"]["atk"] = 999
+        s = choose(p, "stand")
+        assert s.event_kind == "death"
+        assert p["gold"] == 500, (
+            f"death with save_spent={death_save_spent} taxed a level-1 "
+            f"purse: {p['gold']}")
 
 
 def test_backfill_heals_bare_handed_doc_with_apology():

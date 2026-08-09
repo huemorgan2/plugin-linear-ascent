@@ -331,6 +331,19 @@ def wilds_round_cap(bar: int) -> float:
     return WILDS_LOW_BAR_CAPS.get(bar, WILDS_ROUND_CAP)
 
 
+# 043.2: the tutorial floors. The first hour must be EASY, not merely
+# survivable — a flat FLOOR-keyed division of the final ATK, applied on
+# top of the bar math: floor 1 bites at a third, floor 2 at two thirds,
+# floor 3+ is the honest game. Keyed by floor (not bar) on purpose:
+# the same bar-2 shape hits full on floor 3 and soft on floor 1.
+FLOOR_ATK_SOFT = {1: 1 / 3, 2: 2 / 3}
+
+# Death is free until you have anything to lose: a player still on
+# level 1 keeps every coin through every death path — the tower does
+# not tax the first stumble.
+DEATH_FREE_MAX_LEVEL = 1
+
+
 def creature_stats(floor: int, traits) -> tuple[int, int, int]:
     """(ATK, DEF, HP) for THIS creature on `floor` — 043: everything is
     derived from its BAR, not its floor. DEF stays flat per bar; the
@@ -356,6 +369,7 @@ def creature_stats(floor: int, traits) -> tuple[int, int, int]:
     # exactly `per_round` is the smaller of the two solutions.
     raw = min(CHIP_DIVISOR * per_round, per_round + p_def // 2)
     atk = max(1, round(raw / 0.75))
+    atk = max(1, round(atk * FLOOR_ATK_SOFT.get(floor, 1.0)))
     return atk, dfs, hp
 
 

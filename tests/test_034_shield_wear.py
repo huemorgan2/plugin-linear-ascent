@@ -106,8 +106,10 @@ def test_a_fresh_buckler_lasts_days_not_a_week():
 # ── in the fight ────────────────────────────────────────────────────────
 
 def test_taking_a_blow_spends_more_than_one_use():
-    p, fl = _armed("blocker", shield="scrapwood_buckler",
-                   armor="padded_jerkin")
+    # floor 3: the first un-softened floor (043.2 tutorial ATK division
+    # leaves floor-1 blows too small to spend real tread)
+    p, fl = _armed("blocker", floor_no=3, enc_id="sluice_wolf",
+                   shield="scrapwood_buckler", armor="padded_jerkin")
     p["encounter"]["range"] = "close"
     before = p["durability"]["shield"]
     combat.resolve_fight_action(p, fl, "stand")

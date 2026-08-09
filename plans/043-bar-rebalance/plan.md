@@ -118,6 +118,25 @@ side effects: floor 3 gains a second bar-1 kill, floor 4 one (its
 frail bar-2 prey now dies to bar-1 steel) — accepted: the low floors
 are the tutorial, the taper holds from floor 5.
 
+### 043.2 — the tutorial floors (roy's direct spec, 2026-08-09)
+
+Even 043.1 wasn't it: roy died on his second monster at half HP and
+lost half his gold. The spec, verbatim in intent: first-time players
+must find it EASY — floor-1 ATK divided by 3, floor-2 by 2/3,
+floor 3+ honest; and a level-1 death loses NOTHING.
+
+- `FLOOR_ATK_SOFT = {1: 1/3, 2: 2/3}` — a flat floor-keyed division
+  of the final ATK, on top of the bar math. Keyed by FLOOR, not bar:
+  the same bar-2 shape hits full on floor 3, soft on floor 1.
+- `DEATH_FREE_MAX_LEVEL = 1` — both death paths (the daily shardmind
+  save and the beginner-mercy death) take zero gold at level 1.
+
+Measured: floor-1 ATK 6 (hulk 10), avg blow 1.7, max 3, avg fight
+cost 7.4 of 80, 118W/0L fresh; floor-2 ATK 12–28. Test laws bent to
+match: the 025 "worst fight ≥ pool" and 017 "danger ≤ 85%" clauses
+exempt floors in FLOOR_ATK_SOFT — the tutorial is not frightening BY
+LAW; shield-wear's blow test moved to floor 3 (the first honest one).
+
 The /mechanics kill bar reads the FAIR class per shape — physical
 (bow for flyers) unless armor out-halves resist, then the staff —
 never magic's DEF-shaving shortcut against unarmored shapes.

@@ -1293,12 +1293,19 @@ def _death(p: dict, floor) -> Scene:
         p["location"] = "gate_town"
         # 031 §8: the save keeps your life and your gear — never your
         # purse. Half the carried coin scatters where you fell.
-        save_tax = p["gold"] - p["gold"] // 2
-        p["gold"] //= 2
+        # 043.2: unless you are still level 1 — the first stumble is free.
+        if p["level"] <= economy.DEATH_FREE_MAX_LEVEL:
+            save_tax = 0
+        else:
+            save_tax = p["gold"] - p["gold"] // 2
+            p["gold"] //= 2
         save_lines = [f"The {e['name']} loses you in the grass."]
         if save_tax:
             save_lines.append(f"− ◈ {save_tax:,} carried gold, scattered "
                               "where you fell")
+        elif p["level"] <= economy.DEATH_FREE_MAX_LEVEL:
+            save_lines.append("▪ your purse is untouched — the tower asks "
+                              "nothing of the newly arrived")
         save_lines.append("You are at 1 HP. The gate town is close.")
         if save_tax:
             _ledger(p, "death", gold=-save_tax, note=e["name"])
@@ -1332,9 +1339,12 @@ def _death(p: dict, floor) -> Scene:
     lines = [f"Killed by the {e['name']}."]
     if mercy:
         # 004 §A.2: a bad first hour can't spiral — keep everything but
-        # half the carried gold.
-        lost_gold = p["gold"] - p["gold"] // 2
-        p["gold"] //= 2
+        # half the carried gold. 043.2: at level 1 not even that.
+        if p["level"] <= economy.DEATH_FREE_MAX_LEVEL:
+            lost_gold = 0
+        else:
+            lost_gold = p["gold"] - p["gold"] // 2
+            p["gold"] //= 2
         if lost_gold:
             lines.append(f"− ◈ {lost_gold} carried gold, gone")
         lines.append("▪ your gear survives — the tower is gentler with "

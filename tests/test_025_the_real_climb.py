@@ -94,9 +94,17 @@ def test_every_floor_owes_prey_and_a_thing_that_can_kill_you(floor_no):
     assert costs[0] <= cheap, (
         f"floor {floor_no}: the cheapest kill still costs "
         f"{costs[0]:.0%} of the pool — no prey to farm")
-    assert costs[-1] >= 1.0, (
-        f"floor {floor_no}: the worst fight costs only {costs[-1]:.0%} "
-        "of the pool — nothing here is frightening")
+    # 043.2: the tutorial floors are EXEMPT from fright — FLOOR_ATK_SOFT
+    # divides their bite on purpose. The worst draw there still stands
+    # clearly above the prey; everywhere else the old law holds.
+    if floor_no in economy.FLOOR_ATK_SOFT:
+        assert costs[-1] >= 0.25, (
+            f"floor {floor_no}: even the tutorial owes a worst fight "
+            f"({costs[-1]:.0%} of the pool)")
+    else:
+        assert costs[-1] >= 1.0, (
+            f"floor {floor_no}: the worst fight costs only {costs[-1]:.0%} "
+            "of the pool — nothing here is frightening")
 
 
 @pytest.mark.parametrize("floor_no", BAND)

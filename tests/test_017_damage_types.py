@@ -393,6 +393,10 @@ def test_matchup_gate_floors_1_to_10():
         # wolves (§7), and death itself got dearer — §8 taxes every
         # death, no pardons past level 6 — so a ≥15% chance of dying
         # is still ruinous EV. The bar moves 80→85, not away.
-        assert danger <= 0.85, (
-            f"floor {floor_no}: the worst fight on the floor is won "
-            f"{danger:.0%} of the time — nothing here is frightening (025)")
+        # 043.2: the tutorial floors are exempt — FLOOR_ATK_SOFT divides
+        # their bite on purpose, so nothing there is frightening BY LAW.
+        if floor_no not in economy.FLOOR_ATK_SOFT:
+            assert danger <= 0.85, (
+                f"floor {floor_no}: the worst fight on the floor is won "
+                f"{danger:.0%} of the time — nothing here is frightening "
+                "(025)")
