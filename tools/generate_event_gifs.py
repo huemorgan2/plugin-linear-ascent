@@ -928,10 +928,24 @@ _MERCY_DOWN = ("When the beast breaks apart every piece and drop "
 _MERCY_EMPTY_END = ("What settles where the husk came down is only a "
                     "low flat heap of dry leaf-flakes and pale ash, "
                     "like swept-up dead leaves lying flat.")
+# 007 phase 2: guano_vole and wick_owl rendered the MONSTER at true
+# animal size (self-into-self — no size drop at the burst). Anchor the
+# fevered form's bulk explicitly.
+_MERCY_BULK = (" Until the burst the fevered creature is HUGE - a "
+               "swollen beast that TOWERS over the defender, many "
+               "times their size.")
+# Take-2 fail family: the dark shell survived the burst and stood
+# beside the reveal to the last frame (wire_eel, wick_owl). Spell out
+# that the shell ceases to exist.
+_MERCY_VANISH = (" At the burst the dark shell VANISHES COMPLETELY - "
+                 "nothing solid remains of it; from that instant the "
+                 "ONLY creature anywhere is the tiny revealed animal.")
 _MERCY_SCENE_EXTRA = {
     "guano_vole": _MERCY_SOLO + (" Warm lantern-browns and umber in "
                                  "the roost cave - a full-color "
-                                 "photograph, never monochrome."),
+                                 "photograph, never monochrome.")
+    + _MERCY_BULK,
+    "wick_owl": _MERCY_BULK + _MERCY_VANISH,
     "rabid_boar": _MERCY_SOLO + (" When the beast breaks apart every "
                                  "piece falls STRAIGHT DOWN and soaks "
                                  "away - nothing dry, nothing flying "
@@ -950,7 +964,7 @@ _MERCY_SCENE_EXTRA = {
     "night_hawk": ("Deep blue moonlit heath, warm firelight tones on "
                    "the defender - full color, never monochrome."),
     "shellback_tortoise": _MERCY_SOLO,
-    "wire_eel": _MERCY_SOLO,
+    "wire_eel": _MERCY_VANISH,
     # retry round: color anchors for the scenes that rendered
     # grayscale 2-3/3 despite the photoreal prefix (anchors proven
     # near-100% on banner_wolf), plus a monster-species anchor for
@@ -1002,7 +1016,7 @@ _MERCY_WAS_EXTRA = {}
 # Slugs forced to the two-exchange melee shape regardless of parity —
 # pylon_adder's one-shot archer kept rendering a bow-to-monster tether
 # (3 of 6 takes) while ash_adder proved snake+sword works.
-_MERCY_FORCE_MELEE = {"pylon_adder"}
+_MERCY_FORCE_MELEE = {"pylon_adder", "blind_shoal", "muster_wight"}
 # Full reveal replacements — skip the baby transform and species
 # clauses entirely (crow chicks render as big fledged gulls; only the
 # naked-nestling wording is left to try).
@@ -1222,6 +1236,10 @@ _MERCY_PROMPT_SUB = {
 # "(or settling its wings)" aside so no wing token survives in their
 # prompts (scene tokens bleed into the reveal species).
 _SUB_NO_WINGS = [(" (or settling its wings)", "")]
+# 007 phase 2: byte headroom for the _MERCY_BULK anchors above.
+for _sid in ("guano_vole", "wick_owl"):
+    _MERCY_PROMPT_SUB[_sid] = (list(_MERCY_PROMPT_SUB.get(_sid, ()))
+                               + _SUB_TRIM)
 for _sid in ("glare_moth", "grave_moth", "beacon_moth", "hornet_swarm",
              "coolant_crab", "drift_eel", "wire_eel", "night_hawk",
              "windfall_crow"):
@@ -1349,6 +1367,14 @@ def _scrub_color_anchors(text: str) -> str:
     text = text.replace(
         "Physical, documentary-real motion throughout.",
         "Weighty drawn motion throughout.")
+    # wire_eel's blind-WHITE-fish reveal vanishes against the drawn
+    # pale ground (take 1: empty final frames); give it an ink edge.
+    text = text.replace(
+        "a baby blind white fish",
+        "a tiny blind pale fish edged in bold dark ink")
+    text = text.replace(
+        "just its smooth white back breaking the surface",
+        "its dark-edged back breaking the surface")
     return text
 
 
@@ -1434,7 +1460,11 @@ def _load_mercy_jobs() -> None:
                 beat = _MERCY_FREED_FAR
                 strike = _MERCY_STRIKES[1 + ((n + i) // 2) % 2]
             if e["id"] in _MERCY_FORCE_MELEE:
-                beat = _MERCY_FREED
+                # sword strike for every kind; the freed melee beat
+                # only replaces other FREED shapes (evicted/fall keep
+                # their own template, just with the sword defender).
+                if kind == "native":
+                    beat = _MERCY_FREED
                 strike = _MERCY_STRIKES[0]
             prompt = beat.format(scene=scene, was=was, strike=strike)
             for old, new in _MERCY_PROMPT_SUB.get(e["id"], ()):
