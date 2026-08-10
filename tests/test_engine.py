@@ -280,7 +280,7 @@ def test_forge_buy_equips_and_pawns_old():
     choose(p, "forge")
     choose(p, "buy_pigsticker")
     assert p["gear"]["weapon"] == "pigsticker"
-    assert p["gold"] == 1250
+    assert p["gold"] == 1300
     # 019: the worn rung stays on the rack as a spare; outgrowing it
     # (the next rung up) still sends the old paid one back to the pack
     s = core.current_scene(p)
@@ -293,8 +293,8 @@ def test_forge_buy_equips_and_pawns_old():
     choose(p, "pawn")
     s = choose(p, "sell_pigsticker")
     # 006: the broker pays the day's rate (25–55%), not a flat 40%
-    offer = int(250 * economy.pawn_rate(state.world_day()))
-    assert p["gold"] == 1250 - 930 + offer
+    offer = int(200 * economy.pawn_rate(state.world_day()))  # pigsticker ◈200 (047)
+    assert p["gold"] == 1300 - 930 + offer
     assert "pigsticker" not in p["inventory"]
 
 

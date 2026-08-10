@@ -62,7 +62,11 @@ def test_mid_rungs_are_midpoint_bonus_and_geometric_price():
         # geometric — arithmetic would overshoot the curve
         assert mid.bonus == economy._gmean_bonus(lo.bonus, hi.bonus), \
             mid.slug
-        assert mid.price == round((lo.price * hi.price) ** 0.5 / 10) * 10
+        # 047: tier 1's weapon sticker is discounted; the ladder is
+        # priced off the full anchor, so the law reads through it
+        lo_price = (round(lo.price / economy._EARLY_WEAPON_DISCOUNT)
+                    if t == 1 else lo.price)
+        assert mid.price == round((lo_price * hi.price) ** 0.5 / 10) * 10
         assert lo.price < mid.price < hi.price, mid.slug
 
 
@@ -79,8 +83,11 @@ def test_band_ones_new_rungs_did_not_move_the_old_ones():
         assert [g.price for g in band] == sorted({g.price for g in band})
         lo, hi = band[0], economy.gear_rungs(slot, line)[10]
         # 046: sub-rungs step geometrically (the 025 ladder, re-spaced)
+        # 047: weapons read the law through the discounted tier-1 sticker
+        lo_price = (round(lo.price / economy._EARLY_WEAPON_DISCOUNT)
+                    if slot == "weapon" else lo.price)
         assert band[5].bonus == economy._step_bonus(lo.bonus, hi.bonus, 5)
-        assert band[5].price == round((lo.price * hi.price) ** 0.5 / 10) * 10
+        assert band[5].price == round((lo_price * hi.price) ** 0.5 / 10) * 10
 
 
 def test_every_level_of_the_first_ten_sells_something():
@@ -121,14 +128,15 @@ def test_plan_table_spot_checks():
     # the §3.1 example rows — bonuses re-anchored by the 022/002 retune
     # (weapon whole rungs 30T−22, mids the midpoint; prices unchanged)
     # 046: whole rungs ride the pillar (anchor × 1.3^(gate−1)), mids sit
-    # at the geometric mean — floor-1 anchors byte-identical to 0.59.0
-    for slug, bonus, price in (("pigsticker", 8, 250),
+    # at the geometric mean. 047: the first five floors' weapons open
+    # 20% cheaper, the discount fading to nothing by rung 1.5.
+    for slug, bonus, price in (("pigsticker", 8, 200),
                                ("iron_sword", 30, 930),
                                ("wolfbite", 110, 3_450),
                                ("bloodgroove_falchion", 409, 12_800),
-                               ("ashwood_bow", 8, 250),
+                               ("ashwood_bow", 8, 200),
                                ("sinew_backed_bow", 30, 930),
-                               ("tallowwood_staff", 8, 250),
+                               ("tallowwood_staff", 8, 200),
                                ("coalglass_staff", 30, 930)):
         g = economy.FORGE[slug]
         assert (g.bonus, g.price) == (bonus, price), slug
@@ -203,7 +211,7 @@ def test_off_class_offer_is_the_previous_rung():
     assert g.slug == "emberflight_shortbow"
     # level 1 has only rung 1 — the rack still offers something
     assert economy.off_class_offer("archer", 1).slug == "ashwood_bow"
-    assert economy.off_class_price(economy.FORGE["ashwood_bow"]) == 750
+    assert economy.off_class_price(economy.FORGE["ashwood_bow"]) == 600
 
 
 # ── the Forge scene (class-aware racks) ──────────────────────────────────
@@ -217,7 +225,7 @@ def test_warrior_forge_racks_blades_not_bows():
     # the off-class rack: one bow, one rung back, priced ×3
     assert "buy_ashwood_bow" in ids
     bow = next(o for o in s.options if o.id == "buy_ashwood_bow")
-    assert "off-class" in bow.hint and "750" in bow.hint
+    assert "off-class" in bow.hint and "600" in bow.hint
     assert "buy_arrow_pack" in ids
 
 
@@ -227,7 +235,7 @@ def test_next_locked_rung_is_always_visible():
     s = choose(p, "forge")
     # 025: the next rung is one LEVEL away in band 1, not five
     sword = next(o for o in s.options if o.id == "buy_notched_cleaver")
-    assert sword.locked and "level 2" in sword.hint and "330" in sword.hint
+    assert sword.locked and "level 2" in sword.hint and "280" in sword.hint
     boots = next(o for o in s.options if o.id == "buy_cobbled_boots")
     assert boots.locked and "level 3" in boots.hint
     # at level 3 the boots unlock and the NEXT pair takes the lock
@@ -284,7 +292,7 @@ def test_off_class_purchase_charges_triple():
     choose(p, "forge")
     choose(p, "buy_ashwood_bow")
     assert p["gear"]["weapon"] == "ashwood_bow"
-    assert p["gold"] == 250                    # 750 paid, sword to pack
+    assert p["gold"] == 400                    # 600 paid, sword to pack
     assert p["inventory"].get("rusted_sword") is None  # starter is free →
     # free gear goes to the scrap bin, not the pack
 

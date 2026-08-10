@@ -44,7 +44,7 @@ def test_buying_a_spare_fills_the_pack_not_the_body():
     assert p["gear"]["weapon"] == "pigsticker"
     assert p["hone"]["weapon"] == 2            # nothing on the body moved
     assert p["durability"] == dur
-    assert p["gold"] == 1_000 - 250 - 250
+    assert p["gold"] == 1_000 - 200 - 200
     assert "durability_pack" in p and "pigsticker" in p["durability_pack"]
     assert any("spare for the pack" in ln for ln in s.body_lines)
 

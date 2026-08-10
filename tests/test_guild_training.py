@@ -38,8 +38,9 @@ def _kill_one(p: dict) -> object:
 
 # ── the fee curve ────────────────────────────────────────────────────────
 
-def test_first_levelup_costs_200():
-    assert economy.levelup_gold(1) == 200
+def test_first_levelup_costs_60():
+    # 047: the tutorial ramp (×0.25) over the one-day law, floored at 60
+    assert economy.levelup_gold(1) == 60
 
 
 def test_fee_grows_with_the_games_income_curve():

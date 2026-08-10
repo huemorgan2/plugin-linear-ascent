@@ -79,7 +79,7 @@ def test_forge_catalog_shape():
     t1 = economy.forge_tier(1)
     assert {g.slot for g in t1} == {"weapon", "shield", "armor", "shoes"}
     pig = economy.FORGE["pigsticker"]
-    assert (pig.bonus, pig.price) == (8, 250)
+    assert (pig.bonus, pig.price) == (8, 200)
     # 004 §4.4: late tiers repriced from exponential to quadratic;
     # 022/002: bonuses rescaled to carry growth past the cap (30T−22)
     # 046: tier 10 rides the pillar all the way up

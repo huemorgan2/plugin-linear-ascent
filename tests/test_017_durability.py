@@ -90,10 +90,10 @@ def test_repair_price_tracks_the_missing_fraction():
     """035: the rate came down 20% → 13% to pay for the plate joining the
     shield on damage-priced wear — same gold a day, a cheaper bench visit
     far more often."""
-    g = economy.FORGE["pigsticker"]          # ◈ 250
+    g = economy.FORGE["pigsticker"]          # ◈ 200 (047 early discount)
     assert economy.REPAIR_PRICE_PCT == 0.13
-    assert economy.repair_price(g, 1.0) == 32
-    assert economy.repair_price(g, 0.5) == 16
+    assert economy.repair_price(g, 1.0) == 26
+    assert economy.repair_price(g, 0.5) == 13
     assert economy.repair_price(g, 0.0) == 1  # floor, never free
 
 

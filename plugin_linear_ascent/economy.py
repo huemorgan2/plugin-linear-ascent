@@ -755,15 +755,29 @@ def xp_need(level: int) -> int:
 # the gold fee is the price. One day of at-level income per level — the
 # same growth curve everything else is priced in (linear × 1.2 per band).
 
-LEVELUP_BASE_GOLD = 200        # the first level-up, by design
+LEVELUP_BASE_GOLD = 60         # the first level-up, by design (047)
+TRAIN_SOFT_LEVELS = 8          # the ramp reaches the full fee here
+# 8, not 5: the climber trains ~2–3 levels ahead of the floor, so the
+# fees paid ON floors 1–5 are levels 1–8's.
+
+
+def _train_soft(level: int) -> float:
+    """047 tutorial ramp: the first levels charge a fraction of the
+    one-day law (×0.25 at level 1, linear to ×1.0 at TRAIN_SOFT_LEVELS)
+    — the bottom of the tower advances on kills, not a savings plan."""
+    if level >= TRAIN_SOFT_LEVELS:
+        return 1.0
+    return 0.25 + 0.75 * (level - 1) / (TRAIN_SOFT_LEVELS - 1)
 
 
 def levelup_gold(level: int) -> int:
     """Gold fee to train from `level` to `level+1` at the Guildhall.
     046: training is CAPITAL — the fee rides the full pillar (one
-    floor-1 day at the anchor, ×pace_wedge in day terms per level)."""
+    floor-1 day at the anchor, ×pace_wedge in day terms per level).
+    047: the first ten levels ride the tutorial ramp."""
     return max(LEVELUP_BASE_GOLD,
-               round(daily_income(level) * pace_wedge(level) / 10) * 10)
+               round(daily_income(level) * pace_wedge(level)
+                     * _train_soft(level) / 10) * 10)
 
 
 def fade_multiplier(unlocked_floor: int, floor: int) -> float:
@@ -1274,13 +1288,20 @@ def _round_price(n: float) -> int:
     return int(round(n / step) * step)
 
 
+_EARLY_WEAPON_DISCOUNT = 0.8   # 047: first-five-floors weapons cheaper.
+# Applies to the tier-1 sticker; sub-rungs fade it linearly to nothing
+# by rung 1.5 (floor 5), so the price law is untouched from mid-band up.
+_EARLY_WEAPON_FADE_RUNGS = 5
+
 _FORGE_ROWS = [
     (t,
      (w[0], w[1], round(_GEAR_ANCHORS[0][0] * pillar((t - 1) * 10 + 1))),
      (s[0], s[1], round(_GEAR_ANCHORS[1][0] * pillar((t - 1) * 10 + 1))),
      (a[0], a[1], round(_GEAR_ANCHORS[2][0] * pillar((t - 1) * 10 + 1))),
-     tuple(_round_price(anchor * pillar((t - 1) * 10 + 1))
-           for _b, anchor in _GEAR_ANCHORS))
+     tuple(_round_price(anchor * pillar((t - 1) * 10 + 1)
+                        * (_EARLY_WEAPON_DISCOUNT
+                           if t == 1 and i == 0 else 1.0))
+           for i, (_b, anchor) in enumerate(_GEAR_ANCHORS)))
     for t, w, s, a, _p in _FORGE_ROWS
 ]
 
@@ -1587,8 +1608,16 @@ def _build_forge() -> dict[str, GearItem]:
     for k in range(1, BAND1_STEPS):
         r = 1 + k / BAND1_STEPS
         n, f = _BAND1_LADDER["warrior"][k]
+        # 047: the early discount fades out of the sub-rung stickers by
+        # _EARLY_WEAPON_FADE_RUNGS; the ladder is priced off the full
+        # (undiscounted) anchor so rung 1.5 up is byte-identical to 046.
+        full_bpw = round(bpw / _EARLY_WEAPON_DISCOUNT)
+        fade = (_EARLY_WEAPON_DISCOUNT
+                + (1 - _EARLY_WEAPON_DISCOUNT)
+                * min(k, _EARLY_WEAPON_FADE_RUNGS) / _EARLY_WEAPON_FADE_RUNGS)
         put(n, f, "weapon", r, _step_bonus(bw[2], tw[2], k),
-            _step_price(bpw, tpw, k), line="warrior")
+            round(_step_price(full_bpw, tpw, k) * fade / 10) * 10,
+            line="warrior")
         n, f = _BAND1_LADDER["shield"][k]
         put(n, f, "shield", r, _step_bonus(bs[2], ts[2], k),
             _step_price(bps, tps, k))

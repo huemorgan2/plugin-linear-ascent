@@ -18,10 +18,13 @@ Numbers from runs/046-*-s1.jsonl and the economy as committed.
    Test `test_death_stings_one_to_two_days_where_it_first_bites` is
    xfailed until you decide.
 
-2. **Floor-2 cliff.** Optimal 4.2 days, casual 20 days on floor 2 vs a
+2. **Floor-2 cliff.** ~~Optimal 4.2 days, casual 20 days on floor 2 vs a
    ~0.3-day design line. Cause: LEVELUP_BASE_GOLD floor of ◈200 ≈ one
    full day of floor-1 income per level, hit exactly when the player has
-   nothing. Fix would touch new-player feel — your call.
+   nothing.~~ RESOLVED by 047 (0.61.0, Roy's call 2026-08-10): training
+   fees ride a ×0.25→×1.0 tutorial ramp over levels 1–8 and the tier-1
+   weapon sticker opens 20% cheaper, fading by rung 1.5. Floor 2: 4.2→3.1
+   optimal, 20→6.5 casual. See conclusions/003.md.
 
 3. **Striker count has no cap.** Your rule as stated: floor-100 warden
    needs 10% of weekly actives — 100 at 1,000 actives, 100,000 at 1M.
