@@ -194,8 +194,8 @@ def test_honing_buy_flow_and_reset_on_purchase():
     s = choose(p, "hone_weapon")
     assert p["hone"]["weapon"] == 1
     assert p["xp"] == economy.xp_need(1) - hone_xp  # ✦ charged alongside gold
-    # 022/002: a hone level is worth its slot's weight, not a flat +1
-    assert state.gear_bonus(p, "weapon") == 8 + economy.HONE_WEIGHT["weapon"]
+    # 046: a hone step is one floor's growth on the piece — ×1.3
+    assert state.gear_bonus(p, "weapon") == economy.honed_bonus(8, 1)
     choose(p, "hone_weapon")
     assert p["hone"]["weapon"] == 2
     s = choose(p, "hone_weapon")             # at cap — refused
@@ -294,7 +294,7 @@ def test_forge_buy_equips_and_pawns_old():
     s = choose(p, "sell_pigsticker")
     # 006: the broker pays the day's rate (25–55%), not a flat 40%
     offer = int(250 * economy.pawn_rate(state.world_day()))
-    assert p["gold"] == 1250 - 450 + offer
+    assert p["gold"] == 1250 - 930 + offer
     assert "pigsticker" not in p["inventory"]
 
 

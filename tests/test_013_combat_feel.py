@@ -172,5 +172,6 @@ def test_healer_tent_costs_five_per_floor():
 
 def test_tent_still_costs_less_than_one_kill():
     for f in (1, 5, 25, 60, 95):
-        assert (economy.HEALER_TENT_PER_FLOOR * f
-                < economy.gold_per_kill(f))
+        # 046: the tent is a RUNNING cost — it rides the income pillar,
+        # same as the kill, so the ratio holds at every depth
+        assert economy.healer_tent_price(f) < economy.gold_per_kill(f)

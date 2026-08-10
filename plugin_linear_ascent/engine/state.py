@@ -428,9 +428,9 @@ def gear_bonus(p: dict, slot: str) -> int:
         return economy.STARTER_WEAPON.bonus if slot == "weapon" else 0
     item = economy.FORGE.get(slug)
     base = item.bonus if item else 0
-    # 022/002: honing weight per slot — gear, not the capped level,
-    # carries the within-band growth.
-    total = base + economy.HONE_WEIGHT.get(slot, 1) * hone_level(p, slot)
+    # 046: a hone step multiplies the piece by the pillar — gear, not
+    # the capped level, carries the within-band exponential.
+    total = economy.honed_bonus(base, hone_level(p, slot))
     if is_broken(p, slot):
         total //= 2                    # 005: broken, never gone
     return total

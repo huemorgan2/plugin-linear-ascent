@@ -58,7 +58,10 @@ def test_mid_rungs_are_midpoint_bonus_and_geometric_price():
     war = {round(g.rung, 1): g for g in economy.weapon_line("warrior")}
     for t in range(1, 10):
         lo, mid, hi = war[float(t)], war[t + 0.5], war[float(t + 1)]
-        assert mid.bonus == (lo.bonus + hi.bonus) // 2, mid.slug
+        # 046: the band is exponential, so the honest midpoint is
+        # geometric — arithmetic would overshoot the curve
+        assert mid.bonus == economy._gmean_bonus(lo.bonus, hi.bonus), \
+            mid.slug
         assert mid.price == round((lo.price * hi.price) ** 0.5 / 10) * 10
         assert lo.price < mid.price < hi.price, mid.slug
 
@@ -75,7 +78,8 @@ def test_band_ones_new_rungs_did_not_move_the_old_ones():
         assert [g.bonus for g in band] == sorted({g.bonus for g in band})
         assert [g.price for g in band] == sorted({g.price for g in band})
         lo, hi = band[0], economy.gear_rungs(slot, line)[10]
-        assert band[5].bonus == (lo.bonus + hi.bonus) // 2
+        # 046: sub-rungs step geometrically (the 025 ladder, re-spaced)
+        assert band[5].bonus == economy._step_bonus(lo.bonus, hi.bonus, 5)
         assert band[5].price == round((lo.price * hi.price) ** 0.5 / 10) * 10
 
 
@@ -116,14 +120,16 @@ def test_a_rung_is_a_choice_of_three_temperaments():
 def test_plan_table_spot_checks():
     # the §3.1 example rows — bonuses re-anchored by the 022/002 retune
     # (weapon whole rungs 30T−22, mids the midpoint; prices unchanged)
+    # 046: whole rungs ride the pillar (anchor × 1.3^(gate−1)), mids sit
+    # at the geometric mean — floor-1 anchors byte-identical to 0.59.0
     for slug, bonus, price in (("pigsticker", 8, 250),
-                               ("iron_sword", 23, 450),
-                               ("wolfbite", 38, 800),
-                               ("bloodgroove_falchion", 53, 2_280),
+                               ("iron_sword", 30, 930),
+                               ("wolfbite", 110, 3_450),
+                               ("bloodgroove_falchion", 409, 12_800),
                                ("ashwood_bow", 8, 250),
-                               ("sinew_backed_bow", 23, 450),
+                               ("sinew_backed_bow", 30, 930),
                                ("tallowwood_staff", 8, 250),
-                               ("coalglass_staff", 23, 450)):
+                               ("coalglass_staff", 30, 930)):
         g = economy.FORGE[slug]
         assert (g.bonus, g.price) == (bonus, price), slug
 
@@ -154,12 +160,13 @@ def test_shoes_ladder_matches_the_plan_table():
     rows = [(g.name, g.speed, g.price, economy.rung_player_level_req(g),
              economy.rung_floor_req(g))
             for g in economy.gear_rungs("shoes")]
+    # 046: shoe prices ride the pillar from the Cobbled anchor
     assert rows == [
         ("Cobbled Boots", 1, 500, 3, 0),
-        ("Wayfarer's Treads", 2, 3_500, 11, 0),
-        ("Chasewind Boots", 3, 24_000, 21, 0),
-        ("Skyline Striders", 4, 120_000, 30, 41),
-        ("Stormstep Greaves", 5, 400_000, 30, 61),
+        ("Wayfarer's Treads", 2, 4_080, 11, 0),
+        ("Chasewind Boots", 3, 56_200, 21, 0),
+        ("Skyline Striders", 4, 10_700_000, 30, 41),
+        ("Stormstep Greaves", 5, 2_030_000_000, 30, 61),
     ]
 
 
@@ -220,7 +227,7 @@ def test_next_locked_rung_is_always_visible():
     s = choose(p, "forge")
     # 025: the next rung is one LEVEL away in band 1, not five
     sword = next(o for o in s.options if o.id == "buy_notched_cleaver")
-    assert sword.locked and "level 2" in sword.hint and "280" in sword.hint
+    assert sword.locked and "level 2" in sword.hint and "330" in sword.hint
     boots = next(o for o in s.options if o.id == "buy_cobbled_boots")
     assert boots.locked and "level 3" in boots.hint
     # at level 3 the boots unlock and the NEXT pair takes the lock
@@ -503,12 +510,15 @@ def test_days_to_afford_curve_is_smooth_and_bounded():
         days_mid = _set_price(t - 0.5) / income
         assert days_mid < days_set, t          # reachable vs aspirational
         total = days_set + days_mid
-        assert total <= 35, (t, round(total, 1))
+        # 046: the climb-time law — a band's spend is a constant number
+        # of floor-1-equivalent days; in real days it grows by the wedge
+        # (×1.48 per band), which IS the exponential time investment
+        norm = total / economy.pace_wedge(economy.band_start(t) - 5)
+        assert 12 <= norm <= 16, (t, round(norm, 1))
         if prev_total is not None:
             assert total > prev_total, t       # saving never gets shorter
             assert total < prev_total * 2.2, t  # and never walls
         prev_total = total
-    assert prev_total >= 24                    # band 10 is a real project
 
 
 def test_no_price_wall_between_adjacent_rungs():
@@ -517,7 +527,9 @@ def test_no_price_wall_between_adjacent_rungs():
     for line in ("warrior", "archer", "sorcerer"):
         rungs = economy.weapon_line(line)
         for lo, hi in zip(rungs, rungs[1:]):
-            assert hi.price / lo.price <= 3.6, (line, hi.slug)
+            # 046: tier-to-tier is 1.3^10 — a half-band step is its
+            # square root, ~3.71
+            assert hi.price / lo.price <= 3.8, (line, hi.slug)
 
 
 def test_off_class_is_never_income_positive():

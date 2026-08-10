@@ -867,6 +867,12 @@ def _player_hit(p: dict, mult: float = 1.0, pierce: bool = False) -> int:
         prof = dict(prof, armor="none")    # 006: the shot ignores plate
     dmg = economy.typed_damage(_damage_type(p), round(raw * mult),
                                e["def"], prof)
+    if e.get("shared") and e.get("kind") == "warden":
+        # 046: levels ride the pillar, so one over-levelled blow can be
+        # worth many fight-units — a charge never cuts past its unit,
+        # not even the killing blow.
+        unit = economy.pool_unit(int(e.get("floor", 1)))
+        dmg = min(dmg, max(1, unit - _cut_this_fight(e)))
     e["hp"] -= dmg
     return dmg
 
@@ -1328,7 +1334,7 @@ def _death(p: dict, floor) -> Scene:
                        "like this again.",
             body_lines=save_lines,
             options=[Option("heal", "The healer's tent",
-                            f"pay ◈ {economy.HEALER_TENT_PER_FLOOR * floor.floor}"),
+                            f"pay ◈ {economy.healer_tent_price(floor.floor)}"),
                      Option("town", "Limp back to Roothollow")],
             meters=meters(p),
             event_kind="death",
@@ -1528,7 +1534,11 @@ def resolve_fight_action(p: dict, floor, option_id: str) -> Scene:
     if not (keep and e):
         return s
     e["rounds"] = int(e.get("rounds", 0)) + 1
-    if _cut_this_fight(e) >= economy.pool_unit(floor.floor):
+    cut, unit = _cut_this_fight(e), economy.pool_unit(floor.floor)
+    if cut >= unit:
+        # 046: levels ride the pillar now, so one over-levelled blow can
+        # overshoot the unit without bound — the gate keeps the overshoot.
+        e["hp"] += cut - unit
         return _driven_back(p, floor, spent="unit")
     if e["rounds"] >= economy.warden_exchange_rounds(floor.floor):
         return _driven_back(p, floor)

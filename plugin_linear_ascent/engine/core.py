@@ -2714,7 +2714,7 @@ def _gate_town_art(fl) -> dict:
 
 
 def _gate_town_options(p: dict, fl) -> list[Option]:
-    heal_price = economy.HEALER_TENT_PER_FLOOR * fl.floor
+    heal_price = economy.healer_tent_price(fl.floor)
     opts = [Option("hunt", "Hunt the wilds", "1 ⚡")]
     # 039 §2: from floor 4 the wilds have a dangerous end — an informed
     # opt-in, priced on the row before the click.
@@ -2869,7 +2869,7 @@ def _gate_town_action(p: dict, oid: str) -> Scene:
         combat._ledger(p, "energy", note="wilds deep")
         return combat.start_encounter(p, fl, enc, "wilds", deep=True)
     if oid == "heal":
-        price = economy.HEALER_TENT_PER_FLOOR * fl.floor
+        price = economy.healer_tent_price(fl.floor)
         if p["gold"] < price:
             s = _gate_town_scene(p)
             s.shard_note = f"The healer wants ◈ {price} you don't carry."

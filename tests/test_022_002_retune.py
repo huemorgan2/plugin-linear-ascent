@@ -140,7 +140,9 @@ def test_days_to_cap_lands_in_the_first_weeks():
         while level < economy.LEVEL_CAP and xp >= economy.xp_need(level):
             xp -= economy.xp_need(level)
             level += 1
-    assert 21 <= day <= 42, day
+    # 046: the xp law syncs level to the floor pace (level ≈ floor), so
+    # the all-energy hunter caps a shade faster than the 043 curve
+    assert 14 <= day <= 42, day
 
 
 # ── the era-length model ─────────────────────────────────────────────────

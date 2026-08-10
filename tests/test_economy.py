@@ -10,10 +10,13 @@ def test_monster_stats_match_design_table():
     # power (weapon 30T−22, weighted hone), so wilds HP re-derived.
     # 025 §4: band 1 sells a rung per level, so the at-level player on
     # floor 5 hits harder and the animals there carry the HP to match.
-    assert economy.monster_stats(5) == (18, 15, 86)
-    assert economy.monster_stats(25) == (84, 75, 525)
-    assert economy.monster_stats(55) == (184, 165, 756)
-    assert economy.monster_stats(95) == (316, 285, 966)
+    # 046: ATK/DEF ride the pillar, HP still derives from the rounds
+    # budget against the (now pillar-riding) reference player
+    assert economy.monster_stats(5) == (11, 9, 90)
+    assert economy.monster_stats(25) == (1793, 1628, 16338)
+    assert economy.monster_stats(55) == (4693050, 4266407, 20442338)
+    assert economy.monster_stats(95) == (169507553878, 154097776251,
+                                         737207440620)
     for f in (1, 5, 25, 95):
         atk, dfs, hp = economy.monster_stats(f)
         p_atk, _ = economy._at_level_loadout(f)
@@ -22,12 +25,14 @@ def test_monster_stats_match_design_table():
 
 
 def test_kill_rewards_jump_per_band():
-    assert economy.xp_per_kill(5) == 12            # 043: XP scarce, 2.4×bar
-    assert economy.gold_per_kill(5) == 40          # tier 1: base 8×bar
-    assert economy.xp_per_kill(95) == 228
-    # 004 §4.5: ×1.2 per band — same work pays visibly better each band
-    assert economy.gold_per_kill(95) == round(8 * 95 * 1.2 ** 9)
-    assert economy.gold_per_kill(11) == round(8 * 11 * 1.2)
+    # 046: XP syncs level to floor (2.4·bar^1.5 ÷ wedge), gold rides the
+    # income pillar from the floor-1 anchor of 8
+    assert economy.xp_per_kill(5) == 23
+    assert economy.gold_per_kill(5) == 20
+    assert economy.xp_per_kill(95) == 56
+    assert economy.gold_per_kill(95) == max(
+        1, round(8 * economy.income_pillar(95)))
+    assert economy.gold_per_kill(11) == 75
 
 
 def test_xp_need_curve():
@@ -58,11 +63,13 @@ def test_warden_derivation_and_milestones():
     assert dfs == m_def
     assert hp == round(economy._boss_hp_base(7) * economy.WARDEN_HP_MULT)
     assert atk > m_atk                                 # hits harder than wilds
-    # solo odds decay past the soft floor: HP ramps
-    assert economy.warden_stats(40)[2] > round(
+    # 046: the post-30 ramp retired — the warden rise (×1.02^(F−1))
+    # lives in _boss_hp_base itself, on top of the pillar
+    assert economy.warden_stats(40)[2] == round(
         economy._boss_hp_base(40) * economy.WARDEN_HP_MULT)
+    assert economy._boss_hp_base(40) > round(37 * economy.pillar(40))
     g = economy.MILESTONES[10]
-    assert (g.atk, g.dfs, g.hp, g.quorum) == (60, 50, 900, 2)
+    assert (g.atk, g.dfs, g.hp, g.quorum) == (202, 32, 1426, 2)
     assert economy.MILESTONES[100].name == "Vharuk, the Demon King"
 
 
@@ -75,8 +82,10 @@ def test_forge_catalog_shape():
     assert (pig.bonus, pig.price) == (8, 250)
     # 004 §4.4: late tiers repriced from exponential to quadratic;
     # 022/002: bonuses rescaled to carry growth past the cap (30T−22)
+    # 046: tier 10 rides the pillar all the way up
     dawn = economy.FORGE["dawnbreaker"]
-    assert (dawn.bonus, dawn.price) == (278, 685_000)
+    assert (dawn.bonus, dawn.price) == (143_877_106_312,
+                                        4_500_000_000_000)
 
 
 def test_honing_shape():
@@ -84,9 +93,11 @@ def test_honing_shape():
     assert economy.max_hone(1) == 0
     assert economy.max_hone(17) == 6
     assert economy.max_hone(21) == 0          # new band resets the cap
-    # priced ~15% of a frontier day's income
+    # priced ~15% of a frontier day's income, in CAPITAL terms — the
+    # hone is bought power, so the fee rides the wedge (046 cost law)
     assert economy.hone_price(17) == max(
-        5, round(0.15 * economy.daily_income(17)))
+        5, round(0.15 * economy.daily_income(17)
+                 * economy.pace_wedge(17)))
     # the design reference hones with a 2-floor lag
     assert economy.reference_hone(17) == 4
 
@@ -107,8 +118,8 @@ def test_xp_pool_costs_scale_with_floor():
     # 006: XP costs are priced in frontier kills (043: kill = 2.4×bar);
     # 045 dropped the scan, so its cost row is gone.
     assert economy.hone_xp(1) == 1            # half of 2
-    assert economy.hone_xp(17) == 20          # half of 41
-    assert economy.sleep_xp_cost(5) == 12     # exactly the kill skipped
+    assert economy.hone_xp(17) == 45          # half of 90 (046 xp law)
+    assert economy.sleep_xp_cost(5) == 23     # exactly the kill skipped
 
 
 def test_level_gates():

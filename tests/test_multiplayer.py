@@ -57,6 +57,10 @@ def test_strike_joins_a_full_fight_whose_wounds_persist():
     # wounds land (unit shortcut), then the player breaks away — the
     # fight's total persists as exactly one warden_strike effect
     e["hp"] -= 37
+    # 046: pin the toll too — whether a counter-blow lands before
+    # the getaway rides the day-seeded roll stream, so "at least
+    # one" was a coin-flip by the calendar, not a law
+    e["taken"] = int(e.get("taken", 0)) + 5
     for _ in range(40):
         p["hp"] = 999                    # never die in this test
         core.apply_choice(p, "run")

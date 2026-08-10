@@ -98,7 +98,10 @@ def test_every_floor_owes_prey_and_a_thing_that_can_kill_you(floor_no):
     # divides their bite on purpose. The worst draw there still stands
     # clearly above the prey; everywhere else the old law holds.
     if floor_no in economy.FLOOR_ATK_SOFT:
-        assert costs[-1] >= 0.25, (
+        # 046: the exponential is GENTLER than the old linear slope at
+        # the very bottom (×1.3 vs +60% floor 1→2), so the tutorial's
+        # worst draw softened from ~25% to ~18% of the pool
+        assert costs[-1] >= 0.15, (
             f"floor {floor_no}: even the tutorial owes a worst fight "
             f"({costs[-1]:.0%} of the pool)")
     else:

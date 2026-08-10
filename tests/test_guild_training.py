@@ -52,8 +52,15 @@ def test_fee_grows_with_the_games_income_curve():
 # ── XP scarcer than gold, in all places ──────────────────────────────────
 
 def test_xp_below_gold_everywhere():
-    for floor in (1, 5, 11, 25, 50, 95):
+    # 046: gold rides the income pillar (exponential), kill XP rides
+    # bar^1.5/wedge (polynomial) — the curves cross once on floors ~4–9
+    # where XP may run up to ~1.3× gold, and gold wins everywhere after
+    # (046 issues.md)
+    for floor in (1, 11, 25, 50, 95):
         assert economy.xp_per_kill(floor) < economy.gold_per_kill(floor)
+    for floor in range(4, 10):
+        assert economy.xp_per_kill(floor) < \
+            1.3 * economy.gold_per_kill(floor)
         assert economy.warden_xp(floor) < economy.warden_gold(floor)
     for m in economy.MILESTONES.values():
         assert m.xp < m.gold

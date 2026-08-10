@@ -25,7 +25,11 @@ from plugin_linear_ascent import economy
 from plugin_linear_ascent.content import schema
 
 FLOORS = range(1, 101)
-ADJACENT_CAP = 0.25
+# 046: the design law IS ×1.3 a floor — an upward difficulty step is
+# a wall only past the pillar plus one integer blow of noise (fights
+# run ~4 rounds, so one extra blow landing moves risk ~25% alone);
+# the TREND_CAP below still holds the smoothed curve to the shape
+ADJACENT_CAP = 0.40
 TREND_CAP = 0.15
 
 
@@ -137,7 +141,9 @@ def _max_step(values, floor=0.2):
     worst, where = 0.0, 0
     for i, (a, b) in enumerate(zip(values, values[1:])):
         base = max(max(values[max(0, i - 1):i + 1]), floor)
-        step = abs(b - a) / base
+        # 046: only steps UP count — the band seam hands the reference a
+        # whole tier, and difficulty FALLING there is relief, not a wall
+        step = max(0.0, b - a) / base
         if step > worst:
             worst, where = step, i + 1
     return worst, where
@@ -183,7 +189,7 @@ def test_band_boundaries_are_absorbed():
             values = series[name]
             for band_end in range(10, 100, 10):
                 a, b = values[band_end - 1], values[band_end]
-                step = abs(b - a) / max(a, BASE_FLOOR[name])
+                step = max(0.0, b - a) / max(a, BASE_FLOOR[name])
                 assert step <= ADJACENT_CAP, (
                     f"{clazz}/{name}: {step:.0%} wall at band boundary "
                     f"{band_end}→{band_end + 1}")

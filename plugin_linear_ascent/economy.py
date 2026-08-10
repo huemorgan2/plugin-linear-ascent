@@ -45,6 +45,40 @@ COST_PVP_ATTACK = 3
 # or per floor instead.
 LEVEL_CAP = 30
 
+# ── 046: the pillar — one growth law for the whole tower ─────────────────
+# Every power number in the game is its floor-1 anchor carried up ONE
+# exponential: ×PILLAR per floor. Two derived exponents hang off it:
+# income rides PILLAR/PACE_DISCOUNT, so each floor pays slightly less
+# than its costs grow and days-per-floor stretches ×PACE_DISCOUNT — the
+# climb slows exponentially; warden HP rides PILLAR×WARDEN_RISE, so the
+# gates outgrow their own floor's monsters 2%/floor compounding.
+# Floor 1 is byte-identical to the pre-046 game: only the SLOPE changed,
+# never the anchor.
+#
+# The cost law that makes the wedge real: CAPITAL (gear, hones,
+# training) rides the FULL pillar; RUNNING costs (the healer's tent,
+# repairs, consumables) ride the income curve — priced on the pillar
+# they would outgrow the income that pays for them.
+PILLAR = 1.3
+PACE_DISCOUNT = 1.04           # income exponent = PILLAR / PACE_DISCOUNT
+WARDEN_RISE = 1.02             # warden HP exponent = PILLAR × WARDEN_RISE
+
+
+def pillar(b: float) -> float:
+    """The master curve: ×PILLAR per floor (or level), 1.0 at floor 1."""
+    return PILLAR ** (max(1, b) - 1)
+
+
+def income_pillar(b: float) -> float:
+    """What a floor PAYS: the pillar minus the pace discount."""
+    return (PILLAR / PACE_DISCOUNT) ** (max(1, b) - 1)
+
+
+def pace_wedge(b: float) -> float:
+    """How many floor-1 days one of floor B's days is worth — the gap
+    between what B costs (pillar) and what B pays (income_pillar)."""
+    return PACE_DISCOUNT ** (max(1, b) - 1)
+
 # 030 Phase 9: how deep the tuning work has actually gone. Slow sim
 # suites cover floors ≤ this cap on every run; the full tower runs only
 # under ASCENT_FULL_SIMS=1 (the pre-ship ritual, not the inner loop).
@@ -118,7 +152,8 @@ GEAR_HP_PER_ARMOR = 4          # max-HP points per point of armor bonus
 
 
 def player_atk(level: int, weapon_bonus: int) -> int:
-    return 3 * min(level, LEVEL_CAP) + weapon_bonus
+    """046: the level's share rides the pillar (anchor 3 at level 1)."""
+    return round(3 * pillar(min(level, LEVEL_CAP))) + weapon_bonus
 
 
 def player_def(level: int, shield_bonus: int, armor_bonus: int,
@@ -126,11 +161,14 @@ def player_def(level: int, shield_bonus: int, armor_bonus: int,
     armor = armor_bonus
     if race == "dwarf":
         armor = round(armor * 1.05)
-    return 2 * min(level, LEVEL_CAP) + shield_bonus + armor
+    return round(2 * pillar(min(level, LEVEL_CAP))) + shield_bonus + armor
 
 
 def player_max_hp(level: int, armor_bonus: int = 0) -> int:
-    return 40 + 12 * min(level, LEVEL_CAP) + GEAR_HP_PER_ARMOR * armor_bonus
+    """046: the old 40 + 12·L line is one pillar-riding anchor now —
+    52 at level 1 (identical kitted floor-1 pool: 52 + 4·7 = 80)."""
+    return (round(52 * pillar(min(level, LEVEL_CAP)))
+            + GEAR_HP_PER_ARMOR * armor_bonus)
 
 
 # ── §3 Monsters, XP, gold ────────────────────────────────────────────────
@@ -142,7 +180,8 @@ def player_max_hp(level: int, armor_bonus: int = 0) -> int:
 # (they must still feel like bosses; see §5).
 
 MONSTER_ATK_SLOPE = 3.3
-BAND_INCOME_JUMP = 1.2         # gold/kill ×1.2 per gear band (004 §4.5)
+BAND_INCOME_JUMP = 1.2         # RETIRED by 046 (income rides the income
+                               # pillar now); kept for old imports
 
 # 013: armor blunts, it never nullifies. A landed hit always chips at
 # least ⌈raw/CHIP_DIVISOR⌉ (min 1) through any DEF — pre-013 the
@@ -163,8 +202,8 @@ def wilds_rounds(floor: int) -> float:
 
 def monster_stats(floor: int) -> tuple[int, int, int]:
     """(ATK, DEF, HP) for a common wilds monster on `floor`."""
-    atk = round(MONSTER_ATK_SLOPE * floor) + 2
-    dfs = 3 * floor
+    atk = round(MONSTER_ATK_SLOPE * pillar(floor)) + 2
+    dfs = round(3 * pillar(floor))
     p_atk, _ = _at_level_loadout(floor)
     p_dmg = max(1, round(0.75 * p_atk) - dfs // 2)
     return atk, dfs, round(p_dmg * wilds_rounds(floor))
@@ -346,7 +385,7 @@ def creature_stats(floor: int, traits) -> tuple[int, int, int]:
     top and is deliberately NOT bar-neutralized."""
     bar = creature_bar(floor, traits)
     body, bite = _archetype(traits)
-    dfs = 3 * bar
+    dfs = round(3 * pillar(bar))
     # HP: what the bar's reference player grinds through in `rounds`.
     p_atk, p_def = _at_level_loadout(bar)
     p_dmg = max(1, round(0.75 * p_atk) - dfs // 2)
@@ -665,24 +704,37 @@ XP_PER_KILL_SLOPE = 2.4        # 043: was 4 — a 40% cut, the bar filled
 
 def xp_per_kill(bar: int) -> int:
     """012: XP is scarce — always below the kill's gold. 043: takes the
-    creature's BAR (== floor for a common at-floor kill)."""
-    return max(1, round(XP_PER_KILL_SLOPE * bar))   # ±25% by the roller
+    creature's BAR (== floor for a common at-floor kill). 046: derived
+    from the level≈floor sync law — xp_need(L)=24·L^1.5 must be earned
+    in days(L)=d₀·PACE^(L−1) at ~30 kills/day, so xp/kill carries L^1.5
+    over the pace wedge; past the cap the ✦ pool keeps the shape."""
+    return max(1, round(XP_PER_KILL_SLOPE * bar ** 1.5 / pace_wedge(bar)))
+
+
+GOLD_PER_KILL_ANCHOR = 8       # the floor-1 kill, unchanged since 004
 
 
 def gold_per_kill(bar: int) -> int:
-    """Base gold per kill; the same work pays visibly better each band.
-    043: takes the creature's BAR — coin follows toughness, so a floor's
-    F+1 terror out-pays its F−2 snack from this one formula."""
-    tier = gear_tier_for_floor(bar)
-    return round(8 * bar * BAND_INCOME_JUMP ** (tier - 1))
+    """Base gold per kill. 043: takes the creature's BAR — coin follows
+    toughness. 046: the anchor rides the INCOME pillar; the old
+    linear × band-jump ladder is retired (BAND_INCOME_JUMP with it)."""
+    return max(1, round(GOLD_PER_KILL_ANCHOR * income_pillar(bar)))
+
+
+def healer_tent_price(floor: int) -> int:
+    """Full heal at the tent. 046: a RUNNING cost — it rides the income
+    curve (◈5 anchor), the same slice of a hunting day on every floor;
+    the old 5×floor line outgrows deep-floor income and flips it
+    negative."""
+    return max(1, round(HEALER_TENT_PER_FLOOR * income_pillar(floor)))
 
 
 def daily_income(floor: int) -> int:
     """Design estimate of net gold per day of at-level hunting on `floor`
-    (≈30 fights, a ◈5×floor tent visit every ~3 fights now that chip
-    damage is real). Anchors hone prices and the tier price ladder —
-    not paid to anyone directly."""
-    return round((gold_per_kill(floor) - HEALER_TENT_PER_FLOOR * floor / 3)
+    (≈30 fights, a tent visit every ~3 fights now that chip damage is
+    real). Anchors hone prices and the tier price ladder — not paid to
+    anyone directly."""
+    return round((gold_per_kill(floor) - healer_tent_price(floor) / 3)
                  * 30)
 
 
@@ -707,8 +759,11 @@ LEVELUP_BASE_GOLD = 200        # the first level-up, by design
 
 
 def levelup_gold(level: int) -> int:
-    """Gold fee to train from `level` to `level+1` at the Guildhall."""
-    return max(LEVELUP_BASE_GOLD, round(daily_income(level) / 10) * 10)
+    """Gold fee to train from `level` to `level+1` at the Guildhall.
+    046: training is CAPITAL — the fee rides the full pillar (one
+    floor-1 day at the anchor, ×pace_wedge in day terms per level)."""
+    return max(LEVELUP_BASE_GOLD,
+               round(daily_income(level) * pace_wedge(level) / 10) * 10)
 
 
 def fade_multiplier(unlocked_floor: int, floor: int) -> float:
@@ -735,15 +790,25 @@ WARDEN_HP_MULT = 1.9           # × monster HP → a real boss fight (~12 rounds
 # the formula). 0.82 lands floors 5–29 at 59–88% wins, averaging 76%.
 WARDEN_DMG_BUDGET = 0.82       # expected damage dealt ÷ player pool
 WARDEN_SOFT_FLOOR = 30         # last floor tuned for solo play
-WARDEN_HP_RAMP = 40            # HP ×(1+(F−30)/40) past the soft floor
-WARDEN_ATK_RAMP = 100          # ATK ×(1+(F−30)/100) past the soft floor
+# (046: WARDEN_HP_RAMP / WARDEN_ATK_RAMP retired — WARDEN_RISE compounds
+# the gap into the HP exponent itself; ATK stays share-based so strikes
+# remain survivable at every depth.)
 
 
 REFERENCE_HONE_LAG = 2         # honing trails the climb by ~2 floors
 
-# 022/002: honing weight per step, per slot — raised so gear (not the
-# capped level) carries the within-band growth. gear_bonus() applies it.
+# 022/002: additive honing weight per step — RETIRED by 046 (kept for
+# old imports). A flat +3 can never keep a band that grows ×1.3 a
+# floor; honed_bonus() below is the law now.
 HONE_WEIGHT = {"weapon": 3, "shield": 2, "armor": 2}
+
+
+def honed_bonus(base: int, hone: int) -> int:
+    """046: a hone step multiplies its piece by the PILLAR — one step is
+    one floor's growth on that slot, so honing IS the within-band climb
+    and the reference (hone = floors-past-band-start − LAG) lands on
+    anchor × pillar(floor − LAG) by construction."""
+    return round(base * PILLAR ** max(0, hone))
 
 
 def reference_level(floor: int) -> int:
@@ -781,10 +846,10 @@ def _reference_bonus(floor: int, slot: str) -> int:
 
 
 def reference_armor_bonus(floor: int) -> int:
-    """Armor bonus of the at-level player (base + weighted hone) — the
+    """Armor bonus of the at-level player (base × pillar-hone) — the
     piece that also feeds max HP."""
-    return (_reference_bonus(floor, "armor")
-            + HONE_WEIGHT["armor"] * reference_hone(floor))
+    return honed_bonus(_reference_bonus(floor, "armor"),
+                       reference_hone(floor))
 
 
 def reference_player_hp(floor: int) -> int:
@@ -816,28 +881,28 @@ def _at_level_loadout(floor: int) -> tuple[int, int]:
     tuning points at."""
     hone = reference_hone(floor)
     lvl = reference_level(floor)
-    return (player_atk(lvl, _reference_bonus(floor, "weapon")
-                       + HONE_WEIGHT["weapon"] * hone),
+    return (player_atk(lvl, honed_bonus(
+                _reference_bonus(floor, "weapon"), hone)),
             player_def(lvl,
-                       _reference_bonus(floor, "shield")
-                       + HONE_WEIGHT["shield"] * hone,
+                       honed_bonus(_reference_bonus(floor, "shield"), hone),
                        reference_armor_bonus(floor)))
 
 
 def _boss_hp_base(floor: int) -> int:
-    """Pre-008 wilds HP curve. Wardens keep this budget so the 008
-    fast-kill retune never shrinks a boss — a Warden must still take
-    ~12+ rounds while a wilds animal takes 2.5–7."""
-    return 12 * floor + 25
+    """046: the boss pool rides pillar × WARDEN_RISE — a warden outgrows
+    its own floor's monsters 2%/floor, compounding to ~7× the monster
+    gap by floor 100. Anchor 37 = the old 12·1+25 at floor 1."""
+    return round(37 * pillar(floor) * WARDEN_RISE ** (floor - 1))
 
 
 def warden_stats(floor: int) -> tuple[int, int, int]:
-    """Regular Warden (floors not ending in 0), soloable at-level."""
+    """Regular Warden (floors not ending in 0), soloable at-level
+    through the soft floor. 046: the rise lives in HP only — ATK stays
+    share-based (WARDEN_DMG_BUDGET), so a strike is survivable at every
+    depth and the wall is the POOL, not the blow."""
     p_atk, p_def = _at_level_loadout(floor)
-    m_def = 3 * floor
+    m_def = round(3 * pillar(floor))
     hp = round(_boss_hp_base(floor) * WARDEN_HP_MULT)
-    if floor > WARDEN_SOFT_FLOOR:
-        hp = round(hp * (1 + (floor - WARDEN_SOFT_FLOOR) / WARDEN_HP_RAMP))
     p_dmg = max(1, round(0.75 * p_atk) - m_def // 2)
     if floor >= WARDEN_PROFILE_FLOOR:
         # 017: band-3+ wardens carry low tiers (both axes, so every class
@@ -851,18 +916,21 @@ def warden_stats(floor: int) -> tuple[int, int, int]:
     budget = WARDEN_DMG_BUDGET * min(1.0, 0.5 + 0.1 * floor)
     per_round = budget * reference_player_hp(floor) / rounds
     atk = round((per_round + p_def // 2) / 0.75)
-    if floor > WARDEN_SOFT_FLOOR:
-        atk = round(atk * (1 + (floor - WARDEN_SOFT_FLOOR) / WARDEN_ATK_RAMP))
     return atk, m_def, hp
 
 
 def warden_xp(floor: int) -> int:
-    return 15 * floor          # 012: below warden_gold — XP is scarce
-                               # (043: 25 → 15, the global −40% XP cut)
+    """012: below warden_gold — XP is scarce. 046: the old 15·floor
+    carries the same xp_per_kill sync shape (anchor 15 at floor 1)."""
+    return max(1, round(15 * floor ** 1.5 / pace_wedge(floor)))
 
 
 def warden_gold(floor: int) -> int:
-    return 80 * floor
+    """046: ten frontier kills' worth, plus the warden rise — the gate's
+    bounty outgrows the floor's grind the way its HP does. Anchor: ◈80
+    at floor 1, exactly the old 80·floor there."""
+    return max(1, round(10 * gold_per_kill(floor)
+                        * WARDEN_RISE ** (floor - 1)))
 
 
 # ── §5b The shared Warden — the coordination curve (022 §002) ────────────
@@ -1022,10 +1090,15 @@ def pool_unit(floor: int) -> int:
 
 
 def world_warden_hp(floor: int, active: int | None = None) -> int:
-    """The world pool: N(F) × warden_pool_fights(F) honest strike-fights."""
-    return max(1, round(required_strikers(floor, active)
-                        * warden_pool_fights(floor)
-                        * pool_unit(floor)))
+    """The world pool: N(F) × warden_pool_fights(F) honest strike-fights.
+    046: deep pools pass 2^53, where a float product silently loses the
+    low bits — keep the arithmetic in integers whenever the factors are
+    whole (they are, past the soft floor)."""
+    n = required_strikers(floor, active)
+    fights = warden_pool_fights(floor)
+    if float(n).is_integer() and float(fights).is_integer():
+        return max(1, int(n) * int(fights) * pool_unit(floor))
+    return max(1, round(n * fights * pool_unit(floor)))
 
 
 def world_warden_regen_hourly(floor: int) -> float:
@@ -1094,20 +1167,31 @@ class MilestoneBoss:
     gold: int
 
 
-# 012: milestone XP scarcer than gold, in all places. 043: XP column cut
-# ×0.6 with the rest of the world (now 0.18 × gold).
-MILESTONES: dict[int, MilestoneBoss] = {m.floor: m for m in [
-    MilestoneBoss(10, "Gnarl, the Goblin King", 60, 50, 900, 2, 900, 5_000),
-    MilestoneBoss(20, "Warlord Skarn", 120, 100, 1_800, 3, 1_800, 10_000),
-    MilestoneBoss(30, "The Barrow King", 180, 150, 2_700, 4, 2_700, 15_000),
-    MilestoneBoss(40, "Matriarch Vyx", 240, 200, 3_600, 5, 3_600, 20_000),
-    MilestoneBoss(50, "Cindermaw the Wyrm", 300, 250, 4_500, 6, 4_500, 25_000),
-    MilestoneBoss(60, "Jarl Hrimgar", 360, 300, 5_400, 7, 5_400, 30_000),
-    MilestoneBoss(70, "Zephyra, the Storm Queen", 420, 350, 6_300, 8, 6_300, 35_000),
-    MilestoneBoss(80, "The Pale Huntsman", 480, 400, 7_200, 9, 7_200, 40_000),
-    MilestoneBoss(90, "Malgrim, Herald of the King", 540, 450, 8_100, 10, 8_100, 45_000),
-    MilestoneBoss(100, "Vharuk, the Demon King", 650, 550, 12_000, 12, 9_000, 50_000),
-]}
+# 046: the hand-set stat table is gone — a linear boss row is dust
+# against pillar-grown climbers by floor 40. The table keeps only the
+# NAMES and war-party quorums; every stat rides the warden law
+# (_build_milestones, after the forge tables it depends on). 012 rule
+# preserved: milestone XP scarcer than its gold, in all places.
+_MILESTONE_NAMES: dict[int, tuple[str, int]] = {
+    10: ("Gnarl, the Goblin King", 2),
+    20: ("Warlord Skarn", 3),
+    30: ("The Barrow King", 4),
+    40: ("Matriarch Vyx", 5),
+    50: ("Cindermaw the Wyrm", 6),
+    60: ("Jarl Hrimgar", 7),
+    70: ("Zephyra, the Storm Queen", 8),
+    80: ("The Pale Huntsman", 9),
+    90: ("Malgrim, Herald of the King", 10),
+    100: ("Vharuk, the Demon King", 12),
+}
+
+MILESTONE_HP_MULT = 1.6        # a milestone outguns its decade's warden
+MILESTONE_ATK_MULT = 1.15
+MILESTONE_FINALE_HP = 1.5      # Vharuk: the last door is the heaviest
+MILESTONE_XP_MULT = 3          # × warden_xp — scarcer than the gold
+MILESTONE_GOLD_MULT = 6        # × warden_gold
+
+MILESTONES: dict[int, MilestoneBoss] = {}   # filled below the forge tables
 
 
 def is_milestone(floor: int) -> bool:
@@ -1175,10 +1259,51 @@ _FORGE_ROWS = [
          (685_000, 271_000, 550_000)),
 ]
 
+# 046: the table above keeps the NAMES and flavors; every bonus and
+# price is overwritten here — the tier-1 anchors carried up the pillar
+# to each band's first floor. Prices ride the FULL pillar (capital law):
+# against income riding pillar/PACE, days-to-afford a band grows
+# ×pace_wedge — that ratio IS the exponential climb time.
+_GEAR_ANCHORS = ((8, 250), (5, 100), (7, 200))    # (bonus, ◈) w/s/a
+
+
+def _round_price(n: float) -> int:
+    """Prices keep 3 leading digits — readable at ◈10¹³."""
+    n = max(10.0, n)
+    step = 10 ** max(1, len(str(round(n))) - 3)
+    return int(round(n / step) * step)
+
+
+_FORGE_ROWS = [
+    (t,
+     (w[0], w[1], round(_GEAR_ANCHORS[0][0] * pillar((t - 1) * 10 + 1))),
+     (s[0], s[1], round(_GEAR_ANCHORS[1][0] * pillar((t - 1) * 10 + 1))),
+     (a[0], a[1], round(_GEAR_ANCHORS[2][0] * pillar((t - 1) * 10 + 1))),
+     tuple(_round_price(anchor * pillar((t - 1) * 10 + 1))
+           for _b, anchor in _GEAR_ANCHORS))
+    for t, w, s, a, _p in _FORGE_ROWS
+]
+
 # tier → bonus lookups for the reference model (single source: the rows)
 _WEAPON_ATK_BY_TIER = {t: w[2] for t, w, _s, _a, _p in _FORGE_ROWS}
 _SHIELD_DEF_BY_TIER = {t: s[2] for t, _w, s, _a, _p in _FORGE_ROWS}
 _ARMOR_DEF_BY_TIER = {t: a[2] for t, _w, _s, a, _p in _FORGE_ROWS}
+
+
+def _build_milestones() -> dict[int, MilestoneBoss]:
+    """046: milestone stats ride the warden law (× the mults above).
+    Called at the END of the module — the warden model reaches through
+    the whole reference chain (forge tables, band math)."""
+    out = {}
+    for f, (name, quorum) in _MILESTONE_NAMES.items():
+        w_atk, w_def, w_hp = warden_stats(f)
+        hp = round(w_hp * MILESTONE_HP_MULT
+                   * (MILESTONE_FINALE_HP if f == 100 else 1.0))
+        out[f] = MilestoneBoss(
+            f, name, round(w_atk * MILESTONE_ATK_MULT), w_def, hp, quorum,
+            max(1, MILESTONE_XP_MULT * warden_xp(f)),
+            max(1, MILESTONE_GOLD_MULT * warden_gold(f)))
+    return out
 
 
 # ── 004 §3.1: the mid rungs and the three weapon lines ──────────────────
@@ -1289,6 +1414,16 @@ _SHOE_ROWS = [
      4, 120_000, 41),
     (5, "Stormstep Greaves", "the thunder arrives after you do",
      5, 400_000, 61),
+]
+
+# 046: shoes reprice on the same capital law — the tier-1 anchor carried
+# up the pillar from its own gate to each deeper gate.
+_SHOE_ANCHOR = (500, 3)        # tier-1 boots: ◈, gate level
+_SHOE_ROWS = [
+    (t, n, f, spd,
+     _round_price(_SHOE_ANCHOR[0] * pillar(lvl) / pillar(_SHOE_ANCHOR[1])),
+     lvl)
+    for t, n, f, spd, _price, lvl in _SHOE_ROWS
 ]
 
 
@@ -1404,10 +1539,20 @@ def _gmean_price(a: int, b: int) -> int:
     return round(math.sqrt(a * b) / 10) * 10
 
 
+def _gmean_bonus(a: int, b: int) -> int:
+    """046: mid-rung bonuses are geometric means — an even % step on an
+    exponential ladder (the arithmetic midpoint made the lower half of
+    every band a cliff and the upper half a freebie)."""
+    return round(math.sqrt(max(1, a) * max(1, b)))
+
+
 def _step_bonus(base: int, top: int, k: int) -> int:
-    """Bonus of sub-rung k between two whole tiers — linear, so k=5
-    lands exactly on the pre-025 mid."""
-    return base + round((top - base) * k / BAND1_STEPS)
+    """Bonus of sub-rung k between two whole tiers — 046: GEOMETRIC, so
+    every band-1 rung is one pillar step (×1.3, matching the floor it
+    unlocks on) and k=10 lands exactly on the next tier."""
+    if k <= 0 or base <= 0:
+        return base
+    return round(base * (top / base) ** (k / BAND1_STEPS))
 
 
 def _step_price(base: int, top: int, k: int) -> int:
@@ -1459,12 +1604,14 @@ def _build_forge() -> dict[str, GearItem]:
         w2, s2, a2, (pw2, ps2, pa2) = rows[t + 1]
         r = t + 0.5
         n, f = _WARRIOR_MIDS[r]
-        put(n, f, "weapon", r, (w1[2] + w2[2]) // 2,
+        put(n, f, "weapon", r, _gmean_bonus(w1[2], w2[2]),
             _gmean_price(pw1, pw2), line="warrior")
         n, f = _SHIELD_MIDS[r]
-        put(n, f, "shield", r, (s1[2] + s2[2]) // 2, _gmean_price(ps1, ps2))
+        put(n, f, "shield", r, _gmean_bonus(s1[2], s2[2]),
+            _gmean_price(ps1, ps2))
         n, f = _ARMOR_MIDS[r]
-        put(n, f, "armor", r, (a1[2] + a2[2]) // 2, _gmean_price(pa1, pa2))
+        put(n, f, "armor", r, _gmean_bonus(a1[2], a2[2]),
+            _gmean_price(pa1, pa2))
 
     # the other two weapon lines mirror the warrior numbers rung for rung
     warrior = {g.rung: g for g in items.values()
@@ -1703,7 +1850,11 @@ def max_hone(unlocked_floor: int) -> int:
 
 
 def hone_price(unlocked_floor: int) -> int:
-    return max(5, round(HONE_PRICE_PCT * daily_income(unlocked_floor)))
+    """046: honing is CAPITAL — 15% of a floor-1 day at the anchor,
+    riding the full pillar (×pace_wedge in day terms), because a hone
+    step now IS a floor's worth of power on that piece."""
+    return max(5, round(HONE_PRICE_PCT * daily_income(unlocked_floor)
+                        * pace_wedge(unlocked_floor)))
 
 
 # ── §6d Durability (005 §3.5) ────────────────────────────────────────────
@@ -1810,8 +1961,13 @@ def endurance(item: GearItem, left: int | None = None) -> int:
 
 
 def repair_price(item: GearItem, missing_frac: float) -> int:
-    """The Forge mends for a fraction of what the smith charged."""
-    return max(1, round(REPAIR_PRICE_PCT * item.price
+    """The Forge mends for a fraction of what the smith charged.
+    046: repair is a RUNNING cost — the pillar-riding sticker price is
+    discounted back to the income curve (÷pace_wedge at the piece's own
+    gate), so the daily repair tax stays the same share of a hunting
+    day at every band instead of eating the whole income at depth."""
+    running = item.price / pace_wedge(_rung_gate_raw(item))
+    return max(1, round(REPAIR_PRICE_PCT * running
                         * max(0.0, min(1.0, missing_frac))))
 
 
@@ -2154,3 +2310,6 @@ CLASSES = {
                 "experience price).",
     "archer": "Extra combat option: Treeline Shot (first strike).",
 }
+
+# 046: last — the milestone stats read the whole model above.
+MILESTONES.update(_build_milestones())
