@@ -71,3 +71,21 @@ Commit: `048 phase 8: the words teach — polish + playtest log`.
 - School navigation: back → gate camp (fixed phase 6). Playtest all
   town doors' exits once — the generic back-handler trap may have
   siblings.
+
+## Learnings applied (from phase 7)
+
+- The retag moved signs: floor 4's plate is lamptree_wight (not
+  glade_stag), floor 9's is shadow_wolf (not pylon_adder),
+  courier_hound is fierce now. The playtest's "meet all three signs"
+  script uses THESE monsters; teaching texts that name a signed
+  monster must be re-read against the shipped flip table
+  (phase-7 execution_summary.md).
+- Floors 1–3 are staircase floors, not full classrooms: floor 1 all
+  plain, plate arrives on 2, spellguard on 3, wings on 4. The
+  playtest should feel the staircase teach one sign at a time.
+- The three-question audit at ranks 0/5/10 can lean on the /mechanics
+  TRAINING tab (miss/worst-swing per rank) and the sim's path+rank
+  inputs — the numbers are on the page now.
+- Production checklist: the release-day mechanics regen MUST re-run
+  post-vendor (the phase-7 regen read the sibling plugin via
+  ASCENT_GAME_PATH; the vendor was still 047).
