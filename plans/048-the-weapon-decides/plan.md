@@ -142,14 +142,14 @@ trivializes). Frontier = highest unlocked floor:
 TRAIN_XP_ANCHOR   = 20
 TRAIN_GOLD_ANCHOR = 8
 train_xp(R)          = round(20 * R ** 1.5)
-   # 20/57/104/160/224/294/371/453/540/632  (ranks 1..10)
+   # 20/57/104/160/224/294/370/453/540/632  (ranks 1..10)
 train_gold(R, front) = round(8 * pillar(front) * R)
 ```
 
-- **One path 0→10 = 2,855 XP ≈ the XP of body levels 1→10**
+- **One path 0→10 = 2,854 XP ≈ the XP of body levels 1→10**
   (Σ xp_need(1..9) = 2,664) — mastering your first weapon is a
   level-10-sized achievement, landing near the first band's end.
-- **All three paths = 8,565 XP ≈ body levels 1→21** — spreading is
+- **All three paths = 8,562 XP ≈ body levels 1→21** — spreading is
   possible and deliberately slower; the sim tests (T5) assert a
   tri-path climber trails a single-path climber by several body
   levels at equal kills. No player should find it optimal; it is a
@@ -323,7 +323,7 @@ weapon. The School teaches it to bite."*
 ## S2. The School (new room, every gate town, next to the armory)
 
 ```
-⚔ BLADE   trained rank 6   ▰▰▰▰▰▰▱▱▱▱   next: rank 7 — 371 XP + 56 ◈
+⚔ BLADE   trained rank 6   ▰▰▰▰▰▰▱▱▱▱   next: rank 7 — 370 XP + 56 ◈
 ➶ BOW     trained rank 0   ▱▱▱▱▱▱▱▱▱▱   next: rank 1 — 20 XP + 8 ◈
 ✦ STAFF   trained rank 0   ▱▱▱▱▱▱▱▱▱▱   next: rank 1 — 20 XP + 8 ◈
 ✥ CARRY   1 weapon slot            2nd slot — 60 XP + 30 ◈

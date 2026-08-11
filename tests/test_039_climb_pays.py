@@ -317,6 +317,7 @@ def test_deep_pays_the_premium_and_the_dossier_promises_it(monkeypatch):
 
     def kill(deep):
         p = create_character(fresh(f"039-pay-{deep}"))
+        p["training"]["blade"] = 10   # 048: the probe is the payout —
         p["unlocked_floor"], p["level"] = 5, 10   # room in the XP bar
         combat.start_encounter(p, fl, enc, "wilds", deep=deep)
         promised = combat._drop_ranges(p, fl)

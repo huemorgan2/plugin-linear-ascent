@@ -83,3 +83,160 @@ def test_conftest_helper_builds_a_character():
     assert p["name"] == "Proof"
     assert p["stage"] not in ("intro", "creation_race", "creation_class",
                               "creation_name")
+
+
+# ═══════════════════════════════════════════════════════════════════════
+# Phase 2 — N3 trained ranks in the swing + N9 doc migration
+# ═══════════════════════════════════════════════════════════════════════
+
+from plugin_linear_ascent.engine import combat, core
+
+
+def _fresh(uid="048-p2"):
+    return state.new_player(uid)
+
+
+def _choose(p, option="", text=""):
+    return core.apply_choice(p, option, text)
+
+
+def _in_fight(p):
+    _choose(p, "gate")
+    _choose(p, "floor_1")
+    _choose(p, "hunt")
+    assert p["encounter"] is not None
+    p["encounter"]["range"] = "close"
+    return p
+
+
+def test_rank_formulas_exact():
+    assert [economy.TRAIN_MISS_PCT(R) for R in range(11)] == \
+        [25, 22, 20, 18, 15, 12, 10, 8, 5, 2, 0]
+    assert [economy.TRAIN_ROLL_FLOOR(R) for R in range(11)] == \
+        [0.30, 0.34, 0.38, 0.42, 0.46, 0.50, 0.54, 0.58, 0.62, 0.66, 0.70]
+
+
+def test_train_costs_exact():
+    # round() truth, not hand-rounding: rank 7 is 370 (the plan's 371
+    # was a hand-rounding slip; sum one path 0→10 = 2854 XP)
+    assert [economy.train_xp(R) for R in range(1, 11)] == \
+        [20, 57, 104, 160, 224, 294, 370, 453, 540, 632]
+    assert sum(economy.train_xp(R) for R in range(1, 11)) == 2854
+    for front in (1, 5, 20):
+        for R in (1, 4, 10):
+            assert economy.train_gold(R, front) == \
+                round(8 * economy.pillar(front) * R)
+
+
+def test_path_of_line():
+    assert economy.PATH_OF_LINE == {
+        "warrior": "blade", "archer": "bow", "sorcerer": "staff"}
+
+
+def test_creation_grants_class_path_rank6():
+    # transitional (phases 2–3, classes still exist): the class pick
+    # trains its path to 6 ≈ the old on-class feel. Phase 4 replaces
+    # this with the classless blade-2 start.
+    p = _fresh("048-p2-new")
+    make_character(p, clazz="archer", name="Fletch")
+    assert p["training"] == {"blade": 0, "bow": 6, "staff": 0}
+
+
+def test_legacy_doc_migrates_to_rank6_with_card_once():
+    p = _fresh("048-p2-legacy")
+    make_character(p, clazz="archer", name="Oldbow")
+    # rewind the doc to a pre-048 shape
+    del p["training"]
+    p["version"] = 6
+    s = core.current_scene(p)
+    assert p["training"] == {"blade": 0, "bow": 6, "staff": 0}
+    text = " ".join([s.headline or "", s.support or ""]
+                    + list(s.body_lines or []))
+    assert "School" in text
+    assert "Bow — trained rank 6" in text
+    s2 = core.current_scene(p)          # the card never comes back
+    text2 = " ".join([s2.headline or "", s2.support or ""]
+                     + list(s2.body_lines or []))
+    assert "trained rank 6" not in text2
+
+
+def test_swing_floor_follows_rank(monkeypatch):
+    p = _fresh("048-p2-swing")
+    make_character(p, clazz="warrior", name="Swinga")
+    _in_fight(p)
+    captured = {}
+
+    def spy(pp, lo, hi):
+        captured["lo"], captured["hi"] = lo, hi
+        return hi
+
+    monkeypatch.setattr(state, "rng_int", spy)
+    atk = state.atk(p)
+    for rank, floor_pct in ((6, 0.54), (0, 0.30), (10, 0.70)):
+        p["training"]["blade"] = rank
+        p["encounter"]["hp"] = 10 ** 6      # nobody dies in this probe
+        combat._player_hit(p)
+        assert captured["hi"] == atk
+        assert captured["lo"] == round(floor_pct * atk), rank
+
+
+def test_attack_miss_prob_follows_rank(monkeypatch):
+    p = _fresh("048-p2-miss")
+    make_character(p, clazz="warrior", name="Missa")
+    _in_fight(p)
+    probs = []
+
+    def spy(pp, prob):
+        probs.append(prob)
+        return False
+
+    monkeypatch.setattr(state, "roll_ok", spy)
+    p["training"]["blade"] = 3
+    p["encounter"]["hp"] = 10 ** 6
+    combat.resolve_fight_action(p, _floor_obj(p), "attack")
+    assert economy.TRAIN_MISS_PCT(3) / 100 in probs
+
+
+def test_attack_miss_eats_round_names_rank_and_school(monkeypatch):
+    p = _fresh("048-p2-wide")
+    make_character(p, clazz="warrior", name="Wide")
+    _in_fight(p)
+    p["training"]["blade"] = 1
+    miss_prob = economy.TRAIN_MISS_PCT(1) / 100
+
+    def rigged(pp, prob):
+        return prob == miss_prob
+
+    monkeypatch.setattr(state, "roll_ok", rigged)
+    hp_monster = p["encounter"]["hp"]
+    s = combat.resolve_fight_action(p, _floor_obj(p), "attack")
+    assert p["encounter"] is None or p["encounter"]["hp"] == hp_monster
+    note = s.shard_note or ""
+    body = " ".join([note] + list(s.body_lines or []))
+    assert "wide" in body.lower()
+    assert "School" in body or "rank" in body.lower()
+
+
+def test_rank10_never_misses(monkeypatch):
+    p = _fresh("048-p2-ten")
+    make_character(p, clazz="warrior", name="Ten")
+    _in_fight(p)
+    p["training"]["blade"] = 10
+    probs = []
+
+    def spy(pp, prob):
+        probs.append(prob)
+        return False
+
+    monkeypatch.setattr(state, "roll_ok", spy)
+    p["encounter"]["hp"] = 10 ** 6
+    combat.resolve_fight_action(p, _floor_obj(p), "attack")
+    assert 0.0 not in [pr for pr in probs if pr < 0.01] or \
+        all(pr != 0.0 or False for pr in probs)
+    # a zero miss chance must never reach the dice as a roll
+    assert 0.0 not in probs
+
+
+def _floor_obj(p):
+    from plugin_linear_ascent.content import schema
+    return schema.get_floor(p["floor"] or 1)

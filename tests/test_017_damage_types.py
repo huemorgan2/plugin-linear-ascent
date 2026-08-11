@@ -222,7 +222,7 @@ def test_opener_names_the_profile():
 
 # ── the matchup sim gate ─────────────────────────────────────────────────
 
-def reference_player(clazz, floor):
+def reference_player(clazz, floor, rank=8):
     """The design's at-level player (economy._at_level_loadout) as a real
     doc: level = floor, current-tier set, honing 2 floors behind."""
     p = fresh(f"ref-{clazz}-{floor}")
@@ -241,6 +241,13 @@ def reference_player(clazz, floor):
     p["gear"]["weapon"] = _at(economy.weapon_line(clazz))
     p["gear"]["shield"] = _at(economy.gear_rungs("shield"))
     p["gear"]["armor"] = _at(economy.gear_rungs("armor"))
+    # 048 phase-2 transitional: the reference climber swings near OLD
+    # power. The legacy mean (0.75 of ATK, no miss) has no exact rung
+    # on the trained ladder — rank 7 gives 0.73, rank 8 gives 0.77 —
+    # so each sim pins the side its law needs. The phase-6 bake
+    # re-anchors every band at the rank-6 reference climber.
+    p["training"] = {"blade": 0, "bow": 0, "staff": 0}
+    p["training"][economy.PATH_OF_LINE[clazz]] = rank
     # 031 §7: the reference ARCHER wears the boots the rack sells —
     # with the kite now gated on strictly faster legs, a bootless bow
     # is nobody's real build past the first band, and speed is

@@ -688,6 +688,36 @@ TYPE_MULT = {
 }
 
 
+PATH_OF_LINE = {"warrior": "blade", "archer": "bow", "sorcerer": "staff"}
+
+# 048 N3: trained rank 0–10 per path — the player's skill, never the
+# weapon's. Rank buys consistency: the miss fades, the worst swing rises.
+TRAIN_XP_ANCHOR = 20
+TRAIN_GOLD_ANCHOR = 8
+
+
+def TRAIN_MISS_PCT(rank: int) -> int:
+    """Chance (whole %) an attack goes wide: 25% untrained → 0% at 10."""
+    return max(0, round(25 - 2.5 * rank))
+
+
+def TRAIN_ROLL_FLOOR(rank: int) -> float:
+    """The worst swing as a share of full power: 30% → 70% at rank 10.
+    Rank 5 reproduces today's [ATK/2, ATK] band."""
+    return (30 + 4 * rank) / 100
+
+
+def train_xp(rank: int) -> int:
+    """XP the School asks for RANK (each costs more than the last).
+    One path 0→10 = 2,854 XP ≈ body levels 1→10."""
+    return round(TRAIN_XP_ANCHOR * rank ** 1.5)
+
+
+def train_gold(rank: int, frontier: int) -> int:
+    """The instructor's fee — rides the pillar so it never trivializes."""
+    return round(TRAIN_GOLD_ANCHOR * pillar(frontier) * rank)
+
+
 def type_from_traits(traits) -> str:
     """Legacy trait sets → the one 048 type. Flight is the loudest fact;
     resist outranks armor (a warded thing reads as warded); bulwark is

@@ -41,3 +41,11 @@ anchors settled`.
   expected value in the bake with `round()`, never by hand.
 - Suite-green gate excludes the baseline-red
   test_034 shield_wall case (pre-existing on main).
+
+## Learnings applied (from phase 2)
+
+- Rank 6 is NOT legacy parity (0.693 vs 0.75 mean): the bake must
+  re-anchor the warden 60–85 band and the matchup farmable/danger
+  gates at a rank-6 reference climber; drop reference_player's
+  transitional rank pins (8 matchup / 7 warden) to the default 6.
+- Migration-at-6 vs 7 is an open roy question; bake assumes 6.

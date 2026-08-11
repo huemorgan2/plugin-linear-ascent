@@ -830,6 +830,12 @@ def _creation_class_scene(p: dict) -> Scene:
 
 def _creation_pick_class(p: dict, oid: str) -> Scene:
     p["clazz"] = oid
+    # 048 (transitional, dies with the class question): the pick trains
+    # its path to 6 — the old on-class feel on the new ladder.
+    p.setdefault("training", {"blade": 0, "bow": 0, "staff": 0})
+    path = economy.PATH_OF_LINE.get(oid)
+    if path:
+        p["training"][path] = 6
     # 017 §1: the gate issues the weapon of your calling — warriors a
     # rusted sword, archers a basic bow (arrows never run out),
     # sorcerers a worn staff. It never breaks and is never lost.

@@ -55,3 +55,10 @@ Keep the sweep script in this folder for the record.
 T7 engine part, T1 gates, full swept suite.
 Commit: `048 phase 4: classes die — weapon+rank gates, School-era
 creation, test sweep`.
+
+## Learnings applied (from phase 2)
+
+- Delete the two transitional off-class gates in combat.py (marked
+  `transitional until phase 4`): the atk//2 floor branch in
+  _player_hit and the `not _off_class` guard on the rank miss.
+- `_train_path` fallback `p.get("clazz")` dies with the class field.

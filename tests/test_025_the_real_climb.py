@@ -345,7 +345,8 @@ def test_the_card_and_the_tip_both_say_it_never_heals():
 
 def test_a_kill_carries_a_structured_tally():
     p = at_gate_town(create_character(fresh("r25-tally")))
-    fl = schema.get_floor(1)
+    p["training"]["blade"] = 10       # 048: the probe is the tally, not
+    fl = schema.get_floor(1)          # the hand — a master never misses
     enc = schema.Encounter(id="_t", name="Thing", weight=1,
                            prose="A thing arrives.", traits=("sturdy",))
     combat.start_encounter(p, fl, enc, "wilds")

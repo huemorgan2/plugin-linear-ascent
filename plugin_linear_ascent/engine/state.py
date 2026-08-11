@@ -37,7 +37,7 @@ def world_day_f(at: dt.datetime | None = None) -> float:
 def new_player(luna_user: str) -> dict:
     ts = now().isoformat()
     return {
-        "version": 6,
+        "version": 7,
         "luna_user": luna_user,
         "stage": "intro",              # intro → creation_race → creation_class → creation_name → playing
         "name": None, "race": None, "clazz": None,
@@ -67,6 +67,9 @@ def new_player(luna_user: str) -> dict:
                   "death_save": False},
         "sidekick": {"insight": 1, "carried": None},
         "telemetry_day": world_day(),
+        # 048: trained rank 0–10 per weapon path — the player's skill.
+        # Creation trains the starting path; the School sells the rest.
+        "training": {"blade": 0, "bow": 0, "staff": 0},
     }
 
 
@@ -381,6 +384,37 @@ def ensure_current(p: dict) -> None:
         if not p["gear"].get("armor"):
             p["gear"]["armor"] = economy.GATE_ARMOR.slug
         p["version"] = 6
+    if p.get("version", 1) < 7:
+        # 048: the School era — training lives on every doc. A legacy
+        # doc is honored at rank 6 on its class's path: ≈ the old
+        # on-class feel, with four visible steps of headroom above it.
+        if "training" not in p:
+            p["training"] = {"blade": 0, "bow": 0, "staff": 0}
+            path = economy.PATH_OF_LINE.get(p.get("clazz") or "")
+            if path:
+                p["training"][path] = 6
+                if p.get("stage") == "playing":
+                    from .scene import Option, Scene
+                    pretty = {"blade": "Blade", "bow": "Bow",
+                              "staff": "Staff"}[path]
+                    p.setdefault("pending_events", []).insert(0, Scene(
+                        eyebrow="ROOTHOLLOW · A LETTER FROM THE SCHOOL",
+                        headline="The guilds dissolved their halls into "
+                                 "one School",
+                        support="Every gate town teaches every weapon "
+                                "now. Your years on the path are "
+                                "honored.",
+                        shard_note="A trained hand is a trained hand, "
+                                   "whatever the guild called it.",
+                        body_lines=[
+                            f"▪ {pretty} — trained rank 6",
+                            "▪ the School trains all three paths, "
+                            "for XP and coin",
+                        ],
+                        options=[Option("town", "So be it")],
+                        event_kind="present",
+                    ).to_dict())
+        p["version"] = 7
     # Soft clamp: XP used to bank past a full bar. Anyone already over
     # is brought back to the bar — surplus never bought a level anyway.
     if xp_room(p) is not None:

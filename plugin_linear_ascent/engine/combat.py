@@ -844,6 +844,17 @@ def _off_class(p: dict) -> bool:
     return bool(line) and bool(p.get("clazz")) and line != p["clazz"]
 
 
+def _train_path(p: dict) -> str:
+    """048: the weapon in hand names the path; line-less docs fall back
+    to the class's path (transitional until the class question dies)."""
+    line = _weapon_line(p) or p.get("clazz") or "warrior"
+    return economy.PATH_OF_LINE.get(line, "blade")
+
+
+def _train_rank(p: dict) -> int:
+    return int((p.get("training") or {}).get(_train_path(p), 0))
+
+
 def _player_hit(p: dict, mult: float = 1.0, pierce: bool = False) -> int:
     # 017 §2: typed damage through the defense profile. Magic ignores
     # flat DEF but eats the resist tier; melee/ranged keep raw−DEF/2 and
@@ -862,7 +873,16 @@ def _player_hit(p: dict, mult: float = 1.0, pierce: bool = False) -> int:
     if p.get("oil", 0) > 0 and _damage_type(p) != "magic":
         mult *= economy.OIL_MULT
         p["oil"] -= 1
-    raw = state.rng_int(p, state.atk(p) // 2, state.atk(p))
+    # 048: the trained hand sets the floor of the swing — rank 5 is the
+    # old [ATK/2, ATK] band; rank 10 never swings below 70%. Off-class
+    # hands stay on the legacy penalty set until the classes die
+    # (phase 4) — the two systems never stack.
+    atk_full = state.atk(p)
+    if _off_class(p):
+        lo = atk_full // 2
+    else:
+        lo = round(economy.TRAIN_ROLL_FLOOR(_train_rank(p)) * atk_full)
+    raw = state.rng_int(p, lo, atk_full)
     prof = _profile(p)
     if pierce:
         prof = dict(prof, armor="none")    # 006: the shot ignores plate
@@ -2053,6 +2073,33 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
         return fight_scene(p, floor, note=(
             f"Not your weapon — your {weapon_name(p)} goes wide "
             "of anything that matters. "
+            + _counter_text(p, back,
+                            lead=f"The {e['name']} makes you pay "
+                                 "for the fumble")
+            + (f" {chase}" if chase else "")
+            + (f" {snap}" if snap else "")))
+    # 048: the hand decides — an untrained swing goes wide. The miss
+    # eats the round and the monster answers, exactly like any fumble.
+    # Off-class hands already paid at the off-class gate above — the
+    # legacy penalty and the rank ladder never stack (both transitional
+    # until phase 4).
+    rank = _train_rank(p)
+    miss = economy.TRAIN_MISS_PCT(rank) / 100
+    if not _off_class(p) and miss > 0 and state.roll_ok(p, miss):
+        wide = (f"Rank-{rank} hands — your {weapon_name(p)} swings "
+                "wide. The School trains this away.")
+        if unreachable:
+            chase = _advance_chase(p)
+            return fight_scene(p, floor, note=(
+                wide + " It cannot reach you to make you pay."
+                + (f" {chase}" if chase else "")
+                + (f" {snap}" if snap else "")))
+        back = _monster_hit(p)
+        if p["hp"] <= 0:
+            return _death(p, floor)
+        chase = _advance_chase(p)
+        return fight_scene(p, floor, note=(
+            wide + " "
             + _counter_text(p, back,
                             lead=f"The {e['name']} makes you pay "
                                  "for the fumble")
