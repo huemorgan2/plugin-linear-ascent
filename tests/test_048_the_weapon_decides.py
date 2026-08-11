@@ -357,7 +357,9 @@ def test_train_refusals_name_the_numbers():
 def test_economy_school_constants():
     assert economy.MASTERY_XP == 948            # round(632 * 1.5)
     assert economy.CARRY2_XP == 60 and economy.CARRY2_GOLD == 30
-    assert economy.CARRY3_XP == 900 and economy.CARRY3_LEVEL == 8
+    # phase-6 bake: 500 fits the level-8 bar (xp_need(8) = 543) — at
+    # 900 the printed level-8 gate was a lie until ~level 12
+    assert economy.CARRY3_XP == 500 and economy.CARRY3_LEVEL == 8
     for front in (1, 5, 20):
         assert economy.carry3_gold(front) == \
             round(200 * economy.pillar(front))
@@ -428,11 +430,11 @@ def test_carry_slots_second_and_third():
     s = _choose(p, "buy_carry3")
     assert p["slots"] == 2
     assert "needs level 8 — you: 5" in _school_text(s)
-    # at level 12 the bar can actually hold the 900 (level-8 bar can't)
-    _rich(p, level=12, xp=950, gold=2000)
+    # phase-6 bake: 500 fits the level-8 bar — the gate is honest now
+    _rich(p, level=8, xp=520, gold=2000)
     s = _choose(p, "buy_carry3")
     assert p["slots"] == 3
-    assert p["xp"] == 950 - economy.CARRY3_XP
+    assert p["xp"] == 520 - economy.CARRY3_XP
     assert p["gold"] == 2000 - economy.carry3_gold(1)
 
 

@@ -1088,6 +1088,11 @@ def _dispatch_location(p: dict, oid: str) -> Scene:
         if loc == "memorial":
             # 034 §3: the only way out of a monument is back to the camp.
             p["location"] = "gate_town"
+        elif loc == "school":
+            # 048: the School opens off the gate camp, not the square —
+            # without this row the generic handler ate the door and the
+            # student was locked in (the T5 sim found it).
+            p["location"] = "gate_town"
         else:
             p["location"] = "town" if loc in town_menus + ("grants",) \
                 else p["location"]

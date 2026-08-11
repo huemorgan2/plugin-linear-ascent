@@ -275,7 +275,14 @@ def test_the_daily_save_also_teaches():
 
 # ── phase 6 ships the bounty label ─────────────────────────────────────
 
-@pytest.mark.skip(reason="young-tower bounty label lands with the "
-                         "phase-6 bake")
-def test_early_kills_carry_the_bounty_label():
-    raise AssertionError("phase 6")
+def test_early_kills_carry_the_bounty_label(monkeypatch):
+    p = _arm(_classless("048-v-bounty"), "rusted_sword",
+             {"blade": 6, "bow": 0, "staff": 0})
+    _start(p, (), rng="close")
+    monkeypatch.setattr(state, "roll_ok", lambda p, chance: False)
+    monkeypatch.setattr(state, "rng_int", lambda p, lo, hi: hi)
+    p["encounter"]["hp"] = 1
+    fl = schema.get_floor(1)
+    s = combat.resolve_fight_action(p, fl, "attack")
+    assert any("young-tower bounty" in ln for ln in s.body_lines), \
+        s.body_lines

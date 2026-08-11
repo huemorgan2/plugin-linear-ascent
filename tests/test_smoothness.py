@@ -243,6 +243,103 @@ def test_income_never_cliffs_down_or_regresses():
             f"{path}: smoothed income per kill regresses somewhere")
 
 
+# ── 048 phase 6: the rank axis ─────────────────────────────────────────
+
+RANK_FLOORS = (1, 5, 10, 25, 50)
+RANK_STEP_CAP = 0.20
+
+
+def _rank_rounds(path, floor, rank, p_atk=None):
+    """Expected rounds-to-kill vs the floor's plain reference monster
+    at trained rank R — the ladder every climber walks. Plain is every
+    path's ×1.0 target, so the walk isolates the RANK, not the
+    triangle."""
+    if p_atk is None:
+        p_atk, _ = economy._at_level_loadout(floor)
+    m_atk, m_def, m_hp = economy.monster_stats(floor)
+    mean = (economy.TRAIN_ROLL_FLOOR(rank) + 1) / 2
+    hit = 1 - economy.TRAIN_MISS_PCT(rank) / 100
+    dmg = economy.typed_damage_048(path, round(mean * p_atk), m_def,
+                                   "plain") * hit
+    return m_hp / dmg
+
+
+def test_every_rank_step_is_felt_and_none_is_a_wall():
+    """Ranks 0→10: kill speed strictly improves at every rank (a rank
+    is never a dud — the miss curve alone guarantees it even when the
+    rounded swing ties), and no single rank moves rounds-to-kill by
+    more than 20% (progression felt, never a cliff)."""
+    for path in PATHS:
+        for floor in RANK_FLOORS:
+            rounds = [_rank_rounds(path, floor, r) for r in range(11)]
+            for r, (a, b) in enumerate(zip(rounds, rounds[1:])):
+                assert b < a, (
+                    f"{path} floor {floor}: rank {r}→{r + 1} is a dud "
+                    f"({a:.2f} → {b:.2f} rounds)")
+                step = (a - b) / a
+                assert step <= RANK_STEP_CAP, (
+                    f"{path} floor {floor}: rank {r}→{r + 1} jumps "
+                    f"{step:.0%}")
+
+
+# ── 048 phase 6: the weapon-rung axis ──────────────────────────────────
+
+# The 025 ladder is SPARSE past band 1 (a rung every 5 floors), so a
+# fixed-floor walk would only measure the pillar's exponent. The law
+# that matters is the felt corridor: a freshly bought rung, at its own
+# gate floor, always lands the fight in a playable band — never a dud
+# (the buy visibly works) and never a one-shot trivializer.
+RUNG_FRESH_MIN = 1.0
+RUNG_FRESH_MAX = 10.0
+BAND1_RUNG_STEP_CAP = 0.25
+_LINES = ("warrior", "archer", "sorcerer")
+_LINE_PATH = {"warrior": "blade", "archer": "bow", "sorcerer": "staff"}
+
+
+def _fresh_rounds(line, g):
+    floor = max(1, economy._rung_gate_raw(g))
+    hone = economy.reference_hone(floor)
+    atk = economy.player_atk(economy.reference_level(floor),
+                             economy.honed_bonus(g.bonus, hone))
+    return _rank_rounds(_LINE_PATH[line], floor, REF_RANK, p_atk=atk)
+
+
+def test_every_fresh_rung_lands_in_the_corridor():
+    for line in _LINES:
+        for g in sorted(economy.weapon_line(line), key=lambda g: g.rung):
+            r = _fresh_rounds(line, g)
+            assert RUNG_FRESH_MIN <= r <= RUNG_FRESH_MAX, (
+                f"{line} rung {g.rung} ({g.slug}): {r:.1f} rounds at its "
+                "own gate — a dud or a trivializer")
+
+
+def test_band_one_ladder_steps_smoothly():
+    """Band 1 sells a rung per level — the classroom ladder. Each buy
+    is felt (strictly fewer rounds at the new gate) and none is a
+    spike (≤25% — the reward cousin of the 20% rank cap; the shipped
+    ladder steps 18–23%)."""
+    for line in _LINES:
+        rungs = [g for g in sorted(economy.weapon_line(line),
+                                   key=lambda g: g.rung) if g.rung < 2.0]
+        for prev, g in zip(rungs, rungs[1:]):
+            floor = max(1, economy._rung_gate_raw(g))
+            hone = economy.reference_hone(floor)
+            path = _LINE_PATH[line]
+            atk_new = economy.player_atk(
+                economy.reference_level(floor),
+                economy.honed_bonus(g.bonus, hone))
+            atk_old = economy.player_atk(
+                economy.reference_level(floor),
+                economy.honed_bonus(prev.bonus, hone))
+            r_new = _rank_rounds(path, floor, REF_RANK, p_atk=atk_new)
+            r_old = _rank_rounds(path, floor, REF_RANK, p_atk=atk_old)
+            imp = (r_old - r_new) / r_old
+            assert imp > 0, (
+                f"{line} rung {prev.rung}→{g.rung}: a dud upgrade")
+            assert imp <= BAND1_RUNG_STEP_CAP, (
+                f"{line} rung {prev.rung}→{g.rung}: {imp:.0%} spike")
+
+
 def test_every_floor_answers_every_path():
     """048 T3: no floor strands a path — each of blade/bow/staff has at
     least one monster it answers at ×1.0 on every floor."""

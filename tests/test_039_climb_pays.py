@@ -340,9 +340,13 @@ def test_deep_pays_the_premium_and_the_dossier_promises_it(monkeypatch):
     mult = economy.deep_reward_mult(5)
     assert gold1 == round(gold0 * mult)
     assert xp1 == round(xp0 * mult)
-    # the dossier's promise scales with the payout — same math, no drift
-    assert prom1["gold"][0] == round(prom0["gold"][0] * mult)
-    assert prom1["gold"][1] == round(prom0["gold"][1] * mult)
+    # the dossier's promise scales with the payout — same math, no
+    # drift. 048: the bounty puts half-coins in g·0.5, so re-deriving
+    # from the rounded shallow promise carries ±1 of rounding order —
+    # the promise and the PAYOUT still share one formula (asserted by
+    # the containment lines below).
+    assert abs(prom1["gold"][0] - round(prom0["gold"][0] * mult)) <= 1
+    assert abs(prom1["gold"][1] - round(prom0["gold"][1] * mult)) <= 1
     assert prom0["gold"][0] <= gold0 <= prom0["gold"][1]
     assert prom1["gold"][0] <= gold1 <= prom1["gold"][1]
 

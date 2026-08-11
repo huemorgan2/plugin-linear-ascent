@@ -1329,7 +1329,11 @@ def _victory(p: dict, floor) -> Scene:
     if rested:
         lines.append(f"+ {rested} XP rested — ✦ {p['rested']} left "
                      "in the pool")
-    lines.append(f"+ ◈ {gold} gold")
+    if e["kind"] == "wilds" and floor.floor <= economy.EARLY_COIN_FLOORS:
+        # 048 N8: the fade must never read as a nerf — name the bounty
+        lines.append(f"+ ◈ {gold} gold (young-tower bounty)")
+    else:
+        lines.append(f"+ ◈ {gold} gold")
     if e["kind"] == "wilds" and p.get("_world") is not None:
         # 022/008: assist strikes — a floor-mate on the same prey inside
         # the window links the logs. Gold only (rested already paid on

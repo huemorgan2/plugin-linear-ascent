@@ -31,9 +31,8 @@ def _fight_warden(fno, seed):
     kills it without dying (the daily death save counts as a LOSS — the
     fight ended with the player on the floor)."""
     fl = schema.get_floor(fno)
-    # 048 transitional: rank 7 (just under legacy power) — rank 8 tips
-    # the 60–85 band's average over the top; re-anchored in phase 6.
-    p = reference_player("warrior", fno, rank=7)
+    # 048 phase 6: the band is anchored at the rank-6 reference hand.
+    p = reference_player("warrior", fno)
     p["luna_user"] = f"022002-warden-{fno}-{seed}"
     orig_day = state.world_day
     state.world_day = lambda at=None: _SIM_DAY

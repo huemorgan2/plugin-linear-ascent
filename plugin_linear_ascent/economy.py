@@ -759,7 +759,10 @@ MASTERY_XP = round(train_xp(10) * 1.5)          # 948
 MASTERY_DISCOUNT = 0.8
 MASTERY_DISCOUNT_MAX_RANK = 5
 CARRY2_XP, CARRY2_GOLD = 60, 30                 # 2nd slot — level 1
-CARRY3_XP, CARRY3_GOLD_ANCHOR = 900, 200        # 3rd slot — level 8+
+# 048 bake: the 3rd slot's XP price must FIT the level-8 bar it is
+# gated on (xp_need(8) = 543) — at the old 900 the printed gate was a
+# lie until ~level 12. 500 keeps the slot a level-8 decision.
+CARRY3_XP, CARRY3_GOLD_ANCHOR = 500, 200        # 3rd slot — level 8+
 CARRY3_LEVEL = 8
 
 
@@ -811,8 +814,9 @@ def warden_profile(floor: int) -> dict:
     return profile_from_traits(())
 
 
-XP_PER_KILL_SLOPE = 2.4        # 043: was 4 — a 40% cut, the bar filled
-                               # in a single day at every level
+XP_PER_KILL_SLOPE = 3.0        # 048: was 2.4 — +25% funds the School
+                               # sink so the one-path climber keeps the
+                               # level≈floor pace while training
 
 
 def xp_per_kill(bar: int) -> int:
@@ -827,10 +831,31 @@ def xp_per_kill(bar: int) -> int:
 GOLD_PER_KILL_ANCHOR = 8       # the floor-1 kill, unchanged since 004
 
 
+EARLY_COIN_FLOORS = 10
+
+
+def early_coin_mult(floor: int) -> float:
+    """048 N8: the young-tower bounty — ×2.0 at floor 1 fading to ×1.1
+    at 10, gone at 11. The first ten floors are the classroom: the
+    bounty funds both basic weapons and the first ranks of every path.
+    Labeled on the kill card so the fade never reads as a nerf."""
+    return 2.0 - 0.1 * (floor - 1) if floor <= EARLY_COIN_FLOORS else 1.0
+
+
 def gold_per_kill(bar: int) -> int:
     """Base gold per kill. 043: takes the creature's BAR — coin follows
     toughness. 046: the anchor rides the INCOME pillar; the old
-    linear × band-jump ladder is retired (BAND_INCOME_JUMP with it)."""
+    linear × band-jump ladder is retired (BAND_INCOME_JUMP with it).
+    048: the young-tower bounty rides IN the paycheck."""
+    return max(1, round(GOLD_PER_KILL_ANCHOR * income_pillar(bar)
+                        * early_coin_mult(bar)))
+
+
+def base_gold_per_kill(bar: int) -> int:
+    """The un-bountied paycheck — the basis for every price and fee
+    ladder. 048: the young-tower bounty is pocket coin, a gift to the
+    young climber; if fees and prices rode it, the gift would tax
+    itself away. Ladders anchor here; the paycheck pays gold_per_kill."""
     return max(1, round(GOLD_PER_KILL_ANCHOR * income_pillar(bar)))
 
 
@@ -847,8 +872,8 @@ def daily_income(floor: int) -> int:
     (≈30 fights, a tent visit every ~3 fights now that chip damage is
     real). Anchors hone prices and the tier price ladder — not paid to
     anyone directly."""
-    return round((gold_per_kill(floor) - healer_tent_price(floor) / 3)
-                 * 30)
+    return round((base_gold_per_kill(floor) - healer_tent_price(floor) / 3)
+                 * 30)   # 048: un-bountied — prices/fees must not ride the gift
 
 
 XP_NEED_BASE = 24              # 022/002: was 60 — the cap arrives in the
