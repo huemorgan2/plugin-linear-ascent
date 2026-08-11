@@ -70,8 +70,8 @@ def _scene_text(s):
 # ── every monster shows every number plus its sign ─────────────────────
 
 def test_fight_card_shows_every_number_and_sign():
-    cases = [(("flying",), "⚡"), (("armor_med",), "⛨"),
-             (("resist_low",), "✧")]
+    cases = [(("fly",), "⚡"), (("armoured",), "⛨"),
+             (("magic_resist",), "✧")]
     for i, (traits, sign) in enumerate(cases):
         p = _arm(_classless(f"048-v-card-{i}"), "rusted_sword",
                  {"blade": 6, "bow": 0, "staff": 0})
@@ -86,7 +86,7 @@ def test_fight_card_shows_every_number_and_sign():
 def test_fight_card_carries_the_triangle_line():
     p = _arm(_classless("048-v-tri"), "rusted_sword",
              {"blade": 6, "bow": 0, "staff": 0})
-    s = _start(p, ("armor_med",))
+    s = _start(p, ("armoured",))
     text = _scene_text(s)
     assert "steel: half" in text
     assert "arrows: glance" in text
@@ -103,11 +103,11 @@ def test_plain_monster_says_no_sign():
 def test_speed_word_rides_the_spd_number():
     p = _arm(_classless("048-v-spd"), "rusted_sword",
              {"blade": 6, "bow": 0, "staff": 0})
-    s = _start(p, ("armor_low",))          # armoured — SPD 3 (slow)
+    s = _start(p, ("armoured",))          # armoured — SPD 3 (slow)
     assert "SPD 3 (slow)" in s.headline
     p2 = _arm(_classless("048-v-spd2"), "rusted_sword",
               {"blade": 6, "bow": 0, "staff": 0})
-    s2 = _start(p2, ("flying",))           # fly — SPD 7 (fast); alphas +1
+    s2 = _start(p2, ("fly",))           # fly — SPD 7 (fast); alphas +1
     assert "(fast)" in s2.headline
 
 
@@ -128,7 +128,7 @@ def test_hunt_menu_shows_the_roster_numbers():
 def test_verdict_names_the_held_answer_and_rank():
     p = _arm(_classless("048-v-verd1"), "rusted_sword",
              {"blade": 4, "bow": 0, "staff": 0})
-    s = _start(p, ("armor_med",))
+    s = _start(p, ("armoured",))
     text = _scene_text(s)
     # the held blade's answer, with the player's actual rank…
     assert "rank 4" in text
@@ -140,7 +140,7 @@ def test_verdict_names_the_held_answer_and_rank():
 def test_verdict_on_a_flyer_with_steel_only_says_cant_reach():
     p = _arm(_classless("048-v-verd2"), "rusted_sword",
              {"blade": 6, "bow": 0, "staff": 0})
-    s = _start(p, ("flying",))
+    s = _start(p, ("fly",))
     text = _scene_text(s).lower()
     assert "cannot reach" in text or "can't reach" in text
     assert "bow" in text
@@ -228,7 +228,7 @@ def _dying(uid, traits, weapons, training):
 
 
 def test_defeat_by_armoured_with_a_bow_names_the_plate():
-    p = _dying("048-v-d1", ("armor_med",), "basic_bow",
+    p = _dying("048-v-d1", ("armoured",), "basic_bow",
                {"blade": 0, "bow": 6, "staff": 0})
     s = combat._death(p, schema.get_floor(1))
     text = _scene_text(s).lower()
@@ -237,7 +237,7 @@ def test_defeat_by_armoured_with_a_bow_names_the_plate():
 
 
 def test_defeat_by_a_flyer_with_steel_only_names_the_wings():
-    p = _dying("048-v-d2", ("flying",), "rusted_sword",
+    p = _dying("048-v-d2", ("fly",), "rusted_sword",
                {"blade": 6, "bow": 0, "staff": 0})
     s = combat._death(p, schema.get_floor(1))
     text = _scene_text(s).lower()
@@ -266,7 +266,7 @@ def test_defeat_by_plain_overreach_names_the_trade():
 def test_the_daily_save_also_teaches():
     p = _arm(_classless("048-v-d5"), "basic_bow",
              {"blade": 0, "bow": 6, "staff": 0})
-    _start(p, ("armor_med",))
+    _start(p, ("armoured",))
     p["hp"] = 0                          # death_save still unspent
     s = combat._death(p, schema.get_floor(1))
     text = _scene_text(s).lower()

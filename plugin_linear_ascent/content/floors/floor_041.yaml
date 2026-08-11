@@ -16,7 +16,7 @@ encounters:
       It swims the ash the way fish swim water, and heat rolls off it in
       welcome. Fire is where it lives; spells of it are a compliment.
     weight: 3
-    traits: [resist_low, lean, feeble]
+    traits: [lean, feeble, magic_resist]
     prose: >-
       A salamander surfaces through the ash like a swimmer, black-
       scaled, trailing heat-shimmer. Where it rests its chin, the
@@ -27,7 +27,7 @@ encounters:
       Skin baked to crockery, patience baked harder. Your water skin
       became community property on sight.
     weight: 3
-    traits: [slow, lean, fierce]
+    traits: [lean, fierce]
     prose: >-
       An ogre plods the ashline with a wagon axle for a walking stick,
       skin baked to crockery. It is crossing to somewhere cooler and
@@ -38,7 +38,7 @@ encounters:
       It roosts on the warm vents and has gone strange with it. A polite
       landing distance, out here, is a diagnosis.
     weight: 2
-    traits: [flying, lean, savage]
+    traits: [lean, savage, fly]
     prose: >-
       Vultures out here roost on the warm vents and have gone strange
       with it, feathers singed to wire. One lands ahead of you at a

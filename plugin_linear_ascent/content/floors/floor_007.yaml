@@ -18,7 +18,7 @@ encounters:
     lore: >-
       It hunts the rows in silent packs, drunk-bold on the haze.
     weight: 3
-    traits: [lean, fast]
+    traits: [lean]
     prose: >-
       Grey shapes flow between the trunks on both sides, keeping your
       pace — an orchard pack, drunk-bold on the haze, herding you
@@ -31,7 +31,7 @@ encounters:
     lore: >-
       Reeling, furious, and fearless on fermented mush.
     weight: 2
-    traits: [hulking, savage]
+    traits: [hulking, savage, armoured]
     prose: >-
       A boar the size of a hay-wain reels out of the windfall, soaked
       in rot-cider, furious at nothing and now at you. It does not feel
@@ -45,7 +45,7 @@ encounters:
       The wrongness would not let one small thing stay one. It follows
       warmth and sweat as a hundred now.
     weight: 2
-    traits: [flying, frail, fierce]
+    traits: [frail, fierce, fly]
     prose: >-
       The rustle you took for the presses sharpens and turns toward
       you — a boiling carpet of mice the size of a cart, moving as one
@@ -58,7 +58,7 @@ encounters:
     lore: >-
       Bloated on rot, reeling in drunk spirals, going for the eyes.
     weight: 2
-    traits: [flying, frail, feeble]
+    traits: [frail, feeble, fly]
     prose: >-
       Something heavy drops out of the high forks and comes reeling
       across the windfall — a dormouse bloated on rot, going for the
@@ -71,7 +71,7 @@ encounters:
     lore: >-
       Fever-swift, bolting between the rows into shins and ankles.
     weight: 2
-    traits: [frail, feeble, fast]
+    traits: [frail, feeble]
     prose: >-
       Something small tears down the row at shin height, fever-swift,
       and does not swerve. It has stopped swerving for anything.
@@ -82,7 +82,7 @@ encounters:
       A presser drowned in a vat, aether soaked into the black cider.
       It offers a cup.
     weight: 1
-    traits: [resist_low, sturdy]
+    traits: [sturdy, magic_resist]
     prose: >-
       A reeling, dripping figure waits between the rows, black cider
       running from it like sweat. One hand offers a cup. Watch the

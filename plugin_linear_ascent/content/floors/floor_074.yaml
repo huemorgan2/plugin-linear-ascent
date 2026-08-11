@@ -16,7 +16,7 @@ encounters:
       The round has a gap where someone used to be, and every grey face
       turns to you with the same polite, starving expectation.
     weight: 3
-    traits: [resist_high, feeble]
+    traits: [feeble, magic_resist]
     prose: >-
       The wedding glade needs a partner tonight — a gap in the round
       where someone used to be. The dancers stop. Every grey face
@@ -27,7 +27,7 @@ encounters:
       After all these years it has noticed the enemy stopped coming. It is
       relieved beyond words to have somebody real.
     weight: 3
-    traits: [resist_low, lean, feeble]
+    traits: [lean, feeble, armoured]
     prose: >-
       In the battle glade one soldier has noticed, after all these
       years, that the enemy stopped coming. It walks out of the
@@ -39,7 +39,7 @@ encounters:
       The hounds will not enter the glades, which tells you something. It
       drives travelers in instead, patient as a sheepdog.
     weight: 2
-    traits: [fast, sturdy, fierce]
+    traits: [sturdy, fierce]
     prose: >-
       The gloom hounds will not enter the glades, which tells you
       something. This one has learned to drive travelers into them
@@ -51,7 +51,7 @@ encounters:
       It feeds on the grey light of the replays, and it resents every
       shadow that dims the show.
     weight: 2
-    traits: [flying, sturdy, savage]
+    traits: [sturdy, savage, fly]
     prose: >-
       A moth the grey of the wedding light lifts off the glade's edge and
       makes for you in slow spirals, wings printed with a pattern that is

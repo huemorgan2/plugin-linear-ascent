@@ -17,7 +17,7 @@ encounters:
       Goblins have no business on a muster-meadow of Men. Gnarl's
       honor-watch was posted here as mockery doubled, and knows it.
     weight: 3
-    traits: [armor_med]
+    traits: [armoured]
     prose: >-
       A goblin of the honor-watch bars the path in overlapped tower
       plate, collared, better armed than anything below. It guards a
@@ -44,7 +44,7 @@ encounters:
     lore: >-
       It runs its dead routes forever, savaging what it finds on them.
     weight: 2
-    traits: [fast, lean, savage]
+    traits: [lean, fierce]
     prose: >-
       A courier-hound rounds the horse-lines at a dead run, satchel
       long rotted off its harness. Its route runs through where you
@@ -70,7 +70,7 @@ encounters:
     lore: >-
       Nesting in the standards, it stoops on anything bright.
     weight: 2
-    traits: [flying, frail]
+    traits: [frail, fly]
     prose: >-
       A kite drops off a banner-pole and opens wide over you — a
       scavenger grown king-sized in the standards, stooping at the
@@ -82,7 +82,7 @@ encounters:
       The field's dead, aether pooled in the trampled mire. A rank that
       forms and marches nowhere.
     weight: 1
-    traits: [resist_med, slow]
+    traits: [magic_resist]
     prose: >-
       Across the churned field a rank of half-there soldiers forms up
       out of the mire, dresses its line on a rotted standard, and

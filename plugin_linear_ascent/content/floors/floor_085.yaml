@@ -28,7 +28,7 @@ encounters:
       The Welding Halls pay a bounty per body, and yours is worth a month
       of quota. It is nothing personal. It is documented.
     weight: 3
-    traits: [fast, lean, fierce]
+    traits: [lean, fierce]
     prose: >-
       Three imps with a length of net and one with a clipboard
       block the alley. The Welding Halls pay a bounty per body,
@@ -40,7 +40,7 @@ encounters:
       Retired into the warrens, rent collected in teeth. It is sure beyond
       argument that you owe it something.
     weight: 2
-    traits: [armor_med, fierce]
+    traits: [fierce, armoured]
     prose: >-
       A hellknight has retired into the warrens as a slumlord, rent
       collected in teeth. It fills the whole street when it steps
@@ -52,7 +52,7 @@ encounters:
       A million chimneys, one bat per flue. The warrens sell the guano and
       lose the arguments.
     weight: 2
-    traits: [flying, hulking, fierce]
+    traits: [hulking, fierce, fly]
     prose: >-
       Something drops out of the nearest flue-pipe in a puff of soot and
       takes the alley at head height — a bat fat on market scraps,

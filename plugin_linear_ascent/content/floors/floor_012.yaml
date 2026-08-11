@@ -27,7 +27,7 @@ encounters:
       Dwarf-plate seized over six legs of ore-cart iron. Slow as the flood
       and about as easy to argue with.
     weight: 3
-    traits: [slow, armor_high, feeble]
+    traits: [feeble, armoured]
     prose: >-
       An ore-hauler wades out of the flood on six seized legs, lamps
       shorting under a skin of silt. Its bed is empty. It has decided
@@ -38,7 +38,7 @@ encounters:
       A sealed warframe keeps the water out and some of the steel in.
       Salvage pays; you pay better.
     weight: 2
-    traits: [armor_low, sturdy, fierce]
+    traits: [sturdy, fierce, armoured]
     prose: >-
       An orc surfaces in a sealed warframe, water sheeting off the
       plate. It was down there stripping dwarf-steel, but a climber

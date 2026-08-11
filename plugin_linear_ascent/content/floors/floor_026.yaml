@@ -16,7 +16,7 @@ encounters:
       A thousand years in the peat tanned him tough as boat leather. Every
       wound closes with a wet brown sound — outlast him if you can.
     weight: 1
-    traits: [bulwark, slow, resist_med, savage]
+    traits: [bulwark, savage, magic_resist]
     prose: >-
       A bog king climbs from the cut-bank, tanned black by a thousand
       years of peat, torc still bright. He was somebody once, and being
@@ -48,7 +48,7 @@ encounters:
       Marsh midges in a swarm dense enough to have opinions. The cuts
       breed them by the ton.
     weight: 2
-    traits: [flying, lean, savage]
+    traits: [lean, savage, fly]
     prose: >-
       The fog line detaches a piece of itself and hums toward you — a
       midge cloud thick enough to blot the cut-banks, moving with one slow

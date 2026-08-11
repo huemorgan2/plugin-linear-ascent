@@ -16,7 +16,7 @@ encounters:
       It hammers warframes for the warband and wears its best work to the
       job. Trade-ins accepted, forcibly.
     weight: 3
-    traits: [armor_med, feeble]
+    traits: [feeble, armoured]
     prose: >-
       An orc at a stolen forge beats a dent out of a warframe pauldron,
       sees you, and considers the time saved by taking yours off you
@@ -38,7 +38,7 @@ encounters:
       Left on the great anvil mid-making, it finished itself. One side is
       still cooling; the temper never set right.
     weight: 2
-    traits: [slow, sturdy, fierce]
+    traits: [sturdy, fierce]
     prose: >-
       Something left on the great anvil mid-making has finished itself.
       It walks on tong-legs, still cherry-hot down one side, looking
@@ -49,7 +49,7 @@ encounters:
       Forge-hounds were bred to run messages between family fires. The
       families are gone; the running is not.
     weight: 2
-    traits: [fast, sturdy, savage]
+    traits: [sturdy, savage]
     prose: >-
       A hound comes through the forge-smoke at a flat sprint, coat singed
       to wire, and does not slow — the Commons taught it that everything

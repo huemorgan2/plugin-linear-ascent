@@ -17,7 +17,7 @@ encounters:
       more than it attacks you, but it weighs what a boat weighs, and it
       is teething.
     weight: 3
-    traits: [flying, lean, feeble]
+    traits: [lean, feeble, fly]
     prose: >-
       A wyrmling practices its glide down the melted channel, wings
       hissing on the glass. It bowls into you more than it attacks
@@ -29,7 +29,7 @@ encounters:
       stock — shed wyrm-plate lapped like roof tiles. Rich things hire
       fewer witnesses.
     weight: 3
-    traits: [armor_med, feeble]
+    traits: [feeble, armoured]
     prose: >-
       An ogre pries a shed scale off the bank with a whole tree for a
       lever. The scale trade has made it rich by ogre standards, and
@@ -40,7 +40,7 @@ encounters:
       Glutted on shed skin: gleaming, slow — right up until it is none of
       those things.
     weight: 2
-    traits: [slow, resist_low, lean, savage]
+    traits: [lean, savage, magic_resist]
     prose: >-
       The salamanders follow the Wyrmroad eating shed skin, and this
       one is glutted, gleaming, slow — right up until it is none of
@@ -51,7 +51,7 @@ encounters:
       It runs the polished channel for the speed of it, and it has learned
       to use climbers as corner-posts.
     weight: 2
-    traits: [fast, hulking, fierce]
+    traits: [hulking, fierce]
     prose: >-
       Something small takes the melted channel at a speed that should not
       corner — a hare with glass-worn claws, banking off the banks, using

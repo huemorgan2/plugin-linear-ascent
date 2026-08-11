@@ -16,7 +16,7 @@ encounters:
       It has a thousand siblings audible above, and every one of them
       learned to drop before it learned to walk.
     weight: 3
-    traits: [fast, lean, feeble]
+    traits: [lean, feeble]
     prose: >-
       A spider the size of a dog drops from nowhere on a thread you
       never saw, legs finding your shoulders like an old friend. Its
@@ -27,7 +27,7 @@ encounters:
       The struggling cocoon is the lure. The floor under it is not floor,
       and it has all day.
     weight: 2
-    traits: [slow, sturdy, fierce]
+    traits: [sturdy, fierce]
     prose: >-
       A cocooned shape hangs at eye level across the path, and as your
       lamp touches it, it starts to struggle. That is the trap. The
@@ -38,7 +38,7 @@ encounters:
       Harmless itself — but what hunts by the dust it sheds is not, and
       the moth knows exactly whom to lead it to.
     weight: 2
-    traits: [flying, sturdy, savage]
+    traits: [sturdy, savage, fly]
     prose: >-
       A moth with a wingspan like a cloak blunders into your lamplight,
       eyeless and frantic. It is not dangerous. What follows it,

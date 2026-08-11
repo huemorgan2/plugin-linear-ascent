@@ -17,7 +17,7 @@ encounters:
       cannot allow the redefinition. The plate has camped as long as the
       doubt.
     weight: 3
-    traits: [armor_high, fierce]
+    traits: [fierce, armoured]
     prose: >-
       An archdemon knight who camped here a century ago rather than
       knock stands up from its fire. If you knock, its hundred years
@@ -29,7 +29,7 @@ encounters:
       The offer is genuine. That is the trap — there is nothing dishonest
       to push against, and spells find nothing dishonest to bite.
     weight: 3
-    traits: [resist_high, feeble]
+    traits: [feeble, magic_resist]
     prose: >-
       A silk-voiced demon falls in beside you with the Crown's final
       offer: everything below floor ninety-nine, governorship,
@@ -53,7 +53,7 @@ encounters:
       It has watched the camp not-knock for a century, and it heckles
       every new arrival's resolve.
     weight: 2
-    traits: [flying, hulking, fierce]
+    traits: [hulking, fierce, fly]
     prose: >-
       A raven drops from the door's distant hardware and lands between you
       and the camp, head cocked, delivering a verdict on your chances in

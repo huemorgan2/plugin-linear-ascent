@@ -595,7 +595,7 @@ def test_focus_rides_the_cast_in_the_fight(monkeypatch):
     p, fl = _mastered("048-m-focus", "staff", "worn_staff")
     e = p["encounter"]
     e["range"], e["gap"] = "at_range", 1
-    e["profile"] = economy.profile_from_traits(("flying",))
+    e["profile"] = economy.profile_from_traits(("fly",))
     monkeypatch.setattr(state, "rng_int", lambda p, lo, hi: hi)
     monkeypatch.setattr(state, "roll_ok", lambda p, chance: False)
     hp0 = e["hp"]

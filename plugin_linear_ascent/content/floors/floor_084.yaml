@@ -16,7 +16,7 @@ encounters:
       It taps you twice, frowns at the sound of unmodified meat, and flags
       you for the gantries.
     weight: 3
-    traits: [fast, lean, fierce]
+    traits: [lean, fierce]
     prose: >-
       A quality-imp moves down the line tapping welds with a little
       hammer, listening. It taps you twice, frowns at the sound of
@@ -27,7 +27,7 @@ encounters:
       It does not know its own name yet. It knows its function, and its
       function is walking toward you.
     weight: 3
-    traits: [armor_med, fierce]
+    traits: [fierce, armoured]
     prose: >-
       Something newly finished sits up on the line, seams still
       smoking, and swings its legs down. It does not know its own
@@ -39,7 +39,7 @@ encounters:
       The failures have organized — wrong joints, extra arms, grievances
       in writing.
     weight: 2
-    traits: [slow, hulking, fierce]
+    traits: [hulking, fierce]
     prose: >-
       Behind the halls is the scrap-yard of what failed inspection,
       and the failures have organized. A committee of them comes
@@ -51,7 +51,7 @@ encounters:
       It drinks the welding light. The gantry crews bill the King for what
       it costs them in torches.
     weight: 4
-    traits: [flying, lean, feeble]
+    traits: [lean, feeble, fly]
     prose: >-
       A moth with wings like smoked mica detaches from a gantry lamp and
       beats down the line toward the brightest thing on the floor, which —

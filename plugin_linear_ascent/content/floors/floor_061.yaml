@@ -16,7 +16,7 @@ encounters:
       The insults in fluent trade-tongue are a range-finding exercise. The
       stoop comes on the punchline.
     weight: 3
-    traits: [flying, lean, feeble]
+    traits: [lean, feeble, fly]
     prose: >-
       A harpy rides the updraft along the cliff face, keeping pace
       with you at arm's length, insulting your footwork in fluent
@@ -27,7 +27,7 @@ encounters:
       It has not learned to aim its lightning yet. It does not especially
       need to.
     weight: 3
-    traits: [flying, resist_low, lean, fierce]
+    traits: [lean, fierce, fly]
     prose: >-
       A young storm drake breaks out of the cloud deck below you,
       static crawling on its wing edges. It has not learned to aim
@@ -38,7 +38,7 @@ encounters:
       It clips its frayed line to your belt with terrible courtesy. Its
       ship is down there somewhere, and it means to introduce you.
     weight: 2
-    traits: [slow, lean, savage]
+    traits: [lean, savage]
     prose: >-
       A sky-ship crewman in a rotted harness climbs over the trail's
       edge, dragging a length of frayed safety line. It clips the

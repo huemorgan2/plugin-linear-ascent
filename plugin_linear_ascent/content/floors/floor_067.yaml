@@ -17,7 +17,7 @@ encounters:
       Spark-drunk, several strikes in, and spells just read as more
       applause.
     weight: 3
-    traits: [flying, resist_med, feeble]
+    traits: [feeble, fly]
     prose: >-
       A harpy lands on a live pole, takes the strike across her
       banded feathers like applause, and comes down at you glowing
@@ -40,7 +40,7 @@ encounters:
       The thing that moves the white lane-stones. Under the hood is old
       lightning, coiled and patient. It has been farming climbers.
     weight: 2
-    traits: [slow, resist_med, fierce]
+    traits: [fierce, magic_resist]
     prose: >-
       You find the thing that moves the white stones: a bent figure
       in a farmer's storm coat, rearranging the safe lane with slow

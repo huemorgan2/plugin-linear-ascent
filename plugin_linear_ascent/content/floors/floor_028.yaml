@@ -16,7 +16,7 @@ encounters:
       It keeps the offices in a voice like water in a crypt. The old river
       gods may even still be listening.
     weight: 3
-    traits: [resist_med, feeble]
+    traits: [feeble, magic_resist]
     prose: >-
       A wight stands waist-deep at the altar, keeping the offices in a
       voice like water in a crypt. You have interrupted. The
@@ -38,7 +38,7 @@ encounters:
       A votive flame that outlived its brass boat. Each pew it passes,
       something under the water sits up.
     weight: 2
-    traits: [flying, resist_low, sturdy, fierce]
+    traits: [sturdy, fierce, fly]
     prose: >-
       A votive flame floats up the flooded nave toward you, its little
       brass boat long since sunk. Each pew it passes, something under
@@ -49,7 +49,7 @@ encounters:
       The congregation never left the pews when the nave flooded.
       Attendance, in fact, has improved.
     weight: 2
-    traits: [slow, sturdy, savage]
+    traits: [sturdy, savage]
     prose: >-
       A pew shifts and one of the congregation stands up through the black
       water, hymnal still in hand, and wades into the aisle to greet the

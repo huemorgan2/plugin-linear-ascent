@@ -27,7 +27,7 @@ encounters:
       Brass casing, broken arithmetic. It has been counting to the same
       wrong number for years.
     weight: 3
-    traits: [armor_low, lean, fierce]
+    traits: [lean, fierce, armoured]
     prose: >-
       A brass engine unbolts itself from the counting bench, arms still
       flicking beads on a broken frame. It has found an error in the
@@ -38,7 +38,7 @@ encounters:
       The warband taxes everything that walks this floor. The plate is
       company property; the enthusiasm is its own.
     weight: 2
-    traits: [armor_med, fierce]
+    traits: [fierce, armoured]
     prose: >-
       An orc in a warframe painted with tally-marks blocks the aisle.
       The warband taxes this floor, it explains, and you have walked in
@@ -49,7 +49,7 @@ encounters:
       The Counting Halls remember every unpaid ounce. Some of that memory
       has come loose and drifts.
     weight: 2
-    traits: [flying, resist_low, sturdy, fierce]
+    traits: [sturdy, fierce, fly]
     prose: >-
       A pale figure of dust and lamplight rises off the grand ledger — a
       wisp in the shape of a column of figures, drifting toward you to be

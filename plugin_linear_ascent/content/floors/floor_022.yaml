@@ -16,7 +16,7 @@ encounters:
       The custom is older than the priest: the dead are owed bread and
       tin. The bowl has been empty a long time.
     weight: 3
-    traits: [resist_low, frail, feeble]
+    traits: [frail, feeble, magic_resist]
     prose: >-
       A wight in the rags of a tithe-priest stands at a barrow door,
       holding out a bowl of green-scaled tin. The custom is older than
@@ -38,7 +38,7 @@ encounters:
       The old dead fed a whole economy under the turf. Its shell is the
       marsh's answer to a shield wall.
     weight: 2
-    traits: [armor_high, slow, fierce]
+    traits: [fierce, armoured]
     prose: >-
       A beetle the size of a shield surfaces through the turf of a
       barrow roof, mandibles working wetly. The old dead fed a whole

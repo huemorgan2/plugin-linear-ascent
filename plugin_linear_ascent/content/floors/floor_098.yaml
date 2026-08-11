@@ -16,7 +16,7 @@ encounters:
       It salutes the royal box first, you second — protocol, and also a
       tell. It has never once been allowed to lose.
     weight: 3
-    traits: [armor_med, fierce]
+    traits: [fierce, armoured]
     prose: >-
       The lower court's champion steps onto the glass and salutes
       the royal box first, you second — protocol, and also a tell.
@@ -28,7 +28,7 @@ encounters:
       No patents, no second, no grave-plot reserved — irregular. The
       penalty is assessed in the traditional currency, on the spot.
     weight: 3
-    traits: [resist_med, feeble]
+    traits: [feeble, magic_resist]
     prose: >-
       The dueling floor's arbiter descends in robes of chainmail
       silk to review your standing. It finds no patents, no second,
@@ -41,7 +41,7 @@ encounters:
       It stands to lose a province on how far you get, and it has come
       over the rail to adjust the outcome personally.
     weight: 2
-    traits: [fast, frail, feeble]
+    traits: [frail, feeble]
     prose: >-
       Two archdemons in the gallery have bet on how far you get,
       and one of them has just realized it stands to lose a

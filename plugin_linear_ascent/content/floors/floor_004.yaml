@@ -33,7 +33,7 @@ encounters:
       Fever-fast and fearless, it bolts from the dark straight at the
       eyes.
     weight: 3
-    traits: [frail, feeble, fast]
+    traits: [frail, feeble]
     prose: >-
       Something small and quick circles you in the black, closer with
       each pass. A hare — fearless, fever-fast, aimed at your eyes.
@@ -46,7 +46,7 @@ encounters:
       It slept in lamplight once. Hand-span and starving now, it
       smothers any flame.
     weight: 2
-    traits: [flying, frail]
+    traits: [frail, fly]
     prose: >-
       Your lamp gutters as something wet climbs the glass — a newt
       broad as two hands, starving for the light, smothering the flame
@@ -60,7 +60,7 @@ encounters:
       Silent and over-large now, hunting warmth instead of watching
       flames.
     weight: 2
-    traits: [flying, frail, feeble]
+    traits: [frail, feeble, fly]
     prose: >-
       The dark above you goes soft with wingbeat — an owl broad as a
       door, silent past sense, riding your lamp-heat down.
@@ -71,7 +71,7 @@ encounters:
       The black lichen that drinks light, gathered into a slow crawling
       shape. Nothing living is in it.
     weight: 1
-    traits: [resist_low, sturdy, slow]
+    traits: [sturdy, magic_resist]
     prose: >-
       The dark ahead is darker than it should be, and crawling. A shape
       of black lichen drags itself toward your flame — not to warm
@@ -83,7 +83,7 @@ encounters:
       A dead lamp-tree, aether pooled in its rot. It walks with a cold
       false glow.
     weight: 1
-    traits: [sturdy, savage]
+    traits: [sturdy, savage, armoured]
     prose: >-
       A snarl of black branch unbends from the treeline, tall as two
       men, lit from inside by a cold false glow. The light shows

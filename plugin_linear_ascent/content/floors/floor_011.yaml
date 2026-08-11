@@ -27,7 +27,7 @@ encounters:
       Bred to run down thieves in the galleries. The rust never reached
       the part that wants your heels.
     weight: 3
-    traits: [fast, lean, fierce]
+    traits: [lean, fierce]
     prose: >-
       Something bred to guard this mine still guards it — a hound of
       wire and hide, joints weeping orange, nose down to the rust-water
@@ -38,7 +38,7 @@ encounters:
       Half a warframe still turns half the blows. The ledger it keeps is
       short on mercy.
     weight: 2
-    traits: [armor_low, lean, savage]
+    traits: [lean, savage, armoured]
     prose: >-
       An orc in half a warframe rounds the tailings heap, one arm bare
       and one arm hydraulic. It marks you down for the warband's ledger
@@ -49,7 +49,7 @@ encounters:
       It roosts in the lamp-warmth over the mine mouth and takes its meals
       off whatever the lamps draw in.
     weight: 2
-    traits: [flying, hulking, fierce]
+    traits: [hulking, fierce, fly]
     prose: >-
       The dwarf lamps flicker as something drops from the adit's arch — a
       bat broad as a cloak, wings papering the cold updraft, circling your

@@ -16,7 +16,7 @@ encounters:
       One of the Queen's own watch, half weather itself. It does not roar;
       thunder does that for it, on cue.
     weight: 3
-    traits: [flying, resist_med, feeble]
+    traits: [feeble, fly]
     prose: >-
       A shape peels off the inside of the storm wall — a drake of
       cloud and charge, half weather itself, one of the Queen's own
@@ -39,7 +39,7 @@ encounters:
       A climber the storm took, worn down to a pressure change with a
       grudge. Your lungs notice it before your eyes do.
     weight: 2
-    traits: [resist_med, fierce]
+    traits: [fierce, magic_resist]
     prose: >-
       In the Lull your ears keep popping, and one of the pops is a
       figure arriving beside you — a climber the storm took, worn
@@ -51,7 +51,7 @@ encounters:
       The Queen kennels the squalls that behave. This one behaves right up
       until the leash comes off.
     weight: 2
-    traits: [fast, hulking, fierce]
+    traits: [hulking, fierce]
     prose: >-
       A hound made of moving rain slips the eye-wall and crosses the Lull
       at a sprint, its paws printing wet on dry stone, gone and arrived in

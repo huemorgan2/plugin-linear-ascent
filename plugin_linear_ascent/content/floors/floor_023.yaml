@@ -16,7 +16,7 @@ encounters:
       The elves bred it to carry the forest light through the deep woods.
       It remembers the weight of it, and hates you fresh.
     weight: 3
-    traits: [fast, lean, feeble]
+    traits: [lean, feeble]
     prose: >-
       A stag comes through the dead lights, white as root-flesh, antlers
       hung with dark lamp-vines. The elves bred them to carry the forest
@@ -27,7 +27,7 @@ encounters:
       She stayed when the lights died, and the garden kept her. Spells
       slide off what is left like rain off wax leaves.
     weight: 3
-    traits: [resist_med, feeble]
+    traits: [feeble, magic_resist]
     prose: >-
       An elf did not leave when the lights died. What is left of her
       tends a dark lamp-tree, and turns at your step with pruning-hook
@@ -49,7 +49,7 @@ encounters:
       When the bio-lights went dark the moths did not leave. They just got
       hungrier about what light remains.
     weight: 2
-    traits: [flying, hulking, fierce]
+    traits: [hulking, fierce, fly]
     prose: >-
       Wings the grey of dead leaves open on a bough above you — a moth
       grown huge on lamp-marrow, drawn off its dark tree by the smallest

@@ -26,20 +26,20 @@ BANNED_WORDS = (
 _FORBIDDEN_NUMERIC_KEYS = {"atk", "def", "hp", "xp", "gold", "damage", "price"}
 # Encounter traits: qualitative flags the engine turns into numbers
 # (economy.py profile_from_traits) — content stays prose-only.
-# 017 §2.2: armor/resist tiers, flying, bulwark, speed. Legacy "armored"
-# maps to armor_med and is only legal on floors > 10 until phase 008
-# migrates them.
+# 048 phase 7: content speaks types natively — at most ONE type trait
+# per monster (fly / armoured / magic_resist; plain = none), beside the
+# archetype and the orthogonal bulwark. The legacy vocabulary
+# (armor_*/resist_*/flying/fast/slow/armored) is REJECTED: speed rides
+# the type, and the tier grades died with the triangle.
 ALLOWED_TRAITS = {
-    "armor_low", "armor_med", "armor_high",
-    "resist_low", "resist_med", "resist_high",
-    "flying", "bulwark", "slow", "fast",
-    "armored",  # legacy — lint forbids it on floors ≤ 10
+    "fly", "armoured", "magic_resist", "bulwark",
     # 025 §1: the stat archetype — the body and the bite. Legal from floor
     # 1: this is the variance the first floor never had, and it is the
     # difference between four animals and one animal in four costumes.
     "frail", "lean", "sturdy", "hulking",
     "feeble", "fierce", "savage",
 }
+TYPE_TRAITS = ("fly", "armoured", "magic_resist")
 
 ARCHETYPE_TRAITS = {"frail", "lean", "sturdy", "hulking",
                     "feeble", "fierce", "savage"}
@@ -49,17 +49,25 @@ ARCHETYPE_TRAITS = {"frail", "lean", "sturdy", "hulking",
 # floor 1 with the archetypes — being outrun is chase math, not damage,
 # and "some of them you have to run from" is the point of the first floor.
 TRAIT_INTRO_FLOOR = {
-    "armor": 2, "resist": 3, "flying": 4,
+    "armoured": 2, "magic_resist": 3, "fly": 4,
     "bulwark": 6,
 }
 
 
-def _trait_family(trait: str) -> str:
-    if trait.startswith("armor_") or trait == "armored":
-        return "armor"
-    if trait.startswith("resist_"):
-        return "resist"
-    return trait
+def _check_traits(traits, floor: int, where: str) -> None:
+    """048 phase 7: the native vocabulary, the staircase, and the
+    one-type-per-monster law — in one place so tests can aim at it."""
+    for t in traits:
+        if t not in ALLOWED_TRAITS:
+            raise ContentError(f"{where}: unknown trait {t!r}")
+        intro = TRAIT_INTRO_FLOOR.get(t)
+        if intro is not None and floor < intro:
+            raise ContentError(
+                f"{where}: trait {t!r} before its intro "
+                f"floor {intro} (017 staircase)")
+    if sum(1 for t in traits if t in TYPE_TRAITS) > 1:
+        raise ContentError(f"{where}: more than one type trait — a "
+                           "monster is ONE thing (048)")
 
 
 class ContentError(ValueError):
@@ -155,18 +163,7 @@ def _load_floor_file(path: str) -> Floor:
         if int(e.get("weight", 1)) <= 0:
             raise ContentError(f"{where}/{e['id']}: weight must be positive")
         traits = tuple(e.get("traits") or ())
-        for t in traits:
-            if t not in ALLOWED_TRAITS:
-                raise ContentError(f"{where}/{e['id']}: unknown trait {t!r}")
-            if t == "armored" and f <= 10:
-                raise ContentError(
-                    f"{where}/{e['id']}: legacy trait 'armored' — floors "
-                    "1-10 use the 017 tier traits")
-            intro = TRAIT_INTRO_FLOOR.get(_trait_family(t))
-            if intro is not None and f < intro:
-                raise ContentError(
-                    f"{where}/{e['id']}: trait {t!r} before its intro "
-                    f"floor {intro} (017 staircase)")
+        _check_traits(traits, f, f"{where}/{e['id']}")
         _check_prose(e["prose"], f"{where}/{e['id']}")
         lore = str(e.get("lore") or "").strip()
         if lore:
@@ -229,23 +226,23 @@ _floors: dict[int, Floor] | None = None
 
 
 def _class_pool_errors(fl: Floor) -> list[str]:
-    """008/048: no floor strands a PATH — at least one encounter it
-    answers at ×1.0 with no bulwark tax. Speed is priced by the chase
-    model, not excluded here. (The old ≥2 spread returns with the
-    phase-7 retag — ten shipped floors sit at exactly one today.)"""
+    """008/048: no floor strands a PATH — at least TWO encounters it
+    answers at ×1.0 with no bulwark tax (the phase-7 retag restored
+    the old ≥2 spread). Speed is priced by the chase model, not
+    excluded here."""
     errors = []
     for path in ("blade", "bow", "staff"):
         good = 0
         for e in fl.encounters:
-            mtype = economy.type_from_traits(e.traits)
+            mtype = economy.type_of(e.traits)
             prof = economy.profile_from_traits(e.traits)
             if economy.TYPE_MULT[mtype][path] < 1.0 or prof["bulwark"]:
                 continue
             good += 1
-        if good < 1:
+        if good < 2:
             errors.append(
-                f"floor {fl.floor}: {path} has no full-damage "
-                "target — every floor owes each path one (048)")
+                f"floor {fl.floor}: {path} has {good} full-damage "
+                "targets — every floor owes each path two (048)")
     return errors
 
 

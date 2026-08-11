@@ -407,7 +407,7 @@ def creature_stats(floor: int, traits) -> tuple[int, int, int]:
     # 048 N1: the type weighs the body — flyers land many weak cuts,
     # the armoured land rare heavy ones. On top of the bar, like the
     # tiers were: the type layer is deliberately NOT bar-neutralized.
-    mtype = type_from_traits(traits)
+    mtype = type_of(traits)
     atk = max(1, round(atk * TYPE_ATK[mtype]))
     hp = max(1, round(hp * TYPE_HP[mtype]))
     return atk, dfs, hp
@@ -636,11 +636,25 @@ def dodge_pct(pspd: int, mspd: int) -> int:
     return min(DODGE_CAP_PCT, round(7 * math.log2(1 + a)))
 
 
+def type_of(traits) -> str:
+    """048 phase 7: content speaks types natively — at most one type
+    trait per monster (none = plain). The legacy bridge is
+    type_from_traits, kept for doc-migration tests only."""
+    ts = set(traits or ())
+    if "fly" in ts:
+        return "fly"
+    if "magic_resist" in ts:
+        return "magic_resist"
+    if "armoured" in ts:
+        return "armoured"
+    return "plain"
+
+
 def profile_from_traits(traits) -> dict:
     """048: the defense profile IS the type. One type per monster —
     sign, speed, and the triangle answer all hang off it. `bulwark`
     stays orthogonal (an elite wall, never a weapon-answer)."""
-    t = type_from_traits(traits or ())
+    t = type_of(traits or ())
     return {"type": t, "flying": t == "fly",
             "bulwark": "bulwark" in set(traits or ()),
             "speed": TYPE_SPEED[t]}

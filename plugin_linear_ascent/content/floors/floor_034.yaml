@@ -16,7 +16,7 @@ encounters:
       You are standing on its spoil-heap. This is, by troll law, the whole
       of the case against you.
     weight: 3
-    traits: [armor_low, frail, feeble]
+    traits: [frail, feeble, armoured]
     prose: >-
       A deep troll comes up the gallery dragging a hand-sledge of
       rubble, knuckles first. You are standing on its spoil-heap.
@@ -49,7 +49,7 @@ encounters:
       A chitin engine the trolls' digging woke. It eats stone; everything
       else it bores through on principle.
     weight: 2
-    traits: [armor_high, slow, savage]
+    traits: [savage, armoured]
     prose: >-
       The spoil-heap shifts and a borer surfaces — a segmented thing in
       plates of polished basalt, mouthparts turning like a drill-head as

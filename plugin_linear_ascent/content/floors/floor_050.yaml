@@ -16,7 +16,7 @@ encounters:
       The runt of the nest, barge-sized, with a runt's temper about
       visitors. The word runt is doing heavy work.
     weight: 3
-    traits: [flying, resist_low, frail, feeble]
+    traits: [frail, feeble, fly]
     prose: >-
       A wyrmling the size of a river barge suns itself on the caldera
       rim. It is the runt. It has a runt's temper about visitors, and
@@ -38,7 +38,7 @@ encounters:
       In the nest's shadow they grow to the size of oxen and fear nothing
       that walks. The turning is the whole announcement.
     weight: 2
-    traits: [resist_med, fierce]
+    traits: [fierce, magic_resist]
     prose: >-
       In the nest's shadow the salamanders grow to the size of oxen
       and fear nothing that walks. This one does not stalk you. It

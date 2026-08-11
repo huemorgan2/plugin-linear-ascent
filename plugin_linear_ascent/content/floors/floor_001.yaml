@@ -57,7 +57,7 @@ encounters:
       The steading's sheepdogs, feral now, hunting in a silent ring.
       One of them still turns its head at a whistle.
     weight: 2
-    traits: [lean, fast, savage]
+    traits: [lean, savage]
     prose: >-
       Shapes fold out of the hedges on every side — the steading's own
       sheepdogs, feral and silent, working you the way they once worked

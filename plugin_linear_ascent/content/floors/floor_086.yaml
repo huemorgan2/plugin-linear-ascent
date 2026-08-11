@@ -15,7 +15,7 @@ encounters:
     lore: >-
       It has rehearsed this fight so long it starts with your counter.
     weight: 3
-    traits: [armor_high, feeble]
+    traits: [feeble, armoured]
     prose: >-
       A hellknight steps off the drill square mid-exercise, given
       leave at last to work the live version of the problem. It has
@@ -39,7 +39,7 @@ encounters:
       order worth having. Your arrival is an order — and it was built to
       be impossible to stop.
     weight: 2
-    traits: [bulwark, slow, fierce]
+    traits: [bulwark, fierce]
     prose: >-
       The garrison keeps one welded hulk polished for parades, and
       it has been standing at attention for a decade waiting for an
@@ -51,7 +51,7 @@ encounters:
       The garrisons fly messages between bastions. The falcons have
       standing orders about interceptors.
     weight: 2
-    traits: [flying, lean, savage]
+    traits: [lean, savage, fly]
     prose: >-
       A falcon in a message-harness checks its line between bastions,
       folds, and stoops at you instead — the standing orders, it turns
@@ -62,7 +62,7 @@ encounters:
       Kenneled at the sally ports and fed on drill-square mistakes. It
       knows the gap in every formation.
     weight: 2
-    traits: [fast, hulking, fierce]
+    traits: [hulking, fierce]
     prose: >-
       A sally port cracks and a hound comes through it flat and silent,
       taking the drill square's diagonal — the one line no formation

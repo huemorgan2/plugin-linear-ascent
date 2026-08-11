@@ -16,7 +16,7 @@ encounters:
       The wake comes first, quick as a skipped stone. The breach comes
       last, jaws open, gloriously happy.
     weight: 3
-    traits: [fast, frail, feeble]
+    traits: [frail, feeble]
     prose: >-
       The wake comes first — a ridge of disturbed ash running at you
       through the dune, quick as a skipped stone. The salamander
@@ -38,7 +38,7 @@ encounters:
       Each one carries a live cinder in its belly, drawn to anything
       warmer than the desert. You qualify.
     weight: 2
-    traits: [flying, sturdy, fierce]
+    traits: [sturdy, fierce, fly]
     prose: >-
       A drift of moths rises off a glowing dune face, each one carrying
       a live cinder in its belly. They are drawn to anything warmer

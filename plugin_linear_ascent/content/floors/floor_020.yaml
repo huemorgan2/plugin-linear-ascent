@@ -16,7 +16,7 @@ encounters:
       Skarn's own, in plate polished to a dull red shine. The posting cost
       them blood, and they intend it to cost you more.
     weight: 3
-    traits: [armor_high, feeble]
+    traits: [feeble, armoured]
     prose: >-
       Two orcs of Skarn's own guard, warframes polished to a dull red
       shine, cross their glaives without a word. Getting this posting
@@ -27,7 +27,7 @@ encounters:
       It fought up from the gear galleries pit by pit for the honor of
       meeting you first. The salvaged frame fits like a reputation.
     weight: 3
-    traits: [armor_low, lean, feeble]
+    traits: [lean, feeble, armoured]
     prose: >-
       A pit champion in a full salvaged warframe rolls its shoulders,
       plates ringing. It fought its way up from the gear galleries for
@@ -38,7 +38,7 @@ encounters:
       Short chain, shorter rations, and it slipped both. The camp is
       betting on the hound.
     weight: 2
-    traits: [fast, sturdy, fierce]
+    traits: [sturdy, fierce]
     prose: >-
       The Red Orcs kennel their rust hounds on short chain and shorter
       rations. This one has slipped both, and the camp watches with

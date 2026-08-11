@@ -16,7 +16,7 @@ encounters:
       Set at its stone a thousand years ago to challenge whatever comes
       off the moor. The mail rusted; the orders didn't.
     weight: 3
-    traits: [armor_med, feeble]
+    traits: [feeble, armoured]
     prose: >-
       A wight in rusted mail leans against its stone the way it has for
       centuries, spear planted. It was set here to challenge whatever
@@ -38,7 +38,7 @@ encounters:
       The old folk went to real trouble sealing it. It is half out of the
       world still, and spells reach only the half that isn't here.
     weight: 2
-    traits: [resist_med, fierce]
+    traits: [fierce, magic_resist]
     prose: >-
       From a stone standing ajar comes something the old folk went to
       real trouble over — half shadow, half smell of deep earth. It
@@ -49,7 +49,7 @@ encounters:
       It courses the stone rows at night. What it was bred to keep in, it
       now keeps company.
     weight: 2
-    traits: [fast, hulking, fierce]
+    traits: [hulking, fierce]
     prose: >-
       Between two standing stones a hound breaks from a flat-out run to a
       stalk — moor-grey, low, and already closer than the fog said it was.

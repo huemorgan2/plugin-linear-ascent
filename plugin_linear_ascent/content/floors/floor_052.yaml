@@ -16,7 +16,7 @@ encounters:
       It hunts by ear, through the ice, from below. The pack above is only
       there to steer you.
     weight: 3
-    traits: [fast, frail, feeble]
+    traits: [frail, feeble]
     prose: >-
       The wolves out on the sea hunt by ear, listening for footsteps
       through the ice. Somewhere under you, one has matched your
@@ -27,7 +27,7 @@ encounters:
       It hangs in the green glass of its wave like a fly in amber, wearing
       the sea itself for plate.
     weight: 3
-    traits: [armor_med, feeble]
+    traits: [feeble, armoured]
     prose: >-
       An ice troll has hollowed a standing wave into a den and hangs
       in the green glass like a fly in amber, watching the road. The
@@ -38,7 +38,7 @@ encounters:
       It drowned before the sea froze and walks under the ice, upside
       down. Spells refract somewhere on the way through.
     weight: 2
-    traits: [resist_med, fierce]
+    traits: [fierce, magic_resist]
     prose: >-
       Something that drowned in the sea before it froze walks under
       the ice, upside down, matching your route. At the next thin
@@ -49,7 +49,7 @@ encounters:
       It works the frozen swells for whatever the wolves leave, and it has
       stopped waiting for the wolves.
     weight: 2
-    traits: [flying, sturdy, savage]
+    traits: [sturdy, savage, fly]
     prose: >-
       A gull the size of a dog lifts off a standing wave crest, wings
       stiff with rime, and comes down the road cut at mast height,

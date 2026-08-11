@@ -16,7 +16,7 @@ encounters:
       It fights before the throne, which means it fights beautifully,
       which does not mean it fights fair.
     weight: 3
-    traits: [flying, resist_med, fierce]
+    traits: [fierce, fly]
     prose: >-
       The Queen's champion descends from the high perch without
       hurry, storm-glass gorget flashing. It fights before the
@@ -28,7 +28,7 @@ encounters:
       Protocol requires all challengers to arrive bleeding. The court
       dislikes ambiguity; the pike and the plate remove it.
     weight: 3
-    traits: [armor_med, feeble]
+    traits: [feeble, armoured]
     prose: >-
       Two of the court guard cross pikes of ship-spar in front of
       you. Protocol, one explains, requires all challengers to
@@ -39,7 +39,7 @@ encounters:
       Bottled since the fleet fell, dropped the way courts do accidents.
       It holds you personally responsible.
     weight: 2
-    traits: [fast, resist_low, frail, feeble]
+    traits: [frail, feeble, magic_resist]
     prose: >-
       A courtier drops a lantern-globe as you pass, accidentally,
       the way courts do accidents. What gets out has been bottled

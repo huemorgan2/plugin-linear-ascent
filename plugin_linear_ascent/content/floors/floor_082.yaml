@@ -16,7 +16,7 @@ encounters:
       The foreman has spotted a way to lighten the load — you look sturdy,
       and the harness is adjustable.
     weight: 3
-    traits: [fast, frail, feeble]
+    traits: [frail, feeble]
     prose: >-
       A gang of imps hauls a new-forged link toward the lift-heads,
       and the foreman imp has spotted a way to lighten the load —
@@ -27,7 +27,7 @@ encounters:
       Fresh from tempering, issued nothing yet but the need to test
       itself.
     weight: 3
-    traits: [armor_med, feeble]
+    traits: [feeble, armoured]
     prose: >-
       A hellknight climbs out of the quench-pit trailing black oil,
       armor still ticking with heat. It is fresh from tempering and
@@ -38,7 +38,7 @@ encounters:
       The forge puts a little of the fire into everything it makes. This
       one got a temper.
     weight: 1
-    traits: [slow, hulking, fierce]
+    traits: [hulking, fierce]
     prose: >-
       A length of chain slides off its overhead run and pools on the
       yard floor, then rears like something with a spine. The forge
@@ -50,7 +50,7 @@ encounters:
       It swims the black oil between temperings and eats what the quench
       rejects. Spellwork slicks off it with the oil.
     weight: 2
-    traits: [resist_low, lean, savage]
+    traits: [lean, savage, magic_resist]
     prose: >-
       The quench-pit's skin of oil parts without a sound and an eel pours
       itself over the lip, black on black, tasting the yard-floor heat for

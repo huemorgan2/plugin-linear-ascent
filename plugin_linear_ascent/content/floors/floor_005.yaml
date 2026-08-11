@@ -47,7 +47,7 @@ encounters:
       It still runs the dry drifts end to end, fever-fast, coursing
       anything that carries a light.
     weight: 2
-    traits: [fast, lean, fierce]
+    traits: [lean, fly]
     prose: >-
       Claws hammer the dry gallery behind you, gaining — a mine-hound
       running its old message-route at fever pace, and you are standing
@@ -61,7 +61,7 @@ encounters:
       Soft-skinned once. Shield-backed and many-legged now, it scuttles
       the drowned floors underfoot.
     weight: 2
-    traits: [armor_low, sturdy, slow]
+    traits: [sturdy, armoured]
     prose: >-
       The floor of the flooded drift moves under your boot — a pale
       salamander the size of a cart-wheel, hauling up out of the black
@@ -85,7 +85,7 @@ encounters:
       A drift-crew's lost lamp and gear, aether pooled in the flood
       over them. It wades in the shape of a working man.
     weight: 1
-    traits: [resist_low, hulking, slow]
+    traits: [hulking, magic_resist]
     prose: >-
       A lamp comes wading up the flooded gallery at shift-pace, hung on
       a shape like a working man. The shape is water and old gear. The

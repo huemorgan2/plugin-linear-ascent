@@ -16,7 +16,7 @@ encounters:
       The Crown does not garrison its doorstep with soldiers. It casts
       them, and glass casts thick.
     weight: 3
-    traits: [armor_med, fierce]
+    traits: [fierce, armoured]
     prose: >-
       A figure detaches from the balustrade — black glass in the
       shape of a swordsman, faceless, flawless. The Crown does not
@@ -27,7 +27,7 @@ encounters:
       It wears your stance, your gear, and a much better night's sleep.
       Spells recognize themselves in it and hesitate.
     weight: 3
-    traits: [resist_med, feeble]
+    traits: [feeble, magic_resist]
     prose: >-
       The climber in the polished riser ahead has stopped matching
       you. It steps out of the glass wearing your stance and your
@@ -51,7 +51,7 @@ encounters:
       It lays its eggs in reflections. The stair-keepers polish against
       it, and lose ground yearly.
     weight: 2
-    traits: [flying, hulking, fierce]
+    traits: [hulking, fierce, fly]
     prose: >-
       A moth with wings of near-perfect mirror lifts off the balustrade,
       and as it circles you it flashes back small crooked pieces of your

@@ -19,7 +19,7 @@ encounters:
       Web-footed now, wading the channels between the ricks. It swims
       better than you pole.
     weight: 3
-    traits: [lean, fast]
+    traits: [lean]
     prose: >-
       A wolf breasts the grey water between two hay-ricks, web-footed
       and low, only its eyes and shoulders showing. It has learned that
@@ -59,7 +59,7 @@ encounters:
       Grown long through the drowned fence-wire until steel and muscle
       are one barbed length.
     weight: 2
-    traits: [armor_low, lean]
+    traits: [lean, armoured]
     prose: >-
       What looks like drowned fence-wire moves — a white fish grown
       through the barbs until steel and muscle are one length, sawing
@@ -71,7 +71,7 @@ encounters:
       A trapper's lamp lost in the flood, aether soaked into the dead
       flame. It calls punts onto the black reed.
     weight: 2
-    traits: [resist_low, sturdy]
+    traits: [sturdy, magic_resist]
     prose: >-
       A cold light drifts over the water, patient as a ferryman, and
       swings your way. There is no hand carrying it. There never was.

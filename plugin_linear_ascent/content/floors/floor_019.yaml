@@ -15,7 +15,7 @@ encounters:
       It was in the breach when the doors came down, and the warframe
       still carries the dwarf-fire scars. It is owed, it feels.
     weight: 3
-    traits: [armor_med, feeble]
+    traits: [feeble, armoured]
     prose: >-
       A veteran of the breach, warframe scarred by dwarf-fire, patrols
       the fallen doors it helped fell. It remembers this floor costing
@@ -37,7 +37,7 @@ encounters:
       One door-engine survived the breach and never accepted it. It cannot
       be argued past — only outlasted.
     weight: 2
-    traits: [bulwark, slow, fierce]
+    traits: [bulwark, fierce]
     prose: >-
       One dwarven door-engine survived the breach, and it has not
       accepted the news. It holds a doorway with no door, halberd-arms
@@ -48,7 +48,7 @@ encounters:
       It followed the Red Orcs up-tower the way crows have always followed
       armies. The breach was the best day of its life.
     weight: 2
-    traits: [flying, sturdy, fierce]
+    traits: [sturdy, fierce, fly]
     prose: >-
       A crow the size of a dog drops off a fallen door-slab and beats up
       into the scorched dark, circling — it has watched enough battles

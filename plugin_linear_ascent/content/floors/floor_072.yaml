@@ -17,7 +17,7 @@ encounters:
       things you said three floors down. It has had time to take them
       personally.
     weight: 3
-    traits: [resist_med, feeble]
+    traits: [feeble, magic_resist]
     prose: >-
       A shade steps out of a trunk mid-sentence, finishing something
       said here long ago, in your voice. It knows things you said
@@ -28,7 +28,7 @@ encounters:
       It throws its own footfalls ahead of itself. You hear it pass on the
       left. That is where it is not.
     weight: 3
-    traits: [fast, lean, feeble]
+    traits: [lean, feeble]
     prose: >-
       A gloom hound hunts these woods by throwing its own footfalls
       ahead of itself. You hear it pass on the left. That is where
@@ -39,7 +39,7 @@ encounters:
       Saddled in cobweb, patient. It has never needed to chase — everyone
       in the gate town knows somebody who got on.
     weight: 2
-    traits: [slow, resist_low, sturdy, fierce]
+    traits: [sturdy, fierce, armoured]
     prose: >-
       A black mare stands riderless in the trees, saddled in cobweb,
       patient. Everyone in the gate town knows somebody who got on.
@@ -51,7 +51,7 @@ encounters:
       They nest in the talking trees and sting whatever raises its voice.
       The wood has opinions about being quoted.
     weight: 2
-    traits: [flying, sturdy, savage]
+    traits: [sturdy, savage, fly]
     prose: >-
       A seam in the nearest trunk hums open and the wasps come out in a
       ribbon, riding the sound of your own footsteps back at you.

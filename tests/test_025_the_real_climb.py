@@ -289,7 +289,7 @@ def _floor_with(traits):
 
 
 def test_a_flyer_may_not_carry_a_bite_this_low():
-    errs = schema._archetype_errors(_floor_with(("flying", "savage")))
+    errs = schema._archetype_errors(_floor_with(("fly", "savage")))
     assert any("no melee counter" in e for e in errs), errs
 
 

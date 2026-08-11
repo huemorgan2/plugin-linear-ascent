@@ -27,7 +27,7 @@ encounters:
       It died loyal to somebody on the old towpath. What runs it now keeps
       the route and lost the loyalty.
     weight: 3
-    traits: [fast, lean, fierce]
+    traits: [lean, fierce]
     prose: >-
       Something that used to be a hound follows the old towpath, coat
       slicked black, too many joints working. It died loyal to somebody.
@@ -38,7 +38,7 @@ encounters:
       The locals had one rule about the cairn-lights: never follow. Nobody
       made a rule for when the light follows you.
     weight: 2
-    traits: [flying, resist_low, lean, savage]
+    traits: [lean, savage, fly]
     prose: >-
       A soft light drifts off a cairn and comes across the water toward
       you, warm as a lodge window. The locals had one rule about the

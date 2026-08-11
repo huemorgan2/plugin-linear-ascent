@@ -16,7 +16,7 @@ encounters:
       The soldier is dead these many years and still on duty. The rig
       keeps the watch; the salute is muscle memory.
     weight: 3
-    traits: [armor_high, feeble]
+    traits: [feeble, armoured]
     prose: >-
       An exo-rig hauls itself out of the bog with its soldier still
       strapped in, dead these many years and still on duty. The rig
@@ -27,7 +27,7 @@ encounters:
       Years of opening exo-rigs like oysters capped its knuckles with
       salvaged plate. Your armor reads as shell.
     weight: 3
-    traits: [armor_low, lean, feeble]
+    traits: [lean, feeble]
     prose: >-
       A ghoul has spent years learning to open exo-rigs like oysters,
       and its knuckles are capped with salvaged plate. It looks at your
@@ -38,7 +38,7 @@ encounters:
       The beacon still blinks under a foot of bog water. The thing beside
       it learned that light draws rescuers.
     weight: 2
-    traits: [resist_low, sturdy, fierce]
+    traits: [sturdy, fierce, magic_resist]
     prose: >-
       A rig's distress beacon still blinks under a foot of bog water,
       and something has learned to sit beside it and wait. The light

@@ -16,7 +16,7 @@ encounters:
       It knows the provenance of everything in the vaults, including the
       piece the empty plinth is waiting for.
     weight: 3
-    traits: [resist_med, fierce]
+    traits: [fierce, magic_resist]
     prose: >-
       A demon in archivist's grey moves down the gallery straightening
       labels. It knows the provenance of everything in the vaults,
@@ -28,7 +28,7 @@ encounters:
       A realm's champion, taken whole, armor and all. Its terrible
       question: which side of a plinth are you on?
     weight: 3
-    traits: [armor_high, feeble]
+    traits: [feeble, armoured]
     prose: >-
       One of the exhibits — a realm's champion, taken whole, armor
       and all — has been on its plinth long enough to work one foot
@@ -40,7 +40,7 @@ encounters:
       Your gear disappoints it. Your defiance, it says, brightening, will
       mount beautifully.
     weight: 2
-    traits: [fast, lean, feeble]
+    traits: [lean, feeble]
     prose: >-
       An imp with a jeweler's glass screwed into each eye circles
       you twice, muttering valuations. Your gear disappoints it.
@@ -51,7 +51,7 @@ encounters:
       It eats the exhibits — tapestry first, provenance second. The
       curator has posted a bounty in three scripts.
     weight: 2
-    traits: [flying, hulking, fierce]
+    traits: [hulking, fierce, fly]
     prose: >-
       A moth the grey of old banners lifts off a drowned realm's colors
       with a mouthful of history, and makes for the freshest fabric in the

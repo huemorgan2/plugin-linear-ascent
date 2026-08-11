@@ -16,7 +16,7 @@ encounters:
       The vault-light got into it years back. Fear burned away first, and
       spells find little left to grip.
     weight: 3
-    traits: [resist_low, lean, feeble]
+    traits: [lean, feeble, magic_resist]
     prose: >-
       A kobold that has slept too close to the vault doors comes at you
       shedding faint light, fur out in patches, eyes wrong. It is past
@@ -38,7 +38,7 @@ encounters:
       A vault-tender in dwarf-plate, headless and thorough. The checklist
       is gone; the round continues.
     weight: 2
-    traits: [slow, armor_high, fierce]
+    traits: [fierce, armoured]
     prose: >-
       A dwarven vault-tender, headless since the fall, still walks its
       rounds on magnetic feet. It cannot find its checklist, so it has
@@ -49,7 +49,7 @@ encounters:
       Light that leaked from a cracked core and learned the shape of a
       lantern-bearer. Spells pass through it like more light.
     weight: 2
-    traits: [flying, resist_high, savage]
+    traits: [savage, fly]
     prose: >-
       Between the vault doors the air brightens wrong — a figure of bare
       glow drifting the seam-light, carrying nothing, casting no shadow,

@@ -16,7 +16,7 @@ encounters:
       It is not hunting. It is pacing you, for the handicap, and it keeps
       glancing at your knees.
     weight: 3
-    traits: [fast, lean, feeble]
+    traits: [lean, feeble]
     prose: >-
       A gloom hound falls in beside you at an easy lope, matching
       you stride for stride. It is not hunting. It is pacing you,
@@ -39,7 +39,7 @@ encounters:
       You are off the marked course. Rejoining is compulsory. The flag is
       not a request.
     weight: 2
-    traits: [resist_med, fierce]
+    traits: [fierce, magic_resist]
     prose: >-
       A shade in a steward's sash steps onto the turf and raises a
       grey flag. You are, it indicates, off the marked course.
@@ -50,7 +50,7 @@ encounters:
       It works the audience hides for dropped stakes and settles bets
       nobody survived to collect.
     weight: 2
-    traits: [flying, hulking, fierce]
+    traits: [hulking, fierce, fly]
     prose: >-
       A crow flaps up from the master of hounds' stand with a betting slip
       in its beak, takes one lap of the course over your head, and marks

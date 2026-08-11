@@ -16,7 +16,7 @@ encounters:
       It has led ten thousand funerals and been short one mourner for a
       century. Grief that old stops taking no.
     weight: 3
-    traits: [resist_med, feeble]
+    traits: [feeble, magic_resist]
     prose: >-
       A wight in mourning-grey walks the center of the road, bell in
       hand, leading a procession of nobody. It stops. It has been short
@@ -38,7 +38,7 @@ encounters:
       It rings a passing-bell for the about-to-die. It is rarely wrong,
       and it is ringing now.
     weight: 2
-    traits: [flying, resist_low, lean, savage]
+    traits: [lean, savage, fly]
     prose: >-
       A light drifts ahead of you tolling like a small bell, keeping
       just at the edge of sight. It is ringing a passing-bell, you
@@ -49,7 +49,7 @@ encounters:
       Two bearers fused to one iron-bound coffin, still walking the route.
       Nobody has looked inside and reported back.
     weight: 2
-    traits: [slow, armor_low, hulking, fierce]
+    traits: [hulking, fierce, armoured]
     prose: >-
       Up the center of the road comes a shape of two bearers grown into
       one iron-bound coffin, step by processional step. It sets its burden

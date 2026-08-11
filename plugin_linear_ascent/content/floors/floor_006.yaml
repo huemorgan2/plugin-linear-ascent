@@ -19,7 +19,7 @@ encounters:
       Drawn to warm breath even then. Palm-broad now, it powders the
       eyes with grave-dust.
     weight: 3
-    traits: [flying, frail, feeble]
+    traits: [frail, feeble, fly]
     prose: >-
       Something soft drops onto your shoulder in the dark, then clings
       — a palm-broad rat drawn to your breathing, kicking blinding
@@ -47,7 +47,7 @@ encounters:
       Dog-sized and hunting in threads — the first of many broods
       above.
     weight: 2
-    traits: [lean, fast, fierce]
+    traits: [lean, fierce]
     prose: >-
       A thread brushes your face in the dark. Then the thread pulls — a
       dog-sized broodling riding its own line down, forelegs first.
@@ -60,7 +60,7 @@ encounters:
       Fever-quick now, it drops on a shielded lamp from the unseen
       roof.
     weight: 2
-    traits: [sturdy, savage]
+    traits: [sturdy, savage, armoured]
     prose: >-
       Your lamp's glow finds eight points of light in the roof,
       arranged in a pattern, descending. The vault's old ambush-weaver
@@ -75,7 +75,7 @@ encounters:
       Blind and guano-crusted, it plugs the narrow ways and gives you
       only its front. The one road on is through.
     weight: 2
-    traits: [bulwark, slow]
+    traits: [bulwark]
     prose: >-
       The crawl ahead is stopped by a wall of crusted bristle — a blind
       boar grown into the passage it guards, front-on, going nowhere.
@@ -87,7 +87,7 @@ encounters:
       A delver lost to the silk, aether pooled in the bundle. It mimics
       a caught man's voice.
     weight: 1
-    traits: [resist_low, sturdy, slow]
+    traits: [sturdy, magic_resist]
     prose: >-
       From the dark comes a man's voice calling for help, word-perfect.
       The shape that walks out wearing it is a cocoon of silk, and it

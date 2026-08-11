@@ -27,7 +27,7 @@ encounters:
       A millstone of drive-iron that shook off its axle years ago. It only
       knows one direction at a time.
     weight: 3
-    traits: [slow, armor_high, feeble]
+    traits: [feeble, armoured]
     prose: >-
       A flywheel the size of a millstone has shaken off its axle and
       rolls the gallery lengthwise, hunting by echo. It has worn its own
@@ -49,7 +49,7 @@ encounters:
       Something marten-quick lives on the drive belts and has never once
       touched the floor.
     weight: 2
-    traits: [fast, sturdy, savage]
+    traits: [sturdy, savage]
     prose: >-
       A sleek shape flickers along the moving belts overhead, riding the
       machinery like a current, and comes off the last pulley at your

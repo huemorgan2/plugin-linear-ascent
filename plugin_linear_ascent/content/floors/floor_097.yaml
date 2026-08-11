@@ -16,7 +16,7 @@ encounters:
       Processions require rank, and rank requires patents, and you have
       neither — only, it allows, a certain momentum.
     weight: 3
-    traits: [resist_med, fierce]
+    traits: [fierce, magic_resist]
     prose: >-
       A court herald plants its staff in your path with a crack like
       ice. Processions require rank, and rank requires patents, and
@@ -28,7 +28,7 @@ encounters:
       The flag of a dead realm flying itself, looking for hands to carry
       it right side up. Yours are occupied. It intends to free them.
     weight: 3
-    traits: [flying, resist_med, feeble]
+    traits: [feeble, fly]
     prose: >-
       One of the inverted banners unhooks itself and comes down the
       avenue — the flag of a dead realm flying itself, looking for
@@ -41,7 +41,7 @@ encounters:
       a thousand years. You can tell — and the plate has drilled with
       them.
     weight: 2
-    traits: [armor_high, savage]
+    traits: [savage, armoured]
     prose: >-
       Two archdemons of the road-watch descend from their alcoves in
       step, glaives crossing with ceremonial precision. They have
@@ -53,7 +53,7 @@ encounters:
       The road-watch runs hounds down the avenue between processions.
       Unauthorized walkers are their whole diet.
     weight: 3
-    traits: [fast, frail, feeble]
+    traits: [frail, feeble]
     prose: >-
       From an alcove a hound in road-watch livery takes the avenue's black
       glass at a sprint that never slips, and its line ends precisely

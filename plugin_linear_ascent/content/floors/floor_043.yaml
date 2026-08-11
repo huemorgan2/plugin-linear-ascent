@@ -16,7 +16,7 @@ encounters:
       Denned in a red seam, fat on the heat, scales gone the color of
       cooling iron. Annoyed is most of the way to violence.
     weight: 3
-    traits: [resist_low, lean, feeble]
+    traits: [lean, feeble, magic_resist]
     prose: >-
       A salamander has denned in a red seam and grown fat on the heat,
       scales gone the color of cooling iron. It comes out annoyed,
@@ -38,7 +38,7 @@ encounters:
       It cools as it comes, and by arrival it is hard as a bell. It knows
       this. It is not hurrying.
     weight: 2
-    traits: [armor_high, slow, fierce]
+    traits: [fierce, armoured]
     prose: >-
       A hound-shaped clot of slag and cinder trots the ridge road,
       cooling as it comes. By the time it reaches you it will be hard
@@ -49,7 +49,7 @@ encounters:
       It dens in the warm hills with everything else big enough to matter,
       and hunts the ridge roads by heat.
     weight: 2
-    traits: [flying, hulking, fierce]
+    traits: [hulking, fierce, fly]
     prose: >-
       Off the glowing cut-face a bat unfolds, wings edged in ember-light,
       and banks down the ridge road at head height — yours.

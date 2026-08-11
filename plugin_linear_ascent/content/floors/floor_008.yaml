@@ -18,7 +18,7 @@ encounters:
     lore: >-
       Pack-bold and fever-lean, coursing warmth across the flats.
     weight: 3
-    traits: [lean, fast, fierce]
+    traits: [lean, fierce]
     prose: >-
       Lean shapes rise out of the dune-shadows one by one, ash sliding
       from their backs — jackals coursing your warmth, pack-bold and
@@ -31,7 +31,7 @@ encounters:
     lore: >-
       Razor-swift over the fulgurite, kicking up glass-dust.
     weight: 3
-    traits: [frail, feeble, fast]
+    traits: [frail, feeble]
     prose: >-
       A pale blur crosses the flat in a spray of glass-dust, doubles,
       and comes through your legs — a hare running strike-glass at a
@@ -45,7 +45,7 @@ encounters:
       Ember-veined, it beds in warm ash and lashes with a scalding
       tail.
     weight: 2
-    traits: [resist_low, sturdy]
+    traits: [sturdy, magic_resist]
     prose: >-
       The warm ash you were about to cross opens an orange eye. A
       salamander unbeds itself, ember-veined, tail dragging a line of
@@ -58,7 +58,7 @@ encounters:
     lore: >-
       Huge and ash-caked, it stoops on anything that slows.
     weight: 2
-    traits: [flying, frail]
+    traits: [frail, fly]
     prose: >-
       A shadow crosses you twice. The vulture riding it is ash-caked
       and huge, and it has decided you are slowing.
@@ -82,7 +82,7 @@ encounters:
       Waste-born and collared, set to hold the one deep spring against
       the nomads it once shared water with.
     weight: 1
-    traits: [hulking, savage, slow]
+    traits: [hulking, savage, armoured]
     prose: >-
       An ogre stands up from the spring-mouth with an ash-glass boulder
       on its shoulder, sun-mad, collared. It was born to these dunes.

@@ -16,7 +16,7 @@ encounters:
       It is thrown ahead of you by no light at all, and when you stop, it
       keeps walking. Spells pass through what isn't there.
     weight: 3
-    traits: [resist_med, feeble]
+    traits: [feeble, magic_resist]
     prose: >-
       Your shadow arrives before you do — thrown ahead on the path by
       no light at all. It waits for you to catch up, and when you
@@ -27,7 +27,7 @@ encounters:
       The Huntsman's stock run loose between hunts, keeping themselves
       fed. The downwind circle is habit it does not need.
     weight: 3
-    traits: [fast, frail, feeble]
+    traits: [frail, feeble]
     prose: >-
       A hound the color of the space between trees crosses the path,
       soundless. The Huntsman's stock run loose out here between
@@ -39,7 +39,7 @@ encounters:
       The old realm's transmissions never died here. They just kept
       walking, and one of them knows your name.
     weight: 2
-    traits: [resist_low, lean, savage]
+    traits: [lean, savage, magic_resist]
     prose: >-
       A voice you almost know calls your name from off the path — the
       exact tone of someone in Roothollow, worn thin by distance. The

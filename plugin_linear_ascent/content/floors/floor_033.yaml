@@ -16,7 +16,7 @@ encounters:
       Forty small spiders with one opinion. They have never once been
       individually.
     weight: 3
-    traits: [fast, lean, feeble]
+    traits: [lean, feeble]
     prose: >-
       A patch of wall-silk sloughs off and becomes forty small spiders
       with one opinion. Individually they are nothing. They have never
@@ -27,7 +27,7 @@ encounters:
       Silk-blinded and kept as a nursery guard, fed just enough. It fills
       the tunnel wall to wall — you will not go around it, only through.
     weight: 3
-    traits: [bulwark, slow, feeble]
+    traits: [bulwark, feeble]
     prose: >-
       A deep troll has been silk-blinded and kept as a nursery guard,
       fed just enough. It fills the tunnel wall to wall, and it hears
@@ -49,7 +49,7 @@ encounters:
       It nests in the one warm cavern of the Webdeep and pays rent in
       whatever it knocks from the air.
     weight: 2
-    traits: [flying, hulking, fierce]
+    traits: [hulking, fierce, fly]
     prose: >-
       Something leathery cuts through the milk-warm air of the warrens,
       shoulder-high and fast, riding the heat off the brood walls straight

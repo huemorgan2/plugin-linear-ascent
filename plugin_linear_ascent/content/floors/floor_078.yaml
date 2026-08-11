@@ -16,7 +16,7 @@ encounters:
       It weaves shadow through wire with a craftsman's absorption. You are
       the test of the workmanship.
     weight: 3
-    traits: [resist_med, feeble]
+    traits: [feeble, magic_resist]
     prose: >-
       A shade works a new snare into the path ahead, weaving shadow
       through wire with a craftsman's absorption. It does not stop
@@ -37,7 +37,7 @@ encounters:
       Never closing, only steering. Ahead the trees narrow. You are being
       delivered, on schedule.
     weight: 2
-    traits: [fast, sturdy, fierce]
+    traits: [sturdy, fierce]
     prose: >-
       A gloom hound appears behind you on the lane, then another on
       the left, then the right — never closing, only steering. Ahead
@@ -48,7 +48,7 @@ encounters:
       It eats the Huntsman's snare-wire and armors itself with the
       leavings. The snare-setters bill it as an occupational hazard.
     weight: 2
-    traits: [armor_high, slow, savage]
+    traits: [savage, armoured]
     prose: >-
       A beetle in a shell of wound wire works along a dressed lane,
       stripping a snare with its jaws, and rounds on you with the loyalty

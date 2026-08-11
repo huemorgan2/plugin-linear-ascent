@@ -16,7 +16,7 @@ encounters:
       Presenting the Herald with your head might be worth the flogging. It
       has done the arithmetic, visibly, and closed the ledger.
     weight: 3
-    traits: [armor_high, fierce]
+    traits: [fierce, armoured]
     prose: >-
       A Marshal in campaign plate leaves the reviewing line without
       leave — an ambitious breach. Presenting the Herald with your
@@ -28,7 +28,7 @@ encounters:
       Fat and precise on state secrets, carrying a pre-signed writ of
       execution. Spells blur against what it knows and will not say.
     weight: 3
-    traits: [resist_med, feeble]
+    traits: [feeble, magic_resist]
     prose: >-
       Malgrim's personal secretary is an imp grown fat and precise
       on state secrets. It meets you with a writ of execution,
@@ -40,7 +40,7 @@ encounters:
       One duty and no discretion — nothing passes while the Herald holds
       court. It has the patience and the build of architecture.
     weight: 2
-    traits: [bulwark, slow, fierce]
+    traits: [bulwark, fierce]
     prose: >-
       The hulk that tends the great gate has one duty and no
       discretion — nothing passes while the Herald holds court. It
@@ -52,7 +52,7 @@ encounters:
       It runs the parade ground's edge at every muster. Dismissing the
       guard did not dismiss the dog.
     weight: 2
-    traits: [fast, lean, feeble]
+    traits: [lean, feeble]
     prose: >-
       A hound in a studded muster-collar breaks from the reviewing line's
       shadow, taking the parade ground in a flat arc that ends, by old

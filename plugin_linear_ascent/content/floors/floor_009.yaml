@@ -19,7 +19,7 @@ encounters:
       It came to the beacons for warmth. Plate-broad and blinding-pale
       now, it smothers lamps.
     weight: 3
-    traits: [flying, frail, feeble]
+    traits: [frail, feeble, fly]
     prose: >-
       Something runs the heather at your feet — a vole broad as a
       plate, blinding-pale, climbing for your lamp at the exact moment
@@ -45,7 +45,7 @@ encounters:
     lore: >-
       Over-large now, lunging silent out of the strobe.
     weight: 2
-    traits: [flying, hulking, fierce]
+    traits: [hulking, fierce, fly]
     prose: >-
       Between one flash and the next, something crosses the gap — a
       shrew grown wrong and huge, lunging silent out of the strobe
@@ -59,7 +59,7 @@ encounters:
       It hunts inside the moving shadows, unseen until it crosses a
       light.
     weight: 2
-    traits: [lean, fast, savage]
+    traits: [lean, savage, armoured]
     prose: >-
       A pylon-shadow slides across the heather and something keeps pace
       inside it, using the dark like cover. You see the wolf only when
@@ -72,7 +72,7 @@ encounters:
     lore: >-
       Charged and fever-bold, striking from the cable-runs.
     weight: 2
-    traits: [lean, fast, fierce]
+    traits: [lean, fierce]
     prose: >-
       The cable-run beside the path spits a blue spark, and the spark
       has a body — an adder charged from years on the lines, striking
@@ -84,7 +84,7 @@ encounters:
       A keeper electrocuted at a junction, aether caught in the arc. It
       exists only between flashes.
     weight: 1
-    traits: [resist_med]
+    traits: [magic_resist]
     prose: >-
       In the dark between two flashes there is a man-shape at the
       junction box. In the light there is nothing. The dark comes

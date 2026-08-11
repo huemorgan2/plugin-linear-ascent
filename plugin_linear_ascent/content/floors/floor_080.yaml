@@ -16,7 +16,7 @@ encounters:
       Precedence must be observed — nobody reaches the master unbloodied.
       The lash uncoils with the boredom of long practice.
     weight: 3
-    traits: [resist_med, feeble]
+    traits: [feeble, magic_resist]
     prose: >-
       The Huntsman's first whip rides out to meet you at a walk,
       grey coat immaculate, face a smudge. It uncoils its lash with
@@ -28,7 +28,7 @@ encounters:
       White as the columns, moving in mirrored arcs. They have opened
       every hunt for a century. They open yours.
     weight: 3
-    traits: [fast, lean, feeble]
+    traits: [lean, feeble]
     prose: >-
       Two hounds from the master's own couple rise from the
       perimeter, white as the columns, moving in mirrored arcs. They
@@ -39,7 +39,7 @@ encounters:
       The master's spare, saddle empty. It considers the vacancy an insult
       and comes to fill the time.
     weight: 2
-    traits: [resist_low, sturdy, fierce]
+    traits: [sturdy, fierce, magic_resist]
     prose: >-
       The Huntsman's spare nightmare stands at the rail, saddle
       empty. It has carried him through every season and considers

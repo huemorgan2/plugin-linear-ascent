@@ -28,7 +28,7 @@ encounters:
       Your footsteps carry up the chain like a knock. It pours down
       through the links, and it has never needed a floor.
     weight: 3
-    traits: [flying, resist_low, frail, fierce]
+    traits: [frail, fierce, fly]
     prose: >-
       A storm drake has coiled through three links overhead to
       sleep, and your footsteps carry up the chain like a knock. It
@@ -40,7 +40,7 @@ encounters:
       It missed a handhold years ago and still works its ledge,
       weightless-thin. The net it waves you toward is for you.
     weight: 2
-    traits: [slow, sturdy, fierce]
+    traits: [sturdy, fierce]
     prose: >-
       A chain-farmer who missed a handhold years ago still works a
       link ledge, grey and weightless-thin, harvesting moss nobody
@@ -52,7 +52,7 @@ encounters:
       It clamps to the great links and drinks the hum of the load. Its
       shell is chain-grade by adoption.
     weight: 2
-    traits: [armor_high, slow, savage]
+    traits: [savage, armoured]
     prose: >-
       What you took for a rivet head the size of a shield unclamps from
       the link, legs unfolding from under an iron-grey shell, and crabs

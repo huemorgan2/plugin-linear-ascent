@@ -16,7 +16,7 @@ encounters:
       Three passes, honor satisfied — the local dueling form. Nobody has
       explained what satisfies it.
     weight: 3
-    traits: [flying, lean, feeble]
+    traits: [lean, feeble, fly]
     prose: >-
       A harpy rises past you going straight up, flips at the top of
       the column, and stoops. This is the local dueling form — three
@@ -28,7 +28,7 @@ encounters:
       It drops travelers into the valley for the things below. You are not
       even attached to a line. Free lunch.
     weight: 3
-    traits: [fast, lean, fierce]
+    traits: [lean, fierce]
     prose: >-
       Something with shears for a beak works the kite-lines above
       the pass, dropping travelers into the valley for the things
@@ -40,7 +40,7 @@ encounters:
       Asleep on the wind in the updraft's core. Your scent goes up the
       column ahead of you.
     weight: 2
-    traits: [flying, resist_low, lean, savage]
+    traits: [lean, savage, fly]
     prose: >-
       A storm drake hangs in the updraft's core, wings barely
       moving, asleep on the wind. Your scent goes up the column

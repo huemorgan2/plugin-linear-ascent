@@ -16,7 +16,7 @@ encounters:
       Its web is half copper and carries a charge. The flies die before
       they finish landing; climbers take a moment longer.
     weight: 3
-    traits: [resist_low, frail, feeble]
+    traits: [frail, feeble, magic_resist]
     prose: >-
       A spider picks its way down a live cable, abdomen glowing faint
       with stolen charge. Its web is half metal, and the flies it
@@ -27,7 +27,7 @@ encounters:
       It wears a chewed trunk cable like a stole, and the leakage has done
       things to its temper the dark never managed.
     weight: 3
-    traits: [slow, armor_low, frail, fierce]
+    traits: [frail, fierce, armoured]
     prose: >-
       A deep troll has chewed into a trunk cable and sits wearing it
       over its shoulders like a stole, jaw sparking. The leakage has
@@ -49,7 +49,7 @@ encounters:
       Leakage that pooled long enough to want things. Spells feed it more
       than they hurt it.
     weight: 2
-    traits: [flying, resist_med, savage]
+    traits: [savage, fly]
     prose: >-
       A bead of St. Elmo's light detaches from a cable joint and drifts
       down the aisle of webs toward you, swelling as it comes, the copper

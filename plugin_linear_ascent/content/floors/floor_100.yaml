@@ -28,7 +28,7 @@ encounters:
       A younger King, and hungrier, and it does not answer to the one on
       the throne.
     weight: 3
-    traits: [fast, resist_med, feeble]
+    traits: [feeble, fly]
     prose: >-
       Vharuk's shadow leaves him and comes down the throne-steps
       alone, wearing the shape he wore the day he tore the first
@@ -40,7 +40,7 @@ encounters:
       Scepter, orb, and chain of office in slow orbit. They have outlasted
       four bearers and are auditioning the fifth, armed.
     weight: 2
-    traits: [flying, armor_med, fierce]
+    traits: [fierce, armoured]
     prose: >-
       The King's regalia defend themselves — scepter, orb, and
       chain of office rising off their cushions in a slow orbit.
@@ -52,7 +52,7 @@ encounters:
       Every conquered realm watches the throne room through its mirrors.
       One of them could not keep watching quietly.
     weight: 2
-    traits: [resist_low, sturdy, savage]
+    traits: [sturdy, savage, magic_resist]
     prose: >-
       A shape presses out of the nearest watching mirror — a witness from
       some drowned realm, worn thin by the view, determined that whatever

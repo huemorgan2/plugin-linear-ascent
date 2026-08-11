@@ -81,24 +81,24 @@ def test_everything_that_can_hit_chips_at_least_one():
 def test_bulwark_is_orthogonal_to_the_triangle():
     b = prof("bulwark")
     assert b["type"] == "plain" and b["bulwark"]
-    assert prof("armor_med", "bulwark")["type"] == "armoured"
+    assert prof("armoured", "bulwark")["type"] == "armoured"
     assert economy.profile_gold_mult(b) == pytest.approx(
         economy.BULWARK_GOLD_MULT)
 
 
 def test_speed_rides_the_type():
     # 048: fast/slow are the TYPE's legs — the old traits are dead air
-    assert prof("flying")["speed"] == economy.SPEED_FAST
-    assert prof("armor_low")["speed"] == economy.SPEED_SLOW
-    assert prof("resist_med")["speed"] == economy.SPEED_SLOW
+    assert prof("fly")["speed"] == economy.SPEED_FAST
+    assert prof("armoured")["speed"] == economy.SPEED_SLOW
+    assert prof("magic_resist")["speed"] == economy.SPEED_SLOW
     assert prof()["speed"] == economy.SPEED_NORMAL
 
 
 def test_profile_gold_mult_reads_the_type():
-    assert economy.profile_gold_mult(prof("flying")) == pytest.approx(
+    assert economy.profile_gold_mult(prof("fly")) == pytest.approx(
         economy.TYPE_GOLD["fly"])
     assert economy.profile_gold_mult(
-        prof("armor_med", "bulwark")) == pytest.approx(
+        prof("armoured", "bulwark")) == pytest.approx(
         economy.TYPE_GOLD["armoured"] * economy.BULWARK_GOLD_MULT)
 
 
@@ -400,11 +400,9 @@ def test_matchup_gate_floors_1_to_10():
                         f"{where}: win {winrate:.0%}, rounds "
                         f"{avg_rounds:.1f} vs plain {plain_rounds:.1f} — "
                         "neither walls nor drags")
-            # 048: the shipped rosters were drawn for the tier system —
-            # ten floors owe a path its second full target until the
-            # phase-7 retag. The 008 pool rule stands at ≥1 till then,
-            # back to ≥2 with the retag (mirrors the schema lint).
-            assert farmable >= 1, (
+            # 048 phase 7: the retag filled every floor deliberately —
+            # the 008 pool rule is back to ≥2 (mirrors the schema lint).
+            assert farmable >= 2, (
                 f"floor {floor_no} {clazz}: {farmable} farmable targets — "
                 "a class must always have somewhere to earn (008 pool rule)")
         # 031: the booted reference archer shaves a few points off the

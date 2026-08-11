@@ -17,7 +17,7 @@ encounters:
       this size do not lose arguments on their own land — they last them
       out.
     weight: 3
-    traits: [bulwark, slow, feeble]
+    traits: [bulwark, feeble]
     prose: >-
       A frost giant straightens up from mending a fence of whole
       trees, hammer dangling. You are on the near field. The near
@@ -28,7 +28,7 @@ encounters:
       Bred to giant scale, it clears the pine fence without touching it.
       It is not angry. It is on the clock.
     weight: 3
-    traits: [fast, frail, feeble]
+    traits: [frail, feeble]
     prose: >-
       The giants breed their hounds to giant scale, and this one
       clears the pine fence without touching it. It is not angry.

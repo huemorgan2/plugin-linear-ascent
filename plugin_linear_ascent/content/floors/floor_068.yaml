@@ -16,7 +16,7 @@ encounters:
       Young enough to want a story worth telling, old enough to make one
       out of you.
     weight: 3
-    traits: [flying, resist_low, frail, feeble]
+    traits: [frail, feeble, fly]
     prose: >-
       A drake in its first adult molt drops from the home crag to
       look you over. It is young enough to want a story worth
@@ -27,7 +27,7 @@ encounters:
       Drake-scale livery and airs to match. Removing you before the master
       wakes is the kind of initiative that gets noticed.
     weight: 3
-    traits: [armor_med, feeble]
+    traits: [feeble, armoured]
     prose: >-
       The harpies that serve the aeries wear drake-scale livery and
       airs to match. Two of them decide removing you before the
@@ -38,7 +38,7 @@ encounters:
       Beaten off its crag, wings scarred, charge gone grey. It has nothing
       left but seniority, and it means to spend it on you.
     weight: 2
-    traits: [slow, sturdy, fierce]
+    traits: [sturdy, fierce]
     prose: >-
       An old drake beaten off its crag by a younger rival haunts the
       lower ledges, wings scarred, charge gone grey. It has nothing

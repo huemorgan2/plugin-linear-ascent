@@ -18,7 +18,7 @@ encounters:
       Iron-scale coats it and its jaws lock half-open. The packs still
       run the rails, hauling nothing.
     weight: 3
-    traits: [lean, fast]
+    traits: [lean]
     prose: >-
       A hound coated in rust-scale comes down the rails at a working
       trot, jaws locked half-open. It has run this line all its life.
@@ -46,7 +46,7 @@ encounters:
       Grown door-broad in the flooded drift, shell crusted to
       rust-plate. It holds the narrow ways like a gate.
     weight: 2
-    traits: [armor_low, hulking, slow]
+    traits: [hulking, armoured]
     prose: >-
       Something the width of a cart door drags itself out of the orange
       water — a tortoise in a shell of rust-crusted plate, older than
@@ -82,7 +82,7 @@ encounters:
       Spilled aether pooled in the rust-water. It was never alive; it
       only moves.
     weight: 1
-    traits: [sturdy, slow]
+    traits: [sturdy]
     prose: >-
       An orange stain crawls up the drift wall against the run of the
       water, spreading fingers. Where it has passed, the rock is eaten

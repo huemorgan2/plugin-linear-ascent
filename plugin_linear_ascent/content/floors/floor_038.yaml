@@ -16,7 +16,7 @@ encounters:
       It counts by touch, bundle by bundle. You are unlabeled, unwrapped,
       unaccounted for — an error it was made to correct.
     weight: 3
-    traits: [resist_med, feeble]
+    traits: [feeble, magic_resist]
     prose: >-
       A gaunt spider moves down the rows, touching each bundle once,
       counting. It reaches you — unlabeled, unwrapped, unaccounted for
@@ -38,7 +38,7 @@ encounters:
       It came in the honest way, through the wall, and it eats down the
       rows like a man at a market stall. It will take a while to stop.
     weight: 2
-    traits: [bulwark, slow, fierce]
+    traits: [bulwark, fierce]
     prose: >-
       A deep troll has broken into the vaults the honest way, through
       the wall, and is eating its way down a row like a man at a

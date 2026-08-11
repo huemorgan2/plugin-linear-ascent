@@ -16,7 +16,7 @@ encounters:
       It rides the vent-blasts for sport and lands loose and easy, the way
       of an animal that has never once been cold.
     weight: 3
-    traits: [fast, frail, feeble]
+    traits: [frail, feeble]
     prose: >-
       Salamanders ride the vent-blasts for sport, and one lands ahead
       of you, steaming, in the loose easy way of an animal that has
@@ -38,7 +38,7 @@ encounters:
       A long way from the Cindermouth nest, wings still wet — exactly as
       dangerous as a lost child with a furnace in it.
     weight: 2
-    traits: [flying, resist_low, sturdy, fierce]
+    traits: [sturdy, fierce, fly]
     prose: >-
       A wyrmling noses out of a dormant vent, no longer than a skiff,
       wings still wet. It is a long way from the Cindermouth nest, and
@@ -49,7 +49,7 @@ encounters:
       It grew its shell against the eruption schedule. Nothing on that
       schedule was ever in a hurry.
     weight: 2
-    traits: [armor_high, slow, savage]
+    traits: [savage, armoured]
     prose: >-
       A crab wide as a cart squats over a breathing vent, shell fumed
       black, and sidles into your path with the unbothered weight of a
