@@ -74,3 +74,25 @@ anchors settled`.
   explicitly; the conftest kit's rank 6 opens the gap but NOT the
   ×draw (rank 8) — silent at-threshold behavior was phase 4's
   test_036 trap.
+
+## Learnings applied (from phase 5)
+
+- **Smoothness measurement contract**: the pace walk reads floor
+  `monster_stats` × TYPE_ATK/TYPE_HP — never per-encounter
+  `creature_stats` (archetype spread leaked 235% ghost-cliffs).
+  Any T3 rank/rung axis must keep the same split; archetype spread
+  belongs to the matchup gate.
+- **Model both bow stances**: `_chase_adjusted` picks kite-vs-stand
+  by `(taken, total)` — bake pace math that assumes the kite
+  against fast prey explodes the cycle and fails falsely.
+- **Triangle grades are settled law**: full ×1.0 gates ≥80%;
+  halves ×0.5/×0.6 float free (priced slog); only glances ×0.15
+  and the zero must wall (<30%) or drag (≥1.6×). Do not re-tighten
+  halves when re-anchoring the matchup gates at rank 6.
+- **Pool rule sits at ≥1** (schema lint + measured 008 gate) until
+  the phase-7 retag — the bake must not "fix" a 1-farmable floor
+  with anchors; that's roster work, not numbers.
+- **Band-boundary checks use the dip-forgiving rolling-max
+  baseline** (022/002): recovery from an easy floor is not a wall.
+- **Pin rng in threshold tests**: any new bake test asserting on a
+  single roll pins `rng_int`/`roll_ok` (test_034's date-flake).

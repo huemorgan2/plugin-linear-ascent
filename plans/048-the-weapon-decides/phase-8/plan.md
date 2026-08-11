@@ -39,3 +39,16 @@ Commit: `048 phase 8: the words teach — polish + playtest log`.
   starts at creation, not floor 1.
 - Migration wording check needs a planted `p["clazz"]` — new docs
   never carry one; the rank-6 card only shows for legacy docs.
+
+## Learnings applied (from phase 5)
+
+- test_034 shield-wall flake is FIXED (phase 5 pinned
+  `rng_int → hi` — the law is the wear rate, not the roll); drop
+  the pending-roy's-nod polish item, nothing left to re-pin.
+- The three-question audit has new material to check: the verdict
+  block (per-held answer + rank), `_pred_damage` on attack rows,
+  `_defeat_cause` on every death/save — "can I tell why" should now
+  be answerable from the cards alone; log any card where it isn't.
+- Wrong-weapon defeat playtest: use bow vs kings_guard (armoured,
+  floor 10) or blade vs glare_moth (fly, floor 4) — the defeat card
+  must name the sign and the weapon that answers.

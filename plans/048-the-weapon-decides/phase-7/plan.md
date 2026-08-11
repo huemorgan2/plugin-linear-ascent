@@ -41,3 +41,22 @@ worldd `mechanics: path×rank ledger + TRAINING tab`.
   names ("warrior" line, job kind "class") — wire-compat, invisible.
 - retag.py: follow sweep_tests.py's pattern — assert-counted
   replaces, atomic per file, script kept in the phase folder.
+
+## Learnings applied (from phase 5)
+
+- **Restore the ≥2 pool rule in BOTH places** once the retag gives
+  every path its second full-damage target per floor: the schema
+  lint (`_class_pool_errors`, currently ≥1 with a 048 note) AND the
+  measured 008 gate in test_017_damage_types (`farmable >= 1` with
+  the same note). Ten floors sat at exactly one — the retag must
+  fill them deliberately, not incidentally.
+- **fast/slow traits are dead air already** (speed rides the type
+  since phase 5) — the retag deletes them from YAML with zero
+  behavior change; only the linter flip makes them illegal.
+- **Retag flips sim premises**: phase-5 test surgery moved kite/
+  slow tests to wrapped_husk and fast tests to glare_moth because
+  speed now rides the type. After the retag, re-grep tests for
+  encounter ids whose type changed — a premise can die silently
+  (lane_boar stopped being slow and the test still "passed" red).
+- **Bulwark HP rides ×2.2** (BULWARK_HP_MULT) and is orthogonal to
+  type — roster/census tooling must not count bulwark as a sign.
