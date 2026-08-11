@@ -727,6 +727,14 @@ RIPOSTE_RETURN = 0.25          # blocked blow answers 25% of mean swing
 LONG_DRAW_CRIT_MULT = 1.5      # gap-3 top-roll crit
 LONG_DRAW_TOP = 0.10           # the top 10% of the roll band crits
 FOCUS_MULT = 0.75              # staff's half-answers cast at ×0.75
+MASTERY_ATK_BONUS = 0.10       # each studied mastery: +10% on EVERY swing
+
+
+def legacy_rank(unlocked_floor: int) -> int:
+    """048 migration: the honored rank scales with the climb — rank 6
+    (the old on-class feel) as the floor of it, +1 per ten floors
+    opened, capped one step under the master's studies."""
+    return min(9, 6 + max(0, int(unlocked_floor)) // 10)
 
 
 PATH_OF_LINE = {"warrior": "blade", "archer": "bow", "sorcerer": "staff"}

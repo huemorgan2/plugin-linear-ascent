@@ -181,6 +181,22 @@ def _week_lines(fac: dict, hall: dict, lines: list, opts: list) -> None:
         lines.append("the steward signs the banner in — nudge them")
 
 
+def _hands_tag(m: dict) -> str:
+    """048: the tenth rank is toasted in every banner hall — a member
+    row wears the glyph for each rank-10 path, MASTER once studied."""
+    tr = m.get("training") or {}
+    ms = m.get("mastery") or {}
+    marks = []
+    for glyph, path in (("⚔", "blade"), ("➶", "bow"), ("✦", "staff")):
+        try:
+            r = int(tr.get(path) or 0)
+        except (TypeError, ValueError):
+            r = 0
+        if r >= 10:
+            marks.append(f"{glyph} {'MASTER' if ms.get(path) else 'GOLD'}")
+    return f" · {' '.join(marks)}" if marks else ""
+
+
 def _roster_lines(p: dict, fac: dict, lines: list) -> None:
     from .social import _pips
     for m in fac.get("members", [])[:8]:
@@ -190,7 +206,7 @@ def _roster_lines(p: dict, fac: dict, lines: list) -> None:
         elif m.get("role") == "steward":
             tag = " · steward"
         arr = " ▲ arrears" if m.get("arrears") else ""
-        lines.append(f"{m.get('name', '?')}{tag} — "
+        lines.append(f"{m.get('name', '?')}{tag}{_hands_tag(m)} — "
                      f"{_pips(m.get('days', 0), m.get('required', 4))}{arr}")
 
 

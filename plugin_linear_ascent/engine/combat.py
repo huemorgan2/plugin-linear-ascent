@@ -1060,6 +1060,11 @@ def _player_hit(p: dict, mult: float = 1.0, pierce: bool = False) -> int:
     raw = state.rng_int(p, lo, atk_full)
     path = _train_path(p)
     mastery = p.get("mastery") or {}
+    # 048+: a master's hand hits 10% harder — every study, every
+    # weapon, every swing. Three studies stack to +30%.
+    studied = sum(1 for v in mastery.values() if v)
+    if studied:
+        mult *= 1 + economy.MASTERY_ATK_BONUS * studied
     mtype = _profile(p).get("type", "plain")
     if pierce and mtype == "armoured":
         mtype = "plain"        # 006: the shot never meets the plate

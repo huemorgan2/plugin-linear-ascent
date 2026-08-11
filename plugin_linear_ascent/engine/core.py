@@ -2875,8 +2875,8 @@ def _school_scene(p: dict) -> Scene:
             lines.append(f"{g} {path.upper()} — trained rank 10 "
                          f"{_school_bar(10)} · GOLD")
             if mastery.get(path):
-                lines.append(f"   MASTERY — studied. Its edge arrives "
-                             "with the new fighting laws.")
+                lines.append("   MASTERY — studied. The hand hits "
+                             "10% harder — everything, always.")
             else:
                 lines.append(f"   MASTERY — the master offers the "
                              f"{path} study: {economy.MASTERY_XP} XP")
@@ -2992,6 +2992,8 @@ def _school_train(p: dict, path: str) -> Scene:
             body_lines=[
                 f"▪ {path} mastery — a study of "
                 f"{economy.MASTERY_XP} XP, at any School",
+                "▪ a master's hand hits 10% harder — everything, "
+                "always",
                 "▪ a master pays 80% on the other paths' first "
                 "five ranks",
                 "▪ a tenth rank is toasted in every banner hall — "
@@ -3023,8 +3025,8 @@ def _school_mastery(p: dict, path: str) -> Scene:
                    note=f"mastery {path}")
     s = _school_scene(p)
     s.body_lines.insert(
-        0, f"+ {path} MASTERY — the study is yours. Its edge "
-           "arrives with the new fighting laws.")
+        0, f"+ {path} MASTERY — the study is yours. Your hand hits "
+           "10% harder now — everything, always.")
     return s
 
 

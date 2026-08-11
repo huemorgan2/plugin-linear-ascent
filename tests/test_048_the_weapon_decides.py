@@ -559,7 +559,9 @@ def test_long_draw_crits_the_top_roll_at_gap_three(monkeypatch):
     atk_full = state.atk(p)
     want = economy.typed_damage_048(
         "bow", round(atk_full * economy.bow_gap_mult(3)
-                     * economy.LONG_DRAW_CRIT_MULT), e["def"], "plain")
+                     * economy.LONG_DRAW_CRIT_MULT
+                     * (1 + economy.MASTERY_ATK_BONUS)), e["def"],
+        "plain")
     assert hp0 - e["hp"] == want
 
 
@@ -601,6 +603,81 @@ def test_focus_rides_the_cast_in_the_fight(monkeypatch):
     hp0 = e["hp"]
     core.apply_choice(p, "attack", "")
     atk_full = state.atk(p)
-    want = economy.typed_damage_048("staff", atk_full, e["def"], "fly",
-                                    focus=True)
+    want = economy.typed_damage_048(
+        "staff", round(atk_full * (1 + economy.MASTERY_ATK_BONUS)),
+        e["def"], "fly", focus=True)
     assert hp0 - e["hp"] == want
+
+def test_mastery_hand_hits_ten_percent_harder_on_everything(monkeypatch):
+    # roy's law: a master gets +10% attack on everything — any weapon,
+    # any swing; studies stack.
+    p, fl = _mastered("048-m-tenpct", "blade", "rusted_sword")
+    e = p["encounter"]
+    e["range"], e["gap"] = "close", 0
+    monkeypatch.setattr(state, "rng_int", lambda p, lo, hi: hi)
+    monkeypatch.setattr(state, "roll_ok", lambda p, chance: False)
+    atk_full = state.atk(p)
+    e["hp"] = 10 ** 6
+    d1 = combat._player_hit(p)
+    assert d1 == economy.typed_damage_048(
+        "blade", round(atk_full * 1.1), e["def"], "plain")
+    # the study is not weapon-scoped: a staff master swinging steel
+    # still carries the edge — and three studies stack to +30%
+    p["mastery"] = {"blade": True, "bow": True, "staff": True}
+    d3 = combat._player_hit(p)
+    assert d3 == economy.typed_damage_048(
+        "blade", round(atk_full * 1.3), e["def"], "plain")
+
+
+def test_no_mastery_no_bonus(monkeypatch):
+    p, fl = _mastered("048-m-none", "blade", "rusted_sword")
+    p["mastery"] = {}
+    e = p["encounter"]
+    e["range"], e["gap"] = "close", 0
+    monkeypatch.setattr(state, "rng_int", lambda p, lo, hi: hi)
+    monkeypatch.setattr(state, "roll_ok", lambda p, chance: False)
+    e["hp"] = 10 ** 6
+    assert combat._player_hit(p) == economy.typed_damage_048(
+        "blade", state.atk(p), e["def"], "plain")
+
+
+def test_legacy_rank_scales_with_the_climb():
+    # rank 6 floor, +1 per ten floors opened, capped at 9 — the tenth
+    # rank and the studies stay earned.
+    assert [economy.legacy_rank(f) for f in (1, 9, 10, 19, 25, 35, 90)] \
+        == [6, 6, 7, 7, 8, 9, 9]
+
+
+def test_deep_veteran_migrates_above_rank6_with_the_stone_line():
+    p = _fresh("048-p2-deepvet")
+    make_character(p, clazz="archer", name="Deepbow")
+    del p["training"]
+    p["clazz"] = "archer"
+    p["version"] = 6
+    p["unlocked_floor"] = 25
+    s = core.current_scene(p)
+    assert p["training"] == {"blade": 0, "bow": 8, "staff": 0}
+    text = " ".join([s.headline or "", s.support or ""]
+                    + list(s.body_lines or []))
+    assert "Bow — trained rank 8" in text
+    assert "deep floors counted" in text
+
+
+# ── the banner hall toasts the trained hands ─────────────────────────────
+
+def test_roster_rows_wear_the_mastery_glyphs():
+    from plugin_linear_ascent.engine import hall
+    fac = {"members": [
+        {"name": "Brynn", "days": 2, "required": 4,
+         "training": {"blade": 10, "bow": 4},
+         "mastery": {"blade": True}},
+        {"name": "Tam", "days": 1, "required": 4,
+         "training": {"bow": 10, "staff": 10},
+         "mastery": {"staff": True}},
+        {"name": "Wren", "days": 0, "required": 4},
+    ]}
+    lines: list = []
+    hall._roster_lines({}, fac, lines)
+    assert lines[0].startswith("Brynn · ⚔ MASTER — ")
+    assert lines[1].startswith("Tam · ➶ GOLD ✦ MASTER — ")
+    assert lines[2].startswith("Wren — ")            # no rank 10, no mark

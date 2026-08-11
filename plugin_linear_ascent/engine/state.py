@@ -390,17 +390,26 @@ def ensure_current(p: dict) -> None:
         p["version"] = 6
     if p.get("version", 1) < 7:
         # 048: the School era — training lives on every doc. A legacy
-        # doc is honored at rank 6 on its class's path: ≈ the old
-        # on-class feel, with four visible steps of headroom above it.
+        # doc is honored on its class's path at a rank that scales with
+        # the climb: 6 (≈ the old on-class feel) as the floor of it,
+        # +1 per ten floors opened, capped at 9 — the tenth rank and
+        # the master's studies stay earned.
         if "training" not in p:
             p["training"] = {"blade": 0, "bow": 0, "staff": 0}
             path = economy.PATH_OF_LINE.get(p.get("clazz") or "")
             if path:
-                p["training"][path] = 6
+                rank = economy.legacy_rank(p.get("unlocked_floor", 1))
+                p["training"][path] = rank
                 if p.get("stage") == "playing":
                     from .scene import Option, Scene
                     pretty = {"blade": "Blade", "bow": "Bow",
                               "staff": "Staff"}[path]
+                    body = [f"▪ {pretty} — trained rank {rank}"]
+                    if rank > 6:
+                        body.append("▪ the deep floors counted — the "
+                                    "School reads the Stone")
+                    body.append("▪ the School trains all three paths, "
+                                "for XP and coin")
                     p.setdefault("pending_events", []).insert(0, Scene(
                         eyebrow="ROOTHOLLOW · A LETTER FROM THE SCHOOL",
                         headline="The guilds dissolved their halls into "
@@ -410,11 +419,7 @@ def ensure_current(p: dict) -> None:
                                 "honored.",
                         shard_note="A trained hand is a trained hand, "
                                    "whatever the guild called it.",
-                        body_lines=[
-                            f"▪ {pretty} — trained rank 6",
-                            "▪ the School trains all three paths, "
-                            "for XP and coin",
-                        ],
+                        body_lines=body,
                         options=[Option("town", "So be it")],
                         event_kind="present",
                     ).to_dict())
