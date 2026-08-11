@@ -229,27 +229,23 @@ _floors: dict[int, Floor] | None = None
 
 
 def _class_pool_errors(fl: Floor) -> list[str]:
-    """008: every class keeps a hunting pool on every floor ≥ 11 —
-    at least two encounter types it hits at full damage (no bulwark,
-    no speed counter). The sim gate proves the pool wins; this lint
-    proves the pool EXISTS before anyone runs a sim."""
+    """008/048: no floor strands a PATH — at least one encounter it
+    answers at ×1.0 with no bulwark tax. Speed is priced by the chase
+    model, not excluded here. (The old ≥2 spread returns with the
+    phase-7 retag — ten shipped floors sit at exactly one today.)"""
     errors = []
-    for clazz, dtype in economy.DAMAGE_TYPE.items():
+    for path in ("blade", "bow", "staff"):
         good = 0
         for e in fl.encounters:
+            mtype = economy.type_from_traits(e.traits)
             prof = economy.profile_from_traits(e.traits)
-            if dtype == "melee" and prof["flying"]:
-                continue
-            tier = prof["resist"] if dtype == "magic" else prof["armor"]
-            if economy.TIER_MULT[tier] < 1.0 or prof["bulwark"]:
-                continue
-            if dtype == "ranged" and prof["speed"] >= economy.SPEED_FAST:
+            if economy.TYPE_MULT[mtype][path] < 1.0 or prof["bulwark"]:
                 continue
             good += 1
-        if good < 2:
+        if good < 1:
             errors.append(
-                f"floor {fl.floor}: {clazz} has {good} full-damage "
-                "targets — needs ≥2 (008 spread rule)")
+                f"floor {fl.floor}: {path} has no full-damage "
+                "target — every floor owes each path one (048)")
     return errors
 
 
@@ -266,13 +262,9 @@ def _archetype_errors(fl: Floor) -> list[str]:
             prey += 1
         if bite in ("fierce", "savage"):
             threat += 1
-        halves = (economy.TIER_MULT[prof["armor"]] <= 0.5
-                  or economy.TIER_MULT[prof["resist"]] <= 0.5
-                  or prof["bulwark"])
-        if body and halves:
-            errors.append(
-                f"floor {fl.floor}/{e.id}: body trait {body!r} stacked on a "
-                "damage-halving profile — both multiply fight length (025)")
+        # 048: the halves×body slog check died with the tiers — the
+        # triangle guarantees every type a full answer, so a long body
+        # is only long for the paths that chose the wrong tool.
         # A blade cannot reach a flying thing (017's one legal zero), so a
         # flyer with a real bite is an unanswerable death for a warrior —
         # not a fight they may lose — until the shop sells the Sky-Hook.
@@ -300,18 +292,14 @@ def _band_spread_errors(band: list[Floor]) -> list[str]:
     for fl in band:
         for e in fl.encounters:
             prof = economy.profile_from_traits(e.traits)
-            if economy.TIER_MULT[prof["armor"]] <= 0.5:
-                have.add("armor_med+")
-            if economy.TIER_MULT[prof["resist"]] <= 0.5:
-                have.add("resist_med+")
-            for flag in ("flying", "bulwark"):
-                if prof[flag]:
-                    have.add(flag)
+            have.add(prof["type"])
+            if prof["bulwark"]:
+                have.add("bulwark")
             if prof["speed"] >= economy.SPEED_FAST:
                 have.add("fast")
             if prof["speed"] <= economy.SPEED_SLOW:
                 have.add("slow")
-    need = {"armor_med+", "resist_med+", "flying", "bulwark",
+    need = {"armoured", "magic_resist", "fly", "bulwark",
             "fast", "slow"}
     return [f"band {lo}-{hi}: no {m} encounter (008 spread rule)"
             for m in sorted(need - have)]

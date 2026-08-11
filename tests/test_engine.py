@@ -457,7 +457,8 @@ def test_profile_derived_and_stored_on_encounter():
     p = create_character(fresh())
     combat.start_encounter(p, fl, tortoise)
     prof = p["encounter"]["profile"]
-    assert prof["armor"] == "low" and prof["resist"] == "none"
+    assert prof["type"] == "armoured"
+    assert prof["speed"] == economy.SPEED_SLOW
     assert not prof["flying"] and not prof["bulwark"]
 
 

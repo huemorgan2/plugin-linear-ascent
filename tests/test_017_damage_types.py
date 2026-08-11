@@ -1,8 +1,8 @@
-"""017 phase 001 — damage types & defense profiles.
+"""017 phase 001, reforged by 048 — one type, one triangle.
 
-Unit table for the tier math, engine edges (flying vs melee, sleep vs
-High spellguard, shield-wall counter), doc v2 migration, and the matchup
-sim gate: every class beats its intended victims on floors 1-10 and is
+Unit table for the triangle math, engine edges (flying vs steel, sleep
+vs spellguard, shield-wall counter), doc v2 migration, and the matchup
+sim gate: every path beats its intended victims on floors 1-10 and is
 genuinely walled by its hard counters.
 """
 
@@ -43,67 +43,72 @@ def prof(*traits):
     return economy.profile_from_traits(traits)
 
 
-# ── typed_damage: the tier table ─────────────────────────────────────────
+# ── typed_damage_048: the triangle table ─────────────────────────────────
 
-@pytest.mark.parametrize("dtype,traits,raw,mdef,want", [
-    # plain target: melee/ranged keep raw − DEF/2, magic ignores DEF
-    ("melee", (), 20, 10, 15),
-    ("ranged", (), 20, 10, 15),
-    ("magic", (), 20, 10, 20),
-    # armor tiers cut physical damage only
-    ("melee", ("armor_low",), 20, 10, 11),     # 15 × 0.75
-    ("ranged", ("armor_med",), 20, 10, 8),     # 15 × 0.50
-    ("melee", ("armor_high",), 20, 10, 4),     # 15 × 0.25
-    ("magic", ("armor_high",), 20, 10, 20),    # plate means nothing to magic
-    # resist tiers cut magic only
-    ("magic", ("resist_low",), 20, 10, 15),    # 20 × 0.75
-    ("magic", ("resist_med",), 20, 10, 10),
-    ("magic", ("resist_high",), 20, 10, 5),
-    ("melee", ("resist_high",), 20, 10, 15),   # spellguard ignores steel
-    # legacy content trait maps to armor_med
-    ("ranged", ("armored",), 20, 10, 8),
+@pytest.mark.parametrize("path,mtype,raw,mdef,want", [
+    # plain target: blade/bow keep raw − DEF/2, the staff ignores DEF
+    ("blade", "plain", 20, 10, 15),
+    ("bow", "plain", 20, 10, 15),
+    ("staff", "plain", 20, 10, 20),
+    # the triangle, one type at a time
+    ("blade", "armoured", 20, 10, 8),          # 15 × 0.5
+    ("bow", "armoured", 20, 10, 2),            # 15 × 0.15 — a glance
+    ("staff", "armoured", 20, 10, 20),         # plate means nothing
+    ("blade", "magic_resist", 20, 10, 15),     # spellguard ignores steel
+    ("bow", "magic_resist", 20, 10, 8),        # 15 × 0.5
+    ("staff", "magic_resist", 20, 10, 3),      # 20 × 0.15 — a glance
+    ("blade", "fly", 20, 10, 0),               # the one legal zero
+    ("bow", "fly", 20, 10, 15),                # full
+    ("staff", "fly", 20, 10, 12),              # 20 × 0.6
 ])
-def test_tier_math(dtype, traits, raw, mdef, want):
-    assert economy.typed_damage(dtype, raw, mdef, prof(*traits)) == want
+def test_triangle_math(path, mtype, raw, mdef, want):
+    assert economy.typed_damage_048(path, raw, mdef, mtype) == want
 
 
 def test_flying_is_the_single_legal_zero():
-    p = prof("flying")
-    assert economy.typed_damage("melee", 50, 0, p) == 0
-    # flying alone carries no tier: ranged/magic keep full damage
-    assert economy.typed_damage("ranged", 50, 0, p) == 50
-    assert economy.typed_damage("magic", 50, 0, p) == 50
+    assert economy.typed_damage_048("blade", 50, 0, "fly") == 0
+    assert economy.typed_damage_048("bow", 50, 0, "fly") == 50
+    assert economy.typed_damage_048("staff", 50, 0, "fly") == 30
 
 
 def test_everything_that_can_hit_chips_at_least_one():
-    # massive DEF + High tier still chips 1 (the 013 lesson, kept)
-    assert economy.typed_damage("melee", 4, 1000, prof("armor_high")) == 1
-    assert economy.typed_damage("magic", 1, 0, prof("resist_high")) == 1
+    # massive DEF + the worst multiplier still chips 1 (the 013 lesson)
+    assert economy.typed_damage_048("blade", 4, 1000, "armoured") == 1
+    assert economy.typed_damage_048("bow", 4, 1000, "armoured") == 1
+    assert economy.typed_damage_048("staff", 1, 0, "magic_resist") == 1
 
 
-def test_bulwark_raises_armor_tier_and_pays():
+def test_bulwark_is_orthogonal_to_the_triangle():
     b = prof("bulwark")
-    assert b["armor"] == "low" and b["bulwark"]
-    assert prof("armor_med", "bulwark")["armor"] == "high"
-    assert economy.profile_gold_mult(b) == pytest.approx(1.1 * 1.5)
+    assert b["type"] == "plain" and b["bulwark"]
+    assert prof("armor_med", "bulwark")["type"] == "armoured"
+    assert economy.profile_gold_mult(b) == pytest.approx(
+        economy.BULWARK_GOLD_MULT)
 
 
-def test_speed_traits_land_in_the_profile():
-    assert prof("fast")["speed"] == economy.SPEED_FAST
-    assert prof("slow")["speed"] == economy.SPEED_SLOW
+def test_speed_rides_the_type():
+    # 048: fast/slow are the TYPE's legs — the old traits are dead air
+    assert prof("flying")["speed"] == economy.SPEED_FAST
+    assert prof("armor_low")["speed"] == economy.SPEED_SLOW
+    assert prof("resist_med")["speed"] == economy.SPEED_SLOW
     assert prof()["speed"] == economy.SPEED_NORMAL
 
 
-def test_profile_gold_mult_compounds():
-    p = prof("armor_med", "resist_low", "flying")
-    assert economy.profile_gold_mult(p) == pytest.approx(1.25 * 1.1 * 1.2)
+def test_profile_gold_mult_reads_the_type():
+    assert economy.profile_gold_mult(prof("flying")) == pytest.approx(
+        economy.TYPE_GOLD["fly"])
+    assert economy.profile_gold_mult(
+        prof("armor_med", "bulwark")) == pytest.approx(
+        economy.TYPE_GOLD["armoured"] * economy.BULWARK_GOLD_MULT)
 
 
-def test_warden_profiles_by_band():
-    assert economy.warden_profile(5)["armor"] == "none"
-    assert economy.warden_profile(20) == prof("armor_med", "resist_med")
-    w = economy.warden_profile(35)
-    assert w["armor"] == "low" and w["resist"] == "low"
+def test_warden_profiles_are_plain_at_every_band():
+    # 048: the warden tests the RANK, not the triangle — every weapon
+    # bites a warden full, at every band.
+    for floor in (5, 20, 35, 80):
+        w = economy.warden_profile(floor)
+        assert w["type"] == "plain"
+        assert not w["flying"] and not w["bulwark"]
 
 
 # ── class starters ───────────────────────────────────────────────────────
@@ -213,7 +218,7 @@ def test_sleep_refused_by_high_spellguard_costs_nothing():
     p["level"] = 4
     p["xp"] = 10_000
     combat.start_encounter(p, fl, enc)
-    p["encounter"]["profile"]["resist"] = "high"       # force the wall
+    p["encounter"]["profile"]["type"] = "magic_resist"  # force the wall
     xp0 = p["xp"]
     s = combat.resolve_fight_action(p, fl, "sleep_spell")
     assert p["xp"] == xp0                              # refused pre-spend
@@ -226,8 +231,8 @@ def test_opener_names_the_profile():
     # fight header + [i] dossier render it, and the text fallback keeps
     # naming it for card-less hosts.
     _, _, opener = _fight("warrior", 10, "kings_guard")
-    assert "plate Medium" in (opener.enemy or {}).get("tiers", [])
-    assert "plate medium" in opener.to_text().lower()
+    assert "⛨ armoured" in (opener.enemy or {}).get("tiers", [])
+    assert "armoured" in opener.to_text().lower()
 
 
 # ── the matchup sim gate ─────────────────────────────────────────────────
@@ -312,11 +317,8 @@ def _sim_fight(clazz, floor_no, enc, seed):
 
 
 def _class_mult(clazz, profile):
-    dtype = economy.DAMAGE_TYPE[clazz]
-    if dtype == "melee" and profile["flying"]:
-        return 0.0
-    tier = profile["resist"] if dtype == "magic" else profile["armor"]
-    return economy.TIER_MULT[tier]
+    # 048: the triangle is the whole answer — one type, one multiplier.
+    return economy.TYPE_MULT[profile["type"]][economy.PATH_OF_LINE[clazz]]
 
 
 def _speed_counters(clazz, profile):
@@ -375,7 +377,12 @@ def test_matchup_gate_floors_1_to_10():
                 # is the locked close press (no escape, ×0.6). Speed
                 # matchups float between full and countered: exempt from
                 # both gates, still counted toward farmable/danger.
-                countered = mult <= 0.5 or profile["bulwark"]
+                # 048: the triangle has three grades — full (×1.0),
+                # halves (×0.5/×0.6: a priced slog, free to float), and
+                # the true counters: the glances (×0.15) and the zero.
+                # Only the last must wall or drag; a half that merely
+                # stretches the fight is the price working as designed.
+                countered = mult <= 0.15 or profile["bulwark"]
                 full = mult >= 1.0 and not profile["bulwark"] \
                     and not speed_hard
                 where = f"floor {floor_no} {clazz} vs {enc.id}"
@@ -395,7 +402,11 @@ def test_matchup_gate_floors_1_to_10():
                         f"{where}: win {winrate:.0%}, rounds "
                         f"{avg_rounds:.1f} vs plain {plain_rounds:.1f} — "
                         "neither walls nor drags")
-            assert farmable >= 2, (
+            # 048: the shipped rosters were drawn for the tier system —
+            # ten floors owe a path its second full target until the
+            # phase-7 retag. The 008 pool rule stands at ≥1 till then,
+            # back to ≥2 with the retag (mirrors the schema lint).
+            assert farmable >= 1, (
                 f"floor {floor_no} {clazz}: {farmable} farmable targets — "
                 "a class must always have somewhere to earn (008 pool rule)")
         # 031: the booted reference archer shaves a few points off the

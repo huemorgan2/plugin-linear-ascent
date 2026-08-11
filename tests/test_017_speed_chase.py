@@ -361,27 +361,30 @@ def _kite_fight(clazz, floor_no, enc, seed):
     return False
 
 
-def test_archer_kites_the_slow_bulwark(monkeypatch):
+def test_archer_kites_the_slow_monster(monkeypatch):
     """§2.4's promised payoff: the slow monster can be killed from range
-    without ever trading fair — win ≥85% at level. Specimen pinned to
+    without ever trading fair — win ≥85% at level. 048: speed rides the
+    type, so the slow thing is the magic-resist husk (bow bites half —
+    the kite still wins, it just takes more arrows). Specimen pinned to
     common: 039 shifted floor-6 weights toward tough/alpha, and this
     gate is about the speed mechanic, not the specimen roll."""
     real = state.rng_pick
     monkeypatch.setattr(state, "rng_pick", lambda p, table: (
         "common" if any(k in economy.SPECIMENS for _, k in table)
         else real(p, table)))
-    fl, enc = _enc(6, "lane_boar")                        # bulwark, slow
+    fl, enc = _enc(6, "wrapped_husk")                # magic_resist, slow
     wins = sum(_kite_fight("archer", 6, enc, s) for s in range(60))
     assert wins / 60 >= 0.85, f"kite win rate {wins / 60:.0%}"
 
 
 def test_fast_monster_forces_close_by_round_two():
     """p_close(fast) = 0.55 → ~80% of fights are close by round 2."""
-    fl, enc = _enc(5, "downs_courser")
+    # 048: speed rides the type — the fast thing is the flyer.
+    fl, enc = _enc(4, "glare_moth")
     n = 400
     forced = 0
     for seed in range(n):
-        p = _player("archer", 5, f"forced-{seed}")
+        p = _player("archer", 4, f"forced-{seed}")
         combat.start_encounter(p, fl, enc)
         p["encounter"]["hp"] = 10_000
         p["hp"] = 10_000

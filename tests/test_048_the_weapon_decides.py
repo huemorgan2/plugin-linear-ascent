@@ -493,8 +493,112 @@ def test_bag_tooltip_warns_on_an_untrained_path():
     assert acts and "miss" not in acts[0].hint
 
 
-@pytest.mark.skip(reason="mastery EFFECTS (riposte/long draw/focus) land "
-                         "with the triangle flip in phase 5 — phase 3 "
-                         "only sells and records the study")
-def test_mastery_study_effects():
-    raise AssertionError("phase 5")
+# ── N4: the mastery studies DO something (phase 5) ─────────────────────
+
+def _mastered(uid, path, slug):
+    p = _fresh(uid)
+    make_character(p)
+    p["training"] = {"blade": 0, "bow": 0, "staff": 0}
+    p["training"][path] = 10
+    p["mastery"] = {path: True}
+    p["gear"]["weapon"] = slug
+    p["held"] = [slug]
+    from plugin_linear_ascent.content import schema
+    fl = schema.get_floor(1)
+    from types import SimpleNamespace
+    enc = SimpleNamespace(id="m_test", name="Test Beast",
+                          prose="It waits.", weight=1, traits=(),
+                          kind="", was="")
+    combat.start_encounter(p, fl, enc, "wilds")
+    return p, fl
+
+
+def test_riposte_returns_a_quarter_of_the_mean_swing(monkeypatch):
+    p, fl = _mastered("048-m-riposte", "blade", "rusted_sword")
+    e = p["encounter"]
+    e["range"], e["gap"] = "close", 0
+    e["atk"] = 8
+    p["level"] = 20                     # a guard that BLOCKS the blow
+    monkeypatch.setattr(state, "rng_int", lambda p, lo, hi: lo)
+    monkeypatch.setattr(state, "roll_ok", lambda p, chance: False)
+    hp0 = e["hp"]
+    hit = combat._monster_hit(p)
+    assert hit["blocked"] >= hit["dmg"], hit
+    atk_full = state.atk(p)
+    lo = round(economy.TRAIN_ROLL_FLOOR(10) * atk_full)
+    expected = max(1, round(economy.RIPOSTE_RETURN * (lo + atk_full) / 2))
+    assert hit.get("riposte") == expected
+    assert e["hp"] == hp0 - expected
+
+
+def test_riposte_needs_the_study(monkeypatch):
+    p, fl = _mastered("048-m-riposte0", "blade", "rusted_sword")
+    p["mastery"] = {}
+    e = p["encounter"]
+    e["range"], e["gap"] = "close", 0
+    e["atk"] = 8
+    p["level"] = 20
+    monkeypatch.setattr(state, "rng_int", lambda p, lo, hi: lo)
+    monkeypatch.setattr(state, "roll_ok", lambda p, chance: False)
+    hp0 = e["hp"]
+    hit = combat._monster_hit(p)
+    assert not hit.get("riposte")
+    assert e["hp"] == hp0
+
+
+def test_long_draw_crits_the_top_roll_at_gap_three(monkeypatch):
+    p, fl = _mastered("048-m-draw", "bow", "basic_bow")
+    e = p["encounter"]
+    e["range"], e["gap"] = "at_range", 3
+    monkeypatch.setattr(state, "rng_int", lambda p, lo, hi: hi)
+    monkeypatch.setattr(state, "roll_ok", lambda p, chance: False)
+    hp0 = e["hp"]
+    core.apply_choice(p, "attack", "")
+    atk_full = state.atk(p)
+    want = economy.typed_damage_048(
+        "bow", round(atk_full * economy.bow_gap_mult(3)
+                     * economy.LONG_DRAW_CRIT_MULT), e["def"], "plain")
+    assert hp0 - e["hp"] == want
+
+
+def test_long_draw_needs_the_study_and_the_top_roll(monkeypatch):
+    p, fl = _mastered("048-m-draw0", "bow", "basic_bow")
+    p["mastery"] = {}
+    e = p["encounter"]
+    e["range"], e["gap"] = "at_range", 3
+    monkeypatch.setattr(state, "rng_int", lambda p, lo, hi: hi)
+    monkeypatch.setattr(state, "roll_ok", lambda p, chance: False)
+    hp0 = e["hp"]
+    core.apply_choice(p, "attack", "")
+    atk_full = state.atk(p)
+    want = economy.typed_damage_048(
+        "bow", round(atk_full * economy.bow_gap_mult(3)), e["def"],
+        "plain")
+    assert hp0 - e["hp"] == want
+
+
+def test_focus_lifts_the_staff_answers():
+    # fly: staff ×0.6 → ×0.75 under focus; the glance (×0.15) stays a
+    # mistake; full answers don't move.
+    assert economy.typed_damage_048("staff", 100, 0, "fly") == 60
+    assert economy.typed_damage_048("staff", 100, 0, "fly",
+                                    focus=True) == 75
+    assert economy.typed_damage_048("staff", 100, 0, "magic_resist",
+                                    focus=True) == 15
+    assert economy.typed_damage_048("staff", 100, 0, "plain",
+                                    focus=True) == 100
+
+
+def test_focus_rides_the_cast_in_the_fight(monkeypatch):
+    p, fl = _mastered("048-m-focus", "staff", "worn_staff")
+    e = p["encounter"]
+    e["range"], e["gap"] = "at_range", 1
+    e["profile"] = economy.profile_from_traits(("flying",))
+    monkeypatch.setattr(state, "rng_int", lambda p, lo, hi: hi)
+    monkeypatch.setattr(state, "roll_ok", lambda p, chance: False)
+    hp0 = e["hp"]
+    core.apply_choice(p, "attack", "")
+    atk_full = state.atk(p)
+    want = economy.typed_damage_048("staff", atk_full, e["def"], "fly",
+                                    focus=True)
+    assert hp0 - e["hp"] == want

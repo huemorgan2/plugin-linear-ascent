@@ -101,9 +101,13 @@ def test_lore_lint_rejects_overrun_and_banned_words():
 
 # ── the dossier fragment ─────────────────────────────────────────────────
 
-def _payload(armor="none", resist="none", flying=False, bulwark=False,
+def _payload(mtype="plain", flying=None, bulwark=False,
              speed=5, rng="at_range", dtype="melee", pspd=5):
-    prof = {"armor": armor, "resist": resist, "flying": flying,
+    # 048: one type carries the whole triangle; flying rides the type
+    # unless a test grounds it explicitly (the sky-hook case).
+    if flying is None:
+        flying = mtype == "fly"
+    prof = {"type": mtype, "flying": flying,
             "bulwark": bulwark, "speed": speed}
     return {"name": "Test beast", "hp": 40, "hp_max": 80,
             "atk": 10, "def": 10, "profile": prof,
@@ -114,16 +118,15 @@ def _payload(armor="none", resist="none", flying=False, bulwark=False,
 
 
 def test_dossier_renders_every_profile_combination():
-    for armor, resist, flying, bulwark, speed in itertools.product(
-            ("none", "low", "med", "high"), ("none", "low", "med", "high"),
-            (False, True), (False, True), (3, 5, 7)):
+    for mtype, bulwark, speed in itertools.product(
+            ("plain", "armoured", "magic_resist", "fly"),
+            (False, True), (3, 5, 7)):
         html = render._dossier_html(_payload(
-            armor=armor, resist=resist, flying=flying, bulwark=bulwark,
-            speed=speed))
+            mtype=mtype, bulwark=bulwark, speed=speed))
         assert "<details" in html and "dossier" in html
-        assert ("plate" in html) == (armor != "none")
-        assert ("spellguard" in html) == (resist != "none")
-        assert ("airborne" in html) == flying
+        assert ("armoured" in html) == (mtype == "armoured")
+        assert ("magic-resistant" in html) == (mtype == "magic_resist")
+        assert ("it flies" in html) == (mtype == "fly")
         assert ("bulwark" in html) == bulwark
         assert "speed" in html            # always a speed row
 
@@ -136,7 +139,7 @@ def test_dossier_names_the_active_modifiers():
     # 031 §7: at range it isn't halved — it can't answer at all
     assert "CANNOT reach you" in at_range
     assert "swing until you close" in at_range
-    flyer = render._dossier_html(_payload(flying=True, dtype="melee",
+    flyer = render._dossier_html(_payload(mtype="fly", dtype="melee",
                                           rng="close"))
     assert "cannot touch it" in flyer
     dodge = render._dossier_html(_payload(speed=3, pspd=5, rng="close"))
@@ -205,12 +208,14 @@ def test_icon_grids_are_16_wide():
             assert len(row) == 16, (key, i)
 
 
-def test_headline_keeps_atk_def_but_never_hp():
+def test_headline_carries_every_number_including_hp():
+    # 048 total visibility reversed the 030 law: the headline now
+    # shows the whole sheet — HP, ATK, DEF, SPD — in plain text too.
     p, fl, s = _fight("warrior", 1, "grey_wolf")
-    assert "ATK" in s.headline and "DEF" in s.headline
-    assert "HP" not in s.headline
-    # ... even after the first exchange
+    for bit in ("HP", "ATK", "DEF", "SPD"):
+        assert bit in s.headline, (bit, s.headline)
+    # ... and it tracks the wound after the first exchange
     p["encounter"]["range"] = "close"
     s2 = combat.resolve_fight_action(p, fl, "attack")
     if s2.enemy:                          # fight still on
-        assert "HP" not in s2.headline
+        assert f"HP {max(0, p['encounter']['hp'])}" in s2.headline

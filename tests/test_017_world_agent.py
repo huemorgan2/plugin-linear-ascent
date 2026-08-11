@@ -90,14 +90,14 @@ def test_matchup_ignores_soft_counters_and_wrong_class():
 
 def test_hard_counter_map_by_damage_type():
     p = create_character(fresh("ma-4"))
-    assert combat._hard_counter(p, {"flying": True})
-    assert not combat._hard_counter(p, {"armor": "high"})
+    assert combat._hard_counter(p, {"type": "fly"})
+    assert not combat._hard_counter(p, {"type": "armoured"})
     a = create_character(fresh("ma-5"), clazz="archer")
-    assert combat._hard_counter(a, {"armor": "med"})
-    assert not combat._hard_counter(a, {"flying": True})
+    assert combat._hard_counter(a, {"type": "armoured"})
+    assert not combat._hard_counter(a, {"type": "fly"})
     m = create_character(fresh("ma-6"), clazz="sorcerer")
-    assert combat._hard_counter(m, {"resist": "high"})
-    assert not combat._hard_counter(m, {"armor": "high"})
+    assert combat._hard_counter(m, {"type": "magic_resist"})
+    assert not combat._hard_counter(m, {"type": "armoured"})
 
 
 # ── town readability (§4) ────────────────────────────────────────────────

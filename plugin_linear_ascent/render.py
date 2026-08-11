@@ -858,16 +858,20 @@ def _dossier_html(en: dict) -> str:
     story = en.get("story") or en.get("lore")
     if story:
         rows.append(f'<div class="dlore">{_e(story)}</div>')
-    if prof.get("armor", "none") != "none":
-        row("t_armor", f"plate — {economy.TIER_LABEL[prof['armor']]}.",
-            "Turns part of every blow of steel or shot. Spellwork "
-            "ignores it.", TEXT)
-    if prof.get("resist", "none") != "none":
-        row("t_resist", f"spellguard — {economy.TIER_LABEL[prof['resist']]}.",
-            "Eats part of every cast. Steel and shot ignore it.", TEXT)
-    if prof.get("flying"):
-        row("t_wing", "airborne.",
-            "Steel cannot reach it. Arrows and spellwork fly.", VIOLET_SOFT)
+    # 048: the sign IS the row — one type, its whole triangle spelled out.
+    mtype = prof.get("type", "plain")
+    if mtype == "armoured":
+        row("t_armor", "⛨ armoured.",
+            "Plate turns the fight — steel: half, arrows: glance, "
+            "magic: full.", TEXT)
+    elif mtype == "magic_resist":
+        row("t_resist", "✧ magic-resistant.",
+            "Spellguard eats the casts — steel: full, arrows: half, "
+            "magic: glance.", TEXT)
+    elif mtype == "fly":
+        row("t_wing", "⚡ it flies.",
+            "Steel cannot reach it — arrows: full, magic: half.",
+            VIOLET_SOFT)
     if prof.get("bulwark"):
         row("t_bulwark", "bulwark.",
             "Half again the flesh — this will take time.", TEXT)

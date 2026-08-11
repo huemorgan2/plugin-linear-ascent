@@ -65,11 +65,11 @@ def _fight_cost(floor_no, enc):
     """Share of the at-level HP pool a whole fight costs, worst class."""
     atk, dfs, hp = _stats(floor_no, enc)
     p_atk, p_def = economy._at_level_loadout(floor_no)
-    prof = economy.profile_from_traits(enc.traits)
+    mtype = economy.type_from_traits(enc.traits)
     rounds = max(
-        max(1, -(-hp // dmg)) if (dmg := economy.typed_damage(
-            dt, round(0.75 * p_atk), dfs, prof)) > 0 else 1
-        for dt in ("melee", "ranged", "magic"))
+        max(1, -(-hp // dmg)) if (dmg := economy.typed_damage_048(
+            pth, round(0.75 * p_atk), dfs, mtype)) > 0 else 1
+        for pth in ("blade", "bow", "staff"))
     raw = 0.75 * atk
     bite = max(max(1, -(-raw // economy.CHIP_DIVISOR)), raw - p_def // 2)
     return rounds * bite / economy.reference_player_hp(floor_no)
@@ -283,9 +283,9 @@ def _floor_with(traits):
                                      traits=("savage",))])
 
 
-def test_a_long_body_may_not_ride_a_damage_halving_profile():
-    errs = schema._archetype_errors(_floor_with(("hulking", "armor_med")))
-    assert any("multiply fight length" in e for e in errs), errs
+# 048: the halves-x-body lint died with the tiers — the triangle
+# guarantees every type a full answer, so a long body is only long for
+# the paths that chose the wrong tool.
 
 
 def test_a_flyer_may_not_carry_a_bite_this_low():

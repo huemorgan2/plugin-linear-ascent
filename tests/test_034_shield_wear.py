@@ -125,11 +125,14 @@ def test_taking_a_blow_spends_more_than_one_use():
     assert before - p["durability"]["shield"] >= 2
 
 
-def test_shield_wall_pays_for_the_whole_blow():
+def test_shield_wall_pays_for_the_whole_blow(monkeypatch):
     """Nothing gets through because the shield stopped all of it — the
-    one round that used to be free for the piece doing the work."""
+    one round that used to be free for the piece doing the work. The
+    turned blow is pinned to the top roll: the law is about the wear
+    rate, not today's seeded dice."""
     p, fl = _armed("waller", shield="scrapwood_buckler",
                    armor="padded_jerkin")
+    monkeypatch.setattr(state, "rng_int", lambda p, lo, hi: hi)
     p["encounter"]["range"] = "close"
     before = p["durability"]["shield"]
     hp_before = p["hp"]

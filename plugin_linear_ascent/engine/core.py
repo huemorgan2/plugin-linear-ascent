@@ -2694,9 +2694,28 @@ def _gate_pick(p: dict, oid: str) -> Scene:
     return _floor_arrival_scene(p, n)
 
 
+def _roster_lines(fl) -> list[str]:
+    """048 T2: the hunt roster with EVERY number and its sign — the
+    player reads the floor before stepping past the wire."""
+    out = ["Out past the wire:"]
+    for enc in fl.encounters:
+        traits = tuple(getattr(enc, "traits", ()) or ())
+        atk, dfs, hp = economy.creature_stats(fl.floor, traits)
+        prof = economy.profile_from_traits(traits)
+        if prof.get("bulwark"):
+            hp = round(hp * economy.BULWARK_HP_MULT)
+        sign = economy.TYPE_SIGN.get(prof.get("type", "plain"), "")
+        spd = prof.get("speed", economy.SPEED_NORMAL)
+        out.append(f"{enc.name}{' ' + sign if sign else ''} — "
+                   f"HP {hp} · ATK {atk} · DEF {dfs} · "
+                   f"SPD {spd}{economy.speed_word(spd)}")
+    return out
+
+
 def _floor_arrival_scene(p: dict, n: int) -> Scene:
     fl = schema.get_floor(n)
     lines = [fl.arrival]
+    lines += _roster_lines(fl)
     lines += _presence_floor_lines(p, n)
     # 020: the floor BELOW a milestone warns at the gate, before the
     # ⚡ is spent — this floor's own Warden is one thing, the next is a
@@ -3043,7 +3062,7 @@ def _school_carry(p: dict, oid: str) -> Scene:
 
 def _gate_town_scene(p: dict) -> Scene:
     fl = schema.get_floor(max(1, p["floor"]))
-    body = _presence_floor_lines(p, fl.floor)
+    body = _roster_lines(fl) + _presence_floor_lines(p, fl.floor)
     fw = _live_flare(p)
     if fw:
         body.insert(0, f"▪ a RED FLARE hangs over the wilds — "

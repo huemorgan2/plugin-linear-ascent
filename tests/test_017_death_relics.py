@@ -227,7 +227,8 @@ def test_wardens_shrug_the_venom_off():
 
 
 def test_slowing_arrow_rewrites_the_chase_math():
-    p, fl = _fight("archer", floor_no=5, enc_id="downs_courser",
+    # 048: speed rides the type — the kiting nightmare is the flyer.
+    p, fl = _fight("archer", floor_no=4, enc_id="glare_moth",
                    rng="at_range", slowing_arrows=5)
     prof = combat._profile(p)
     assert prof["speed"] == economy.SPEED_FAST     # the kiting nightmare
@@ -337,18 +338,18 @@ def test_sky_hook_grounds_the_flyer_for_the_fight():
 def test_strip_potion_dissolves_the_spellguard():
     p, fl = _fight("sorcerer", floor_no=3, enc_id="windfall_haunt",
                    strip_potion=1)
-    assert combat._profile(p)["resist"] != "none"
+    assert combat._profile(p)["type"] == "magic_resist"
     act(p, fl, "use_strip")
-    assert combat._profile(p)["resist"] == "none"
+    assert combat._profile(p)["type"] == "plain"
     assert "strip_potion" not in p["inventory"]
 
 
 def test_curse_scroll_halves_the_plate():
     p, fl = _fight("sorcerer", floor_no=10, enc_id="kings_guard",
                    curse_scroll=1)
-    assert combat._profile(p)["armor"] == "med"
+    assert combat._profile(p)["type"] == "armoured"
     act(p, fl, "use_curse")
-    assert combat._profile(p)["armor"] == "low"
+    assert combat._profile(p)["type"] == "plain"
 
 
 def test_polymorph_ends_the_fight_with_nothing():

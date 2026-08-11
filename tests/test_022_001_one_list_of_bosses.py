@@ -69,7 +69,7 @@ def _solo_sim(floor):
     w_atk, w_def, _ = economy.warden_stats(floor)
     p_dmg = max(1, round(0.75 * p_atk) - w_def // 2)
     if floor >= economy.WARDEN_PROFILE_FLOOR:
-        p_dmg = max(1, round(p_dmg * economy.TIER_MULT["low"]))
+        p_dmg = max(1, round(p_dmg * economy.WARDEN_REF_CUT))
     w_dmg = max(1, round(0.75 * w_atk) - p_def // 2)
     rounds = max(1, (economy.reference_player_hp(floor) - 1) // w_dmg)
     per_fight = rounds * p_dmg
