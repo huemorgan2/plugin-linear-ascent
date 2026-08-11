@@ -29,6 +29,15 @@ def create_character(p, race="human", clazz="warrior", name="Reaper"):
     core.apply_choice(p, race)
     core.apply_choice(p, clazz)
     core.apply_choice(p, "", text=name)
+    # 048: the class question is gone — restore the old class FEEL by
+    # hand: the path at rank 6 plus that line's basic weapon in hand.
+    _path = {"warrior": "blade", "archer": "bow",
+             "sorcerer": "staff"}[clazz]
+    _slug = {"warrior": "rusted_sword", "archer": "basic_bow",
+             "sorcerer": "worn_staff"}[clazz]
+    p["training"][_path] = 6
+    p["gear"]["weapon"] = _slug
+    p["held"] = [_slug]
     return p
 
 
@@ -79,22 +88,23 @@ def test_prices_anchor_to_the_frontier_and_stay_pretty():
             assert set(digits[2:]) <= {"0"} or n < 100, (r.slug, n)
 
 
-def test_stock_filters_by_shop_floor_and_class():
+def test_stock_filters_by_shop_floor_and_held_lines():
     # 025 §4: the tactical shelf now starts in band 1 — floor 2 sells oil
-    # and nothing else, and each counter arrives just after its trait
-    slugs = {r.slug for r in economy.relic_stock("forge", 2, "warrior")}
+    # and nothing else, and each counter arrives just after its trait.
+    # 048: the filter reads the LINES OF THE WEAPONS HELD, not a class.
+    slugs = {r.slug for r in economy.relic_stock("forge", 2, {"warrior"})}
     assert slugs == {"weapon_oil"}
-    slugs = {r.slug for r in economy.relic_stock("forge", 6, "warrior")}
+    slugs = {r.slug for r in economy.relic_stock("forge", 6, {"warrior"})}
     assert "poison_arrows" in slugs and "weapon_oil" in slugs
     assert "fire_arrows" not in slugs             # floor 8
-    # floor 11 forge, warrior: nets yes, archer-only piercing no
-    slugs = {r.slug for r in economy.relic_stock("forge", 11, "warrior")}
+    # floor 11 forge, blade in hand: nets yes, bow-only piercing no
+    slugs = {r.slug for r in economy.relic_stock("forge", 11, {"warrior"})}
     assert "entangling_net" in slugs and "piercing_arrows" not in slugs
-    # the arcanum keeps sorcerer's work from other hands
-    assert not any(r.clazz == "sorcerer"
-                   for r in economy.relic_stock("arcanum", 31, "warrior"))
+    # the arcanum keeps staff work from bladeless hands
+    assert not any(r.line == "sorcerer"
+                   for r in economy.relic_stock("arcanum", 31, {"warrior"}))
     assert any(r.slug == "strip_potion"
-               for r in economy.relic_stock("arcanum", 6, "sorcerer"))
+               for r in economy.relic_stock("arcanum", 6, {"sorcerer"}))
 
 
 # ── shop wiring ──────────────────────────────────────────────────────────
@@ -139,19 +149,20 @@ def test_hold1_refuses_a_second_stone():
     assert "One, exactly" in s.shard_note
 
 
-def test_class_lock_refuses_cross_class_work():
+def test_line_lock_refuses_work_for_weapons_not_held():
+    # 048: the lock follows the hand — no staff held, no staff work
     p = _shopper(clazz="warrior", floor=21)
     p["level"] = 21
     p["location"] = "arcanum"
     s = core.current_scene(p)
-    # the shelf never even shows sorcerer's work to a warrior…
+    # the shelf never even shows staff work to a bladeless hand…
     assert not any(o.id == "buy_strip_potion" for o in s.options)
     s = choose(p, "buy_strip_potion")
     assert "strip_potion" not in p["inventory"]
     # …and the deeper guard answers a forced buy in its own words
     s = core._relic_buy(p, "strip_potion", core._arcanum_scene)
     assert "strip_potion" not in p["inventory"]
-    assert "not yours" in s.shard_note
+    assert "answers only to a staff" in s.shard_note
 
 
 # ── the broker's mood (§3.8) ─────────────────────────────────────────────

@@ -1579,7 +1579,9 @@ def warden_action(p: dict, fl, oid: str) -> Scene:
     note = ""
     if fl.floor in seen:
         e["shot_used"] = True
-        if p.get("clazz") == "archer":
+        if any(economy.FORGE[s].line == "archer"
+               for s in (p.get("held") or [])
+               if s in economy.FORGE):
             # 027 law: a missing button is said out loud.
             note = ("It watches the treeline now — your shot from "
                     "cover is spent until this Warden falls.")

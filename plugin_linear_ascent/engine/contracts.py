@@ -56,9 +56,9 @@ def board(day: int, frontier: int) -> list[dict]:
         "kind": "class", "dtype": dtype, "need": n2, "floor": fb,
         "title": f"{n2} kills by {word[dtype]}, any floor",
         "gold": max(1, round(economy.gold_per_kill(fb) * n2
-                             * economy.CONTRACT_CLASS_GOLD_MULT)),
+                             * economy.CONTRACT_PATH_GOLD_MULT)),
         "xp": max(1, round(economy.xp_per_kill(fb) * n2
-                           * economy.CONTRACT_CLASS_XP_MULT)),
+                           * economy.CONTRACT_PATH_XP_MULT)),
     })
 
     # C — answer the horn: one Warden engagement. 034 §3 retired the echo
@@ -160,9 +160,9 @@ def pay_for(p: dict, job: dict) -> tuple[int, int]:
         return (job["gold"], job["xp"])
     if job["kind"] == "class":
         return (max(1, round(economy.gold_per_kill(reach) * job["need"]
-                             * economy.CONTRACT_CLASS_GOLD_MULT)),
+                             * economy.CONTRACT_PATH_GOLD_MULT)),
                 max(1, round(economy.xp_per_kill(reach) * job["need"]
-                             * economy.CONTRACT_CLASS_XP_MULT)))
+                             * economy.CONTRACT_PATH_XP_MULT)))
     if job["kind"] == "warden":
         return (max(1, round(economy.warden_gold(reach)
                              * economy.CONTRACT_WARDEN_MULT)),

@@ -24,8 +24,16 @@ def create_character(p, race="human", clazz="warrior", name="Testa"):
     while p["stage"] == "intro":
         choose(p, "1")
     choose(p, race)
-    choose(p, clazz)
     choose(p, text=name)
+    # 048: the class question is gone — restore the old class FEEL by
+    # hand: the path at rank 6 plus that line's basic weapon in hand.
+    _path = {"warrior": "blade", "archer": "bow",
+             "sorcerer": "staff"}[clazz]
+    _slug = {"warrior": "rusted_sword", "archer": "basic_bow",
+             "sorcerer": "worn_staff"}[clazz]
+    p["training"][_path] = 6
+    p["gear"]["weapon"] = _slug
+    p["held"] = [_slug]
     return p
 
 
@@ -171,7 +179,7 @@ def test_class_job_pay_is_capped_at_the_hands_reach():
     low = {"unlocked_floor": 1}
     gold, xp = contracts.pay_for(low, job)
     cap_gold = max(1, round(economy.gold_per_kill(3) * job["need"]
-                            * economy.CONTRACT_CLASS_GOLD_MULT))
+                            * economy.CONTRACT_PATH_GOLD_MULT))
     assert gold == cap_gold and gold < job["gold"]
     assert xp < job["xp"]
     # a hand whose reach covers the job's floor collects the posted price

@@ -26,8 +26,16 @@ def create_character(p, race="human", clazz="warrior", name="Testa"):
     while p["stage"] == "intro":
         choose(p, "1")
     choose(p, race)
-    choose(p, clazz)
     choose(p, text=name)
+    # 048: the class question is gone — restore the old class FEEL by
+    # hand: the path at rank 6 plus that line's basic weapon in hand.
+    _path = {"warrior": "blade", "archer": "bow",
+             "sorcerer": "staff"}[clazz]
+    _slug = {"warrior": "rusted_sword", "archer": "basic_bow",
+             "sorcerer": "worn_staff"}[clazz]
+    p["training"][_path] = 6
+    p["gear"]["weapon"] = _slug
+    p["held"] = [_slug]
     return p
 
 
@@ -121,7 +129,9 @@ def test_starters_never_appear_in_the_forge_stock():
 def _v1_playing_doc(clazz):
     p = create_character(fresh(f"v1-{clazz}"), clazz=clazz)
     p["version"] = 1
+    p["clazz"] = clazz                    # pre-048 docs carried a class
     p["gear"]["weapon"] = economy.STARTER_WEAPON.slug   # pre-017 shiv
+    p["held"] = [economy.STARTER_WEAPON.slug]
     p.pop("pending_events", None)
     return p
 

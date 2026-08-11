@@ -36,11 +36,10 @@ _TIPS: dict[str, str] = {
               "what makes higher floors survivable, and higher floors pay "
               "more gold and XP per hunt. Each tier answers to a level: "
               "train at the Guildhall to wear the next one."),
-    "arcanum": ("The mage shop — staves and focuses only a caster can "
-                "own, behind a door that reads the hand on it (level 6). "
-                "Warriors and archers can buy a stopgap staff off the "
-                "rack at triple price; the good glass answers only to "
-                "sorcerers."),
+    "arcanum": ("The staff shop — the full staff line and the glass "
+                "focuses, list price to any hand. A staff casts magic "
+                "damage past flat DEF; the School trains the rank that "
+                "makes it hit true."),
     "medlab": ("The shelf that keeps a hunting run going: Medgel +25 HP, "
                "Trauma kit +80 HP, Trollblood tonic full heal usable "
                "MID-fight, Energy cell +5 energy (one a day), Luck charm "
@@ -224,7 +223,7 @@ _TIPS: dict[str, str] = {
                       "it closes the gap."),
     # 040: the archer's gap ladder wears the same "Open distance" label
     # on the card — one verb for making ground; this tip is the [i].
-    "create_distance": ("Give ground on purpose — archer craft. It "
+    "create_distance": ("Give ground on purpose — rank-6 bowwork. It "
                         "ALWAYS works: you step back one length and "
                         "your bow hits harder from there (×1.25 at 2 "
                         "lengths, ×1.5 at 3 — the cap). The price is "
@@ -302,7 +301,7 @@ _TIPS: dict[str, str] = {
                 "straight in your carried coin."),
 }
 
-# race / class picks read their economy line plus the climb angle.
+# race picks read their economy line plus the climb angle.
 _RACE_ANGLE = {
     "human": ("+1 energy cap. Energy is the game's clock — one more point "
               "is one more hunt, strike or ambush every single day."),
@@ -311,21 +310,8 @@ _RACE_ANGLE = {
     "dwarf": ("+5% armor value. Hits land softer, the healer is paid "
               "less, and hunting runs stretch longer per coin."),
 }
-_CLASS_ANGLE = {
-    "warrior": ("Unlocks Shield Wall in fights: take a whole round on "
-                "the shield, no damage either way. The durable pick — "
-                "fewer healer bills on the way up."),
-    "sorcerer": ("Unlocks Sleep Spell: skip any fight for its XP price, "
-                 "spending no HP. Trades loot for safety whenever a "
-                 "fight looks like a bad deal."),
-    "archer": ("Unlocks Treeline Shot: one free strike before every "
-               "fight is joined. Shorter fights, less damage taken, "
-               "faster grinding."),
-}
 for _r, _t in _RACE_ANGLE.items():
     _TIPS[_r] = _t
-for _c, _t in _CLASS_ANGLE.items():
-    _TIPS[_c] = _t
 
 
 # ── prefix rules — the dynamic ids ───────────────────────────────────────
@@ -394,11 +380,6 @@ def option_tip(oid: str) -> str:
                 "and the weekly dues, steward the store, enter the "
                 "world's weekly challenges and share their minted "
                 "prizes with your members.")
-    if oid == "buy_arrow_pack":
-        return (f"A pack of {economy.ARROW_PACK_SIZE} arrows for a bow "
-                "in off-class hands — an archer's basic quiver never "
-                "empties, everyone else's does. When the pack runs dry "
-                "mid-fight your own weapon comes back out on its own.")
     if oid.startswith("buy_"):
         return _buy_tip(oid.removeprefix("buy_"))
     if oid.startswith("wear_"):
@@ -545,10 +526,9 @@ _ITEM_TIPS: dict[str, str] = {
                    "better loot and present rolls. Click it to crack one "
                    "(once a day is all it does); alphas and Wardens drop "
                    "them about one time in ten."),
-    "arrows": ("Bought arrows — every off-class bow shot burns one. "
-               "When they run out mid-fight your own weapon comes "
-               "back out. Archers never need these; their basic "
-               "quiver refills itself."),
+    "arrows": ("Bought arrows from the old armory ledger — bows no "
+               "longer burn them; a trained hand's quiver looks after "
+               "itself. A keepsake of a stricter era."),
     "repair_token": ("Armor-repair token — the Forge honors it as one "
                      "FREE mend, any worn piece, no gold, no XP. Best "
                      "spent on your priciest steel; the pawn shop buys "

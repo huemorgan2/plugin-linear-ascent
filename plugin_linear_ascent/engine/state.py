@@ -39,8 +39,8 @@ def new_player(luna_user: str) -> dict:
     return {
         "version": 7,
         "luna_user": luna_user,
-        "stage": "intro",              # intro → creation_race → creation_class → creation_name → playing
-        "name": None, "race": None, "clazz": None,
+        "stage": "intro",              # intro → creation_race → creation_name → playing
+        "name": None, "race": None,
         "level": 1, "xp": 0,
         "hp": economy.player_max_hp(1, economy.GATE_ARMOR.bonus),
         "gold": 50, "bank": 0, "bank_day": world_day(),
@@ -257,7 +257,7 @@ def ensure_current(p: dict) -> None:
         clazz = p.get("clazz")
         if (p.get("stage") == "playing" and clazz in economy.CLASS_STARTERS
                 and p["gear"].get("weapon") == economy.STARTER_WEAPON.slug):
-            starter = economy.class_starter(clazz)
+            starter = economy.CLASS_STARTERS[clazz]
             p["gear"]["weapon"] = starter.slug
             if clazz in ("archer", "sorcerer"):
                 from .scene import Option, Scene
@@ -338,7 +338,7 @@ def ensure_current(p: dict) -> None:
             starters.add(economy.STARTER_WEAPON.slug)
             item = economy.FORGE.get(worn)
             if worn in starters:
-                p["gear"]["weapon"] = economy.class_starter(clazz).slug
+                p["gear"]["weapon"] = economy.CLASS_STARTERS[clazz].slug
             elif item and item.line and item.line != clazz:
                 twin = economy.line_twin(item, clazz)
                 if twin:

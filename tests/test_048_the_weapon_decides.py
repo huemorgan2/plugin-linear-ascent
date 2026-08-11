@@ -133,20 +133,20 @@ def test_path_of_line():
         "warrior": "blade", "archer": "bow", "sorcerer": "staff"}
 
 
-def test_creation_grants_class_path_rank6():
-    # transitional (phases 2–3, classes still exist): the class pick
-    # trains its path to 6 ≈ the old on-class feel. Phase 4 replaces
-    # this with the classless blade-2 start.
+def test_creation_grants_blade_two_helper_restores_the_feel():
+    # 048 phase 4: creation hands everyone blade 2; the conftest helper
+    # then restores the old class FEEL (the clazz path at rank 6).
     p = _fresh("048-p2-new")
     make_character(p, clazz="archer", name="Fletch")
-    assert p["training"] == {"blade": 0, "bow": 6, "staff": 0}
+    assert p["training"] == {"blade": 2, "bow": 6, "staff": 0}
 
 
 def test_legacy_doc_migrates_to_rank6_with_card_once():
     p = _fresh("048-p2-legacy")
     make_character(p, clazz="archer", name="Oldbow")
-    # rewind the doc to a pre-048 shape
+    # rewind the doc to a pre-048 shape (class docs carried a clazz)
     del p["training"]
+    p["clazz"] = "archer"
     p["version"] = 6
     s = core.current_scene(p)
     assert p["training"] == {"blade": 0, "bow": 6, "staff": 0}

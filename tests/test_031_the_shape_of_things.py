@@ -26,8 +26,16 @@ def create_character(p, race="elf", clazz="archer", name="Testa"):
     while p["stage"] == "intro":
         choose(p, "1")
     choose(p, race)
-    choose(p, clazz)
     choose(p, text=name)
+    # 048: the class question is gone — restore the old class FEEL by
+    # hand: the path at rank 6 plus that line's basic weapon in hand.
+    _path = {"warrior": "blade", "archer": "bow",
+             "sorcerer": "staff"}[clazz]
+    _slug = {"warrior": "rusted_sword", "archer": "basic_bow",
+             "sorcerer": "worn_staff"}[clazz]
+    p["training"][_path] = 6
+    p["gear"]["weapon"] = _slug
+    p["held"] = [_slug]
     return p
 
 
@@ -66,10 +74,9 @@ def test_forge_hints_carry_the_stat_the_prose_used_to():
     p = create_character(fresh("stat"), clazz="warrior")
     p["gold"] = 10_000
     s = choose(p, "forge")
-    # off-class rows say "off-class" instead — halved bite, no honest stat
+    # 048: the basics rows say their own law (never wears, never lost)
     buy = [o for o in s.options if o.id.startswith("buy_")
-           and o.id != "buy_arrow_pack"
-           and "off-class" not in o.hint
+           and o.id not in ("buy_basic_bow", "buy_worn_staff")
            and o.id.removeprefix("buy_") in economy.FORGE]
     assert buy
     for o in buy:
@@ -100,7 +107,8 @@ def test_ident_header_names_you_and_bolds_the_purse():
     frag = render.render_scene_fragment(core.current_scene(p))
     assert 'class="ident later"' in frag
     assert "Vael" in frag
-    assert "elf" in frag.lower() and "archer" in frag.lower()
+    # 048: the calling is the weapon path in hand, not a class
+    assert "elf" in frag.lower() and "bow" in frag.lower()
     assert "LEVEL" in frag and "COINS" in frag
 
 

@@ -19,8 +19,12 @@ def playing(name="Bosses", world=None):
     while p["stage"] == "intro":
         core.apply_choice(p, "1")
     core.apply_choice(p, "human")
-    core.apply_choice(p, "warrior")
     core.apply_choice(p, "", name)
+    # 048: the class question is gone — restore the old warrior FEEL
+    # (blade rank 6, sword in hand) the class pick used to grant.
+    p["training"]["blade"] = 6
+    p["gear"]["weapon"] = "rusted_sword"
+    p["held"] = ["rusted_sword"]
     if world is not None:
         p["_world"] = world
     return p
@@ -145,7 +149,10 @@ def test_finishing_the_pool_pays_nothing_locally():
 
 def test_shared_warden_cannot_be_slept_past():
     p = playing("Mage", world=warden_world(1))
-    p["clazz"] = "sorcerer"
+    # 048: sleep follows the staff in hand at rank 6, not a class
+    p["training"]["staff"] = 6
+    p["gear"]["weapon"] = "worn_staff"
+    p["held"] = ["worn_staff"]
     p["xp"] = 10_000
     join_fight(p)
     s = core.apply_choice(p, "sleep_spell")

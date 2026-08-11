@@ -570,7 +570,9 @@ def _build_scene(p: dict) -> Scene:
     if p["stage"] == "creation_race":
         return _creation_race_scene(p)
     if p["stage"] == "creation_class":
-        return _creation_class_scene(p)
+        # legacy doc parked on the dead class question — hand it the
+        # starter kit and move it along to the name.
+        return _creation_finish_race(p)
     if p["stage"] == "creation_name":
         return _creation_name_scene(p)
     # 030 Phase 8: mid-movie a refresh replays the current beat; the
@@ -713,7 +715,7 @@ def _dispatch(p: dict, oid: str) -> Scene:
     if p["stage"] == "creation_race":
         return _creation_pick_race(p, oid)
     if p["stage"] == "creation_class":
-        return _creation_pick_class(p, oid)
+        return _creation_finish_race(p)
     if p["stage"] == "creation_name":
         return _creation_name_scene(p)     # name comes as text
     if p.get("movie_floor"):
@@ -833,32 +835,19 @@ def _creation_race_scene(p: dict) -> Scene:
 
 def _creation_pick_race(p: dict, oid: str) -> Scene:
     p["race"] = oid
-    p["stage"] = "creation_class"
-    return _creation_class_scene(p)
+    return _creation_finish_race(p)
 
 
-def _creation_class_scene(p: dict) -> Scene:
-    return Scene(
-        eyebrow="THE TOWER GATE · REGISTRAR",
-        headline=f"A {p['race']} — and how do you fight?",
-        support="Class shapes which options appear when it matters.",
-        options=[Option(c, c.capitalize(), economy.CLASSES[c].split(":")[0])
-                 for c in economy.CLASSES],
-    )
-
-
-def _creation_pick_class(p: dict, oid: str) -> Scene:
-    p["clazz"] = oid
-    # 048 (transitional, dies with the class question): the pick trains
-    # its path to 6 — the old on-class feel on the new ladder.
+def _creation_finish_race(p: dict) -> Scene:
+    """048: the class question died — every climber walks in with the
+    gate's Rusted Sword and two ranks of bladework (enough to swing
+    honestly on floor 1; the School sells the rest). The weapon in the
+    hand decides everything the class used to."""
     p.setdefault("training", {"blade": 0, "bow": 0, "staff": 0})
-    path = economy.PATH_OF_LINE.get(oid)
-    if path:
-        p["training"][path] = 6
-    # 017 §1: the gate issues the weapon of your calling — warriors a
-    # rusted sword, archers a basic bow (arrows never run out),
-    # sorcerers a worn staff. It never breaks and is never lost.
-    p["gear"]["weapon"] = economy.class_starter(oid).slug
+    if p["training"].get("blade", 0) < 2:
+        p["training"]["blade"] = 2
+    p["gear"]["weapon"] = economy.CLASS_STARTERS["warrior"].slug
+    p["held"] = [p["gear"]["weapon"]]
     if p.get("name"):
         # 005 web play: the door already carved this name at signup —
         # the registrar recognizes the account and waves them through.
@@ -1243,7 +1232,7 @@ def _relic_rows(p: dict, shop: str, opts: list, lines: list) -> None:
     folds into a <details> block — ▣ opens the fold, ▣. closes it;
     the renderer draws the summary, to_text draws a plain divider."""
     stock = economy.relic_stock(shop, p["unlocked_floor"],
-                                p.get("clazz") or "")
+                                combat._held_lines(p))
     if not stock:
         return
     fold = len(lines) > 8
@@ -1267,9 +1256,12 @@ def _relic_buy(p: dict, slug: str, scene_fn) -> Scene:
         s.shard_note = (f"The {r.name} waits behind the counter until "
                         f"floor {r.floor} stands open to you.")
         return s
-    if r.clazz and (p.get("clazz") or "") != r.clazz:
+    if r.line and r.line not in combat._held_lines(p):
         s = scene_fn(p)
-        s.shard_note = f"The {r.name} is {r.clazz}'s work — not yours."
+        word = {"warrior": "blade", "archer": "bow",
+                "sorcerer": "staff"}.get(r.line, r.line)
+        s.shard_note = (f"The {r.name} answers only to a {word} — "
+                        "nothing in your hands can use it.")
         return s
     if r.hold1 and p["inventory"].get(slug, 0) >= 1:
         s = scene_fn(p)
@@ -1293,39 +1285,30 @@ def _relic_buy(p: dict, slug: str, scene_fn) -> Scene:
 
 
 def _forge_scene(p: dict) -> Scene:
-    clazz = p.get("clazz") or ""
     opts, lines = [], []
-    nod = ""
-    # weapons: your own line at the Forge — staves live at the Arcanum
-    if clazz in ("warrior", "archer"):
-        _rack(p, economy.weapon_line(clazz), opts, lines)
-    elif clazz == "sorcerer":
-        # 031 §14: the one line worth keeping rides as a notice, not prose
-        nod = ("The smith nods at your staff and points across "
-               "the square: staves and focuses live at the Arcanum.")
-    if clazz != "sorcerer":
-        # shields serve warrior and archer; the caster's guard is the
-        # Arcanum's focus (same slot, different shop)
-        _rack(p, economy.gear_rungs("shield"), opts, lines)
+    # 048: the smith sells every physical line to every hand at list
+    # price — the trained rank is the only tax on strange steel.
+    # Staves and focuses still live at the Arcanum.
+    nod = ("The smith nods across the square: staves and "
+           "focuses live at the Arcanum.")
+    _rack(p, economy.weapon_line("warrior"), opts, lines)
+    _rack(p, economy.weapon_line("archer"), opts, lines)
+    _rack(p, economy.gear_rungs("shield"), opts, lines)
     _rack(p, economy.gear_rungs("armor"), opts, lines)
     _rack(p, economy.gear_rungs("shoes"), opts, lines)
-    # 004 §3.2: the off-class rack — the other physical line, one rung
-    # back, at triple price. A tool for a bad matchup, never a build.
-    off_lines = {"warrior": ("archer",), "archer": ("warrior",),
-                 "sorcerer": ("warrior", "archer")}.get(clazz, ())
-    for line in off_lines:
-        g = economy.off_class_offer(line, p["level"], p["unlocked_floor"])
-        if g:
-            price = economy.off_class_price(g)
-            opts.append(Option(f"buy_{g.slug}", g.name,
-                               f"pay ◈ {price:,} · off-class"))
-            lines.append(f"{g.name} — not your weapon: ×3 the coin, "
-                         "half the bite, and one shot in four goes wide")
-    if clazz != "archer":
+    # 048: the gate-issue basics of the other lines hang by the door —
+    # a flat coin buys a second path's first weapon. Never wears,
+    # never lost, never sold back.
+    owned = set(combat._held_slugs(p)) | set(p.get("inventory") or {})
+    for slug in ("basic_bow", "worn_staff"):
+        if slug in owned:
+            continue
+        g = economy.FORGE[slug]
         opts.append(Option(
-            "buy_arrow_pack", "Arrow pack",
-            f"pay ◈ {economy.ARROW_PACK_PRICE} · {economy.ARROW_PACK_SIZE} "
-            "arrows"))
+            f"buy_{slug}", g.name,
+            f"pay ◈ {economy.BASIC_WEAPON_PRICE} · never wears, "
+            "never lost"))
+        lines.append(f"{g.name} — {g.flavor}")
     _relic_rows(p, "forge", opts, lines)      # 006: quivers and tools
     for g in _wearable_pack(p):
         if p["gear"].get(g.slot) != g.slug:
@@ -1337,11 +1320,6 @@ def _forge_scene(p: dict) -> Scene:
     for slot in economy.HONE_SLOTS:
         slug = p["gear"].get(slot)
         lvl = state.hone_level(p, slot)
-        item = economy.FORGE.get(slug or "")
-        # off-class gear never hones (004 §3.2)
-        if slot == "weapon" and item is not None and item.line \
-                and clazz and item.line != clazz:
-            continue
         if slug and lvl < cap:
             name = economy.FORGE[slug].name
             opts.append(Option(f"hone_{slot}", f"Hone {name} +{lvl + 1}",
@@ -1481,11 +1459,10 @@ def _forge_repair(p: dict, slot: str) -> Scene:
 
 def _gear_purchase(p: dict, g, scene_fn) -> Scene:
     """Shared buy path for the Forge and the Arcanum: level gate,
-    off-class ×3 pricing, equip + old piece to the pack."""
-    clazz = p.get("clazz") or ""
-    off = bool(g.line) and clazz and g.line != clazz
+    equip + old piece to the pack. 048: list price for every hand —
+    the trained rank is the only tax on a strange line."""
     req = economy.rung_player_level_req(g)
-    price = economy.off_class_price(g) if off else g.price
+    price = g.price
     if p["level"] < req:
         s = scene_fn(p)
         s.shard_note = (f"{g.name} answers to level {req} hands — you are "
@@ -1546,8 +1523,6 @@ def _gear_purchase(p: dict, g, scene_fn) -> Scene:
     else:
         stat = "ATK" if g.slot == "weapon" else "DEF"
         note = f"+ {g.name} equipped ({g.slot} +{g.bonus} {stat})"
-    if off:
-        note += " — off-class: half the bite, one in four goes wide"
     if old and economy.FORGE[old].price > 0:
         p["inventory"][old] = p["inventory"].get(old, 0) + 1
         note += f" — your {economy.FORGE[old].name} goes to your pack"
@@ -1608,6 +1583,39 @@ def _wear_from_pack(p: dict, slug: str, scene_fn) -> Scene:
     return s
 
 
+def _basic_buy(p: dict, slug: str, scene_fn) -> Scene:
+    """048: a gate-issue basic of another line — flat coin, never
+    wears, never lost. It goes into a free carry slot if one is open,
+    else into the pack (promote it on the road)."""
+    g = economy.FORGE[slug]
+    owned = set(combat._held_slugs(p)) | set(p.get("inventory") or {})
+    if slug in owned:
+        s = scene_fn(p)
+        s.shard_note = f"You already carry a {g.name} — one is plenty; " \
+                       "it never wears out."
+        return s
+    price = economy.BASIC_WEAPON_PRICE
+    if p["gold"] < price:
+        s = scene_fn(p)
+        s.shard_note = (f"{g.name} wants ◈ {price}; you carry "
+                        f"◈ {p['gold']:,}.")
+        return s
+    p["gold"] -= price
+    held = p.setdefault("held", [])
+    cap = max(1, int(p.get("slots", 1)))
+    if len(held) < cap:
+        held.append(slug)
+        where = "into your free hand"
+    else:
+        p["inventory"][slug] = p["inventory"].get(slug, 0) + 1
+        where = "into your pack"
+    combat._ledger(p, "buy", gold=-price, note=slug)
+    s = scene_fn(p)
+    s.body_lines.insert(0, f"+ {g.name} — {where}. The School teaches "
+                           "any weapon to bite.")
+    return s
+
+
 def _forge_buy(p: dict, oid: str) -> Scene:
     if oid.startswith("hone_") and oid.removeprefix("hone_") in \
             economy.HONE_SLOTS:
@@ -1618,27 +1626,13 @@ def _forge_buy(p: dict, oid: str) -> Scene:
     if oid.startswith("token_") and oid.removeprefix("token_") in \
             economy.DURABILITY_SLOTS:
         return _forge_token_mend(p, oid.removeprefix("token_"))
-    if oid == "buy_arrow_pack":
-        if p["gold"] < economy.ARROW_PACK_PRICE:
-            s = _forge_scene(p)
-            s.shard_note = (f"A pack of arrows is ◈ "
-                            f"{economy.ARROW_PACK_PRICE} and you carry "
-                            f"◈ {p['gold']:,}.")
-            return s
-        p["gold"] -= economy.ARROW_PACK_PRICE
-        p["inventory"]["arrows"] = (p["inventory"].get("arrows", 0)
-                                    + economy.ARROW_PACK_SIZE)
-        combat._ledger(p, "buy", gold=-economy.ARROW_PACK_PRICE,
-                       note="arrow_pack")
-        s = _forge_scene(p)
-        s.body_lines.insert(0, f"+ {economy.ARROW_PACK_SIZE} arrows — "
-                            f"{p['inventory']['arrows']} in the quiver")
-        return s
     if oid.startswith("wear_"):
         return _wear_from_pack(p, oid.removeprefix("wear_"), _forge_scene)
     slug = oid.removeprefix("buy_")
     if slug in economy.RELICS and economy.RELICS[slug].shop == "forge":
         return _relic_buy(p, slug, _forge_scene)
+    if slug in ("basic_bow", "worn_staff"):
+        return _basic_buy(p, slug, _forge_scene)
     g = economy.FORGE.get(slug)
     if not g:
         return _forge_scene(p)
@@ -1659,24 +1653,11 @@ def _arcanum_scene(p: dict) -> Scene:
         s.shard_note = (f"The Arcanum wants level {economy.ARCANUM_LEVEL} "
                         "hands. Climb first.")
         return s
-    clazz = p.get("clazz") or ""
     opts, lines = [], []
-    if clazz == "sorcerer":
-        _rack(p, economy.weapon_line("sorcerer"), opts, lines)
-        _rack(p, economy.gear_rungs("shield", "sorcerer"), opts, lines)
-    else:
-        # 004 §3.2: staves off the rack, one rung back, triple coin —
-        # focuses answer only to a caster's hand.
-        g = economy.off_class_offer("sorcerer", p["level"],
-                                    p["unlocked_floor"])
-        if g:
-            opts.append(Option(f"buy_{g.slug}", g.name,
-                               f"pay ◈ {economy.off_class_price(g):,} · "
-                               "off-class"))
-            lines.append(f"{g.name} — not your weapon: ×3 the coin, "
-                         "half the bite, and one cast in four fizzles")
-        lines.append("The focuses behind the counter won't wake for "
-                     "you — caster's gear, caster's hand.")
+    # 048: star-charts for every hand — the full staff line and the
+    # focuses at list price; the trained rank is the only gate.
+    _rack(p, economy.weapon_line("sorcerer"), opts, lines)
+    _rack(p, economy.gear_rungs("shield", "sorcerer"), opts, lines)
     _relic_rows(p, "arcanum", opts, lines)    # 006: the mage relics
     opts.append(Option("back", "Back to the square"))
     return Scene(
@@ -1704,15 +1685,6 @@ def _arcanum_buy(p: dict, oid: str) -> Scene:
         s = _arcanum_scene(p)
         s.shard_note = "The shopkeeper tilts her head: steel is the " \
                        "smith's trade. The Forge is across the square."
-        return s
-    if g.slot == "shield" and (p.get("clazz") or "") != "sorcerer":
-        # 005 design decision: only BUYING a focus is class-gated. One
-        # already owned (class change, hand-me-down) keeps working as a
-        # shield and may be honed/repaired — it's the wearer's guard
-        # now, and durability taxes it like any other paid piece.
-        s = _arcanum_scene(p)
-        s.shard_note = ("The focus goes dark in your hand — it answers "
-                        "only to a caster.")
         return s
     return _gear_purchase(p, g, _arcanum_scene)
 
@@ -2085,8 +2057,9 @@ def _sleep_menu_scene(p: dict) -> Scene:
 def _sleep_fx(p: dict, where: str) -> str:
     """One sleeping animation per showcase character per place — the art
     canon puts every figure on one of the three class silhouettes."""
-    clazz = p.get("clazz") or "warrior"
-    return f"sleep_{where}_{clazz}"
+    g = economy.FORGE.get(p["gear"].get("weapon") or "")
+    look = (g.line if g and g.line else "") or "warrior"
+    return f"sleep_{where}_{look}"
 
 
 def _sleeping_scene(p: dict, note: str = "") -> Scene:

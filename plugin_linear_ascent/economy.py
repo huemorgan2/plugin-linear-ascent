@@ -721,6 +721,13 @@ def train_gold(rank: int, frontier: int) -> int:
 # 048 N4/N5: mastery studies and the CARRY skill — School merchandise.
 # A master pays 80% on the OTHER paths' first five ranks (the hands
 # already know discipline); the discount never reaches rank 6+.
+# N7: fight options answer to trained rank, not class — the gate table.
+TREELINE_RANK = 4     # bow — the shot from cover
+GAP_OPEN_RANK = 6     # bow — give ground on purpose
+GAP_DRAW_RANK = 8     # bow — the open gap starts paying ×1.25/×1.5
+WALL_RANK = 4         # blade — shield wall (a shield on the arm too)
+SLEEP_RANK = 6        # staff — the lullaby
+
 MASTERY_XP = round(train_xp(10) * 1.5)          # 948
 MASTERY_DISCOUNT = 0.8
 MASTERY_DISCOUNT_MAX_RANK = 5
@@ -1826,9 +1833,6 @@ FORGE[GATE_SHIELD.slug] = GATE_SHIELD
 FORGE[GATE_ARMOR.slug] = GATE_ARMOR
 
 
-def class_starter(clazz: str) -> GearItem:
-    return CLASS_STARTERS.get(clazz or "", STARTER_WEAPON)
-
 PAWN_BUYBACK = 0.40    # pre-006 flat rate; 006 makes it the band centre
 
 
@@ -1893,16 +1897,15 @@ def rung_floor_req(g: GearItem) -> int:
     return r if r > LEVEL_CAP else 0
 
 
-# ── 004 §3.2: off-class stopgap gear ─────────────────────────────────────
-# Any class can buy the previous-rung weapon of another line: ×3 price,
-# ×0.5 damage, a 25% miss that eats the round, never hones, and a bow in
-# off-class hands burns bought arrows. A tool for breaking a hard
-# counter, priced so it can never be a build.
+# ── 048: the armory sells every line to everyone at list price ───────────
+# The off-class system (×3 price, ×0.5 damage, 25% miss, arrow burn)
+# died with the classes — the trained rank is the only tax on a weapon
+# in the wrong hands now. The gate-issue basics of the other two lines
+# sell for a flat coin so ANY climber can start a second path.
 
-OFF_CLASS_PRICE_MULT = 3
-OFF_CLASS_DMG_MULT = 0.5
-OFF_CLASS_MISS = 0.25
-ARROW_PACK_SIZE = 10
+BASIC_WEAPON_PRICE = 60        # basic_bow / worn_staff off the wall —
+                               # never wears, never lost, never sold back
+ARROW_PACK_SIZE = 10           # legacy — old packs still hold arrows
 ARROW_PACK_PRICE = 120
 
 ARCANUM_LEVEL = 3              # 0.29.1: was 6 — the shop arrives when
@@ -1917,10 +1920,6 @@ RELAY_LEVEL = 2                # was 3
 FIELDS_LEVEL = 5
 
 
-def off_class_price(g: GearItem) -> int:
-    return g.price * OFF_CLASS_PRICE_MULT
-
-
 def line_twin(g: GearItem, line: str) -> GearItem | None:
     """The same rung of another weapon line. The three lines mirror each
     other rung for rung — same bonus, same price — so trading a piece for
@@ -1932,19 +1931,6 @@ def line_twin(g: GearItem, line: str) -> GearItem | None:
                 and other.rung == g.rung and other.style == g.style):
             return other
     return None
-
-
-def off_class_offer(line: str, level: int,
-                    unlocked_floor: int = 0) -> GearItem | None:
-    """The one off-class weapon on the rack: the rung BELOW the highest
-    this level (and, past the cap, this floor) unlocks in `line` (the
-    first rung when nothing is below)."""
-    unlocked = [g for g in weapon_line(line)
-                if rung_player_level_req(g) <= level
-                and rung_floor_req(g) <= unlocked_floor]
-    if not unlocked:
-        return None
-    return unlocked[-2] if len(unlocked) >= 2 else unlocked[0]
 
 
 def gear_tier_for_floor(floor: int) -> int:
@@ -2129,7 +2115,8 @@ class Relic:
     floor: int             # appears in stock from this unlocked floor
     shop: str              # "forge" | "arcanum" | "apothecary"
     count: int = 1         # units per purchase (arrow packs, net packs)
-    clazz: str = ""        # class-locked purchase ("" = anyone)
+    line: str = ""         # weapon-line-locked purchase ("" = anyone;
+                           # 048: sold to whoever HOLDS that line)
     hold1: bool = False    # own at most one at a time
     group: str = ""        # per-fight exclusivity ("life")
 
@@ -2157,7 +2144,7 @@ RELICS: dict[str, Relic] = {r.slug: r for r in [
     Relic("piercing_arrows", "Piercing Arrows",
           "the shot ignores armor tiers entirely",
           "five to a quiver, archer hands only",
-          0.35, 8, "forge", count=5, clazz="archer"),
+          0.35, 8, "forge", count=5, line="archer"),
     Relic("fire_arrows", "Fire Arrows",
           "+50% burst on the shot; burns regeneration out",
           "plate still turns fire-tipped shafts like any arrow",
@@ -2169,11 +2156,11 @@ RELICS: dict[str, Relic] = {r.slug: r for r in [
     Relic("entangling_net", "Entangling Net",
           "the monster loses its round tangled — it cannot close or flee",
           "three to a pack; a Warden tears through it instantly",
-          0.25, 5, "forge", count=3, clazz="warrior"),
+          0.25, 5, "forge", count=3, line="warrior"),
     Relic("sky_hook", "Sky-Hook",
           "your steel reaches the airborne for this whole fight",
           "five uses a hook, one burned per fight",
-          0.4, 6, "forge", count=5, clazz="warrior"),
+          0.4, 6, "forge", count=5, line="warrior"),
     # 010 retune (2026-07-28): vials 0.3→0.1 DI. One vial is one FIGHT,
     # so at 0.3 the mage's wall-push cost 3.6× the warrior's net and
     # broke the stacked-drain ceiling at every band; 0.1 puts all three
@@ -2181,15 +2168,15 @@ RELICS: dict[str, Relic] = {r.slug: r for r in [
     Relic("strip_potion", "Resistance-Strip Potion",
           "dissolves the target's spellguard for the fight",
           "one fight, one vial",
-          0.1, 4, "arcanum", clazz="sorcerer"),
+          0.1, 4, "arcanum", line="sorcerer"),
     Relic("curse_scroll", "Curse Scroll",
           "halves the target's plate for the fight",
           "one fight, one scroll",
-          0.1, 3, "arcanum", clazz="sorcerer"),
+          0.1, 3, "arcanum", line="sorcerer"),
     Relic("polymorph_dust", "Polymorph Dust",
           "the monster becomes a harmless critter — the fight simply ends",
           "no loot, no XP, never works on Wardens; one pinch",
-          1.2, 21, "arcanum", clazz="sorcerer"),
+          1.2, 21, "arcanum", line="sorcerer"),
     Relic("veil_draught", "Veil Draught",
           "nothing can touch you until your first attack lands",
           "one fight; only one life-guard works per fight",
@@ -2264,11 +2251,13 @@ def relic_price(slug: str, frontier: int) -> int:
     return _pretty(r.di * daily_income(max(1, frontier)))
 
 
-def relic_stock(shop: str, frontier: int, clazz: str) -> list[Relic]:
-    """What this shop shows this player, catalog order."""
+def relic_stock(shop: str, frontier: int, lines) -> list[Relic]:
+    """What this shop shows this player, catalog order. `lines` is the
+    set of weapon lines in the player's hands (048: the weapon decides
+    who a line-locked relic sells to)."""
     return [r for r in RELICS.values()
             if r.shop == shop and frontier >= r.floor
-            and (not r.clazz or r.clazz == clazz)]
+            and (not r.line or r.line in lines)]
 
 
 # ── §6c Healing (008, repriced by 013, dawn law by 022/004) ─────────────
@@ -2332,8 +2321,8 @@ BOARD_LEVEL = 2                  # 0.29.1: was 4 — the board is the day's
 BOARD_JOBS_PER_DAY = 3
 CONTRACT_CULL_GOLD_MULT = 0.8    # × N kills' base gold on the named floor
 CONTRACT_CULL_XP_MULT = 0.5      # × N kills' base XP
-CONTRACT_CLASS_GOLD_MULT = 0.5   # weapon-class jobs price off mid-tower
-CONTRACT_CLASS_XP_MULT = 0.5
+CONTRACT_PATH_GOLD_MULT = 0.5    # weapon-path jobs price off mid-tower
+CONTRACT_PATH_XP_MULT = 0.5
 CONTRACT_WARDEN_MULT = 0.5       # × warden pay at the frontier
 CONTRACT_TOKEN_CHANCE = 0.25     # a job carries a repair token sometimes
 
@@ -2424,13 +2413,6 @@ RACES = {
     "human": "Adaptable: +1 energy cap. Port-town survivors.",
     "elf": "Keen: +5% experience from kills. Their bio-lit forest is floor 23.",
     "dwarf": "Stubborn: +5% armor value. The fusion-halls are floors 11-20.",
-}
-
-CLASSES = {
-    "warrior": "Extra combat option: Shield Wall (soak a round).",
-    "sorcerer": "Extra combat option: Sleep Spell (skip a fight for its "
-                "experience price).",
-    "archer": "Extra combat option: Treeline Shot (first strike).",
 }
 
 # 046: last — the milestone stats read the whole model above.

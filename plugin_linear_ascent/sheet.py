@@ -31,7 +31,7 @@ def character_sheet(p: dict) -> dict:
     pts = pstate.prestige(p)
     name = (p["name"] or "") + (" " + "✦" * min(pts, 3) if pts else "")
     return {
-        "name": name, "race": p["race"], "class": p["clazz"],
+        "name": name, "race": p["race"],
         "level": p["level"], "xp": p["xp"],
         "xp_to_next": (0 if at_cap
                        else max(0, economy.xp_need(p["level"]) - p["xp"])),

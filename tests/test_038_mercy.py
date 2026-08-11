@@ -30,8 +30,16 @@ def create_character(p, race="human", clazz="warrior", name="Testa"):
     while p["stage"] == "intro":                # 016: through the movie
         choose(p, "1")
     choose(p, race)
-    choose(p, clazz)
     choose(p, text=name)
+    # 048: the class question is gone — restore the old class FEEL by
+    # hand: the path at rank 6 plus that line's basic weapon in hand.
+    _path = {"warrior": "blade", "archer": "bow",
+             "sorcerer": "staff"}[clazz]
+    _slug = {"warrior": "rusted_sword", "archer": "basic_bow",
+             "sorcerer": "worn_staff"}[clazz]
+    p["training"][_path] = 6
+    p["gear"]["weapon"] = _slug
+    p["held"] = [_slug]
     return p
 
 

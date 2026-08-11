@@ -25,6 +25,15 @@ def create_character(p, race="human", clazz="archer", name="Gap"):
     core.apply_choice(p, race)
     core.apply_choice(p, clazz)
     core.apply_choice(p, "", text=name)
+    # 048: the class question is gone — restore the old class FEEL by
+    # hand: the path at rank 6 plus that line's basic weapon in hand.
+    _path = {"warrior": "blade", "archer": "bow",
+             "sorcerer": "staff"}[clazz]
+    _slug = {"warrior": "rusted_sword", "archer": "basic_bow",
+             "sorcerer": "worn_staff"}[clazz]
+    p["training"][_path] = 6
+    p["gear"]["weapon"] = _slug
+    p["held"] = [_slug]
     return p
 
 
@@ -136,6 +145,7 @@ def test_bow_damage_climbs_the_ladder(monkeypatch):
     dealt = {}
     for gap in (1, 3):
         p = _player("archer", 1, f"gap-dmg-{gap}")
+        p["training"]["bow"] = 8       # 048: the draw bonus is rank-8 work
         combat.start_encounter(p, fl, enc)
         p["encounter"]["gap"] = gap
         p["encounter"]["hp"] = 10_000

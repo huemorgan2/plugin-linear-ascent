@@ -24,6 +24,15 @@ def create_character(p, race="human", clazz="warrior", name="Wearer"):
     core.apply_choice(p, race)
     core.apply_choice(p, clazz)
     core.apply_choice(p, "", text=name)
+    # 048: the class question is gone — restore the old class FEEL by
+    # hand: the path at rank 6 plus that line's basic weapon in hand.
+    _path = {"warrior": "blade", "archer": "bow",
+             "sorcerer": "staff"}[clazz]
+    _slug = {"warrior": "rusted_sword", "archer": "basic_bow",
+             "sorcerer": "worn_staff"}[clazz]
+    p["training"][_path] = 6
+    p["gear"]["weapon"] = _slug
+    p["held"] = [_slug]
     return p
 
 
@@ -116,14 +125,14 @@ def test_first_paid_purchase_arms_the_slot_and_teaches_once():
     s = choose(p, "buy_scrapwood_buckler")   # second slot teaches again
     assert any("wears with use" in ln for ln in s.body_lines)
     p["gold"] = 1000
-    p["gear"]["weapon"] = economy.class_starter("warrior").slug
+    p["gear"]["weapon"] = economy.CLASS_STARTERS["warrior"].slug
     del p["durability"]["weapon"]
     s = choose(p, "buy_pigsticker")          # same slot: taught already
     assert not any("wears with use" in ln for ln in s.body_lines)
 
 
 def test_free_gear_never_wears():
-    p, fl = _armed(weapon=economy.class_starter("warrior").slug)
+    p, fl = _armed(weapon=economy.CLASS_STARTERS["warrior"].slug)
     p["encounter"]["range"] = "close"
     combat.resolve_fight_action(p, fl, "attack")
     assert "weapon" not in p["durability"]

@@ -21,8 +21,16 @@ def create_character(p, name="Packa"):
     while p["stage"] == "intro":                # 016: through the movie
         choose(p, "1")
     choose(p, "human")
-    choose(p, "warrior")
     choose(p, text=name)
+    # 048: the class question is gone — restore the old class FEEL by
+    # hand: the path at rank 6 plus that line's basic weapon in hand.
+    _path = {"warrior": "blade", "archer": "bow",
+             "sorcerer": "staff"}["warrior"]
+    _slug = {"warrior": "rusted_sword", "archer": "basic_bow",
+             "sorcerer": "worn_staff"}["warrior"]
+    p["training"][_path] = 6
+    p["gear"]["weapon"] = _slug
+    p["held"] = [_slug]
     return p
 
 
@@ -104,7 +112,6 @@ def test_icon_key_resolution():
 STATIC_IDS = [
     # navigation + creation
     "town", "back", "begin", "human", "elf", "dwarf",
-    "warrior", "sorcerer", "archer",
     # town buildings
     "forge", "medlab", "lodge", "vault", "pawn", "relay", "fields",
     "guildhall", "stone", "gate",
@@ -173,8 +180,7 @@ def test_every_option_in_a_full_walk_has_a_tip():
     while p["stage"] == "intro":                 # 016: every movie step
         check(choose(p, "1"))
     check(core.current_scene(p))                 # races
-    check(choose(p, "human"))                    # classes
-    choose(p, "warrior")
+    check(choose(p, "human"))                    # the registrar
     choose(p, text="Packa")
     p["inventory"]["medgel"] = 1                 # exercise use_/sell_ rows
     p["inventory"]["padded_jerkin"] = 1

@@ -25,8 +25,16 @@ def watch_movie(p):
 def create_character(p, race="human", clazz="warrior", name="Testa"):
     watch_movie(p)
     choose(p, race)
-    choose(p, clazz)
     choose(p, text=name)
+    # 048: the class question is gone — restore the old class FEEL by
+    # hand: the path at rank 6 plus that line's basic weapon in hand.
+    _path = {"warrior": "blade", "archer": "bow",
+             "sorcerer": "staff"}[clazz]
+    _slug = {"warrior": "rusted_sword", "archer": "basic_bow",
+             "sorcerer": "worn_staff"}[clazz]
+    p["training"][_path] = 6
+    p["gear"]["weapon"] = _slug
+    p["held"] = [_slug]
     return p
 
 
@@ -66,9 +74,7 @@ def test_creation_flow_and_gates():
     assert p["stage"] == "creation_race"
     assert s.shard_note                      # steering hint present
     choose(p, "elf")
-    assert p["stage"] == "creation_class"
-    choose(p, "sorcerer")
-    assert p["stage"] == "creation_name"
+    assert p["stage"] == "creation_name"     # 048: no class question
     s = choose(p, text="x")                  # too short
     assert p["stage"] == "creation_name"
     # 004: the name IS the username — one word, so the words are joined
@@ -82,7 +88,7 @@ def test_numbered_fallback_resolves_positionally():
     p = fresh()
     watch_movie(p)                           # "1" advances every movie step
     s = choose(p, "1")                       # first race option
-    assert p["stage"] == "creation_class"
+    assert p["stage"] == "creation_name"     # 048: race goes straight on
 
 
 def test_wilds_fight_costs_energy_and_resolves():

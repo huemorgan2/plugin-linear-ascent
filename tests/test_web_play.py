@@ -12,22 +12,23 @@ from plugin_linear_ascent import pane
 from plugin_linear_ascent.engine import core, state
 
 
-def at_the_class_pick(pid="t:webber", name=""):
+def at_the_race_pick(pid="t:webber", name=""):
+    # 048: the class question is gone — the race pick is the last
+    # choice before the registrar (or the welcome, if prenamed).
     p = state.new_player(pid)
     if name:
         p["name"] = name
     core.current_scene(p)
     while p["stage"] == "intro":
         core.apply_choice(p, "1")
-    core.apply_choice(p, "elf")
     return p
 
 
 # ── the registrar recognizes the door's name ─────────────────────────────
 
 def test_a_prenamed_doc_skips_the_name_ask_entirely():
-    p = at_the_class_pick(name="Webprobe")
-    s = core.apply_choice(p, "archer")
+    p = at_the_race_pick(name="Webprobe")
+    s = core.apply_choice(p, "elf")
     assert p["stage"] == "playing"
     assert p["name"] == "Webprobe"
     assert "Welcome to Roothollow, Webprobe" in s.headline
@@ -35,8 +36,8 @@ def test_a_prenamed_doc_skips_the_name_ask_entirely():
 
 
 def test_an_unnamed_doc_still_meets_the_registrar():
-    p = at_the_class_pick()
-    s = core.apply_choice(p, "archer")
+    p = at_the_race_pick()
+    s = core.apply_choice(p, "elf")
     assert p["stage"] == "creation_name"
     assert s.awaits_text
 
@@ -44,11 +45,11 @@ def test_an_unnamed_doc_still_meets_the_registrar():
 def test_the_prenamed_welcome_matches_the_typed_one():
     """One welcome, both doors: the pre-carved path and the typed path
     land on the same scene grammar (town, shard note, headline form)."""
-    typed = at_the_class_pick(pid="t:typer")
-    core.apply_choice(typed, "archer")
+    typed = at_the_race_pick(pid="t:typer")
+    core.apply_choice(typed, "elf")
     st = core.apply_choice(typed, "", text="Typer")
-    web = at_the_class_pick(pid="t:webber2", name="Webber")
-    sw = core.apply_choice(web, "archer")
+    web = at_the_race_pick(pid="t:webber2", name="Webber")
+    sw = core.apply_choice(web, "elf")
     assert st.eyebrow == sw.eyebrow
     assert st.shard_note == sw.shard_note
     assert typed["location"] == web["location"] == "town"
