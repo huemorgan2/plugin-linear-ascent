@@ -240,3 +240,261 @@ def test_rank10_never_misses(monkeypatch):
 def _floor_obj(p):
     from plugin_linear_ascent.content import schema
     return schema.get_floor(p["floor"] or 1)
+
+
+# ═══════════════════════════════════════════════════════════════════════
+# Phase 3 — the School (train, mastery, carry, holding)
+# ═══════════════════════════════════════════════════════════════════════
+
+import pytest
+
+from plugin_linear_ascent.sheet import character_sheet
+
+
+def _rich(p, level=15, xp=1300, gold=2000):
+    """A doc with room in the bar — training spends the SAME pool the
+    Guildhall levels from, and the bar is hard-capped at xp_need."""
+    p["level"] = level
+    assert xp <= economy.xp_need(level)
+    p["xp"] = xp
+    p["gold"] = gold
+    return p
+
+
+def _at_school(p):
+    _choose(p, "gate")
+    _choose(p, "floor_1")
+    s = _choose(p, "school")
+    assert p["location"] == "school"
+    return s
+
+
+def _school_text(s):
+    return " ".join([s.headline or "", s.support or "",
+                     s.shard_note or ""] + list(s.body_lines or [])
+                    + [f"{o.label} {o.hint}" for o in (s.options or [])])
+
+
+def test_school_door_in_every_gate_town():
+    from plugin_linear_ascent.content import schema
+    p = _fresh("048-p3-door")
+    make_character(p)
+    for n in range(1, 13):
+        opts = core._gate_town_options(p, schema.get_floor(n))
+        assert "school" in [o.id for o in opts], n
+
+
+def test_school_lists_three_paths_with_costs_and_improvement():
+    p = _fresh("048-p3-list")
+    make_character(p, clazz="warrior")
+    _rich(p)
+    s = _at_school(p)
+    text = _school_text(s)
+    # blade rank 6 (creation), bar, exact next-cost at frontier 1
+    assert "rank 6" in text
+    assert "▰▰▰▰▰▰▱▱▱▱" in text
+    assert "370 XP" in text and "◈ 56" in text
+    # untouched paths at 0 with the rank-1 price
+    assert "▱▱▱▱▱▱▱▱▱▱" in text
+    assert "20 XP" in text and "◈ 8" in text
+    # the "what improves" sentence for blade 6→7
+    assert "miss 10%→8%" in text
+    assert "54%→58%" in text
+    ids = [o.id for o in s.options]
+    for oid in ("train_blade", "train_bow", "train_staff"):
+        assert oid in ids
+
+
+def test_train_gold_price_rides_the_current_frontier():
+    p = _fresh("048-p3-frontier")
+    make_character(p, clazz="warrior")
+    _rich(p)
+    p["unlocked_floor"] = 5
+    s = _at_school(p)
+    assert f"◈ {economy.train_gold(7, 5)}" in _school_text(s)
+
+
+def test_train_deducts_xp_and_gold_and_bumps():
+    p = _fresh("048-p3-train")
+    make_character(p, clazz="warrior")
+    _rich(p, xp=1300, gold=2000)
+    _at_school(p)
+    s = _choose(p, "train_bow")
+    assert p["training"]["bow"] == 1
+    assert p["xp"] == 1300 - economy.train_xp(1)
+    assert p["gold"] == 2000 - economy.train_gold(1, 1)
+    # and again — the price climbs the curve
+    s = _choose(p, "train_bow")
+    assert p["training"]["bow"] == 2
+    assert p["xp"] == 1300 - economy.train_xp(1) - economy.train_xp(2)
+
+
+def test_train_refusals_name_the_numbers():
+    p = _fresh("048-p3-refuse")
+    make_character(p, clazz="warrior")
+    # xp short: rank 7 blade wants 370
+    _rich(p, xp=100, gold=2000)
+    _at_school(p)
+    s = _choose(p, "train_blade")
+    assert p["training"]["blade"] == 6
+    assert "370" in (s.shard_note or "") and "100" in (s.shard_note or "")
+    # gold short
+    _rich(p, xp=1300, gold=3)
+    s = _choose(p, "train_blade")
+    assert p["training"]["blade"] == 6
+    assert "56" in (s.shard_note or "") and "3" in (s.shard_note or "")
+    # rank 10: the row is gone from the menu AND the guard behind it
+    # still answers "nothing left to teach" (defense-in-depth)
+    p["training"]["blade"] = 10
+    _rich(p, xp=1300, gold=2000)
+    s = core.current_scene(p)
+    assert "train_blade" not in [o.id for o in s.options]
+    s = core._school_action(p, "train_blade")
+    assert p["training"]["blade"] == 10
+    assert "nothing left to teach" in (s.shard_note or "").lower()
+
+
+def test_economy_school_constants():
+    assert economy.MASTERY_XP == 948            # round(632 * 1.5)
+    assert economy.CARRY2_XP == 60 and economy.CARRY2_GOLD == 30
+    assert economy.CARRY3_XP == 900 and economy.CARRY3_LEVEL == 8
+    for front in (1, 5, 20):
+        assert economy.carry3_gold(front) == \
+            round(200 * economy.pillar(front))
+    # a master pays 80% on the other paths' ranks 1-5, full after
+    assert economy.train_xp_cost(1, discounted=True) == 16
+    assert economy.train_xp_cost(5, discounted=True) == \
+        round(economy.train_xp(5) * 0.8)
+    assert economy.train_xp_cost(6, discounted=True) == economy.train_xp(6)
+    assert economy.train_xp_cost(1) == 20
+
+
+def test_rank10_gold_bar_mastery_row_and_invitation_once():
+    p = _fresh("048-p3-ten")
+    make_character(p, clazz="warrior")
+    p["training"]["blade"] = 9
+    _rich(p, xp=1300, gold=2000)
+    _at_school(p)
+    _choose(p, "train_blade")
+    assert p["training"]["blade"] == 10
+    # the invitation card fires once, then never again
+    s = core.current_scene(p)
+    text = _school_text(s)
+    assert "master" in text.lower()
+    assert p["flags"].get("invited_blade")
+    s2 = core.current_scene(p)
+    assert "master will see you" not in _school_text(s2).lower() or \
+        p["location"] == "school"
+    assert not p.get("pending_events")
+    # the school bar turns gold and shows the study
+    s = core.apply_choice(p, "school") if p["location"] != "school" else s2
+    if p["location"] != "school":
+        _at_school(p)
+    s = core.current_scene(p)
+    text = _school_text(s)
+    assert "▰▰▰▰▰▰▰▰▰▰" in text
+    assert "MASTERY" in text and "948" in text
+
+
+def test_mastery_purchase_records_and_discounts():
+    p = _fresh("048-p3-mastery")
+    make_character(p, clazz="warrior")
+    p["training"]["blade"] = 10
+    _rich(p, xp=1300, gold=2000)
+    _at_school(p)
+    s = _choose(p, "mastery_blade")
+    assert (p.get("mastery") or {}).get("blade") is True
+    assert p["xp"] == 1300 - economy.MASTERY_XP
+    # the other paths' low ranks discount to 80%
+    text = _school_text(core.current_scene(p))
+    assert "16 XP" in text
+    before = p["xp"]
+    _choose(p, "train_bow")
+    assert p["training"]["bow"] == 1
+    assert p["xp"] == before - 16
+
+
+def test_carry_slots_second_and_third():
+    p = _fresh("048-p3-carry")
+    make_character(p, clazz="warrior")
+    assert p["slots"] == 1
+    _rich(p, level=5, xp=200, gold=500)
+    _at_school(p)
+    s = _choose(p, "buy_carry2")
+    assert p["slots"] == 2
+    assert p["xp"] == 200 - economy.CARRY2_XP
+    assert p["gold"] == 500 - economy.CARRY2_GOLD
+    # 3rd slot: level-gated with the exact sentence
+    s = _choose(p, "buy_carry3")
+    assert p["slots"] == 2
+    assert "needs level 8 — you: 5" in _school_text(s)
+    # at level 12 the bar can actually hold the 900 (level-8 bar can't)
+    _rich(p, level=12, xp=950, gold=2000)
+    s = _choose(p, "buy_carry3")
+    assert p["slots"] == 3
+    assert p["xp"] == 950 - economy.CARRY3_XP
+    assert p["gold"] == 2000 - economy.carry3_gold(1)
+
+
+def test_held_defaults_and_promote_swaps():
+    p = _fresh("048-p3-held")
+    make_character(p, clazz="warrior")
+    assert p["held"] == [p["gear"]["weapon"]]
+    # a bagged bow promotes into the hand; one slot → the sword is bumped
+    p["inventory"]["basic_bow"] = 1
+    _choose(p, "wear_basic_bow")
+    assert p["gear"]["weapon"] == "basic_bow"
+    assert p["held"] == ["basic_bow"]
+
+
+def test_promote_with_a_free_slot_keeps_both():
+    p = _fresh("048-p3-both")
+    make_character(p, clazz="warrior")
+    p["slots"] = 2
+    sword = p["gear"]["weapon"]
+    p["inventory"]["basic_bow"] = 1
+    _choose(p, "wear_basic_bow")
+    assert p["gear"]["weapon"] == "basic_bow"
+    assert p["held"] == ["basic_bow", sword]
+    assert sword not in p["inventory"]
+
+
+def test_promote_refused_mid_fight():
+    p = _fresh("048-p3-midfight")
+    make_character(p, clazz="warrior")
+    _in_fight(p)
+    p["inventory"]["basic_bow"] = 1
+    sword = p["gear"]["weapon"]
+    s = _choose(p, "wear_basic_bow")
+    assert p["encounter"] is not None
+    assert p["gear"]["weapon"] == sword
+    assert "fight" in (s.shard_note or "").lower()
+
+
+def test_sheet_carries_trained_and_holding():
+    p = _fresh("048-p3-sheet")
+    make_character(p, clazz="warrior")
+    sheet = character_sheet(p)
+    assert sheet["trained"] == {"blade": 6, "bow": 0, "staff": 0}
+    assert sheet["slots"] == 1
+    assert sheet["holding"] == [economy.FORGE[p["gear"]["weapon"]].name]
+
+
+def test_bag_tooltip_warns_on_an_untrained_path():
+    p = _fresh("048-p3-tooltip")
+    make_character(p, clazz="warrior")     # bow rank 0
+    p["inventory"]["basic_bow"] = 1
+    acts, _why = core.pack_actions(p, "basic_bow")
+    assert acts, "the bow should offer its promote row"
+    assert "miss 25%" in acts[0].hint
+    # the trained path carries no warning
+    p["inventory"]["pigsticker"] = 1
+    acts, _why = core.pack_actions(p, "pigsticker")
+    assert acts and "miss" not in acts[0].hint
+
+
+@pytest.mark.skip(reason="mastery EFFECTS (riposte/long draw/focus) land "
+                         "with the triangle flip in phase 5 — phase 3 "
+                         "only sells and records the study")
+def test_mastery_study_effects():
+    raise AssertionError("phase 5")

@@ -93,6 +93,10 @@ _TIPS: dict[str, str] = {
              "carried gold and breaks your armor and shield."),
     "stew": ("Hunter's stew: ◈ 2 for +5 HP, repeatable. The cheap "
              "top-up when a full heal would waste coin."),
+    "school": ("Train your weapon paths — blade, bow, staff — rank 0 to "
+               "10 for XP and coin. Higher rank: fewer misses, harder "
+               "worst swings. Also sells the CARRY slots that let you "
+               "walk in holding two or three weapons."),
     "keep": ("The floor's Warden — one shared body for the whole world. "
              "3 energy joins a real fight; every wound you leave stays in "
              "it for the next blade. When its pool empties the floor "

@@ -70,6 +70,10 @@ def new_player(luna_user: str) -> dict:
         # 048: trained rank 0–10 per weapon path — the player's skill.
         # Creation trains the starting path; the School sells the rest.
         "training": {"blade": 0, "bow": 0, "staff": 0},
+        # 048 phase 3: CARRY — weapon slugs in hand; held[0] IS the
+        # equipped weapon, the School sells the 2nd and 3rd slot.
+        "slots": 1,
+        "held": [economy.STARTER_WEAPON.slug],
     }
 
 
@@ -415,6 +419,24 @@ def ensure_current(p: dict) -> None:
                         event_kind="present",
                     ).to_dict())
         p["version"] = 7
+    # 048 phase 3: carry slots + held list, self-healing on every load —
+    # held[0] mirrors the hand, length never exceeds slots, and paid
+    # overflow returns to the pack instead of vanishing.
+    if "slots" not in p:
+        p["slots"] = 1
+    held = p.setdefault("held", [])
+    w = (p.get("gear") or {}).get("weapon")
+    if w:
+        if w in held:
+            held.remove(w)
+        held.insert(0, w)
+    cap = max(1, int(p["slots"]))
+    for slug in held[cap:]:
+        g = economy.FORGE.get(slug)
+        if g and g.price > 0:
+            p.setdefault("inventory", {})[slug] = \
+                p["inventory"].get(slug, 0) + 1
+    del held[cap:]
     # Soft clamp: XP used to bank past a full bar. Anyone already over
     # is brought back to the bar — surplus never bought a level anyway.
     if xp_room(p) is not None:

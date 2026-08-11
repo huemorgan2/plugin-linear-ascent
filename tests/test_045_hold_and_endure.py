@@ -78,7 +78,12 @@ def test_no_promotion_mid_fight():
     combat.start_encounter(p, fl, enc)
     acts, why = core.pack_actions(p, g.slug)
     assert not any(o.id.startswith("wear_") for o in acts)
-    assert core._pack_use(p, f"wear_{g.slug}") is None
+    # 048 phase 3: the refusal now speaks — a scene with the reason,
+    # and NOTHING on the body moves.
+    s = core._pack_use(p, f"wear_{g.slug}")
+    assert s is not None
+    assert "mid-fight" in (s.shard_note or "").lower()
+    assert p["gear"].get(g.slot) != g.slug
 
 
 def test_equipped_slug_refuses_with_a_reason():

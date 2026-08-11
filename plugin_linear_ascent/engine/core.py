@@ -197,6 +197,14 @@ def pack_actions(p: dict, slug: str) -> tuple[list[Option], str]:
             worn = p["gear"].get(g.slot)
             hint = (f"swap out the {economy.FORGE[worn].name}"
                     if worn and worn in economy.FORGE else "from your pack")
+            # 048 phase 3: an untrained path warns BEFORE the swap —
+            # no silent numbers, even on a tooltip.
+            if g.slot == "weapon":
+                path = economy.PATH_OF_LINE.get(g.line, "")
+                if path and not int((p.get("training") or {})
+                                    .get(path, 0)):
+                    hint += (f" · untrained {path} — miss "
+                             f"{economy.TRAIN_MISS_PCT(0)}%, weak swings")
             if (p.get("hone") or {}).get(g.slot):
                 hint += " · honing resets"
             return [Option(f"wear_{slug}", label, hint)], ""
@@ -208,7 +216,17 @@ def _pack_use(p: dict, oid: str) -> Scene | None:
     """027: a pack action taken from the strip — legal in any room, never
     in a fight. Returns None when the id isn't a pack action."""
     wearing = oid.startswith("wear_")
-    if (oid not in PACK_USE_IDS and not wearing) or p.get("encounter"):
+    if oid not in PACK_USE_IDS and not wearing:
+        return None
+    if p.get("encounter"):
+        if wearing:
+            # 048 phase 3: the promote is refused mid-fight WITH a
+            # reason — not the generic "not one of the paths".
+            s = _build_scene(p)
+            s.shard_note = ("Not mid-fight — you don't re-rig your "
+                            "hands with teeth in your face. The swap "
+                            "waits for the road.")
+            return s
         return None
     slug = oid.removeprefix("wear_" if wearing else "use_")
     acts, why = pack_actions(p, slug)
@@ -575,6 +593,7 @@ def _build_scene(p: dict) -> Scene:
         "board": _board_scene,
         "stone": _stone_scene, "gate": _gate_scene,
         "gate_town": _gate_town_scene,
+        "school": _school_scene,
         "relay": social.relay_scene, "fields": social.fields_scene,
         "guildhall": social.guildhall_scene, "hall": hall.hall_scene,
         "grants": social.grant_scene,
@@ -1113,6 +1132,8 @@ def _dispatch_location(p: dict, oid: str) -> Scene:
         return _gate_pick(p, oid)
     if loc == "gate_town":
         return _gate_town_action(p, oid)
+    if loc == "school":
+        return _school_action(p, oid)
     if loc == "relay":
         return social.relay_action(p, oid)
     if loc == "fields":
@@ -1501,6 +1522,16 @@ def _gear_purchase(p: dict, g, scene_fn) -> Scene:
         return s
     p["gold"] -= price
     p["gear"][g.slot] = g.slug
+    # 048 phase 3: the hand changed — held[0] follows, the old piece
+    # leaves the held list (it rides to the pack below, not both).
+    if g.slot == "weapon":
+        held = p.setdefault("held", [])
+        if old in held:
+            held.remove(old)
+        if g.slug in held:
+            held.remove(g.slug)
+        held.insert(0, g.slug)
+        del held[max(1, int(p.get("slots", 1))):]
     if g.slot in p.get("hone", {}):
         p["hone"][g.slot] = 0        # honing lives on the item it honed
     # 005: wear lives on the item too — stash the old piece's remaining
@@ -1554,8 +1585,22 @@ def _wear_from_pack(p: dict, slug: str, scene_fn) -> Scene:
     if g.price > 0:
         p.setdefault("durability", {})[g.slot] = stash.pop(
             slug, economy.item_pool(g))
+    # 048 phase 3: CARRY — a free slot keeps the old weapon in hand
+    # instead of bumping it to the pack; held[0] is always the hand.
+    kept = False
+    if g.slot == "weapon":
+        held = p.setdefault("held", [])
+        if slug in held:
+            held.remove(slug)
+        held.insert(0, slug)
+        cap = max(1, int(p.get("slots", 1)))
+        kept = bool(old) and old in held[1:cap]
+        del held[cap:]
     note = f"+ {g.name} back on"
-    if old and economy.FORGE.get(old) and economy.FORGE[old].price > 0:
+    if kept:
+        note += (f" — the {economy.FORGE[old].name} stays in your "
+                 "other hand")
+    elif old and economy.FORGE.get(old) and economy.FORGE[old].price > 0:
         p["inventory"][old] = p["inventory"].get(old, 0) + 1
         note += f" — the {economy.FORGE[old].name} goes to your pack"
     s = scene_fn(p)
@@ -2759,6 +2804,9 @@ def _gate_town_options(p: dict, fl) -> list[Option]:
     npc = getattr(fl, "npc", None)
     if npc is not None:
         opts.append(Option("talk", f"Talk — {npc.name}", npc.role))
+    # 048: every gate town teaches — the School door, next to the fire.
+    opts.append(Option("school", "The School",
+                       "any weapon, taught to bite"))
     opts.append(Option("town", "Return to Roothollow"))
     return opts
 
@@ -2800,6 +2848,226 @@ def _npc_scene(p: dict, fl) -> Scene:
     )
 
 
+# ── The School (048: train, mastery, carry — every gate town) ────────
+
+_PATH_GLYPH = {"blade": "⚔", "bow": "➶", "staff": "✦"}
+_PATH_ORDER = ("blade", "bow", "staff")
+
+
+def _school_bar(rank: int) -> str:
+    return "▰" * rank + "▱" * (10 - rank)
+
+
+def _school_discounted(p: dict, path: str) -> bool:
+    """A master pays 80% on the OTHER paths' ranks 1-5."""
+    m = p.get("mastery") or {}
+    return any(m.get(k) for k in _PATH_ORDER if k != path)
+
+
+def _school_scene(p: dict) -> Scene:
+    fl = schema.get_floor(max(1, p["floor"]))
+    front = max(1, p["unlocked_floor"])
+    training = p.get("training") or {}
+    mastery = p.get("mastery") or {}
+    lines, opts = [], []
+    for path in _PATH_ORDER:
+        r = int(training.get(path, 0))
+        g = _PATH_GLYPH[path]
+        if r >= 10:
+            # the bar turns gold — rank 10 is a public achievement
+            lines.append(f"{g} {path.upper()} — trained rank 10 "
+                         f"{_school_bar(10)} · GOLD")
+            if mastery.get(path):
+                lines.append(f"   MASTERY — studied. Its edge arrives "
+                             "with the new fighting laws.")
+            else:
+                lines.append(f"   MASTERY — the master offers the "
+                             f"{path} study: {economy.MASTERY_XP} XP")
+                opts.append(Option(f"mastery_{path}",
+                                   f"Study {path} mastery",
+                                   f"{economy.MASTERY_XP} XP"))
+            continue
+        nxt = r + 1
+        xp = economy.train_xp_cost(nxt, _school_discounted(p, path))
+        gold = economy.train_gold(nxt, front)
+        lines.append(f"{g} {path.upper()} — trained rank {r} "
+                     f"{_school_bar(r)} · next: rank {nxt} — "
+                     f"{xp} XP + ◈ {gold}")
+        m0, m1 = economy.TRAIN_MISS_PCT(r), economy.TRAIN_MISS_PCT(nxt)
+        f0 = round(economy.TRAIN_ROLL_FLOOR(r) * 100)
+        f1 = round(economy.TRAIN_ROLL_FLOOR(nxt) * 100)
+        lines.append(f"   rank {nxt}: miss {m0}%→{m1}%, worst swing "
+                     f"{f0}%→{f1}% of full power")
+        opts.append(Option(f"train_{path}",
+                           f"Train {path} to rank {nxt}",
+                           f"{xp} XP + ◈ {gold}"))
+    slots = int(p.get("slots", 1))
+    carry = (f"✥ CARRY — {slots} weapon "
+             f"slot{'s' if slots != 1 else ''}")
+    if slots == 1:
+        carry += (f" · 2nd slot — {economy.CARRY2_XP} XP + "
+                  f"◈ {economy.CARRY2_GOLD}")
+        opts.append(Option("buy_carry2", "Learn to carry a 2nd weapon",
+                           f"{economy.CARRY2_XP} XP + "
+                           f"◈ {economy.CARRY2_GOLD}"))
+    elif slots == 2:
+        if p["level"] < economy.CARRY3_LEVEL:
+            lock = (f"needs level {economy.CARRY3_LEVEL} — "
+                    f"you: {p['level']}")
+            carry += f" · 3rd slot — locked ({lock})"
+            opts.append(Option("buy_carry3",
+                               "Learn to carry a 3rd weapon", lock,
+                               locked=True))
+        else:
+            gold3 = economy.carry3_gold(front)
+            carry += (f" · 3rd slot — {economy.CARRY3_XP} XP + "
+                      f"◈ {gold3}")
+            opts.append(Option("buy_carry3",
+                               "Learn to carry a 3rd weapon",
+                               f"{economy.CARRY3_XP} XP + ◈ {gold3}"))
+    lines.append(carry)
+    opts.append(Option("back", f"Back to {fl.gate_town}"))
+    return Scene(
+        eyebrow=f"FLOOR {fl.floor} · {fl.gate_town.upper()} · "
+                "THE SCHOOL",
+        headline="The School",
+        support="Any hand can hold any weapon. The School teaches it "
+                "to bite. Training spends the XP bar — the same pool "
+                "the Guildhall levels from.",
+        body_lines=lines,
+        options=opts,
+        meters=combat.meters(p),
+    )
+
+
+def _school_action(p: dict, oid: str) -> Scene:
+    if oid == "back":
+        p["location"] = "gate_town"
+        return _gate_town_scene(p)
+    if oid.startswith("train_"):
+        path = oid.removeprefix("train_")
+        if path in _PATH_GLYPH:
+            return _school_train(p, path)
+    if oid.startswith("mastery_"):
+        path = oid.removeprefix("mastery_")
+        if path in _PATH_GLYPH:
+            return _school_mastery(p, path)
+    if oid in ("buy_carry2", "buy_carry3"):
+        return _school_carry(p, oid)
+    return _school_scene(p)
+
+
+def _school_refuse(p: dict, why: str) -> Scene:
+    s = _school_scene(p)
+    s.shard_note = why
+    return s
+
+
+def _school_train(p: dict, path: str) -> Scene:
+    r = int(p["training"].get(path, 0))
+    if r >= 10:
+        return _school_refuse(
+            p, f"Rank 10 — the School has nothing left to teach "
+               f"your {path}. The master, though, might.")
+    nxt = r + 1
+    xp = economy.train_xp_cost(nxt, _school_discounted(p, path))
+    gold = economy.train_gold(nxt, max(1, p["unlocked_floor"]))
+    if p["xp"] < xp:
+        return _school_refuse(
+            p, f"Rank {nxt} {path} wants {xp} XP — your bar holds "
+               f"{p['xp']}. Kills fill it.")
+    if p["gold"] < gold:
+        return _school_refuse(
+            p, f"The instructor's fee is ◈ {gold} — you carry "
+               f"◈ {p['gold']:,}.")
+    p["xp"] -= xp
+    p["gold"] -= gold
+    p["training"][path] = nxt
+    combat._ledger(p, "train", gold=-gold, xp=-xp, note=f"{path} {nxt}")
+    if nxt == 10 and not p["flags"].get(f"invited_{path}"):
+        # rank 10 — the invitation card, once, ever
+        p["flags"][f"invited_{path}"] = True
+        p.setdefault("pending_events", []).insert(0, Scene(
+            eyebrow="THE SCHOOL · AN INVITATION",
+            headline=f"The {path} master will see you now",
+            support="Rank 10 — the drills end where the studies "
+                    "begin.",
+            body_lines=[
+                f"▪ {path} mastery — a study of "
+                f"{economy.MASTERY_XP} XP, at any School",
+                "▪ a master pays 80% on the other paths' first "
+                "five ranks",
+            ],
+            options=[Option("town", "So be it")],
+            event_kind="present",
+        ).to_dict())
+    s = _school_scene(p)
+    s.body_lines.insert(
+        0, f"+ {path} — trained rank {nxt}. The drills stick.")
+    return s
+
+
+def _school_mastery(p: dict, path: str) -> Scene:
+    if int(p["training"].get(path, 0)) < 10:
+        return _school_refuse(
+            p, "The studies open at rank 10 — train first.")
+    if (p.get("mastery") or {}).get(path):
+        return _school_refuse(
+            p, "Already studied — the master has no second lesson.")
+    if p["xp"] < economy.MASTERY_XP:
+        return _school_refuse(
+            p, f"The study wants {economy.MASTERY_XP} XP — your bar "
+               f"holds {p['xp']}.")
+    p["xp"] -= economy.MASTERY_XP
+    p.setdefault("mastery", {})[path] = True
+    combat._ledger(p, "train", xp=-economy.MASTERY_XP,
+                   note=f"mastery {path}")
+    s = _school_scene(p)
+    s.body_lines.insert(
+        0, f"+ {path} MASTERY — the study is yours. Its edge "
+           "arrives with the new fighting laws.")
+    return s
+
+
+def _school_carry(p: dict, oid: str) -> Scene:
+    slots = int(p.get("slots", 1))
+    if oid == "buy_carry2":
+        if slots != 1:
+            return _school_refuse(p, "Your hands already know the "
+                                     "second grip.")
+        xp, gold = economy.CARRY2_XP, economy.CARRY2_GOLD
+    else:
+        if slots >= 3:
+            return _school_refuse(p, "Three is all the hands you have.")
+        if slots < 2:
+            return _school_refuse(p, "The second grip comes first.")
+        if p["level"] < economy.CARRY3_LEVEL:
+            return _school_refuse(
+                p, f"The third hand is a veteran's trick — needs "
+                   f"level {economy.CARRY3_LEVEL} — you: "
+                   f"{p['level']}.")
+        xp, gold = economy.CARRY3_XP, economy.carry3_gold(
+            max(1, p["unlocked_floor"]))
+    if p["xp"] < xp:
+        return _school_refuse(
+            p, f"The grip wants {xp} XP — your bar holds "
+               f"{p['xp']}.")
+    if p["gold"] < gold:
+        return _school_refuse(
+            p, f"The grip's fee is ◈ {gold} — you carry "
+               f"◈ {p['gold']:,}.")
+    p["xp"] -= xp
+    p["gold"] -= gold
+    p["slots"] = slots + 1
+    combat._ledger(p, "train", gold=-gold, xp=-xp,
+                   note=f"carry {slots + 1}")
+    s = _school_scene(p)
+    s.body_lines.insert(
+        0, f"+ CARRY — {slots + 1} weapon slots now. The weight "
+           "settles across your back.")
+    return s
+
+
 def _gate_town_scene(p: dict) -> Scene:
     fl = schema.get_floor(max(1, p["floor"]))
     body = _presence_floor_lines(p, fl.floor)
@@ -2823,6 +3091,9 @@ def _gate_town_action(p: dict, oid: str) -> Scene:
     fl = schema.get_floor(max(1, p["floor"]))
     if oid == "talk" and getattr(fl, "npc", None) is not None:
         return _npc_scene(p, fl)
+    if oid == "school":
+        p["location"] = "school"
+        return _school_scene(p)
     if oid == "answer_flare":
         fw = _live_flare(p)
         if fw is None:

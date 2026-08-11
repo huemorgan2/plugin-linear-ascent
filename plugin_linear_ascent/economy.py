@@ -718,6 +718,28 @@ def train_gold(rank: int, frontier: int) -> int:
     return round(TRAIN_GOLD_ANCHOR * pillar(frontier) * rank)
 
 
+# 048 N4/N5: mastery studies and the CARRY skill — School merchandise.
+# A master pays 80% on the OTHER paths' first five ranks (the hands
+# already know discipline); the discount never reaches rank 6+.
+MASTERY_XP = round(train_xp(10) * 1.5)          # 948
+MASTERY_DISCOUNT = 0.8
+MASTERY_DISCOUNT_MAX_RANK = 5
+CARRY2_XP, CARRY2_GOLD = 60, 30                 # 2nd slot — level 1
+CARRY3_XP, CARRY3_GOLD_ANCHOR = 900, 200        # 3rd slot — level 8+
+CARRY3_LEVEL = 8
+
+
+def carry3_gold(frontier: int) -> int:
+    return round(CARRY3_GOLD_ANCHOR * pillar(frontier))
+
+
+def train_xp_cost(rank: int, discounted: bool = False) -> int:
+    xp = train_xp(rank)
+    if discounted and rank <= MASTERY_DISCOUNT_MAX_RANK:
+        xp = round(xp * MASTERY_DISCOUNT)
+    return xp
+
+
 def type_from_traits(traits) -> str:
     """Legacy trait sets → the one 048 type. Flight is the loudest fact;
     resist outranks armor (a warded thing reads as warded); bulwark is
