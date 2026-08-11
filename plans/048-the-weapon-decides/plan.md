@@ -36,6 +36,10 @@ Decisions made (2026-08-11):
 - **Spreading over all three paths is deliberately slower** — each
   rank costs more than the last (it costs XP), and no player should
   find tri-path investment optimal.
+- **Carry is a School skill**: a second weapon slot is learnable
+  from level 1; a third slot costs a lot more and opens at player
+  level 8 (shown locked until then). Each slotted weapon is its own
+  attack option in the fight — sword attack AND bow attack.
 - Tests change FIRST: visibility (why I lost, every monster param),
   smooth scaling with no bumps across levels, weapon rungs, and
   floors, and healthy progression pacing are all asserted before
@@ -183,10 +187,51 @@ material). It opens:
 gains a MASTERY line listing studies with costs; the invitation
 card names the discount.
 
-## N5. Classes die; weapons and lines survive
+## N5. Carry — more than one weapon in the fight
+
+A School skill, not an item. You enter every fight with your
+**slotted** weapons; each slot is its own attack option:
+
+```
+› Sword attack ⚔ rank 6 — ~38 vs this one (steel: half)
+› Bow attack   ➶ rank 3 — ~9 vs this one (arrows: glance)
+```
+
+Every slotted weapon rolls with its OWN path's rank and its own
+triangle answer — no switching action, no lost round. Weapons
+beyond your slots stay in the pack; slots are rearranged freely in
+town or between fights, never mid-fight.
+
+```python
+WEAPON_SLOTS_BASE = 1          # everyone starts with one hand ready
+CARRY2_XP,  CARRY2_GOLD  = 60,  30    # 2nd slot — learnable at level 1
+CARRY3_XP,  CARRY3_GOLD_ANCHOR = 900, 200
+CARRY3_LEVEL = 8               # 3rd slot: costs a lot more, opens at 8
+carry3_gold(front) = round(200 * pillar(front))
+```
+
+- The 2nd slot is cheap on purpose — it is the classroom's key: buy
+  a bow, learn carry, and the triangle is playable on floor 3.
+- The 3rd slot is the completionist's answer to all three types at
+  once — priced like a mid-tower luxury and gated at player level
+  8. Below 8 it renders **locked with the requirement**:
+  `3rd slot — 900 XP + ◈620 (needs level 8 — you: 5)`.
+
+**What the player sees:** a CARRY row in the School under the three
+path bars (S2); in the fight, one attack option per slotted weapon,
+each labeled with its weapon, rank, and predicted damage against
+THIS monster — the triangle made pickable. **In the profile/bag:**
+hovering a weapon in the bag shows its tooltip with a
+`Hold — promote to slot` action; picking it moves the weapon into a
+holding slot (choosing which slot to bump when all are full).
+Slotted weapons render at the top of the sheet as the HOLDING row
+with their ⚔/➶/✦ path marks; a bag weapon's tooltip also says why
+promotion is refused mid-fight.
+
+## N6. Classes die; weapons and lines survive
 
 - `CLASSES` dict, creation class question, `class_starter()` — die.
-- `clazz` stays on old docs, ignored by the engine (migration N8).
+- `clazz` stays on old docs, ignored by the engine (migration N9).
 - Weapon `line` tags survive as the path key:
   `PATH_OF_LINE = {"warrior": "blade", "archer": "bow",
   "sorcerer": "staff"}`; `DAMAGE_TYPE` stays line-keyed
@@ -204,21 +249,25 @@ BASIC_WEAPON_PRICE = 60        # basic_bow, worn_staff at the armory
   the young-tower bounty — all three basic weapons owned before
   floor 10 is the intended path.
 
-## N6. Fight actions follow the weapon + rank (0–10 scale)
+## N7. Fight actions follow the weapon + rank (0–10 scale)
+
+"In hand" = in a holding slot (N5). With two slots holding sword
+and bow, both columns of options are live in the same fight.
 
 | action | today | 048 gate |
 |---|---|---|
-| Treeline shot | archer only | bow in hand, bow rank ≥ 4 |
-| Create distance | archer only | bow in hand, bow rank ≥ 6 |
-| Gap draw ×1.25/×1.5 | archer only | bow in hand, bow rank ≥ 8 |
+| Sword/Bow/Staff attack | one "Attack" | one attack option per SLOTTED weapon (N5) |
+| Treeline shot | archer only | bow in a slot, bow rank ≥ 4 |
+| Create distance | archer only | bow in a slot, bow rank ≥ 6 |
+| Gap draw ×1.25/×1.5 | archer only | bow in a slot, bow rank ≥ 8 |
 | Shield wall | warrior only | shield equipped, blade rank ≥ 4 |
-| Sleep spell | sorcerer only | staff in hand, staff rank ≥ 6 |
-| **Switch weapon** (new) | — | second weapon in pack; costs the round |
+| Sleep spell | sorcerer only | staff in a slot, staff rank ≥ 6 |
 
-Locked actions render greyed with the requirement:
+The mid-fight switch-weapon action is NOT needed — slots replace
+it. Locked actions render greyed with the requirement:
 `Treeline shot — needs Bow rank 4 (you: 2)`.
 
-## N7. Early-tower coin
+## N8. Early-tower coin
 
 ```python
 EARLY_COIN_FLOORS = 10
@@ -232,7 +281,7 @@ basic weapons (◈180) + the first ranks of each path by floor 10.
 The first ten floors are the classroom — all three signs appear
 there in weak specimens.
 
-## N8. Migration (one-time, on first load of a legacy doc)
+## N9. Migration (one-time, on first load of a legacy doc)
 
 - `p["training"] = {old class's path: 6, others: 0}` — rank 6 on
   the new scale ≈ the old class feel plus one visible step of
@@ -261,6 +310,8 @@ weapon. The School teaches it to bite."*
 ⚔ BLADE   trained rank 6   ▰▰▰▰▰▰▱▱▱▱   next: rank 7 — 371 XP + 56 ◈
 ➶ BOW     trained rank 0   ▱▱▱▱▱▱▱▱▱▱   next: rank 1 — 20 XP + 8 ◈
 ✦ STAFF   trained rank 0   ▱▱▱▱▱▱▱▱▱▱   next: rank 1 — 20 XP + 8 ◈
+✥ CARRY   1 weapon slot            2nd slot — 60 XP + 30 ◈
+                                   3rd slot — locked (needs level 8)
 ```
 
 Each "next" line says in words what improves: *"Rank 7: miss
@@ -324,15 +375,17 @@ Validated by grep (2026-08-11). Every file that must change for
   `_creation_pick_class` die; race → name directly; School scene;
   migration hook.
 - `engine/state.py` (17) — `clazz` on the doc → tolerated-legacy;
-  `training` dict; sheet/profile payloads.
-- `engine/combat.py` (23) — every `p.get("clazz")` gate (§N6);
-  `_damage_type` reads the HELD WEAPON's line, never the class;
-  off-class miss/burn branches die.
+  `training` dict + `slots` (held weapons, N5); sheet/profile
+  payloads.
+- `engine/combat.py` (23) — every `p.get("clazz")` gate (§N7);
+  `_damage_type` reads the SLOTTED WEAPON's line, never the class;
+  one attack option per slot; off-class miss/burn branches die.
 - `engine/tips.py` (8) — class-named tips rewritten to weapon-named.
 - `engine/profile.py`, `engine/scene.py`, `engine/social.py`,
   `pane.py`, `render.py`, `sheet.py`, `icons.py` — class label on
-  the sheet/profile/pane becomes the three training bars; class
-  icons → path icons ⚔/➶/✦.
+  the sheet/profile/pane becomes the three training bars + the
+  HOLDING row; bag-weapon tooltips gain the `Hold — promote to
+  slot` action (N5); class icons → path icons ⚔/➶/✦.
 - `content/schema.py` — creature trait vocabulary swaps to the four
   types; weapon `line` field survives.
 
@@ -370,9 +423,13 @@ starts by landing its tests red, then turns them green.
   can't train past 10; XP/gold actually deducted.
 - Mastery: rank 10 opens studies at 948 XP; invitation discount
   20% on other paths' ranks 1–5; studies' effects measurable.
-- Gates: each N6 action opens exactly at its rank with the weapon
-  held, for a doc that never had that class; switch-weapon spends
-  the round and the monster answers.
+- Gates: each N7 action opens exactly at its rank with the weapon
+  slotted, for a doc that never had that class.
+- Carry: 2nd slot purchasable at level 1 (60 XP + 30 ◈); 3rd slot
+  refused below level 8 and rendered locked with the requirement;
+  with sword+bow slotted the fight offers BOTH attack options, each
+  rolling its own path's rank and triangle answer; promote-from-bag
+  works in town, refused mid-fight with a reason.
 - Migration: legacy archer doc → bow 6; plays without error; card
   shown once.
 
@@ -384,7 +441,11 @@ The "can I tell why?" law as assertions on rendered scenes:
 - The pre-fight verdict names the player's actual best answer and
   its rank.
 - Every locked action's text contains the gate (`needs Bow rank 4
-  (you: 2)`).
+  (you: 2)`); the locked 3rd carry slot shows `needs level 8 —
+  you: N`.
+- With multiple slots, each attack option is labeled with its
+  weapon, rank, and predicted damage vs THIS monster; the bag
+  tooltip carries the `Hold — promote to slot` action.
 - Every miss/shallow-hit line names the rank as the cause.
 - **Every defeat scene names the losing cause in one sentence
   containing a lever the player owns** (weapon choice, rank, or
@@ -430,9 +491,10 @@ The 017 gate walked floors per CLASS. It now walks:
 ## T5. Progression-feel suite `test_048_progression.py` (new)
 
 Scripted sim playthroughs (engine-level, seeded):
-- "The intended first ten floors": buy bow at ~3, staff at ~5,
-  train to 2/2/2 — every floor-1–10 monster of every type is
-  answerable by SOMETHING in the pack; no fight is a wall.
+- "The intended first ten floors": buy bow at ~3, learn the 2nd
+  carry slot, buy staff at ~5, train to 2/2/2 — every floor-1–10
+  monster of every type is answerable by a SLOTTED weapon; no
+  fight is a wall.
 - "The specialist": blade-only to rank 10 by ~level 10 — mastery
   reached, invitation card fires.
 - "Wrong-weapon lesson": bow-only climber meets armoured — loses
@@ -501,9 +563,11 @@ mechanical group as it surfaces).
 
 ## Phase 3 — the School + mastery
 
-T1 school/mastery tests; then the School scene, train flow
+T1 school/mastery/carry tests; then the School scene, train flow
 (XP+gold, refusals, "what improves" lines), rank-10 gold bar,
-mastery studies, invitation + discount.
+mastery studies, invitation + discount, carry slots (2nd at level
+1, 3rd locked to level 8) + the slots field and promote-from-bag
+UI on the sheet.
 
 **Green =** T1 complete; T2 school assertions.
 
@@ -512,9 +576,9 @@ mastery studies, invitation + discount.
 T7 trace lint (red), T1 gate cases; then: creation drops the class
 question; everyone starts Rusted Sword + blade 2; armory sells all
 lines (`OFF_CLASS_*` deleted); basic bow/staff at ◈60; action
-gates flip to weapon+rank; switch-weapon; sheet/pane/profile show
-the three bars; tips/contracts reworded. The big T6 sweep lands
-here.
+gates flip to slotted-weapon+rank; per-slot attack options;
+sheet/pane/profile show the three bars + HOLDING row;
+tips/contracts reworded. The big T6 sweep lands here.
 
 **Green =** T7 (engine part), T1 gates, swept suite.
 
@@ -530,7 +594,7 @@ sentences, blade-vs-fly run truth, `TYPE_GOLD`.
 
 T3 rank/rung axes + T4 + T5 (red); then `XP_PER_KILL_SLOPE` → 3.0,
 `early_coin_mult` + bounty label, anchor tuning until every T3/T4
-gate holds (this is the bake — anchors in N3/N7 are the starting
+gate holds (this is the bake — anchors in N3/N8 are the starting
 guess, the tests are the law).
 
 **Green =** T3, T4, T5 in full.
@@ -563,8 +627,9 @@ monster of each type at ranks 0/5/10.
   the hand; every DEFEAT names the cause and a lever (T2 enforces
   all of it).
 - **Can I change it next time?** Train the path (School, XP+gold,
-  ten visible steps), or carry the counter-weapon (armory, ◈ + a
-  round to switch). Nothing is locked to a day-one choice.
+  ten visible steps), or slot the counter-weapon (armory ◈ + the
+  carry skill — both attacks live in the same fight). Nothing is
+  locked to a day-one choice.
 
 ## Open questions
 
@@ -578,8 +643,9 @@ monster of each type at ranks 0/5/10.
    flagging because it changes the spread-is-slower principle.
 3. Train-by-use (kills with the weapon drip path-XP) or
    School-only? Plan assumes School-only for legibility.
-4. Two-weapon carry: free pack slot or a bought harness item?
-   Plan assumes free pack slot (the round cost is the price).
+4. ~~Two-weapon carry~~ — decided: the CARRY School skill (N5) —
+   2nd slot from level 1, 3rd slot expensive and level-8-gated;
+   per-slot attack options replace the switch action.
 5. Rename internal weapon-line slugs (`warrior/archer/sorcerer` →
    `blade/bow/staff`) — clean but touches every saved doc's gear;
    plan keeps the old slugs as whitelisted internal IDs.
