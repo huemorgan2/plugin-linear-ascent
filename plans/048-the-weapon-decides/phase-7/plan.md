@@ -31,3 +31,13 @@ T7 complete, census, suite; mechanics page renders locally
 (worldd venv, spot-check /mechanics).
 Commit(s): plugin `048 phase 7: content retagged to types`,
 worldd `mechanics: path×rank ledger + TRAINING tab`.
+
+## Learnings applied (from phase 4)
+
+- Mechanics page + TRAINING tab copy speaks PATH words (blade/bow/
+  staff): the engine's calling line is race + path ("elf bow"), and
+  engine-rendered text may not contain warrior/archer/sorcerer/class
+  (test_rendered_text_is_class_free). Slugs/ids keep the old line
+  names ("warrior" line, job kind "class") — wire-compat, invisible.
+- retag.py: follow sweep_tests.py's pattern — assert-counted
+  replaces, atomic per file, script kept in the phase folder.

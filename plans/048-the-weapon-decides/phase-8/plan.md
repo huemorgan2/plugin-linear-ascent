@@ -30,3 +30,12 @@ Commit: `048 phase 8: the words teach — polish + playtest log`.
   `test_034_shield_wear.py::test_shield_wall_pays_for_the_whole_blow`
   (pre-existing on main; 047 floor-1 softening) — pin the fight to
   floor 3 per the sibling test's 043.2 precedent, pending roy's nod.
+
+## Learnings applied (from phase 4)
+
+- Playtest the classless open specifically: race → name, Rusted
+  Sword + blade 2, first bow at the Forge counter (60), the locked
+  rows' `needs Bow rank 4 (you: 2)` voice — confused-card log
+  starts at creation, not floor 1.
+- Migration wording check needs a planted `p["clazz"]` — new docs
+  never carry one; the rank-6 card only shows for legacy docs.

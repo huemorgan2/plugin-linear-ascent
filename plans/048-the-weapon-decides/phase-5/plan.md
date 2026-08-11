@@ -50,3 +50,17 @@ visibility, defeats that teach`.
 - The School scene's "what improves" strings are the visibility
   pattern (numbers on the row, before the click) — reuse the same
   voice for monster sign lines and the pre-fight verdict.
+
+## Learnings applied (from phase 4)
+
+- New tests build on tests/test_048_no_classes.py helpers
+  (`_classless`, `_arm`, `_fight`) — never the clazz-era creation
+  walk. Rank thresholds must be set EXPLICITLY per case (the old
+  "class feel" rank 6 is below the rank-8 draw gate).
+- After deleting old damage machinery (typed_damage, TIER_MULT,
+  PROFILE_GOLD, FLYING_GOLD_MULT), grep the BARE identifiers across
+  engine AND tests — phase 4's leftover `if off:` NameError hid on
+  an untested branch until the buy path ran.
+- The pane's calling line renders race + PATH ("elf bow") via
+  Meters.clazz — verdict/sign copy must speak path words; a class
+  word in rendered text fails test_rendered_text_is_class_free.

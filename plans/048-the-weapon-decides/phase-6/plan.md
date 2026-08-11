@@ -63,3 +63,14 @@ anchors settled`.
 - School gold prices ride pillar(frontier) — any PILLAR change
   moves train_gold/carry3_gold; the bake's expected values must be
   computed with round() from the constants, never hand-copied.
+
+## Learnings applied (from phase 4)
+
+- Bake sims start from the classless doc: Rusted Sword + blade 2,
+  basics at flat 60 through `_basic_buy` (FORGE price stays 0 —
+  price>0 is the wear/pawn/death key; never move basics through
+  `_gear_purchase`).
+- Any test that leans on a gate threshold trains the rank
+  explicitly; the conftest kit's rank 6 opens the gap but NOT the
+  ×draw (rank 8) — silent at-threshold behavior was phase 4's
+  test_036 trap.
