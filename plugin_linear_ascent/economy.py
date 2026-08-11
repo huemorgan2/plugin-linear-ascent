@@ -672,6 +672,47 @@ def profile_gold_mult(prof: dict) -> float:
     return m
 
 
+# ── 048: one type per monster — sign, speed, weight, and the triangle ──
+# (phase 1: tables + mapping only; combat still runs the tier system.)
+
+TYPE_SPEED = {"fly": 7, "armoured": 3, "magic_resist": 3, "plain": 5}
+TYPE_ATK = {"fly": 0.6, "armoured": 1.4, "magic_resist": 1.4, "plain": 1.0}
+TYPE_HP = {"fly": 0.9, "armoured": 1.2, "magic_resist": 1.0, "plain": 1.0}
+TYPE_GOLD = {"fly": 1.2, "armoured": 1.3, "magic_resist": 1.3, "plain": 1.0}
+
+TYPE_MULT = {
+    "fly":          {"blade": 0.0, "bow": 1.0, "staff": 0.6},
+    "armoured":     {"blade": 0.5, "bow": 0.15, "staff": 1.0},
+    "magic_resist": {"blade": 1.0, "bow": 0.5, "staff": 0.15},
+    "plain":        {"blade": 1.0, "bow": 1.0, "staff": 1.0},
+}
+
+
+def type_from_traits(traits) -> str:
+    """Legacy trait sets → the one 048 type. Flight is the loudest fact;
+    resist outranks armor (a warded thing reads as warded); bulwark is
+    orthogonal and never a type."""
+    ts = set(traits)
+    if "flying" in ts:
+        return "fly"
+    if any(t.startswith("resist_") for t in ts):
+        return "magic_resist"
+    if any(t.startswith("armor_") for t in ts):
+        return "armoured"
+    return "plain"
+
+
+def typed_damage_048(path: str, raw: int, monster_def: int,
+                     mtype: str) -> int:
+    """Damage of weapon path P against monster type T. Staff ignores flat
+    DEF; blade and bow eat raw−DEF/2. Anything that CAN hit chips ≥1 —
+    the single legal zero stays blade-vs-fly."""
+    if path == "blade" and mtype == "fly":
+        return 0
+    base = raw if path == "staff" else raw - monster_def // 2
+    return max(1, round(max(1, base) * TYPE_MULT[mtype][path]))
+
+
 def typed_damage(dtype: str, raw: int, monster_def: int, prof: dict) -> int:
     """Player damage through a defense profile. Magic ignores flat DEF but
     eats the resist tier; melee/ranged keep raw−DEF/2 and eat the armor

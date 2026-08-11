@@ -23,3 +23,10 @@ paper game is the felt game.
 
 full suite, playtest log clean of unexplained losses.
 Commit: `048 phase 8: the words teach — polish + playtest log`.
+
+## Learnings applied (from phase 1)
+
+- Add polish item: baseline-red
+  `test_034_shield_wear.py::test_shield_wall_pays_for_the_whole_blow`
+  (pre-existing on main; 047 floor-1 softening) — pin the fight to
+  floor 3 per the sibling test's 043.2 precedent, pending roy's nod.

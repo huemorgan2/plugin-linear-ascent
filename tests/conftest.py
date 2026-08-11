@@ -107,3 +107,19 @@ def _step_the_reel(request, monkeypatch):
 
     monkeypatch.setattr(core, "apply_choice", step)
     yield
+
+
+# ── 048: the canonical creation helper ─────────────────────────────────
+# ~30 test files carry a local copy of this walk; new tests use this one
+# and the local copies fold into it during the phase-4 sweep.
+
+def make_character(p, race="human", clazz="warrior", name="Testa"):
+    """Walk the intro movie and the creation flow to a live climber."""
+    from plugin_linear_ascent.engine import core
+    core.current_scene(p)
+    while p["stage"] == "intro":
+        core.apply_choice(p, "1", "")
+    core.apply_choice(p, race, "")
+    core.apply_choice(p, clazz, "")
+    core.apply_choice(p, "", name)
+    return p

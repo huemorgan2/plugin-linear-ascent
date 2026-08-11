@@ -34,3 +34,10 @@ guess; the tests are the law — tune until green.
 T3+T4+T5 full, suite.
 Commit: `048 phase 6: the bake — slope 3.0, young-tower bounty,
 anchors settled`.
+
+## Learnings applied (from phase 1)
+
+- Python banker's rounding (`round(4.5)==4`): compute every
+  expected value in the bake with `round()`, never by hand.
+- Suite-green gate excludes the baseline-red
+  test_034 shield_wall case (pre-existing on main).
