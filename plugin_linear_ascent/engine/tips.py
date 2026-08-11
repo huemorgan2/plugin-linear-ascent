@@ -26,9 +26,11 @@ _TIPS: dict[str, str] = {
     # creation
     "next": ("The story of the Ascent, one scene at a time. Nothing is "
              "spent — watch, then climb."),
-    "begin": ("Register at the tower gate: pick a line and a craft, take "
-              "your shardmind and ◈ 50, and start hunting floor 1. Every "
-              "climber the world has starts exactly here."),
+    "begin": ("Register at the tower gate: pick a line, take your "
+              "shardmind, the gate's Rusted Sword (two ranks of bladework "
+              "with it) and ◈ 50, and start hunting floor 1. Every "
+              "climber the world has starts exactly here — the School "
+              "sells everything else."),
 
     # ── Roothollow buildings — the priority tips ──
     "forge": ("Weapons, shields and armor by tier. More ATK ends fights "
@@ -224,9 +226,10 @@ _TIPS: dict[str, str] = {
     # 040: the archer's gap ladder wears the same "Open distance" label
     # on the card — one verb for making ground; this tip is the [i].
     "create_distance": ("Give ground on purpose — rank-6 bowwork. It "
-                        "ALWAYS works: you step back one length and "
-                        "your bow hits harder from there (×1.25 at 2 "
-                        "lengths, ×1.5 at 3 — the cap). The price is "
+                        "ALWAYS works: you step back one length. From "
+                        "rank 8 the open gap starts PAYING — ×1.25 at 2 "
+                        "lengths, ×1.5 at 3 (the cap); below rank 8 the "
+                        "long draw shoots plain ×1.0. The price is "
                         "the monster may rake you once as you pull "
                         "away; faster legs shrink that chance. Costs "
                         "the round."),
@@ -234,15 +237,17 @@ _TIPS: dict[str, str] = {
                     "mid-fight: full HP, the round keeps going. Carried "
                     "for exactly the moment a Warden has you at the "
                     "edge."),
-    "shield_wall": ("Warrior craft: plant the shield and take the round "
+    "shield_wall": ("Blade craft, rank 4 — a shield on the arm: plant it "
+                    "and take the round "
                     "on it. You deal nothing, you take nothing — resets "
                     "a fight that started badly without giving up the "
                     "kill."),
-    "sleep_spell": ("Sorcerer craft: put the creature under and walk "
+    "sleep_spell": ("Staff craft, rank 6 — the lullaby: put the creature "
+                    "under and walk "
                     "past. Costs the fight's XP price and forfeits its "
                     "loot — but spends no HP at all. Cheap when your "
                     "health is worth more than the purse."),
-    "treeline_shot": ("Archer craft: one free arrow from the distance, "
+    "treeline_shot": ("Bow craft, rank 4: one free arrow from the distance, "
                       "before the fight is joined — damage the enemy "
                       "never answers. It is the OPENING move: once you "
                       "attack, the cover is blown and the shot is gone "

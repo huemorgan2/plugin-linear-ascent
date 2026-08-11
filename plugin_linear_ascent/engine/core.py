@@ -2994,6 +2994,8 @@ def _school_train(p: dict, path: str) -> Scene:
                 f"{economy.MASTERY_XP} XP, at any School",
                 "▪ a master pays 80% on the other paths' first "
                 "five ranks",
+                "▪ a tenth rank is toasted in every banner hall — "
+                "the tower knows its masters by name",
             ],
             options=[Option("town", "So be it")],
             event_kind="present",

@@ -93,10 +93,23 @@ def profile_scene(p: dict, note: str = "") -> Scene:
         return _loot_confirm_scene(p, pr, note)
     lines = note.split("\n") if note else []
     race = str(pr.get("race") or "").title()
-    clazz = str(pr.get("clazz") or "").title()
-    who = " · ".join(x for x in (race, clazz) if x)
-    if who:
-        lines.append(who)
+    if race:
+        lines.append(race)
+    # 048: the classes died — the public page shows the trained hands.
+    # Rank 10 reads GOLD, a studied mastery reads MASTER; older worldd
+    # payloads carry no training key and the line simply doesn't render.
+    tr = pr.get("training") or {}
+    if isinstance(tr, dict) and any(
+            int(tr.get(k) or 0) for k in ("blade", "bow", "staff")):
+        ms = pr.get("mastery") or {}
+        parts = []
+        for glyph, path in (("⚔", "blade"), ("➶", "bow"), ("✦", "staff")):
+            r = int(tr.get(path) or 0)
+            word = f"{glyph} {r}"
+            if r >= 10:
+                word += " MASTER" if ms.get(path) else " GOLD"
+            parts.append(word)
+        lines.append("hands: " + " · ".join(parts))
     if pr.get("sleeping"):
         lines.append("Asleep — the tower keeps their bunk warm.")
     lines.append(f"carries ◈ {int(pr.get('gold', 0)):,} · "

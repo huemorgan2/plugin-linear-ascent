@@ -334,16 +334,16 @@ def _advance_chase(p: dict) -> str:
         # 006: it cannot close through the net — this attempt is the
         # net's last service.
         e.pop("netted", None)
-        return f"The {e['name']} tears at the net instead of the ground."
+        return f"{_the(e['name'])} tears at the net instead of the ground."
     if state.roll_ok(p, economy.p_close(_mspd(p), economy.player_speed(p))):
         gap = _gap(p) - 1
         e["gap"] = gap
         if gap <= 0:
             e["range"] = "close"
-            return f"The {e['name']} closes the gap — it is on you now."
-        return (f"The {e['name']} eats a length of the open ground — "
+            return f"{_the(e['name'])} closes the gap — it is on you now."
+        return (f"{_the(e['name'])} eats a length of the open ground — "
                 f"{gap} between you now.")
-    return f"The {e['name']} comes on across open ground."
+    return f"{_the(e['name'])} comes on across open ground."
 
 
 def _profile_tiers(prof: dict) -> list[str]:
@@ -883,17 +883,17 @@ def _counter_text(p: dict, hit: dict, lead: str = "") -> str:
     e = p["encounter"]
     guard = guard_name(p)
     dmg, blocked = hit["dmg"], hit["blocked"]
-    lead = lead or f"The {e['name']} answers"
+    lead = lead or f"{_the(e['name'])} answers"
     # 005: the round a guard piece snaps, the card says so right here.
     tail = " " + " ".join(hit["broke"]) if hit.get("broke") else ""
     if hit.get("riposte"):
         # 048 N4: the studied blade answers in the same breath.
         tail += f" Your riposte answers — {hit['riposte']} back."
     if hit.get("netted"):
-        return (f"The {e['name']} thrashes in the net — its round is "
+        return (f"{_the(e['name'])} thrashes in the net — its round is "
                 "spent tearing cord.")
     if hit.get("veiled"):
-        return (f"The {e['name']} strikes where you were — the veil "
+        return (f"{_the(e['name'])} strikes where you were — the veil "
                 "holds; nothing finds you.")
     if hit.get("dodged"):
         return f"{lead} — you slip the blow entirely. Speed tells."
@@ -926,9 +926,9 @@ def _strike_text(p: dict, dmg: int) -> str:
     swing = e.pop("_swing", None) or {}
     if dmg <= 0:
         if mtype == "fly" and path == "blade":
-            return (f"The {e['name']} lifts out of reach — your {w} "
+            return (f"{_the(e['name'])} lifts out of reach — your {w} "
                     "cuts empty air. Steel can't touch what flies.")
-        return (f"Your {w} glances off the {e['name']}'s hide — "
+        return (f"Your {w} glances off {_the(e['name'], False)}'s hide — "
                 "nothing lands.")
     mult = economy.TYPE_MULT[mtype][path]
     note = ""
@@ -983,6 +983,15 @@ def _train_rank(p: dict) -> int:
 
 def _rank_of(p: dict, path: str) -> int:
     return int((p.get("training") or {}).get(path, 0))
+
+
+def _the(name, cap: bool = True) -> str:
+    """048 phase 8: exactly one article. Monsters named with their own
+    ("The lamp-eater", "The Seep") never read "the The lamp-eater"."""
+    n = str(name)
+    if n[:4].lower() == "the ":
+        return n if cap else "the " + n[4:]
+    return ("The " if cap else "the ") + n
 
 
 def _held_slugs(p: dict) -> list[str]:
@@ -1110,7 +1119,7 @@ def _apply_shot_effect(p: dict, effect: str) -> str:
         immune = e["kind"] == "warden" or "venomproof" in (
             e.get("traits") or [])
         if immune:
-            return (f"The venom beads off the {e['name']} — this one "
+            return (f"The venom beads off {_the(e['name'], False)} — this one "
                     "doesn't poison.")
         if e.get("poison_left"):
             return "The venom is already in it — a second dose is wasted."
@@ -1120,11 +1129,11 @@ def _apply_shot_effect(p: dict, effect: str) -> str:
                 f"round, {economy.POISON_ROUNDS} rounds, past any plate.")
     if effect == "slow":
         if prof.get("speed", economy.SPEED_NORMAL) <= economy.SPEED_SLOW:
-            return (f"The {e['name']} was already dragging — the "
+            return (f"{_the(e['name'])} was already dragging — the "
                     "slowing shaft changes nothing.")
         prof["speed"] = max(1, prof["speed"] - economy.SLOW_ARROW_DELTA)
         e["profile"] = prof
-        return (f"The shaft bites tendon — the {e['name']} drops "
+        return (f"The shaft bites tendon — {_the(e['name'], False)} drops "
                 f"{economy.SLOW_ARROW_DELTA} speed for this fight.")
     return ""
 
@@ -1318,9 +1327,9 @@ def _victory(p: dict, floor) -> Scene:
         # board's only bookkeeping.
         contracts.note_kill(p, e, _damage_type(p))
     weekly.note(p, "kills")     # 022/005: the strongbox counts the week
-    downed = (f"The {e['name']} goes down — no match for your "
+    downed = (f"{_the(e['name'])} goes down — no match for your "
               f"{weapon_name(p)}."
-              if e["kind"] == "wilds" else f"The {e['name']} goes down.")
+              if e["kind"] == "wilds" else f"{_the(e['name'])} goes down.")
     # Just what landed — a full bar takes no more XP, so a kill at the
     # cap writes gold (and spoils) and stays quiet about the overflow.
     lines = [downed]
@@ -1546,7 +1555,7 @@ def _death(p: dict, floor) -> Scene:
         else:
             save_tax = p["gold"] - p["gold"] // 2
             p["gold"] //= 2
-        save_lines = [f"The {e['name']} loses you in the grass.", cause]
+        save_lines = [f"{_the(e['name'])} loses you in the grass.", cause]
         if save_tax:
             save_lines.append(f"− ◈ {save_tax:,} carried gold, scattered "
                               "where you fell")
@@ -1583,7 +1592,7 @@ def _death(p: dict, floor) -> Scene:
             f"you stand back up at {p['hp']} HP. It is still here."))
     _report_shared_strike(p)       # 022/001: the wounds you left persist
     mercy = p["level"] <= economy.BEGINNER_MERCY_MAX_LEVEL
-    lines = [f"Killed by the {e['name']}.", cause]
+    lines = [f"Killed by {_the(e['name'], False)}.", cause]
     if mercy:
         # 004 §A.2: a bad first hour can't spiral — keep everything but
         # half the carried gold. 043.2: at level 1 not even that.
@@ -1835,7 +1844,7 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
             f"You slick the {weapon_name(p)} — the next "
             f"{economy.OIL_STRIKES} strikes bite +25%. "
             + _counter_text(p, hit,
-                            lead=f"The {e['name']} presses while you pour")
+                            lead=f"{_the(e['name'])} presses while you pour")
             + (f" {chase}" if chase else "")))
 
     if option_id == "throw_net" and p["inventory"].get("entangling_net") \
@@ -1845,7 +1854,7 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
             del p["inventory"]["entangling_net"]
         e["netted"] = True
         return fight_scene(p, floor, note=(
-            f"The net blooms open and drops — the {e['name']} goes down "
+            f"The net blooms open and drops — {_the(e['name'], False)} goes down "
             "thrashing in cord. Its round is spent, and it closes no "
             "ground through the mesh."))
 
@@ -1868,7 +1877,7 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
             "The sky-hook's line goes taut — whatever height it had, "
             "it fights on your ground now. "
             + _counter_text(p, hit,
-                            lead=f"The {e['name']} comes down swinging")
+                            lead=f"{_the(e['name'])} comes down swinging")
             + (f" {chase}" if chase else "")))
 
     if option_id == "use_strip" and p["inventory"].get("strip_potion") \
@@ -1884,7 +1893,7 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
             return _death(p, floor)
         chase = _advance_chase(p)
         return fight_scene(p, floor, note=(
-            f"The vial bursts across the {e['name']} — its spellguard "
+            f"The vial bursts across {_the(e['name'], False)} — its spellguard "
             "dissolves like frost in rain. "
             + _counter_text(p, hit)
             + (f" {chase}" if chase else "")))
@@ -1993,7 +2002,7 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
             + (f"{seen} hot blade{'s' if seen != 1 else ''} on this floor "
                "will see it. " if seen else
                "no torch burns close, but flares carry. ")
-            + f"The {e['name']} flinches from the light."))
+            + f"{_the(e['name'])} flinches from the light."))
 
     if option_id == "drink_tonic":
         p["inventory"]["trollblood_tonic"] -= 1
@@ -2007,7 +2016,7 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
         return fight_scene(p, floor, note=(
             "The tonic burns going down — full health. "
             + _counter_text(p, hit,
-                            lead=f"The {e['name']} strikes while you drink")
+                            lead=f"{_the(e['name'])} strikes while you drink")
             + (f" {chase}" if chase else "")))
 
     if option_id in ("close_in", "attack") and _damage_type(p) == "melee" \
@@ -2024,7 +2033,7 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
         return fight_scene(p, floor, note=(
             "You cross the open ground fast and low. "
             + _counter_text(p, hit,
-                            lead=f"The {e['name']} meets you mid-stride")
+                            lead=f"{_the(e['name'])} meets you mid-stride")
             + (f" {snap}" if snap else "")))
 
     if option_id == "open_distance" and _range_state(p) == "close":
@@ -2032,7 +2041,7 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
         # refused flat, before the turn is spent.
         if _mspd(p) >= economy.player_speed(p):
             return fight_scene(p, floor, note=(
-                f"The {e['name']} matches you stride for stride — "
+                f"{_the(e['name'])} matches you stride for stride — "
                 "no gap will open against those legs."))
         # §2.4: speed decides; on failure the monster gets a free
         # halved hit while you turn.
@@ -2051,7 +2060,7 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
         return fight_scene(p, floor, note=(
             "No gap opens — it stays with you. "
             + _counter_text(p, hit,
-                            lead=f"The {e['name']} punishes the turn")
+                            lead=f"{_the(e['name'])} punishes the turn")
             + (f" {snap}" if snap else "")))
 
     if option_id == "create_distance" and _damage_type(p) == "ranged":
@@ -2089,7 +2098,7 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
             return fight_scene(p, floor, note=(
                 "You give ground and it collects the toll — "
                 + _counter_text(p, hit,
-                                lead=f"the {e['name']} rakes you as "
+                                lead=f"{_the(e['name'], False)} rakes you as "
                                      "you pull away")
                 + f" {shot}" + (f" {snap}" if snap else "")))
         return fight_scene(p, floor, note=(
@@ -2223,7 +2232,7 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
         # refused BEFORE the XP is spent, so probing costs nothing.
         if _profile(p).get("type") == "magic_resist":
             return fight_scene(p, floor, note=(
-                f"You shape the lullaby and the {e['name']}'s spellguard "
+                f"You shape the lullaby and {_the(e['name'], False)}'s spellguard "
                 "burns it off mid-air. This one won't sleep."))
         cost = economy.sleep_xp_cost(floor.floor)
         if not state.spend_xp(p, cost):
@@ -2236,7 +2245,7 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
         return Scene(
             eyebrow=_eyebrow(p, floor),
             headline="Sleep takes it mid-snarl",
-            body_lines=[f"The {e['name']} folds into the grass, snoring.",
+            body_lines=[f"{_the(e['name'])} folds into the grass, snoring.",
                         f"− {cost} XP burned — you step past it"],
             options=_after_fight_options(p, floor),
             meters=meters(p))
@@ -2326,7 +2335,7 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
         return fight_scene(p, floor, note=(
             wide + " "
             + _counter_text(p, back,
-                            lead=f"The {e['name']} makes you pay "
+                            lead=f"{_the(e['name'])} makes you pay "
                                  "for the fumble")
             + (f" {chase}" if chase else "")
             + (f" {snap}" if snap else "")))

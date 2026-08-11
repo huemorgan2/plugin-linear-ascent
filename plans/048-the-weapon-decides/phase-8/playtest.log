@@ -1,0 +1,1994 @@
+======================================================================
+BEAT 1 — creation: race → name, no class question
+
+──[open] THE STORY SO FAR · I · The world that was
+   Aldervale was whole once — and it was never primitive.
+   Human river-ports under blinking signal towers. Elven woods lit from within. Dwarven forges splitting atoms beneath the mountains.
+   Magic and machine were one craft there. They called it aether.
+   [next] Next
+
+──[intro] THE STORY SO FAR · II · The theft
+   Then Vharuk, the Demon King, rose from below.
+   He did not burn the world. He stole it — realm by realm, torn out of the ground with everyone still on it.
+   [next] Next
+
+──[intro] THE STORY SO FAR · III · The Ascent
+   He welded what he took into a tower of a hundred floors — black iron, grav-engines, chains of aether.
+   Every floor is a captured realm. The people below gave it the only name that fits: the Ascent.
+   [next] Next
+
+──[intro] THE STORY SO FAR · IV · The Wardens
+   On every floor, a Warden holds the lift to the next — half beast, half war-machine.
+   And on the hundredth floor, in a citadel half throne room, half reactor core, the Demon King sits with the whole world stacked beneath him.
+   [next] Next
+
+──[intro] THE STORY SO FAR · V · You
+   You were on one of those floors.
+   Your home is up there now — locked behind a hundred Wardens. You walked out of the wreckage with a rusted shiv and fifty coins.
+   That makes you what everyone here is: a refugee. And a climber.
+   [next] Next
+
+──[intro] THE STORY SO FAR · VI · Roothollow
+   At the tower's foot stands the last free settlement: Roothollow.
+   Tarps over titanium. A plasma forge next to a horse trough. Refugees of every stolen realm, all of them climbers now.
+   Every climb starts here — and every dead climber wakes here. The tower does not get to keep you.
+   [next] Next
+
+──[intro] THE STORY SO FAR · VII · No one climbs alone
+   When a Warden falls, the lift opens for everyone — every climber, everywhere.
+   And the names of those who did it are cut into the Stone of the Climb, lit from within by aether.
+   [next] Next
+
+──[intro] THE STORY SO FAR · VIII · The shardmind
+   At the gate, a shard of old Aldervale will choose you — a machine spirit that remembers the world as it was.
+   It will scout ahead of you, carry what you cannot lose, and drag you back from death.
+   It is speaking to you right now.
+   [next] Next
+
+──[intro] THE STORY SO FAR · IX · The muster
+   The great Wardens do not fall to one blade.
+   Climbers pledge at the keep, and when enough have gathered, they break it — together. Floor by floor. Warden by Warden. All the way to the throne.
+   [next] Next
+
+──[intro] LINEAR ASCENT · Climb the Ascent. Cast down the Demon King.
+   (One hundred floors between Roothollow and the throne.)
+   [begin] Walk to the tower gate
+
+──[intro] THE TOWER GATE · FIRST LIGHT · A shard of old Aldervale chooses you
+   (Every climber is bonded to a shardmind. Yours just woke up.)
+   ✦ shard: I remember this gate when it was a mountain. Tell me what you are, refugee.
+   The registrar's slate wants your line first.
+   [human] Human
+   [elf] Elf
+   [dwarf] Dwarf
+
+──[race] THE TOWER GATE · REGISTRAR · Your username — the Stone carves the same one
+   (One word, two to twenty-four strokes, yours alone in the whole world.)
+   ✦ shard: You get one name here: it signs your letters, rides the Crier, and takes the credit when a Warden falls. Spaces get joined — granite has no gaps.
+
+──[name] ROOTHOLLOW · THE SQUARE · Welcome to Roothollow, Handtest
+   (Tarps over titanium, a plasma forge next to a horse trough. Home.)
+   ✦ shard: We carry ◈ 50 and a rusted shiv — the Forge's cheapest real blade wants ◈ 250. The tower gate first: hunt floor 1 until steel is affordable.
+   NEXT — LEVEL 2: the Relay Office · the contract board · the night slot
+   [gate] The Tower Gate
+   [forge] The Forge
+   [arcanum] 🔒 The Arcanum
+   [medlab] Apothecary & Medlab
+   [board] 🔒 The contract board
+   [lodge] The Lodge
+   [sleep_menu] Sleep
+   [vault] The Vault
+   [pawn] Pawn shop
+   [guildhall] The Guildhall
+   [stone] Stone of the Climb
+
+   post-creation: stage=playing weapon=rusted_sword held=['rusted_sword'] training={'blade': 2, 'bow': 0, 'staff': 0} slots=1 gold=50
+
+──[post-creation-done] ROOTHOLLOW · THE SQUARE · Roothollow — floor 1 is the frontier
+   (The last free settlement. Everything starts and restarts here.)
+   NEXT — LEVEL 2: the Relay Office · the contract board · the night slot
+   [gate] The Tower Gate
+   [forge] The Forge
+   [arcanum] 🔒 The Arcanum
+   [medlab] Apothecary & Medlab
+   [board] 🔒 The contract board
+   [lodge] The Lodge
+   [sleep_menu] Sleep
+   [vault] The Vault
+   [pawn] Pawn shop
+   [guildhall] The Guildhall
+   [stone] Stone of the Climb
+
+======================================================================
+BEAT 2 — every unlocked town door opens and its exit returns
+
+──[town] ROOTHOLLOW · THE SQUARE · Roothollow — floor 1 is the frontier
+   (The last free settlement. Everything starts and restarts here.)
+   NEXT — LEVEL 2: the Relay Office · the contract board · the night slot
+   [gate] The Tower Gate
+   [forge] The Forge
+   [arcanum] 🔒 The Arcanum
+   [medlab] Apothecary & Medlab
+   [board] 🔒 The contract board
+   [lodge] The Lodge
+   [sleep_menu] Sleep
+   [vault] The Vault
+   [pawn] Pawn shop
+   [guildhall] The Guildhall
+   [stone] Stone of the Climb
+
+──[town] ROOTHOLLOW · THE SQUARE · Roothollow — floor 1 is the frontier
+   (The last free settlement. Everything starts and restarts here.)
+   NEXT — LEVEL 2: the Relay Office · the contract board · the night slot
+   [gate] The Tower Gate
+   [forge] The Forge
+   [arcanum] 🔒 The Arcanum
+   [medlab] Apothecary & Medlab
+   [board] 🔒 The contract board
+   [lodge] The Lodge
+   [sleep_menu] Sleep
+   [vault] The Vault
+   [pawn] Pawn shop
+   [guildhall] The Guildhall
+   [stone] Stone of the Climb
+
+──[enter-forge] ROOTHOLLOW · THE FORGE · Tier 1 steel, scrap to plasma
+   ✦ shard: The smith nods across the square: staves and focuses live at the Arcanum.
+   [buy_pigsticker] Pigsticker
+   [buy_keen_pigsticker] Keen Pigsticker
+   [buy_warded_pigsticker] Warded Pigsticker
+   [buy_notched_cleaver] 🔒 Notched Cleaver
+   [buy_ashwood_bow] Ashwood Bow
+   [buy_keen_ashwood_bow] Keen Ashwood Bow
+   [buy_warded_ashwood_bow] Warded Ashwood Bow
+   [buy_green_hazel_bow] 🔒 Green Hazel Bow
+   [buy_scrapwood_buckler] Scrapwood Buckler
+   [buy_keen_scrapwood_buckler] Keen Scrapwood Buckler
+   [buy_warded_scrapwood_buckler] Warded Scrapwood Buckler
+   [buy_plank_shield] 🔒 Plank Shield
+   [buy_padded_jerkin] Padded Jerkin
+   [buy_keen_padded_jerkin] Keen Padded Jerkin
+   [buy_warded_padded_jerkin] Warded Padded Jerkin
+   [buy_ratskin_vest] 🔒 Ratskin Vest
+   [buy_cobbled_boots] 🔒 Cobbled Boots
+   [buy_basic_bow] Basic Bow
+   [buy_worn_staff] Worn Wooden Staff
+   [back] Back to the square
+
+──[exit-forge] ROOTHOLLOW · THE SQUARE · Roothollow — floor 1 is the frontier
+   (The last free settlement. Everything starts and restarts here.)
+   NEXT — LEVEL 2: the Relay Office · the contract board · the night slot
+   [gate] The Tower Gate
+   [forge] The Forge
+   [arcanum] 🔒 The Arcanum
+   [medlab] Apothecary & Medlab
+   [board] 🔒 The contract board
+   [lodge] The Lodge
+   [sleep_menu] Sleep
+   [vault] The Vault
+   [pawn] Pawn shop
+   [guildhall] The Guildhall
+   [stone] Stone of the Climb
+
+──[town] ROOTHOLLOW · THE SQUARE · Roothollow — floor 1 is the frontier
+   (The last free settlement. Everything starts and restarts here.)
+   NEXT — LEVEL 2: the Relay Office · the contract board · the night slot
+   [gate] The Tower Gate
+   [forge] The Forge
+   [arcanum] 🔒 The Arcanum
+   [medlab] Apothecary & Medlab
+   [board] 🔒 The contract board
+   [lodge] The Lodge
+   [sleep_menu] Sleep
+   [vault] The Vault
+   [pawn] Pawn shop
+   [guildhall] The Guildhall
+   [stone] Stone of the Climb
+
+──[enter-medlab] ROOTHOLLOW · APOTHECARY & MEDLAB · Gels, stims, and honest odds
+   (The lamp hums. The shelves are stocked. The prices are firm.)
+   [buy_medgel] Medgel
+   [buy_trauma_kit] Trauma kit
+   [buy_trollblood_tonic] Trollblood tonic
+   [buy_energy_cell] Energy cell
+   [buy_luck_charm] Luck charm
+   [back] Back to the square
+
+──[exit-medlab] ROOTHOLLOW · THE SQUARE · Roothollow — floor 1 is the frontier
+   (The last free settlement. Everything starts and restarts here.)
+   NEXT — LEVEL 2: the Relay Office · the contract board · the night slot
+   [gate] The Tower Gate
+   [forge] The Forge
+   [arcanum] 🔒 The Arcanum
+   [medlab] Apothecary & Medlab
+   [board] 🔒 The contract board
+   [lodge] The Lodge
+   [sleep_menu] Sleep
+   [vault] The Vault
+   [pawn] Pawn shop
+   [guildhall] The Guildhall
+   [stone] Stone of the Climb
+
+──[town] ROOTHOLLOW · THE SQUARE · Roothollow — floor 1 is the frontier
+   (The last free settlement. Everything starts and restarts here.)
+   NEXT — LEVEL 2: the Relay Office · the contract board · the night slot
+   [gate] The Tower Gate
+   [forge] The Forge
+   [arcanum] 🔒 The Arcanum
+   [medlab] Apothecary & Medlab
+   [board] 🔒 The contract board
+   [lodge] The Lodge
+   [sleep_menu] Sleep
+   [vault] The Vault
+   [pawn] Pawn shop
+   [guildhall] The Guildhall
+   [stone] Stone of the Climb
+
+──[enter-lodge] ROOTHOLLOW · THE LODGE · Sleep behind the palisade
+   (Skip the lodge and you sleep in the fields — where anyone may find you.)
+   A night costs ◈ 10. Banked gold can't buy it — carry coin.
+   Dawn closes wounds wherever you lie. The palisade is about who can FIND you before it does.
+   The night slot — one action a night: rest by the fire or take a shift for coin at dawn.
+   [lie_down] Turn in — sleep now
+   [night_slot] 🔒 The night slot
+   [talk] Talk with Wick
+   [back] Back to the square
+
+──[exit-lodge] ROOTHOLLOW · THE SQUARE · Roothollow — floor 1 is the frontier
+   (The last free settlement. Everything starts and restarts here.)
+   NEXT — LEVEL 2: the Relay Office · the contract board · the night slot
+   [gate] The Tower Gate
+   [forge] The Forge
+   [arcanum] 🔒 The Arcanum
+   [medlab] Apothecary & Medlab
+   [board] 🔒 The contract board
+   [lodge] The Lodge
+   [sleep_menu] Sleep
+   [vault] The Vault
+   [pawn] Pawn shop
+   [guildhall] The Guildhall
+   [stone] Stone of the Climb
+
+──[town] ROOTHOLLOW · THE SQUARE · Roothollow — floor 1 is the frontier
+   (The last free settlement. Everything starts and restarts here.)
+   NEXT — LEVEL 2: the Relay Office · the contract board · the night slot
+   [gate] The Tower Gate
+   [forge] The Forge
+   [arcanum] 🔒 The Arcanum
+   [medlab] Apothecary & Medlab
+   [board] 🔒 The contract board
+   [lodge] The Lodge
+   [sleep_menu] Sleep
+   [vault] The Vault
+   [pawn] Pawn shop
+   [guildhall] The Guildhall
+   [stone] Stone of the Climb
+
+──[enter-vault] ROOTHOLLOW · THE VAULT · A lodge for your money
+   (Deposits survive death, theft, and bad decisions. Interest drips in through the day as stubs — collect them and it compounds.)
+   carried ◈ 50
+   the weekly strongbox — 🔒 level 6. Kills, keeps and floors gained fill it; every week you pick one reward from what you earned.
+   [deposit_all] Deposit everything
+   [deposit_half] Deposit half
+   [back] Back to the square
+
+──[exit-vault] ROOTHOLLOW · THE SQUARE · Roothollow — floor 1 is the frontier
+   (The last free settlement. Everything starts and restarts here.)
+   NEXT — LEVEL 2: the Relay Office · the contract board · the night slot
+   [gate] The Tower Gate
+   [forge] The Forge
+   [arcanum] 🔒 The Arcanum
+   [medlab] Apothecary & Medlab
+   [board] 🔒 The contract board
+   [lodge] The Lodge
+   [sleep_menu] Sleep
+   [vault] The Vault
+   [pawn] Pawn shop
+   [guildhall] The Guildhall
+   [stone] Stone of the Climb
+
+──[town] ROOTHOLLOW · THE SQUARE · Roothollow — floor 1 is the frontier
+   (The last free settlement. Everything starts and restarts here.)
+   NEXT — LEVEL 2: the Relay Office · the contract board · the night slot
+   [gate] The Tower Gate
+   [forge] The Forge
+   [arcanum] 🔒 The Arcanum
+   [medlab] Apothecary & Medlab
+   [board] 🔒 The contract board
+   [lodge] The Lodge
+   [sleep_menu] Sleep
+   [vault] The Vault
+   [pawn] Pawn shop
+   [guildhall] The Guildhall
+   [stone] Stone of the Climb
+
+──[enter-pawn] ROOTHOLLOW · PAWN SHOP · 31 on the hundred, no haggling
+   (The broker has seen everything twice and paid less for it both times.)
+   The broker pays 31% today. Tomorrow is another mood.
+   Empty pack. The broker buys ANYTHING you carry — gear, relics, potions, tokens. Come back heavier.
+   [back] Back to the square
+
+──[exit-pawn] ROOTHOLLOW · THE SQUARE · Roothollow — floor 1 is the frontier
+   (The last free settlement. Everything starts and restarts here.)
+   NEXT — LEVEL 2: the Relay Office · the contract board · the night slot
+   [gate] The Tower Gate
+   [forge] The Forge
+   [arcanum] 🔒 The Arcanum
+   [medlab] Apothecary & Medlab
+   [board] 🔒 The contract board
+   [lodge] The Lodge
+   [sleep_menu] Sleep
+   [vault] The Vault
+   [pawn] Pawn shop
+   [guildhall] The Guildhall
+   [stone] Stone of the Climb
+
+──[town] ROOTHOLLOW · THE SQUARE · Roothollow — floor 1 is the frontier
+   (The last free settlement. Everything starts and restarts here.)
+   NEXT — LEVEL 2: the Relay Office · the contract board · the night slot
+   [gate] The Tower Gate
+   [forge] The Forge
+   [arcanum] 🔒 The Arcanum
+   [medlab] Apothecary & Medlab
+   [board] 🔒 The contract board
+   [lodge] The Lodge
+   [sleep_menu] Sleep
+   [vault] The Vault
+   [pawn] Pawn shop
+   [guildhall] The Guildhall
+   [stone] Stone of the Climb
+
+──[enter-guildhall] ROOTHOLLOW · THE GUILDHALL · Banners for hire
+   (Milestone Wardens fall to war parties, not heroes.)
+   The drillmaster sizes you up: XP 0/24. Come back with a full bar — the fee is ◈ 60.
+   [guild_train] Train to LEVEL 2
+   [found_guild] 🔒 Found a guild
+   [town] Back to the square
+
+──[exit-guildhall] ROOTHOLLOW · THE SQUARE · Roothollow — floor 1 is the frontier
+   (The last free settlement. Everything starts and restarts here.)
+   NEXT — LEVEL 2: the Relay Office · the contract board · the night slot
+   [gate] The Tower Gate
+   [forge] The Forge
+   [arcanum] 🔒 The Arcanum
+   [medlab] Apothecary & Medlab
+   [board] 🔒 The contract board
+   [lodge] The Lodge
+   [sleep_menu] Sleep
+   [vault] The Vault
+   [pawn] Pawn shop
+   [guildhall] The Guildhall
+   [stone] Stone of the Climb
+
+──[town] ROOTHOLLOW · THE SQUARE · Roothollow — floor 1 is the frontier
+   (The last free settlement. Everything starts and restarts here.)
+   NEXT — LEVEL 2: the Relay Office · the contract board · the night slot
+   [gate] The Tower Gate
+   [forge] The Forge
+   [arcanum] 🔒 The Arcanum
+   [medlab] Apothecary & Medlab
+   [board] 🔒 The contract board
+   [lodge] The Lodge
+   [sleep_menu] Sleep
+   [vault] The Vault
+   [pawn] Pawn shop
+   [guildhall] The Guildhall
+   [stone] Stone of the Climb
+
+──[enter-stone] ROOTHOLLOW · STONE OF THE CLIMB · The frontier stands at floor 1
+   (Old granite, names lit from within by aether.)
+   Handtest — highest floor opened: 1
+   The lift opens for everyone when a Warden falls.
+   ▣ THE CLIMB AHEAD
+   LEVEL 2
+     + the Relay Office — letters between climbers — free to write, gold rides along
+     + the contract board — 3 world jobs a day — the same three for every climber, paid in gold and XP
+     + the night slot — one action a night — rest toward your next kills, or work a shift for coin at dawn
+     + new steel on the racks (◈ 130–280) — the next rung of blade, guard and coat — and each cut keen or warded if you'd rather trade upkeep for bite
+   FLOOR 2
+     + new relics reach the shelves — 1 relic join the racks at floor 2
+   LEVEL 3
+     + the Arcanum — staves, focuses and caster relics behind the reading door
+     + new steel on the racks (◈ 170–370) — the next rung of blade, guard and coat — and each cut keen or warded if you'd rather trade upkeep for bite
+     + Cobbled Boots (◈ 500) — +1 speed — the chase, the getaway and the small dodge
+   FLOOR 3
+     + new relics reach the shelves — 1 relic join the racks at floor 3
+   LEVEL 4
+     − beginner's mercy ends — a death starts costing gear and a bite of carried gold
+     + raise your own banner (◈ 300) — you set the join fee and dues, and steward the store
+     + new steel on the racks (◈ 220–510) — the next rung of blade, guard and coat — and each cut keen or warded if you'd rather trade upkeep for bite
+   FLOOR 4
+     + new relics reach the shelves — 2 relics join the racks at floor 4
+   LEVEL 5
+     + the fields — ambush other climbers — 3 ⚡ a raid, 2 a day
+     …and the tower keeps the rest
+   [back] Back to the square
+
+──[exit-stone] ROOTHOLLOW · THE SQUARE · Roothollow — floor 1 is the frontier
+   (The last free settlement. Everything starts and restarts here.)
+   NEXT — LEVEL 2: the Relay Office · the contract board · the night slot
+   [gate] The Tower Gate
+   [forge] The Forge
+   [arcanum] 🔒 The Arcanum
+   [medlab] Apothecary & Medlab
+   [board] 🔒 The contract board
+   [lodge] The Lodge
+   [sleep_menu] Sleep
+   [vault] The Vault
+   [pawn] Pawn shop
+   [guildhall] The Guildhall
+   [stone] Stone of the Climb
+
+======================================================================
+BEAT 3 — floor 1: hunt twice, read the kill cards
+
+──[town] ROOTHOLLOW · THE SQUARE · Roothollow — floor 1 is the frontier
+   (The last free settlement. Everything starts and restarts here.)
+   NEXT — LEVEL 2: the Relay Office · the contract board · the night slot
+   [gate] The Tower Gate
+   [forge] The Forge
+   [arcanum] 🔒 The Arcanum
+   [medlab] Apothecary & Medlab
+   [board] 🔒 The contract board
+   [lodge] The Lodge
+   [sleep_menu] Sleep
+   [vault] The Vault
+   [pawn] Pawn shop
+   [guildhall] The Guildhall
+   [stone] Stone of the Climb
+
+──[gate] ROOTHOLLOW · THE TOWER GATE · 1 floor stand open
+   (Pick any opened floor. The grind pays best near your level.)
+   [floor_1] Floor 1 — The Fencerows
+   [back] Back to the square
+
+──[lift] FLOOR 1 · THE FENCEROWS · I · Men — The Fencerows
+   Stolen meadowland rolls out under the tower's floodlights. Hedgerows still stand in their old lines, fencing fields no farmer will cut again. Somewhere out in the grass, something is moving.
+   "The hedgerows were mine once. Wolves come through the gap in the third hedge — the dogs that kept it are gone. Mind the grass when it stops moving. That's when something has set its feet."
+   [next] Next
+   [skip] Skip
+
+──[f1-movie-skip] FLOOR 1 · MEN · LAMPLIT STEADING · Lamplit Steading — the floor's last safe fire
+   (A healer, a rumor bench, and the wilds beyond the wire.)
+   Stolen meadowland rolls out under the tower's floodlights. Hedgerows still stand in their old lines, fencing fields no farmer will cut again. Somewhere out in the grass, something is moving.
+   Out past the wire:
+   Grey wolf — HP 18 · ATK 6 · DEF 3 · SPD 5
+   Feral boar — HP 24 · ATK 6 · DEF 3 · SPD 5
+   Hedgerow rat — HP 10 · ATK 6 · DEF 3 · SPD 5
+   The last pack — HP 14 · ATK 6 · DEF 3 · SPD 5
+   Goblin straggler — HP 14 · ATK 6 · DEF 3 · SPD 5
+   Hedge-wight — HP 41 · ATK 10 · DEF 4 · SPD 5
+   [hunt] Hunt the wilds
+   [keep] The Warden's keep — Warden Brackjaw
+   [talk] Talk — Hobb Fennick
+   [school] The School
+   [town] Return to Roothollow
+
+──[f1-movie-done] FLOOR 1 · MEN · LAMPLIT STEADING · Lamplit Steading — the floor's last safe fire
+   (A healer, a rumor bench, and the wilds beyond the wire.)
+   Stolen meadowland rolls out under the tower's floodlights. Hedgerows still stand in their old lines, fencing fields no farmer will cut again. Somewhere out in the grass, something is moving.
+   Out past the wire:
+   Grey wolf — HP 18 · ATK 6 · DEF 3 · SPD 5
+   Feral boar — HP 24 · ATK 6 · DEF 3 · SPD 5
+   Hedgerow rat — HP 10 · ATK 6 · DEF 3 · SPD 5
+   The last pack — HP 14 · ATK 6 · DEF 3 · SPD 5
+   Goblin straggler — HP 14 · ATK 6 · DEF 3 · SPD 5
+   Hedge-wight — HP 41 · ATK 10 · DEF 4 · SPD 5
+   [hunt] Hunt the wilds
+   [keep] The Warden's keep — Warden Brackjaw
+   [talk] Talk — Hobb Fennick
+   [school] The School
+   [town] Return to Roothollow
+
+──[pre-hunt0-done] FLOOR 1 · MEN · LAMPLIT STEADING · Lamplit Steading
+   (The fire is small but honest. Beyond the wire, the wilds.)
+   Out past the wire:
+   Grey wolf — HP 18 · ATK 6 · DEF 3 · SPD 5
+   Feral boar — HP 24 · ATK 6 · DEF 3 · SPD 5
+   Hedgerow rat — HP 10 · ATK 6 · DEF 3 · SPD 5
+   The last pack — HP 14 · ATK 6 · DEF 3 · SPD 5
+   Goblin straggler — HP 14 · ATK 6 · DEF 3 · SPD 5
+   Hedge-wight — HP 41 · ATK 10 · DEF 4 · SPD 5
+   [hunt] Hunt the wilds
+   [keep] The Warden's keep — Warden Brackjaw
+   [talk] Talk — Hobb Fennick
+   [school] The School
+   [town] Return to Roothollow
+
+──[hunt0] FLOOR 1 · MEN · THE FENCEROWS · Grey wolf — HP 18/18 · ATK 6 · DEF 3 · SPD 5
+   (It is between you and the way forward.)
+   ✦ shard: That thing hits harder than you do. Running costs pride, not gold.
+   A grey wolf slides out of the hedgerow, ribs showing under a dull coat. It has learned that climbers carry meat.
+   You — ATK 8 with your Rusted Sword, DEF 14 behind your Gate-Issue Jerkin and Gate-Issue Buckler.
+   no sign — every weapon bites full
+   Your Rusted Sword: full — blade rank 2.
+   [close_in] Close in
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] 🔒 Shield wall
+
+──[f1 hunt0 r1] FLOOR 1 · MEN · THE FENCEROWS · Grey wolf — HP 18/18 · ATK 6 · DEF 3 · SPD 5
+   (It is between you and the way forward.)
+   You cross the open ground fast and low. The Grey wolf meets you mid-stride — your Gate-Issue Jerkin and Gate-Issue Buckler soak almost all of it: only −1 HP gets through.
+   [attack] Attack
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] 🔒 Shield wall
+
+──[f1 hunt0 r2] FLOOR 1 · MEN · THE FENCEROWS · Grey wolf — HP 16/18 · ATK 6 · DEF 3 · SPD 5
+   (It is between you and the way forward.)
+   Your rank-2 swing lands shallow — 2. A rank-4 hand cuts nearer 5. The Grey wolf answers — your Gate-Issue Jerkin and Gate-Issue Buckler soak almost all of it: only −2 HP gets through.
+   [attack] Attack
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] 🔒 Shield wall
+
+──[f1 hunt0 r3] FLOOR 1 · MEN · THE FENCEROWS · Grey wolf — HP 14/18 · ATK 6 · DEF 3 · SPD 5
+   (It is between you and the way forward.)
+   Your rank-2 swing lands shallow — 2. A rank-4 hand cuts nearer 5. The Grey wolf answers — your Gate-Issue Jerkin and Gate-Issue Buckler soak almost all of it: only −2 HP gets through.
+   [attack] Attack
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] 🔒 Shield wall
+
+──[f1 hunt0 r4] FLOOR 1 · MEN · THE FENCEROWS · Grey wolf — HP 14/18 · ATK 6 · DEF 3 · SPD 5
+   (It is between you and the way forward.)
+   Rank-2 hands — your Rusted Sword swings wide. The School trains this away. The Grey wolf makes you pay for the fumble — your Gate-Issue Jerkin and Gate-Issue Buckler soak almost all of it: only −1 HP gets through.
+   [attack] Attack
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] 🔒 Shield wall
+
+──[f1 hunt0 r5] FLOOR 1 · MEN · THE FENCEROWS · Grey wolf — HP 8/18 · ATK 6 · DEF 3 · SPD 5
+   (It is between you and the way forward.)
+   Your Rusted Sword bites deep — 6 damage the Grey wolf won't shrug off. The Grey wolf answers — your Gate-Issue Jerkin and Gate-Issue Buckler soak almost all of it: only −1 HP gets through.
+   [attack] Attack
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] 🔒 Shield wall
+
+──[f1 hunt0 r6] FLOOR 1 · MEN · THE FENCEROWS · Grey wolf — HP 1/18 · ATK 6 · DEF 3 · SPD 5
+   (It is between you and the way forward.)
+   Your Rusted Sword bites deep — 7 damage the Grey wolf won't shrug off. The Grey wolf answers — your Gate-Issue Jerkin and Gate-Issue Buckler soak almost all of it: only −1 HP gets through.
+   [attack] Attack
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] 🔒 Shield wall
+
+──[f1 hunt0 r7] FLOOR 1 · MEN · THE FENCEROWS · Grey wolf — HP 1/18 · ATK 6 · DEF 3 · SPD 5
+   (It is between you and the way forward.)
+   Rank-2 hands — your Rusted Sword swings wide. The School trains this away. The Grey wolf makes you pay for the fumble — your Gate-Issue Jerkin and Gate-Issue Buckler soak almost all of it: only −1 HP gets through.
+   [attack] Attack
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] 🔒 Shield wall
+
+──[f1 hunt0 r8] FLOOR 1 · MEN · THE FENCEROWS · Grey wolf — HP 1/18 · ATK 6 · DEF 3 · SPD 5
+   (It is between you and the way forward.)
+   Rank-2 hands — your Rusted Sword swings wide. The School trains this away. The Grey wolf makes you pay for the fumble — your Gate-Issue Jerkin and Gate-Issue Buckler soak almost all of it: only −2 HP gets through.
+   [attack] Attack
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] 🔒 Shield wall
+
+──[f1 hunt0 r9] FLOOR 1 · MEN · THE FENCEROWS · Grey wolf — freed
+   (The fever's shape drops away. The shy grey wolf the farm dogs kept past the fences shakes itself loose and slips back to the wild edges.)
+   The Grey wolf goes down — no match for your Rusted Sword.
+   + 3 XP
+   + ◈ 18 gold (young-tower bounty)
+   [hunt] Hunt the wilds again
+   [stew] Hunter's stew
+   [heal] The healer's tent
+   [keep] The Warden's keep — Warden Brackjaw
+   [talk] Talk — Hobb Fennick
+   [school] The School
+   [town] Return to Roothollow
+
+──[pre-hunt1-done] FLOOR 1 · MEN · LAMPLIT STEADING · Lamplit Steading
+   (The fire is small but honest. Beyond the wire, the wilds.)
+   Out past the wire:
+   Grey wolf — HP 18 · ATK 6 · DEF 3 · SPD 5
+   Feral boar — HP 24 · ATK 6 · DEF 3 · SPD 5
+   Hedgerow rat — HP 10 · ATK 6 · DEF 3 · SPD 5
+   The last pack — HP 14 · ATK 6 · DEF 3 · SPD 5
+   Goblin straggler — HP 14 · ATK 6 · DEF 3 · SPD 5
+   Hedge-wight — HP 41 · ATK 10 · DEF 4 · SPD 5
+   [hunt] Hunt the wilds
+   [keep] The Warden's keep — Warden Brackjaw
+   [talk] Talk — Hobb Fennick
+   [school] The School
+   [town] Return to Roothollow
+
+──[hunt1] FLOOR 1 · MEN · THE FENCEROWS · Hedge-wight — HP 23/23 · ATK 10 · DEF 4 · SPD 5
+   (It is between you and the way forward.)
+   ✦ shard: Its guard is lower than yours — press it.
+   At the floodlights' flicker a man-shape stands up out of the hedge — blackthorn snarled into shoulders and arms, walking the fence line it grew from. It is enormous — it fills the path. This one is gaunt and limping — an easy kill, thin pickings.
+   You — ATK 8 with your Rusted Sword, DEF 14 behind your Gate-Issue Jerkin and Gate-Issue Buckler.
+   no sign — every weapon bites full
+   Your Rusted Sword: full — blade rank 2.
+   [close_in] Close in
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] 🔒 Shield wall
+
+──[f1 hunt1 r1] FLOOR 1 · MEN · THE FENCEROWS · Hedge-wight — HP 23/23 · ATK 10 · DEF 4 · SPD 5
+   (It is between you and the way forward.)
+   You cross the open ground fast and low. The Hedge-wight meets you mid-stride — your Gate-Issue Jerkin and Gate-Issue Buckler soak almost all of it: only −1 HP gets through.
+   [attack] Attack
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] 🔒 Shield wall
+
+──[f1 hunt1 r2] FLOOR 1 · MEN · THE FENCEROWS · Hedge-wight — HP 23/23 · ATK 10 · DEF 4 · SPD 5
+   (It is between you and the way forward.)
+   Rank-2 hands — your Rusted Sword swings wide. The School trains this away. The Hedge-wight makes you pay for the fumble — your Gate-Issue Jerkin and Gate-Issue Buckler soak almost all of it: only −2 HP gets through.
+   [attack] Attack
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] 🔒 Shield wall
+
+──[f1 hunt1 r3] FLOOR 1 · MEN · THE FENCEROWS · Hedge-wight — HP 19/23 · ATK 10 · DEF 4 · SPD 5
+   (It is between you and the way forward.)
+   Your Rusted Sword takes it for 4. The Hedge-wight answers — your Gate-Issue Jerkin and Gate-Issue Buckler soak almost all of it: only −2 HP gets through.
+   [attack] Attack
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] 🔒 Shield wall
+
+──[f1 hunt1 r4] FLOOR 1 · MEN · THE FENCEROWS · Hedge-wight — HP 13/23 · ATK 10 · DEF 4 · SPD 5
+   (It is between you and the way forward.)
+   Your Rusted Sword takes it for 6. The Hedge-wight answers — your Gate-Issue Jerkin and Gate-Issue Buckler soak almost all of it: only −3 HP gets through.
+   [attack] Attack
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] 🔒 Shield wall
+
+──[f1 hunt1 r5] FLOOR 1 · MEN · THE FENCEROWS · Hedge-wight — HP 11/23 · ATK 10 · DEF 4 · SPD 5
+   (It is between you and the way forward.)
+   Your rank-2 swing lands shallow — 2. A rank-4 hand cuts nearer 4. The Hedge-wight answers — your Gate-Issue Jerkin and Gate-Issue Buckler soak almost all of it: only −3 HP gets through.
+   [attack] Attack
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] 🔒 Shield wall
+
+──[f1 hunt1 r6] FLOOR 1 · MEN · THE FENCEROWS · Hedge-wight — HP 8/23 · ATK 10 · DEF 4 · SPD 5
+   (It is between you and the way forward.)
+   Your Rusted Sword takes it for 3. The Hedge-wight answers — your Gate-Issue Jerkin and Gate-Issue Buckler soak almost all of it: only −2 HP gets through.
+   [attack] Attack
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] 🔒 Shield wall
+
+──[f1 hunt1 r7] FLOOR 1 · MEN · THE FENCEROWS · Hedge-wight — HP 5/23 · ATK 10 · DEF 4 · SPD 5
+   (It is between you and the way forward.)
+   Your Rusted Sword takes it for 3. The Hedge-wight answers — your Gate-Issue Jerkin and Gate-Issue Buckler soak almost all of it: only −3 HP gets through.
+   [attack] Attack
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] 🔒 Shield wall
+
+──[f1 hunt1 r8] FLOOR 1 · MEN · THE FENCEROWS · Hedge-wight — evicted
+   (The made shape comes apart. The scrap of will that ran it drains downward, back to the country it was poured from.)
+   The Hedge-wight goes down — no match for your Rusted Sword.
+   + 10 XP
+   + ◈ 12 gold (young-tower bounty)
+   [hunt] Hunt the wilds again
+   [stew] Hunter's stew
+   [heal] The healer's tent
+   [keep] The Warden's keep — Warden Brackjaw
+   [talk] Talk — Hobb Fennick
+   [school] The School
+   [town] Return to Roothollow
+
+======================================================================
+BEAT 4 — Forge: the first bow (ashwood_bow), the rank voice on rows
+
+──[pre-forge-done] FLOOR 1 · MEN · LAMPLIT STEADING · Lamplit Steading
+   (The fire is small but honest. Beyond the wire, the wilds.)
+   Out past the wire:
+   Grey wolf — HP 18 · ATK 6 · DEF 3 · SPD 5
+   Feral boar — HP 24 · ATK 6 · DEF 3 · SPD 5
+   Hedgerow rat — HP 10 · ATK 6 · DEF 3 · SPD 5
+   The last pack — HP 14 · ATK 6 · DEF 3 · SPD 5
+   Goblin straggler — HP 14 · ATK 6 · DEF 3 · SPD 5
+   Hedge-wight — HP 41 · ATK 10 · DEF 4 · SPD 5
+   [hunt] Hunt the wilds
+   [keep] The Warden's keep — Warden Brackjaw
+   [talk] Talk — Hobb Fennick
+   [school] The School
+   [town] Return to Roothollow
+
+──[forge] ROOTHOLLOW · THE FORGE · Tier 1 steel, scrap to plasma
+   ✦ shard: The smith nods across the square: staves and focuses live at the Arcanum.
+   [buy_pigsticker] Pigsticker
+   [buy_keen_pigsticker] Keen Pigsticker
+   [buy_warded_pigsticker] Warded Pigsticker
+   [buy_notched_cleaver] 🔒 Notched Cleaver
+   [buy_ashwood_bow] Ashwood Bow
+   [buy_keen_ashwood_bow] Keen Ashwood Bow
+   [buy_warded_ashwood_bow] Warded Ashwood Bow
+   [buy_green_hazel_bow] 🔒 Green Hazel Bow
+   [buy_scrapwood_buckler] Scrapwood Buckler
+   [buy_keen_scrapwood_buckler] Keen Scrapwood Buckler
+   [buy_warded_scrapwood_buckler] Warded Scrapwood Buckler
+   [buy_plank_shield] 🔒 Plank Shield
+   [buy_padded_jerkin] Padded Jerkin
+   [buy_keen_padded_jerkin] Keen Padded Jerkin
+   [buy_warded_padded_jerkin] Warded Padded Jerkin
+   [buy_ratskin_vest] 🔒 Ratskin Vest
+   [buy_cobbled_boots] 🔒 Cobbled Boots
+   [buy_basic_bow] Basic Bow
+   [buy_worn_staff] Worn Wooden Staff
+   [back] Back to the square
+
+──[buy-bow] ROOTHOLLOW · THE FORGE · Tier 1 steel, scrap to plasma
+   ✦ shard: The smith nods across the square: staves and focuses live at the Arcanum.
+   + Ashwood Bow equipped (weapon +8 ATK) — the Rusted Sword goes in the scrap bin — paid gear wears with use; the Forge repairs it for a fraction of its price
+   [buy_pigsticker] Pigsticker
+   [buy_keen_pigsticker] Keen Pigsticker
+   [buy_warded_pigsticker] Warded Pigsticker
+   [buy_notched_cleaver] 🔒 Notched Cleaver
+   [buy_ashwood_bow] Ashwood Bow
+   [buy_keen_ashwood_bow] Keen Ashwood Bow
+   [buy_warded_ashwood_bow] Warded Ashwood Bow
+   [buy_green_hazel_bow] 🔒 Green Hazel Bow
+   [buy_scrapwood_buckler] Scrapwood Buckler
+   [buy_keen_scrapwood_buckler] Keen Scrapwood Buckler
+   [buy_warded_scrapwood_buckler] Warded Scrapwood Buckler
+   [buy_plank_shield] 🔒 Plank Shield
+   [buy_padded_jerkin] Padded Jerkin
+   [buy_keen_padded_jerkin] Keen Padded Jerkin
+   [buy_warded_padded_jerkin] Warded Padded Jerkin
+   [buy_ratskin_vest] 🔒 Ratskin Vest
+   [buy_cobbled_boots] 🔒 Cobbled Boots
+   [buy_basic_bow] Basic Bow
+   [buy_worn_staff] Worn Wooden Staff
+   [back] Back to the square
+   inventory now: {}
+
+======================================================================
+BEAT 5 — School at floor 3's gate town: bow 2, 2nd slot
+
+──[f3-arrive-done] FLOOR 3 · MEN · WEIRSEND · Weirsend
+   (The fire is small but honest. Beyond the wire, the wilds.)
+   Out past the wire:
+   Marsh wolf — HP 19 · ATK 31 · DEF 4 · SPD 5
+   Marsh adder — HP 10 · ATK 18 · DEF 3 · SPD 5
+   Mire boar — HP 86 · ATK 56 · DEF 7 · SPD 5
+   Fence-wire pike ⛨ — HP 23 · ATK 43 · DEF 4 · SPD 3 (slow)
+   Drowned lantern ✧ — HP 57 · ATK 62 · DEF 5 · SPD 3 (slow)
+   [hunt] Hunt the wilds
+   [keep] The keep where Warden Sedgeback fell
+   [talk] Talk — Old Nan Sedge
+   [school] The School
+   [town] Return to Roothollow
+
+──[school-door] FLOOR 3 · WEIRSEND · THE SCHOOL · The School
+   (Any hand can hold any weapon. The School teaches it to bite. Training spends the XP bar — the same pool the Guildhall levels from.)
+   ⚔ BLADE — trained rank 2 ▰▰▱▱▱▱▱▱▱▱ · next: rank 3 — 104 XP + ◈ 53
+      rank 3: miss 20%→18%, worst swing 38%→42% of full power
+   ➶ BOW — trained rank 0 ▱▱▱▱▱▱▱▱▱▱ · next: rank 1 — 20 XP + ◈ 18
+      rank 1: miss 25%→22%, worst swing 30%→34% of full power
+   ✦ STAFF — trained rank 0 ▱▱▱▱▱▱▱▱▱▱ · next: rank 1 — 20 XP + ◈ 18
+      rank 1: miss 25%→22%, worst swing 30%→34% of full power
+   ✥ CARRY — 1 weapon slot · 2nd slot — 60 XP + ◈ 30
+   [train_blade] Train blade to rank 3
+   [train_bow] Train bow to rank 1
+   [train_staff] Train staff to rank 1
+   [buy_carry2] Learn to carry a 2nd weapon
+   [back] Back to Weirsend
+
+──[bow-1] FLOOR 3 · WEIRSEND · THE SCHOOL · The School
+   (Any hand can hold any weapon. The School teaches it to bite. Training spends the XP bar — the same pool the Guildhall levels from.)
+   + bow — trained rank 1. The drills stick.
+   ⚔ BLADE — trained rank 2 ▰▰▱▱▱▱▱▱▱▱ · next: rank 3 — 104 XP + ◈ 53
+      rank 3: miss 20%→18%, worst swing 38%→42% of full power
+   ➶ BOW — trained rank 1 ▰▱▱▱▱▱▱▱▱▱ · next: rank 2 — 57 XP + ◈ 35
+      rank 2: miss 22%→20%, worst swing 34%→38% of full power
+   ✦ STAFF — trained rank 0 ▱▱▱▱▱▱▱▱▱▱ · next: rank 1 — 20 XP + ◈ 18
+      rank 1: miss 25%→22%, worst swing 30%→34% of full power
+   ✥ CARRY — 1 weapon slot · 2nd slot — 60 XP + ◈ 30
+   [train_blade] Train blade to rank 3
+   [train_bow] Train bow to rank 2
+   [train_staff] Train staff to rank 1
+   [buy_carry2] Learn to carry a 2nd weapon
+   [back] Back to Weirsend
+
+──[bow-2] FLOOR 3 · WEIRSEND · THE SCHOOL · The School
+   (Any hand can hold any weapon. The School teaches it to bite. Training spends the XP bar — the same pool the Guildhall levels from.)
+   ✦ shard: Rank 2 bow wants 57 XP — your bar holds 4. Kills fill it.
+   ⚔ BLADE — trained rank 2 ▰▰▱▱▱▱▱▱▱▱ · next: rank 3 — 104 XP + ◈ 53
+      rank 3: miss 20%→18%, worst swing 38%→42% of full power
+   ➶ BOW — trained rank 1 ▰▱▱▱▱▱▱▱▱▱ · next: rank 2 — 57 XP + ◈ 35
+      rank 2: miss 22%→20%, worst swing 34%→38% of full power
+   ✦ STAFF — trained rank 0 ▱▱▱▱▱▱▱▱▱▱ · next: rank 1 — 20 XP + ◈ 18
+      rank 1: miss 25%→22%, worst swing 30%→34% of full power
+   ✥ CARRY — 1 weapon slot · 2nd slot — 60 XP + ◈ 30
+   [train_blade] Train blade to rank 3
+   [train_bow] Train bow to rank 2
+   [train_staff] Train staff to rank 1
+   [buy_carry2] Learn to carry a 2nd weapon
+   [back] Back to Weirsend
+
+──[carry2] FLOOR 3 · WEIRSEND · THE SCHOOL · The School
+   (Any hand can hold any weapon. The School teaches it to bite. Training spends the XP bar — the same pool the Guildhall levels from.)
+   ✦ shard: The grip wants 60 XP — your bar holds 4.
+   ⚔ BLADE — trained rank 2 ▰▰▱▱▱▱▱▱▱▱ · next: rank 3 — 104 XP + ◈ 53
+      rank 3: miss 20%→18%, worst swing 38%→42% of full power
+   ➶ BOW — trained rank 1 ▰▱▱▱▱▱▱▱▱▱ · next: rank 2 — 57 XP + ◈ 35
+      rank 2: miss 22%→20%, worst swing 34%→38% of full power
+   ✦ STAFF — trained rank 0 ▱▱▱▱▱▱▱▱▱▱ · next: rank 1 — 20 XP + ◈ 18
+      rank 1: miss 25%→22%, worst swing 30%→34% of full power
+   ✥ CARRY — 1 weapon slot · 2nd slot — 60 XP + ◈ 30
+   [train_blade] Train blade to rank 3
+   [train_bow] Train bow to rank 2
+   [train_staff] Train staff to rank 1
+   [buy_carry2] Learn to carry a 2nd weapon
+   [back] Back to Weirsend
+   training={'blade': 2, 'bow': 1, 'staff': 0} slots=1
+
+──[school-back] FLOOR 3 · MEN · WEIRSEND · Weirsend
+   (The fire is small but honest. Beyond the wire, the wilds.)
+   Out past the wire:
+   Marsh wolf — HP 19 · ATK 31 · DEF 4 · SPD 5
+   Marsh adder — HP 10 · ATK 18 · DEF 3 · SPD 5
+   Mire boar — HP 86 · ATK 56 · DEF 7 · SPD 5
+   Fence-wire pike ⛨ — HP 23 · ATK 43 · DEF 4 · SPD 3 (slow)
+   Drowned lantern ✧ — HP 57 · ATK 62 · DEF 5 · SPD 3 (slow)
+   [hunt] Hunt the wilds
+   [keep] The keep where Warden Sedgeback fell
+   [talk] Talk — Old Nan Sedge
+   [school] The School
+   [town] Return to Roothollow
+
+======================================================================
+BEAT 6 — the staircase: one sign at a time, fair weapon in hand
+
+   verdict for shellback_tortoise:
+     ⛨ Armoured. Your Rusted Sword: half — blade rank 2.
+     A staff bites full — yours is rank 0.
+
+──[f2 ⛨ blade-vs-plate opener] FLOOR 2 · GIANTS · THE RUSTWATER ADIT · Shellback tortoise ⛨ — HP 85/85 · ATK 35 · DEF 5 · SPD 3 (slow)
+   (It is between you and the way forward.)
+   [close_in] Close in
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] 🔒 Shield wall
+
+──[f2 ⛨ blade-vs-plate r1] FLOOR 2 · GIANTS · THE RUSTWATER ADIT · Shellback tortoise ⛨ — HP 85/85 · ATK 35 · DEF 5 · SPD 3 (slow)
+   (It is between you and the way forward.)
+   You cross the open ground fast and low. The Shellback tortoise meets you mid-stride — your Gate-Issue Jerkin and Gate-Issue Buckler soak almost all of it: only −6 HP gets through.
+   [attack] Attack
+   [open_distance] Open distance
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] 🔒 Shield wall
+
+──[f2 ⛨ blade-vs-plate r2] FLOOR 2 · GIANTS · THE RUSTWATER ADIT · Shellback tortoise ⛨ — HP 85/85 · ATK 35 · DEF 5 · SPD 3 (slow)
+   (It is between you and the way forward.)
+   Rank-2 hands — your Rusted Sword swings wide. The School trains this away. The Shellback tortoise makes you pay for the fumble for −9 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 8 of it.
+   [attack] Attack
+   [open_distance] Open distance
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] 🔒 Shield wall
+
+──[f2 ⛨ blade-vs-plate r3] FLOOR 2 · GIANTS · THE RUSTWATER ADIT · Shellback tortoise ⛨ — HP 83/85 · ATK 35 · DEF 5 · SPD 3 (slow)
+   (It is between you and the way forward.)
+   Your rank-2 swing lands shallow — 2 — its armoured sign halves steel. A rank-4 hand cuts nearer 4. The Shellback tortoise answers for −14 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 8 of it.
+   [attack] Attack
+   [open_distance] Open distance
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] 🔒 Shield wall
+
+──[f2 ⛨ blade-vs-plate r4] FLOOR 2 · GIANTS · THE RUSTWATER ADIT · Shellback tortoise ⛨ — HP 81/85 · ATK 35 · DEF 5 · SPD 3 (slow)
+   (It is between you and the way forward.)
+   Your Rusted Sword takes it for 2 — its armoured sign halves steel. The Shellback tortoise answers — you slip the blow entirely. Speed tells.
+   [attack] Attack
+   [open_distance] Open distance
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] 🔒 Shield wall
+
+──[f2 ⛨ blade-vs-plate r5] FLOOR 2 · GIANTS · THE RUSTWATER ADIT · Shellback tortoise ⛨ — HP 78/85 · ATK 35 · DEF 5 · SPD 3 (slow)
+   (It is between you and the way forward.)
+   Your Rusted Sword takes it for 3 — its armoured sign halves steel. The Shellback tortoise answers for −24 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 8 of it.
+   [attack] Attack
+   [open_distance] Open distance
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] 🔒 Shield wall
+
+──[f2 ⛨ blade-vs-plate r6] FLOOR 2 · GIANTS · THE RUSTWATER ADIT · Shellback tortoise ⛨ — HP 74/85 · ATK 35 · DEF 5 · SPD 3 (slow)
+   (It is between you and the way forward.)
+   Your Rusted Sword takes it for 4 — its armoured sign halves steel. The Shellback tortoise answers for −23 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 8 of it.
+   [attack] Attack
+   [open_distance] Open distance
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] 🔒 Shield wall
+
+──[f2 ⛨ blade-vs-plate r7] FLOOR 2 · GIANTS · THE RUSTWATER ADIT · Shellback tortoise ⛨ — HP 72/85 · ATK 35 · DEF 5 · SPD 3 (slow)
+   (It is between you and the way forward.)
+   Your Rusted Sword takes it for 2 — its armoured sign halves steel. The Shellback tortoise answers for −23 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 8 of it.
+   [attack] Attack
+   [open_distance] Open distance
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] 🔒 Shield wall
+
+──[f2 ⛨ blade-vs-plate r8] FLOOR 2 · GIANTS · THE RUSTWATER ADIT · Shellback tortoise ⛨ — HP 70/85 · ATK 35 · DEF 5 · SPD 3 (slow)
+   (It is between you and the way forward.)
+   Your rank-2 swing lands shallow — 2 — its armoured sign halves steel. A rank-4 hand cuts nearer 4. The Shellback tortoise answers for −27 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 8 of it.
+   [attack] Attack
+   [open_distance] Open distance
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] 🔒 Shield wall
+
+──[f2 ⛨ blade-vs-plate r9] FLOOR 2 · GIANTS · THE RUSTWATER ADIT · Your shardmind drags you out
+   (Everything goes white, then very loud, then quiet.)
+   ✦ shard: I have you. Once a day, I have you. Do not spend it like this again.
+   The Shellback tortoise loses you in the grass.
+   Nothing turned your blows — it simply hit harder than you could trade. Better gear, or run from this one until a floor's rungs catch you up.
+   − ◈ 291 carried gold, scattered where you fell
+   You are at 1 HP. The gate town is close.
+   [heal] The healer's tent
+   [town] Limp back to Roothollow
+
+   verdict for windfall_haunt:
+     ✧ Spellguarded. Your Rusted Sword: full — blade rank 2.
+
+──[f3 ✧ blade-vs-spellguard opener] FLOOR 3 · MEN · THE DROWNED PASTURE · Drowned lantern ✧ — HP 114/114 · ATK 74 · DEF 5 · SPD 4
+   (It is between you and the way forward.)
+   [close_in] Close in
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] 🔒 Shield wall
+
+──[f3 ✧ blade-vs-spellguard r1] FLOOR 3 · MEN · THE DROWNED PASTURE · Drowned lantern ✧ — HP 114/114 · ATK 74 · DEF 5 · SPD 4
+   (It is between you and the way forward.)
+   You cross the open ground fast and low. The Drowned lantern meets you mid-stride — your Gate-Issue Jerkin and Gate-Issue Buckler soak almost all of it: only −15 HP gets through.
+   [attack] Attack
+   [open_distance] Open distance
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] 🔒 Shield wall
+
+──[f3 ✧ blade-vs-spellguard r2] FLOOR 3 · MEN · THE DROWNED PASTURE · Drowned lantern ✧ — HP 107/114 · ATK 74 · DEF 5 · SPD 4
+   (It is between you and the way forward.)
+   Your Rusted Sword takes it for 7. The Drowned lantern answers for −32 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 8 of it.
+   [attack] Attack
+   [open_distance] Open distance
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] 🔒 Shield wall
+
+──[f3 ✧ blade-vs-spellguard r3] FLOOR 3 · MEN · THE DROWNED PASTURE · Drowned lantern ✧ — HP 101/114 · ATK 74 · DEF 5 · SPD 4
+   (It is between you and the way forward.)
+   Your Rusted Sword takes it for 6. The Drowned lantern answers for −62 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 8 of it.
+   [attack] Attack
+   [open_distance] Open distance
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] 🔒 Shield wall
+
+──[f3 ✧ blade-vs-spellguard r4] FLOOR 3 · MEN · THE DROWNED PASTURE · Drowned lantern ✧ — HP 93/114 · ATK 74 · DEF 5 · SPD 4
+   (It is between you and the way forward.)
+   Your Rusted Sword takes it for 8. The Drowned lantern answers for −29 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 8 of it.
+   [attack] Attack
+   [open_distance] Open distance
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] 🔒 Shield wall
+
+──[f3 ✧ blade-vs-spellguard r5] ROOTHOLLOW · THE SQUARE · You wake at the foot of the Stone
+   (Dying in the Ascent means waking in Roothollow. It always has.)
+   ✦ shard: I carried what I could. We go again when you're ready.
+   Killed by the Drowned lantern.
+   Nothing turned your blows — it simply hit harder than you could trade. Better gear, or run from this one until a floor's rungs catch you up.
+   ▪ the tower is no longer gentle with you — from here, deaths cost gear and gold
+   − ◈ 163 carried gold (56%), gone
+   Banked gold untouched. The Vault keeps its word.
+   [town] Get up
+
+   verdict for glare_moth:
+     ⚡ It flies. Your Ashwood Bow: full — bow rank 1.
+
+──[f4 ⚡ bow-vs-wings opener] FLOOR 4 · ELVES · THE LIGHTLESS GLADE · Lamp newt ⚡ — HP 22/22 · ATK 33 · DEF 5 · SPD 7 (fast)
+   (It is between you and the way forward.)
+   [attack] Attack
+   [create_distance] 🔒 Open distance
+   [stand] Stand your ground
+   [run] Run away
+   [treeline_shot] 🔒 Treeline shot
+
+──[f4 ⚡ bow-vs-wings r1] FLOOR 4 · ELVES · THE LIGHTLESS GLADE · Lamp newt ⚡ — HP 14/22 · ATK 33 · DEF 5 · SPD 7 (fast)
+   (It is between you and the way forward.)
+   Your Ashwood Bow bites deep — 8 damage the Lamp newt won't shrug off. It has no answer at this range. The Lamp newt closes the gap — it is on you now.
+   [attack] Attack
+   [create_distance] 🔒 Open distance
+   [stand] Stand your ground
+   [run] Run away
+
+──[f4 ⚡ bow-vs-wings r2] FLOOR 4 · ELVES · THE LIGHTLESS GLADE · Lamp newt ⚡ — HP 11/22 · ATK 33 · DEF 5 · SPD 7 (fast)
+   (It is between you and the way forward.)
+   Your Ashwood Bow takes it for 3. The Lamp newt answers for −11 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 8 of it.
+   [attack] Attack
+   [create_distance] 🔒 Open distance
+   [stand] Stand your ground
+   [run] Run away
+
+──[f4 ⚡ bow-vs-wings r3] FLOOR 4 · ELVES · THE LIGHTLESS GLADE · Lamp newt ⚡ — HP 9/22 · ATK 33 · DEF 5 · SPD 7 (fast)
+   (It is between you and the way forward.)
+   Your Ashwood Bow takes it for 2. The Lamp newt answers for −16 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 8 of it.
+   [attack] Attack
+   [create_distance] 🔒 Open distance
+   [stand] Stand your ground
+   [run] Run away
+
+──[f4 ⚡ bow-vs-wings r4] FLOOR 4 · ELVES · THE LIGHTLESS GLADE · Lamp newt ⚡ — HP 4/22 · ATK 33 · DEF 5 · SPD 7 (fast)
+   (It is between you and the way forward.)
+   Your Ashwood Bow takes it for 5. The Lamp newt answers for −22 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 8 of it.
+   [attack] Attack
+   [create_distance] 🔒 Open distance
+   [stand] Stand your ground
+   [run] Run away
+
+──[f4 ⚡ bow-vs-wings r5] FLOOR 4 · ELVES · THE LIGHTLESS GLADE · Lamp newt — freed
+   (The fever's shape drops away. A glade-newt that dozed in the moss under the wick-flowers shakes itself loose and slips back to the wild edges.)
+   The Lamp newt goes down — no match for your Ashwood Bow.
+   + 13 XP
+   + ◈ 16 gold (young-tower bounty)
+   [hunt] Hunt the wilds again
+   [hunt_deep] Hunt deep — off the lit paths
+   [stew] Hunter's stew
+   [heal] The healer's tent
+   [keep] The Warden's keep — Warden Palegleam
+   [talk] Talk — Ithren of the Wicks
+   [school] The School
+   [town] Return to Roothollow
+
+======================================================================
+BEAT 7 — blade vs the moth, on purpose; read the defeat card
+
+   verdict for glare_moth:
+     ⚡ It flies. Your Rusted Sword: cannot reach it — blade rank 2.
+     A bow bites full — yours is rank 1.
+
+──[WRONG blade-vs-moth opener] FLOOR 4 · ELVES · THE LIGHTLESS GLADE · Lamp newt ⚡ — HP 44/44 · ATK 40 · DEF 5 · SPD 8 (fast)
+   (It is between you and the way forward.)
+   [close_in] Close in
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] 🔒 Shield wall
+
+──[WRONG blade-vs-moth r1] FLOOR 4 · ELVES · THE LIGHTLESS GLADE · Lamp newt ⚡ — HP 44/44 · ATK 40 · DEF 5 · SPD 8 (fast)
+   (It is between you and the way forward.)
+   You cross the open ground fast and low. The Lamp newt meets you mid-stride — your Gate-Issue Jerkin and Gate-Issue Buckler soak almost all of it: only −7 HP gets through.
+   [attack] Attack
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] 🔒 Shield wall
+
+──[WRONG blade-vs-moth r2] FLOOR 4 · ELVES · THE LIGHTLESS GLADE · Lamp newt ⚡ — HP 44/44 · ATK 40 · DEF 5 · SPD 8 (fast)
+   (It is between you and the way forward.)
+   Rank-2 hands — your Rusted Sword swings wide. The School trains this away. The Lamp newt makes you pay for the fumble for −23 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 8 of it.
+   [attack] Attack
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] 🔒 Shield wall
+
+──[WRONG blade-vs-moth r3] FLOOR 4 · ELVES · THE LIGHTLESS GLADE · Lamp newt ⚡ — HP 44/44 · ATK 40 · DEF 5 · SPD 8 (fast)
+   (It is between you and the way forward.)
+   The Lamp newt lifts out of reach — your Rusted Sword cuts empty air. Steel can't touch what flies. The Lamp newt answers for −31 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 8 of it.
+   [attack] Attack
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] 🔒 Shield wall
+
+──[WRONG blade-vs-moth r4] FLOOR 4 · ELVES · THE LIGHTLESS GLADE · Lamp newt ⚡ — HP 44/44 · ATK 40 · DEF 5 · SPD 8 (fast)
+   (It is between you and the way forward.)
+   The Lamp newt lifts out of reach — your Rusted Sword cuts empty air. Steel can't touch what flies. The Lamp newt answers for −12 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 8 of it.
+   [attack] Attack
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] 🔒 Shield wall
+
+──[WRONG blade-vs-moth r5] FLOOR 4 · ELVES · THE LIGHTLESS GLADE · Lamp newt ⚡ — HP 44/44 · ATK 40 · DEF 5 · SPD 8 (fast)
+   (It is between you and the way forward.)
+   Rank-2 hands — your Rusted Sword swings wide. The School trains this away. The Lamp newt makes you pay for the fumble for −25 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 8 of it.
+   [attack] Attack
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] 🔒 Shield wall
+
+──[WRONG blade-vs-moth r6] FLOOR 4 · ELVES · THE LIGHTLESS GLADE · Lamp newt ⚡ — HP 44/44 · ATK 40 · DEF 5 · SPD 8 (fast)
+   (It is between you and the way forward.)
+   The Lamp newt lifts out of reach — your Rusted Sword cuts empty air. Steel can't touch what flies. The Lamp newt answers for −23 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 8 of it.
+   [attack] Attack
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] 🔒 Shield wall
+
+──[WRONG blade-vs-moth r7] ROOTHOLLOW · THE SQUARE · You wake at the foot of the Stone
+   (Dying in the Ascent means waking in Roothollow. It always has.)
+   ✦ shard: I carried what I could. We go again when you're ready.
+   Killed by the Lamp newt.
+   It flew; your blade never reached it once. A bow answers in full — the armory sells one.
+   − ◈ 78 carried gold (54%), gone
+   Banked gold untouched. The Vault keeps its word.
+   [town] Get up
+   after: hp=142 location=town gold=66
+
+======================================================================
+BEAT 8 — staff at the Arcanum (tallowwood_staff), staff 2, blade to 4
+
+──[arcanum] ROOTHOLLOW · THE ARCANUM · Star-charts, staves and patient glass
+   (The shop hums a half-tone above silence. The shopkeeper's eyes are the only bright thing in it.)
+   Gatewatch Baton, issued to whoever could read — +23 ATK, END 1,430
+   Coalglass Staff, coalglass core, banked heat — +30 ATK, END 1,462
+   Keen Coalglass Staff — +34 ATK, END 950, ember-tempered — keener than it should be, and it knows it
+   Warded Coalglass Staff — +30 ATK, END 2,558, frost-warded — no keener, and it outlasts three of these
+   Wolfsong Staff — +39 ATK, END 1,495, the rung you're saving for
+   Gatewatch Signet, issued to whoever could read — +14 DEF, END 3,337
+   Sootglass Bead, soot trapped in glass, and it glows — +19 DEF, END 4,630
+   Keen Sootglass Bead — +22 DEF, END 3,483, ember-tempered — keener than it should be, and it knows it
+   Warded Sootglass Bead — +19 DEF, END 8,100, frost-warded — no keener, and it outlasts three of these
+   Wolfeye Stone — +24 DEF, END 5,980, the rung you're saving for
+   [buy_gatewatch_baton] Gatewatch Baton
+   [buy_coalglass_staff] Coalglass Staff
+   [buy_keen_coalglass_staff] Keen Coalglass Staff
+   [buy_warded_coalglass_staff] Warded Coalglass Staff
+   [buy_wolfsong_staff] 🔒 Wolfsong Staff
+   [buy_gatewatch_signet] Gatewatch Signet
+   [buy_sootglass_bead] Sootglass Bead
+   [buy_keen_sootglass_bead] Keen Sootglass Bead
+   [buy_warded_sootglass_bead] Warded Sootglass Bead
+   [buy_wolfeye_stone] 🔒 Wolfeye Stone
+   [back] Back to the square
+   !! CONFUSED: no option matching /buy_tallowwood_staff/ on 'Star-charts, staves and patient glass' — ids: ['buy_gatewatch_baton', 'buy_coalglass_staff', 'buy_keen_coalglass_staff', 'buy_warded_coalglass_staff', 'buy_wolfsong_staff', 'buy_gatewatch_signet', 'buy_sootglass_bead', 'buy_keen_sootglass_bead', 'buy_warded_sootglass_bead', 'buy_wolfeye_stone', 'back']
+
+──[f6-arrive-done] FLOOR 6 · DEEP · LASTLIGHT · Lastlight
+   (The fire is small but honest. Beyond the wire, the wilds.)
+   Out past the wire:
+   Grave-rat ⚡ — HP 34 · ATK 50 · DEF 7 · SPD 7 (fast)
+   Guano vole — HP 38 · ATK 83 · DEF 7 · SPD 5
+   Cave broodling — HP 72 · ATK 93 · DEF 9 · SPD 5
+   Sentinel spider ⛨ — HP 294 · ATK 148 · DEF 14 · SPD 3 (slow)
+   Vault boar — HP 286 · ATK 97 · DEF 11 · SPD 5
+   Silk-wrapped husk ✧ — HP 176 · ATK 113 · DEF 11 · SPD 3 (slow)
+   [hunt] Hunt the wilds
+   [hunt_deep] Hunt deep — off the lit paths
+   [keep] The Warden's keep — Warden Duskspin
+   [talk] Talk — Sable Lastlamp
+   [school] The School
+   [town] Return to Roothollow
+
+──[school-f6] FLOOR 6 · LASTLIGHT · THE SCHOOL · The School
+   (Any hand can hold any weapon. The School teaches it to bite. Training spends the XP bar — the same pool the Guildhall levels from.)
+   ⚔ BLADE — trained rank 2 ▰▰▱▱▱▱▱▱▱▱ · next: rank 3 — 104 XP + ◈ 89
+      rank 3: miss 20%→18%, worst swing 38%→42% of full power
+   ➶ BOW — trained rank 1 ▰▱▱▱▱▱▱▱▱▱ · next: rank 2 — 57 XP + ◈ 59
+      rank 2: miss 22%→20%, worst swing 34%→38% of full power
+   ✦ STAFF — trained rank 0 ▱▱▱▱▱▱▱▱▱▱ · next: rank 1 — 20 XP + ◈ 30
+      rank 1: miss 25%→22%, worst swing 30%→34% of full power
+   ✥ CARRY — 1 weapon slot · 2nd slot — 60 XP + ◈ 30
+   [train_blade] Train blade to rank 3
+   [train_bow] Train bow to rank 2
+   [train_staff] Train staff to rank 1
+   [buy_carry2] Learn to carry a 2nd weapon
+   [back] Back to Lastlight
+
+──[staff-1] FLOOR 6 · LASTLIGHT · THE SCHOOL · The School
+   (Any hand can hold any weapon. The School teaches it to bite. Training spends the XP bar — the same pool the Guildhall levels from.)
+   + staff — trained rank 1. The drills stick.
+   ⚔ BLADE — trained rank 2 ▰▰▱▱▱▱▱▱▱▱ · next: rank 3 — 104 XP + ◈ 89
+      rank 3: miss 20%→18%, worst swing 38%→42% of full power
+   ➶ BOW — trained rank 1 ▰▱▱▱▱▱▱▱▱▱ · next: rank 2 — 57 XP + ◈ 59
+      rank 2: miss 22%→20%, worst swing 34%→38% of full power
+   ✦ STAFF — trained rank 1 ▰▱▱▱▱▱▱▱▱▱ · next: rank 2 — 57 XP + ◈ 59
+      rank 2: miss 22%→20%, worst swing 34%→38% of full power
+   ✥ CARRY — 1 weapon slot · 2nd slot — 60 XP + ◈ 30
+   [train_blade] Train blade to rank 3
+   [train_bow] Train bow to rank 2
+   [train_staff] Train staff to rank 2
+   [buy_carry2] Learn to carry a 2nd weapon
+   [back] Back to Lastlight
+
+──[staff-2] FLOOR 6 · LASTLIGHT · THE SCHOOL · The School
+   (Any hand can hold any weapon. The School teaches it to bite. Training spends the XP bar — the same pool the Guildhall levels from.)
+   + staff — trained rank 2. The drills stick.
+   ⚔ BLADE — trained rank 2 ▰▰▱▱▱▱▱▱▱▱ · next: rank 3 — 104 XP + ◈ 89
+      rank 3: miss 20%→18%, worst swing 38%→42% of full power
+   ➶ BOW — trained rank 1 ▰▱▱▱▱▱▱▱▱▱ · next: rank 2 — 57 XP + ◈ 59
+      rank 2: miss 22%→20%, worst swing 34%→38% of full power
+   ✦ STAFF — trained rank 2 ▰▰▱▱▱▱▱▱▱▱ · next: rank 3 — 104 XP + ◈ 89
+      rank 3: miss 20%→18%, worst swing 38%→42% of full power
+   ✥ CARRY — 1 weapon slot · 2nd slot — 60 XP + ◈ 30
+   [train_blade] Train blade to rank 3
+   [train_bow] Train bow to rank 2
+   [train_staff] Train staff to rank 3
+   [buy_carry2] Learn to carry a 2nd weapon
+   [back] Back to Lastlight
+
+──[blade-3] FLOOR 6 · LASTLIGHT · THE SCHOOL · The School
+   (Any hand can hold any weapon. The School teaches it to bite. Training spends the XP bar — the same pool the Guildhall levels from.)
+   + blade — trained rank 3. The drills stick.
+   ⚔ BLADE — trained rank 3 ▰▰▰▱▱▱▱▱▱▱ · next: rank 4 — 160 XP + ◈ 119
+      rank 4: miss 18%→15%, worst swing 42%→46% of full power
+   ➶ BOW — trained rank 1 ▰▱▱▱▱▱▱▱▱▱ · next: rank 2 — 57 XP + ◈ 59
+      rank 2: miss 22%→20%, worst swing 34%→38% of full power
+   ✦ STAFF — trained rank 2 ▰▰▱▱▱▱▱▱▱▱ · next: rank 3 — 104 XP + ◈ 89
+      rank 3: miss 20%→18%, worst swing 38%→42% of full power
+   ✥ CARRY — 1 weapon slot · 2nd slot — 60 XP + ◈ 30
+   [train_blade] Train blade to rank 4
+   [train_bow] Train bow to rank 2
+   [train_staff] Train staff to rank 3
+   [buy_carry2] Learn to carry a 2nd weapon
+   [back] Back to Lastlight
+
+──[blade-4] FLOOR 6 · LASTLIGHT · THE SCHOOL · The School
+   (Any hand can hold any weapon. The School teaches it to bite. Training spends the XP bar — the same pool the Guildhall levels from.)
+   + blade — trained rank 4. The drills stick.
+   ⚔ BLADE — trained rank 4 ▰▰▰▰▱▱▱▱▱▱ · next: rank 5 — 224 XP + ◈ 149
+      rank 5: miss 15%→12%, worst swing 46%→50% of full power
+   ➶ BOW — trained rank 1 ▰▱▱▱▱▱▱▱▱▱ · next: rank 2 — 57 XP + ◈ 59
+      rank 2: miss 22%→20%, worst swing 34%→38% of full power
+   ✦ STAFF — trained rank 2 ▰▰▱▱▱▱▱▱▱▱ · next: rank 3 — 104 XP + ◈ 89
+      rank 3: miss 20%→18%, worst swing 38%→42% of full power
+   ✥ CARRY — 1 weapon slot · 2nd slot — 60 XP + ◈ 30
+   [train_blade] Train blade to rank 5
+   [train_bow] Train bow to rank 2
+   [train_staff] Train staff to rank 3
+   [buy_carry2] Learn to carry a 2nd weapon
+   [back] Back to Lastlight
+   training={'blade': 4, 'bow': 1, 'staff': 2}
+
+======================================================================
+BEAT 9 — floors 5-12, first roster monster, fair weapon
+
+   verdict for blind_shoal:
+     Your Rusted Sword: full — blade rank 4.
+     Your Ashwood Bow: full — bow rank 1.
+     Your Tallowwood Staff: full — staff rank 2.
+
+──[f5 plain opener] FLOOR 5 · GIANTS · THE FLOODED MINE · Blind cave-fish — HP 25/25 · ATK 55 · DEF 5 · SPD 5
+   (It is between you and the way forward.)
+   [close_in] Close in
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+   [treeline_shot] 🔒 Treeline shot
+
+──[f5 plain r1] FLOOR 5 · GIANTS · THE FLOODED MINE · Blind cave-fish — HP 25/25 · ATK 55 · DEF 5 · SPD 5
+   (It is between you and the way forward.)
+   You cross the open ground fast and low. The Blind cave-fish meets you mid-stride — your Gate-Issue Jerkin and Gate-Issue Buckler soak almost all of it: only −14 HP gets through.
+   [attack] Attack
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f5 plain r2] FLOOR 5 · GIANTS · THE FLOODED MINE · Blind cave-fish — HP 25/25 · ATK 55 · DEF 5 · SPD 5
+   (It is between you and the way forward.)
+   Rank-4 hands — your Rusted Sword swings wide. The School trains this away. The Blind cave-fish makes you pay for the fumble for −25 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 24 of it.
+   [attack] Attack
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f5 plain r3] FLOOR 5 · GIANTS · THE FLOODED MINE · Blind cave-fish — freed
+   (The fever's shape drops away. A shoal of pallid fish from the drowned galleries shakes itself loose and slips back to the wild edges.)
+   The Blind cave-fish goes down — no match for your Rusted Sword.
+   + 12 XP
+   + ◈ 23 gold (young-tower bounty)
+   [hunt] Hunt the wilds again
+   [gate] Back to the tower gate
+   [hunt_deep] Hunt deep — off the lit paths
+   [stew] Hunter's stew
+   [heal] The healer's tent
+   [keep] The keep where Warden Sumplock fell
+   [talk] Talk — Durn Sumphand
+   [school] The School
+   [town] Return to Roothollow
+
+   verdict for grave_moth:
+     ⚡ It flies. Your Ashwood Bow: full — bow rank 1.
+     Your Rusted Sword: cannot reach it — blade rank 4.
+     Your Tallowwood Staff: half — staff rank 2.
+
+──[f6 fly opener] FLOOR 6 · DEEP · THE THRESHOLD DARK · Grave-rat ⚡ — HP 34/34 · ATK 50 · DEF 7 · SPD 7 (fast)
+   (It is between you and the way forward.)
+   [attack] Attack
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [create_distance] 🔒 Open distance
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+   [treeline_shot] 🔒 Treeline shot
+
+──[f6 fly r1] FLOOR 6 · DEEP · THE THRESHOLD DARK · Grave-rat ⚡ — HP 5/34 · ATK 50 · DEF 7 · SPD 7 (fast)
+   (It is between you and the way forward.)
+   Your Ashwood Bow bites deep — 29 damage the Grave-rat won't shrug off. It has no answer at this range. The Grave-rat closes the gap — it is on you now.
+   [attack] Attack
+   [attack_rusted_sword] Attack — Rusted Sword
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [create_distance] 🔒 Open distance
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f6 fly r2] FLOOR 6 · DEEP · THE THRESHOLD DARK · Grave-rat — freed
+   (The fever's shape drops away. A pallid rat-pup of the guano beds shakes itself loose and slips back to the wild edges.)
+   The Grave-rat goes down — no match for your Ashwood Bow.
+   + 27 XP
+   + ◈ 18 gold (young-tower bounty)
+   [hunt] Hunt the wilds again
+   [hunt_deep] Hunt deep — off the lit paths
+   [keep] The Warden's keep — Warden Duskspin
+   [talk] Talk — Sable Lastlamp
+   [school] The School
+   [town] Return to Roothollow
+
+   verdict for orchard_wolfpack:
+     Your Rusted Sword: full — blade rank 4.
+     Your Ashwood Bow: full — bow rank 1.
+     Your Tallowwood Staff: full — staff rank 2.
+
+──[f7 plain opener] FLOOR 7 · MEN · THE ORCHARD ROWS · Orchard wolf — HP 104/104 · ATK 112 · DEF 11 · SPD 5
+   (It is between you and the way forward.)
+   [close_in] Close in
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+   [treeline_shot] 🔒 Treeline shot
+
+──[f7 plain r1] FLOOR 7 · MEN · THE ORCHARD ROWS · Orchard wolf — HP 104/104 · ATK 112 · DEF 11 · SPD 5
+   (It is between you and the way forward.)
+   You cross the open ground fast and low. The Orchard wolf meets you mid-stride — your Gate-Issue Jerkin and Gate-Issue Buckler soak almost all of it: only −33 HP gets through.
+   [attack] Attack
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f7 plain r2] FLOOR 7 · MEN · THE ORCHARD ROWS · Orchard wolf — HP 53/104 · ATK 112 · DEF 11 · SPD 5
+   (It is between you and the way forward.)
+   Your Rusted Sword bites deep — 51 damage the Orchard wolf won't shrug off. The Orchard wolf answers for −53 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 24 of it.
+   [attack] Attack
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f7 plain r3] FLOOR 7 · MEN · THE ORCHARD ROWS · Orchard wolf — HP 8/104 · ATK 112 · DEF 11 · SPD 5
+   (It is between you and the way forward.)
+   Your Rusted Sword bites deep — 45 damage the Orchard wolf won't shrug off. The Orchard wolf answers for −59 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 24 of it.
+   [attack] Attack
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f7 plain r4] FLOOR 7 · MEN · THE ORCHARD ROWS · Orchard wolf — HP 8/104 · ATK 112 · DEF 11 · SPD 5
+   (It is between you and the way forward.)
+   Rank-4 hands — your Rusted Sword swings wide. The School trains this away. The Orchard wolf makes you pay for the fumble for −41 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 24 of it.
+   [attack] Attack
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f7 plain r5] FLOOR 7 · MEN · THE ORCHARD ROWS · Orchard wolf — freed
+   (The fever's shape drops away. A wolf that denned in the windbreak rows shakes itself loose and slips back to the wild edges.)
+   The Orchard wolf goes down — no match for your Rusted Sword.
+   + 42 XP
+   + ◈ 31 gold (young-tower bounty)
+   [hunt] Hunt the wilds again
+   [hunt_deep] Hunt deep — off the lit paths
+   [stew] Hunter's stew
+   [heal] The healer's tent
+   [keep] The Warden's keep — Warden Applewrath
+   [talk] Talk — Cesta Pommet
+   [school] The School
+   [town] Return to Roothollow
+
+   verdict for cinder_wolf:
+     Your Rusted Sword: full — blade rank 4.
+     Your Ashwood Bow: full — bow rank 1.
+     Your Tallowwood Staff: full — staff rank 2.
+
+──[f8 plain opener] FLOOR 8 · WASTE · THE ASHLINE · Ashline jackal — HP 290/290 · ATK 166 · DEF 14 · SPD 6
+   (It is between you and the way forward.)
+   [close_in] Close in
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+   [treeline_shot] 🔒 Treeline shot
+
+──[f8 plain r1] FLOOR 8 · WASTE · THE ASHLINE · Ashline jackal — HP 290/290 · ATK 166 · DEF 14 · SPD 6
+   (It is between you and the way forward.)
+   You cross the open ground fast and low. The Ashline jackal meets you mid-stride — your Gate-Issue Jerkin and Gate-Issue Buckler soak almost all of it: only −37 HP gets through.
+   [attack] Attack
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f8 plain r2] FLOOR 8 · WASTE · THE ASHLINE · Ashline jackal — HP 290/290 · ATK 166 · DEF 14 · SPD 6
+   (It is between you and the way forward.)
+   Rank-4 hands — your Rusted Sword swings wide. The School trains this away. The Ashline jackal makes you pay for the fumble for −107 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 24 of it.
+   [attack] Attack
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f8 plain r3] FLOOR 8 · WASTE · THE ASHLINE · Ashline jackal — HP 248/290 · ATK 166 · DEF 14 · SPD 6
+   (It is between you and the way forward.)
+   Your Rusted Sword takes it for 42. The Ashline jackal answers for −133 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 24 of it.
+   [attack] Attack
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f8 plain r4] FLOOR 8 · WASTE · THE ASHLINE · Ashline jackal — HP 216/290 · ATK 166 · DEF 14 · SPD 6
+   (It is between you and the way forward.)
+   Your Rusted Sword takes it for 32. The Ashline jackal answers for −122 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 24 of it.
+   [attack] Attack
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f8 plain r5] FLOOR 8 · WASTE · THE ASHLINE · Ashline jackal — HP 177/290 · ATK 166 · DEF 14 · SPD 6
+   (It is between you and the way forward.)
+   Your Rusted Sword takes it for 39. The Ashline jackal answers for −86 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 24 of it.
+   [attack] Attack
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f8 plain r6] FLOOR 8 · WASTE · THE ASHLINE · Ashline jackal — HP 148/290 · ATK 166 · DEF 14 · SPD 6
+   (It is between you and the way forward.)
+   Your Rusted Sword takes it for 29. The Ashline jackal answers for −64 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 24 of it.
+   [attack] Attack
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f8 plain r7] FLOOR 8 · WASTE · THE ASHLINE · Ashline jackal — HP 107/290 · ATK 166 · DEF 14 · SPD 6
+   (It is between you and the way forward.)
+   Your Rusted Sword takes it for 41. The Ashline jackal answers for −88 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 24 of it.
+   [attack] Attack
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f8 plain r8] FLOOR 8 · WASTE · THE ASHLINE · Ashline jackal — HP 81/290 · ATK 166 · DEF 14 · SPD 6
+   (It is between you and the way forward.)
+   Your rank-4 swing lands shallow — 26. A rank-6 hand cuts nearer 38. The Ashline jackal answers for −59 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 24 of it.
+   [attack] Attack
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f8 plain r9] FLOOR 8 · WASTE · THE ASHLINE · Ashline jackal — HP 40/290 · ATK 166 · DEF 14 · SPD 6
+   (It is between you and the way forward.)
+   Your Rusted Sword takes it for 41. The Ashline jackal answers for −61 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 24 of it.
+   [attack] Attack
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f8 plain r10] FLOOR 8 · WASTE · THE ASHLINE · Ashline jackal — HP 2/290 · ATK 166 · DEF 14 · SPD 6
+   (It is between you and the way forward.)
+   Your Rusted Sword takes it for 38. The Ashline jackal answers for −131 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 24 of it.
+   [attack] Attack
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f8 plain r11] FLOOR 8 · WASTE · THE ASHLINE · Ashline jackal — freed
+   (The fever's shape drops away. A dune scavenger that followed the caravans shakes itself loose and slips back to the wild edges.)
+   The Ashline jackal goes down — no match for your Rusted Sword.
+   + 37 XP
+   + ◈ 64 gold (young-tower bounty)
+   ▪ alpha spoils: Medgel
+   [hunt] Hunt the wilds again
+   [hunt_deep] Hunt deep — off the lit paths
+   [stew] Hunter's stew
+   [heal] The healer's tent
+   [use_medgel] Use a Medgel
+   [keep] The Warden's keep — Warden Cinderhide
+   [talk] Talk — Kesh of the Grey Wells
+   [school] The School
+   [town] Return to Roothollow
+
+   verdict for beacon_moth:
+     ⚡ It flies. Your Ashwood Bow: full — bow rank 1.
+     Your Rusted Sword: cannot reach it — blade rank 4.
+     Your Tallowwood Staff: half — staff rank 2.
+
+──[f9 fly opener] FLOOR 9 · MEN · THE BEACON FIELD · Glare vole ⚡ — HP 98/98 · ATK 90 · DEF 14 · SPD 7 (fast)
+   (It is between you and the way forward.)
+   [attack] Attack
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [create_distance] 🔒 Open distance
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+   [treeline_shot] 🔒 Treeline shot
+
+──[f9 fly r1] FLOOR 9 · MEN · THE BEACON FIELD · Glare vole ⚡ — HP 61/98 · ATK 90 · DEF 14 · SPD 7 (fast)
+   (It is between you and the way forward.)
+   Your Ashwood Bow bites deep — 37 damage the Glare vole won't shrug off. It has no answer at this range. The Glare vole comes on across open ground.
+   [attack] Attack
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [create_distance] 🔒 Open distance
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f9 fly r2] FLOOR 9 · MEN · THE BEACON FIELD · Glare vole ⚡ — HP 8/98 · ATK 90 · DEF 14 · SPD 7 (fast)
+   (It is between you and the way forward.)
+   Your Ashwood Bow bites deep — 53 damage the Glare vole won't shrug off. It has no answer at this range. The Glare vole closes the gap — it is on you now.
+   [attack] Attack
+   [attack_rusted_sword] Attack — Rusted Sword
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [create_distance] 🔒 Open distance
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f9 fly r3] FLOOR 9 · MEN · THE BEACON FIELD · Glare vole — freed
+   (The fever's shape drops away. A heath-vole that nested warm at the pylon-feet shakes itself loose and slips back to the wild edges.)
+   The Glare vole goes down — no match for your Ashwood Bow.
+   + 48 XP
+   + ◈ 36 gold (young-tower bounty)
+   [hunt] Hunt the wilds again
+   [hunt_deep] Hunt deep — off the lit paths
+   [keep] The Warden's keep — Warden Glarefang
+   [talk] Talk — Wick Harlow
+   [school] The School
+   [town] Return to Roothollow
+
+   verdict for kings_guard:
+     ⛨ Armoured. Your Tallowwood Staff: full — staff rank 2.
+     Your Ashwood Bow: glance — bow rank 1.
+     Your Rusted Sword: half — blade rank 4.
+
+──[f10 armoured opener] FLOOR 10 · MEN · THE KINGSFIELD · Goblin guard ⛨ — HP 605/605 · ATK 321 · DEF 32 · SPD 3 (slow)
+   (It is between you and the way forward.)
+   [attack] Attack
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+   [treeline_shot] 🔒 Treeline shot
+
+──[f10 armoured r1] FLOOR 10 · MEN · THE KINGSFIELD · Goblin guard ⛨ — HP 545/605 · ATK 321 · DEF 32 · SPD 3 (slow)
+   (It is between you and the way forward.)
+   Your Tallowwood Staff takes it for 60. It has no answer at this range. The Goblin guard comes on across open ground.
+   [attack] Attack
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f10 armoured r2] FLOOR 10 · MEN · THE KINGSFIELD · Goblin guard ⛨ — HP 503/605 · ATK 321 · DEF 32 · SPD 3 (slow)
+   (It is between you and the way forward.)
+   Your Tallowwood Staff takes it for 42. It has no answer at this range. The Goblin guard comes on across open ground.
+   [attack] Attack
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f10 armoured r3] FLOOR 10 · MEN · THE KINGSFIELD · Goblin guard ⛨ — HP 475/605 · ATK 321 · DEF 32 · SPD 3 (slow)
+   (It is between you and the way forward.)
+   Your rank-2 swing lands shallow — 28. A rank-4 hand cuts nearer 45. It has no answer at this range. The Goblin guard comes on across open ground.
+   [attack] Attack
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f10 armoured r4] FLOOR 10 · MEN · THE KINGSFIELD · Goblin guard ⛨ — HP 447/605 · ATK 321 · DEF 32 · SPD 3 (slow)
+   (It is between you and the way forward.)
+   Your rank-2 swing lands shallow — 28. A rank-4 hand cuts nearer 45. It has no answer at this range. The Goblin guard comes on across open ground.
+   [attack] Attack
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f10 armoured r5] FLOOR 10 · MEN · THE KINGSFIELD · Goblin guard ⛨ — HP 415/605 · ATK 321 · DEF 32 · SPD 3 (slow)
+   (It is between you and the way forward.)
+   Your rank-2 swing lands shallow — 32. A rank-4 hand cuts nearer 45. It has no answer at this range. The Goblin guard comes on across open ground.
+   [attack] Attack
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f10 armoured r6] FLOOR 10 · MEN · THE KINGSFIELD · Goblin guard ⛨ — HP 362/605 · ATK 321 · DEF 32 · SPD 3 (slow)
+   (It is between you and the way forward.)
+   Your Tallowwood Staff takes it for 53. It has no answer at this range. The Goblin guard comes on across open ground.
+   [attack] Attack
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f10 armoured r7] FLOOR 10 · MEN · THE KINGSFIELD · Goblin guard ⛨ — HP 331/605 · ATK 321 · DEF 32 · SPD 3 (slow)
+   (It is between you and the way forward.)
+   Your rank-2 swing lands shallow — 31. A rank-4 hand cuts nearer 45. It has no answer at this range. The Goblin guard comes on across open ground.
+   [attack] Attack
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f10 armoured r8] FLOOR 10 · MEN · THE KINGSFIELD · Goblin guard ⛨ — HP 277/605 · ATK 321 · DEF 32 · SPD 3 (slow)
+   (It is between you and the way forward.)
+   Your Tallowwood Staff takes it for 54. It has no answer at this range. The Goblin guard comes on across open ground.
+   [attack] Attack
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f10 armoured r9] FLOOR 10 · MEN · THE KINGSFIELD · Goblin guard ⛨ — HP 277/605 · ATK 321 · DEF 32 · SPD 3 (slow)
+   (It is between you and the way forward.)
+   Rank-2 hands — your Tallowwood Staff swings wide. The School trains this away. It cannot reach you to make you pay. The Goblin guard comes on across open ground.
+   [attack] Attack
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f10 armoured r10] FLOOR 10 · MEN · THE KINGSFIELD · Goblin guard ⛨ — HP 231/605 · ATK 321 · DEF 32 · SPD 3 (slow)
+   (It is between you and the way forward.)
+   Your Tallowwood Staff takes it for 46. It has no answer at this range. The Goblin guard comes on across open ground.
+   [attack] Attack
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f10 armoured r11] FLOOR 10 · MEN · THE KINGSFIELD · Goblin guard ⛨ — HP 198/605 · ATK 321 · DEF 32 · SPD 3 (slow)
+   (It is between you and the way forward.)
+   Your rank-2 swing lands shallow — 33. A rank-4 hand cuts nearer 45. It has no answer at this range. The Goblin guard comes on across open ground.
+   [attack] Attack
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f10 armoured r12] FLOOR 10 · MEN · THE KINGSFIELD · Goblin guard ⛨ — HP 171/605 · ATK 321 · DEF 32 · SPD 3 (slow)
+   (It is between you and the way forward.)
+   Your rank-2 swing lands shallow — 27. A rank-4 hand cuts nearer 45. It has no answer at this range. The Goblin guard comes on across open ground.
+   [attack] Attack
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f10 armoured r13] FLOOR 10 · MEN · THE KINGSFIELD · Goblin guard ⛨ — HP 141/605 · ATK 321 · DEF 32 · SPD 3 (slow)
+   (It is between you and the way forward.)
+   Your rank-2 swing lands shallow — 30. A rank-4 hand cuts nearer 45. It has no answer at this range. The Goblin guard comes on across open ground.
+   [attack] Attack
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f10 armoured r14] FLOOR 10 · MEN · THE KINGSFIELD · Goblin guard ⛨ — HP 98/605 · ATK 321 · DEF 32 · SPD 3 (slow)
+   (It is between you and the way forward.)
+   Your Tallowwood Staff takes it for 43. It has no answer at this range. The Goblin guard comes on across open ground.
+   [attack] Attack
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f10 armoured r15] FLOOR 10 · MEN · THE KINGSFIELD · Goblin guard ⛨ — HP 43/605 · ATK 321 · DEF 32 · SPD 3 (slow)
+   (It is between you and the way forward.)
+   Your Tallowwood Staff takes it for 55. It has no answer at this range. The Goblin guard comes on across open ground.
+   [attack] Attack
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f10 armoured r16] FLOOR 10 · MEN · THE KINGSFIELD · Goblin guard falls
+   (No ghost leaves it. A collared conscript lies where it stood, and that is the whole of it.)
+   The Goblin guard goes down — no match for your Tallowwood Staff.
+   + 72 XP
+   + ◈ 96 gold (young-tower bounty)
+   [hunt] Hunt the wilds again
+   [hunt_deep] Hunt deep — off the lit paths
+   [keep] The Warden's keep — Gnarl, the Goblin King
+   [talk] Talk — Serjeant Mella Rung
+   [school] The School
+   [town] Return to Roothollow
+
+   verdict for kobold_scavenger:
+     Your Rusted Sword: full — blade rank 4.
+     Your Tallowwood Staff: full — staff rank 2.
+     Your Ashwood Bow: full — bow rank 1.
+
+──[f11 plain opener] FLOOR 11 · IRONVALE · THE RUSTWATER ADIT · Kobold scavenger — HP 286/286 · ATK 190 · DEF 24 · SPD 5
+   (It is between you and the way forward.)
+   [close_in] Close in
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+   [treeline_shot] 🔒 Treeline shot
+
+──[f11 plain r1] FLOOR 11 · IRONVALE · THE RUSTWATER ADIT · Kobold scavenger — HP 286/286 · ATK 190 · DEF 24 · SPD 5
+   (It is between you and the way forward.)
+   You cross the open ground fast and low. The Kobold scavenger meets you mid-stride — your Gate-Issue Jerkin and Gate-Issue Buckler soak almost all of it: only −76 HP gets through.
+   [attack] Attack
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f11 plain r2] FLOOR 11 · IRONVALE · THE RUSTWATER ADIT · Kobold scavenger — HP 260/286 · ATK 190 · DEF 24 · SPD 5
+   (It is between you and the way forward.)
+   Your Rusted Sword takes it for 26. The Kobold scavenger answers for −106 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 24 of it.
+   [attack] Attack
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f11 plain r3] FLOOR 11 · IRONVALE · THE RUSTWATER ADIT · Kobold scavenger — HP 260/286 · ATK 190 · DEF 24 · SPD 5
+   (It is between you and the way forward.)
+   Rank-4 hands — your Rusted Sword swings wide. The School trains this away. The Kobold scavenger makes you pay for the fumble for −72 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 24 of it.
+   [attack] Attack
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f11 plain r4] FLOOR 11 · IRONVALE · THE RUSTWATER ADIT · Kobold scavenger — HP 244/286 · ATK 190 · DEF 24 · SPD 5
+   (It is between you and the way forward.)
+   Your rank-4 swing lands shallow — 16. A rank-6 hand cuts nearer 33. The Kobold scavenger answers for −139 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 24 of it.
+   [attack] Attack
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f11 plain r5] FLOOR 11 · IRONVALE · THE RUSTWATER ADIT · Kobold scavenger — HP 218/286 · ATK 190 · DEF 24 · SPD 5
+   (It is between you and the way forward.)
+   Your Rusted Sword takes it for 26. The Kobold scavenger answers for −156 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 24 of it.
+   [attack] Attack
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f11 plain r6] FLOOR 11 · IRONVALE · THE RUSTWATER ADIT · Kobold scavenger — HP 184/286 · ATK 190 · DEF 24 · SPD 5
+   (It is between you and the way forward.)
+   Your Rusted Sword takes it for 34. The Kobold scavenger answers for −111 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 24 of it.
+   [attack] Attack
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f11 plain r7] FLOOR 11 · IRONVALE · THE RUSTWATER ADIT · Kobold scavenger — HP 149/286 · ATK 190 · DEF 24 · SPD 5
+   (It is between you and the way forward.)
+   Your Rusted Sword takes it for 35. The Kobold scavenger answers for −150 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 24 of it.
+   [attack] Attack
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f11 plain r8] FLOOR 11 · IRONVALE · THE RUSTWATER ADIT · Kobold scavenger — HP 104/286 · ATK 190 · DEF 24 · SPD 5
+   (It is between you and the way forward.)
+   Your Rusted Sword takes it for 45. The Kobold scavenger answers for −109 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 24 of it.
+   [attack] Attack
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f11 plain r9] ROOTHOLLOW · THE SQUARE · You wake at the foot of the Stone
+   (Dying in the Ascent means waking in Roothollow. It always has.)
+   ✦ shard: I carried what I could. We go again when you're ready.
+   Killed by the Kobold scavenger.
+   Nothing turned your blows — it simply hit harder than you could trade. Better gear, or run from this one until a floor's rungs catch you up.
+   − ◈ 2,674 carried gold (90%), gone
+   − Medgel tumbles from your pack into the dark
+   Banked gold untouched. The Vault keeps its word.
+   [town] Get up
+
+   verdict for bilge_kobold:
+     Your Rusted Sword: full — blade rank 4.
+     Your Tallowwood Staff: full — staff rank 2.
+     Your Ashwood Bow: full — bow rank 1.
+
+──[f12 plain opener] FLOOR 12 · IRONVALE · THE FLOODED MINE · Bilge kobold — HP 302/302 · ATK 284 · DEF 32 · SPD 5
+   (It is between you and the way forward.)
+   [close_in] Close in
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+   [treeline_shot] 🔒 Treeline shot
+
+──[f12 plain r1] FLOOR 12 · IRONVALE · THE FLOODED MINE · Bilge kobold — HP 302/302 · ATK 284 · DEF 32 · SPD 5
+   (It is between you and the way forward.)
+   You cross the open ground fast and low. The Bilge kobold meets you mid-stride — your Gate-Issue Jerkin and Gate-Issue Buckler soak almost all of it: only −124 HP gets through.
+   [attack] Attack
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f12 plain r2] FLOOR 12 · IRONVALE · THE FLOODED MINE · Bilge kobold — HP 283/302 · ATK 284 · DEF 32 · SPD 5
+   (It is between you and the way forward.)
+   Your rank-4 swing lands shallow — 19. A rank-6 hand cuts nearer 29. The Bilge kobold answers for −147 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 24 of it.
+   [attack] Attack
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f12 plain r3] FLOOR 12 · IRONVALE · THE FLOODED MINE · Bilge kobold — HP 268/302 · ATK 284 · DEF 32 · SPD 5
+   (It is between you and the way forward.)
+   Your rank-4 swing lands shallow — 15. A rank-6 hand cuts nearer 29. The Bilge kobold answers for −229 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 24 of it.
+   [attack] Attack
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f12 plain r4] FLOOR 12 · IRONVALE · THE FLOODED MINE · Bilge kobold — HP 243/302 · ATK 284 · DEF 32 · SPD 5
+   (It is between you and the way forward.)
+   Your Rusted Sword takes it for 25. The Bilge kobold answers for −207 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 24 of it.
+   [attack] Attack
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f12 plain r5] FLOOR 12 · IRONVALE · THE FLOODED MINE · Bilge kobold — HP 214/302 · ATK 284 · DEF 32 · SPD 5
+   (It is between you and the way forward.)
+   Your Rusted Sword takes it for 29. The Bilge kobold answers for −127 HP — your Gate-Issue Jerkin and Gate-Issue Buckler blunted 24 of it.
+   [attack] Attack
+   [attack_tallowwood_staff] Attack — Tallowwood Staff
+   [attack_ashwood_bow] Attack — Ashwood Bow
+   [stand] Stand your ground
+   [run] Run away
+   [shield_wall] Shield wall
+   [sleep_spell] 🔒 Sleep spell
+
+──[f12 plain r6] ROOTHOLLOW · THE SQUARE · You wake at the foot of the Stone
+   (Dying in the Ascent means waking in Roothollow. It always has.)
+   ✦ shard: I carried what I could. We go again when you're ready.
+   Killed by the Bilge kobold.
+   Nothing turned your blows — it simply hit harder than you could trade. Better gear, or run from this one until a floor's rungs catch you up.
+   − ◈ 267 carried gold (90%), gone
+   Banked gold untouched. The Vault keeps its word.
+   [town] Get up
+
+======================================================================
+BEAT 10 — legacy doc (clazz=sorcerer, v6) reads its School letter
+
+──[legacy-load] ROOTHOLLOW · A LETTER FROM THE SCHOOL · The guilds dissolved their halls into one School
+   (Every gate town teaches every weapon now. Your years on the path are honored.)
+   ✦ shard: A trained hand is a trained hand, whatever the guild called it.
+   ▪ Staff — trained rank 6
+   ▪ the School trains all three paths, for XP and coin
+   [town] So be it
+   legacy training after load: {'blade': 0, 'bow': 0, 'staff': 6}
+
+DONE
