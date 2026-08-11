@@ -62,3 +62,19 @@ creation, test sweep`.
   `transitional until phase 4`): the atk//2 floor branch in
   _player_hit and the `not _off_class` guard on the rank miss.
 - `_train_path` fallback `p.get("clazz")` dies with the class field.
+
+## Learnings applied (from phase 3)
+
+- Every writer of `gear["weapon"]` must maintain `p["held"]` —
+  `_gear_purchase` and `_wear_from_pack` do; when the class racks
+  die, keep the held bookkeeping in whatever replaces them (one
+  helper, not three copies).
+- Off-class death touches MORE than combat: `_gear_purchase` (off
+  pricing + "off-class: half the bite" note), `pack_actions`, the
+  Arcanum's off_class_offer rack. Grep `off_class|_off_class`.
+- New/removed town options must keep `tips.py` in step (test_014
+  walks every option) and new *_LEVEL constants must register in
+  unlocks.py + the test_020 guard set.
+- Rows removed from menus can't be reached via `apply_choice`
+  (option validation) — test dead-row guards via the action
+  handler directly.

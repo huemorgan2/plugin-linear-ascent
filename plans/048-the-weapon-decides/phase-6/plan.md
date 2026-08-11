@@ -49,3 +49,17 @@ anchors settled`.
   gates at a rank-6 reference climber; drop reference_player's
   transitional rank pins (8 matchup / 7 warden) to the default 6.
 - Migration-at-6 vs 7 is an open roy question; bake assumes 6.
+
+## Learnings applied (from phase 3)
+
+- **Carry-3 collision**: training spends the level bar, capped at
+  xp_need(level). CARRY3_XP=900 vs the level-8 bar (543) means the
+  level-8 gate is a lie until ~level 12 (bar 998). Bake must pick:
+  CARRY3_XP ≤ 543, or CARRY3_LEVEL = 12 (and fix the printed
+  sentence + tests either way). Same math blesses the ranks:
+  rank 10 (632 XP) first fits at level ~10, MASTERY (948) at 12 —
+  keep those as designed anchors when re-baking xp_need or
+  XP_PER_KILL_SLOPE.
+- School gold prices ride pillar(frontier) — any PILLAR change
+  moves train_gold/carry3_gold; the bake's expected values must be
+  computed with round() from the constants, never hand-copied.

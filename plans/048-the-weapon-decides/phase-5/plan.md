@@ -37,3 +37,16 @@ defeat teaches. Mastery study effects land here too.
 T2 (minus bounty label), T3 floor axis, suite.
 Commit: `048 phase 5: the triangle lives — typed monsters, total
 visibility, defeats that teach`.
+
+## Learnings applied (from phase 3)
+
+- Mastery purchases already record `p["mastery"][path]` — the
+  effect hooks (riposte / long draw / focus) attach there; unskip
+  `test_mastery_study_effects` in test_048 and replace its body.
+- `p["held"]` (held[0] = the hand, ≤ slots) is the scaffolding for
+  the fight-time weapon choice; the ensure_current sync self-heals
+  drift, so fight-scene swap logic may reorder held freely as long
+  as it also sets `gear["weapon"]`.
+- The School scene's "what improves" strings are the visibility
+  pattern (numbers on the row, before the click) — reuse the same
+  voice for monster sign lines and the pre-fight verdict.
