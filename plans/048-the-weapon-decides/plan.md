@@ -14,40 +14,49 @@ its full power is low — you train. So we add another layer of
 progress: buy any weapon type, train each path, and then you can
 attack all three types of monsters and be better at it."*
 
-Design law this plan serves: **fun is difficulty overcome and
-understood.** Every piece must pass three questions: can I lose?
-can I tell why? can I change it next time?
+Design law: **fun is difficulty overcome and understood.** Every
+piece must pass: can I lose? can I tell why? can I change it next
+time?
 
-Decisions already made (2026-08-11):
+Decisions made (2026-08-11):
 - Races stay untouched: human / elf / dwarf.
-- Ranks are numbers only — **trained rank 0–5**, shown as a bar. No
-  rank names.
-- The magic-resistant type is called **magic-resistant** (not
-  spellguard), is **weak to the sword** and **not fully armoured**.
-- FLY monsters hit **weak** — fast but low ATK; armoured and
-  magic-resistant hit hard but are slow.
+- Skill is a number and a bar — **trained rank 0–10** (rescaled from
+  0–5 for a stronger feeling of progression). No rank names.
+- The magic-resistant type is called **magic-resistant**, is weak to
+  the sword and not fully armoured.
+- FLY hits weak — fast but low ATK; armoured and magic-resistant hit
+  hard but are slow.
 - Every monster shows **all its numbers** plus its sign, everywhere.
-- Floors 1–10 drop **extra coin** so the player can buy and try the
-  basic weapon of every path early.
+- Floors 1–10 drop extra coin so the player can buy and try every
+  path's basic weapon early.
+- **Maxing one path (rank 10) costs about the XP of reaching player
+  level ~10** — a real goal, reached around the first band's end.
+- At rank 10 a path opens **mastery studies** — more things to learn
+  in that profession — and formally opens the other weapon types.
+- **Spreading over all three paths is deliberately slower** — each
+  rank costs more than the last (it costs XP), and no player should
+  find tri-path investment optimal.
+- Tests change FIRST: visibility (why I lost, every monster param),
+  smooth scaling with no bumps across levels, weapon rungs, and
+  floors, and healthy progression pacing are all asserted before
+  the mechanics land.
 
 ## The design in one paragraph
 
 Delete classes. Every player is a climber. What you fight *like* is
-decided by what is in your hand — blade, bow, or staff — and how well
-you fight is decided by how much you have **trained that path** at
-the School. Monsters come in three signed types — FLY ⚡, ARMOURED ⛨,
-MAGIC-RESISTANT ✧ — and each type has one weapon that answers it
-well, one that answers it poorly, and one that barely works. The game
-gains a second progression layer: levels make your body stronger (as
-today), training makes your *hands* better with each weapon. A
-countered monster is never "not for your class" — it is "not for the
-weapon you brought and trained", and both are choices the player owns.
+decided by what is in your hand — blade, bow, or staff — and how
+well you fight is decided by how much you have **trained that path**
+at the School. Monsters come in three signed types — FLY ⚡,
+ARMOURED ⛨, MAGIC-RESISTANT ✧ — and each type has one weapon that
+answers it well, one that answers it poorly, and one that barely
+works. The game gains a second progression layer: levels make your
+body stronger, training makes your *hands* better. A countered
+monster is never "not for your class" — it is "not for the weapon
+you brought and trained", and both are choices the player owns.
 
 ---
 
 # PART I — THE NUMBERS
-
-Everything new, changed, or deleted. All names final unless marked.
 
 ## N1. Monster types (replaces armor/resist tiers + flying/slow/fast)
 
@@ -63,27 +72,22 @@ triangle** — one authoring decision instead of five traits.
 | `plain` | — | 5 | ×1.0 | ×1.0 |
 
 ```python
-TYPE_SPEED  = {"fly": 7, "armoured": 3, "magic_resist": 3, "plain": 5}
-TYPE_ATK    = {"fly": 0.6, "armoured": 1.4, "magic_resist": 1.4,
-               "plain": 1.0}
-TYPE_HP     = {"fly": 0.9, "armoured": 1.2, "magic_resist": 1.0,
-               "plain": 1.0}
+TYPE_SPEED = {"fly": 7, "armoured": 3, "magic_resist": 3, "plain": 5}
+TYPE_ATK   = {"fly": 0.6, "armoured": 1.4, "magic_resist": 1.4,
+              "plain": 1.0}
+TYPE_HP    = {"fly": 0.9, "armoured": 1.2, "magic_resist": 1.0,
+              "plain": 1.0}
+TYPE_GOLD  = {"fly": 1.2, "armoured": 1.3, "magic_resist": 1.3,
+              "plain": 1.0}
 ```
 
-Weights apply on top of `creature_stats` (which already carries the
-pillar); an armoured monster on floor N hits like a plain monster
-about one floor up, a flyer like two floors down — but far more
-often (SPD 7 vs 3 through `p_close`).
+Weights apply on top of `creature_stats` (which already rides the
+pillar). **Dies:** `armor_*`, `resist_*`, `flying`, `slow`, `fast`
+traits; `TIER_MULT`; `PROFILE_GOLD`; `FLYING_GOLD_MULT`;
+`profile_gold_mult`. `bulwark` survives as an orthogonal elite
+marker (▣, HP ×2.2, gold ×1.5) — a wall, not a weapon-answer.
 
-**Dies:** `armor_low/med/high`, `resist_low/med/high`, `flying`,
-`slow`, `fast` traits; `TIER_MULT`; `PROFILE_GOLD`;
-`FLYING_GOLD_MULT`. `bulwark` survives as an orthogonal elite marker
-(▣, HP ×2.2, gold ×1.5) — it is a wall, not a weapon-answer.
-**Gold bump:** `TYPE_GOLD = {"fly": 1.2, "armoured": 1.3,
-"magic_resist": 1.3, "plain": 1.0}` (replaces the tier-based
-`profile_gold_mult`).
-
-## N2. The damage triangle (replaces typed_damage tiers)
+## N2. The damage triangle
 
 Damage of path P against type T: `raw_after_def × TYPE_MULT[T][P]`.
 
@@ -94,123 +98,152 @@ Damage of path P against type T: `raw_after_def × TYPE_MULT[T][P]`.
 | `magic_resist` | **1.0** | 0.5 | 0.15 |
 | `plain` | 1.0 | 1.0 | 1.0 |
 
-- Staff (magic) keeps ignoring flat DEF: `base = raw`. Blade and bow
-  keep `base = raw − DEF//2`. Then `dmg = max(1, round(base × mult))`
-  — the ≥1 chip law (013) survives, EXCEPT blade-vs-fly which is the
-  single legal 0.
+- Staff (magic) keeps ignoring flat DEF (`base = raw`); blade and
+  bow keep `base = raw − DEF//2`. Then
+  `dmg = max(1, round(base × mult))` — the ≥1 chip law (013)
+  survives; blade-vs-fly is the single legal 0.
 - ×0.15 answers chip 1s and 2s — visibly a mistake, not a wall.
-- `BOW_CLOSE_MULT` (0.5) and `BOW_GAP_MULT` (1.0/1.25/1.5) stack on
-  top unchanged — the gap ladder is the bow's identity, the triangle
-  is the monster's.
+- `BOW_CLOSE_MULT` (0.5) and the gap ladder (1.0/1.25/1.5) stack on
+  top unchanged.
 
-## N3. Trained ranks (new; replaces the whole off-class system)
+## N3. Trained ranks 0–10 (replaces the whole off-class system)
 
-Per-path integer **trained rank 0–5**, stored on the player:
-
-```python
-p["training"] = {"blade": 1, "bow": 0, "staff": 0}   # new-player start
-```
-
-Effects of rank R when the held weapon is on path P:
+Per-path integer **trained rank 0–10** on the player doc:
 
 ```python
-TRAIN_MISS_PCT   = lambda R: max(0, 25 - 5 * R)   # 25/20/15/10/5/0 %
-TRAIN_ROLL_FLOOR = lambda R: (30 + 8 * R) / 100   # .30 → .70 of ATK
+p["training"] = {"blade": 2, "bow": 0, "staff": 0}  # new-player start
 ```
 
-The swing rolls uniform in `[roll_floor(R)·ATK, ATK]` (today: fixed
-`[ATK/2, ATK]` — rank 2½ is the old feel). A miss eats the round and
-the monster answers with its normal counter. Mean damage rank 0 → 5
-rises ≈ ×1.34 with no lost rounds — training is consistency the
-player can feel.
-
-Training costs, paid at the School, frontier = highest unlocked
-floor:
+Effects of rank R with a path-P weapon in hand:
 
 ```python
-TRAIN_XP_ANCHOR   = 40
-TRAIN_GOLD_ANCHOR = 15
-train_xp(R)          = round(40 * R ** 1.5)        # 40/113/208/320/447
-train_gold(R, front) = round(15 * pillar(front) * R)
+TRAIN_MISS_PCT   = lambda R: max(0, round(25 - 2.5 * R))
+                   # 25 → 0% at rank 10
+TRAIN_ROLL_FLOOR = lambda R: (30 + 4 * R) / 100
+                   # worst swing: 30% → 70% of ATK at rank 10
 ```
 
-- Full path 0→5: **1,128 XP** ≈ the XP of body levels ~7→9 — a real
-  second sink, not a tax. Second and third paths are where the extra
-  grind goes; broad mastery is the long game.
-- Gold is the minor component (instructor's fee, rides the pillar so
-  it never trivializes); XP is the currency of learning.
-- Ranks never decay. Cap 5. XP re-bake: `XP_PER_KILL_SLOPE` 2.4 →
-  **2.9** (+20%) so one-path climbers keep today's level≈floor pace
-  while funding one path to ~3 by mid-tower (verify in the bake).
+The swing rolls uniform in `[roll_floor(R)·ATK, ATK]`. Today's fixed
+`[ATK/2, ATK]` with no miss ≈ **rank 5** — the middle of the ladder
+is the old feel; everything above it is new power. A miss eats the
+round and the monster answers. Mean damage rank 0 → 10 rises ≈
+×1.34 with all misses gone — training is consistency the player can
+feel, in ten visible steps instead of five.
+
+**Costs** — each rank costs more than the last; XP is the currency
+of learning, gold the instructor's fee (rides the pillar so it never
+trivializes). Frontier = highest unlocked floor:
+
+```python
+TRAIN_XP_ANCHOR   = 20
+TRAIN_GOLD_ANCHOR = 8
+train_xp(R)          = round(20 * R ** 1.5)
+   # 20/57/104/160/224/294/371/453/540/632  (ranks 1..10)
+train_gold(R, front) = round(8 * pillar(front) * R)
+```
+
+- **One path 0→10 = 2,855 XP ≈ the XP of body levels 1→10**
+  (Σ xp_need(1..9) = 2,664) — mastering your first weapon is a
+  level-10-sized achievement, landing near the first band's end.
+- **All three paths = 8,565 XP ≈ body levels 1→21** — spreading is
+  possible and deliberately slower; the sim tests (T5) assert a
+  tri-path climber trails a single-path climber by several body
+  levels at equal kills. No player should find it optimal; it is a
+  long-game choice, not a trap (the cost is printed).
+- Ranks never decay. XP re-bake: `XP_PER_KILL_SLOPE` 2.4 → **3.0**
+  (+25%) so a one-path climber keeps today's level≈floor pace while
+  funding the path (verified in the bake, T4).
 
 **Dies:** `OFF_CLASS_PRICE_MULT`, `OFF_CLASS_DMG_MULT`,
-`OFF_CLASS_MISS`, `off_class_price()`, `off_class_offer()`, arrow
-burn for off-class bows (`ARROW_PACK_*` stays only if some bow
-mechanic still uses it — expected: dies).
+`OFF_CLASS_MISS`, `off_class_price()`, `off_class_offer()`,
+off-class arrow burn (`ARROW_PACK_*` dies with it).
 
-## N4. Classes die; weapons and lines survive
+## N4. Mastery at rank 10
+
+Reaching rank 10 in a path is a public achievement (banner-hall
+material). It opens:
+
+1. **Mastery studies** — the School master offers further learning
+   in that profession, priced in XP like ranks. First set (one per
+   path, more can ship later):
+   - ⚔ *Riposte* — a blocked/shallow monster strike returns 25% of
+     your mean swing.
+   - ➶ *Long draw* — gap-3 shots crit (×1.5) on the top 10% of the
+     roll.
+   - ✦ *Focus* — your ×0.6 and ×0.5 answers become ×0.75.
+   Cost: `round(train_xp(10) * 1.5)` = 948 XP each.
+2. **The invitation** — the master formally points the climber to
+   the other two paths: a one-time card and a **20% XP discount on
+   the other paths' ranks 1–5** ("a trained hand learns the next
+   grip faster"). This is the "open them up to other weapon types"
+   beat — the other paths were never locked, but mastery makes
+   starting them cheaper and *narrated*.
+
+**What the player sees:** the School bar at 10 turns gold; the row
+gains a MASTERY line listing studies with costs; the invitation
+card names the discount.
+
+## N5. Classes die; weapons and lines survive
 
 - `CLASSES` dict, creation class question, `class_starter()` — die.
-- `clazz` field stays on old docs, ignored (migration N7).
+- `clazz` stays on old docs, ignored by the engine (migration N8).
 - Weapon `line` tags survive as the path key:
   `PATH_OF_LINE = {"warrior": "blade", "archer": "bow",
-  "sorcerer": "staff"}`; `DAMAGE_TYPE` becomes line-keyed only
-  (it already is: `{"warrior": "melee", "archer": "ranged",
-  "sorcerer": "magic"}`).
+  "sorcerer": "staff"}`; `DAMAGE_TYPE` stays line-keyed
+  (melee/ranged/magic); every by-class read dies.
 - The armory sells **every** weapon line to everyone at the one
-  listed price. The three lines stay rung-for-rung mirrors
-  (`line_twin` survives for trading).
-- Starter kit: Rusted Sword (free, as today) + `p["training"]`
-  blade 1. The two other gate-issue weapons become **purchasable**:
+  listed price (`line_twin` survives for trading).
+- Starter kit: Rusted Sword (free) + blade rank 2. The other two
+  gate-issue weapons become purchasable:
 
 ```python
 BASIC_WEAPON_PRICE = 60        # basic_bow, worn_staff at the armory
 ```
 
-  (+5 ATK, never wear, never lost — same stats as the starter
-  sword.) At ◈60 they cost ~3–4 kills on floors 3–5 under the
-  young-tower bounty (N6) — every player can own all three paths'
-  basic weapons before floor 10.
+  (+5 ATK, never wear, never lost.) ~3–4 kills on floors 3–5 under
+  the young-tower bounty — all three basic weapons owned before
+  floor 10 is the intended path.
 
-## N5. Fight actions follow the weapon + rank
+## N6. Fight actions follow the weapon + rank (0–10 scale)
 
 | action | today | 048 gate |
 |---|---|---|
-| Treeline shot | archer only | bow in hand, bow rank ≥ 2 |
-| Create distance | archer only | bow in hand, bow rank ≥ 3 |
-| Gap draw ×1.25/×1.5 | archer only | bow in hand, bow rank ≥ 4 |
-| Shield wall | warrior only | shield equipped, blade rank ≥ 2 |
-| Sleep spell | sorcerer only | staff in hand, staff rank ≥ 3 |
-| **Switch weapon** (new) | — | second weapon in pack; costs the round (monster gets its close/strike roll) |
+| Treeline shot | archer only | bow in hand, bow rank ≥ 4 |
+| Create distance | archer only | bow in hand, bow rank ≥ 6 |
+| Gap draw ×1.25/×1.5 | archer only | bow in hand, bow rank ≥ 8 |
+| Shield wall | warrior only | shield equipped, blade rank ≥ 4 |
+| Sleep spell | sorcerer only | staff in hand, staff rank ≥ 6 |
+| **Switch weapon** (new) | — | second weapon in pack; costs the round |
 
 Locked actions render greyed with the requirement:
-`Treeline shot — needs Bow rank 2 (you: 1)`.
+`Treeline shot — needs Bow rank 4 (you: 2)`.
 
-## N6. Early-tower coin (new)
+## N7. Early-tower coin
 
 ```python
 EARLY_COIN_FLOORS = 10
-def early_coin_mult(floor):        # ×2.0 at floor 1 → ×1.1 at 10 → ×1.0
+def early_coin_mult(floor):     # ×2.0 at floor 1 → ×1.1 at 10 → ×1.0
     return 2.0 - 0.1 * (floor - 1) if floor <= 10 else 1.0
 ```
 
-Applied in the `gold_per_kill` path for floors 1–10, labeled on the
-kill card as *"young-tower bounty"* so the fade never reads as a
-nerf. Purpose: fund all three basic weapons (◈180 total) + first
-ranks in each path by floor 10. The first ten floors are the
-classroom — all three signs appear there in weak specimens.
+Applied in the `gold_per_kill` path, labeled *"young-tower bounty"*
+on the kill card so the fade never reads as a nerf. Funds the three
+basic weapons (◈180) + the first ranks of each path by floor 10.
+The first ten floors are the classroom — all three signs appear
+there in weak specimens.
 
-## N7. Migration (one-time, on first load of a legacy doc)
+## N8. Migration (one-time, on first load of a legacy doc)
 
-- `p["training"] = {old class's path: 3, others: 0}`.
-- One-time card: *"The guilds dissolved their halls into one School.
-  Your years as an archer are honored: Bow — trained rank 3."*
-- Old class weapons keep working — line tags already map to paths.
-- Old monster traits: `type_from_traits` maps legacy trait sets to
-  the nearest type — `flying` → `fly`; `armor_*` → `armoured`;
-  `resist_*` → `magic_resist`; both armor+resist → `magic_resist`;
-  none → `plain`. Floor YAML is then bulk-retagged (phase 6) so the
-  legacy mapping is transitional only.
+- `p["training"] = {old class's path: 6, others: 0}` — rank 6 on
+  the new scale ≈ the old class feel plus one visible step of
+  headroom.
+- One-time card: *"The guilds dissolved their halls into one
+  School. Your years as an archer are honored: Bow — trained
+  rank 6."*
+- Legacy monster traits mapped by `type_from_traits`: `flying` →
+  `fly`; `armor_*` → `armoured`; `resist_*` → `magic_resist`; both
+  → `magic_resist`; none → `plain`. Floor YAML is bulk-retagged in
+  phase 7 so the mapping is transitional only.
 
 ---
 
@@ -225,14 +258,14 @@ weapon. The School teaches it to bite."*
 ## S2. The School (new room, every gate town, next to the armory)
 
 ```
-⚔ BLADE   trained rank 3   ▰▰▰▱▱  next: rank 4 — 320 XP + 60 ◈
-➶ BOW     trained rank 0   ▱▱▱▱▱  next: rank 1 — 40 XP + 15 ◈
-✦ STAFF   trained rank 0   ▱▱▱▱▱  next: rank 1 — 40 XP + 15 ◈
+⚔ BLADE   trained rank 6   ▰▰▰▰▰▰▱▱▱▱   next: rank 7 — 371 XP + 56 ◈
+➶ BOW     trained rank 0   ▱▱▱▱▱▱▱▱▱▱   next: rank 1 — 20 XP + 8 ◈
+✦ STAFF   trained rank 0   ▱▱▱▱▱▱▱▱▱▱   next: rank 1 — 20 XP + 8 ◈
 ```
 
-Each "next" line says in words what improves: *"Rank 4: miss
-15%→10%, your worst swing 54%→62% of full power."* No silent
-numbers.
+Each "next" line says in words what improves: *"Rank 7: miss
+10%→8%, your worst swing 54%→58% of full power."* A rank-10 bar
+turns gold and shows its MASTERY studies. No silent numbers.
 
 ## S3. Every monster shows all its numbers
 
@@ -243,29 +276,32 @@ VAULT BOAR ⛨            HP 210 · ATK 116 · DEF 48 · SPD 3 (slow)
 armoured — steel: half · arrows: glance · magic: full
 ```
 
-Plain monsters: *"no sign — every weapon bites full."* This extends
-the 003 law (no silent numbers) to monsters completely.
+Plain monsters: *"no sign — every weapon bites full."* The 003 law
+(no silent numbers) extended to monsters completely.
 
 ## S4. The verdict, before every fight
 
-Computed from the player's ACTUAL weapons and ranks — the mechanics
-HITS column personalized and moved to the moment of decision:
+Computed from the player's ACTUAL weapons and ranks:
 
 - *"⛨ Armoured. Your arrows will glance (~40 shots). Steel: half.
   A staff bites full — yours is rank 0."*
 - *"⚡ It flies. Your blade cannot reach it. Bow or staff, or walk
   away."*
 
-## S5. The strike text teaches
+## S5. The strike text teaches — and so does the defeat
 
-Weapon line on the fight card: `Rusted Sword · ⚔ rank 2 ▰▰▱▱▱`.
-Bad rolls blamed on the hand, not luck: *"Your untrained swing lands
-shallow — 12. A rank-4 hand would have cut nearer 30."* Misses:
-*"Not yet your weapon — the swing goes wide. The School in town
-fixes this."* A blade-only climber facing ⚡ gets the truth instead
-of an Attack button: *"It is above you. Nothing in your pack
-reaches. Run, or come back with a bow."* (Running from a flyer is
-free — it doesn't chase downward.)
+Weapon line on the card: `Rusted Sword · ⚔ rank 4 ▰▰▰▰▱▱▱▱▱▱`.
+Bad rolls blame the hand, not luck: *"Your half-trained swing lands
+shallow — 12. A rank-8 hand would have cut nearer 30."* Misses:
+*"Not yet your weapon — the swing goes wide. The School fixes
+this."*
+
+**The defeat card names the cause** — one sentence, one lever:
+*"The boar's plate turned your arrows — 40 shots was always too
+many. Steel halves it; a staff bites full."* / *"It flew; your
+blade never reached it once."* / *"Your rank-1 staff missed four
+rounds — the School in town fixes this."* Losing must teach WHY,
+every time (T2 asserts it).
 
 ## S6. Early kills
 
@@ -273,126 +309,248 @@ free — it doesn't chase downward.)
 
 ---
 
-# PART III — CODE CHANGES BY FILE
+# PART III — REMOVING EVERY TRACE OF CLASSES
 
-- **`economy.py`** — add `TYPE_SPEED/ATK/HP/GOLD`, `TYPE_MULT`,
-  `PATH_OF_LINE`, `TRAIN_*` tables + `train_xp`/`train_gold`,
-  `early_coin_mult`, `BASIC_WEAPON_PRICE`; rewrite
-  `profile_from_traits` → `type_from_traits` (with legacy mapping),
-  `typed_damage(path, raw, def, mtype)`, `profile_gold_mult` →
-  `TYPE_GOLD`; delete `TIER_MULT`, `PROFILE_GOLD`, `OFF_CLASS_*`,
-  `off_class_price/offer`, `CLASSES`, `class_starter`; make
-  `basic_bow`/`worn_staff` armory-listed at ◈60; bump
-  `XP_PER_KILL_SLOPE` → 2.9.
-- **`engine/combat.py`** — `_player_hit`: roll
-  `[roll_floor(R)·ATK, ATK]`, miss `TRAIN_MISS_PCT(R)`; path from
-  held weapon's line, rank from `p["training"]`; action gates per
-  N5 (all `clazz ==` checks die); new `switch_weapon` option;
-  full stat headline + sign on every card; verdict lines in
-  `fight_scene`/hunt table; strike/miss text per S5.
-- **`engine/core.py`** — creation: `_creation_pick_race` → name
-  stage directly (class scene dies); init `p["training"]`; migration
-  hook for legacy docs (N7); School scene + train choice handlers.
-- **`state.py`** — `training` dict on the player doc; `clazz`
-  tolerated-legacy.
-- **Floor YAML (content)** — bulk retag 425 monsters: traits →
-  one type (+ optional `bulwark`). The current ⚡/⛨/✧ signs on
-  /mechanics say which is which.
-- **`worldd/tools/gen_mechanics.py` + site** — HITS column becomes
-  per-path at reference rank 3; TRAINING tab with the rank tables;
-  simulator gets a rank input instead of a class dropdown.
-- **Tests** — every phase below names its own.
+Validated by grep (2026-08-11). Every file that must change for
+"there are no archers, only bows":
+
+**Engine (`plugin_linear_ascent/`):**
+- `economy.py` (47 refs) — `CLASSES`, `class_starter`,
+  `CLASS_STARTERS` (items survive, the class KEYING dies),
+  `OFF_CLASS_*` + `off_class_price/offer`, class-gated shop copy,
+  `CONTRACT_CLASS_GOLD_MULT` → weapon-path jobs ("bow contracts",
+  not "archer contracts"), `DAMAGE_TYPE` by-class fallback.
+- `engine/core.py` (37) — `_creation_class_scene` /
+  `_creation_pick_class` die; race → name directly; School scene;
+  migration hook.
+- `engine/state.py` (17) — `clazz` on the doc → tolerated-legacy;
+  `training` dict; sheet/profile payloads.
+- `engine/combat.py` (23) — every `p.get("clazz")` gate (§N6);
+  `_damage_type` reads the HELD WEAPON's line, never the class;
+  off-class miss/burn branches die.
+- `engine/tips.py` (8) — class-named tips rewritten to weapon-named.
+- `engine/profile.py`, `engine/scene.py`, `engine/social.py`,
+  `pane.py`, `render.py`, `sheet.py`, `icons.py` — class label on
+  the sheet/profile/pane becomes the three training bars; class
+  icons → path icons ⚔/➶/✦.
+- `content/schema.py` — creature trait vocabulary swaps to the four
+  types; weapon `line` field survives.
+
+**Content:** floor YAML (425 monsters, bulk retag, phase 7); any
+class-worded flavor text (sweep with grep, phase 6).
+
+**worldd:** `tools/gen_mechanics.py` (reference players per class →
+per path×rank), `static/site/mechanics.js` (sim class dropdown →
+path + rank inputs), mechanics legend.
+
+**Acceptance (the trace lint, T7):** outside migration code and
+legacy-doc tolerance, grep for `clazz|warrior|archer|sorcerer|class`
+in engine + content + rendered scene text returns nothing
+player-facing. Weapon-line slugs (`line: "archer"` etc.) are
+whitelisted internal IDs — renamed only if free (open question 5).
 
 ---
 
-# PART IV — PHASES (each lands green and shippable)
+# PART IV — THE TEST PLAN (tests change first)
 
-Run tests with the worldd venv per the release flow. Each phase is
-one commit; the game is playable after every one.
+The previous rebalances (017 smoothness gate, 022-002 retune, 025
+climb, 043/046 bake) own today's balance tests. They are rewritten
+to assert THIS plan before the mechanics land: each phase in Part V
+starts by landing its tests red, then turns them green.
 
-## Phase 1 — the triangle (economy only, no behavior change yet)
+## T1. New suite `test_048_the_weapon_decides.py` — the mechanics
 
-Add types, `TYPE_*` tables, `type_from_traits` (with the legacy
-trait mapping), new `typed_damage(path, ...)` alongside the old one.
-Nothing calls the new code yet.
+- Triangle: every (type × path) cell of N2 exact; chip ≥1
+  everywhere except blade-vs-fly = 0; TYPE_SPEED/ATK/HP/GOLD
+  applied by `creature_stats`; legacy trait sets map to the right
+  type.
+- Ranks: miss% and roll-floor exact at every R 0–10 (seeded RNG);
+  rank 5 reproduces today's `[ATK/2, ATK]`-no-miss feel; cost
+  curves exact (20/57/104/…/632 XP; gold ×pillar(frontier));
+  can't train past 10; XP/gold actually deducted.
+- Mastery: rank 10 opens studies at 948 XP; invitation discount
+  20% on other paths' ranks 1–5; studies' effects measurable.
+- Gates: each N6 action opens exactly at its rank with the weapon
+  held, for a doc that never had that class; switch-weapon spends
+  the round and the monster answers.
+- Migration: legacy archer doc → bow 6; plays without error; card
+  shown once.
 
-**Tests:** table-driven `test_type_triangle.py` — every
-(type × path) cell of N2 exact; legacy trait sets map to the right
-type; chip ≥1 everywhere except blade-vs-fly = 0; TYPE_SPEED/ATK/HP
-applied by `creature_stats`.
+## T2. New suite `test_048_visible.py` — understood, not just fair
 
-## Phase 2 — trained ranks in the swing
+The "can I tell why?" law as assertions on rendered scenes:
+- Every fight card and hunt row contains HP, ATK, DEF, SPD, and the
+  sign (or "no sign") of the monster — no parameter unshown.
+- The pre-fight verdict names the player's actual best answer and
+  its rank.
+- Every locked action's text contains the gate (`needs Bow rank 4
+  (you: 2)`).
+- Every miss/shallow-hit line names the rank as the cause.
+- **Every defeat scene names the losing cause in one sentence
+  containing a lever the player owns** (weapon choice, rank, or
+  run) — table-driven over: killed by armoured with bow, by fly
+  with blade only, by anything at rank ≤1, plain overreach.
+- School rows carry the "what improves" sentence; early kills carry
+  the bounty label.
 
-`p["training"]` (default blade 1), `TRAIN_MISS_PCT`/
-`TRAIN_ROLL_FLOOR`, `_player_hit` rolls by rank of the held weapon's
-path. Classes still exist and still gate actions — only the damage
-roll changes. Migration grant (old class path → rank 3) lands here
-so existing players feel no nerf.
+## T3. Rewrite `test_smoothness.py` — no bumps, now over three axes
 
-**Tests:** rank 0 misses ~25% and floors at 30% (seeded RNG);
-rank 5 never misses and floors at 70%; migration grants rank 3 to
-the right path; legacy doc without `training` plays without error.
+The 017 gate walked floors per CLASS. It now walks:
+- **Floors 1–100** per path (blade/bow/staff) at reference rank
+  (6), reference gear: rounds-to-kill vs intended targets, death
+  risk, income — adjacent-floor moves ≤ 40%, 5-floor trend ≤ 15%,
+  band boundaries absorbed, income never cliffs (all today's caps
+  kept).
+- **Ranks 0→10** on fixed floors {1, 5, 10, 25, 50}: mean kill
+  speed strictly improves per rank; no single rank step moves
+  rounds-to-kill by more than 20% (progression felt, never a wall
+  or a dead rank).
+- **Weapon rungs** tier 1→10 at fixed rank: same caps — upgrades
+  step smoothly, no rung is a spike or a dud.
+- Every type is SOMEONE's intended target on its floor: for each
+  floor, each of the three paths has ≥1 monster it answers at ×1.0
+  (no floor strands a path).
 
-## Phase 3 — the School
+## T4. Rewrite the pace/economy gates (022-002 retune, 043/046 bake)
 
-School scene in gate towns; `train_xp`/`train_gold`; spend flow
-(XP+gold check, rank +1, refusal texts). Rank effects already live
-from phase 2, so training is immediately felt.
+- Level≈floor law with the new sink: a one-path climber (trains
+  main path on schedule, `XP_PER_KILL_SLOPE` 3.0) still lands
+  level ≈ floor ±1 through the tower.
+- **Rank-10 lands ≈ player level 10**: cumulative XP at level 10
+  covers body levels + one path to 10 (assert within ±15%).
+- Tri-path spread is slower: a sim climber splitting XP across all
+  three paths trails the one-path climber by ≥3 body levels at
+  equal kills by mid-tower — and never bricks (still climbs).
+- Young-tower bounty: coin mult exact at floors 1/5/10/11; a
+  floor-1→10 sim can afford basic bow + staff (◈120) + first two
+  ranks of each path before floor 10 without farming.
+- `test_022_002_retune` keeps its era/warden/cap laws — reruns
+  against the new slope; thresholds re-anchored in the bake.
 
-**Tests:** cost curve values exact (40/113/208/320/447 XP;
-gold ×pillar(frontier)); can't train past 5; can't pay twice; XP
-deducted from the pool, gold from the purse; School lines carry the
-"what improves" sentence (003 law assert).
+## T5. Progression-feel suite `test_048_progression.py` (new)
+
+Scripted sim playthroughs (engine-level, seeded):
+- "The intended first ten floors": buy bow at ~3, staff at ~5,
+  train to 2/2/2 — every floor-1–10 monster of every type is
+  answerable by SOMETHING in the pack; no fight is a wall.
+- "The specialist": blade-only to rank 10 by ~level 10 — mastery
+  reached, invitation card fires.
+- "Wrong-weapon lesson": bow-only climber meets armoured — loses
+  or runs, defeat text names the staff/steel answer (ties into T2).
+
+## T6. Sweep of the ~55 existing test files that build class docs
+
+`conftest.py` helpers (`create_character(clazz=…)`, `fresh`) are
+THE chokepoint — they change to build a climber + `training` dict
+(param: which path pre-trained, default blade 6 ≈ old warrior).
+Then, by group:
+- **Die:** `test_017_offclass_migration.py` (off-class system gone
+  — replaced by T1 migration cases), off-class racks in
+  `test_017_shops.py`, class-gate cases in `test_037_sleep.py` /
+  `test_036_gap_and_grants.py` (reborn as rank-gate cases in T1).
+- **Rewrite meaning:** `test_017_damage_types.py` → triangle;
+  `test_017_characters.py` → creation without the class question;
+  `test_smoothness.py` per T3; retune per T4.
+- **Mechanical sweep** (clazz kwarg → training kwarg, expected
+  texts): the ~45 remaining files. Grep-driven; no meaning change.
+- Dojo `.md` checklists under `tests/0*` referencing classes get a
+  one-line deprecation note pointing at 048 (history, not deleted).
+
+## T7. The trace lint `test_048_no_classes.py` (new)
+
+- Engine grep (AST-level where sensible): no `clazz` reads outside
+  `state.py` legacy-tolerance + migration; `CLASSES`,
+  `OFF_CLASS_*`, `class_starter` do not exist.
+- Rendered-text sweep: creation flow, town, shops, fight cards,
+  tips, sheet — the words warrior/archer/sorcerer/class appear
+  nowhere player-facing (weapon-line slugs whitelisted as internal
+  IDs).
+- Schema: creature traits accept only the four types (+ `bulwark`);
+  legacy traits rejected by the content linter after phase 7.
+
+---
+
+# PART V — PHASES (tests first, each lands green, branch-only)
+
+All work stays on branch `048-the-weapon-decides` (plugin + outer
+repo). Tests run with the worldd venv per the release flow. Each
+phase = one commit; the game is playable after every one. **Within
+every phase: land the phase's tests first (red), then the code
+(green).** No deploy without roy's explicit word.
+
+## Phase 1 — conftest + the triangle
+
+T6's conftest chokepoint (helpers grow the `training` shape while
+still writing `clazz` for the legacy engine); T1 triangle tests;
+then `TYPE_*` tables, `type_from_traits`, new
+`typed_damage(path, …)` alongside the old one. Nothing
+player-visible changes.
+
+**Green =** T1 triangle cases + full existing suite.
+
+## Phase 2 — trained ranks in the swing + migration
+
+T1 rank/migration tests; then `p["training"]` (blade 2 default),
+`TRAIN_MISS_PCT`/`TRAIN_ROLL_FLOOR` in `_player_hit` keyed to the
+held weapon's line, migration grant (old class path → 6). Classes
+still gate actions — only the roll changes; rank 6 ≈ old feel so
+live players feel no nerf.
+
+**Green =** T1 ranks/migration + suite (sweep fallout from T6
+mechanical group as it surfaces).
+
+## Phase 3 — the School + mastery
+
+T1 school/mastery tests; then the School scene, train flow
+(XP+gold, refusals, "what improves" lines), rank-10 gold bar,
+mastery studies, invitation + discount.
+
+**Green =** T1 complete; T2 school assertions.
 
 ## Phase 4 — classes die
 
-Creation drops the class question (race → name); everyone starts
-Rusted Sword + blade 1; armory sells all lines at list price
-(`OFF_CLASS_*` deleted); `basic_bow`/`worn_staff` purchasable ◈60;
-action gates flip from `clazz` to weapon+rank (N5); `switch_weapon`
-action added. Monster side still on old tiers — the triangle wires
-in next.
+T7 trace lint (red), T1 gate cases; then: creation drops the class
+question; everyone starts Rusted Sword + blade 2; armory sells all
+lines (`OFF_CLASS_*` deleted); basic bow/staff at ◈60; action
+gates flip to weapon+rank; switch-weapon; sheet/pane/profile show
+the three bars; tips/contracts reworded. The big T6 sweep lands
+here.
 
-**Tests:** creation flow race→name; new doc has training dict and
-no clazz; every weapon purchasable by anyone at one price; each N5
-gate opens exactly at its rank with the weapon held; switch spends
-the round and the monster answers; treeline shot with bow rank 2
-works for a doc that was never an archer.
+**Green =** T7 (engine part), T1 gates, swept suite.
 
-## Phase 5 — monsters switch to types
+## Phase 5 — monsters switch to types + total visibility
 
-`typed_damage` calls flip to the triangle; monster cards show the
-full stat line + sign; verdict lines; blade-vs-fly shows the run
-truth instead of attack; kill gold uses `TYPE_GOLD`. Legacy trait
-mapping carries un-retagged YAML.
+T2 (red), T3 floor-walk rewrite; then `typed_damage` flip, full
+stat lines + signs on every card, verdicts, defeat-cause
+sentences, blade-vs-fly run truth, `TYPE_GOLD`.
 
-**Tests:** simulated fights per (type × path × rank ∈ {0,3,5})
-match expected kill-turn counts within tolerance; fight card
-contains HP/ATK/DEF/SPD and the sign; verdict text names the
-player's actual best answer; melee attack option absent vs fly.
+**Green =** T2, T3 floor axis, suite.
 
-## Phase 6 — content retag + economy bake
+## Phase 6 — the balance bake
 
-Bulk retag 425 monsters' traits to the three types (script over
-floor YAML, review diff by floor bands); `early_coin_mult` wired
-with the bounty label; `XP_PER_KILL_SLOPE` → 2.9; re-run the bake
-(kill bars, level≈floor pace with one path trained to 3 by
-mid-tower); gen_mechanics per-path HITS + TRAINING tab; cache-bust.
+T3 rank/rung axes + T4 + T5 (red); then `XP_PER_KILL_SLOPE` → 3.0,
+`early_coin_mult` + bounty label, anchor tuning until every T3/T4
+gate holds (this is the bake — anchors in N3/N7 are the starting
+guess, the tests are the law).
 
-**Tests:** no monster left with legacy traits (lint over YAML);
-every floor 1–10 spawns at least one of each sign; coin mult exact
-at floors 1/5/10/11; bake sanity — floor-10 climber income covers
-3 basic weapons + ~6 ranks; existing production suite green.
+**Green =** T3, T4, T5 in full.
 
-## Phase 7 — polish pass (post-review)
+## Phase 7 — content retag + mechanics page
 
-Strike/miss teaching texts everywhere, School door line, one-time
-migration card, mechanics simulator rank input. Play a floor-1→12
-run by hand; fix what reads wrong.
+Retag 425 monsters' YAML to the four types (script + banded diff
+review); schema linter rejects legacy traits (T7 schema part);
+gen_mechanics per path×rank + TRAINING tab; simulator rank input;
+cache-bust.
 
-**Tests:** production run checklist (release flow); the
-three-question audit on one monster of each type at rank 0 and
-rank 3.
+**Green =** T7 complete; every floor 1–10 spawns all three signs;
+regenerated mechanics-data.
+
+## Phase 8 — polish + hand playtest
+
+Teaching texts everywhere, School door line, migration card,
+banner-hall mastery mention. Hand-play floors 1–12 per the dojo
+style; production checklist. The three-question audit on one
+monster of each type at ranks 0/5/10.
 
 ---
 
@@ -400,21 +558,28 @@ rank 3.
 
 - **Can I lose?** Wrong weapon or untrained hand against a signed
   type is a visible, felt loss (or a forced run).
-- **Can I tell why?** The sign and all stats are on the card before
-  the fight; the verdict is written in your weapons' terms; every
-  shallow hit or miss names the untrained hand.
-- **Can I change it next time?** Two ways, both bought with play:
-  train the path (School, XP+gold) or carry the counter-weapon
-  (armory, ◈ + a round to switch). Nothing is locked to a day-one
-  choice — there are no types of players.
+- **Can I tell why?** Every parameter of every monster is on the
+  card; the verdict speaks in your weapons' terms; every miss names
+  the hand; every DEFEAT names the cause and a lever (T2 enforces
+  all of it).
+- **Can I change it next time?** Train the path (School, XP+gold,
+  ten visible steps), or carry the counter-weapon (armory, ◈ + a
+  round to switch). Nothing is locked to a day-one choice.
 
 ## Open questions
 
-1. ~~SPELLGUARD~~ — decided: named "magic-resistant"; weak to sword,
-   not fully armoured; FLY hits weak.
-2. Rank cap 5 — rare/late or reachable per path by mid-tower?
-   (Plan prices it reachable: 447 XP + ◈75·pillar for the last step.)
-3. Train-by-use (kills with the weapon drip path-XP) or School-only?
-   Plan assumes School-only for legibility.
+1. Mastery studies (N4): ship the three named studies with 048, or
+   ship the rank-10 gold bar + invitation first and studies in 049?
+   (Plan ships all three — they are the "learn other things on that
+   profession" beat.)
+2. "Rank 10 ≈ level 10" is read as: ONE path maxed costs about the
+   XP of body levels 1→10. If you meant all THREE paths by level
+   10, the anchor drops 20 → 7 and spreading stops hurting —
+   flagging because it changes the spread-is-slower principle.
+3. Train-by-use (kills with the weapon drip path-XP) or
+   School-only? Plan assumes School-only for legibility.
 4. Two-weapon carry: free pack slot or a bought harness item?
    Plan assumes free pack slot (the round cost is the price).
+5. Rename internal weapon-line slugs (`warrior/archer/sorcerer` →
+   `blade/bow/staff`) — clean but touches every saved doc's gear;
+   plan keeps the old slugs as whitelisted internal IDs.
