@@ -644,7 +644,8 @@ def fight_scene(p: dict, floor, opener: bool = False, note: str = "") -> Scene:
         eyebrow=_eyebrow(p, floor),
         # 003: the headline keeps ATK/DEF; HP lives in the always-on
         # enemy bar (scene.enemy) from round one.
-        headline=f"{e['name']} — ATK {e['atk']} / DEF {e['def']}",
+        headline=(f"{e['name']} — ATK {e['atk']} / DEF {e['def']}"
+                  f" / SPD {_mspd(p)}"),
         support="It is between you and the way forward.",
         shard_note=_shard_advice(p, floor) if opener else "",
         body_lines=body,

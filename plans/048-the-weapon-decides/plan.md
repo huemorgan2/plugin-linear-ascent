@@ -228,18 +228,21 @@ Slotted weapons render at the top of the sheet as the HOLDING row
 with their ⚔/➶/✦ path marks; a bag weapon's tooltip also says why
 promotion is refused mid-fight.
 
-**Every weapon in the profile carries its trained rank.** The
-HOLDING row and every bag weapon show the player's rank on that
-weapon's path next to the path mark — the rank is the hand's, not
-the weapon's, so two blades read the same rank:
+**The profile shows the player's trained rank per weapon path.**
+The rank is a skill of the PLAYER, not a stat of any weapon — the
+profile carries a TRAINED block with the three path bars (same as
+the School's S2 view, minus the prices):
 
 ```
-HOLDING  Steel Sword ⚔ rank 6 ▰▰▰▰▰▰▱▱▱▱   Basic Bow ➶ rank 3 ▰▰▰▱▱▱▱▱▱▱
-BAG      Worn Staff ✦ rank 0 ▱▱▱▱▱▱▱▱▱▱ — untrained: 25% miss, weak swings
+TRAINED  ⚔ blade rank 6 ▰▰▰▰▰▰▱▱▱▱  ➶ bow rank 3 ▰▰▰▱▱▱▱▱▱▱  ✦ staff rank 0 ▱▱▱▱▱▱▱▱▱▱
+HOLDING  Steel Sword ⚔   Basic Bow ➶
 ```
 
-A rank-0 weapon in the bag says so before it is slotted — the
-player never discovers untrained in the fight.
+Weapons show only their path mark; a weapon's tooltip may SAY
+*"your bow: rank 3"* as a pointer to the player's skill, but no
+rank is ever stored or displayed as belonging to the weapon. A
+tooltip on an untrained path's weapon warns (*"staff untrained:
+25% miss, weak swings"*) before it is ever slotted.
 
 ## N6. Classes die; weapons and lines survive
 
@@ -396,11 +399,10 @@ Validated by grep (2026-08-11). Every file that must change for
 - `engine/tips.py` (8) — class-named tips rewritten to weapon-named.
 - `engine/profile.py`, `engine/scene.py`, `engine/social.py`,
   `pane.py`, `render.py`, `sheet.py`, `icons.py` — class label on
-  the sheet/profile/pane becomes the three training bars + the
-  HOLDING row; every weapon on the sheet (holding + bag) is
-  annotated with its path's trained rank (N5); bag-weapon tooltips
-  gain the `Hold — promote to slot` action (N5); class icons →
-  path icons ⚔/➶/✦.
+  the sheet/profile/pane becomes the TRAINED block (three path
+  bars — player skill, never a weapon stat) + the HOLDING row
+  (N5); bag-weapon tooltips gain the `Hold — promote to slot`
+  action (N5); class icons → path icons ⚔/➶/✦.
 - `content/schema.py` — creature trait vocabulary swaps to the four
   types; weapon `line` field survives.
 
@@ -461,9 +463,10 @@ The "can I tell why?" law as assertions on rendered scenes:
 - With multiple slots, each attack option is labeled with its
   weapon, rank, and predicted damage vs THIS monster; the bag
   tooltip carries the `Hold — promote to slot` action.
-- Every weapon rendered on the profile — HOLDING row and bag —
-  shows its path's trained rank; a rank-0 bag weapon's line says
-  untrained (miss % and weak swings) before it is ever slotted.
+- The profile carries the TRAINED block: three path bars with the
+  player's rank each — the rank renders on the player, never as a
+  weapon stat; an untrained path's weapon tooltip warns (miss %
+  and weak swings) before it is ever slotted.
 - Every miss/shallow-hit line names the rank as the cause.
 - **Every defeat scene names the losing cause in one sentence
   containing a lever the player owns** (weapon choice, rank, or
