@@ -52,3 +52,22 @@ Commit: `048 phase 8: the words teach — polish + playtest log`.
 - Wrong-weapon defeat playtest: use bow vs kings_guard (armoured,
   floor 10) or blade vs glare_moth (fly, floor 4) — the defeat card
   must name the sign and the weapon that answers.
+
+## Learnings applied (from phase 6)
+
+- The bow-vs-kings_guard defeat card is now ENGINE-TESTED
+  (test_048_progression) — the playtest re-reads it for tone, not
+  existence; spend the wrong-weapon slot on blade vs glare_moth
+  instead (the untested pair).
+- Playtest the young-tower coin FEEL: kill cards on floors ≤10 print
+  `(young-tower bounty)`; prices (levelup ◈60, hone, tiers) must
+  read UN-inflated beside the doubled paycheck — that contrast is
+  the classroom's teaching, check it lands.
+- The intended-first-ten script is proven affordable at leash pace
+  (bow by 3, slot by 4, staff by 6, ranks 2/2/2) — the hand
+  playtest follows the same script and flags any point where the
+  ENGINE allowed it but the CARDS didn't teach it (what to buy
+  next, where the School is).
+- School navigation: back → gate camp (fixed phase 6). Playtest all
+  town doors' exits once — the generic back-handler trap may have
+  siblings.

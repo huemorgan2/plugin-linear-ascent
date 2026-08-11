@@ -60,3 +60,22 @@ worldd `mechanics: path×rank ledger + TRAINING tab`.
   (lane_boar stopped being slow and the test still "passed" red).
 - **Bulwark HP rides ×2.2** (BULWARK_HP_MULT) and is orthogonal to
   type — roster/census tooling must not count bulwark as a sign.
+
+## Learnings applied (from phase 6)
+
+- **The mechanics page reads the bake's split**: income tables show
+  gold_per_kill (bounty IN, floors ≤10 marked "young-tower bounty");
+  price/fee tables (levelup, hone, tiers) anchor on
+  base_gold_per_kill/daily_income — un-bountied. Don't render one
+  number for both.
+- **TRAINING tab numbers**: train_xp fits-the-bar law (cost ≤
+  xp_need at the rank's natural level) is worth a printed column —
+  rank 10 at L9, MASTERY at L12, CARRY3 at L8.
+- **Retag answerability gate exists already**: T5's
+  test_the_intended_first_ten_floors asserts every floor-1–10
+  monster has a ×1.0 answer among {blade,bow,staff} — the retag
+  can't strand a floor without breaking it; run it early in the
+  retag loop.
+- **New locations need a row in core.py's generic back-handler**
+  (before location dispatch) — the School was trapped until phase 6;
+  check any scene the mechanics/census work adds.
