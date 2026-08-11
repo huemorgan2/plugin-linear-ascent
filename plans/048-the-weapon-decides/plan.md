@@ -228,6 +228,19 @@ Slotted weapons render at the top of the sheet as the HOLDING row
 with their ⚔/➶/✦ path marks; a bag weapon's tooltip also says why
 promotion is refused mid-fight.
 
+**Every weapon in the profile carries its trained rank.** The
+HOLDING row and every bag weapon show the player's rank on that
+weapon's path next to the path mark — the rank is the hand's, not
+the weapon's, so two blades read the same rank:
+
+```
+HOLDING  Steel Sword ⚔ rank 6 ▰▰▰▰▰▰▱▱▱▱   Basic Bow ➶ rank 3 ▰▰▰▱▱▱▱▱▱▱
+BAG      Worn Staff ✦ rank 0 ▱▱▱▱▱▱▱▱▱▱ — untrained: 25% miss, weak swings
+```
+
+A rank-0 weapon in the bag says so before it is slotted — the
+player never discovers untrained in the fight.
+
 ## N6. Classes die; weapons and lines survive
 
 - `CLASSES` dict, creation class question, `class_starter()` — die.
@@ -384,8 +397,10 @@ Validated by grep (2026-08-11). Every file that must change for
 - `engine/profile.py`, `engine/scene.py`, `engine/social.py`,
   `pane.py`, `render.py`, `sheet.py`, `icons.py` — class label on
   the sheet/profile/pane becomes the three training bars + the
-  HOLDING row; bag-weapon tooltips gain the `Hold — promote to
-  slot` action (N5); class icons → path icons ⚔/➶/✦.
+  HOLDING row; every weapon on the sheet (holding + bag) is
+  annotated with its path's trained rank (N5); bag-weapon tooltips
+  gain the `Hold — promote to slot` action (N5); class icons →
+  path icons ⚔/➶/✦.
 - `content/schema.py` — creature trait vocabulary swaps to the four
   types; weapon `line` field survives.
 
@@ -446,6 +461,9 @@ The "can I tell why?" law as assertions on rendered scenes:
 - With multiple slots, each attack option is labeled with its
   weapon, rank, and predicted damage vs THIS monster; the bag
   tooltip carries the `Hold — promote to slot` action.
+- Every weapon rendered on the profile — HOLDING row and bag —
+  shows its path's trained rank; a rank-0 bag weapon's line says
+  untrained (miss % and weak swings) before it is ever slotted.
 - Every miss/shallow-hit line names the rank as the cause.
 - **Every defeat scene names the losing cause in one sentence
   containing a lever the player owns** (weapon choice, rank, or
