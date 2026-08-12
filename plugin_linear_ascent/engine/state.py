@@ -37,7 +37,7 @@ def world_day_f(at: dt.datetime | None = None) -> float:
 def new_player(luna_user: str) -> dict:
     ts = now().isoformat()
     return {
-        "version": 8,
+        "version": 9,
         "luna_user": luna_user,
         "stage": "intro",              # intro → creation_race → creation_name → playing
         "name": None, "race": None,
@@ -456,6 +456,22 @@ def ensure_current(p: dict) -> None:
                 event_kind="present",
             ).to_dict())
         p["version"] = 8
+    if p.get("version", 1) < 9:
+        # 049.1: the Pigsticker grew a name with a weapon in it — Scrap
+        # Dagger. Same steel, same numbers; every ledger line follows
+        # the slug. Silent, like the v2 warrior rename.
+        _old, _new = "pigsticker", "scrap_dagger"
+        if p["gear"].get("weapon") == _old:
+            p["gear"]["weapon"] = _new
+        if p.get("held"):
+            p["held"] = [_new if s == _old else s for s in p["held"]]
+        inv = p.get("inventory") or {}
+        if _old in inv:
+            inv[_new] = inv.get(_new, 0) + inv.pop(_old)
+        stash = p.get("durability_pack") or {}
+        if _old in stash:
+            stash[_new] = stash.pop(_old)
+        p["version"] = 9
     # 048 phase 3: carry slots + held list, self-healing on every load —
     # held[0] mirrors the hand, length never exceeds slots, and paid
     # overflow returns to the pack instead of vanishing.

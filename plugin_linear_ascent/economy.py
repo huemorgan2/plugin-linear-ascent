@@ -781,11 +781,11 @@ MASTERY_XP = round(train_xp(10) * 1.5)          # 948
 MASTERY_DISCOUNT = 0.8
 MASTERY_DISCOUNT_MAX_RANK = 5
 CARRY2_XP, CARRY2_GOLD = 60, 30                 # 2nd slot — level 1
-# 048 bake: the 3rd slot's XP price must FIT the level-8 bar it is
-# gated on (xp_need(8) = 543) — at the old 900 the printed gate was a
-# lie until ~level 12. 500 keeps the slot a level-8 decision.
-CARRY3_XP, CARRY3_GOLD_ANCHOR = 500, 200        # 3rd slot — level 8+
-CARRY3_LEVEL = 8
+# 049.1: no level gate — the price IS the gate. 500 XP + pillar-scaled
+# gold is a real decision at any level; a level-2 hand that saved for
+# it has earned the grip. (048 gated it at level 8; the lock read as a
+# bug next to a buyable slot.)
+CARRY3_XP, CARRY3_GOLD_ANCHOR = 500, 200        # 3rd slot
 
 
 def carry3_gold(frontier: int) -> int:
@@ -1401,7 +1401,9 @@ class GearItem:
 # untouched): weapon 30·T − 22, shield 10·T − 5, armor 16·T − 9.
 _FORGE_ROWS = [
     # tier, weapon(name, flavor, +ATK), shield, armor, prices (w, s, a)
-    (1, ("Pigsticker", "scrap-steel shiv", 8),
+    # 049.1: was "Pigsticker" — a name with no weapon in it read as a
+    # mystery on the attack row. Every blade says what it is now.
+    (1, ("Scrap Dagger", "scrap-steel, but it's yours", 8),
         ("Scrapwood Buckler", "", 5), ("Padded Jerkin", "", 7),
         (250, 100, 200)),
     (2, ("Wolfbite", "shock-tip hunting spear", 38),

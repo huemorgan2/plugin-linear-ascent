@@ -59,7 +59,7 @@ def _member_world(rack=None, took=False):
     }
 
 
-def _rack_row(item_id=7, slug="pigsticker", frac=1.0, donor="Giver"):
+def _rack_row(item_id=7, slug="scrap_dagger", frac=1.0, donor="Giver"):
     g = economy.FORGE[slug]
     return {"id": item_id, "slug": slug, "name": g.name, "slot": g.slot,
             "bonus": g.bonus, "frac": frac, "donor": donor}
@@ -136,9 +136,9 @@ def test_the_worn_rung_stays_on_the_rack_as_a_spare():
     p = create_character(fresh("sh-1"))
     p["gold"] = 10_000
     choose(p, "forge")
-    choose(p, "buy_pigsticker")
+    choose(p, "buy_scrap_dagger")
     s = core.current_scene(p)
-    row = next(o for o in s.options if o.id == "buy_pigsticker")
+    row = next(o for o in s.options if o.id == "buy_scrap_dagger")
     assert "worn — spare" in row.hint
 
 
@@ -169,13 +169,13 @@ def test_fold_markers_still_work_and_the_forge_wall_stays_bare():
 
 def test_pawn_offers_the_donate_to_members_only():
     p = create_character(fresh("ar-1"))
-    p["inventory"]["pigsticker"] = 1
+    p["inventory"]["scrap_dagger"] = 1
     choose(p, "pawn")
     s = core.current_scene(p)
     assert not any(o.id.startswith("donate_") for o in s.options)
     p["_world"] = _member_world()
     s = core._pawn_scene(p)
-    assert any(o.id == "donate_pigsticker" for o in s.options)
+    assert any(o.id == "donate_scrap_dagger" for o in s.options)
     # free starter steel is not donatable
     assert not any(o.id == "donate_rusted_sword" for o in s.options)
 
@@ -183,17 +183,17 @@ def test_pawn_offers_the_donate_to_members_only():
 def test_donate_lifts_the_piece_and_its_wear_into_the_effect():
     p = create_character(fresh("ar-2"))
     p["_world"] = _member_world()
-    p["inventory"]["pigsticker"] = 1
-    p.setdefault("durability_pack", {})["pigsticker"] = 42
+    p["inventory"]["scrap_dagger"] = 1
+    p.setdefault("durability_pack", {})["scrap_dagger"] = 42
     p["location"] = "pawn"
     gold0 = p["gold"]
-    s = choose(p, "donate_pigsticker")
+    s = choose(p, "donate_scrap_dagger")
     assert "goes to the Oakhearts racks" in " ".join(s.body_lines)
-    assert "pigsticker" not in p["inventory"]
-    assert "pigsticker" not in p["durability_pack"]
+    assert "scrap_dagger" not in p["inventory"]
+    assert "scrap_dagger" not in p["durability_pack"]
     assert p["gold"] == gold0                        # the EV law
     fx = [e for e in p["_effects"] if e["kind"] == "armory_deposit"]
-    assert fx == [{"kind": "armory_deposit", "slug": "pigsticker",
+    assert fx == [{"kind": "armory_deposit", "slug": "scrap_dagger",
                    "uses_left": 42}]
 
 
@@ -201,11 +201,11 @@ def test_full_racks_refuse_before_the_piece_moves():
     p = create_character(fresh("ar-3"))
     p["_world"] = _member_world(rack=[_rack_row(item_id=i)
                                       for i in range(50)])
-    p["inventory"]["pigsticker"] = 1
+    p["inventory"]["scrap_dagger"] = 1
     p["location"] = "pawn"
-    s = choose(p, "donate_pigsticker")
+    s = choose(p, "donate_scrap_dagger")
     assert "full" in s.shard_note
-    assert p["inventory"]["pigsticker"] == 1
+    assert p["inventory"]["scrap_dagger"] == 1
     assert not p.get("_effects")
 
 
@@ -239,5 +239,5 @@ def test_the_cooldown_hides_the_take_and_refuses_a_forced_one():
 
 
 def test_armory_options_carry_tips():
-    assert "no coin" in tips.option_tip("donate_pigsticker")
+    assert "no coin" in tips.option_tip("donate_scrap_dagger")
     assert "One take" in tips.option_tip("take_arm_7")

@@ -43,7 +43,7 @@ def test_no_gate_constant_was_forgotten_by_this_test():
     hand-list can't rot: any NEW *_LEVEL constant in economy.py must be
     either in the guard or explicitly exempted here."""
     known = {"ARCANUM_LEVEL", "RELAY_LEVEL", "FIELDS_LEVEL", "BOARD_LEVEL",
-             "NIGHT_SLOT_LEVEL", "STRONGBOX_LEVEL", "CARRY3_LEVEL",
+             "NIGHT_SLOT_LEVEL", "STRONGBOX_LEVEL",
              "BEGINNER_MERCY_MAX_LEVEL",
              "BEGINNER_PROTECTION_MAX_LEVEL", "DEATH_NO_PARDON_LEVEL"}
     # DEATH_FREE_MAX_LEVEL is not a gate — it's the 043.2 free-death

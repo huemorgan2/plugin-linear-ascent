@@ -102,7 +102,7 @@ def test_a_hole_keeps_its_rim_and_a_thin_glyph_is_untouched():
 
 def test_icon_key_resolution():
     assert icons.icon_key("medgel") == "medgel"
-    assert icons.icon_key("pigsticker", "weapon") == "weapon"
+    assert icons.icon_key("scrap_dagger", "weapon") == "weapon"
     assert icons.icon_key("padded_jerkin", "armor") == "armor"
     assert icons.icon_key("mystery_thing", "item") == "pack"
 
@@ -215,7 +215,7 @@ def test_every_veteran_option_has_a_tip_too():
     p["level"] = economy.STRONGBOX_LEVEL
     p["gold"] = 5000
     # a worn paid piece + a token → repair_ and token_ rows at the forge
-    g = economy.FORGE["pigsticker"]
+    g = economy.FORGE["scrap_dagger"]
     p["gear"]["weapon"] = g.slug
     p.setdefault("durability", {})["weapon"] = 1
     p["inventory"]["repair_token"] = 1

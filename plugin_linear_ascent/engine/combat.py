@@ -29,16 +29,37 @@ def _event_art(slug: str) -> bool:
     return os.path.exists(os.path.join(_EVENTS, f"{slug}_320x112.gif"))
 
 
-def _fight_banner(e: dict, floor) -> str:
+def _typed_slug(slug: str, p: dict | None, line: str = "") -> str:
+    """049: the scene drawn for THIS climber — {slug}_{race}_{line} art
+    (the player's race x the path of the weapon in hand) wins over the
+    creature's solo art when it ships. Returns slug unchanged when no
+    typed art exists."""
+    if not slug or not p:
+        return slug
+    race = p.get("race") or ""
+    line = line or _train_path(p)
+    if race and _creature_art(f"{slug}_{race}_{line}"):
+        return f"{slug}_{race}_{line}"
+    return slug
+
+
+def _fight_banner(e: dict, floor, p: dict | None = None) -> str:
     """Creature's own art if shipped (plan 005), else the old behavior."""
     if e["kind"] == "warden":
         if floor.floor % 10 == 0:  # milestone boss banners ship in banners/
             return "gnarl" if floor.floor == 10 else floor.banner
         slug = f"warden_{floor.floor:03d}"
+        typed = _typed_slug(slug, p)
+        if typed != slug:
+            return typed
         return slug if _creature_art(slug) else ""
     slug = e.get("id", "")
-    if slug and _creature_art(slug):
-        return slug
+    if slug:
+        typed = _typed_slug(slug, p)
+        if typed != slug:
+            return typed
+        if _creature_art(slug):
+            return slug
     return floor.banner if e["kind"] == "wilds" else ""
 
 
@@ -55,8 +76,12 @@ _KILL_SUFFIX = {"melee": "melee", "ranged": "arrow", "magic": "magic"}
 _BREED_FX_VERB = {"native": "freed", "pressed": "fall",
                   "wrongmade": "evicted"}
 
+# 049: the landing damage type names the weapon line of the last blow.
+_LINE_OF_DTYPE = {"melee": "blade", "ranged": "bow", "magic": "staff"}
 
-def _kill_fx(e: dict, name: str, first_clear: bool, dtype: str = "") -> str:
+
+def _kill_fx(e: dict, name: str, first_clear: bool, dtype: str = "",
+             p: dict | None = None) -> str:
     """011/009: event animation slug for a victory scene. A typed kill
     GIF (family × landing damage type) wins; the family's untyped kill
     is the fallback; a first floor clear plays the gate opening. The
@@ -74,6 +99,17 @@ def _kill_fx(e: dict, name: str, first_clear: bool, dtype: str = "") -> str:
             return "ascent_open"
         verb = _BREED_FX_VERB[breed]
         slug = e.get("id", "")
+        if not slug and e.get("kind") == "warden" and e.get("floor"):
+            slug = f"warden_{e['floor']:03d}"
+        # 049: the ending shows YOUR kill — the movie keyed by the
+        # player's race and the line of the weapon that landed the
+        # last blow wins over the untyped ending.
+        if slug and p:
+            race = p.get("race") or ""
+            wline = _LINE_OF_DTYPE.get(dtype, "")
+            if race and wline and _event_art(
+                    f"{slug}_{verb}_{race}_{wline}"):
+                return f"{slug}_{verb}_{race}_{wline}"
         if slug and _event_art(f"{slug}_{verb}"):
             return f"{slug}_{verb}"
         if _event_art(f"{breed}_{verb}"):
@@ -618,6 +654,13 @@ def fight_scene(p: dict, floor, opener: bool = False, note: str = "") -> Scene:
             continue
         g = economy.FORGE[slug]
         if at_range and economy.DAMAGE_TYPE.get(g.line, "melee") == "melee":
+            # 049.1: the row used to vanish at range — a held blade
+            # looked lost until close quarters. It shows, locked, and
+            # explains itself (048 N7 law).
+            opts.append(Option(
+                f"attack_{slug}", f"Attack — {g.name}",
+                "steel can't reach at range — close in first",
+                locked=True))
             continue
         path = economy.PATH_OF_LINE.get(g.line, "blade")
         opts.append(Option(
@@ -758,7 +801,7 @@ def fight_scene(p: dict, floor, opener: bool = False, note: str = "") -> Scene:
         # The creature stays on screen for every round of the fight: it is
         # the same enemy, and dropping the art after the opener read as
         # "this monster has no picture".
-        banner=_fight_banner(e, floor),
+        banner=_fight_banner(e, floor, p),
         banner_variant=(e.get("specimen", "")
                         if e["kind"] == "wilds"
                         and e.get("specimen") != "common" else ""),
@@ -939,7 +982,9 @@ def _strike_text(p: dict, dmg: int) -> str:
         note = (f" — its {economy.TYPE_NAME[mtype]} sign halves "
                 f"{economy.PATH_WEAPON_WORD[path]}")
     if swing.get("crit"):
-        note += " — the long draw finds its mark"
+        note += {"blade": " — the full swing finds its mark",
+                 "bow": " — the long draw finds its mark",
+                 "staff": " — the deep focus finds its mark"}[path]
     # 048 S5: a bottom-of-the-band roll names the rank as the cause
     rank = _train_rank(p)
     lo, hi = swing.get("lo", 0), swing.get("hi", 0)
@@ -949,8 +994,13 @@ def _strike_text(p: dict, dmg: int) -> str:
         better = economy.typed_damage_048(
             path, round((economy.TRAIN_ROLL_FLOOR(min(10, rank + 2))
                          + 1) / 2 * hi), e["def"], mtype)
-        return (f"Your rank-{rank} swing lands shallow — {dmg}{note}. "
-                f"A rank-{min(10, rank + 2)} hand cuts nearer {better}.")
+        # 049.1: the verb follows the weapon in hand — a bow SHOOTS,
+        # it never "swings" or "cuts"
+        blow, verb = {"blade": ("swing", "cuts"),
+                      "bow": ("shot", "shoots"),
+                      "staff": ("cast", "casts")}[path]
+        return (f"Your rank-{rank} {blow} lands shallow — {dmg}{note}. "
+                f"A rank-{min(10, rank + 2)} hand {verb} nearer {better}.")
     if dmg >= max(1, e["hp_max"] // 3):
         return (f"Your {w} bites deep — {dmg} damage the "
                 f"{e['name']} won't shrug off{note}.")
@@ -1474,7 +1524,7 @@ def _victory(p: dict, floor) -> Scene:
         # 045: the exit card carries the floor's tiles like the gate
         # town does — the reel branch keeps its two bare buttons.
         option_art=(None if first_clear else _floor_art(floor)),
-        fx=_kill_fx(e, e["name"], first_clear, _damage_type(p)),
+        fx=_kill_fx(e, e["name"], first_clear, _damage_type(p), p),
     )
 
 
@@ -1794,6 +1844,16 @@ def resolve_fight_action(p: dict, floor, option_id: str) -> Scene:
     if option_id.startswith("attack_"):
         slug = option_id.removeprefix("attack_")
         if slug in (p.get("held") or []) and slug in economy.FORGE:
+            g = economy.FORGE[slug]
+            if (_range_state(p) == "at_range"
+                    and economy.DAMAGE_TYPE.get(g.line, "melee")
+                    == "melee"):
+                # 049.1: the locked at-range row — refuse without
+                # promoting, spend nothing.
+                s = fight_scene(p, floor)
+                s.shard_note = (f"The {g.name} can't reach at range — "
+                                "close in first.")
+                return s
             _promote_held(p, slug)
         option_id = "attack"
     e = p.get("encounter") or {}

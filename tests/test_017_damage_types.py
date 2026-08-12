@@ -171,11 +171,11 @@ def test_v1_doc_with_bought_weapon_is_never_demoted_to_the_starter():
     the free staff. (v5 later trades it rung-for-rung into the sorcerer
     line — see test_017_offclass_migration.)"""
     p = _v1_playing_doc("sorcerer")
-    p["gear"]["weapon"] = "pigsticker"
+    p["gear"]["weapon"] = "scrap_dagger"
     state.ensure_current(p)
     held = economy.FORGE[p["gear"]["weapon"]]
-    assert held.rung == economy.FORGE["pigsticker"].rung
-    assert held.price == economy.FORGE["pigsticker"].price
+    assert held.rung == economy.FORGE["scrap_dagger"].rung
+    assert held.price == economy.FORGE["scrap_dagger"].price
 
 
 # ── engine edges ─────────────────────────────────────────────────────────

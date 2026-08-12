@@ -53,7 +53,7 @@ def test_an_actually_empty_pack_reads_as_empty_not_refusal():
 def test_repair_token_mends_at_the_forge_for_free():
     p = playing("smith")
     # a PAID, worn weapon (starter steel doesn't wear) and one token
-    g = economy.FORGE["pigsticker"]
+    g = economy.FORGE["scrap_dagger"]
     p["gear"]["weapon"] = g.slug
     pool = economy.item_pool(g)
     p.setdefault("durability", {})["weapon"] = max(0, pool - 3)
@@ -70,7 +70,7 @@ def test_repair_token_mends_at_the_forge_for_free():
 
 def test_no_token_no_free_row():
     p = playing("rowless")
-    g = economy.FORGE["pigsticker"]
+    g = economy.FORGE["scrap_dagger"]
     p["gear"]["weapon"] = g.slug
     p.setdefault("durability", {})["weapon"] = 1
     s = core.apply_choice(p, "forge")

@@ -114,7 +114,7 @@ def test_death_consequences_and_death_save():
     p["gold"] = 500
     p["gear"]["armor"] = "padded_jerkin"
     p["gear"]["shield"] = "scrapwood_buckler"
-    p["gear"]["weapon"] = "pigsticker"
+    p["gear"]["weapon"] = "scrap_dagger"
     choose(p, "gate")
     choose(p, "floor_1")
     choose(p, "hunt")
@@ -126,7 +126,7 @@ def test_death_consequences_and_death_save():
     assert 500 * 0.40 <= 500 - p["gold"] <= 500 * 0.60
     assert p["gear"]["armor"] == "padded_jerkin"       # worn, not gone
     assert p["gear"]["shield"] == "scrapwood_buckler"
-    assert p["gear"]["weapon"] in ("pigsticker", "rusted_sword")
+    assert p["gear"]["weapon"] in ("scrap_dagger", "rusted_sword")
     assert p["location"] == "town"
     assert s.event_kind == "death"
 
@@ -196,7 +196,7 @@ def test_honing_buy_flow_and_reset_on_purchase():
     p["unlocked_floor"] = 3                  # cap = 2 this band
     hone_xp = economy.hone_xp(3)
     choose(p, "forge")
-    choose(p, "buy_pigsticker")
+    choose(p, "buy_scrap_dagger")
     s = choose(p, "hone_weapon")
     assert p["hone"]["weapon"] == 1
     assert p["xp"] == economy.xp_need(1) - hone_xp  # ✦ charged alongside gold
@@ -284,24 +284,24 @@ def test_forge_buy_equips_and_pawns_old():
     p = create_character(fresh())
     p["gold"] = 1500
     choose(p, "forge")
-    choose(p, "buy_pigsticker")
-    assert p["gear"]["weapon"] == "pigsticker"
+    choose(p, "buy_scrap_dagger")
+    assert p["gear"]["weapon"] == "scrap_dagger"
     assert p["gold"] == 1300
     # 019: the worn rung stays on the rack as a spare; outgrowing it
     # (the next rung up) still sends the old paid one back to the pack
     s = core.current_scene(p)
-    row = next(o for o in s.options if o.id == "buy_pigsticker")
+    row = next(o for o in s.options if o.id == "buy_scrap_dagger")
     assert "spare" in row.hint
     p["level"] = 6
     choose(p, "buy_iron_sword")
-    assert p["inventory"].get("pigsticker") == 1
+    assert p["inventory"].get("scrap_dagger") == 1
     choose(p, "back")
     choose(p, "pawn")
-    s = choose(p, "sell_pigsticker")
+    s = choose(p, "sell_scrap_dagger")
     # 006: the broker pays the day's rate (25–55%), not a flat 40%
-    offer = int(200 * economy.pawn_rate(state.world_day()))  # pigsticker ◈200 (047)
+    offer = int(200 * economy.pawn_rate(state.world_day()))  # scrap_dagger ◈200 (047)
     assert p["gold"] == 1300 - 930 + offer
-    assert "pigsticker" not in p["inventory"]
+    assert "scrap_dagger" not in p["inventory"]
 
 
 def test_energy_regen_is_lazy_and_timestamped():

@@ -25,7 +25,7 @@ def _known(cls, raw: dict) -> dict:
 
 @dataclass
 class Option:
-    id: str                 # stable id, e.g. "attack", "buy_pigsticker"
+    id: str                 # stable id, e.g. "attack", "buy_scrap_dagger"
     label: str
     hint: str = ""          # right-aligned cost/class hint, e.g. "1 ⚡"
     aether: bool = False    # class/sidekick option — aether key chip

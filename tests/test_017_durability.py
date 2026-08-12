@@ -40,7 +40,7 @@ def choose(p, oid="", text=""):
     return core.apply_choice(p, oid, text=text)
 
 
-def _armed(clazz="warrior", weapon="pigsticker", floor_no=1,
+def _armed(clazz="warrior", weapon="scrap_dagger", floor_no=1,
            enc_id="feral_boar", **slots):
     fl = schema.get_floor(floor_no)
     enc = next(e for e in fl.encounters if e.id == enc_id)
@@ -99,7 +99,7 @@ def test_repair_price_tracks_the_missing_fraction():
     """035: the rate came down 20% → 13% to pay for the plate joining the
     shield on damage-priced wear — same gold a day, a cheaper bench visit
     far more often."""
-    g = economy.FORGE["pigsticker"]          # ◈ 200 (047 early discount)
+    g = economy.FORGE["scrap_dagger"]          # ◈ 200 (047 early discount)
     assert economy.REPAIR_PRICE_PCT == 0.13
     assert economy.repair_price(g, 1.0) == 26
     assert economy.repair_price(g, 0.5) == 13
@@ -122,7 +122,7 @@ def test_first_paid_purchase_arms_the_slot_and_teaches_once():
     p = create_character(fresh("learner"))
     p["gold"] = 1000
     p["location"] = "forge"
-    s = choose(p, "buy_pigsticker")
+    s = choose(p, "buy_scrap_dagger")
     assert p["durability"]["weapon"] == economy.durability_pool(1)
     assert any("wears with use" in ln for ln in s.body_lines)
     p["gold"] = 1000
@@ -131,7 +131,7 @@ def test_first_paid_purchase_arms_the_slot_and_teaches_once():
     p["gold"] = 1000
     p["gear"]["weapon"] = economy.CLASS_STARTERS["warrior"].slug
     del p["durability"]["weapon"]
-    s = choose(p, "buy_pigsticker")          # same slot: taught already
+    s = choose(p, "buy_scrap_dagger")          # same slot: taught already
     assert not any("wears with use" in ln for ln in s.body_lines)
 
 
@@ -192,7 +192,7 @@ def test_standing_still_spares_the_boots():
 
 def test_broken_weapon_hits_at_half():
     p = create_character(fresh("halved"))
-    p["gear"]["weapon"] = "pigsticker"
+    p["gear"]["weapon"] = "scrap_dagger"
     p["durability"]["weapon"] = 5
     full = state.gear_bonus(p, "weapon")
     p["durability"]["weapon"] = 0
@@ -227,7 +227,7 @@ def test_the_snap_gets_its_line_exactly_once():
 def test_broken_is_never_gone():
     p, fl = _armed()
     p["durability"]["weapon"] = 0
-    assert p["gear"]["weapon"] == "pigsticker"      # still in hand
+    assert p["gear"]["weapon"] == "scrap_dagger"      # still in hand
     assert state.gear_bonus(p, "weapon") >= 0
 
 
@@ -239,7 +239,7 @@ def _worn_smith(gold=10_000, xp=None):
     # so fill it exactly rather than piling on a number the model won't hold.
     p["gold"] = gold
     p["xp"] = economy.xp_need(1) if xp is None else xp
-    p["gear"]["weapon"] = "pigsticker"
+    p["gear"]["weapon"] = "scrap_dagger"
     p["durability"]["weapon"] = economy.durability_pool(1) // 2
     p["location"] = "forge"
     return p
@@ -249,7 +249,7 @@ def test_repair_row_quotes_price_and_xp():
     p = _worn_smith()
     s = core.current_scene(p)
     row = next(o for o in s.options if o.id == "repair_weapon")
-    g = economy.FORGE["pigsticker"]
+    g = economy.FORGE["scrap_dagger"]
     want = economy.repair_price(g, 0.5)
     assert f"◈ {want:,}" in row.hint and "XP" in row.hint
 
@@ -260,7 +260,7 @@ def test_repair_restores_the_full_pool():
     s = choose(p, "repair_weapon")
     assert p["durability"]["weapon"] == economy.durability_pool(1)
     assert p["gold"] == gold0 - economy.repair_price(
-        economy.FORGE["pigsticker"], 0.5)
+        economy.FORGE["scrap_dagger"], 0.5)
     assert p["xp"] == xp0 - economy.hone_xp(p["unlocked_floor"])
     assert any("made whole" in ln for ln in s.body_lines)
 
@@ -274,7 +274,7 @@ def test_repair_refused_without_the_xp():
 
 def test_fresh_gear_offers_no_repair_row():
     p = create_character(fresh("mint"))
-    p["gear"]["weapon"] = "pigsticker"
+    p["gear"]["weapon"] = "scrap_dagger"
     p["durability"]["weapon"] = economy.durability_pool(1)
     p["location"] = "forge"
     s = core.current_scene(p)
@@ -301,9 +301,9 @@ def test_swapping_gear_stashes_and_restores_the_wear():
 
 def test_pawn_pays_by_the_wear():
     p = create_character(fresh("broker"))
-    g = economy.FORGE["pigsticker"]
-    p["inventory"]["pigsticker"] = 1
-    p["durability_pack"]["pigsticker"] = economy.durability_pool(1) // 2
+    g = economy.FORGE["scrap_dagger"]
+    p["inventory"]["scrap_dagger"] = 1
+    p["durability_pack"]["scrap_dagger"] = economy.durability_pool(1) // 2
     p["location"] = "pawn"
     s = core.current_scene(p)
     # 006: the broker's rate moves day to day (25–55%) — wear still
@@ -312,19 +312,19 @@ def test_pawn_pays_by_the_wear():
     offer = int(g.price * rate * 0.5)
     full = int(g.price * rate)
     assert offer < full
-    row = next(o for o in s.options if o.id == "sell_pigsticker")
+    row = next(o for o in s.options if o.id == "sell_scrap_dagger")
     assert f"◈ {offer:,}" in row.hint
     gold0 = p["gold"]
-    choose(p, "sell_pigsticker")
+    choose(p, "sell_scrap_dagger")
     assert p["gold"] == gold0 + offer
-    assert "pigsticker" not in p["durability_pack"]
+    assert "scrap_dagger" not in p["durability_pack"]
 
 
 # ── migration ────────────────────────────────────────────────────────────
 
 def test_old_docs_arrive_with_full_pools_on_paid_gear():
     p = create_character(fresh("veteran"))
-    p["gear"]["weapon"] = "pigsticker"
+    p["gear"]["weapon"] = "scrap_dagger"
     p["gear"]["shield"] = "scrapwood_buckler"
     del p["durability"]
     del p["durability_pack"]
@@ -350,23 +350,23 @@ def test_migration_arms_only_the_basic_weapon_never_the_gate_kit():
 
 def test_pack_strip_carries_the_fraction():
     p = create_character(fresh("stripy"))
-    p["gear"]["weapon"] = "pigsticker"
+    p["gear"]["weapon"] = "scrap_dagger"
     pool = economy.durability_pool(1)
     p["durability"]["weapon"] = pool // 4
     strip = core._pack_strip(p)
-    cell = next(c for c in strip if c["slug"] == "pigsticker")
+    cell = next(c for c in strip if c["slug"] == "scrap_dagger")
     assert abs(cell["dur"] - 0.25) < 0.01
 
 
 def test_sheet_names_worn_and_broken():
     from plugin_linear_ascent.sheet import character_sheet
     p = create_character(fresh("sheeted"))
-    p["gear"]["weapon"] = "pigsticker"
+    p["gear"]["weapon"] = "scrap_dagger"
     p["durability"]["weapon"] = economy.durability_pool(1) // 2
     # 045 §3: the sheet says the wear in the unit the forge sells;
     # 048: the word is "durability", spelled out
     half = economy.durability_pool(1) // 2
-    g = economy.FORGE["pigsticker"]
+    g = economy.FORGE["scrap_dagger"]
     want = (f"durability {economy.endurance(g, half):,}"
             f"/{economy.endurance(g):,}")
     assert want in character_sheet(p)["gear"]["weapon"]
@@ -440,7 +440,7 @@ def test_archer_kiting_does_not_double_pay_the_wear():
     a class tax — uses per KILL for a kiting archer stay within 3× the
     warrior's trade (rounds differ, the pool math must absorb it)."""
     counts = {}
-    for clazz, weapon in (("warrior", "pigsticker"),
+    for clazz, weapon in (("warrior", "scrap_dagger"),
                           ("archer", "ashwood_bow")):
         spent = []
         for i in range(40):

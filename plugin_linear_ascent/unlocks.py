@@ -68,10 +68,6 @@ def registry() -> tuple[Unlock, ...]:
                "the weekly strongbox", "the vault",
                "a week of kills, keeps and floors opens slots — pick "
                "ONE reward at the tick"),
-        Unlock("carry3", "level", economy.CARRY3_LEVEL, "opens",
-               "the third carry slot", "the School",
-               "a veteran's grip — three weapons into every fight",
-               f"{economy.CARRY3_XP} XP + coin"),
         # ── level, closes — the protections that expire ──
         Unlock("mercy_ends", "level",
                economy.BEGINNER_MERCY_MAX_LEVEL + 1, "closes",

@@ -139,7 +139,7 @@ def test_plan_table_spot_checks():
     # 046: whole rungs ride the pillar (anchor × 1.3^(gate−1)), mids sit
     # at the geometric mean. 047: the first five floors' weapons open
     # 20% cheaper, the discount fading to nothing by rung 1.5.
-    for slug, bonus, price in (("pigsticker", 8, 200),
+    for slug, bonus, price in (("scrap_dagger", 8, 200),
                                ("iron_sword", 30, 930),
                                ("wolfbite", 110, 3_450),
                                ("bloodgroove_falchion", 409, 12_800),
@@ -219,7 +219,7 @@ def test_forge_racks_blades_and_bows_at_list_price():
     p = create_character(fresh("w-forge"), clazz="warrior")
     s = choose(p, "forge")
     ids = {o.id for o in s.options}
-    assert "buy_pigsticker" in ids
+    assert "buy_scrap_dagger" in ids
     assert "buy_tallowwood_staff" not in ids   # staves live at the Arcanum
     assert "buy_ashwood_bow" in ids            # every line, list price
     bow = next(o for o in s.options if o.id == "buy_ashwood_bow")
@@ -250,9 +250,9 @@ def test_archer_sees_the_same_rack():
     s = choose(p, "forge")
     ids = {o.id for o in s.options}
     assert "buy_ashwood_bow" in ids
-    assert "buy_pigsticker" in ids            # every line, one rack
+    assert "buy_scrap_dagger" in ids            # every line, one rack
     assert "buy_arrow_pack" not in ids
-    blade = next(o for o in s.options if o.id == "buy_pigsticker")
+    blade = next(o for o in s.options if o.id == "buy_scrap_dagger")
     assert "off-class" not in blade.hint and "200" in blade.hint
 
 
@@ -299,12 +299,12 @@ def test_wear_from_pack_swaps_for_free():
     p = create_character(fresh("swap"), clazz="warrior")
     p["gold"] = 10_000
     choose(p, "forge")
-    choose(p, "buy_pigsticker")
+    choose(p, "buy_scrap_dagger")
     choose(p, "buy_ashwood_bow")               # sticker → pack
-    assert p["inventory"]["pigsticker"] == 1
+    assert p["inventory"]["scrap_dagger"] == 1
     gold = p["gold"]
-    s = choose(p, "wear_pigsticker")
-    assert p["gear"]["weapon"] == "pigsticker"
+    s = choose(p, "wear_scrap_dagger")
+    assert p["gear"]["weapon"] == "scrap_dagger"
     assert p["inventory"].get("ashwood_bow") == 1
     assert p["gold"] == gold                   # free
     assert any("back on" in ln for ln in s.body_lines)
@@ -406,7 +406,7 @@ def test_bow_shots_never_burn_arrows():
 
 
 def test_treeline_shot_needs_a_bow_in_hand():
-    p, fl = _armed("archer", "pigsticker", enc_id="feral_boar")
+    p, fl = _armed("archer", "scrap_dagger", enc_id="feral_boar")
     s = combat.fight_scene(p, fl)
     assert not any(o.id == "treeline_shot" for o in s.options)
 
@@ -488,7 +488,7 @@ def test_weapon_icons_follow_the_line():
     """Dojo catch: a bow drawn as a sword misreads the whole rack.
     Weapons resolve to their line's silhouette; focuses to the diamond."""
     from plugin_linear_ascent import icons
-    assert icons.icon_key("pigsticker", "weapon") == "weapon"
+    assert icons.icon_key("scrap_dagger", "weapon") == "weapon"
     assert icons.icon_key("ashwood_bow", "weapon") == "bow"
     assert icons.icon_key("basic_bow", "weapon") == "bow"
     assert icons.icon_key("tallowwood_staff", "weapon") == "staff"

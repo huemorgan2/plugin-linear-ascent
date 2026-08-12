@@ -33,10 +33,10 @@ def test_worn_rung_stays_on_sale_as_a_spare():
     p = create_character("spare-row")
     p["gold"] = 1_000
     core.apply_choice(p, "forge")
-    core.apply_choice(p, "buy_pigsticker")
-    assert p["gear"]["weapon"] == "pigsticker"
+    core.apply_choice(p, "buy_scrap_dagger")
+    assert p["gear"]["weapon"] == "scrap_dagger"
     s = core.current_scene(p)
-    row = next(o for o in s.options if o.id == "buy_pigsticker")
+    row = next(o for o in s.options if o.id == "buy_scrap_dagger")
     assert "worn — spare" in row.hint
     assert not row.locked
 
@@ -45,16 +45,16 @@ def test_buying_a_spare_fills_the_pack_not_the_body():
     p = create_character("spare-buy")
     p["gold"] = 1_000
     core.apply_choice(p, "forge")
-    core.apply_choice(p, "buy_pigsticker")
+    core.apply_choice(p, "buy_scrap_dagger")
     p["hone"]["weapon"] = 2                    # sharpened on the body
     dur = dict(p["durability"])
-    s = core.apply_choice(p, "buy_pigsticker")
-    assert p["inventory"]["pigsticker"] == 1   # the spare, in the pack
-    assert p["gear"]["weapon"] == "pigsticker"
+    s = core.apply_choice(p, "buy_scrap_dagger")
+    assert p["inventory"]["scrap_dagger"] == 1   # the spare, in the pack
+    assert p["gear"]["weapon"] == "scrap_dagger"
     assert p["hone"]["weapon"] == 2            # nothing on the body moved
     assert p["durability"] == dur
     assert p["gold"] == 1_000 - 200 - 200
-    assert "durability_pack" in p and "pigsticker" in p["durability_pack"]
+    assert "durability_pack" in p and "scrap_dagger" in p["durability_pack"]
     assert any("spare for the pack" in ln for ln in s.body_lines)
 
 
@@ -62,10 +62,10 @@ def test_spares_stack():
     p = create_character("spare-stack")
     p["gold"] = 1_000
     core.apply_choice(p, "forge")
-    core.apply_choice(p, "buy_pigsticker")
-    core.apply_choice(p, "buy_pigsticker")
-    core.apply_choice(p, "buy_pigsticker")
-    assert p["inventory"]["pigsticker"] == 2
+    core.apply_choice(p, "buy_scrap_dagger")
+    core.apply_choice(p, "buy_scrap_dagger")
+    core.apply_choice(p, "buy_scrap_dagger")
+    assert p["inventory"]["scrap_dagger"] == 2
 
 
 # ── the locked next rung ─────────────────────────────────────────────────

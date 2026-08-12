@@ -55,7 +55,7 @@ def test_forge_renders_cards_for_gear_and_rows_for_the_bench():
     p = create_character(fresh("cards"))
     p["gold"], p["level"] = 10_000, 4
     choose(p, "forge")
-    choose(p, "buy_pigsticker")
+    choose(p, "buy_scrap_dagger")
     p["durability"]["weapon"] = 1          # earn a repair row
     s = core.current_scene(p)
     frag = render.render_scene_fragment(s)

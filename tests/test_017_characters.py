@@ -61,7 +61,7 @@ def test_halfling_is_not_choosable_at_the_gate():
 
 
 def test_new_docs_are_current():
-    assert fresh()["version"] == 8        # 049: gate steel wears
+    assert fresh()["version"] == 9        # 049.1: the dagger says dagger
 
 
 # ── doc v4 migration: halfling → human ───────────────────────────────────

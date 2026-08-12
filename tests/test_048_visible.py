@@ -147,15 +147,19 @@ def test_verdict_on_a_flyer_with_steel_only_says_cant_reach():
 
 # ── locked rows explain their gates ────────────────────────────────────
 
-def test_locked_third_slot_names_the_level_gate():
+def test_third_slot_is_open_at_any_level():
+    # 049.1: no level gate — the row prints its price, even at level 1
     p = _arm(_classless("048-v-slot3"), "rusted_sword",
              {"blade": 6, "bow": 0, "staff": 0})
     p["slots"] = 2
     p["floor"] = 1
     p["location"] = "school"
     s = core._school_scene(p)
-    assert f"needs level {economy.CARRY3_LEVEL} — you: {p['level']}" \
-        in _scene_text(s)
+    text = _scene_text(s)
+    assert "needs level" not in text
+    assert f"{economy.CARRY3_XP} XP" in text
+    row = next(o for o in s.options if o.id == "buy_carry3")
+    assert not row.locked
 
 
 def test_school_rows_say_what_improves():

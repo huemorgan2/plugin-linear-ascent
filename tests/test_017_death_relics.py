@@ -465,15 +465,15 @@ def test_the_free_save_comes_before_bought_things():
 
 
 def test_mercy_still_holds_below_level_four():
-    p, fl = _doomed("r6-mercy", level=3, weapon="pigsticker")
+    p, fl = _doomed("r6-mercy", level=3, weapon="scrap_dagger")
     combat._death(p, fl)
     assert p["gold"] == 500                        # half, exactly
-    assert p["gear"]["weapon"] == "pigsticker"     # everything survives
+    assert p["gear"]["weapon"] == "scrap_dagger"     # everything survives
 
 
 def test_unprotected_death_bites_gold_wear_and_maybe_steel():
     p, fl = _doomed("r6-bitten", armor="padded_jerkin",
-                    shield="scrapwood_buckler", weapon="pigsticker")
+                    shield="scrapwood_buckler", weapon="scrap_dagger")
     pools = {s: p["durability"][s] for s in ("armor", "shield")}
     s = combat._death(p, fl)
     frac = 1 - p["gold"] / 1000
@@ -489,9 +489,9 @@ def test_unprotected_death_bites_gold_wear_and_maybe_steel():
 def test_each_paid_weapon_rolls_one_in_five():
     lost = 0
     trials = 300
-    p, fl = _doomed("r6-roller", weapon="pigsticker")
+    p, fl = _doomed("r6-roller", weapon="scrap_dagger")
     for _ in range(trials):
-        p["gear"]["weapon"] = "pigsticker"
+        p["gear"]["weapon"] = "scrap_dagger"
         p["gold"], p["hp"] = 1000, 0
         p["daily"]["death_save"] = True
         fl2 = schema.get_floor(1)
@@ -499,13 +499,13 @@ def test_each_paid_weapon_rolls_one_in_five():
         combat.start_encounter(p, fl2, enc)
         p["encounter"]["range"] = "close"
         combat._death(p, fl)
-        if p["gear"]["weapon"] != "pigsticker":
+        if p["gear"]["weapon"] != "scrap_dagger":
             lost += 1
     assert 0.12 <= lost / trials <= 0.28, lost / trials
 
 
 def test_protected_death_loses_nothing_and_mends_everything():
-    p, fl = _doomed("r6-shielded", spells=1, weapon="pigsticker",
+    p, fl = _doomed("r6-shielded", spells=1, weapon="scrap_dagger",
                     armor="padded_jerkin")
     p["durability"]["weapon"] = 3                  # nearly spent
     p["durability"]["armor"] = 3
@@ -513,10 +513,10 @@ def test_protected_death_loses_nothing_and_mends_everything():
     p["durability_pack"] = {"ashwood_bow": 2}
     s = combat._death(p, fl)
     assert p["gold"] == 1000                       # death took NOTHING
-    assert p["gear"]["weapon"] == "pigsticker"
+    assert p["gear"]["weapon"] == "scrap_dagger"
     assert "reincarnation_spell" not in p["inventory"]
     assert p["durability"]["weapon"] == economy.item_pool(
-        economy.FORGE["pigsticker"])
+        economy.FORGE["scrap_dagger"])
     assert p["durability"]["armor"] == economy.item_pool(
         economy.FORGE["padded_jerkin"])
     assert p["durability_pack"]["ashwood_bow"] == economy.item_pool(
@@ -527,7 +527,7 @@ def test_protected_death_loses_nothing_and_mends_everything():
 def test_spare_spells_leak_half_the_time():
     leaked = 0
     trials = 200
-    p, fl = _doomed("r6-hoarder", weapon="pigsticker")
+    p, fl = _doomed("r6-hoarder", weapon="scrap_dagger")
     for _ in range(trials):
         p["inventory"]["reincarnation_spell"] = 3
         p["gold"], p["hp"] = 1000, 0

@@ -80,6 +80,23 @@ def _pack_strip(p: dict) -> list[dict]:
             cell["dur_left"] = economy.endurance(g, left)
             cell["dur_max"] = economy.endurance(g)
         strip.append(cell)
+    # 049.1: side-arms ride the carry slots, not the pack — but the
+    # strip must still SHOW them. A bought blade that vanished from
+    # every surface read as lost (it wasn't — it was held).
+    lead = (p.get("gear") or {}).get("weapon")
+    for slug in (p.get("held") or []):
+        g = economy.FORGE.get(slug)
+        if not g or slug == lead:
+            continue
+        cell = {"slug": slug, "kind": "weapon", "count": 1,
+                "held": True, "name": g.name + " · held"}
+        left = (p.get("durability_pack") or {}).get(slug)
+        if left is not None and economy.wears(g):
+            pool = economy.item_pool(g)
+            cell["dur"] = max(0.0, min(1.0, left / pool)) if pool else 1.0
+            cell["dur_left"] = economy.endurance(g, left)
+            cell["dur_max"] = economy.endurance(g)
+        strip.append(cell)
     pack = p.get("inventory") or {}
     order = sorted(pack.items(),
                    key=lambda kv: (kv[0] not in economy.APOTHECARY, kv[0]))
@@ -2918,20 +2935,12 @@ def _school_scene(p: dict) -> Scene:
                            f"{economy.CARRY2_XP} XP + "
                            f"◈ {economy.CARRY2_GOLD}"))
     elif slots == 2:
-        if p["level"] < economy.CARRY3_LEVEL:
-            lock = (f"needs level {economy.CARRY3_LEVEL} — "
-                    f"you: {p['level']}")
-            carry += f" · 3rd slot — locked ({lock})"
-            opts.append(Option("buy_carry3",
-                               "Learn to carry a 3rd weapon", lock,
-                               locked=True))
-        else:
-            gold3 = economy.carry3_gold(front)
-            carry += (f" · 3rd slot — {economy.CARRY3_XP} XP + "
-                      f"◈ {gold3}")
-            opts.append(Option("buy_carry3",
-                               "Learn to carry a 3rd weapon",
-                               f"{economy.CARRY3_XP} XP + ◈ {gold3}"))
+        gold3 = economy.carry3_gold(front)
+        carry += (f" · 3rd slot — {economy.CARRY3_XP} XP + "
+                  f"◈ {gold3}")
+        opts.append(Option("buy_carry3",
+                           "Learn to carry a 3rd weapon",
+                           f"{economy.CARRY3_XP} XP + ◈ {gold3}"))
     lines.append(carry)
     opts.append(Option("back", "Back to the square"))
     return Scene(
@@ -3051,11 +3060,6 @@ def _school_carry(p: dict, oid: str) -> Scene:
             return _school_refuse(p, "Three is all the hands you have.")
         if slots < 2:
             return _school_refuse(p, "The second grip comes first.")
-        if p["level"] < economy.CARRY3_LEVEL:
-            return _school_refuse(
-                p, f"The third hand is a veteran's trick — needs "
-                   f"level {economy.CARRY3_LEVEL} — you: "
-                   f"{p['level']}.")
         xp, gold = economy.CARRY3_XP, economy.carry3_gold(
             max(1, p["unlocked_floor"]))
     if p["xp"] < xp:

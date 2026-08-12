@@ -367,9 +367,9 @@ def test_train_refusals_name_the_numbers():
 def test_economy_school_constants():
     assert economy.MASTERY_XP == 948            # round(632 * 1.5)
     assert economy.CARRY2_XP == 60 and economy.CARRY2_GOLD == 30
-    # phase-6 bake: 500 fits the level-8 bar (xp_need(8) = 543) — at
-    # 900 the printed level-8 gate was a lie until ~level 12
-    assert economy.CARRY3_XP == 500 and economy.CARRY3_LEVEL == 8
+    # 049.1: no level gate — the 500 XP + pillar gold IS the gate
+    assert economy.CARRY3_XP == 500
+    assert not hasattr(economy, "CARRY3_LEVEL")
     for front in (1, 5, 20):
         assert economy.carry3_gold(front) == \
             round(200 * economy.pillar(front))
@@ -436,11 +436,11 @@ def test_carry_slots_second_and_third():
     assert p["slots"] == 2
     assert p["xp"] == 200 - economy.CARRY2_XP
     assert p["gold"] == 500 - economy.CARRY2_GOLD
-    # 3rd slot: level-gated with the exact sentence
+    # 3rd slot: 049.1 — no level gate, the 500-XP price is the gate
+    # (the bar itself can't hold 500 XP before level 8: xp_need(8)=543)
     s = _choose(p, "buy_carry3")
-    assert p["slots"] == 2
-    assert "needs level 8 — you: 5" in _school_text(s)
-    # phase-6 bake: 500 fits the level-8 bar — the gate is honest now
+    assert p["slots"] == 2                     # refused on XP, not level
+    assert "needs level" not in _school_text(s)
     _rich(p, level=8, xp=520, gold=2000)
     s = _choose(p, "buy_carry3")
     assert p["slots"] == 3
@@ -500,8 +500,8 @@ def test_bag_tooltip_warns_on_an_untrained_path():
     assert acts, "the bow should offer its promote row"
     assert "miss 25%" in acts[0].hint
     # the trained path carries no warning
-    p["inventory"]["pigsticker"] = 1
-    acts, _why = core.pack_actions(p, "pigsticker")
+    p["inventory"]["scrap_dagger"] = 1
+    acts, _why = core.pack_actions(p, "scrap_dagger")
     assert acts and "miss" not in acts[0].hint
 
 
@@ -691,3 +691,26 @@ def test_roster_rows_wear_the_mastery_glyphs():
     assert lines[0].startswith("Brynn · ⚔ MASTER — ")
     assert lines[1].startswith("Tam · ➶ GOLD ✦ MASTER — ")
     assert lines[2].startswith("Wren — ")            # no rank 10, no mark
+
+
+# ── 049.1: the narration follows the weapon in hand ──────────────────────
+
+def _shallow_text(uid, path, slug):
+    p, fl = _mastered(uid, path, slug)
+    p["training"][path] = 1              # rank 1 — shallow can name it
+    p["mastery"] = {}
+    p["encounter"]["_swing"] = {"lo": 1.0, "hi": 10.0, "raw": 1.0}
+    return combat._strike_text(p, 1)
+
+
+def test_a_bow_shoots_it_never_swings():
+    text = _shallow_text("048-n-bow", "bow", "basic_bow")
+    assert "shot lands shallow" in text, text
+    assert "swing" not in text and "cuts" not in text
+
+
+def test_a_blade_still_swings_and_a_staff_casts():
+    assert "swing lands shallow" in \
+        _shallow_text("048-n-blade", "blade", "rusted_sword")
+    assert "cast lands shallow" in \
+        _shallow_text("048-n-staff", "staff", "worn_staff")
