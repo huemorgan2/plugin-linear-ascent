@@ -108,10 +108,14 @@ def test_repair_price_tracks_the_missing_fraction():
 
 # ── staged onboarding ────────────────────────────────────────────────────
 
-def test_fresh_docs_carry_no_durability():
+def test_fresh_docs_carry_only_the_basic_weapons_pool():
+    # 049: the basic weapon wears from birth; the gate guard kit never
     p = create_character(fresh("bare"))
-    assert p["durability"] == {}
+    assert p["durability"] == {
+        "weapon": economy.item_pool(economy.CLASS_STARTERS["warrior"])}
     assert not state.is_broken(p, "weapon")
+    assert state.durability_max(p, "shield") == 0
+    assert state.durability_max(p, "armor") == 0
 
 
 def test_first_paid_purchase_arms_the_slot_and_teaches_once():
@@ -131,12 +135,17 @@ def test_first_paid_purchase_arms_the_slot_and_teaches_once():
     assert not any("wears with use" in ln for ln in s.body_lines)
 
 
-def test_free_gear_never_wears():
+def test_the_basic_weapon_wears_but_the_gate_kit_never_does():
+    # 049: gate steel wears — a swing on the basic sword ticks its pool;
+    # the gate-issue buckler and jerkin stay wear-free.
     p, fl = _armed(weapon=economy.CLASS_STARTERS["warrior"].slug)
     p["encounter"]["range"] = "close"
+    before = p["durability"]["weapon"]
     combat.resolve_fight_action(p, fl, "attack")
-    assert "weapon" not in p["durability"]
+    assert p["durability"]["weapon"] == before - 1
     assert not state.is_broken(p, "weapon")
+    assert "shield" not in p["durability"]
+    assert "armor" not in p["durability"]
 
 
 # ── wear hooks: once per event ───────────────────────────────────────────
@@ -327,12 +336,14 @@ def test_old_docs_arrive_with_full_pools_on_paid_gear():
     assert "shoes" not in p["durability"]           # nothing worn there
 
 
-def test_migration_never_arms_free_gear():
+def test_migration_arms_only_the_basic_weapon_never_the_gate_kit():
     p = create_character(fresh("frugal"))
     del p["durability"]
     p["version"] = 2
     state.ensure_current(p)
-    assert p["durability"] == {}
+    # 049: the basic weapon's pool comes back; the gate kit stays bare
+    assert p["durability"] == {
+        "weapon": economy.item_pool(economy.CLASS_STARTERS["warrior"])}
 
 
 # ── the pack strip and the sheet say it out loud ─────────────────────────

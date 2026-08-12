@@ -149,15 +149,21 @@ def test_v1_archer_gets_bow_and_letter():
     ev = p["pending_events"][0]
     assert "weapon" in ev["headline"].lower()
     # idempotent: running again neither re-swaps nor re-letters
+    # (049's one-time gate-steel note rides along; it doesn't count)
     state.ensure_current(p)
-    assert len(p["pending_events"]) == 1
+    letters = [e for e in p["pending_events"]
+               if "Gate steel" not in (e.get("headline") or "")]
+    assert len(letters) == 1
 
 
 def test_v1_warrior_renames_silently():
     p = _v1_playing_doc("warrior")
     state.ensure_current(p)
     assert p["gear"]["weapon"] == "rusted_sword"
-    assert not p.get("pending_events")
+    # the RENAME says nothing — the only letter allowed is 049's
+    # one-time gate-steel-wears note, which every basic holder gets
+    ev = p.get("pending_events") or []
+    assert all("Gate steel" in (e.get("headline") or "") for e in ev)
 
 
 def test_v1_doc_with_bought_weapon_is_never_demoted_to_the_starter():

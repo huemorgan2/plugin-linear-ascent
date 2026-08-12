@@ -37,7 +37,7 @@ def world_day_f(at: dt.datetime | None = None) -> float:
 def new_player(luna_user: str) -> dict:
     ts = now().isoformat()
     return {
-        "version": 7,
+        "version": 8,
         "luna_user": luna_user,
         "stage": "intro",              # intro → creation_race → creation_name → playing
         "name": None, "race": None,
@@ -50,7 +50,9 @@ def new_player(luna_user: str) -> dict:
                  "armor": economy.GATE_ARMOR.slug, "shoes": None},
         "hone": {s: 0 for s in economy.HONE_SLOTS},
         # 005: staged onboarding — a slot gets a durability entry only
-        # when its first PAID piece is bought (free gear never wears).
+        # when its first wearing piece arrives. 049: the basic weapon
+        # wears, so migrate()'s self-heal grants its pool on first load;
+        # the gate guard kit stays wear-free.
         "durability": {},
         "durability_pack": {},
         "inventory": {},
@@ -270,8 +272,9 @@ def ensure_current(p: dict) -> None:
                     shard_note="It fits your hands. It always should have.",
                     body_lines=[
                         f"▪ {starter.name} — {starter.flavor}",
-                        "▪ the basic weapon never breaks, never runs "
-                        "out, and is never lost",
+                        "▪ the basic weapon is never lost — it wears "
+                        "like any steel, and the Forge mends gate "
+                        "steel for a coin",
                     ],
                     options=[Option("town", "Take it up")],
                     event_kind="present",
@@ -424,6 +427,35 @@ def ensure_current(p: dict) -> None:
                         event_kind="present",
                     ).to_dict())
         p["version"] = 7
+    if p.get("version", 1) < 8:
+        # 049: the basic weapons wear now (full pool granted by the
+        # self-heal below). One letter, only to hands that hold one.
+        basics_held = [s for s in ([p["gear"].get("weapon")]
+                                   + list(p.get("held") or [])
+                                   + list(p.get("inventory") or {}))
+                       if s in economy.BASIC_WEAPONS]
+        if basics_held and p.get("stage") == "playing":
+            # appended, not front-inserted: an older doc crossing several
+            # versions at once reads the bigger letters first.
+            from .scene import Option, Scene
+            p.setdefault("pending_events", []).append(Scene(
+                eyebrow="ROOTHOLLOW · A WORD FROM THE FORGE",
+                headline="Gate steel wears now, like any steel",
+                support="The smith stopped pretending salvage iron is "
+                        "eternal. Your basic weapon carries a plain "
+                        "durability pool from today.",
+                shard_note="Nothing to fear — it still can't be lost, "
+                           "and broken only ever means half strength.",
+                body_lines=[
+                    "▪ your basic weapon starts at FULL durability",
+                    "▪ the Forge mends gate steel for a coin",
+                    "▪ replaced, it rides to your pack instead of "
+                    "the scrap bin",
+                ],
+                options=[Option("town", "Fair enough")],
+                event_kind="present",
+            ).to_dict())
+        p["version"] = 8
     # 048 phase 3: carry slots + held list, self-healing on every load —
     # held[0] mirrors the hand, length never exceeds slots, and paid
     # overflow returns to the pack instead of vanishing.
@@ -438,10 +470,16 @@ def ensure_current(p: dict) -> None:
     cap = max(1, int(p["slots"]))
     for slug in held[cap:]:
         g = economy.FORGE.get(slug)
-        if g and g.price > 0:
+        if g and economy.wears(g):
             p.setdefault("inventory", {})[slug] = \
                 p["inventory"].get(slug, 0) + 1
     del held[cap:]
+    # 049: the basic weapons wear now — a wearing weapon in the hand
+    # without a pool gets a full one (fresh docs, death promotes).
+    wg = economy.FORGE.get((p.get("gear") or {}).get("weapon") or "")
+    if wg and economy.wears(wg) \
+            and "weapon" not in p.setdefault("durability", {}):
+        p["durability"]["weapon"] = economy.item_pool(wg)
     # Soft clamp: XP used to bank past a full bar. Anyone already over
     # is brought back to the bar — surplus never bought a level anyway.
     if xp_room(p) is not None:
@@ -453,9 +491,11 @@ def ensure_current(p: dict) -> None:
 # ── Durability (005 §3.5) ────────────────────────────────────────────────
 
 def durability_max(p: dict, slot: str) -> int:
-    """The full pool of the slot's equipped item; 0 for free gear."""
+    """The full pool of the slot's equipped item; 0 for wear-free gear
+    (049: the basic weapons wear now — only the gate guard kit is
+    wear-free)."""
     g = economy.FORGE.get(p["gear"].get(slot) or "")
-    return economy.item_pool(g) if g and g.price > 0 else 0
+    return economy.item_pool(g) if g and economy.wears(g) else 0
 
 
 def is_broken(p: dict, slot: str) -> bool:

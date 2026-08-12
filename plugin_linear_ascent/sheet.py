@@ -15,7 +15,7 @@ def character_sheet(p: dict) -> dict:
         name = g.name + (f" (honed +{hone})" if hone else "")
         # 005: the sheet names the wear the pack strip draws.
         left = (p.get("durability") or {}).get(slot)
-        if left is not None and g.price > 0:
+        if left is not None and economy.wears(g):
             pool = economy.item_pool(g)
             if left <= 0:
                 name += " (BROKEN — half strength)"

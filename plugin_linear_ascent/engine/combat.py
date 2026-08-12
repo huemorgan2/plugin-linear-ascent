@@ -1027,12 +1027,25 @@ def _held_melee(p: dict) -> str:
 def _promote_held(p: dict, slug: str) -> None:
     """Bring a held weapon into the striking hand. This is which of
     your carried weapons LEADS — not a pack swap (those wait for the
-    road, per 045/048)."""
+    road, per 045/048). 049: wear rides the item, so the hands swap
+    their pools too — the resting hand's count stashes per slug, the
+    lead hand's comes back out (fresh pool if it never wore)."""
     held = p.setdefault("held", [])
+    old = p["gear"].get("weapon")
     if slug in held:
         held.remove(slug)
     held.insert(0, slug)
     p["gear"]["weapon"] = slug
+    if old == slug:
+        return
+    stash = p.setdefault("durability_pack", {})
+    old_dur = (p.get("durability") or {}).pop("weapon", None)
+    if old and old_dur is not None:
+        stash[old] = old_dur
+    g = economy.FORGE.get(slug)
+    if g and economy.wears(g):
+        p.setdefault("durability", {})["weapon"] = stash.pop(
+            slug, economy.item_pool(g))
 
 
 def _player_hit(p: dict, mult: float = 1.0, pierce: bool = False) -> int:
@@ -1506,7 +1519,7 @@ def _repair_everything(p: dict) -> None:
     piece to full, worn or stashed."""
     for slot in economy.DURABILITY_SLOTS:
         g = economy.FORGE.get(p["gear"].get(slot) or "")
-        if g and g.price > 0 and slot in (p.get("durability") or {}):
+        if g and economy.wears(g) and slot in (p.get("durability") or {}):
             p["durability"][slot] = economy.item_pool(g)
     for slug in list((p.get("durability_pack") or {})):
         g = economy.FORGE.get(slug)
@@ -1651,8 +1664,11 @@ def _death(p: dict, floor) -> Scene:
             lines.append(f"− ◈ {lost_gold:,} carried gold "
                          f"({round(frac * 100)}%), gone")
         if no_pardon:
+            # 049: the basics wear now but are still never LOST — the
+            # tower's tumble passes over gate steel.
             stacks = sorted(slug for slug, n in (p.get("inventory") or {})
-                            .items() if n > 0)
+                            .items()
+                            if n > 0 and slug not in economy.BASIC_WEAPONS)
             if stacks:
                 slug = stacks[state.rng_int(p, 0, len(stacks) - 1)]
                 n = p["inventory"].pop(slug)
@@ -1673,11 +1689,14 @@ def _death(p: dict, floor) -> Scene:
                 held = p.setdefault("held", [])
                 if slug in held:
                     held.remove(slug)
+                # 049: the lost weapon's wear dies with it — clear the
+                # slot BEFORE the promote, which now moves pools around
+                # (a packed spare's stash entry is its own and stays).
+                (p.get("durability") or {}).pop("weapon", None)
                 basic = (economy.CLASS_STARTERS.get(g.line)
                          or economy.STARTER_WEAPON)
                 _promote_held(p, basic.slug)
                 p["hone"]["weapon"] = 0
-                (p.get("durability") or {}).pop("weapon", None)
             else:
                 p["inventory"][slug] -= 1
                 if p["inventory"][slug] <= 0:

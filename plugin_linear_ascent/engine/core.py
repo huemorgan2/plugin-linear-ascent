@@ -73,7 +73,7 @@ def _pack_strip(p: dict) -> list[dict]:
         # 005: paid gear carries its wear onto the strip — the bar and
         # the hover both read from this one number.
         left = (p.get("durability") or {}).get(slot)
-        if left is not None and g.price > 0:
+        if left is not None and economy.wears(g):
             pool = economy.item_pool(g)
             cell["dur"] = max(0.0, min(1.0, left / pool)) if pool else 1.0
             # 045: the hover names the number, not just the fraction.
@@ -102,7 +102,7 @@ def _pack_strip(p: dict) -> list[dict]:
             # 045: packed gear carries its wear too — a spare bought
             # used should say so before it's promoted to the hand.
             left = (p.get("durability_pack") or {}).get(slug)
-            if left is not None and g.price > 0:
+            if left is not None and economy.wears(g):
                 pool = economy.item_pool(g)
                 cell["dur"] = (max(0.0, min(1.0, left / pool))
                                if pool else 1.0)
@@ -1306,8 +1306,8 @@ def _forge_scene(p: dict) -> Scene:
     _rack(p, economy.gear_rungs("armor"), opts, lines)
     _rack(p, economy.gear_rungs("shoes"), opts, lines)
     # 048: the gate-issue basics of the other lines hang by the door —
-    # a flat coin buys a second path's first weapon. Never wears,
-    # never lost, never sold back.
+    # a flat coin buys a second path's first weapon. 049: they wear
+    # like any steel now, but are never lost and mend for a coin.
     owned = set(combat._held_slugs(p)) | set(p.get("inventory") or {})
     for slug in ("basic_bow", "worn_staff"):
         if slug in owned:
@@ -1315,8 +1315,8 @@ def _forge_scene(p: dict) -> Scene:
         g = economy.FORGE[slug]
         opts.append(Option(
             f"buy_{slug}", g.name,
-            f"pay ◈ {economy.BASIC_WEAPON_PRICE} · never wears, "
-            "never lost"))
+            f"pay ◈ {economy.BASIC_WEAPON_PRICE} · +{g.bonus} ATK · "
+            f"durability {economy.endurance(g):,}"))
         lines.append(f"{g.name} — {g.flavor}")
     _relic_rows(p, "forge", opts, lines)      # 006: quivers and tools
     for g in _wearable_pack(p):
@@ -1341,7 +1341,7 @@ def _forge_scene(p: dict) -> Scene:
     for slot in economy.DURABILITY_SLOTS:
         g = economy.FORGE.get(p["gear"].get(slot) or "")
         left = (p.get("durability") or {}).get(slot)
-        if not g or g.price <= 0 or left is None:
+        if not g or not economy.wears(g) or left is None:
             continue
         pool = economy.item_pool(g)
         if left >= pool:
@@ -1429,7 +1429,7 @@ def _forge_token_mend(p: dict, slot: str) -> Scene:
     no gold, no XP. The token's whole identity."""
     g = economy.FORGE.get(p["gear"].get(slot) or "")
     left = (p.get("durability") or {}).get(slot)
-    if (not g or g.price <= 0 or left is None
+    if (not g or not economy.wears(g) or left is None
             or p["inventory"].get("repair_token", 0) <= 0):
         return _forge_scene(p)
     pool = economy.item_pool(g)
@@ -1451,7 +1451,7 @@ def _forge_repair(p: dict, slot: str) -> Scene:
     plus the honing bench's XP ask. Same refusal grammar as honing."""
     g = economy.FORGE.get(p["gear"].get(slot) or "")
     left = (p.get("durability") or {}).get(slot)
-    if not g or g.price <= 0 or left is None:
+    if not g or not economy.wears(g) or left is None:
         return _forge_scene(p)
     pool = economy.item_pool(g)
     if left >= pool:
@@ -1545,7 +1545,10 @@ def _gear_purchase(p: dict, g, scene_fn) -> Scene:
     else:
         stat = "ATK" if g.slot == "weapon" else "DEF"
         note = f"+ {g.name} equipped ({g.slot} +{g.bonus} {stat})"
-    if old and economy.FORGE[old].price > 0:
+    # 049: the basic weapon rides to the pack with the paid gear — the
+    # scrap bin only takes the gate guard kit now.
+    if old and (economy.FORGE[old].price > 0
+                or old in economy.BASIC_WEAPONS):
         p["inventory"][old] = p["inventory"].get(old, 0) + 1
         note += f" — your {economy.FORGE[old].name} goes to your pack"
     elif old:
@@ -1579,7 +1582,7 @@ def _wear_from_pack(p: dict, slug: str, scene_fn) -> Scene:
     old_dur = (p.get("durability") or {}).pop(g.slot, None)
     if old and old_dur is not None:
         stash[old] = old_dur
-    if g.price > 0:
+    if economy.wears(g):
         p.setdefault("durability", {})[g.slot] = stash.pop(
             slug, economy.item_pool(g))
     # 048 phase 3: CARRY — a free slot keeps the old weapon in hand
@@ -1597,7 +1600,9 @@ def _wear_from_pack(p: dict, slug: str, scene_fn) -> Scene:
     if kept:
         note += (f" — the {economy.FORGE[old].name} stays in your "
                  "other hand")
-    elif old and economy.FORGE.get(old) and economy.FORGE[old].price > 0:
+    elif old and economy.FORGE.get(old) \
+            and (economy.FORGE[old].price > 0
+                 or old in economy.BASIC_WEAPONS):
         p["inventory"][old] = p["inventory"].get(old, 0) + 1
         note += f" — the {economy.FORGE[old].name} goes to your pack"
     s = scene_fn(p)
@@ -1606,15 +1611,16 @@ def _wear_from_pack(p: dict, slug: str, scene_fn) -> Scene:
 
 
 def _basic_buy(p: dict, slug: str, scene_fn) -> Scene:
-    """048: a gate-issue basic of another line — flat coin, never
-    wears, never lost. It goes into a free carry slot if one is open,
-    else into the pack (promote it on the road)."""
+    """048: a gate-issue basic of another line — flat coin, never lost
+    (049: it wears now, but the smith mends gate steel for a coin). It
+    goes into a free carry slot if one is open, else into the pack
+    (promote it on the road)."""
     g = economy.FORGE[slug]
     owned = set(combat._held_slugs(p)) | set(p.get("inventory") or {})
     if slug in owned:
         s = scene_fn(p)
         s.shard_note = f"You already carry a {g.name} — one is plenty; " \
-                       "it never wears out."
+                       "the Forge mends gate steel for a coin."
         return s
     price = economy.BASIC_WEAPON_PRICE
     if p["gold"] < price:
@@ -2356,7 +2362,10 @@ def _pawn_sundry(p: dict, slug: str) -> tuple[str, int]:
 
 def _pawn_scene(p: dict) -> Scene:
     rate = economy.pawn_rate(state.world_day())
-    gear_in_pack = [k for k in p["inventory"] if k in economy.FORGE]
+    # 049: the broker won't take gate steel — the basics are worth
+    # nothing to him and are never lost to the player.
+    gear_in_pack = [k for k in p["inventory"] if k in economy.FORGE
+                    and k not in economy.BASIC_WEAPONS]
     relics_in_pack = [k for k in p["inventory"] if k in economy.RELICS]
     # 006 §3.8: the pawn always buys ANYTHING — so potions and tokens
     # get a row too (0.29.4: they used to be invisible here, which read
@@ -2422,7 +2431,8 @@ def _pawn_action(p: dict, oid: str) -> Scene:
     if oid.startswith("donate_"):
         return _pawn_donate(p, oid.removeprefix("donate_"))
     slug = oid.removeprefix("sell_")
-    if slug in p["inventory"] and slug in economy.FORGE:
+    if slug in p["inventory"] and slug in economy.FORGE \
+            and slug not in economy.BASIC_WEAPONS:
         g = economy.FORGE[slug]
         offer = _pawn_offer(p, g)
         p["inventory"][slug] -= 1

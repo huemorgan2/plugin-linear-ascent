@@ -77,9 +77,8 @@ def test_forge_hints_carry_the_stat_the_prose_used_to():
     p = create_character(fresh("stat"), clazz="warrior")
     p["gold"] = 10_000
     s = choose(p, "forge")
-    # 048: the basics rows say their own law (never wears, never lost)
+    # 049: the basics carry a stat + durability hint like any card now
     buy = [o for o in s.options if o.id.startswith("buy_")
-           and o.id not in ("buy_basic_bow", "buy_worn_staff")
            and o.id.removeprefix("buy_") in economy.FORGE]
     assert buy
     for o in buy:

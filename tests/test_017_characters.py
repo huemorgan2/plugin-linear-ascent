@@ -61,7 +61,7 @@ def test_halfling_is_not_choosable_at_the_gate():
 
 
 def test_new_docs_are_current():
-    assert fresh()["version"] == 7        # 048: the School era
+    assert fresh()["version"] == 8        # 049: gate steel wears
 
 
 # ── doc v4 migration: halfling → human ───────────────────────────────────
@@ -84,8 +84,11 @@ def test_halfling_docs_wake_human_with_a_letter(clazz):
     assert "registrar" in ev["eyebrow"].lower()
     assert "HUMAN" in " ".join(ev["body_lines"])
     # idempotent: running again neither re-registers nor re-letters
+    # (049's one-time gate-steel note rides along; it doesn't count)
     state.ensure_current(p)
-    assert len(p["pending_events"]) == 1
+    letters = [e for e in p["pending_events"]
+               if "Gate steel" not in (e.get("headline") or "")]
+    assert len(letters) == 1
 
 
 def test_other_races_migrate_without_a_letter():
@@ -96,7 +99,9 @@ def test_other_races_migrate_without_a_letter():
         state.ensure_current(p)
         assert p["race"] == race
         assert p["version"] >= 4
-        assert not p.get("pending_events")
+        # only 049's one-time gate-steel note may appear
+        assert all("Gate steel" in (e.get("headline") or "")
+                   for e in p.get("pending_events") or [])
 
 
 def test_mid_creation_halfling_migrates_quietly():

@@ -291,8 +291,8 @@ def test_weapons_sell_at_list_price_to_any_hand():
     choose(p, "buy_ashwood_bow")
     assert p["gear"]["weapon"] == "ashwood_bow"
     assert p["gold"] == 800                    # 200 list, no surcharge
-    assert p["inventory"].get("rusted_sword") is None  # starter is free →
-    # free gear goes to the scrap bin, not the pack
+    # 049: the basic weapon rides to the pack now, never the scrap bin
+    assert p["inventory"].get("rusted_sword") == 1
 
 
 def test_wear_from_pack_swaps_for_free():

@@ -1849,9 +1849,12 @@ SHOE_SPEED.update({g.slug: g.speed for g in FORGE.values()
 # floor-1 monsters at DEF 3 / HP 37 — ~1 damage a round, unwinnable. The
 # basic weapon makes floor 1 hard-but-fair while keeping the ◈250 tier-1
 # purchase a real first goal. Never sold (forge_tier lists tiers ≥ 1).
-# 017 §1: the basic weapon is a floor, not a phase — one per class, it
-# never degrades, never runs out, is never lost. rusted_shiv stays as the
-# pre-class / legacy-doc slug (same stats as the warrior sword).
+# 017 §1 / 049: the basic weapon is a floor, not a phase — one per class.
+# It WEARS now (a plain tier-1 pool, 049) but is still never LOST: a
+# replaced basic rides to the pack, death never takes it, and broken
+# means half strength until the Forge mends it for pocket change.
+# rusted_shiv stays as the pre-class / legacy-doc slug (same stats as
+# the warrior sword).
 STARTER_WEAPON = GearItem(
     "rusted_shiv", "Rusted Shiv",
     "gate-issue salvage steel — barely better than teeth",
@@ -1874,6 +1877,17 @@ CLASS_STARTERS: dict[str, GearItem] = {
 }
 for _g in CLASS_STARTERS.values():
     FORGE[_g.slug] = _g
+
+# 049: the basic weapons — gate steel that wears but is never lost.
+BASIC_WEAPONS = frozenset({STARTER_WEAPON.slug}
+                          | {g.slug for g in CLASS_STARTERS.values()})
+
+
+def wears(item: GearItem) -> bool:
+    """049: does this piece spend a durability pool? All paid gear, plus
+    the basic weapons — they carry a plain tier-1 pool now. The gate
+    guard kit (buckler, jerkin) stays wear-free."""
+    return item.price > 0 or item.slug in BASIC_WEAPONS
 
 # 043: the gate issues the whole kit, not just the blade. Bar 1 is
 # defined as "level 1 in the floor's reference gear" — so a fresh
@@ -1964,7 +1978,7 @@ def rung_floor_req(g: GearItem) -> int:
 # sell for a flat coin so ANY climber can start a second path.
 
 BASIC_WEAPON_PRICE = 60        # basic_bow / worn_staff off the wall —
-                               # never wears, never lost, never sold back
+                               # wears (049), never lost, never sold back
 ARROW_PACK_SIZE = 10           # legacy — old packs still hold arrows
 ARROW_PACK_PRICE = 120
 
@@ -2036,8 +2050,9 @@ def hone_price(unlocked_floor: int) -> int:
 # ~16% at T10. (The pre-plan's "better gear wears faster" pool CURVE
 # failed the ≤20%-of-income gate by up to 14× at T10 — the tax keeps the
 # intent, the pool direction had to flip.)
-# Basic (tier-0) gear never wears; broken means half strength, never
-# helpless.
+# 049: the basic WEAPONS carry a plain tier-1 pool too (repair is
+# pocket change — price 0 floors the bill at ◈1); the gate guard kit
+# stays wear-free. Broken means half strength, never helpless.
 
 DURABILITY_BASE = 1300
 DURABILITY_GROWTH = 0.25

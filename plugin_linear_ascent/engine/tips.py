@@ -554,7 +554,7 @@ def item_tip(slug: str, equipped: bool = False) -> str:
         # 045: durability on the tip — fresh-piece endurance; the pack
         # cell's hover carries the live left/total.
         end = (f", durability {economy.endurance(g):,}"
-               if g.price > 0 else "")
+               if economy.wears(g) else "")
         if equipped:
             doing = ("every blow you land rides it"
                      if g.slot == "weapon"
