@@ -74,7 +74,9 @@ def test_pools_grow_with_tier_and_survive_a_hunting_day():
     pools = [economy.durability_pool(t) for t in range(1, 11)]
     assert pools == sorted(pools)
     day = 30 * 6                                    # fights × rounds
-    guard_day = day * max(economy.SHIELD_WEAR_RATE, economy.ARMOR_WEAR_RATE)
+    # The shield left this guarantee on purpose: the 50×-block law caps
+    # it at ~100 even blows (~16 fights), a mid-day break by design.
+    guard_day = day * economy.ARMOR_WEAR_RATE
     assert all(pool > guard_day for pool in pools)  # never mid-day break
 
 
@@ -395,10 +397,12 @@ def test_repair_tax_stays_under_a_fifth_of_income_every_band():
                      if g.tier == tier and g.rung == float(tier))
         spend = 0.0
         # 035: both guard pieces spend their rate on an evenly-met blow
-        # where the blade still spends one per swing.
+        # where the blade still spends one per swing. The shield's rate
+        # rides its own pool now (50×-block law) — a full day caps its
+        # missing fraction at 1.0, one whole pool through the bench.
         for g, events in ((weapon, fights * rounds),
                           (shield, fights * rounds
-                           * economy.SHIELD_WEAR_RATE),
+                           * economy.shield_wear_rate(shield.rung)),
                           (armor, fights * rounds
                            * economy.ARMOR_WEAR_RATE)):
             pool = economy.durability_pool(g.tier)

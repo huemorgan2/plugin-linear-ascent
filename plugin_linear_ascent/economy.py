@@ -1442,7 +1442,7 @@ _FORGE_ROWS = [
 # to each band's first floor. Prices ride the FULL pillar (capital law):
 # against income riding pillar/PACE, days-to-afford a band grows
 # ×pace_wedge — that ratio IS the exponential climb time.
-_GEAR_ANCHORS = ((8, 250), (5, 100), (7, 200))    # (bonus, ◈) w/s/a
+_GEAR_ANCHORS = ((8, 250), (5, 150), (7, 200))    # (bonus, ◈) w/s/a
 
 
 def _round_price(n: float) -> int:
@@ -2079,8 +2079,21 @@ REPAIR_PRICE_PCT = 0.13        # of item price × missing fraction
 # 3, not 4: 4 tips the band 1→2 step over the cliff tolerance even at the
 # lowered repair price. 3 burns a guard ~3× faster than the flat point it
 # replaces — ~2.4 hunting days out of a tier-1 buckler or jerkin.
-SHIELD_WEAR_RATE = 3           # uses per evenly-met blow (was a flat 1)
 ARMOR_WEAR_RATE = 3            # 035: the plate meets every blow — bill it
+
+# A bought shield turns 50× its own block, then breaks. The flat rate it
+# replaces read as ~217× block at tier 1 and ran past 700× at depth —
+# a pool nobody would ever see the bottom of. The rate scales with the
+# piece's own pool so END is 50·block on every rung; the sticker anchor
+# pays for the endurance (100 → 150, the 30×-floor price plus two thirds).
+SHIELD_END_PER_BLOCK = 50
+
+
+def shield_wear_rate(rung: float) -> float:
+    """Uses per evenly-met blow for a shield of this rung — sized so the
+    fresh pool empties after exactly `SHIELD_END_PER_BLOCK × block` of
+    turned damage (2·50 even blows, whatever the tier)."""
+    return durability_pool(rung) / (2 * SHIELD_END_PER_BLOCK)
 
 
 def durability_pool(tier: float) -> int:
@@ -2089,7 +2102,8 @@ def durability_pool(tier: float) -> int:
     return round(DURABILITY_BASE * (1 + DURABILITY_GROWTH * (t - 1)))
 
 
-def guard_wear(blocked: int, bonus: int, total_def: int, rate: int) -> int:
+def guard_wear(blocked: int, bonus: int, total_def: int,
+               rate: float) -> int:
     """034 §1 / 035: uses spent by a guard piece that turned `blocked`.
 
     The piece's share of the guard is `bonus / DEF`, and that share is
@@ -2110,8 +2124,10 @@ def guard_wear(blocked: int, bonus: int, total_def: int, rate: int) -> int:
     return max(1, round(rate * blocked_by_piece / even_blow))
 
 
-def shield_wear(blocked: int, shield_bonus: int, total_def: int) -> int:
-    return guard_wear(blocked, shield_bonus, total_def, SHIELD_WEAR_RATE)
+def shield_wear(blocked: int, shield_bonus: int, total_def: int,
+                rung: float = 1.0) -> int:
+    return guard_wear(blocked, shield_bonus, total_def,
+                      shield_wear_rate(rung))
 
 
 def armor_wear(blocked: int, armor_bonus: int, total_def: int) -> int:
@@ -2141,7 +2157,8 @@ def endurance(item: GearItem, left: int | None = None) -> int:
     """
     pool = item_pool(item) if left is None else max(0, left)
     if item.slot == "shield":
-        return round(pool * item.bonus / (2 * SHIELD_WEAR_RATE))
+        return round(pool * item.bonus
+                     / (2 * shield_wear_rate(item.rung or item.tier)))
     if item.slot == "armor":
         return round(pool * item.bonus / (2 * ARMOR_WEAR_RATE))
     return pool

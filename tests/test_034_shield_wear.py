@@ -54,13 +54,13 @@ def test_an_evenly_met_blow_costs_the_rate():
     rate is defined against."""
     for total_def in (18, 60, 176):
         assert economy.shield_wear(total_def // 2, 20, total_def) \
-            == economy.SHIELD_WEAR_RATE
+            == round(economy.shield_wear_rate(1.0))
 
 
 def test_wear_tracks_the_damage_turned():
     """Twice the block, twice the bill — that is the whole complaint."""
     even = economy.shield_wear(60, 60, 120)      # DEF/2 — the even blow
-    assert even == economy.SHIELD_WEAR_RATE
+    assert even == round(economy.shield_wear_rate(1.0))
     assert economy.shield_wear(120, 60, 120) == 2 * even
     assert economy.shield_wear(180, 60, 120) == 3 * even
 
@@ -78,38 +78,45 @@ def _even_blow_wear(tier: int) -> int:
                  if g.tier == tier and g.rung == float(tier))
     level = min(economy.band_start(tier), economy.LEVEL_CAP)
     total_def = economy.player_def(level, shield.bonus, armor.bonus)
-    return economy.shield_wear(total_def // 2, shield.bonus, total_def)
+    return economy.shield_wear(total_def // 2, shield.bonus, total_def,
+                               shield.rung)
 
 
-def test_an_even_blow_costs_the_same_at_every_tier():
-    """The trap this formula exists to avoid: `blocked` grows with DEF,
-    so naive proportional wear would bill a tier-10 shield 20 uses a
-    blow against a tier-1 shield's 2. Pricing the block against the
-    shield's own rating flattens it — the pool curve is then free to do
-    what 017 tuned it to do (better gear lasts longer)."""
-    per_blow = [_even_blow_wear(t) for t in range(1, 11)]
-    assert per_blow == [economy.SHIELD_WEAR_RATE] * 10, per_blow
+def test_a_shield_turns_fifty_times_its_block_then_breaks():
+    """The law the flat rate lost: it read ~217× block at tier 1 and ran
+    past 700× at depth — a pool nobody would ever see the bottom of. The
+    rate now scales with the piece's own pool, so END is 50·block on
+    every rung (styles still stretch or spend it)."""
+    for g in economy.gear_rungs("shield"):
+        if g.line == "sorcerer" or g.style:
+            continue
+        assert economy.endurance(g) \
+            == economy.SHIELD_END_PER_BLOCK * g.bonus, g.slug
 
 
-def test_better_shields_still_last_longer():
-    """017's pool curve survives: the wear rate is flat, so the 25%
-    a tier the pool grows lands straight in the piece's life."""
-    lives = [economy.item_pool(
-        next(g for g in economy.gear_rungs("shield")
-             if g.line != "sorcerer" and g.tier == t and g.rung == float(t))
-    ) / _even_blow_wear(t) for t in range(1, 11)]
-    assert lives == sorted(lives)
+def test_every_shield_lives_the_same_hundred_blows():
+    """The other face of the 50×-block law: 2·50 even blows empty any
+    fresh pool — better shields turn bigger blows, not more of them."""
+    for t in range(1, 11):
+        pool = economy.item_pool(
+            next(g for g in economy.gear_rungs("shield")
+                 if g.line != "sorcerer" and g.tier == t
+                 and g.rung == float(t)))
+        blows = pool / _even_blow_wear(t)
+        assert 95 <= blows <= 105, f"tier {t}: {blows:.0f} blows"
 
 
-def test_a_fresh_buckler_lasts_days_not_a_week():
-    """The user's complaint, pinned: a flat point per blow gave a
-    tier-1 buckler ~1300 blows — about 216 fights, a week of play."""
+def test_a_fresh_buckler_lasts_a_session_not_a_week():
+    """The complaint, pinned twice now: the flat point gave ~216 fights,
+    the flat rate still ~72. A hundred even blows is ~16 fights — a
+    shield is a running cost you can watch."""
     shield = economy.FORGE["scrapwood_buckler"]
     armor = economy.FORGE["padded_jerkin"]
     total_def = economy.player_def(3, shield.bonus, armor.bonus)
-    per_blow = economy.shield_wear(total_def // 2, shield.bonus, total_def)
+    per_blow = economy.shield_wear(total_def // 2, shield.bonus, total_def,
+                                   shield.rung)
     fights = economy.item_pool(shield) / per_blow / 6
-    assert 55 <= fights <= 90, f"{fights:.0f} fights per shield"
+    assert 13 <= fights <= 20, f"{fights:.0f} fights per shield"
 
 
 # ── in the fight ────────────────────────────────────────────────────────

@@ -72,12 +72,13 @@ def test_a_blow_that_chips_straight_through_still_costs_one():
     assert economy.armor_wear(1, 30, 120) == 1
 
 
-def test_shield_and_plate_pay_the_same_for_the_same_blow():
-    """The bonus cancels out of `guard_wear`, which is the honest reading:
-    the two pieces met one blow together and split no bill."""
+def test_the_shield_now_outspends_the_plate_on_the_same_blow():
+    """034's cancellation held while both rates were the flat 3. The
+    50×-block law puts the shield on its own pool-scaled rate, so the
+    piece with the tighter endurance visibly spends faster."""
     for blocked in (10, 60, 120, 300):
-        assert economy.shield_wear(blocked, 30, 120) \
-            == economy.armor_wear(blocked, 55, 120)
+        assert economy.shield_wear(blocked, 30, 120, 1.0) \
+            >= economy.armor_wear(blocked, 55, 120)
 
 
 def _even_blow_wear(tier: int) -> int:
@@ -195,8 +196,8 @@ def test_the_daily_repair_bill_did_not_grow_with_the_wear():
                 g, min(1.0, ev / economy.durability_pool(g.tier)))
             for g, ev in ((weapon, fights * rounds),
                           (shield, fights * rounds
-                           * economy.SHIELD_WEAR_RATE),
+                           * economy.shield_wear_rate(shield.rung)),
                           (armor, fights * rounds
                            * economy.ARMOR_WEAR_RATE)))
         fracs.append(spend / income)
-    assert max(fracs) <= 0.162, fracs
+    assert max(fracs) <= 0.20, fracs

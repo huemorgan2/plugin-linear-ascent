@@ -891,8 +891,10 @@ def _monster_hit(p: dict, halved: bool = False, least: int = 0,
 
 def _shield_wear(p: dict, blocked: int) -> int:
     """034 §1: uses the shield spends turning `blocked` of a blow."""
+    g = economy.FORGE.get(p["gear"].get("shield") or "")
+    rung = (g.rung or g.tier) if g else 1.0
     return economy.shield_wear(blocked, state.gear_bonus(p, "shield"),
-                               state.dfs(p))
+                               state.dfs(p), rung)
 
 
 def _armor_wear(p: dict, blocked: int) -> int:
