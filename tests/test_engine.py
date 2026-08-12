@@ -347,8 +347,7 @@ def test_encounter_carries_id_for_creature_art():
     s = choose(p, "hunt")
     assert p["encounter"]["id"] in {e.id for e in
                                     schema.get_floor(1).encounters}
-    # 049: the banner prefers the race/line-typed floor-1 scene art
-    assert s.banner.startswith(p["encounter"]["id"])
+    assert s.banner == p["encounter"]["id"]      # floor-1 art is shipped
 
 
 # ── 006: the XP pool replaces mana ───────────────────────────────────────

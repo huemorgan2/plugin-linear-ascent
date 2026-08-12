@@ -150,13 +150,20 @@ Assets (7 monsters: 6 encounters + warden_001):
    animal at true size; pressed: the goblin falls, its sword left in
    the grass; wrongmade: evicted — collapses to dead brush / scrap
    plate, nothing living. Saved as .mp4 + .mpg + 1-bit gif.
-4. Game formats: closeup → `creatures/{id}_320x112.png`; scene →
-   `creatures/{id}_{race}_{line}_320x112.png`; movie →
+4. Game formats: closeup → `creatures/{id}_320x112.png`; movie →
    `events/{id}_{verb}_{race}_{line}_320x112.gif` (verb = freed /
    fall / evicted), white ink on alpha, play-once.
 
-Code: `combat._fight_banner` prefers `{slug}_{race}_{line}` art;
-`combat._kill_fx` kinded branch prefers `{id}_{verb}_{race}_{line}`.
+**CORRECTION (roy, 2026-08-12): the encounter banner is the CLOSEUP,
+always the monster alone.** The staged player-vs-monster scenes are
+movie first-frames ONLY — they never ship as `creatures/` art and
+never appear as banners. A first wiring that showed
+`{id}_{race}_{line}` scenes as banners was wrong and was reverted
+(63 scene pngs deleted from `creatures/`, `_fight_banner` restored).
+
+Code: `combat._fight_banner` = the creature's solo closeup;
+`combat._kill_fx` kinded branch prefers `{id}_{verb}_{race}_{line}`
+(race and weapon line matter only in the kill movie).
 
 **Triple check before the swap (must all pass):**
 1. **Monster matches** — the creature in every image/movie is the
@@ -165,9 +172,9 @@ Code: `combat._fight_banner` prefers `{slug}_{race}_{line}` art;
 2. **Weapon matches** — the kill art slug is keyed by the line of the
    weapon that landed the last blow, and the weapon visible in the
    clip is that weapon.
-3. **Player matches** — the art slug is keyed by `p["race"]`, and the
-   figure in the image is that race (human woman fighter / male elf /
-   dwarf).
+3. **Player matches** — the kill-movie slug is keyed by `p["race"]`,
+   and the figure in the clip is that race (human woman fighter /
+   male elf / dwarf). The player appears ONLY in kill movies.
 
 ## Steps
 

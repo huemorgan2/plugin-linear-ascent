@@ -115,6 +115,10 @@ autocontrast(cutoff=2). Bayer 8x8 ordered dither at the end.
 
 ## Closeups (single-creature encounter shots)
 
+**Role: the closeup IS the encounter banner — always the monster
+alone.** The staged player-vs-monster scenes exist only as first
+frames for the kill movies; they never ship as encounter art.
+
 The recipe that works (`plans/049-monster-image-remake/gen_floor1.py`
 CLOSEUP_PROMPT, floor1/closeups/):
 

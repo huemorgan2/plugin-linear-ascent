@@ -29,37 +29,18 @@ def _event_art(slug: str) -> bool:
     return os.path.exists(os.path.join(_EVENTS, f"{slug}_320x112.gif"))
 
 
-def _typed_slug(slug: str, p: dict | None, line: str = "") -> str:
-    """049: the scene drawn for THIS climber — {slug}_{race}_{line} art
-    (the player's race x the path of the weapon in hand) wins over the
-    creature's solo art when it ships. Returns slug unchanged when no
-    typed art exists."""
-    if not slug or not p:
-        return slug
-    race = p.get("race") or ""
-    line = line or _train_path(p)
-    if race and _creature_art(f"{slug}_{race}_{line}"):
-        return f"{slug}_{race}_{line}"
-    return slug
-
-
-def _fight_banner(e: dict, floor, p: dict | None = None) -> str:
-    """Creature's own art if shipped (plan 005), else the old behavior."""
+def _fight_banner(e: dict, floor) -> str:
+    """Creature's own art if shipped (plan 005), else the old behavior.
+    049: always the creature ALONE (the closeup) — the staged
+    player-vs-monster scenes are movie first-frames, never banners."""
     if e["kind"] == "warden":
         if floor.floor % 10 == 0:  # milestone boss banners ship in banners/
             return "gnarl" if floor.floor == 10 else floor.banner
         slug = f"warden_{floor.floor:03d}"
-        typed = _typed_slug(slug, p)
-        if typed != slug:
-            return typed
         return slug if _creature_art(slug) else ""
     slug = e.get("id", "")
-    if slug:
-        typed = _typed_slug(slug, p)
-        if typed != slug:
-            return typed
-        if _creature_art(slug):
-            return slug
+    if slug and _creature_art(slug):
+        return slug
     return floor.banner if e["kind"] == "wilds" else ""
 
 
@@ -801,7 +782,7 @@ def fight_scene(p: dict, floor, opener: bool = False, note: str = "") -> Scene:
         # The creature stays on screen for every round of the fight: it is
         # the same enemy, and dropping the art after the opener read as
         # "this monster has no picture".
-        banner=_fight_banner(e, floor, p),
+        banner=_fight_banner(e, floor),
         banner_variant=(e.get("specimen", "")
                         if e["kind"] == "wilds"
                         and e.get("specimen") != "common" else ""),

@@ -2,8 +2,11 @@
 """049: floor1/ plan assets -> the game's content/art/ formats.
 
   closeups/{id}.jpg              -> creatures/{id}_320x112.png
-  scenes/floor001_{id}_{pw}.jpg  -> creatures/{id}_{race}_{line}_320x112.png
   movies/{id}_{race}_{line}.mp4  -> events/{id}_{verb}_{race}_{line}_320x112.gif
+
+The encounter banner is the CLOSEUP — the monster alone (roy,
+2026-08-12). The staged scenes are movie first-frames only and never
+ship as creatures/ art; the scenes mode was removed.
 
 Game spec (tools/generate_banners.py / generate_event_gifs.py): white
 ink on alpha at 1x 320x112; GIFs palette index 0 transparent / 1 white,
@@ -11,7 +14,7 @@ play once (no loop extension), disposal 2. "warden" maps to warden_001.
 Demo names map fighter->human, wand->staff, sword->blade.
 
 Usage:
-  python gen_floor1_game.py [closeups|scenes|movies ...]   (default all)
+  python gen_floor1_game.py [closeups|movies ...]   (default all)
 """
 
 from __future__ import annotations
@@ -92,25 +95,6 @@ def do_closeups() -> None:
         print(f"ok   creatures/{os.path.basename(dst)}", flush=True)
 
 
-def do_scenes() -> None:
-    n = 0
-    for m in IDS:
-        for race, old_p in RACES.items():
-            for line, old_w in LINES.items():
-                src = os.path.join(
-                    FLOOR1, "scenes",
-                    f"floor001_{m}_{old_p}_{old_w}.jpg")
-                if not os.path.exists(src):
-                    print(f"MISS {os.path.basename(src)}", flush=True)
-                    continue
-                dst = os.path.join(
-                    ART, "creatures",
-                    f"{GAME_ID[m]}_{race}_{line}_320x112.png")
-                bits_to_ink_png(to_bits(Image.open(src)), dst)
-                n += 1
-    print(f"ok   {n} scene pngs", flush=True)
-
-
 def do_movies() -> None:
     n = 0
     for m in IDS:
@@ -138,7 +122,6 @@ def do_movies() -> None:
 
 
 if __name__ == "__main__":
-    modes = sys.argv[1:] or ["closeups", "scenes", "movies"]
+    modes = sys.argv[1:] or ["closeups", "movies"]
     for mode in modes:
-        {"closeups": do_closeups, "scenes": do_scenes,
-         "movies": do_movies}[mode]()
+        {"closeups": do_closeups, "movies": do_movies}[mode]()
