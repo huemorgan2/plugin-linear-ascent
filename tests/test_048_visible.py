@@ -111,16 +111,15 @@ def test_speed_word_rides_the_spd_number():
     assert "(fast)" in s2.headline
 
 
-def test_hunt_menu_shows_the_roster_numbers():
+def test_hunt_menu_carries_no_stat_roster():
+    # 048 retro: the per-monster stat dump left the camp — the fight
+    # card and the mechanics page carry the numbers.
     p = _classless("048-v-hunt")
     core.apply_choice(p, "gate", "")
     s = core.apply_choice(p, "floor_1", "")
-    fl = schema.get_floor(1)
     text = " ".join(s.body_lines or [])
-    for enc in fl.encounters:
-        assert enc.name in text, enc.name
-    for bit in ("HP", "ATK", "DEF", "SPD"):
-        assert bit in text, bit
+    assert "Out past the wire:" not in text
+    assert "HP " not in text and "ATK " not in text
 
 
 # ── the verdict, before every fight ────────────────────────────────────

@@ -1480,10 +1480,8 @@ def _after_fight_options(p: dict, floor) -> list[Option]:
     for i, o in enumerate(opts):
         if o.id == "hunt":
             opts[i] = Option("hunt", "Hunt the wilds again", o.hint)
-            # the gate row is the gate-town SCENE's affordance, not part
-            # of its option list — keep it for the climber passing through
-            if p["unlocked_floor"] > floor.floor:
-                opts.insert(i + 1, Option("gate", "Back to the tower gate"))
+            # 048 retro: the gate row rides the borrowed menu itself
+            # now — every camp keeps a lift to the Tower Gate
             break
     return opts
 

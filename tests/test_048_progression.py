@@ -58,13 +58,13 @@ def _to_forge(p):
 
 
 def _to_school(p):
+    # 048 retro: the School lives on Roothollow's square now
     if p["location"] == "school":
         return
     if p["location"] == "forge":
         choose(p, "back")
-    if p["location"] == "town":
-        choose(p, "gate")
-        choose(p, "floor_1")
+    if p["location"] == "gate_town":
+        choose(p, "town")
     choose(p, "school")
     assert p["location"] == "school"
 
@@ -207,11 +207,12 @@ def test_the_specialist_masters_blade_by_level_ten():
 
 def test_the_school_door_opens_both_ways():
     """The T5 sim found the generic back-handler eating the School's
-    door — the student was locked in. Back goes to the gate camp."""
+    door — the student was locked in. 048 retro: the School sits on
+    the square, so back goes home to town."""
     p = _classless("048-t5-door")
     _to_school(p)
     choose(p, "back")
-    assert p["location"] == "gate_town"
+    assert p["location"] == "town"
 
 
 def test_a_bow_into_plate_loses_and_the_card_teaches(monkeypatch):

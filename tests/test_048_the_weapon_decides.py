@@ -262,9 +262,13 @@ def _rich(p, level=15, xp=1300, gold=2000):
 
 
 def _at_school(p):
-    _choose(p, "gate")
-    _choose(p, "floor_1")
-    s = _choose(p, "school")
+    # 048 retro: the School lives on Roothollow's square now
+    if p["location"] == "school":
+        s = core.current_scene(p)
+    else:
+        if p["location"] != "town":
+            _choose(p, "town")
+        s = _choose(p, "school")
     assert p["location"] == "school"
     return s
 
@@ -275,13 +279,19 @@ def _school_text(s):
                     + [f"{o.label} {o.hint}" for o in (s.options or [])])
 
 
-def test_school_door_in_every_gate_town():
+def test_school_on_the_square_and_gate_lift_in_every_camp():
+    # 048 retro: the School's one door is on Roothollow's square; every
+    # camp keeps a lift straight to the Tower Gate instead.
     from plugin_linear_ascent.content import schema
     p = _fresh("048-p3-door")
     make_character(p)
+    town = core._town_scene(p)
+    assert "school" in [o.id for o in town.options]
     for n in range(1, 13):
         opts = core._gate_town_options(p, schema.get_floor(n))
-        assert "school" in [o.id for o in opts], n
+        ids = [o.id for o in opts]
+        assert "school" not in ids, n
+        assert "gate" in ids, n
 
 
 def test_school_lists_three_paths_with_costs_and_improvement():

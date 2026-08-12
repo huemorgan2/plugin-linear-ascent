@@ -982,6 +982,10 @@ def _town_scene(p: dict) -> Scene:
         # there, so it must exist even without a connected world.
         Option("guildhall", "The Guildhall",
                p.get("guild") or "training", badge=_b("guildhall")),
+        # 048 retro: the School lives on the square — one school, your
+        # ranks ride with you; the floor camps stopped teaching.
+        Option("school", "The School",
+               "train any weapon — blade, bow, staff"),
         Option("stone", "Stone of the Climb", "news"),
     ]
     # 032: members get their own door — the banner's name on the hint.
@@ -1046,7 +1050,7 @@ def _dispatch_location(p: dict, oid: str) -> Scene:
         return _town_scene(p)
     town_menus = ("forge", "arcanum", "medlab", "lodge", "vault", "pawn",
                   "stone", "gate", "relay", "fields", "guildhall", "hall",
-                  "board", "sleep_menu")
+                  "board", "sleep_menu", "school")
     if loc == "town" and oid in town_menus:
         if oid == "arcanum" and not _door_open(p, economy.ARCANUM_LEVEL):
             s = _town_scene(p)
@@ -1090,12 +1094,9 @@ def _dispatch_location(p: dict, oid: str) -> Scene:
         if loc == "memorial":
             # 034 §3: the only way out of a monument is back to the camp.
             p["location"] = "gate_town"
-        elif loc == "school":
-            # 048: the School opens off the gate camp, not the square —
-            # without this row the generic handler ate the door and the
-            # student was locked in (the T5 sim found it).
-            p["location"] = "gate_town"
         else:
+            # 048 retro: the School moved onto the square — it rides
+            # town_menus now, so the generic route below takes it home.
             p["location"] = "town" if loc in town_menus + ("grants",) \
                 else p["location"]
         return _build_scene(p)
@@ -2715,28 +2716,11 @@ def _gate_pick(p: dict, oid: str) -> Scene:
     return _floor_arrival_scene(p, n)
 
 
-def _roster_lines(fl) -> list[str]:
-    """048 T2: the hunt roster with EVERY number and its sign — the
-    player reads the floor before stepping past the wire."""
-    out = ["Out past the wire:"]
-    for enc in fl.encounters:
-        traits = tuple(getattr(enc, "traits", ()) or ())
-        atk, dfs, hp = economy.creature_stats(fl.floor, traits)
-        prof = economy.profile_from_traits(traits)
-        if prof.get("bulwark"):
-            hp = round(hp * economy.BULWARK_HP_MULT)
-        sign = economy.TYPE_SIGN.get(prof.get("type", "plain"), "")
-        spd = prof.get("speed", economy.SPEED_NORMAL)
-        out.append(f"{enc.name}{' ' + sign if sign else ''} — "
-                   f"HP {hp} · ATK {atk} · DEF {dfs} · "
-                   f"SPD {spd}{economy.speed_word(spd)}")
-    return out
-
-
 def _floor_arrival_scene(p: dict, n: int) -> Scene:
     fl = schema.get_floor(n)
     lines = [fl.arrival]
-    lines += _roster_lines(fl)
+    # 048 retro: the stat roster is gone — the fight card and the
+    # mechanics page carry the numbers; the camp stays prose.
     lines += _presence_floor_lines(p, n)
     # 020: the floor BELOW a milestone warns at the gate, before the
     # ⚡ is spent — this floor's own Warden is one thing, the next is a
@@ -2817,9 +2801,10 @@ def _gate_town_options(p: dict, fl) -> list[Option]:
     npc = getattr(fl, "npc", None)
     if npc is not None:
         opts.append(Option("talk", f"Talk — {npc.name}", npc.role))
-    # 048: every gate town teaches — the School door, next to the fire.
-    opts.append(Option("school", "The School",
-                       "any weapon, taught to bite"))
+    # 048 retro: the camp lift runs straight to the Tower Gate — change
+    # floors without the walk home (the School moved to the square).
+    opts.append(Option("gate", "The Tower Gate",
+                       "change floors from here"))
     opts.append(Option("town", "Return to Roothollow"))
     return opts
 
@@ -2861,7 +2846,7 @@ def _npc_scene(p: dict, fl) -> Scene:
     )
 
 
-# ── The School (048: train, mastery, carry — every gate town) ────────
+# ── The School (048: train, mastery, carry — on Roothollow's square) ─
 
 _PATH_GLYPH = {"blade": "⚔", "bow": "➶", "staff": "✦"}
 _PATH_ORDER = ("blade", "bow", "staff")
@@ -2878,7 +2863,6 @@ def _school_discounted(p: dict, path: str) -> bool:
 
 
 def _school_scene(p: dict) -> Scene:
-    fl = schema.get_floor(max(1, p["floor"]))
     front = max(1, p["unlocked_floor"])
     training = p.get("training") or {}
     mastery = p.get("mastery") or {}
@@ -2939,10 +2923,9 @@ def _school_scene(p: dict) -> Scene:
                                "Learn to carry a 3rd weapon",
                                f"{economy.CARRY3_XP} XP + ◈ {gold3}"))
     lines.append(carry)
-    opts.append(Option("back", f"Back to {fl.gate_town}"))
+    opts.append(Option("back", "Back to the square"))
     return Scene(
-        eyebrow=f"FLOOR {fl.floor} · {fl.gate_town.upper()} · "
-                "THE SCHOOL",
+        eyebrow="ROOTHOLLOW · THE SCHOOL",
         headline="The School",
         support="Any hand can hold any weapon. The School teaches it "
                 "to bite. Training spends the XP bar — the same pool "
@@ -2955,8 +2938,8 @@ def _school_scene(p: dict) -> Scene:
 
 def _school_action(p: dict, oid: str) -> Scene:
     if oid == "back":
-        p["location"] = "gate_town"
-        return _gate_town_scene(p)
+        p["location"] = "town"
+        return _town_scene(p)
     if oid.startswith("train_"):
         path = oid.removeprefix("train_")
         if path in _PATH_GLYPH:
@@ -3087,7 +3070,7 @@ def _school_carry(p: dict, oid: str) -> Scene:
 
 def _gate_town_scene(p: dict) -> Scene:
     fl = schema.get_floor(max(1, p["floor"]))
-    body = _roster_lines(fl) + _presence_floor_lines(p, fl.floor)
+    body = _presence_floor_lines(p, fl.floor)
     fw = _live_flare(p)
     if fw:
         body.insert(0, f"▪ a RED FLARE hangs over the wilds — "
@@ -3108,9 +3091,12 @@ def _gate_town_action(p: dict, oid: str) -> Scene:
     fl = schema.get_floor(max(1, p["floor"]))
     if oid == "talk" and getattr(fl, "npc", None) is not None:
         return _npc_scene(p, fl)
-    if oid == "school":
-        p["location"] = "school"
-        return _school_scene(p)
+    if oid == "gate":
+        # 048 retro: the lift to the Gate runs from every camp — pick
+        # the next floor without walking the square first.
+        p["location"] = "gate"
+        p["floor"] = 0
+        return _gate_scene(p)
     if oid == "answer_flare":
         fw = _live_flare(p)
         if fw is None:

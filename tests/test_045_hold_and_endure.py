@@ -190,9 +190,9 @@ def test_after_fight_menu_is_the_floor_menu():
     s = _hunt_victory(p, 4)
     ids = [o.id for o in s.options]
     for want in ("hunt", "hunt_deep", "stew", "heal",
-                 "use_medgel", "keep", "talk", "town"):
+                 "use_medgel", "keep", "talk", "town", "gate"):
         assert want in ids, (want, ids)
-    assert "gate" not in ids                         # frontier floor
+    # 048 retro: the gate lift rides every camp menu, frontier included
     hunt = next(o for o in s.options if o.id == "hunt")
     assert hunt.label == "Hunt the wilds again"
     fl = schema.get_floor(4)
@@ -206,7 +206,7 @@ def test_gate_row_and_monument_keep_below_the_frontier():
     p["hp"] = economy.player_max_hp(8)
     s = _hunt_victory(p, 4)
     ids = [o.id for o in s.options]
-    assert ids.index("gate") == ids.index("hunt") + 1
+    assert "gate" in ids            # 048 retro: the lift rides the menu
     keep = next(o for o in s.options if o.id == "keep")
     assert "fell" in keep.label                      # monument, not a swing
     assert "monument" in keep.hint
