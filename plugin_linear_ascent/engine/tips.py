@@ -551,9 +551,10 @@ def item_tip(slug: str, equipped: bool = False) -> str:
     g = economy.FORGE.get(slug)
     if g:
         stat = "ATK" if g.slot == "weapon" else "DEF"
-        # 045: END on the tip — fresh-piece endurance; the pack cell's
-        # hover carries the live left/total.
-        end = (f", END {economy.endurance(g):,}" if g.price > 0 else "")
+        # 045: durability on the tip — fresh-piece endurance; the pack
+        # cell's hover carries the live left/total.
+        end = (f", durability {economy.endurance(g):,}"
+               if g.price > 0 else "")
         if equipped:
             doing = ("every blow you land rides it"
                      if g.slot == "weapon"

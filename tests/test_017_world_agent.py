@@ -156,11 +156,13 @@ def test_fold_markers_still_work_and_the_forge_wall_stays_bare():
     assert '<details class="fold">' in html and "▣" not in html
     txt = s.to_text()
     assert "▣" not in txt and "— the relic shelf" in txt
-    # the Forge page carries no prose at all — cards and rows only
+    # 048: the Forge's only prose is the folded plain-words legend —
+    # cards and rows carry everything else
     q = create_character(fresh("fo-2"))
     choose(q, "forge")
     fs = core.current_scene(q)
-    assert fs.grid and fs.body_lines == [] and fs.support == ""
+    assert fs.grid and fs.support == ""
+    assert fs.body_lines[0].startswith("▣ ") and fs.body_lines[-1] == "▣."
 
 
 # ── the armory, engine side ──────────────────────────────────────────────

@@ -339,9 +339,11 @@ def apply_choice(p: dict, option_id: str, text: str = "") -> Scene:
             # range, for steel, that means crossing the ground.
             option_id = "close_in"
         else:
+            # 048: no raw id dump — a human reads this. The numbered
+            # fallback above means "say the row's number" always works.
             scene.shard_note = (
-                f"That isn't one of the paths in front of us. "
-                f"Pick one of: {', '.join(sorted(valid))}.")
+                "That isn't one of the paths in front of us — "
+                "pick one of the numbered rows on the card.")
             return _stamp(p, scene)
     # 042: a face is a door — clicking any avatar opens that climber's
     # page, from any room, any board.
@@ -1181,11 +1183,12 @@ def _rack(p: dict, items: list, opts: list, lines: list) -> None:
 
     # 031 §14: the stat rides IN the hint now — the Forge's card grid
     # has no body lines to carry it, and richer hints hurt no shop
-    # 045: END rides next to the stat — what the piece can take (guard
-    # steel: damage turned; weapons/shoes: swings/strides) is half the
-    # price tag's meaning.
+    # 045: durability rides next to the stat — what the piece can take
+    # (guard steel: damage turned; weapons/shoes: swings/strides) is
+    # half the price tag's meaning. 048: the word is "durability",
+    # spelled out — "END" said nothing to anyone.
     def _end(g):
-        return f"END {economy.endurance(g):,}"
+        return f"durability {economy.endurance(g):,}"
 
     for g in show:
         hint = f"pay ◈ {g.price:,} · {_stat(g)} · {_end(g)}"
@@ -1294,8 +1297,8 @@ def _forge_scene(p: dict) -> Scene:
     # 048: the smith sells every physical line to every hand at list
     # price — the trained rank is the only tax on strange steel.
     # Staves and focuses still live at the Arcanum.
-    nod = ("The smith nods across the square: staves and "
-           "focuses live at the Arcanum.")
+    nod = ("Buy whatever you need for archery and swordsmanship — "
+           "magic weapons are sold at the Arcanum, across the square.")
     _rack(p, economy.weapon_line("warrior"), opts, lines)
     _rack(p, economy.weapon_line("archer"), opts, lines)
     _rack(p, economy.gear_rungs("shield"), opts, lines)
@@ -1347,7 +1350,7 @@ def _forge_scene(p: dict) -> Scene:
             f"repair_{slot}",
             f"Repair {g.name}" + (" — broken" if left <= 0 else ""),
             f"pay ◈ {rprice:,} · +{hone_xp} XP · "
-            f"END {economy.endurance(g, left):,} → "
+            f"durability {economy.endurance(g, left):,} → "
             f"{economy.endurance(g):,}"))
         if tokens > 0:
             opts.append(Option(
@@ -1365,10 +1368,23 @@ def _forge_scene(p: dict) -> Scene:
     # 031 §14: the Forge is a card wall now — no prose above the racks.
     # Everything the body lines used to say lives in the hints and the
     # [i] tips; `lines` is built and dropped so _rack stays one shape.
+    # 048: one folded legend survives — the cards' words, in plain
+    # English, for anyone who never played a game with a stat line.
+    legend = [
+        "▣ what the cards say — in plain words",
+        "• cost — the gold you hand over once, at the counter.",
+        "• attack / defense — attack is how hard you hit; "
+        "defense is how much of a blow you shrug off.",
+        "• durability — how many hits a piece can take before it "
+        "breaks. Bring it back here and the smith repairs it.",
+        "• speed — boots only: how much earlier you strike.",
+        "▣.",
+    ]
     return Scene(
         eyebrow="ROOTHOLLOW · THE FORGE",
         headline=f"Tier {tier} steel, scrap to plasma",
         shard_note=nod,
+        body_lines=legend,
         options=opts,
         grid=True,
         meters=combat.meters(p),

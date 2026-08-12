@@ -308,6 +308,41 @@ function showScene(d) {
   if (window.__laScene) window.__laScene(d, game);
   // 027: the pack popup, the card's input box and the rail count-up
   if (window.__laWire) window.__laWire(game);
+  if (WEB) armHistory();    // browser back = the card's own back door
+}
+/* ── browser back walks the game home (WEB only) ────────────────────
+   Every card that carries a back-style row arms one history entry and
+   names itself in the address bar (#roothollow-the-square). Pressing
+   the browser's back pops that guard and acts the row — deeper cards
+   walk home door by door. Cards with no back row (the square, a
+   fight) leave the button to the browser: nothing is fled by
+   accident, and a second press leaves the site. Inside the Luna
+   iframe (!WEB) the shell owns the history — hands off. */
+const BACK_IDS = ['back', 'dr_back', 'gdir_back', 'guild_leave', 'town'];
+let armed = false;
+function backOpt() {
+  const b = [...game.querySelectorAll('button.opt')]
+    .find(x => BACK_IDS.indexOf(x.dataset.opt) !== -1);
+  return b ? b.dataset.opt : '';
+}
+function armHistory() {
+  const label = ((game.querySelector('.eyebrow') || {}).textContent || '')
+    .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  const url = label ? '#' + label : location.pathname + location.search;
+  if (backOpt()) {
+    if (armed) history.replaceState({laGuard: 1}, '', url);
+    else { history.pushState({laGuard: 1}, '', url); armed = true; }
+  } else {
+    history.replaceState(armed ? {laGuard: 1} : {laBase: 1}, '', url);
+  }
+}
+if (WEB) {
+  history.replaceState({laBase: 1}, '', location.href);
+  window.addEventListener('popstate', () => {
+    armed = false;                     // the guard entry was consumed
+    const opt = backOpt();
+    if (opt && !loading) window.__laAct(opt);   // showScene re-arms
+  });
 }
 /* 027: one door for everything that isn't a menu row — the pack popup's
    actions and the card's own text/number box. */

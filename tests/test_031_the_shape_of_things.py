@@ -42,10 +42,13 @@ def create_character(p, race="elf", clazz="archer", name="Testa"):
 # ── §14: the Forge card wall ─────────────────────────────────────────────
 
 def test_forge_scene_is_a_grid_with_no_prose():
+    # 048: one exception — the folded plain-words legend; folded shut,
+    # it costs the wall no prose
     p = create_character(fresh("wall"))
     s = choose(p, "forge")
     assert s.grid
-    assert s.body_lines == [] and s.support == ""
+    assert s.support == ""
+    assert s.body_lines[0].startswith("▣ ") and s.body_lines[-1] == "▣."
 
 
 def test_forge_renders_cards_for_gear_and_rows_for_the_bench():

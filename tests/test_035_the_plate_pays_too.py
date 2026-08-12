@@ -119,12 +119,19 @@ def test_a_fresh_jerkin_lasts_days_not_a_week():
 # ── in the fight ────────────────────────────────────────────────────────
 
 def test_taking_a_blow_spends_more_than_one_point_of_plate():
+    # 048: rolls are day-seeded — a single blow can land soft and bill
+    # the flat floor of one. Take a run of blows: damage-priced wear
+    # must beat the old flat point per blow over the run.
     p, fl = _armed("plated", shield="scrapwood_buckler",
                    armor="padded_jerkin")
     p["encounter"]["range"] = "close"
     before = p["durability"]["armor"]
-    combat.resolve_fight_action(p, fl, "stand")
-    assert before - p["durability"]["armor"] >= 2
+    blows = 8
+    for _ in range(blows):
+        p["encounter"]["hp"] = 10 ** 6           # the boar stays up
+        p["hp"] = state.max_hp(p)                # so do we
+        combat.resolve_fight_action(p, fl, "stand")
+    assert before - p["durability"]["armor"] > blows
 
 
 def test_plate_worn_by_the_blow_not_by_the_round():

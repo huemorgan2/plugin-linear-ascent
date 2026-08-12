@@ -252,16 +252,16 @@ _PAINT_DEF = re.compile(r"\+(?P<n>\d+)\s?DEF\b")
 
 
 def _stat_gain(n: int, key: str, tint: str) -> str:
-    """A gear gain wears its stat, not the coin's gold: +3 ATK is three
-    orange daggers, +2 DEF two dim shields — same glyphs and tints as
-    the profile pip rows. Past eight the count would smear, so it
-    collapses to the number and one glyph (+56⚔)."""
+    """A gear gain wears its stat, not the coin's gold: the number and
+    ONE glyph (+5⚔), same tints as the profile pip rows. Never a pip
+    per point — a rack of near rungs must read as numbers, at a
+    glance."""
     url = icons.icon_data_url(key)
     pip = (f'<span class="gpip" style="background-color:{tint};'
            f"-webkit-mask-image:url('{url}');"
            f"mask-image:url('{url}');\"></span>")
-    body = f"+{n:,}{pip}" if n > 8 else "+" + pip * n
-    return f'<span class="amt" style="color:{tint}">{body}</span>'
+    return (f'<span class="amt" style="color:{tint}">'
+            f"+{n:,}{pip}</span>")
 
 
 def _paint_amounts(s: str) -> str:
@@ -1000,7 +1000,7 @@ def _slot_cell(it: dict) -> str:
         # 045: name the number when the scene ships it (older servers
         # send only the fraction — keep the % fallback for the skew).
         left, total = it.get("dur_left"), it.get("dur_max")
-        wear = (f"END {left:,}/{total:,}" if left is not None
+        wear = (f"durability {left:,}/{total:,}" if left is not None
                 and total else f"{pct}%")
         tip = (f"{tip} · " if tip else "") + (
             "broken — half strength until the Forge repairs it"
@@ -1557,11 +1557,18 @@ def render_scene_fragment(scene: Scene) -> str:
             info = (f'<span class="info" tabindex="0" role="note" '
                     f'data-tip="{_e(tip)}">i</span>' if tip else "")
             if grid_mode and gicon:
+                # the card stacks its facts — cost, stat, durability
+                # each on its own line (the button is a column flex,
+                # so every span is a line of its own)
+                stack = ("".join(
+                    f'<span class="hint">{_ep(part)}</span>'
+                    for part in o.hint.split(" · ") if part)
+                    if o.hint else "")
                 card = (f'<button type="button" class="opt gcard{opt_cls}" '
                         f'data-opt="{_e(o.id)}">'
                         f'<span class="key{key_cls}">{i}</span>{gicon}'
                         f'<span class="lbl">{_ep(o.label)}</span>{badge}'
-                        f"{hint}</button>")
+                        f"{stack}</button>")
                 cards.append(f'<div class="gcell">{card}{info}</div>')
                 continue
             btn = (f'<button type="button" class="opt{opt_cls}" '
@@ -1880,17 +1887,19 @@ SCENE_CSS = f"""
 .orow{{display:flex;align-items:stretch;gap:5px;}}
 .orow .opt{{flex:1;min-width:0;}}
 /* ── 031 §14: the card wall — a shop shelf you look at, not read ── */
-.ggrid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));
+.ggrid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));
  gap:6px;margin-bottom:6px;}}
 .gcell{{position:relative;display:flex;}}
 .gcard{{flex-direction:column;align-items:center;justify-content:flex-start;
- gap:6px;padding:22px 1ch 10px;text-align:center;position:relative;}}
+ gap:6px;padding:22px 1ch 12px;text-align:center;position:relative;}}
 .gcard .key{{position:absolute;top:5px;left:7px;}}
 .gcard .gicon{{width:56px;height:56px;background-color:{TEXT};}}
 .gcard:hover .gicon{{background-color:{GOLD};}}
 .gcard.locked .gicon,.gcard.locked:hover .gicon{{background-color:{FAINT};}}
 .gcard .lbl{{font-weight:700;line-height:1.3;}}
-.gcard .hint{{margin-left:0;text-align:center;color:{DIM};}}
+.gcard .hint{{margin-left:0;text-align:center;color:{DIM};
+ display:block;white-space:nowrap;}}
+.gcard .hint+.hint{{margin-top:-3px;}}
 .gcard.locked .hint{{color:{FAINT};}}
 .gpip{{display:inline-block;width:11px;height:11px;margin:0 1px;
  vertical-align:-1px;mask-size:contain;-webkit-mask-size:contain;

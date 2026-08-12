@@ -160,7 +160,7 @@ def test_forge_cards_show_def_and_end():
     gear_hints = [o.hint for o in s.options
                   if o.id.startswith("buy_") and "DEF" in (o.hint or "")]
     assert gear_hints, "no guard rows on the rack"
-    assert all("END" in h for h in gear_hints), gear_hints
+    assert all("durability" in h for h in gear_hints), gear_hints
     repair_free = [o for o in s.options if o.id.startswith("repair_")]
     assert repair_free == []                         # fresh gear: no rows
 
