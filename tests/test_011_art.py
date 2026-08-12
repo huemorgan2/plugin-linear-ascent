@@ -54,6 +54,30 @@ def test_every_warden_has_art():
     assert not missing, f"wardens without art: {missing}"
 
 
+# ── 049/055: floor 1 promises the full reel matrix ───────────────────────
+# The first floor is the game's handshake: every creature has its
+# closeup banner and a typed kill reel for every race × weapon line.
+# A hole here silently falls back to the untyped reel — a content bug.
+
+def test_floor1_has_every_typed_reel():
+    events = {f for f in os.listdir(os.path.join(ART, "events"))
+              if f.endswith(".gif")}
+    closeups = _creature_slugs()
+    floor1 = schema.load_floors()[1]
+    beats = [(e.id, combat._BREED_FX_VERB[e.kind])
+             for e in floor1.encounters] + [("warden_001", "evicted")]
+    missing = []
+    for slug, verb in beats:
+        if slug not in closeups:
+            missing.append(f"creatures/{slug}")
+        for race in economy.RACES:
+            for line in combat._LINE_OF_DTYPE.values():
+                g = f"{slug}_{verb}_{race}_{line}_320x112.gif"
+                if g not in events:
+                    missing.append(f"events/{g}")
+    assert not missing, f"floor 1 art holes: {missing}"
+
+
 # ── specimen variants retint the shared art ──────────────────────────────
 
 def _fight_scene_with_specimen(specimen: str):
