@@ -394,12 +394,18 @@ _HIT_HP = re.compile(r"[−-]\d+ HP|(?<=answers for )[1-9][\d,]*")
 _HIT_DMG = re.compile(
     r"[1-9]\d* damage|(?<=takes it for )[1-9]\d*"
     r"|(?<=counter takes )[1-9]\d*|(?<=blow lands for )[1-9][\d,]*")
+# 053: a fumbled swing must not read like a hit — the whole miss
+# sentence (through the School pointer) wears ember.
+_HIT_MISS = re.compile(r"ATTACK MISSED — .*?Improve at the School\.")
 
 
 def _combat_html(line: str) -> str:
     # 042: the classes are the sound layer's ears — chp is HP lost,
     # chit damage dealt. Purely semantic; the color still paints.
     s = _e(line)
+    s = _HIT_MISS.sub(
+        lambda m: f'<span class="cmiss" style="color:{ORANGE}">'
+                  f"{m.group(0)}</span>", s)
     s = _HIT_HP.sub(
         lambda m: f'<span class="chp" style="color:{RED}">'
                   f"{m.group(0)}</span>", s)

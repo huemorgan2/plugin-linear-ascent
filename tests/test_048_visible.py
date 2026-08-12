@@ -210,7 +210,9 @@ def test_miss_line_names_the_rank(monkeypatch):
     monkeypatch.setattr(state, "rng_int", lambda p, lo, hi: hi)
     s = core.apply_choice(p, "attack", "")
     text = _scene_text(s)
-    assert "Rank-1" in text
+    # 053: the fumble leads with its name and still points at the lever
+    assert "ATTACK MISSED" in text
+    assert "rank-1" in text
     assert "School" in text
 
 

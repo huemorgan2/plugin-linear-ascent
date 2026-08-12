@@ -2388,8 +2388,10 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
     rank = _train_rank(p)
     miss = economy.TRAIN_MISS_PCT(rank) / 100
     if miss > 0 and state.roll_ok(p, miss):
-        wide = (f"Rank-{rank} hands — your {weapon_name(p)} swings "
-                "wide. The School trains this away.")
+        # 053: the fumble names itself loud — the renderer paints the
+        # whole line ember so a missed swing is never read as a hit.
+        wide = (f"ATTACK MISSED — your {weapon_name(p)} swings wide "
+                f"(rank-{rank} hands). Improve at the School.")
         if unreachable:
             chase = _advance_chase(p)
             return fight_scene(p, floor, note=(

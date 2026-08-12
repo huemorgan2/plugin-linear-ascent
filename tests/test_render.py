@@ -65,6 +65,20 @@ def test_combat_numbers_are_colored():
                                       "0 damage.")
 
 
+def test_missed_swing_is_painted_ember():
+    # 053: the whole miss sentence — through the School pointer — wears
+    # orange; the counter that follows still colors on its own.
+    from plugin_linear_ascent.render import ORANGE, RED, _combat_html
+    line = ("ATTACK MISSED — your Rusted Sword swings wide (rank-1 "
+            "hands). Improve at the School. The Grey wolf makes you "
+            "pay for the fumble — −5 HP.")
+    html = _combat_html(line)
+    assert (f'<span class="cmiss" style="color:{ORANGE}">ATTACK MISSED'
+            in html)
+    assert "Improve at the School.</span>" in html
+    assert f'color:{RED}">−5 HP' in html
+
+
 def test_death_card_has_no_stripe():
     # 031 §1: the left stripe is retired everywhere — the death card
     # speaks through its banner, not a colored edge
