@@ -104,24 +104,34 @@ def test_enemy_head_is_one_hp_atk_def_line():
     assert enemy.count('class="echip"') == 1
 
 
-# ── Phase 2: the armour-keyed portrait ──────────────────────────────────
+# ── Phase 2 (rewritten by 052): the race-keyed portrait ─────────────────
+# The chosen character is the face — one portrait per line, armor never
+# touches it. The giant's frame is 140x260 (1.3x), so his size rides
+# the PNG's own aspect on every surface.
 
-def _scene_with_armor(slug):
-    inv = ([{"slug": slug, "kind": "armor", "equipped": True}]
-           if slug else [])
-    return Scene(eyebrow="E", headline="H", inventory=inv)
+def _scene_with_race(race):
+    return Scene(eyebrow="E", headline="H",
+                 meters=Meters(10, 10, 5, 24, 0, 100, 0, race=race))
 
 
-def test_portrait_slug_buckets():
-    assert render._portrait_slug(_scene_with_armor(None)) == "rags"
-    buckets = {(1, 2): "leather", (3, 4): "chain", (5, 6): "scale",
-               (7, 8): "plate", (9, 10): "aegis"}
-    armors = [g for g in economy.FORGE.values() if g.slot == "armor"]
-    assert armors
-    for g in armors:
-        want = next((b for (lo, hi), b in buckets.items()
-                     if lo <= g.tier <= hi), "rags")
-        assert render._portrait_slug(_scene_with_armor(g.slug)) == want, g.slug
+def test_portrait_is_the_chosen_character():
+    for race in ("human", "elf", "giant"):
+        assert render._portrait_slug(_scene_with_race(race)) == race
+    # docs older than the race question wear the warrior frame
+    assert render._portrait_slug(_scene_with_race("")) == "human"
+    assert render._portrait_slug(_scene_with_race("halfling")) == "human"
+
+
+def test_giant_frame_is_a_third_taller():
+    for race, (w, h) in (("human", (100, 200)), ("elf", (100, 200)),
+                         ("giant", (140, 260))):
+        art = render._portrait_art(race)
+        assert art and art[1:] == (w, h), race
+
+
+def test_armor_tier_wardrobe_is_gone():
+    for tier in ("rags", "leather", "chain", "scale", "plate", "aegis"):
+        assert render._portrait_data_url(tier) is None, tier
 
 
 def test_portrait_missing_art_degrades_to_bare_rail():

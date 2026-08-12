@@ -159,7 +159,7 @@ def player_atk(level: int, weapon_bonus: int) -> int:
 def player_def(level: int, shield_bonus: int, armor_bonus: int,
                race: str = "") -> int:
     armor = armor_bonus
-    if race == "dwarf":
+    if race == "giant":
         armor = round(armor * 1.05)
     return round(2 * pillar(min(level, LEVEL_CAP))) + shield_bonus + armor
 
@@ -2487,11 +2487,13 @@ def flare_answer_gold(floor: int) -> int:
 # ── Races & classes ──────────────────────────────────────────────────────
 
 # 009: three lines climb the Ascent — the halfling listing is retired
-# (doc v4 re-registers existing halflings as human).
+# (doc v4 re-registers existing halflings as human). 052: the dwarf
+# line is re-carved GIANT (doc v10) — same Stubborn perk, a frame two
+# heads taller; the fusion-halls stay theirs.
 RACES = {
     "human": "Adaptable: +1 energy cap. Port-town survivors.",
     "elf": "Keen: +5% experience from kills. Their bio-lit forest is floor 23.",
-    "dwarf": "Stubborn: +5% armor value. The fusion-halls are floors 11-20.",
+    "giant": "Stubborn: +5% armor value. The fusion-halls are floors 11-20.",
 }
 
 # 046: last — the milestone stats read the whole model above.

@@ -498,12 +498,32 @@ def _ask_html(ask: dict) -> str:
 
 
 # ── 027: picture tiles — a banner is a sigil, not a filename ────────────
+# 052: a portrait_* slug turns the tile into a character card — the
+# figure stands full-height on a shared ground line, the name under the
+# picture; the giant's 1.3x frame makes him tower without special cases.
+
+_CHAR_PIC_H = 180  # a 100x200 figure's card height; taller frames scale
+
+
 def _gallery_html(gallery: list[dict]) -> str:
     tiles = []
+    chars = False
     for g in gallery:
         slug = str(g.get("slug", ""))
-        art = _banner_data_url(slug) if slug else None
-        if art:
+        if slug.startswith("portrait_"):
+            art = _portrait_art(slug[len("portrait_"):])
+            chars = True
+        else:
+            art = _banner_data_url(slug) if slug else None
+        if art and slug.startswith("portrait_"):
+            url, w, h = art
+            pic = (f'<span class="gbox"><span class="gpic pchar" '
+                   f'style="background-color:{AETHER};'
+                   f"aspect-ratio:{w}/{h};"
+                   f"height:{round(_CHAR_PIC_H * h / 200)}px;"
+                   f"-webkit-mask-image:url('{url}');"
+                   f"mask-image:url('{url}');\"></span></span>")
+        elif art:
             url, w, h = art
             pic = (f'<span class="gpic" style="background-color:{AETHER};'
                    f"aspect-ratio:{w}/{h};"
@@ -520,23 +540,20 @@ def _gallery_html(gallery: list[dict]) -> str:
             f"{sub}</button>")
     if not tiles:
         return ""
-    return f'<div class="gal later">{"".join(tiles)}</div>'
+    cls = "gal chars later" if chars else "gal later"
+    return f'<div class="{cls}">{"".join(tiles)}</div>'
 
 
 # ── 042: the presence grid — who else stands in this room ───────────────
-# Seven faces to a row, the same derived portraits the profile rail
-# wears (armor tier + race, never stored art). A sleeping climber wears
-# a Zzz chip; hover carries coin and energy; every face is a door to
-# that climber's page (data-opt="pv:<name>").
+# Seven faces to a row, the same race portraits the profile rail wears
+# (052: the chosen character is the face — armor never touches it). A
+# sleeping climber wears a Zzz chip; hover carries coin and energy;
+# every face is a door to that climber's page (data-opt="pv:<name>").
 
-def _tile_portrait_url(race: str, armor: str) -> str | None:
-    slug = armor if armor in ("rags", "leather", "chain", "scale",
-                              "plate", "aegis") else "rags"
-    if race:
-        url = _portrait_data_url(f"{race}_{slug}")
-        if url:
-            return url
-    return _portrait_data_url(slug)
+def _tile_portrait_url(race: str) -> str | None:
+    if race and _portrait_art(race):
+        return _portrait_data_url(race)
+    return _portrait_data_url("human")
 
 
 def _players_here_html(scene: Scene) -> str:
@@ -549,9 +566,10 @@ def _players_here_html(scene: Scene) -> str:
         if not isinstance(t, dict) or not t.get("name"):
             continue
         name = str(t["name"])
-        url = _tile_portrait_url(str(t.get("race") or ""),
-                                 str(t.get("armor") or ""))
-        face = (f'<img class="pface" src="{url}" alt="">' if url
+        race = str(t.get("race") or "")
+        url = _tile_portrait_url(race)
+        giant = " giant" if race == "giant" else ""
+        face = (f'<img class="pface{giant}" src="{url}" alt="">' if url
                 else '<span class="pface none"></span>')
         zzz = ('<span class="pzzz">Zzz</span>'
                if t.get("sleeping") else "")
@@ -659,9 +677,6 @@ def _ident_html(m: Meters) -> str:
 # in the icon house style), the numeral always beside them. Missing art
 # or an older engine (no atk on the wire) degrades to the bare rail.
 
-_PORTRAIT_TIERS = ((9, "aegis"), (7, "plate"), (5, "scale"),
-                   (3, "chain"), (1, "leather"))
-
 _TIP_ATK = ("ATK — your total attack: class base plus weapon and honing. "
             "Every 3 points fills half a sword.")
 _TIP_DEF = ("DEF — your total defense: shield, armor and honing. "
@@ -671,35 +686,34 @@ _TIP_SPD = ("SPD — your speed: class base plus footwear. Decides dodges, "
 
 
 def _portrait_slug(scene: Scene) -> str:
-    """rags → leather → chain → scale → plate → aegis, resolved from the
-    equipped armour on the pack strip — the renderer never opens the
-    player doc, it reads the scene it was handed. A race that has its
-    own wardrobe (portrait_elf_*_100x200.png) wears it; anyone else
-    keeps the shared human set."""
-    tier = 0
-    for cell in scene.inventory or []:
-        if cell.get("kind") == "armor" and cell.get("equipped"):
-            g = economy.FORGE.get(cell.get("slug", ""))
-            tier = g.tier if g else 0
-            break
-    slug = "rags"
-    for floor_t, s in _PORTRAIT_TIERS:
-        if tier >= floor_t:
-            slug = s
-            break
+    """052: the chosen character IS the face — warrior, elf or giant,
+    one portrait per line, the armor-tier wardrobe is gone (the pack
+    grid and the DEF pips carry the progression now). Docs older than
+    the race question wear the warrior frame."""
     race = getattr(scene.meters, "race", "") or ""
-    if race and _portrait_data_url(f"{race}_{slug}"):
-        return f"{race}_{slug}"
-    return slug
+    if race and _portrait_art(race):
+        return race
+    return "human"
+
+
+# the giant's frame is 1.3x the human one — his size is baked into the
+# PNG's aspect, so every natural-ratio surface draws him bigger.
+_PORTRAIT_SIZES = ((100, 200), (140, 260))
 
 
 @lru_cache(maxsize=None)
-def _portrait_data_url(slug: str) -> str | None:
-    path = os.path.join(_PORTRAITS, f"portrait_{slug}_100x200.png")
-    if os.path.exists(path):
-        b64 = base64.b64encode(open(path, "rb").read()).decode()
-        return f"data:image/png;base64,{b64}"
+def _portrait_art(slug: str) -> tuple[str, int, int] | None:
+    for w, h in _PORTRAIT_SIZES:
+        path = os.path.join(_PORTRAITS, f"portrait_{slug}_{w}x{h}.png")
+        if os.path.exists(path):
+            b64 = base64.b64encode(open(path, "rb").read()).decode()
+            return f"data:image/png;base64,{b64}", w, h
     return None
+
+
+def _portrait_data_url(slug: str) -> str | None:
+    art = _portrait_art(slug)
+    return art[0] if art else None
 
 
 def _pip_row(key: str, label: str, stat: int, tint: str, tip: str,
@@ -1552,8 +1566,15 @@ def render_scene_fragment(scene: Scene) -> str:
         # runs across both in scene.options order, so the typed-number
         # fallback never notices the layout.
         grid_mode = bool(getattr(scene, "grid", False))
+        # 052: an option the gallery already shows as a picture tile
+        # never repeats as a row — the card IS the button. Numbering
+        # stays on scene.options order so typed numbers keep working.
+        gal_opts = {str(g.get("opt", "")) for g in
+                    (getattr(scene, "gallery", None) or [])}
         rows, cards = [], []
         for i, o in enumerate(scene.options, 1):
+            if o.id in gal_opts:
+                continue
             key_cls = " aether" if o.aether else ""
             # 019: a locked row is dimmed but stays a button — clicking
             # it is how the player asks why the gate is shut.
@@ -1781,6 +1802,17 @@ SCENE_CSS = f"""
 .gtile:hover .gpic{{background-color:{TEXT};}}
 .gtile .glab{{color:{TEXT};}}
 .gtile .gsub{{color:{FAINT};font-size:12px;}}
+/* ── 052: character cards — three climbers on one ground line ── */
+.gal.chars{{grid-template-columns:repeat(3,1fr);}}
+.gal.chars .gtile{{align-items:center;text-align:center;
+ padding:12px 6px 10px;}}
+.gal.chars .gbox{{flex:1;display:flex;align-items:flex-end;
+ justify-content:center;width:100%;}}
+.gal.chars .gpic.pchar{{display:block;width:auto;
+ mask-size:100% 100%;-webkit-mask-size:100% 100%;mask-repeat:no-repeat;
+ -webkit-mask-repeat:no-repeat;image-rendering:pixelated;}}
+.gal.chars .glab{{font-weight:700;letter-spacing:.08em;margin-top:6px;}}
+.gal.chars .gsub{{min-height:3.2em;}}
 /* ── 042: the presence grid — seven faces to a row ── */
 .phere{{margin:12px 0 0;}}
 .phere .phead{{color:{FAINT};text-transform:uppercase;
@@ -1792,9 +1824,11 @@ SCENE_CSS = f"""
  min-width:0;}}
 .ptile:hover:not(:disabled){{border-color:{AETHER};}}
 .ptile:focus-visible{{outline:1px solid {AETHER};outline-offset:1px;}}
-.ptile .pfbox{{position:relative;display:block;height:56px;}}
+.ptile .pfbox{{position:relative;display:flex;height:72px;
+ align-items:flex-end;}}
 .ptile .pface{{display:block;height:56px;width:auto;
  image-rendering:pixelated;}}
+.ptile .pface.giant{{height:72px;}}
 .ptile .pface.none{{display:block;height:56px;width:28px;
  background:{BORDER};}}
 .ptile .pzzz{{position:absolute;top:-2px;right:-14px;background:{INK};

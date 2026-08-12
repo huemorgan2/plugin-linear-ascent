@@ -170,6 +170,9 @@ def test_rendered_text_is_class_free():
     p["location"] = "forge"
     texts.append(_scene_text(core.current_scene(p)))
     joined = " ".join(texts)
+    # 052: the human line's card at the gate is labeled WARRIOR — the
+    # one sanctioned use of the word; it names a climber, not a class.
+    joined = joined.replace("WARRIOR", "")
     m = words.search(joined)
     assert not m, f"class word in rendered text: {m.group()!r}"
 

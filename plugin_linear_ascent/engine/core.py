@@ -849,6 +849,11 @@ def _intro_scene(p: dict) -> Scene:
     )
 
 
+# 052: the pick is three portrait cards on one ground line — the face
+# chosen here is the face the whole game wears from then on.
+_RACE_CARDS = {"human": "WARRIOR", "elf": "ELF", "giant": "GIANT"}
+
+
 def _creation_race_scene(p: dict) -> Scene:
     return Scene(
         eyebrow="THE TOWER GATE · FIRST LIGHT",
@@ -856,14 +861,22 @@ def _creation_race_scene(p: dict) -> Scene:
         support="Every climber is bonded to a shardmind. Yours just woke up.",
         shard_note="I remember this gate when it was a mountain. Tell me "
                    "what you are, refugee.",
-        body_lines=["The registrar's slate wants your line first."],
-        options=[Option(r, r.capitalize(), economy.RACES[r].split(":")[0])
+        body_lines=["The registrar's slate wants your line first — "
+                    "pick your climber."],
+        options=[Option(r, _RACE_CARDS.get(r, r.capitalize()),
+                        economy.RACES[r].split(":")[0])
+                 for r in economy.RACES],
+        gallery=[{"opt": r, "slug": f"portrait_{r}",
+                  "label": _RACE_CARDS.get(r, r.capitalize()),
+                  "sub": economy.RACES[r].split(".")[0]}
                  for r in economy.RACES],
         banner="gate",
     )
 
 
 def _creation_pick_race(p: dict, oid: str) -> Scene:
+    if oid not in economy.RACES:
+        return _creation_race_scene(p)
     p["race"] = oid
     return _creation_finish_race(p)
 

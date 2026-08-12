@@ -312,7 +312,7 @@ _RACE_ANGLE = {
               "is one more hunt, strike or ambush every single day."),
     "elf": ("+5% XP from kills. Levels come faster, and levels are "
             "gear, floors and power — the compounding pick."),
-    "dwarf": ("+5% armor value. Hits land softer, the healer is paid "
+    "giant": ("+5% armor value. Hits land softer, the healer is paid "
               "less, and hunting runs stretch longer per coin."),
 }
 for _r, _t in _RACE_ANGLE.items():

@@ -37,7 +37,7 @@ def world_day_f(at: dt.datetime | None = None) -> float:
 def new_player(luna_user: str) -> dict:
     ts = now().isoformat()
     return {
-        "version": 9,
+        "version": 10,
         "luna_user": luna_user,
         "stage": "intro",              # intro → creation_race → creation_name → playing
         "name": None, "race": None,
@@ -303,7 +303,7 @@ def ensure_current(p: dict) -> None:
                     eyebrow="ROOTHOLLOW · A LETTER FROM THE REGISTRAR",
                     headline="The Stone re-registers your line",
                     support="The registrar's slate was recut: three lines "
-                            "climb the Ascent — human, elf, dwarf. Yours "
+                            "climb the Ascent — human, elf, giant. Yours "
                             "now reads HUMAN.",
                     shard_note="The registry changed, not you. Your name "
                                "on the Stone stands exactly as carved.",
@@ -472,6 +472,33 @@ def ensure_current(p: dict) -> None:
         if _old in stash:
             stash[_new] = stash.pop(_old)
         p["version"] = 9
+    if p.get("version", 1) < 10:
+        # 052: the dwarf line is re-carved GIANT — same Stubborn +5%
+        # armor, a frame two heads taller. The perk never moves, so the
+        # rename is mechanical; the registrar sends the same kind of
+        # letter the halflings got in v4.
+        if p.get("race") == "dwarf":
+            p["race"] = "giant"
+            if p.get("stage") == "playing":
+                from .scene import Option, Scene
+                p.setdefault("pending_events", []).insert(0, Scene(
+                    eyebrow="ROOTHOLLOW · A LETTER FROM THE REGISTRAR",
+                    headline="The Stone re-carves your line",
+                    support="The registrar's slate was recut: the line "
+                            "that held the fusion-halls is written at "
+                            "its true height. Yours now reads GIANT.",
+                    shard_note="Same stubborn hide, same +5% armor — "
+                               "the slate finally admits how tall you "
+                               "stand. Your name is untouched.",
+                    body_lines=[
+                        "▪ your line on the slate: GIANT — stubborn, "
+                        "+5% armor value, unchanged",
+                    ],
+                    options=[Option("town",
+                                    "Fold the letter and climb on")],
+                    event_kind="present",
+                ).to_dict())
+        p["version"] = 10
     # 048 phase 3: carry slots + held list, self-healing on every load —
     # held[0] mirrors the hand, length never exceeds slots, and paid
     # overflow returns to the pack instead of vanishing.

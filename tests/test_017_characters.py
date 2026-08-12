@@ -1,6 +1,7 @@
 """017 phase 009 — races, doc v4 migration, typed kill FX.
 
-The canon cast is three races (human, elf, dwarf); existing halfling
+The canon cast is three races (human, elf, giant — the dwarf line was
+re-carved GIANT in 052, doc v10); existing halfling
 docs are re-registered human with an in-world letter, and the racial
 luck bonus retires while luck DAYS and CHARMS keep working. Victory
 scenes pick a kill GIF by the landing damage type.
@@ -41,13 +42,20 @@ def create_character(p, race="human", clazz="warrior", name="Testa"):
 # ── creation: exactly three races ────────────────────────────────────────
 
 def test_creation_menu_has_exactly_three_races():
-    assert list(economy.RACES) == ["human", "elf", "dwarf"]
+    assert list(economy.RACES) == ["human", "elf", "giant"]
     p = fresh("three-races")
     core.current_scene(p)
     while p["stage"] == "intro":
         choose(p, "1")
     scene = core.current_scene(p)
-    assert [o.id for o in scene.options] == ["human", "elf", "dwarf"]
+    assert [o.id for o in scene.options] == ["human", "elf", "giant"]
+    # 052: the pick is three portrait cards — every option rides the
+    # gallery too, portrait slug + the type name under the picture
+    assert [g["opt"] for g in scene.gallery] == ["human", "elf", "giant"]
+    assert [g["slug"] for g in scene.gallery] == [
+        "portrait_human", "portrait_elf", "portrait_giant"]
+    assert [g["label"] for g in scene.gallery] == [
+        "WARRIOR", "ELF", "GIANT"]
 
 
 def test_halfling_is_not_choosable_at_the_gate():
@@ -61,7 +69,7 @@ def test_halfling_is_not_choosable_at_the_gate():
 
 
 def test_new_docs_are_current():
-    assert fresh()["version"] == 9        # 049.1: the dagger says dagger
+    assert fresh()["version"] == 10       # 052: the dwarf line reads GIANT
 
 
 # ── doc v4 migration: halfling → human ───────────────────────────────────
@@ -92,7 +100,7 @@ def test_halfling_docs_wake_human_with_a_letter(clazz):
 
 
 def test_other_races_migrate_without_a_letter():
-    for race in ("human", "elf", "dwarf"):
+    for race in ("human", "elf", "giant"):
         p = create_character(fresh(f"v3-{race}"), race=race)
         p["version"] = 3
         p.pop("pending_events", None)
@@ -102,6 +110,33 @@ def test_other_races_migrate_without_a_letter():
         # only 049's one-time gate-steel note may appear
         assert all("Gate steel" in (e.get("headline") or "")
                    for e in p.get("pending_events") or [])
+
+
+# ── doc v10 migration (052): dwarf → giant ─────────────────────────────────────
+
+def test_dwarf_docs_wake_giant_with_a_letter():
+    p = create_character(fresh("v9-dwarf"), race="human")
+    p["race"] = "dwarf"            # pre-052 doc
+    p["version"] = 9
+    p.pop("pending_events", None)
+    state.ensure_current(p)
+    assert p["version"] >= 10
+    assert p["race"] == "giant"
+    ev = p["pending_events"][0]
+    assert "registrar" in ev["eyebrow"].lower()
+    assert "GIANT" in " ".join(ev["body_lines"])
+    # idempotent: running again neither re-carves nor re-letters
+    state.ensure_current(p)
+    letters = [e for e in p["pending_events"]
+               if "re-carves" in (e.get("headline") or "")]
+    assert len(letters) == 1
+
+
+def test_migrated_giant_keeps_the_armor_perk():
+    assert economy.player_def(5, 0, 100, race="giant") \
+        == economy.player_def(5, 0, 105)
+    assert economy.player_def(5, 0, 100, race="dwarf") \
+        == economy.player_def(5, 0, 100)   # the old key is dead
 
 
 def test_mid_creation_halfling_migrates_quietly():
