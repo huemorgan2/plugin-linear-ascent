@@ -987,6 +987,16 @@ fbBtn.addEventListener('click', () => {
 });
 fbAdminBtn.addEventListener('click', () => {
   if (window.__laSfx) window.__laSfx('click');
+  // on the site the button opens the full admin desk (/admin) in its
+  // own tab — the session cookie is the key; in Luna the pane's inline
+  // postbox desk remains the whole desk. An anchor click, not a popup
+  // call (015): the browser treats it as plain navigation.
+  if (WEB) {
+    const a = document.createElement('a');
+    a.href = '/admin'; a.target = '_blank'; a.rel = 'noopener';
+    document.body.appendChild(a); a.click(); a.remove();
+    return;
+  }
   fbOpen('admin');
 });
 fbLight.addEventListener('click', () => fbLight.classList.remove('open'));
