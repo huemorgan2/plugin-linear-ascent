@@ -146,10 +146,16 @@ def fields_action(p: dict, oid: str) -> Scene:
         return fields_scene(p)
     target = oid.removeprefix("attack_")
     if p["daily"].get("pvp_used", 0) >= economy.PVP_ATTACKS_PER_DAY:
-        return fields_scene(p, note="Two ambushes a day is the custom. "
-                                    "Even bandits have one.")
+        s = fields_scene(p, note="Two ambushes a day is the custom. "
+                                 "Even bandits have one.")
+        s.refusal = (f"Can't attack — {economy.PVP_ATTACKS_PER_DAY} "
+                     "ambushes a day is the limit")
+        return s
     if not state.spend_energy(p, economy.COST_PVP_ATTACK):
-        return fields_scene(p, note="An ambush takes 3 ⚡ you don't have.")
+        s = fields_scene(p, note="An ambush takes 3 ⚡ you don't have.")
+        s.refusal = (f"Can't attack — not enough energy "
+                     f"(⚡ {economy.COST_PVP_ATTACK} needed)")
+        return s
     p["daily"]["pvp_used"] = p["daily"].get("pvp_used", 0) + 1
     _effect(p, "pvp_attack", target_name=target)
     # the host resolves and replaces this scene via doc["_pvp_result"]
@@ -884,14 +890,19 @@ def guild_train(p: dict) -> Scene:
     need = economy.xp_need(p["level"])
     fee = economy.levelup_gold(p["level"])
     if p["xp"] < need:
-        return guildhall_scene(
+        s = guildhall_scene(
             p, note=f"The drillmaster shakes his head: XP "
                     f"{p['xp']:,}/{need:,}. Earn the bar first — "
                     "the tower is the only teacher.")
+        s.refusal = (f"Can't train — the XP bar isn't full "
+                     f"({p['xp']:,}/{need:,})")
+        return s
     if p["gold"] < fee:
-        return guildhall_scene(
+        s = guildhall_scene(
             p, note=f"Training to LEVEL {p['level'] + 1} costs ◈ {fee:,} "
                     f"— you carry ◈ {p['gold']:,}. Come back heavier.")
+        s.refusal = f"Can't train — not enough gold (◈ {fee:,} needed)"
+        return s
     p["gold"] -= fee
     # 034 §2: the bar EMPTIES. Subtracting the need used to carry any
     # surplus into the next level's bar — and worldd's big payouts (a
@@ -1645,7 +1656,10 @@ def boss_action(p: dict, floor, oid: str) -> Scene:
     if oid != "boss_commit":
         return boss_scene(p, floor)
     if not state.spend_energy(p, economy.COST_BOSS_COMMIT):
-        return boss_scene(p, floor, note="A pledge costs 5 ⚡ — rest first.")
+        s = boss_scene(p, floor, note="A pledge costs 5 ⚡ — rest first.")
+        s.refusal = (f"Can't pledge — not enough energy "
+                     f"(⚡ {economy.COST_BOSS_COMMIT} needed)")
+        return s
     _effect(p, "boss_commit", floor=floor.floor)
     return boss_scene(p, floor, note="You drive your blade into the "
                                      "pledge-post.")

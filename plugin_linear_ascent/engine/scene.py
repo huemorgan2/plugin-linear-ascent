@@ -156,6 +156,12 @@ class Scene:
     players_title: str = ""         # 042: heading over the grid — "" hides
                                     # it ("PLAYERS HERE", "THE STRIKERS",
                                     # "THE HONORED FALLEN").
+    refusal: str = ""               # 050: a rule said no — one short line
+                                    # ("Can't buy this — not enough ◈").
+                                    # The pane shows it as the top toast and
+                                    # SKIPS the card swap; the in-card note
+                                    # still rides for older clients. A new
+                                    # TOP-LEVEL key: old clients drop it.
 
     def to_text(self) -> str:
         """Plain-text fallback — always works, cards are enhancement."""
@@ -272,6 +278,7 @@ class Scene:
             "location": self.location,
             "players_here": self.players_here,
             "players_title": self.players_title,
+            "refusal": self.refusal,
         }
 
     @staticmethod
@@ -319,4 +326,5 @@ class Scene:
             location=d.get("location", ""),
             players_here=list(d.get("players_here", [])),
             players_title=d.get("players_title", ""),
+            refusal=d.get("refusal", ""),
         )

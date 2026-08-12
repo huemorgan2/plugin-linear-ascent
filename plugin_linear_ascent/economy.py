@@ -781,10 +781,12 @@ MASTERY_XP = round(train_xp(10) * 1.5)          # 948
 MASTERY_DISCOUNT = 0.8
 MASTERY_DISCOUNT_MAX_RANK = 5
 CARRY2_XP, CARRY2_GOLD = 60, 30                 # 2nd slot — level 1
-# 049.1: no level gate — the price IS the gate. 500 XP + pillar-scaled
-# gold is a real decision at any level; a level-2 hand that saved for
-# it has earned the grip. (048 gated it at level 8; the lock read as a
-# bug next to a buyable slot.)
+# 049.2: the level-8 gate is back — and this time it LOOKS locked.
+# 049.1 removed it because a plain "needs level 8" line next to a
+# buyable row read as a bug; the real fix is a dimmed row that says
+# what opens it, not an open row nobody below level 8 can pay anyway
+# (the XP bar can't hold 500 before then).
+CARRY3_LEVEL = 8
 CARRY3_XP, CARRY3_GOLD_ANCHOR = 500, 200        # 3rd slot
 
 

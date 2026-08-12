@@ -84,10 +84,12 @@ def _pack_strip(p: dict) -> list[dict]:
     # strip must still SHOW them. A bought blade that vanished from
     # every surface read as lost (it wasn't — it was held).
     lead = (p.get("gear") or {}).get("weapon")
+    filled = 1 if lead else 0
     for slug in (p.get("held") or []):
         g = economy.FORGE.get(slug)
         if not g or slug == lead:
             continue
+        filled += 1
         cell = {"slug": slug, "kind": "weapon", "count": 1,
                 "held": True, "name": g.name + " · held"}
         left = (p.get("durability_pack") or {}).get(slug)
@@ -97,6 +99,13 @@ def _pack_strip(p: dict) -> list[dict]:
             cell["dur_left"] = economy.endurance(g, left)
             cell["dur_max"] = economy.endurance(g)
         strip.append(cell)
+    # 049.2: a BOUGHT slot with nothing in it still draws — an empty
+    # square where the next weapon goes. Paying for a slot and seeing
+    # no change on the sheet read as the purchase not happening.
+    for _ in range(max(0, int(p.get("slots", 1)) - filled)):
+        strip.append({"slug": "", "kind": "weapon", "count": 0,
+                      "held": True, "empty_slot": True,
+                      "name": "open weapon slot"})
     pack = p.get("inventory") or {}
     order = sorted(pack.items(),
                    key=lambda kv: (kv[0] not in economy.APOTHECARY, kv[0]))
@@ -361,6 +370,8 @@ def apply_choice(p: dict, option_id: str, text: str = "") -> Scene:
             scene.shard_note = (
                 "That isn't one of the paths in front of us — "
                 "pick one of the numbered rows on the card.")
+            scene.refusal = ("That isn't one of the paths — pick a "
+                             "numbered row on the card")
             return _stamp(p, scene)
     # 042: a face is a door — clicking any avatar opens that climber's
     # page, from any room, any board.
@@ -1281,6 +1292,7 @@ def _relic_buy(p: dict, slug: str, scene_fn) -> Scene:
         s = scene_fn(p)
         s.shard_note = (f"The {r.name} waits behind the counter until "
                         f"floor {r.floor} stands open to you.")
+        s.refusal = f"Can't buy this — it opens at floor {r.floor}"
         return s
     if r.line and r.line not in combat._held_lines(p):
         s = scene_fn(p)
@@ -1288,17 +1300,20 @@ def _relic_buy(p: dict, slug: str, scene_fn) -> Scene:
                 "sorcerer": "staff"}.get(r.line, r.line)
         s.shard_note = (f"The {r.name} answers only to a {word} — "
                         "nothing in your hands can use it.")
+        s.refusal = f"Can't buy this — it answers only to a {word}"
         return s
     if r.hold1 and p["inventory"].get(slug, 0) >= 1:
         s = scene_fn(p)
         s.shard_note = (f"You hold a {r.name} already — its kind "
                         "suffers no company. One, exactly.")
+        s.refusal = "Can't buy this — you already hold one"
         return s
     price = economy.relic_price(slug, p["unlocked_floor"])
     if p["gold"] < price:
         s = scene_fn(p)
         s.shard_note = (f"The {r.name} is ◈ {price:,} and you carry "
                         f"◈ {p['gold']:,}.")
+        s.refusal = f"Can't buy this — not enough gold (◈ {price:,} needed)"
         return s
     p["gold"] -= price
     p["inventory"][slug] = p["inventory"].get(slug, 0) + r.count
@@ -1422,12 +1437,14 @@ def _forge_hone(p: dict, slot: str) -> Scene:
         s = _forge_scene(p)
         s.shard_note = (f"A honing pass costs ◈ {price:,} + {xp_cost} XP; "
                         f"you carry ◈ {p['gold']:,}.")
+        s.refusal = f"Can't hone — not enough gold (◈ {price:,} needed)"
         return s
     if p["xp"] < xp_cost:
         s = _forge_scene(p)
         s.shard_note = (f"The bench takes {xp_cost} XP of what you've "
                         f"learned along with the coin — you carry "
                         f"{p['xp']} XP. Hunt first.")
+        s.refusal = f"Can't hone — not enough XP ({xp_cost} needed)"
         return s
     p["gold"] -= price
     state.spend_xp(p, xp_cost)
@@ -1479,12 +1496,14 @@ def _forge_repair(p: dict, slot: str) -> Scene:
         s = _forge_scene(p)
         s.shard_note = (f"Mending the {g.name} costs ◈ {price:,} + "
                         f"{xp_cost} XP; you carry ◈ {p['gold']:,}.")
+        s.refusal = f"Can't mend — not enough gold (◈ {price:,} needed)"
         return s
     if p["xp"] < xp_cost:
         s = _forge_scene(p)
         s.shard_note = (f"The smith takes {xp_cost} XP of what you've "
                         f"learned along with the coin — you carry "
                         f"{p['xp']} XP. Hunt first.")
+        s.refusal = f"Can't mend — not enough XP ({xp_cost} needed)"
         return s
     p["gold"] -= price
     state.spend_xp(p, xp_cost)
@@ -1507,6 +1526,7 @@ def _gear_purchase(p: dict, g, scene_fn) -> Scene:
         s.shard_note = (f"{g.name} answers to level {req} hands — you are "
                         f"level {p['level']}. The Guildhall trains climbers "
                         "with a full XP bar and the fee in gold.")
+        s.refusal = f"Can't buy this — it needs a level {req} hand"
         return s
     freq = economy.rung_floor_req(g)
     if freq > p["unlocked_floor"]:
@@ -1515,11 +1535,13 @@ def _gear_purchase(p: dict, g, scene_fn) -> Scene:
         s.shard_note = (f"{g.name} is floor-{freq} work — the war has "
                         f"only opened floor {p['unlocked_floor']}. The "
                         "smith won't sell steel the tower hasn't earned.")
+        s.refusal = f"Can't buy this — floor {freq} isn't open yet"
         return s
     if p["gold"] < price:
         s = scene_fn(p)
         s.shard_note = f"{g.name} wants ◈ {price:,}; you carry ◈ {p['gold']:,}. " \
                        "The Vault pays interest for a reason."
+        s.refusal = f"Can't buy this — not enough gold (◈ {price:,} needed)"
         return s
     old = p["gear"].get(g.slot)
     if old == g.slug:
@@ -1638,12 +1660,14 @@ def _basic_buy(p: dict, slug: str, scene_fn) -> Scene:
         s = scene_fn(p)
         s.shard_note = f"You already carry a {g.name} — one is plenty; " \
                        "the Forge mends gate steel for a coin."
+        s.refusal = "Can't buy this — you already carry one"
         return s
     price = economy.BASIC_WEAPON_PRICE
     if p["gold"] < price:
         s = scene_fn(p)
         s.shard_note = (f"{g.name} wants ◈ {price}; you carry "
                         f"◈ {p['gold']:,}.")
+        s.refusal = f"Can't buy this — not enough gold (◈ {price} needed)"
         return s
     p["gold"] -= price
     held = p.setdefault("held", [])
@@ -1685,6 +1709,7 @@ def _forge_buy(p: dict, oid: str) -> Scene:
         s = _forge_scene(p)
         s.shard_note = "The smith shrugs: caster's work. The Arcanum " \
                        "sells the staves and the focuses."
+        s.refusal = "Can't buy this here — the Arcanum sells caster's work"
         return s
     return _gear_purchase(p, g, _forge_scene)
 
@@ -1697,6 +1722,8 @@ def _arcanum_scene(p: dict) -> Scene:
         s = _town_scene(p)
         s.shard_note = (f"The Arcanum wants level {economy.ARCANUM_LEVEL} "
                         "hands. Climb first.")
+        s.refusal = (f"Can't enter — the Arcanum opens at level "
+                     f"{economy.ARCANUM_LEVEL}")
         return s
     opts, lines = [], []
     # 048: star-charts for every hand — the full staff line and the
@@ -1730,6 +1757,7 @@ def _arcanum_buy(p: dict, oid: str) -> Scene:
         s = _arcanum_scene(p)
         s.shard_note = "The shopkeeper tilts her head: steel is the " \
                        "smith's trade. The Forge is across the square."
+        s.refusal = "Can't buy this here — the Forge sells the steel"
         return s
     return _gear_purchase(p, g, _arcanum_scene)
 
@@ -1767,10 +1795,12 @@ def _medlab_buy(p: dict, oid: str) -> Scene:
     if slug == "energy_cell" and daily.get("energy_cell"):
         s = _medlab_scene(p)
         s.shard_note = "One cell a day. Your heart is not a reactor."
+        s.refusal = "Can't buy this — one energy cell a day"
         return s
     if p["gold"] < item.price:
         s = _medlab_scene(p)
         s.shard_note = f"That's ◈ {item.price} and you carry ◈ {p['gold']}."
+        s.refusal = f"Can't buy this — not enough gold (◈ {item.price} needed)"
         return s
     p["gold"] -= item.price
     combat._ledger(p, "buy", gold=-item.price, note=slug)
@@ -1797,10 +1827,13 @@ def _eat_stew(p: dict, scene_fn) -> Scene:
         s = scene_fn(p)
         s.shard_note = (f"The stew costs ◈ {economy.STEW_PRICE} and the pot "
                         "keeper doesn't run tabs.")
+        s.refusal = (f"Can't buy this — not enough gold "
+                     f"(◈ {economy.STEW_PRICE} needed)")
         return s
     if p["hp"] >= state.max_hp(p):
         s = scene_fn(p)
         s.shard_note = "You're whole. Save the coin for when you're not."
+        s.refusal = "No need — you're already at full HP"
         return s
     p["gold"] -= economy.STEW_PRICE
     p["hp"] = min(state.max_hp(p), p["hp"] + economy.STEW_HEAL_HP)
@@ -2017,6 +2050,8 @@ def _lodge_action(p: dict, oid: str) -> Scene:
             s = _lodge_scene(p)
             s.shard_note = (f"A stranger's stew is ◈ "
                             f"{economy.FIRE_STEW_GOLD} you don't carry.")
+            s.refusal = (f"Can't buy this — not enough gold "
+                         f"(◈ {economy.FIRE_STEW_GOLD} needed)")
             return s
         p["gold"] -= economy.FIRE_STEW_GOLD
         from . import social
@@ -2151,6 +2186,8 @@ def _sleep_action(p: dict, oid: str) -> Scene:
             s = _sleep_menu_scene(p)
             s.shard_note = (f"A bunk is ◈ {price} carried coin. The fields "
                             "are free — or the Vault is on the square.")
+            s.refusal = (f"Can't rent a bunk — not enough carried gold "
+                         f"(◈ {price} needed)")
             return s
         p["gold"] -= price
         p["lodged_until_day"] = state.world_day() + 1
@@ -2499,6 +2536,7 @@ def _pawn_donate(p: dict, slug: str) -> Scene:
     if len(w.get("armory") or []) >= int(w.get("armory_cap", 50)):
         s = _pawn_scene(p)
         s.shard_note = "The armory racks are full — nothing fits."
+        s.refusal = "Can't donate — the armory racks are full"
         return s
     from . import social
     p["inventory"][slug] -= 1
@@ -2724,6 +2762,7 @@ def _gate_pick(p: dict, oid: str) -> Scene:
     if n > p["unlocked_floor"] or n > schema.max_content_floor():
         s = _gate_scene(p)
         s.shard_note = f"Floor {n} is still sealed. A Warden holds every lift."
+        s.refusal = f"Can't ride up — floor {n} is still sealed"
         return s
     req = economy.floor_entry_player_level(n)
     if p["level"] < req:
@@ -2731,6 +2770,7 @@ def _gate_pick(p: dict, oid: str) -> Scene:
         s.shard_note = (f"The lift is open, but floor {n} wants level {req} "
                         f"legs — you are level {p['level']}. Climb closer "
                         "to your weight first.")
+        s.refusal = f"Can't ride up — floor {n} wants level {req}"
         return s
     p["floor"] = n
     p["location"] = "gate_town"
@@ -2931,16 +2971,30 @@ def _school_scene(p: dict) -> Scene:
     if slots == 1:
         carry += (f" · 2nd slot — {economy.CARRY2_XP} XP + "
                   f"◈ {economy.CARRY2_GOLD}")
-        opts.append(Option("buy_carry2", "Learn to carry a 2nd weapon",
+        opts.append(Option("buy_carry2",
+                           "Unlock the 2nd weapon slot",
                            f"{economy.CARRY2_XP} XP + "
                            f"◈ {economy.CARRY2_GOLD}"))
     elif slots == 2:
+        # 049.2: the row is always on the menu — owned slots are named
+        # in the CARRY line, and below level 8 the 3rd shows LOCKED
+        # with the level on it (a bare "needs level" hint next to a
+        # buyable-looking row read as a bug).
         gold3 = economy.carry3_gold(front)
-        carry += (f" · 3rd slot — {economy.CARRY3_XP} XP + "
-                  f"◈ {gold3}")
-        opts.append(Option("buy_carry3",
-                           "Learn to carry a 3rd weapon",
-                           f"{economy.CARRY3_XP} XP + ◈ {gold3}"))
+        level = int(p.get("level", 1))
+        if level < economy.CARRY3_LEVEL:
+            carry += (f" · 3rd slot locked — opens at level "
+                      f"{economy.CARRY3_LEVEL}")
+            opts.append(Option("buy_carry3",
+                               "Unlock the 3rd weapon slot",
+                               f"locked — level {economy.CARRY3_LEVEL} "
+                               f"(you: {level})", locked=True))
+        else:
+            carry += (f" · 3rd slot — {economy.CARRY3_XP} XP + "
+                      f"◈ {gold3}")
+            opts.append(Option("buy_carry3",
+                               "Unlock the 3rd weapon slot",
+                               f"{economy.CARRY3_XP} XP + ◈ {gold3}"))
     lines.append(carry)
     opts.append(Option("back", "Back to the square"))
     return Scene(
@@ -2975,6 +3029,9 @@ def _school_action(p: dict, oid: str) -> Scene:
 def _school_refuse(p: dict, why: str) -> Scene:
     s = _school_scene(p)
     s.shard_note = why
+    # 050: the school's refusals are already one short line — the toast
+    # speaks the same words the card would.
+    s.refusal = why
     return s
 
 
@@ -3060,6 +3117,11 @@ def _school_carry(p: dict, oid: str) -> Scene:
             return _school_refuse(p, "Three is all the hands you have.")
         if slots < 2:
             return _school_refuse(p, "The second grip comes first.")
+        if int(p.get("level", 1)) < economy.CARRY3_LEVEL:
+            return _school_refuse(
+                p, f"The third grip opens at level "
+                   f"{economy.CARRY3_LEVEL} — you're level "
+                   f"{int(p.get('level', 1))}.")
         xp, gold = economy.CARRY3_XP, economy.carry3_gold(
             max(1, p["unlocked_floor"]))
     if p["xp"] < xp:
@@ -3121,6 +3183,7 @@ def _gate_town_action(p: dict, oid: str) -> Scene:
         if not state.spend_energy(p, economy.COST_WILDS_FIGHT):
             s = _gate_town_scene(p)
             s.shard_note = "Even a rescue takes ⚡ — you're spent."
+            s.refusal = "Can't answer the flare — not enough energy"
             return s
         # the claim races other answerers server-side; first tap wins
         # the pay and the Stone line, everyone who ran still fights.
@@ -3142,6 +3205,7 @@ def _gate_town_action(p: dict, oid: str) -> Scene:
             s = _gate_town_scene(p)
             s.shard_note = ("You're spent — ⚡ regenerates one point every "
                             "45 minutes. Rest, bank, or read the Stone.")
+            s.refusal = "Can't hunt — not enough energy"
             return s
         # 025 §5: the rubber band weights the roster against your sheet
         enc_id = state.rng_pick(p, combat.hunt_table(p, fl))
@@ -3157,6 +3221,8 @@ def _gate_town_action(p: dict, oid: str) -> Scene:
             s.shard_note = (f"The deep wants ⚡ {economy.COST_WILDS_DEEP} "
                             "in hand — you're short. One point returns "
                             "every 45 minutes.")
+            s.refusal = (f"Can't hunt the deep — not enough energy "
+                         f"(⚡ {economy.COST_WILDS_DEEP} needed)")
             return s
         enc_id = state.rng_pick(p, combat.hunt_table(p, fl, deep=True))
         enc = next(e for e in fl.encounters if e.id == enc_id)
@@ -3167,6 +3233,7 @@ def _gate_town_action(p: dict, oid: str) -> Scene:
         if p["gold"] < price:
             s = _gate_town_scene(p)
             s.shard_note = f"The healer wants ◈ {price} you don't carry."
+            s.refusal = f"Can't heal — not enough gold (◈ {price} needed)"
             return s
         p["gold"] -= price
         p["hp"] = state.max_hp(p)

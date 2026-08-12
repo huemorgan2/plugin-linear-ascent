@@ -1038,21 +1038,43 @@ def _inventory_html(scene: Scene) -> str:
     if not scene.inventory:
         return ""
     hand: dict[str, dict] = {}
+    side: list[dict] = []
     rest: list[dict] = []
     for it in scene.inventory:
         kind = it.get("kind", "")
         if it.get("equipped") and kind in ("weapon", "shield") \
                 and kind not in hand:
             hand[kind] = it
+        elif kind == "weapon" and it.get("held"):
+            # 049.2: side-arms and bought-but-empty slots are HAND
+            # cells, not pack clutter — one square per carry slot the
+            # player owns, so a bought slot visibly exists.
+            side.append(it)
         else:
             rest.append(it)
     hrow = []
-    for kind, lab in (("weapon", "in hand"), ("shield", "shield")):
-        it = hand.get(kind)
-        cell = (_slot_cell(it) if it else
-                f'<span class="slot empty" data-tip="no {lab.replace("in hand", "weapon in hand")} — the Forge sells steel"></span>')
+    it = hand.get("weapon")
+    cell = (_slot_cell(it) if it else
+            '<span class="slot empty" data-tip="no weapon in hand '
+            '— the Forge sells steel"></span>')
+    hrow.append(f'<span class="hcell"><span class="hlab">in hand'
+                f"</span>{cell}</span>")
+    for it in side:
+        if it.get("empty_slot"):
+            cell = ('<span class="slot empty" data-tip="an open weapon '
+                    'slot — the Forge sells steel"></span>')
+            lab = "open slot"
+        else:
+            cell = _slot_cell(it)
+            lab = "held"
         hrow.append(f'<span class="hcell"><span class="hlab">{lab}'
                     f"</span>{cell}</span>")
+    it = hand.get("shield")
+    cell = (_slot_cell(it) if it else
+            '<span class="slot empty" data-tip="no shield '
+            '— the Forge sells steel"></span>')
+    hrow.append(f'<span class="hcell"><span class="hlab">shield'
+                f"</span>{cell}</span>")
     n = len(rest)
     total = max(_PACK_MIN_SLOTS, -(-n // _PACK_COLS) * _PACK_COLS)
     cells = [_slot_cell(it) for it in rest]

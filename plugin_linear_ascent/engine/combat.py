@@ -1890,10 +1890,13 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
                      and _range_state(p) == "at_range"):
         if not state.spend_energy(p, economy.COST_WARDEN_STRIKE):
             e["_no_round"] = True
-            return fight_scene(p, floor, note=(
+            s = fight_scene(p, floor, note=(
                 f"A swing at a Warden takes {economy.COST_WARDEN_STRIKE} ⚡ "
                 "you don't have. Stand your ground, run, or let the clock "
                 "refill you."))
+            s.refusal = (f"Can't attack — not enough energy "
+                         f"(⚡ {economy.COST_WARDEN_STRIKE} needed)")
+            return s
 
     # 006: round upkeep — the venom ticks and the golden shell rots on
     # every round-spending action, before the action itself resolves.

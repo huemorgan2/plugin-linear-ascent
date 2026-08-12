@@ -367,9 +367,9 @@ def test_train_refusals_name_the_numbers():
 def test_economy_school_constants():
     assert economy.MASTERY_XP == 948            # round(632 * 1.5)
     assert economy.CARRY2_XP == 60 and economy.CARRY2_GOLD == 30
-    # 049.1: no level gate — the 500 XP + pillar gold IS the gate
+    # 049.2: the level-8 gate is back — shown LOCKED, not hidden
     assert economy.CARRY3_XP == 500
-    assert not hasattr(economy, "CARRY3_LEVEL")
+    assert economy.CARRY3_LEVEL == 8
     for front in (1, 5, 20):
         assert economy.carry3_gold(front) == \
             round(200 * economy.pillar(front))
@@ -436,11 +436,10 @@ def test_carry_slots_second_and_third():
     assert p["slots"] == 2
     assert p["xp"] == 200 - economy.CARRY2_XP
     assert p["gold"] == 500 - economy.CARRY2_GOLD
-    # 3rd slot: 049.1 — no level gate, the 500-XP price is the gate
-    # (the bar itself can't hold 500 XP before level 8: xp_need(8)=543)
+    # 3rd slot: 049.2 — locked below level 8, and the refusal says so
     s = _choose(p, "buy_carry3")
-    assert p["slots"] == 2                     # refused on XP, not level
-    assert "needs level" not in _school_text(s)
+    assert p["slots"] == 2
+    assert "level 8" in (s.shard_note or "")
     _rich(p, level=8, xp=520, gold=2000)
     s = _choose(p, "buy_carry3")
     assert p["slots"] == 3

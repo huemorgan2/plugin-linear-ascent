@@ -22,7 +22,7 @@ import yaml
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _ROOT = os.path.join(_HERE, "..", "..")
 FLOORS = os.path.join(_ROOT, "plugin_linear_ascent", "content", "floors")
-OUT = os.path.join(_HERE, "demoimages")
+OUT = os.path.join(_HERE, "demoimages2")
 
 # load providers.py by path — the package __init__ pulls in luna_sdk,
 # which this venv doesn't carry and the demo doesn't need
@@ -40,8 +40,11 @@ STYLE = (
     "arcade fighting-game stage. Wide horizontal landscape backdrop, DARK "
     "and moody, filled completely with dense detail edge to edge — no "
     "empty space, no white paper, every part of the frame carries scenery. "
-    "ONE creature standing in full SIDE VIEW (profile), feet on the "
-    "ground, large in frame, sharp readable silhouette picked out by "
+    "Camera pulled far back — a wide zoomed-out shot where the landscape "
+    "dominates. ONE creature standing in full SIDE VIEW (profile), feet "
+    "on the ground, positioned at the extreme {side} EDGE of the frame, "
+    "small against the vast scenery (about a quarter of the frame "
+    "height), sharp readable silhouette picked out by "
     "strong dramatic rim light against the dark background. Monochrome "
     "greyscale only, high contrast, cinematic lighting, realistic "
     "detailed textures and materials. "
@@ -75,15 +78,17 @@ def load_jobs() -> list[dict]:
         setting = " ".join(d["arrival"].split())
         for e in d["encounters"]:
             prose = " ".join(e["prose"].split())
+            style = STYLE.format(side="LEFT" if len(jobs) % 2 else "RIGHT")
             jobs.append({
                 "slug": f"floor{d['floor']}_{e['id']}",
-                "prompt": (f"{STYLE}Creature: {e['name']}. {prose} "
+                "prompt": (f"{style}Creature: {e['name']}. {prose} "
                            f"Setting: {setting}{NO_TEXT}"),
             })
         prose = " ".join(d["warden"]["prose"].split())
+        style = STYLE.format(side="LEFT" if len(jobs) % 2 else "RIGHT")
         jobs.append({
             "slug": f"floor{d['floor']}_warden",
-            "prompt": (f"{STYLE}Creature: {d['warden']['name']}, the floor "
+            "prompt": (f"{style}Creature: {d['warden']['name']}, the floor "
                        f"boss guarding the stair-gate. {prose} "
                        f"Setting: {setting}{NO_TEXT}"),
         })

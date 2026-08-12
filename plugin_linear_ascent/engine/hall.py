@@ -646,15 +646,20 @@ def _work_buy(p: dict, wid: str, fac: dict, hall: dict) -> Scene:
         return hall_scene(p)
     label = str(wrow.get("label", wid))
     if fac.get("role") != "steward":
-        return hall_scene(
+        s = hall_scene(
             p, note="The works answer to the steward's hand — nudge them.")
+        s.refusal = "Can't buy this — only the steward buys works"
+        return s
     bal, _cap = _coffer_nums(fac, hall)
     price = int(wrow.get("price", 0) or 0)
     if price > bal or not wrow.get("affordable", True):
-        return hall_scene(
+        s = hall_scene(
             p, note=f"The {label} takes ◈ {price:,} and the coffer holds "
                     f"◈ {bal:,} — ◈ {max(0, price - bal):,} short. Dues "
                     "land at week's turn, or pass the hat.")
+        s.refusal = (f"Can't buy this — the coffer is "
+                     f"◈ {max(0, price - bal):,} short")
+        return s
     kind = wid if wid.startswith("hall_") \
         else _WORK_EFFECTS.get(wid, f"hall_{wid}")
     _effect(p, kind)

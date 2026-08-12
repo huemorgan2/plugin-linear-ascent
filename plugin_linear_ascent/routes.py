@@ -58,6 +58,31 @@ class FactionTargetIn(BaseModel):
     player: str = Field(min_length=1, max_length=128)
 
 
+class FeedbackAttachmentIn(BaseModel):
+    mime: str = Field(max_length=64)
+    data: str = Field(max_length=4_000_000)
+
+
+class FeedbackCreateIn(BaseModel):
+    subject: str = Field(default="", max_length=200)
+    body: str = Field(default="", max_length=8000)
+    attachments: list[FeedbackAttachmentIn] = Field(
+        default_factory=list, max_length=8)
+
+
+class FeedbackThreadIn(BaseModel):
+    id: int = Field(gt=0)
+    as_admin: bool = False
+
+
+class FeedbackReplyIn(BaseModel):
+    id: int = Field(gt=0)
+    body: str = Field(default="", max_length=8000)
+    attachments: list[FeedbackAttachmentIn] = Field(
+        default_factory=list, max_length=8)
+    as_admin: bool = False
+
+
 class ActIn(BaseModel):
     option: str = Field(default="", max_length=64)
     text: str = Field(default="", max_length=200)
@@ -245,6 +270,9 @@ def register_routes(app, ctx: PluginContext) -> None:
             "event_kind": scene.event_kind,
             "headline": scene.headline,
             "fragment": render_scene_fragment(scene),
+            # 050: a rule said no — the pane toasts this line and keeps
+            # the card it has instead of swapping the fragment in.
+            "refusal": getattr(scene, "refusal", ""),
         }
 
     @router.post("/pane/scene")
@@ -366,6 +394,53 @@ def register_routes(app, ctx: PluginContext) -> None:
     async def pane_faction_enter(user=Depends(get_current_user)) -> dict:
         """Admin accepts the week's challenge — paid from the vault."""
         return await _proxy(_world().faction_enter(runtime.player_key()))
+
+    # ── 051: the postbox — feedback, replies, the admin desk ────────────
+
+    @router.post("/pane/feedback/create")
+    async def pane_feedback_create(body: FeedbackCreateIn,
+                                   user=Depends(get_current_user)) -> dict:
+        return await _proxy(_world().feedback_create(
+            runtime.player_key(), body.subject, body.body,
+            [a.model_dump() for a in body.attachments]))
+
+    @router.get("/pane/feedback/mine")
+    async def pane_feedback_mine(user=Depends(get_current_user)) -> dict:
+        return await _proxy(_world().feedback_mine(runtime.player_key()))
+
+    @router.post("/pane/feedback/thread")
+    async def pane_feedback_thread(body: FeedbackThreadIn,
+                                   user=Depends(get_current_user)) -> dict:
+        return await _proxy(_world().feedback_thread(
+            runtime.player_key(), body.id, body.as_admin))
+
+    @router.post("/pane/feedback/reply")
+    async def pane_feedback_reply(body: FeedbackReplyIn,
+                                  user=Depends(get_current_user)) -> dict:
+        return await _proxy(_world().feedback_reply(
+            runtime.player_key(), body.id, body.body,
+            [a.model_dump() for a in body.attachments], body.as_admin))
+
+    @router.get("/pane/feedback/unread")
+    async def pane_feedback_unread(user=Depends(get_current_user)) -> dict:
+        return await _proxy(_world().feedback_unread(runtime.player_key()))
+
+    @router.get("/pane/feedback/admin")
+    async def pane_feedback_admin(user=Depends(get_current_user)) -> dict:
+        return await _proxy(_world().feedback_admin(runtime.player_key()))
+
+    @router.get("/pane/feedback/att/{att_id}")
+    async def pane_feedback_att(att_id: int,
+                                user=Depends(get_current_user)):
+        """The screenshot: worldd answers base64 over the HMAC door; this
+        route turns it back into a real image response for the pane."""
+        import base64 as _b64
+
+        from fastapi.responses import Response
+        d = await _proxy(_world().feedback_att(runtime.player_key(), att_id))
+        return Response(content=_b64.b64decode(d.get("data", "")),
+                        media_type=d.get("mime", "image/png"),
+                        headers={"Cache-Control": "private, max-age=3600"})
 
     @router.get("/art/factions/{slug}.png")
     async def faction_banner(slug: str):

@@ -73,7 +73,8 @@ def test_creature_art_stays_up_for_every_round():
     floor = schema.get_floor(1)
     opener = combat.start_encounter(p, floor, floor.encounters[0])
     later = combat.fight_scene(p, floor, note="you swing again")
-    assert opener.banner == p["encounter"]["id"]
+    # 049: the banner prefers the race/line-typed scene art when it exists
+    assert opener.banner.startswith(p["encounter"]["id"])
     assert later.banner == opener.banner
     assert 'class="banner"' in render.render_scene_fragment(later)
 

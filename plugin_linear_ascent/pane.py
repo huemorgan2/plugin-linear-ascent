@@ -12,7 +12,9 @@ ADMIN DESK inline — rename, join requests (accept/reject), kick/promote,
 and the week's challenge paid from the coin vault. Founding still happens
 IN-GAME at the Guildhall (level 4+); joining files a request the admins
 settle at the desk. Everything is ANSI-block styled, monospace, in-pane —
-no popups.
+no popups. The one sanctioned exception (050): a refused action toasts a
+single red line pinned to the top of the viewport for three seconds —
+nothing to click, nothing to dismiss, the card underneath never moves.
 
 Auth: the shell posts {type:'luna-auth', token} into the iframe on load and
 whenever the session changes; the pane also answers 401s by asking again
@@ -53,6 +55,16 @@ body{{color:{TEXT};
  letter-spacing:.08em;margin-bottom:6px;}}
 .err{{border:1px solid {BORDER};
  background:{PANEL};color:{DIM};padding:12px 2ch;margin-top:10px;}}
+/* 050: the refusal line — a rule said no. One thin bright-red line on
+   black, pinned to the top of the viewport over whatever is scrolled
+   there, then it slides up and is gone. Not a popup: nothing to click,
+   nothing to dismiss, the card underneath never moves. */
+#latoast{{position:fixed;top:0;left:0;right:0;z-index:120;
+ background:#000;color:#ff5c57;border-bottom:1px solid #ff5c5744;
+ font:inherit;font-size:12px;line-height:1.5;padding:5px 2ch;
+ text-align:center;white-space:nowrap;overflow:hidden;
+ text-overflow:ellipsis;transition:transform .28s ease;}}
+#latoast.gone{{transform:translateY(-110%);}}
 a{{color:{AETHER};}}
 {SCENE_CSS}
 .opt.busy{{border-color:{VIOLET};opacity:.7;}}
@@ -149,6 +161,48 @@ select.ti{{background:{INK};color:{TEXT};border:1px solid {BORDER};
 .sndico{{width:16px;height:16px;background:currentColor;flex:none;
  mask-size:100% 100%;-webkit-mask-size:100% 100%;mask-repeat:no-repeat;
  -webkit-mask-repeat:no-repeat;image-rendering:pixelated;}}
+/* ── 051: the postbox — feedback, replies, the admin desk ── */
+.sndbtn{{position:relative;}}
+.fbbadge{{position:absolute;top:-7px;right:-7px;background:#f4645f;
+ color:#000;font-size:10px;line-height:1;padding:2px 4px;font-weight:700;
+ letter-spacing:0;}}
+#fbpanel{{display:none;position:fixed;inset:0;z-index:110;background:{INK};
+ overflow-y:auto;}}
+#fbpanel.open{{display:block;}}
+#fbpanel .fbwrap{{max-width:760px;margin:0 auto;padding:14px 12px 90px;}}
+textarea.ti{{background:{INK};color:{TEXT};border:1px solid {BORDER};
+ font:inherit;padding:6px 1ch;width:100%;box-sizing:border-box;
+ min-height:110px;resize:vertical;display:block;}}
+.fbrow{{display:grid;grid-template-columns:1fr auto;gap:1ch;padding:7px 0;
+ border-bottom:1px dashed {BORDER};cursor:pointer;align-items:baseline;}}
+.fbrow .fbsub{{color:{TEXT};min-width:0;}}
+.fbrow:hover .fbsub{{color:{AETHER};}}
+.fbrow .sub{{color:{FAINT};font-size:12px;overflow:hidden;
+ text-overflow:ellipsis;white-space:nowrap;}}
+.fbnew{{color:#f4645f;font-weight:700;font-size:12px;}}
+.fbmsg{{border:1px solid {BORDER};background:{PANEL};padding:8px 2ch;
+ margin:10px 0;max-width:85%;}}
+.fbmsg.me{{margin-left:15%;border-color:{VIOLET};}}
+.fbmsg.them{{margin-right:15%;}}
+.fbmsg .meta{{color:{FAINT};font-size:11px;text-transform:uppercase;
+ letter-spacing:.08em;margin-bottom:5px;}}
+.fbmsg .mbody{{white-space:pre-wrap;overflow-wrap:anywhere;}}
+.fbatt{{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;}}
+.fbatt img{{max-width:140px;max-height:100px;border:1px solid {BORDER};
+ cursor:pointer;display:block;background:{PANEL2};min-width:40px;
+ min-height:30px;}}
+.fbthumbs{{display:flex;gap:10px;margin:8px 0;flex-wrap:wrap;}}
+.fbthumbs .twrap{{position:relative;}}
+.fbthumbs img{{max-width:90px;max-height:70px;border:1px solid {BORDER};
+ display:block;}}
+.fbthumbs .tx{{position:absolute;top:-7px;right:-7px;background:#000;
+ color:#f4645f;border:1px solid #f4645f;font:inherit;font-size:10px;
+ line-height:1;padding:2px 4px;cursor:pointer;}}
+#fblight{{display:none;position:fixed;inset:0;z-index:130;
+ background:#000000dd;align-items:center;justify-content:center;
+ padding:20px;cursor:pointer;}}
+#fblight.open{{display:flex;}}
+#fblight img{{max-width:100%;max-height:100%;border:1px solid {BORDER};}}
 """
 
 # Plain string on purpose: real braces everywhere — no f-string doubling.
@@ -309,6 +363,8 @@ function showScene(d) {
   // 027: the pack popup, the card's input box and the rail count-up
   if (window.__laWire) window.__laWire(game);
   if (WEB) armHistory();    // browser back = the card's own back door
+  // 051: the first working scene proves auth — light the postbox badge
+  if (!fbPolled) { fbPolled = true; fbPoll(); }
 }
 /* ── browser back walks the game home (WEB only) ────────────────────
    Every card that carries a back-style row arms one history entry and
@@ -350,8 +406,17 @@ window.__laAct = async function (option, text) {
   if (loading) return;
   loading = true;
   try {
-    showScene(await call('/act', {option: option || '', text: text || '',
-      scene_id: sceneId, mode: 'pane'}));
+    const d = await call('/act', {option: option || '', text: text || '',
+      scene_id: sceneId, mode: 'pane'});
+    if (d.refusal) {
+      // 050: a rule said no — toast the line, keep the card as it is.
+      showToast(d.refusal);
+      const f = game.querySelector('form.ask');
+      if (f) { f.querySelectorAll('input,button').forEach(
+        x => { x.disabled = false; }); }
+    } else {
+      showScene(d);
+    }
   } catch (err) {
     if (err.message !== 'auth') showErr(err.message);
     const f = game.querySelector('form.ask');
@@ -364,6 +429,22 @@ function showErr(msg) {
   e.className = 'err'; e.textContent = msg;
   game.appendChild(e);
   setTimeout(() => e.remove(), 6000);
+}
+/* 050: the refusal toast — shows instantly at the top of the viewport,
+   holds 3 seconds, slides up and is gone. One at a time: a new refusal
+   replaces the line instead of stacking. */
+let toastTimer = 0;
+function showToast(msg) {
+  const old = document.getElementById('latoast');
+  if (old) { clearTimeout(toastTimer); old.remove(); }
+  const t = document.createElement('div');
+  t.id = 'latoast'; t.textContent = msg;
+  document.body.appendChild(t);
+  toastTimer = setTimeout(() => {
+    t.classList.add('gone');
+    t.addEventListener('transitionend', () => t.remove(), {once: true});
+    setTimeout(() => { t.remove(); }, 600);  // reduced-motion fallback
+  }, 3000);
 }
 function wireOptions() {
   /* 027: everything that carries a data-opt acts the same way — menu rows,
@@ -378,13 +459,24 @@ function wireOptions() {
     btns.forEach(x => { x.disabled = true;
       x.classList.add(x === b ? 'busy' : 'stale'); });
     if (hint) hint.textContent = '…';
-    try {
-      showScene(await call('/act',
-        {option: b.dataset.opt, scene_id: sceneId, mode: 'pane'}));
-    } catch (err) {
+    const restore = () => {
       btns.forEach(x => { x.disabled = false;
         x.classList.remove('busy', 'stale'); });
       if (hint) hint.textContent = 'click an option — or reply with a number';
+    };
+    try {
+      const d = await call('/act',
+        {option: b.dataset.opt, scene_id: sceneId, mode: 'pane'});
+      if (d.refusal) {
+        // 050: a rule said no — toast the line, no card swap, no
+        // typewriter replay; the rows come straight back to hand.
+        showToast(d.refusal);
+        restore();
+      } else {
+        showScene(d);
+      }
+    } catch (err) {
+      restore();
       if (err.message !== 'auth') showErr(err.message);
     } finally { loading = false; }
   }));
@@ -837,6 +929,281 @@ function renderBoard(d) {
   return h;
 }
 
+/* ── 051: the postbox — feedback, replies, the admin desk ───────────────
+   A FEEDBACK switch on the sound bar opens a full-viewport overlay in the
+   pane's own ANSI grammar. Players file subject + message + up to three
+   screenshots; each thread reads like a chat. The two named wardens get
+   an ADMIN switch: every thread, WhatsApp-sorted, same chat inside.
+   Unread counts ride small red badges — polled once a minute and after
+   every postbox act, never on the 2s peek hot path. */
+const fbPanel = document.getElementById('fbpanel');
+const fbLight = document.getElementById('fblight');
+const fbBtn = document.getElementById('fbbtn');
+const fbAdminBtn = document.getElementById('fbadmin');
+let fbPolled = false;
+let fb = {view: 'list', id: 0, asAdmin: false, admin: false};
+let fbDraft = [];              // pending screenshots [{mime, data}]
+let fbBusy = false;
+
+async function fetchBlob(path) {
+  const h = (!WEB && token) ? {'Authorization': 'Bearer ' + token} : {};
+  const r = await fetch(API + path, {headers: h});
+  if (!r.ok) throw new Error('att');
+  return URL.createObjectURL(await r.blob());
+}
+
+function fbBadges(d) {
+  fb.admin = !!d.admin;
+  fbAdminBtn.hidden = !fb.admin;
+  const b = document.getElementById('fbbadge');
+  b.hidden = !d.unread; b.textContent = d.unread || '';
+  const a = document.getElementById('fbabadge');
+  const n = d.admin_unread || 0;
+  a.hidden = !n; a.textContent = n || '';
+}
+async function fbPoll() {
+  if (!WEB && !token) return;
+  try { fbBadges(await call('/pane/feedback/unread')); } catch (e) {}
+}
+setInterval(fbPoll, 60000);
+
+const fbWhen = iso => {
+  try {
+    return new Date(iso).toLocaleString(undefined,
+      {month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'});
+  } catch (e) { return ''; }
+};
+
+function fbOpen(view) {
+  fb.view = view; fb.id = 0; fb.asAdmin = view === 'admin';
+  fbDraft = [];
+  fbPanel.classList.add('open');
+  fbLoad();
+}
+function fbClose() { fbPanel.classList.remove('open'); fbPoll(); }
+fbBtn.addEventListener('click', () => {
+  if (window.__laSfx) window.__laSfx('click');
+  fbOpen('list');
+});
+fbAdminBtn.addEventListener('click', () => {
+  if (window.__laSfx) window.__laSfx('click');
+  fbOpen('admin');
+});
+fbLight.addEventListener('click', () => fbLight.classList.remove('open'));
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape') return;
+  if (fbLight.classList.contains('open')) {
+    fbLight.classList.remove('open');
+  } else if (fbPanel.classList.contains('open')) {
+    if (fb.id) { fb.id = 0; fbDraft = []; fbLoad(); } else fbClose();
+  }
+});
+
+async function fbLoad() {
+  try {
+    if (fb.id) {
+      fbRenderThread(await call('/pane/feedback/thread',
+        {id: fb.id, as_admin: fb.asAdmin}));
+    } else if (fb.view === 'admin') {
+      fbRenderAdmin(await call('/pane/feedback/admin'));
+    } else {
+      fbRenderList(await call('/pane/feedback/mine'));
+    }
+  } catch (err) {
+    if (err.message === 'auth') return;
+    fbPanel.innerHTML = '<div class="fbwrap">'
+      + '<span class="back" id="fbback">◀ THE GAME</span>'
+      + '<div class="placeholder"><div class="eyebrow">the postbox</div>'
+      + esc(err.message) + '</div></div>';
+  }
+}
+
+/* the composer — the new-feedback form and every chat's reply box */
+function fbComposer(withSubject) {
+  return (withSubject
+      ? '<input id="fbsub" class="ti" maxlength="80" placeholder='
+        + '"subject — what is this about?" style="margin-bottom:8px">'
+      : '')
+    + '<textarea id="fbbody" class="ti" maxlength="4000" placeholder="'
+    + (withSubject
+        ? 'tell the wardens — what happened, what you loved, what broke…'
+        : 'write back…') + '"></textarea>'
+    + '<div class="fbthumbs" id="fbthumbs"></div>'
+    + '<div class="savebar" style="margin-top:8px">'
+    + '<button class="btn" id="fbattach">+ SCREENSHOT</button>'
+    + '<button class="btn" id="fbsend">SEND ▸</button></div>'
+    + '<input type="file" id="fbfile" accept="image/*" multiple hidden>'
+    + '<div class="deskmsg" id="fbnote"></div>';
+}
+function fbMsg(text) {
+  const el = document.getElementById('fbnote');
+  if (el) { el.textContent = text; el.className = 'deskmsg bad'; }
+}
+function fbThumbs() {
+  const t = document.getElementById('fbthumbs');
+  if (!t) return;
+  t.innerHTML = fbDraft.map((a, i) =>
+    '<span class="twrap"><img src="data:' + a.mime + ';base64,' + a.data
+    + '"><button class="tx" data-i="' + i + '">✕</button></span>')
+    .join('');
+}
+/* screenshots shrink client-side: ≤1400px JPEG, so even the HMAC
+   door's signed JSON bodies stay small */
+function fbShrink(file) {
+  return new Promise((res, rej) => {
+    const img = new Image();
+    img.onload = () => {
+      const scale = Math.min(1, 1400 / Math.max(img.width, img.height));
+      const c = document.createElement('canvas');
+      c.width = Math.max(1, Math.round(img.width * scale));
+      c.height = Math.max(1, Math.round(img.height * scale));
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(img.src);
+      res(c.toDataURL('image/jpeg', 0.85).split(',')[1]);
+    };
+    img.onerror = rej;
+    img.src = URL.createObjectURL(file);
+  });
+}
+async function fbAddFiles(files) {
+  for (const f of files) {
+    if (fbDraft.length >= 3) { fbMsg('three screenshots at most'); break; }
+    try { fbDraft.push({mime: 'image/jpeg', data: await fbShrink(f)}); }
+    catch (e) { fbMsg('that file is not an image'); }
+  }
+  fbThumbs();
+}
+function fbWireComposer(send) {
+  const file = document.getElementById('fbfile');
+  document.getElementById('fbattach').addEventListener('click',
+    () => file.click());
+  file.addEventListener('change', () => {
+    fbAddFiles([...file.files]); file.value = '';
+  });
+  document.getElementById('fbthumbs').addEventListener('click', (e) => {
+    const x = e.target.closest('.tx');
+    if (x) { fbDraft.splice(+x.dataset.i, 1); fbThumbs(); }
+  });
+  document.getElementById('fbsend').addEventListener('click', send);
+}
+async function fbSendNew() {
+  if (fbBusy) return;
+  fbBusy = true;
+  try {
+    await call('/pane/feedback/create', {
+      subject: (document.getElementById('fbsub').value || '').trim(),
+      body: (document.getElementById('fbbody').value || '').trim(),
+      attachments: fbDraft.map(a => ({mime: a.mime, data: a.data}))});
+    fbDraft = [];
+    fbLoad();
+  } catch (err) {
+    if (err.message !== 'auth') fbMsg(err.message);
+  } finally { fbBusy = false; }
+}
+async function fbSendReply() {
+  if (fbBusy) return;
+  fbBusy = true;
+  try {
+    await call('/pane/feedback/reply', {
+      id: fb.id, as_admin: fb.asAdmin,
+      body: (document.getElementById('fbbody').value || '').trim(),
+      attachments: fbDraft.map(a => ({mime: a.mime, data: a.data}))});
+    fbDraft = [];
+    fbLoad();
+  } catch (err) {
+    if (err.message !== 'auth') fbMsg(err.message);
+  } finally { fbBusy = false; }
+}
+
+function fbRenderList(d) {
+  let h = '<span class="back" id="fbback">◀ THE GAME</span>';
+  h += '<div class="panel"><div class="eyebrow">the postbox — write '
+    + 'to the wardens</div>'
+    + '<div class="faint" style="margin-bottom:8px">a bug, an idea, a '
+    + 'grievance — file it here; replies land right back in this '
+    + 'box.</div>' + fbComposer(true) + '</div>';
+  h += '<div class="panel"><div class="eyebrow">your feedback</div>'
+    + (d.threads.length ? d.threads.map(t =>
+        '<div class="fbrow" data-id="' + t.id + '"><span class="fbsub">'
+        + esc(t.subject)
+        + (t.unread ? ' <span class="fbnew">● ' + t.unread
+            + ' NEW</span>' : '')
+        + '<div class="sub">' + (t.last_sender === 'admin'
+            ? 'the wardens answered' : 'you wrote') + ' · '
+        + fbWhen(t.last_msg_at) + '</div></span>'
+        + '<span class="dim">▸</span></div>').join('')
+      : '<div class="faint">nothing filed yet</div>') + '</div>';
+  fbPanel.innerHTML = '<div class="fbwrap">' + h + '</div>';
+  fbThumbs();
+  fbWireComposer(fbSendNew);
+}
+
+function fbRenderAdmin(d) {
+  let h = '<span class="back" id="fbback">◀ THE GAME</span>';
+  h += '<div class="panel"><div class="eyebrow">the admin desk — '
+    + 'all feedback, freshest first</div>'
+    + (d.threads.length ? d.threads.map(t =>
+        '<div class="fbrow" data-id="' + t.id + '"><span class="fbsub">'
+        + esc(t.author) + ' — ' + esc(t.subject)
+        + (t.unread ? ' <span class="fbnew">● NEW</span>' : '')
+        + '<div class="sub">' + esc(t.last_line) + '</div>'
+        + '<div class="sub">' + (t.last_sender === 'player'
+            ? 'awaiting reply' : 'answered') + ' · '
+        + fbWhen(t.last_msg_at) + ' · ' + esc(t.tenant) + '/'
+        + esc(t.player) + '</div></span>'
+        + '<span class="dim">▸</span></div>').join('')
+      : '<div class="faint">the box is empty — no feedback yet</div>')
+    + '</div>';
+  fbPanel.innerHTML = '<div class="fbwrap">' + h + '</div>';
+}
+
+function fbRenderThread(d) {
+  const mine = fb.asAdmin ? 'admin' : 'player';
+  let h = '<span class="back" id="fbback">◀ '
+    + (fb.asAdmin ? 'ALL FEEDBACK' : 'THE POSTBOX') + '</span>';
+  h += '<div class="panel"><div class="eyebrow">' + esc(d.subject)
+    + (fb.asAdmin ? ' — ' + esc(d.author) + ' <span class="faint">('
+        + esc(d.tenant) + '/' + esc(d.player) + ')</span>' : '')
+    + '</div>';
+  d.messages.forEach(m => {
+    h += '<div class="fbmsg ' + (m.sender === mine ? 'me' : 'them') + '">'
+      + '<div class="meta">' + esc(m.author)
+      + (m.sender === 'admin' ? ' <span class="tag">◆ WARDEN</span>'
+          : '')
+      + ' · ' + fbWhen(m.at) + '</div>'
+      + '<div class="mbody">' + esc(m.body) + '</div>'
+      + (m.attachments.length ? '<div class="fbatt">'
+          + m.attachments.map(a => '<img data-att="' + a.id
+            + '" alt="screenshot">').join('') + '</div>' : '')
+      + '</div>';
+  });
+  h += fbComposer(false) + '</div>';
+  fbPanel.innerHTML = '<div class="fbwrap">' + h + '</div>';
+  fbThumbs();
+  fbWireComposer(fbSendReply);
+  [...fbPanel.querySelectorAll('img[data-att]')].forEach(async img => {
+    try { img.src = await fetchBlob('/pane/feedback/att/' + img.dataset.att); }
+    catch (e) { img.alt = 'screenshot lost'; }
+  });
+  fbPanel.scrollTop = fbPanel.scrollHeight;   // the chat opens at its end
+  fbPoll();          // opening marked the thread read — repaint badges
+}
+
+/* one delegated ear: back walks up, rows open, screenshots enlarge */
+fbPanel.addEventListener('click', (e) => {
+  if (e.target.closest('#fbback')) {
+    if (fb.id) { fb.id = 0; fbDraft = []; fbLoad(); } else fbClose();
+    return;
+  }
+  const row = e.target.closest('.fbrow[data-id]');
+  if (row) { fb.id = +row.dataset.id; fbDraft = []; fbLoad(); return; }
+  const img = e.target.closest('.fbatt img');
+  if (img && img.src) {
+    fbLight.innerHTML = '<img src="' + img.src + '">';
+    fbLight.classList.add('open');
+  }
+});
+
 if (token || WEB) loadScene();
 })();
 """
@@ -849,6 +1216,7 @@ def render_pane(api_base: str = _API, web: bool = False) -> str:
     title = "<title>LINEAR ASCENT</title>" if web else ""
     spk = icons.icon_data_url("speaker")
     note = icons.icon_data_url("note")
+    post = icons.icon_data_url("postbox")
     return f"""<!doctype html><html><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">{title}
 <style>{_CSS}</style></head><body>
@@ -872,7 +1240,17 @@ def render_pane(api_base: str = _API, web: bool = False) -> str:
   <button id="sndmus" class="sndbtn" aria-pressed="true"><span class="sndico"
     style="mask-image:url('{note}');-webkit-mask-image:url('{note}')"
     aria-hidden="true"></span><span class="sndlab">music on</span></button>
+  <button id="fbbtn" class="sndbtn"><span class="sndico"
+    style="mask-image:url('{post}');-webkit-mask-image:url('{post}')"
+    aria-hidden="true"></span><span class="sndlab">feedback</span><span
+    id="fbbadge" class="fbbadge" hidden></span></button>
+  <button id="fbadmin" class="sndbtn" hidden><span class="sndico"
+    style="mask-image:url('{post}');-webkit-mask-image:url('{post}')"
+    aria-hidden="true"></span><span class="sndlab">admin</span><span
+    id="fbabadge" class="fbbadge" hidden></span></button>
 </div>
+<div id="fbpanel"></div>
+<div id="fblight"></div>
 <script>{INTERACT_JS}</script>
 <script>{_JS.replace("__API__", api_base)
            .replace("__WEB__", "true" if web else "false")

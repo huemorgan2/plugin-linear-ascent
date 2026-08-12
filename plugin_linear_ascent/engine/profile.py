@@ -380,8 +380,11 @@ def profile_action(p: dict, oid: str) -> Scene:
             return profile_scene(
                 p, note="You cased that camp within the hour.")
         if not state.spend_energy(p, LOOT_COST):
-            return profile_scene(
+            s = profile_scene(
                 p, note=f"A raid takes {LOOT_COST} ⚡ you don't have.")
+            s.refusal = (f"Can't raid — not enough energy "
+                         f"(⚡ {LOOT_COST} needed)")
+            return s
         p.setdefault("loot_cd", {})[name] = state.now().isoformat()
         _ledger(p, "loot_try", note=name)
         _effect(p, "loot_attempt", target_name=name)

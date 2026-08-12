@@ -169,9 +169,9 @@ def test_repeat_warden_kill_stays_eviction_without_the_reel():
     combat.start_encounter(p, fl, None, kind="warden")
     s = slay(p)
     assert s.headline == f"{fl.warden_name} — evicted"
-    # wardens have no encounter id, so the fx ladder lands on the
-    # shipped per-kind generic eviction reel
-    assert s.fx == "wrongmade_evicted"
+    # 049: the warden slug is rebuilt from the floor, so the fx ladder
+    # finds the typed floor-1 eviction reel for this race and weapon line
+    assert s.fx == "warden_001_evicted_human_blade"
 
 
 # ── kind and was thread from content to the runtime encounter ───────────

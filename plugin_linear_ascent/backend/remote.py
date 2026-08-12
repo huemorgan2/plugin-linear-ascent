@@ -159,3 +159,37 @@ class WorldClient:
         return await self._post("/v1/faction/promote", {
             "player": luna_user, "target_tenant": target_tenant,
             "target_player": target_player})
+
+    # ── 051: the postbox ─────────────────────────────────────────────────
+
+    async def feedback_create(self, luna_user: str, subject: str, body: str,
+                              attachments: list) -> dict:
+        return await self._post("/v1/feedback/create", {
+            "player": luna_user, "subject": subject, "body": body,
+            "attachments": attachments})
+
+    async def feedback_mine(self, luna_user: str) -> dict:
+        return await self._post("/v1/feedback/mine", {"player": luna_user})
+
+    async def feedback_thread(self, luna_user: str, fid: int,
+                              as_admin: bool = False) -> dict:
+        return await self._post("/v1/feedback/thread", {
+            "player": luna_user, "id": fid, "as_admin": as_admin})
+
+    async def feedback_reply(self, luna_user: str, fid: int, body: str,
+                             attachments: list,
+                             as_admin: bool = False) -> dict:
+        return await self._post("/v1/feedback/reply", {
+            "player": luna_user, "id": fid, "body": body,
+            "attachments": attachments, "as_admin": as_admin})
+
+    async def feedback_unread(self, luna_user: str) -> dict:
+        return await self._post("/v1/feedback/unread", {"player": luna_user})
+
+    async def feedback_admin(self, luna_user: str) -> dict:
+        return await self._post("/v1/feedback/admin", {"player": luna_user})
+
+    async def feedback_att(self, luna_user: str, att_id: int) -> dict:
+        """{"mime", "data" (base64)} — the route decodes it back to bytes."""
+        return await self._post("/v1/feedback/att", {
+            "player": luna_user, "id": att_id})
