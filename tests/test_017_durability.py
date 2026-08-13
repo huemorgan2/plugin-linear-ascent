@@ -464,3 +464,72 @@ def test_archer_kiting_does_not_double_pay_the_wear():
                 spent.append(start - p["durability"]["weapon"])
         counts[clazz] = sum(spent) / max(1, len(spent))
     assert counts["archer"] <= 3 * counts["warrior"], counts
+
+
+# ── the shortcut home: mend rows wear icons, the pack walks you there ────
+# Roy's ask: the Forge's mend rows carry the piece's own icon on the
+# left, and the worn piece's pack popup offers "Go to the Forge and fix
+# ◈ X + Y XP" — one tap walks you home to the anvil. Just the trip;
+# never offered mid-fight.
+
+def test_mend_rows_wear_their_gear_icon():
+    from plugin_linear_ascent import render
+    p = _worn_smith()
+    p["inventory"]["repair_token"] = 1
+    s = core.current_scene(p)
+    assert s.option_art.get("repair_weapon") == "scrap_dagger"
+    assert s.option_art.get("token_weapon") == "scrap_dagger"
+    html = render.render_scene_fragment(s)
+    row = html.split('data-opt="repair_weapon"', 1)[1].split("</button>")[0]
+    assert 'class="gicon"' in row, "the mend row carries the gear icon"
+    # the icon dresses the row where it stands — never promotes it to
+    # a shop card up on the wall
+    card = html.split('data-opt="repair_weapon"', 1)[0].rsplit("<button", 1)[1]
+    assert "gcard" not in card
+
+
+def test_pack_popup_offers_the_forge_trip():
+    p = _worn_smith()
+    p["location"] = "town"
+    acts, why = core.pack_actions(p, "scrap_dagger")
+    assert [o.id for o in acts] == ["forge_fix_weapon"]
+    assert acts[0].label == "Go to the Forge and fix"
+    g = economy.FORGE["scrap_dagger"]
+    want = economy.repair_price(g, 0.5)
+    assert f"◈ {want:,}" in acts[0].hint and "XP" in acts[0].hint
+
+
+def test_forge_fix_walks_home_from_anywhere():
+    p = _worn_smith()
+    p["location"] = "gate_town"
+    p["floor"] = 1
+    s = choose(p, "forge_fix_weapon")
+    assert p["location"] == "forge"
+    assert "FORGE" in s.eyebrow
+    assert any(o.id == "repair_weapon" for o in s.options)
+    # the trip itself is free — the repair row takes the coin
+    assert p["durability"]["weapon"] == economy.durability_pool(1) // 2
+
+
+def test_forge_trip_never_offered_mid_fight():
+    p, fl = _armed()
+    p["durability"]["weapon"] = economy.durability_pool(1) // 2
+    acts, why = core.pack_actions(p, "scrap_dagger")
+    assert not any(o.id.startswith("forge_fix_") for o in acts)
+
+
+def test_whole_gear_keeps_the_old_answer():
+    p = _worn_smith()
+    p["location"] = "town"
+    p["durability"]["weapon"] = economy.durability_pool(1)
+    acts, why = core.pack_actions(p, "scrap_dagger")
+    assert acts == [] and "Already in your hand." == why
+
+
+def test_forge_trip_refused_mid_fight():
+    p, fl = _armed()
+    p["durability"]["weapon"] = economy.durability_pool(1) // 2
+    s = core.apply_choice(p, "forge_fix_weapon")
+    assert p.get("encounter") is not None       # still in the fight
+    assert p["location"] != "forge"
+    assert "Not mid-fight" in s.shard_note

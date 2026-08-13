@@ -206,11 +206,25 @@ def pack_actions(p: dict, slug: str) -> tuple[list[Option], str]:
         # 045: gear promotes itself from the pack — one weapon held, one
         # shield, one armour; the slot decides which.
         g = economy.FORGE[slug]
+        if g.slot in economy.DURABILITY_SLOTS \
+                and p["gear"].get(g.slot) == slug:
+            # the worn piece's popup offers the trip home: one tap
+            # walks you to the Forge, where the repair row waits.
+            # Just the shortcut — the anvil takes the coin there.
+            left = (p.get("durability") or {}).get(g.slot)
+            if economy.wears(g) and left is not None:
+                pool = economy.item_pool(g)
+                if left < pool:
+                    rprice = economy.repair_price(g, 1 - left / pool)
+                    xp_cost = economy.hone_xp(p["unlocked_floor"])
+                    return [Option(
+                        f"forge_fix_{g.slot}",
+                        "Go to the Forge and fix",
+                        f"◈ {rprice:,} + {xp_cost} XP")], ""
+            return [], ("Already in your hand."
+                        if g.slot in ("weapon", "shield")
+                        else "Already worn.")
         if g.slot in economy.DURABILITY_SLOTS and have:
-            if p["gear"].get(g.slot) == slug:
-                return [], ("Already in your hand."
-                            if g.slot in ("weapon", "shield")
-                            else "Already worn.")
             if g.slot == "weapon":
                 label = "Use this"
             elif g.slot == "shield":
@@ -242,18 +256,46 @@ def _pack_use(p: dict, oid: str) -> Scene | None:
     """027: a pack action taken from the strip — legal in any room, never
     in a fight. Returns None when the id isn't a pack action."""
     wearing = oid.startswith("wear_")
-    if oid not in PACK_USE_IDS and not wearing:
+    fixing = oid.startswith("forge_fix_")
+    if oid not in PACK_USE_IDS and not wearing and not fixing:
         return None
     if p.get("encounter"):
-        if wearing:
+        if wearing or fixing:
             # 048 phase 3: the promote is refused mid-fight WITH a
             # reason — not the generic "not one of the paths".
             s = _build_scene(p)
-            s.shard_note = ("Not mid-fight — you don't re-rig your "
-                            "hands with teeth in your face. The swap "
-                            "waits for the road.")
+            s.shard_note = (("Not mid-fight — the Forge keeps. Finish "
+                             "this first.") if fixing else
+                            ("Not mid-fight — you don't re-rig your "
+                             "hands with teeth in your face. The swap "
+                             "waits for the road."))
             return s
         return None
+    if fixing:
+        # the worn piece's shortcut home: one tap walks you to the
+        # anvil from any room. Just the trip — the repair row on the
+        # wall takes the coin.
+        slot = oid.removeprefix("forge_fix_")
+        slug = (p.get("gear") or {}).get(slot) or ""
+        acts, why = pack_actions(p, slug) if slug else ([], "")
+        if not any(o.id == oid for o in acts):
+            s = _build_scene(p)
+            s.shard_note = why or "Nothing happens."
+            return s
+        p["location"] = "forge"
+        p["floor"] = 0
+        for k in ("hall_area", "hall_ask", "hall_putting", "hall_kicking",
+                  "hall_promoting", "banner_page", "guild_dir",
+                  "door_rules", "profile_view", "profile_back",
+                  "profile_pay", "profile_gift", "profile_loot"):
+            p.pop(k, None)
+        s = _forge_scene(p)
+        g = economy.FORGE.get(slug)
+        if g:
+            s.shard_note = (f"Back to Roothollow — the smith waves the "
+                            f"{g.name} onto the anvil. The repair row "
+                            "is on the wall.")
+        return s
     slug = oid.removeprefix("wear_" if wearing else "use_")
     acts, why = pack_actions(p, slug)
     if not any(o.id == oid for o in acts):
@@ -1383,6 +1425,7 @@ def _forge_scene(p: dict) -> Scene:
     # 0.29.4: a held repair token adds a FREE row per worn piece — the
     # token finally spends where its name promised.
     tokens = p["inventory"].get("repair_token", 0)
+    mend_art: dict[str, str] = {}
     for slot in economy.DURABILITY_SLOTS:
         g = economy.FORGE.get(p["gear"].get(slot) or "")
         left = (p.get("durability") or {}).get(slot)
@@ -1398,11 +1441,15 @@ def _forge_scene(p: dict) -> Scene:
             f"pay ◈ {rprice:,} · +{hone_xp} XP · "
             f"durability {economy.endurance(g, left):,} → "
             f"{economy.endurance(g):,}"))
+        # the mend row wears the piece's own 1-bit icon (option_art
+        # resolves gear slugs to the same glyph the shop rows use)
+        mend_art[f"repair_{slot}"] = g.slug
         if tokens > 0:
             opts.append(Option(
                 f"token_{slot}",
                 f"Mend {g.name} with a token",
                 f"free — {tokens} held"))
+            mend_art[f"token_{slot}"] = g.slug
     if cap > 0:
         honed = ", ".join(
             f"{slot} +{state.hone_level(p, slot)}"
@@ -1435,6 +1482,7 @@ def _forge_scene(p: dict) -> Scene:
         grid=True,
         meters=combat.meters(p),
         banner="forge",
+        option_art=mend_art,
     )
 
 

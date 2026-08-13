@@ -1605,7 +1605,10 @@ def render_scene_fragment(scene: Scene) -> str:
             tip = tips.option_tip(o.id)
             info = (f'<span class="info" tabindex="0" role="note" '
                     f'data-tip="{_e(tip)}">i</span>' if tip else "")
-            if grid_mode and gicon:
+            # the mend rows keep their place at the foot of the wall —
+            # the icon rides the row, left of the label, never a card
+            if grid_mode and gicon \
+                    and not o.id.startswith(("repair_", "token_")):
                 # the card stacks its facts — cost, stat, durability
                 # each on its own line (the button is a column flex,
                 # so every span is a line of its own)
