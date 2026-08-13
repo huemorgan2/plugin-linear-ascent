@@ -316,8 +316,9 @@ async function runFX(root) {
     for (let i = 0; i < ns.length; i++) {
       const n = ns[i], t = full[i];
       n.parentNode.insertBefore(cur, n.nextSibling);
-      for (let c = 1; c <= t.length; c++) {
-        n.nodeValue = t.slice(0, c); await sleep(fast ? 2 : 7);
+      for (let c = 3; c < t.length + 3; c += 3) {
+        n.nodeValue = t.slice(0, Math.min(c, t.length));
+        await sleep(fast ? 2 : 7);
         if (!el.isConnected) { cur.remove(); return; }
       }
     }
@@ -325,7 +326,7 @@ async function runFX(root) {
   }
   let d = 0;
   for (const el of later) {
-    setTimeout(() => el.classList.add('shown'), d); d += fast ? 22 : 90;
+    setTimeout(() => el.classList.add('shown'), d); d += fast ? 8 : 30;
   }
 }
 
