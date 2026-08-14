@@ -1825,13 +1825,28 @@ def _arcanum_scene(p: dict) -> Scene:
     _rack(p, economy.gear_rungs("shield", "sorcerer"), opts, lines)
     _relic_rows(p, "arcanum", opts, lines)    # 006: the mage relics
     opts.append(Option("back", "Back to the square"))
+    # 057: the Arcanum is the Forge's twin now — a card wall, not prose
+    # above a list. One line of explanation survives as the shard note;
+    # `lines` is built and dropped so _rack stays one shape, and the
+    # same folded legend rides the foot of the wall.
+    nod = ("Staves and focuses for every hand — steel and armor are "
+           "sold at the Forge, across the square.")
+    legend = [
+        "▣ what the cards say — in plain words",
+        "• cost — the gold you hand over once, at the counter.",
+        "• attack / defense — attack is how hard you hit; "
+        "defense is how much of a blow you shrug off.",
+        "• durability — how many hits a piece can take before it "
+        "breaks. The Forge's smith repairs caster's work too.",
+        "▣.",
+    ]
     return Scene(
         eyebrow="ROOTHOLLOW · THE ARCANUM",
         headline="Star-charts, staves and patient glass",
-        support="The shop hums a half-tone above silence. The "
-                "shopkeeper's eyes are the only bright thing in it.",
-        body_lines=lines,
+        shard_note=nod,
+        body_lines=legend,
         options=opts,
+        grid=True,
         meters=combat.meters(p),
         banner="arcanum",
     )

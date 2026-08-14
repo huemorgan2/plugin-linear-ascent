@@ -87,10 +87,16 @@ identity hints; accepts slugs as args; skips existing unless
 ## Phases
 
 1. **P1 — this folder: 10 sample swords** (below) + this plan. STOP
-   for review — roy judges the look before any bulk generation.
-2. **P2** — bulk-generate all 85 (≈85 model calls), review contact
-   sheets, regenerate the misses.
-3. **P3** — wire icons + hover + Arcanum card wall + tests, ship.
+   for review — roy judges the look before any bulk generation. DONE,
+   approved.
+2. **P2** — bulk-generate all 85 (`tools/generate_weapon_art.py`; the
+   10 P1 swords copied, not re-rendered), review contact sheets in
+   `review/`, regenerate the misses. DONE.
+3. **P3** — wire icons + hover + Arcanum card wall + tests. DONE in
+   0.79.0: `render._weapon_art_url`/`_weapon_art_slug` resolve per-slug
+   art (variants → base), shop rows/cards/pack cells wear the 30x48
+   face (`.gicon.gw`, `.picon.gw`), weapon cards carry the portrait in
+   `data-tiph`, the Arcanum is a card wall with the Forge's legend.
 
 ## P1 — the 10 review swords
 

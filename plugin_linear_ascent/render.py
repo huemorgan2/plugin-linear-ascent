@@ -63,6 +63,12 @@ _EVENTS = os.path.join(_ART_ROOT, "events")
 _SIGILS = os.path.join(_ART, "factions")
 # 030: full-body player portraits, 100×200 — one per armour forge tier.
 _PORTRAITS = os.path.join(_ART_ROOT, "portraits")
+# 057: every weapon wears its own face — per-slug 1-bit art at two
+# sizes: icons/<slug>_30x48.png replaces the shared line glyph wherever
+# FORGE gear renders; large/<slug>_100x160.png rides the card's hover
+# tip. keen/warded variants reuse their base weapon's art (the style
+# tint carries the difference, same as the pack strip).
+_WEAPONS_ART = os.path.join(_ART_ROOT, "weapons")
 # 009: ONE font everywhere — the homepage's bitmap IBM VGA 8×16, shipped
 # inside the card CSS as a data: url so both hosts (web pane and legacy
 # chat card) render it without a network fetch.
@@ -128,6 +134,27 @@ def _banner_data_url(slug: str) -> tuple[str, int, int] | None:
                 w, h = (int(n) for n in size.split("x"))
                 return f"data:image/png;base64,{b64}", w, h
     return None
+
+
+@lru_cache(maxsize=None)
+def _weapon_art_url(slug: str, kind: str) -> str | None:
+    """data URL for a weapon's own 1-bit art, or None.
+    kind: "icons" (30x48) or "large" (100x160)."""
+    size = "30x48" if kind == "icons" else "100x160"
+    path = os.path.join(_WEAPONS_ART, kind, f"{slug}_{size}.png")
+    if not os.path.exists(path):
+        return None
+    b64 = base64.b64encode(open(path, "rb").read()).decode()
+    return f"data:image/png;base64,{b64}"
+
+
+def _weapon_art_slug(slug: str) -> str:
+    """The slug whose art a weapon draws — keen/warded variants reuse
+    their base weapon's face; "" when the slug isn't a FORGE weapon."""
+    g = economy.FORGE.get(slug)
+    if g is None or g.slot != "weapon":
+        return ""
+    return g.base or slug
 
 
 @lru_cache(maxsize=None)
@@ -1069,11 +1096,51 @@ def _opt_gear_icon(oid: str, art_slug: str = "") -> str:
         g = economy.FORGE.get(slug)
         if g is None:
             return ""
+        # 057: a weapon wears its OWN face when the art ships — the
+        # shared line glyph survives only as the fallback. keen/warded
+        # keep their style ink over the base weapon's mask.
+        wart = _weapon_art_slug(slug)
+        wurl = _weapon_art_url(wart, "icons") if wart else None
+        if wurl:
+            tint = _STYLE_TINT.get(economy.style_of(slug))
+            tint_css = f"background-color:{tint};" if tint else ""
+            return (f'<span class="gicon gw" aria-hidden="true" '
+                    f'style="{tint_css}'
+                    f"-webkit-mask-image:url('{wurl}');"
+                    f"mask-image:url('{wurl}')\"></span>")
         key = icons.icon_key(slug, g.slot)
     url = icons.icon_data_url(key)
     return (f'<span class="gicon" aria-hidden="true" '
             f"style=\"-webkit-mask-image:url('{url}');"
             f"mask-image:url('{url}')\"></span>")
+
+
+def _weapon_card_tip(oid: str) -> str:
+    """057: tip attrs for a weapon card — hovering the card shows the
+    weapon LARGE: the 100x160 portrait (tinted mask, same technique as
+    every icon) above a colored ATK / DURABILITY line and the flavor.
+    "" for any option that isn't a weapon with shipped art."""
+    if not oid.startswith(("buy_", "wear_")):
+        return ""
+    slug = oid.split("_", 1)[1]
+    g = economy.FORGE.get(slug)
+    wart = _weapon_art_slug(slug)
+    lurl = _weapon_art_url(wart, "large") if wart else None
+    if g is None or not lurl:
+        return ""
+    tint = _STYLE_TINT.get(economy.style_of(slug)) or ART
+    plain = f"{g.name} — {g.flavor}"
+    tiph = (
+        f'<span style="display:block;width:100px;height:160px;'
+        f"margin:0 auto 6px;background-color:{tint};"
+        f"-webkit-mask-image:url('{lurl}');mask-image:url('{lurl}');"
+        f"-webkit-mask-size:100% 100%;mask-size:100% 100%;"
+        f'image-rendering:pixelated"></span>'
+        f'<span style="color:{GOLD}">ATK {g.bonus:,}</span> · '
+        f'<span style="color:{OK}">DURABILITY '
+        f"{economy.endurance(g):,}</span>"
+        f"<br>{_e(plain)}")
+    return f' data-tip="{_e(plain)}" data-tiph="{_e(tiph)}"'
 
 
 # ── 031 §13: art rides the choice the engine says it belongs to ─────────
@@ -1103,6 +1170,14 @@ def _slot_cell(it: dict) -> str:
     slug = it.get("slug", "")
     equipped = bool(it.get("equipped"))
     url = icons.icon_data_url(icons.icon_key(slug, it.get("kind", "")))
+    # 057: weapons wear their own face in the pack too — the 30x48 art
+    # centered in the square cell (mask-size contain via .gw); other
+    # gear keeps the 16×16 grid glyphs.
+    picon_cls = ""
+    wart = _weapon_art_slug(slug)
+    wurl = _weapon_art_url(wart, "icons") if wart else None
+    if wurl:
+        url, picon_cls = wurl, " gw"
     # 025 §4: the same glyph in the style's ink — ember for keen steel,
     # frost for warded. Unstyled gear keeps the worn/packed contrast.
     tint = _STYLE_TINT.get(economy.style_of(slug)) or (
@@ -1167,7 +1242,7 @@ def _slot_cell(it: dict) -> str:
         f'data-tip="{_e(tip)}"{tiph_attr} data-slug="{_e(slug)}" '
         f'data-name="{_e(name)}"'
         f"{act_attr}{why_attr}>"
-        f'<span class="picon" style="background-color:{tint};'
+        f'<span class="picon{picon_cls}" style="background-color:{tint};'
         f"-webkit-mask-image:url('{url}');mask-image:url('{url}');\">"
         f"</span>{ct}{durbar}</button>")
 
@@ -1744,8 +1819,12 @@ def render_scene_fragment(scene: Scene) -> str:
                     f'<span class="hint">{_ep(part)}</span>'
                     for part in o.hint.split(" · ") if part)
                     if o.hint else "")
+                # 057: hovering a weapon card shows the weapon LARGE —
+                # the 100x160 portrait rides the card's own tip as
+                # server-authored HTML above the colored param line.
+                tipa = _weapon_card_tip(o.id)
                 card = (f'<button type="button" class="opt gcard{opt_cls}" '
-                        f'data-opt="{_e(o.id)}">'
+                        f'data-opt="{_e(o.id)}"{tipa}>'
                         f'<span class="key{key_cls}">{i}</span>{gicon}'
                         f'<span class="lbl">{_ep(o.label)}</span>{badge}'
                         f"{stack}</button>")
@@ -2120,6 +2199,8 @@ SCENE_CSS = f"""
  background-color:{DIM};mask-size:100% 100%;-webkit-mask-size:100% 100%;
  mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;
  image-rendering:pixelated;}}
+/* 057: a weapon's own 30x48 face keeps its portrait aspect */
+.opt .gicon.gw{{width:30px;height:48px;}}
 /* ── 030: gate floor rows — a door you can see through ── */
 .opt.ftile{{min-height:96px;}}
 .farts{{flex:none;display:flex;gap:4px;align-items:center;}}
@@ -2146,6 +2227,7 @@ SCENE_CSS = f"""
  color:{INK}!important;}}
 .gcard .key{{position:absolute;top:5px;left:7px;}}
 .gcard .gicon{{width:56px;height:56px;background-color:{ART};}}
+.gcard .gicon.gw{{width:60px;height:96px;}}
 .gcard:hover .gicon{{background-color:{INK};}}
 .gcard.locked .gicon{{background-color:{DIM};}}
 .gcard.locked:hover .gicon{{background-color:{INK};}}
@@ -2242,6 +2324,10 @@ SCENE_CSS = f"""
  mask-size:100% 100%;-webkit-mask-size:100% 100%;mask-repeat:no-repeat;
  -webkit-mask-repeat:no-repeat;image-rendering:pixelated;}}
 .hcell .picon{{width:34px;height:34px;}}
+/* 057: weapon art is 30x48 upright — in the square pack cell it sits
+   centered at its own aspect instead of stretching to fill */
+.picon.gw{{mask-size:contain;-webkit-mask-size:contain;
+ mask-position:center;-webkit-mask-position:center;}}
 .slot .ct{{position:absolute;right:2px;bottom:0;color:{TEXT};
  line-height:1.2;}}
 .slot .dur{{position:absolute;left:3px;right:3px;bottom:2px;height:3px;

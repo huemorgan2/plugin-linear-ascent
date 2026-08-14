@@ -481,7 +481,9 @@ def test_mend_rows_wear_their_gear_icon():
     assert s.option_art.get("token_weapon") == "scrap_dagger"
     html = render.render_scene_fragment(s)
     row = html.split('data-opt="repair_weapon"', 1)[1].split("</button>")[0]
-    assert 'class="gicon"' in row, "the mend row carries the gear icon"
+    # 057: a weapon's mend row wears the weapon's OWN face (gicon gw);
+    # non-weapon gear keeps the plain shared glyph
+    assert 'class="gicon' in row, "the mend row carries the gear icon"
     # the icon dresses the row where it stands — never promotes it to
     # a shop card up on the wall
     card = html.split('data-opt="repair_weapon"', 1)[0].rsplit("<button", 1)[1]
