@@ -172,10 +172,22 @@ select.ti{{background:{INK};color:{TEXT};border:1px solid {BORDER};
 .fbbadge{{position:absolute;top:-7px;right:-7px;background:{AETHER};
  color:{INK};line-height:1;padding:2px 4px;
  letter-spacing:0;}}
-#fbpanel{{display:none;position:fixed;inset:0;z-index:110;background:{INK};
- overflow-y:auto;}}
-#fbpanel.open{{display:block;}}
-#fbpanel .fbwrap{{max-width:760px;margin:0 auto;padding:14px 12px 90px;}}
+#fbpanel,#plypanel{{display:none;position:fixed;inset:0;z-index:110;
+ background:{INK};overflow-y:auto;}}
+#fbpanel.open,#plypanel.open{{display:block;}}
+#fbpanel .fbwrap,#plypanel .fbwrap{{max-width:760px;margin:0 auto;
+ padding:14px 12px 90px;}}
+/* ── 056: the Playing panel — the tower's pulse ── */
+.plytabs{{display:flex;gap:1ch;margin:10px 0;}}
+.plytab{{background:none;border:1px solid {BORDER};color:{DIM};
+ font:inherit;letter-spacing:.14em;text-transform:uppercase;
+ padding:4px 1.5ch;cursor:pointer;}}
+.plytab.on{{color:{INK};background:{TEXT};border-color:{TEXT};}}
+.plyrow{{display:grid;grid-template-columns:1fr auto;gap:1ch;
+ padding:6px 0;border-bottom:1px dashed {BORDER};align-items:baseline;}}
+.plyrow .sub{{color:{FAINT};white-space:nowrap;}}
+.plyrow.war .pline{{color:{GOLD};}}
+.plyrow.boss .pline{{color:{AETHER};}}
 textarea.ti{{background:{INK};color:{TEXT};border:1px solid {BORDER};
  font:inherit;padding:6px 1ch;width:100%;box-sizing:border-box;
  min-height:110px;resize:vertical;display:block;}}
@@ -552,6 +564,7 @@ async function peek() {
   try {
     const d = await call('/pane/peek');
     if (d.scene_id && sceneId && d.scene_id !== sceneId) loadScene(true);
+    plyUpdate(d);
   } catch (e) {}
 }
 /* 0.29.5: 2s — the pane FOLLOWS the agent's play move by move (peek is
@@ -981,6 +994,101 @@ function renderBoard(d) {
    an ADMIN switch: every thread, WhatsApp-sorted, same chat inside.
    Unread counts ride small red badges — polled once a minute and after
    every postbox act, never on the 2s peek hot path. */
+/* ── 056 PLAYING: the tower's pulse, riding the 2s peek ─────────────────
+   The peek carries two ints (online, feed_head). The counter repaints
+   every tick; the feed is fetched ONLY while the panel is open and the
+   head has moved past our cursor — closed panel costs nothing. */
+const plyPanel = document.getElementById('plypanel');
+const plyBtn = document.getElementById('plybtn');
+const plyCount = document.getElementById('plycount');
+let ply = {open: false, tab: 'world', cursor: 0, head: 0,
+           rows: [], faction: undefined, busy: false};
+
+function plyUpdate(d) {
+  if (d.online !== undefined) plyCount.textContent = num(d.online);
+  if (d.feed_head !== undefined) ply.head = Number(d.feed_head) || 0;
+  if (ply.open && ply.head > ply.cursor) plyLoad();
+}
+
+const PLY_WHEN = iso => {
+  try {
+    const s = (Date.now() - new Date(iso).getTime()) / 1000;
+    if (s < 60) return 'now';
+    if (s < 3600) return Math.floor(s / 60) + 'm';
+    if (s < 86400) return Math.floor(s / 3600) + 'h';
+    return fbWhen(iso);
+  } catch (e) { return ''; }
+};
+
+function plyRender() {
+  const t = n => '<button class="plytab' + (ply.tab === n ? ' on' : '')
+    + '" data-ply="' + n + '">' + n + '</button>';
+  let h = '<div class="fbwrap"><div class="eyebrow">PLAYING · '
+    + esc(plyCount.textContent) + ' on the floors</div>'
+    + '<div class="plytabs">' + t('world') + t('faction')
+    + '<button class="plytab" data-ply="close" style="margin-left:auto">'
+    + 'close</button></div>';
+  if (ply.tab === 'faction' && ply.faction === null) {
+    h += '<div class="placeholder"><div class="eyebrow">no banner</div>'
+      + 'You climb alone. Join a faction at the Guildhall on any '
+      + 'milestone floor — or found your own.<br><br>'
+      + '<button class="plytab" data-ply="hall">to the guildhall'
+      + '</button></div>';
+  } else if (!ply.rows.length) {
+    h += '<div class="placeholder"><div class="eyebrow">quiet</div>'
+      + 'The tower holds its breath. News lands here as it happens.</div>';
+  } else {
+    for (const r of ply.rows) {
+      h += '<div class="plyrow ' + esc(r.kind || '') + '">'
+        + '<span class="pline">' + esc(r.line) + '</span>'
+        + '<span class="sub">'
+        + (r.floor ? 'F' + esc(r.floor) + ' · ' : '')
+        + PLY_WHEN(r.ts) + '</span></div>';
+    }
+  }
+  plyPanel.innerHTML = h + '</div>';
+}
+
+async function plyLoad() {
+  if (ply.busy) return;
+  ply.busy = true;
+  try {
+    const d = await call('/pane/playing/feed?scope=' + ply.tab
+      + '&since=' + ply.cursor);
+    ply.faction = d.faction;
+    ply.head = Math.max(ply.head, Number(d.head) || 0);
+    ply.cursor = ply.head;
+    if (d.rows && d.rows.length) {
+      const seen = new Set(ply.rows.map(r => r.id));
+      ply.rows = d.rows.filter(r => !seen.has(r.id)).concat(ply.rows)
+        .slice(0, 100);
+    }
+    plyRender();
+  } catch (e) { if (e.message !== 'auth') plyRender(); }
+  finally { ply.busy = false; }
+}
+
+function plyOpen() {
+  ply.open = true; ply.cursor = 0; ply.rows = [];
+  plyPanel.classList.add('open');
+  plyRender();
+  plyLoad();
+}
+function plyClose() { ply.open = false; plyPanel.classList.remove('open'); }
+plyBtn.addEventListener('click', () => {
+  if (window.__laSfx) window.__laSfx('click');
+  if (ply.open) plyClose(); else plyOpen();
+});
+plyPanel.addEventListener('click', (e) => {
+  const b = e.target.closest('[data-ply]');
+  if (!b) return;
+  const a = b.dataset.ply;
+  if (a === 'close') { plyClose(); return; }
+  if (a === 'hall') { plyClose(); switchTab('community'); return; }
+  if (a !== ply.tab) { ply.tab = a; ply.cursor = 0; ply.rows = [];
+                       plyRender(); plyLoad(); }
+});
+
 const fbPanel = document.getElementById('fbpanel');
 const fbLight = document.getElementById('fblight');
 const fbBtn = document.getElementById('fbbtn');
@@ -1051,6 +1159,8 @@ document.addEventListener('keydown', (e) => {
     fbLight.classList.remove('open');
   } else if (fbPanel.classList.contains('open')) {
     if (fb.id) { fb.id = 0; fbDraft = []; fbLoad(); } else fbClose();
+  } else if (plyPanel.classList.contains('open')) {
+    plyClose();
   }
 });
 
@@ -1295,6 +1405,9 @@ def render_pane(api_base: str = _API, web: bool = False) -> str:
   <button id="sndmus" class="sndbtn" aria-pressed="true"><span class="sndico"
     style="mask-image:url('{note}');-webkit-mask-image:url('{note}')"
     aria-hidden="true"></span><span class="sndlab">music on</span></button>
+  <button id="plybtn" class="sndbtn"><span
+    aria-hidden="true">▶</span><span class="sndlab">playing</span><span
+    id="plycount">–</span></button>
   <button id="fbbtn" class="sndbtn"><span class="sndico"
     style="mask-image:url('{post}');-webkit-mask-image:url('{post}')"
     aria-hidden="true"></span><span class="sndlab">feedback</span><span
@@ -1305,6 +1418,7 @@ def render_pane(api_base: str = _API, web: bool = False) -> str:
     id="fbabadge" class="fbbadge" hidden></span></button>
 </div>
 <div id="fbpanel"></div>
+<div id="plypanel"></div>
 <div id="fblight"></div>
 <script>{INTERACT_JS}</script>
 <script>{_JS.replace("__API__", api_base)

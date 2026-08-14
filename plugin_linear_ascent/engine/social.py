@@ -913,6 +913,11 @@ def guild_train(p: dict) -> Scene:
     p["level"] += 1
     p["hp"] = state.max_hp(p)
     _ledger(p, "levelup", gold=-fee, note=f"level {p['level']}")
+    if p.get("_world") is not None:
+        _effect(p, "happening",
+                line=f"{p.get('name') or 'A climber'} bought level "
+                     f"{p['level']} at the drillmaster",
+                meta={"level": p["level"]})
     # 020: levels are BOUGHT, so this card is guaranteed to be read —
     # it announces everything the new level opens and closes.
     from .. import unlocks

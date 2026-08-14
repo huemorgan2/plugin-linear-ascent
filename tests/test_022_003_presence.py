@@ -151,7 +151,8 @@ class _FakeRemote:
 
     async def presence(self, user):
         self.calls += 1
-        return {"floor": 1, "hot": self.calls, "camped": 0}
+        return {"floor": 1, "hot": self.calls, "camped": 0,
+                "online": 10 * self.calls, "feed_head": 100 * self.calls}
 
 
 def test_floor_presence_caches_and_refreshes_once_a_minute(monkeypatch):
@@ -160,20 +161,24 @@ def test_floor_presence_caches_and_refreshes_once_a_minute(monkeypatch):
     monkeypatch.setitem(runtime.state, "presence", {})
     t = [1000.0]
     monkeypatch.setattr(runtime.time, "monotonic", lambda: t[0])
-    # the hot path: two peeks inside the window = ONE world round trip
-    assert asyncio.run(runtime.floor_presence("u")) == 1
-    assert asyncio.run(runtime.floor_presence("u")) == 1
+    # the hot path: two peeks inside the window = ONE world round trip.
+    # 056: the same slot carries the Playing ints — still one call.
+    d = asyncio.run(runtime.floor_presence("u"))
+    assert (d["hot"], d["online"], d["feed_head"]) == (1, 10, 100)
+    assert asyncio.run(runtime.floor_presence("u"))["hot"] == 1
     assert remote.calls == 1
     # window expires → one refresh, monotonic with the served count
     t[0] += runtime.PRESENCE_REFRESH_S + 1
-    assert asyncio.run(runtime.floor_presence("u")) == 2
+    d = asyncio.run(runtime.floor_presence("u"))
+    assert (d["hot"], d["online"], d["feed_head"]) == (2, 20, 200)
     assert remote.calls == 2
 
 
 def test_floor_presence_is_zero_without_a_world(monkeypatch):
     monkeypatch.setitem(runtime.state, "remote", None)
     monkeypatch.setitem(runtime.state, "presence", {})
-    assert asyncio.run(runtime.floor_presence("u")) == 0
+    d = asyncio.run(runtime.floor_presence("u"))
+    assert (d["hot"], d["online"], d["feed_head"]) == (0, 0, 0)
 
 
 def test_failed_refresh_keeps_the_last_honest_number(monkeypatch):
@@ -185,13 +190,16 @@ def test_failed_refresh_keeps_the_last_honest_number(monkeypatch):
             self.calls += 1
             if self.calls > 1:
                 raise RuntimeError("world down")
-            return {"floor": 1, "hot": 4, "camped": 0}
+            return {"floor": 1, "hot": 4, "camped": 0,
+                    "online": 7, "feed_head": 40}
 
     remote = Flaky()
     monkeypatch.setitem(runtime.state, "remote", remote)
     monkeypatch.setitem(runtime.state, "presence", {})
     t = [0.0]
     monkeypatch.setattr(runtime.time, "monotonic", lambda: t[0])
-    assert asyncio.run(runtime.floor_presence("u")) == 4
+    d = asyncio.run(runtime.floor_presence("u"))
+    assert (d["hot"], d["online"]) == (4, 7)
     t[0] += runtime.PRESENCE_REFRESH_S + 1
-    assert asyncio.run(runtime.floor_presence("u")) == 4
+    d = asyncio.run(runtime.floor_presence("u"))
+    assert (d["hot"], d["online"], d["feed_head"]) == (4, 7, 40)

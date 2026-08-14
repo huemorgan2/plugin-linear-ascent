@@ -1685,6 +1685,13 @@ def _gear_purchase(p: dict, g, scene_fn) -> Scene:
         note += (" — paid gear wears with use; the Forge repairs it "
                  "for a fraction of its price")
     combat._ledger(p, "buy", gold=-price, note=g.slug)
+    # 056: faction grain — the banner hears about new steel.
+    if p.get("_world") is not None and p.get("guild"):
+        from . import social
+        social._effect(p, "happening", scope="faction",
+                       line=f"{p.get('name') or 'A climber'} bought "
+                            f"{g.name}",
+                       meta={"item": g.slug})
     s = scene_fn(p)
     s.body_lines.insert(0, note)
     return s
@@ -2265,6 +2272,13 @@ def _sleep_action(p: dict, oid: str) -> Scene:
     if oid == "sleep_fields":
         state.start_sleep(p, "fields")
         p["location"] = "sleeping"
+        if p.get("_world") is not None:
+            from . import social
+            social._effect(p, "happening",
+                           line=f"{p.get('name') or 'A climber'} lies down "
+                                f"in the open fields of floor "
+                                f"{p.get('floor', 1)}",
+                           floor=p.get("floor", 1))
         return _sleeping_scene(p, note="You roll into a hollow out of the "
                                        "wind and let the fields hold you.")
     if oid != "sleep_lodge":
@@ -2864,6 +2878,14 @@ def _gate_pick(p: dict, oid: str) -> Scene:
         return s
     p["floor"] = n
     p["location"] = "gate_town"
+    # 056: faction grain — the world feed doesn't care which lift you
+    # rode; your banner does.
+    if p.get("_world") is not None and p.get("guild"):
+        from . import social
+        social._effect(p, "happening", scope="faction",
+                       line=f"{p.get('name') or 'A climber'} steps onto "
+                            f"floor {n}",
+                       floor=n)
     # 030 Phase 8: the first time a character sets foot on a floor —
     # old name or new — the floor introduces itself: a short movie,
     # once per floor, skippable on every beat.

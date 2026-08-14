@@ -297,8 +297,11 @@ def register_routes(app, ctx: PluginContext) -> None:
         the hot path — 022/003 adds `floor_presence` (hot blades on the
         player's floor) from a cache refreshed at most once a minute."""
         key = runtime.player_key()
+        pres = await runtime.floor_presence(key)
         return {"scene_id": runtime.last_scene_id(key),
-                "floor_presence": await runtime.floor_presence(key)}
+                "floor_presence": int(pres["hot"]),
+                "online": int(pres["online"]),
+                "feed_head": int(pres["feed_head"])}
 
     # ── 010: score & community (worldd proxies with the host's auth) ────
 
@@ -335,6 +338,15 @@ def register_routes(app, ctx: PluginContext) -> None:
         if runtime.state["remote"] is None:
             return {"ok": True, "html": "", "total": 0}
         return await _proxy(_world().room_more(runtime.player_key()))
+
+    @router.get("/pane/playing/feed")
+    async def pane_playing_feed(scope: str = "world", since: int = 0,
+                                user=Depends(get_current_user)) -> dict:
+        """056: the Playing panel's rows — solo mode has no feed."""
+        if runtime.state["remote"] is None:
+            return {"ok": True, "faction": None, "head": 0, "rows": []}
+        return await _proxy(_world().playing_feed(
+            runtime.player_key(), scope[:16], max(0, since)))
 
     @router.get("/pane/community")
     async def pane_community(user=Depends(get_current_user)) -> dict:

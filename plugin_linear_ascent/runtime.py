@@ -67,26 +67,32 @@ async def pace_wait(user: str) -> None:
         await asyncio.sleep(wait)
 
 
-async def floor_presence(user: str) -> int:
-    """Hot count on the player's floor for the pane peek. The hot path
-    is the in-process cache — a world round trip happens at most once a
-    minute, and a failed refresh keeps the last honest number."""
+async def floor_presence(user: str) -> dict:
+    """Presence ints for the pane peek: {"hot", "online", "feed_head"}.
+    The hot path is the in-process cache — a world round trip happens at
+    most once a minute, and a failed refresh keeps the last honest
+    numbers. 056: the same /v1/presence reply now carries the Playing
+    button's two ints, so the peek stays one cached call."""
     remote = state["remote"]
     if remote is None:
-        return 0
+        return {"hot": 0, "online": 0, "feed_head": 0}
     now = time.monotonic()
     slot = state["presence"].get(user)
     if slot is not None and now - slot["at"] < PRESENCE_REFRESH_S:
-        return slot["hot"]
+        return slot
     # claim the window before the fetch so concurrent peeks don't stampede
-    slot = {"at": now, "hot": (slot or {}).get("hot", 0)}
+    slot = {"at": now, "hot": (slot or {}).get("hot", 0),
+            "online": (slot or {}).get("online", 0),
+            "feed_head": (slot or {}).get("feed_head", 0)}
     state["presence"][user] = slot
     try:
         d = await remote.presence(user)
         slot["hot"] = int(d.get("hot", 0))
+        slot["online"] = int(d.get("online", 0))
+        slot["feed_head"] = int(d.get("feed_head", 0))
     except Exception:
         pass
-    return slot["hot"]
+    return slot
 
 
 def remember_scene(user: str, scene) -> None:

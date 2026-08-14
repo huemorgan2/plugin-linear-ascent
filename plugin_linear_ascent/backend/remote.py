@@ -89,6 +89,12 @@ class WorldClient:
         """The presence grid's unfold — the rest of the room, ≤200."""
         return await self._post("/v1/room_more", {"player": luna_user})
 
+    async def playing_feed(self, luna_user: str, scope: str = "world",
+                           since: int = 0) -> dict:
+        """056: the Playing panel's rows past the cursor."""
+        return await self._post("/v1/playing_feed", {
+            "player": luna_user, "scope": scope, "since": since})
+
     async def faction_list(self, luna_user: str, q: str = "") -> dict:
         """The ledger: top 10 by members; q searches server-side (015)."""
         return await self._post("/v1/faction/list",
