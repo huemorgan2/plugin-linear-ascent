@@ -69,6 +69,10 @@ _PORTRAITS = os.path.join(_ART_ROOT, "portraits")
 # tip. keen/warded variants reuse their base weapon's art (the style
 # tint carries the difference, same as the pack strip).
 _WEAPONS_ART = os.path.join(_ART_ROOT, "weapons")
+# 058: the rest of the shop wears its own face too — shields, focuses,
+# armor, boots and the relics, same two sizes, shipped under art/gear.
+# Weapons keep their 057 home; the lookup tries both.
+_GEAR_ART = os.path.join(_ART_ROOT, "gear")
 # 009: ONE font everywhere — the homepage's bitmap IBM VGA 8×16, shipped
 # inside the card CSS as a data: url so both hosts (web pane and legacy
 # chat card) render it without a network fetch.
@@ -137,24 +141,29 @@ def _banner_data_url(slug: str) -> tuple[str, int, int] | None:
 
 
 @lru_cache(maxsize=None)
-def _weapon_art_url(slug: str, kind: str) -> str | None:
-    """data URL for a weapon's own 1-bit art, or None.
-    kind: "icons" (30x48) or "large" (100x160)."""
+def _gear_art_url(slug: str, kind: str) -> str | None:
+    """data URL for an item's own 1-bit art, or None.
+    kind: "icons" (30x48) or "large" (100x160). Weapons live under
+    art/weapons (057), everything else under art/gear (058)."""
     size = "30x48" if kind == "icons" else "100x160"
-    path = os.path.join(_WEAPONS_ART, kind, f"{slug}_{size}.png")
-    if not os.path.exists(path):
-        return None
-    b64 = base64.b64encode(open(path, "rb").read()).decode()
-    return f"data:image/png;base64,{b64}"
+    for art_dir in (_WEAPONS_ART, _GEAR_ART):
+        path = os.path.join(art_dir, kind, f"{slug}_{size}.png")
+        if os.path.exists(path):
+            b64 = base64.b64encode(open(path, "rb").read()).decode()
+            return f"data:image/png;base64,{b64}"
+    return None
 
 
-def _weapon_art_slug(slug: str) -> str:
-    """The slug whose art a weapon draws — keen/warded variants reuse
-    their base weapon's face; "" when the slug isn't a FORGE weapon."""
+def _gear_art_slug(slug: str) -> str:
+    """The slug whose art an item draws — keen/warded variants reuse
+    their base item's face; relics draw their own; "" when the slug
+    is neither FORGE gear nor a relic."""
     g = economy.FORGE.get(slug)
-    if g is None or g.slot != "weapon":
-        return ""
-    return g.base or slug
+    if g is not None:
+        return g.base or slug
+    if slug in economy.RELICS:
+        return slug
+    return ""
 
 
 @lru_cache(maxsize=None)
@@ -1087,6 +1096,18 @@ def _opt_gear_icon(oid: str, art_slug: str = "") -> str:
             return ""
     else:
         slug = oid.split("_", 1)[1]
+    # 057/058: an item wears its OWN face when the art ships — the
+    # shared line glyph survives only as the fallback. keen/warded
+    # keep their style ink over the base item's mask.
+    wart = _gear_art_slug(slug)
+    wurl = _gear_art_url(wart, "icons") if wart else None
+    if wurl:
+        tint = _STYLE_TINT.get(economy.style_of(slug))
+        tint_css = f"background-color:{tint};" if tint else ""
+        return (f'<span class="gicon gw" aria-hidden="true" '
+                f'style="{tint_css}'
+                f"-webkit-mask-image:url('{wurl}');"
+                f"mask-image:url('{wurl}')\"></span>")
     if slug == "arrow_pack":
         key = "arrows"
     elif slug in economy.RELICS:
@@ -1096,18 +1117,6 @@ def _opt_gear_icon(oid: str, art_slug: str = "") -> str:
         g = economy.FORGE.get(slug)
         if g is None:
             return ""
-        # 057: a weapon wears its OWN face when the art ships — the
-        # shared line glyph survives only as the fallback. keen/warded
-        # keep their style ink over the base weapon's mask.
-        wart = _weapon_art_slug(slug)
-        wurl = _weapon_art_url(wart, "icons") if wart else None
-        if wurl:
-            tint = _STYLE_TINT.get(economy.style_of(slug))
-            tint_css = f"background-color:{tint};" if tint else ""
-            return (f'<span class="gicon gw" aria-hidden="true" '
-                    f'style="{tint_css}'
-                    f"-webkit-mask-image:url('{wurl}');"
-                    f"mask-image:url('{wurl}')\"></span>")
         key = icons.icon_key(slug, g.slot)
     url = icons.icon_data_url(key)
     return (f'<span class="gicon" aria-hidden="true" '
@@ -1115,32 +1124,43 @@ def _opt_gear_icon(oid: str, art_slug: str = "") -> str:
             f"mask-image:url('{url}')\"></span>")
 
 
-def _weapon_card_tip(oid: str) -> str:
-    """057: tip attrs for a weapon card — hovering the card shows the
-    weapon LARGE: the 100x160 portrait (tinted mask, same technique as
-    every icon) above a colored ATK / DURABILITY line and the flavor.
-    "" for any option that isn't a weapon with shipped art."""
+def _gear_card_preview(oid: str, hint: str) -> str:
+    """057b: the item preview — not a tooltip. The card's own face
+    grows: a sibling card 20% larger in every direction, the 100x160
+    portrait at full card scale, the name, the stat line, and a buy
+    button carrying the price at the foot. Desktop shows it on :hover;
+    touch opens it on tap (instead of buying) and ✕ closes it — the
+    wiring lives in TIP_JS, the show/hide rules in SCENE_CSS.
+    058: any FORGE item or relic with shipped art previews; "" else."""
     if not oid.startswith(("buy_", "wear_")):
         return ""
     slug = oid.split("_", 1)[1]
     g = economy.FORGE.get(slug)
-    wart = _weapon_art_slug(slug)
-    lurl = _weapon_art_url(wart, "large") if wart else None
-    if g is None or not lurl:
+    relic = economy.RELICS.get(slug) if g is None else None
+    wart = _gear_art_slug(slug)
+    lurl = _gear_art_url(wart, "large") if wart else None
+    if (g is None and relic is None) or not lurl:
         return ""
+    name = g.name if g is not None else relic.name
     tint = _STYLE_TINT.get(economy.style_of(slug)) or ART
-    plain = f"{g.name} — {g.flavor}"
-    tiph = (
-        f'<span style="display:block;width:100px;height:160px;'
-        f"margin:0 auto 6px;background-color:{tint};"
-        f"-webkit-mask-image:url('{lurl}');mask-image:url('{lurl}');"
-        f"-webkit-mask-size:100% 100%;mask-size:100% 100%;"
-        f'image-rendering:pixelated"></span>'
-        f'<span style="color:{GOLD}">ATK {g.bonus:,}</span> · '
-        f'<span style="color:{OK}">DURABILITY '
-        f"{economy.endurance(g):,}</span>"
-        f"<br>{_e(plain)}")
-    return f' data-tip="{_e(plain)}" data-tiph="{_e(tiph)}"'
+    parts = [t for t in (hint or "").split(" · ") if t]
+    pay = next((t for t in parts if t.startswith("pay ")), "")
+    if oid.startswith("buy_"):
+        act = _ep("buy " + pay[4:]) if pay else "buy it"
+    else:
+        act = "wear it"
+    stats = _ep(" · ".join(t for t in parts if t != pay))
+    stat_html = f'<span class="wpstat">{stats}</span>' if stats else ""
+    return (
+        '<div class="wprev">'
+        '<button type="button" class="wpx" aria-label="close">✕</button>'
+        f'<span class="wpart" aria-hidden="true" '
+        f'style="background-color:{tint};'
+        f"-webkit-mask-image:url('{lurl}');mask-image:url('{lurl}')\">"
+        "</span>"
+        f'<span class="wpname">{_e(name)}</span>{stat_html}'
+        f'<button type="button" class="opt wpbuy" '
+        f'data-opt="{_e(oid)}">{act}</button></div>')
 
 
 # ── 031 §13: art rides the choice the engine says it belongs to ─────────
@@ -1170,12 +1190,12 @@ def _slot_cell(it: dict) -> str:
     slug = it.get("slug", "")
     equipped = bool(it.get("equipped"))
     url = icons.icon_data_url(icons.icon_key(slug, it.get("kind", "")))
-    # 057: weapons wear their own face in the pack too — the 30x48 art
-    # centered in the square cell (mask-size contain via .gw); other
-    # gear keeps the 16×16 grid glyphs.
+    # 057/058: items wear their own face in the pack too — the 30x48
+    # art centered in the square cell (mask-size contain via .gw);
+    # anything without shipped art keeps the 16×16 grid glyphs.
     picon_cls = ""
-    wart = _weapon_art_slug(slug)
-    wurl = _weapon_art_url(wart, "icons") if wart else None
+    wart = _gear_art_slug(slug)
+    wurl = _gear_art_url(wart, "icons") if wart else None
     if wurl:
         url, picon_cls = wurl, " gw"
     # 025 §4: the same glyph in the style's ink — ember for keen steel,
@@ -1381,6 +1401,30 @@ TIP_JS = """(function () {
     hide();
   });
   window.addEventListener('scroll', hide, true);
+  /* 057b: the weapon preview. Desktop (hover) shows it in CSS and the
+     buy button is simply on top of the card. On touch the card's tap
+     must open the preview INSTEAD of buying — this capture listener
+     fires before the host's buy wiring and stops it. ✕ or a tap
+     anywhere outside closes; the preview's own buy button acts. */
+  function unpre() {
+    var o = document.querySelectorAll('.gcell.wopen');
+    for (var i = 0; i < o.length; i++) o[i].classList.remove('wopen');
+  }
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest) return;
+    var x = e.target.closest('.wpx');
+    if (x) { e.preventDefault(); e.stopPropagation(); unpre(); return; }
+    if (matchMedia('(hover: hover)').matches) return;
+    var c = e.target.closest('.gcard[data-wprev]');
+    if (c) {
+      e.preventDefault(); e.stopPropagation();
+      var cell = c.closest('.gcell');
+      unpre();
+      if (cell) cell.classList.add('wopen');
+      return;
+    }
+    if (!e.target.closest('.wprev')) unpre();
+  }, true);
 })();"""
 
 # ── 027: the three new interactions, written once for both hosts ────────
@@ -1828,16 +1872,21 @@ def render_scene_fragment(scene: Scene) -> str:
                     f'<span class="hint">{_ep(part)}</span>'
                     for part in o.hint.split(" · ") if part)
                     if o.hint else "")
-                # 057: hovering a weapon card shows the weapon LARGE —
-                # the 100x160 portrait rides the card's own tip as
-                # server-authored HTML above the colored param line.
-                tipa = _weapon_card_tip(o.id)
+                # 057b: an item card grows a preview — a 20% bigger
+                # sibling card with the portrait at full scale and the
+                # buy button at the foot. Hover shows it on desktop;
+                # on touch the tap opens it INSTEAD of buying (the
+                # data-wprev flag tells TIP_JS to intercept). Locked
+                # cards keep their plain "why is the gate shut" click.
+                prev = ("" if getattr(o, "locked", False)
+                        else _gear_card_preview(o.id, o.hint or ""))
+                wflag = ' data-wprev="1"' if prev else ""
                 card = (f'<button type="button" class="opt gcard{opt_cls}" '
-                        f'data-opt="{_e(o.id)}"{tipa}>'
+                        f'data-opt="{_e(o.id)}"{wflag}>'
                         f'<span class="key{key_cls}">{i}</span>{gicon}'
                         f'<span class="lbl">{_ep(o.label)}</span>{badge}'
                         f"{stack}</button>")
-                cards.append(f'<div class="gcell">{card}{info}</div>')
+                cards.append(f'<div class="gcell">{card}{info}{prev}</div>')
                 continue
             btn = (f'<button type="button" class="opt{opt_cls}" '
                    f'data-opt="{_e(o.id)}">'
@@ -2254,6 +2303,29 @@ SCENE_CSS = f"""
 .opt.locked .amt,.gcard.locked .amt{{color:{FAINT}!important;}}
 .gcell .info{{position:absolute;top:5px;right:5px;border:0;
  background:none;padding:0;}}
+/* ── 057b: the weapon preview — the card, 20% bigger, portrait at
+   full scale, the buy button at the foot. Desktop: lives on :hover.
+   Touch: a tap opens it (.wopen, wired in TIP_JS), ✕ closes. ── */
+.gcell .wprev{{display:none;position:absolute;left:-10%;top:-10%;
+ width:120%;height:120%;z-index:30;flex-direction:column;
+ align-items:center;gap:4px;padding:10px 8px 8px;text-align:center;
+ background:{PANEL};border:1px solid {ART};}}
+.gcell.wopen .wprev{{display:flex;}}
+@media (hover: hover){{
+ .gcell:hover .wprev{{display:flex;}}
+ .wprev .wpx{{display:none;}}}}
+.wpart{{flex:1;width:100%;min-height:0;
+ mask-size:contain;-webkit-mask-size:contain;
+ mask-position:center;-webkit-mask-position:center;
+ mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;
+ image-rendering:pixelated;}}
+.wpname{{color:{BRIGHT};line-height:1.3;flex:none;}}
+.wpstat{{color:{DIM};flex:none;}}
+.wprev .wpbuy{{width:100%;flex:none;justify-content:center;
+ text-align:center;}}
+.wpx{{position:absolute;top:2px;right:2px;background:none;border:0;
+ color:{DIM};padding:4px 8px;cursor:pointer;z-index:1;}}
+.wpx:hover{{color:{BRIGHT};}}
 .info{{flex:none;display:flex;align-items:center;padding:0;
  background:none;border:0;color:{DIM};
  cursor:help;user-select:none;}}
