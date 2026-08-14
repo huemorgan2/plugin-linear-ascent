@@ -24,9 +24,9 @@ whenever the session changes; the pane also answers 401s by asking again
 from __future__ import annotations
 
 from . import icons
-from .render import (AETHER, BORDER, DIM, FAINT, INK, INTERACT_JS, PANEL,
-                     PANEL2, SCENE_CSS, SWAP_JS, TEXT, TIP_JS, VIOLET,
-                     VIOLET_SOFT)
+from .render import (AETHER, ART, BORDER, BRIGHT, DIM, FAINT, FONT_STACK,
+                     GOLD, INK, INTERACT_JS, PANEL, PANEL2, RED, SCENE_CSS,
+                     SWAP_JS, TEXT, TIP_JS, VIOLET, VIOLET_SOFT)
 from .sfx import SFX_JS
 
 _API = "/api/p/plugin-linear-ascent"
@@ -35,7 +35,8 @@ _CSS = f"""
 :root {{ color-scheme: dark; }}
 html,body{{margin:0;padding:0;background:{INK};min-height:100%;}}
 body{{color:{TEXT};
- font:14px/1.6 ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+ font:16px/1.5 {FONT_STACK};
+ -webkit-font-smoothing:none;font-smooth:never;text-rendering:optimizeSpeed;
  font-variant-numeric:tabular-nums;}}
 .wrap{{max-width:760px;margin:0 auto;padding:14px 12px 64px;}}
 .tabs{{display:flex;gap:2px;margin-bottom:12px;border:1px solid {BORDER};
@@ -45,7 +46,7 @@ body{{color:{TEXT};
  padding:9px 0;cursor:pointer;border-radius:0;}}
 .tab:last-child{{border-right:0;}}
 .tab:hover{{color:{TEXT};}}
-.tab.active{{background:{TEXT};color:{INK};font-weight:700;}}
+.tab.active{{background:{GOLD};color:{INK};}}
 .pane{{display:none;}}
 .pane.active{{display:block;}}
 .dim{{color:{DIM};}} .faint{{color:{FAINT};}}
@@ -60,14 +61,14 @@ body{{color:{TEXT};
    there, then it slides up and is gone. Not a popup: nothing to click,
    nothing to dismiss, the card underneath never moves. */
 #latoast{{position:fixed;top:0;left:0;right:0;z-index:120;
- background:#000;color:#ff5c57;border-bottom:1px solid #ff5c5744;
- font:inherit;font-size:12px;line-height:1.5;padding:5px 2ch;
+ background:{INK};color:{RED};border-bottom:1px solid {RED};
+ font:inherit;line-height:1.5;padding:5px 2ch;
  text-align:center;white-space:nowrap;overflow:hidden;
- text-overflow:ellipsis;transition:transform .28s ease;}}
+ text-overflow:ellipsis;transition:transform .28s steps(4,end);}}
 #latoast.gone{{transform:translateY(-110%);}}
 a{{color:{AETHER};}}
 {SCENE_CSS}
-.opt.busy{{border-color:{VIOLET};opacity:.7;}}
+.opt.busy{{opacity:.7;}}
 /* ── 010: score & community ── */
 .panel{{background:{PANEL};border:1px solid {BORDER};padding:12px 2ch 10px;
  margin-bottom:12px;}}
@@ -77,35 +78,40 @@ a{{color:{AETHER};}}
  white-space:nowrap;overflow:hidden;}}
 .trow.head{{color:{FAINT};text-transform:uppercase;letter-spacing:.08em;}}
 .trow .r{{text-align:right;}}
-.trow .gold{{color:#f5a524;text-align:right;}}
+.trow .gold{{color:{GOLD};text-align:right;}}
 /* 030: gold reads gold wherever it is written, coin mask included. */
-.gold{{color:#f5a524;}}
+.gold{{color:{GOLD};}}
 .trow.me{{color:{AETHER};}}
 .fbanner{{width:160px;aspect-ratio:320/112;background-color:{DIM};
  mask-size:100% 100%;-webkit-mask-size:100% 100%;mask-repeat:no-repeat;
  -webkit-mask-repeat:no-repeat;image-rendering:pixelated;flex:none;}}
-.fbanner.big{{width:100%;max-width:320px;background-color:{VIOLET_SOFT};}}
+.fbanner.big{{width:100%;max-width:320px;background-color:{ART};}}
 /* 027: the sigil rides beside a name in tight rows too. */
-.fbanner.small{{width:64px;background-color:{VIOLET_SOFT};}}
+.fbanner.small{{width:64px;background-color:{ART};}}
 .lrow .lname{{display:flex;align-items:center;gap:1ch;min-width:0;}}
 .frow{{display:flex;gap:2ch;align-items:center;padding:8px 0;
  border-bottom:1px dashed {BORDER};}}
 .frow .meta{{flex:1;min-width:0;}}
 .btn{{background:{PANEL2};border:1px solid {BORDER};color:{TEXT};
  font:inherit;padding:6px 1.5ch;cursor:pointer;border-radius:0;}}
-.btn:hover:not(:disabled){{border-color:{VIOLET};}}
+.btn:hover:not(:disabled){{background:{GOLD};border-color:{GOLD};
+ color:{INK};}}
 .btn:disabled{{opacity:.5;cursor:default;}}
-.btn.danger:hover:not(:disabled){{border-color:#f4645f;color:#f4645f;}}
+.btn.danger:hover:not(:disabled){{background:{RED};border-color:{RED};
+ color:{INK};}}
 .bgrid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));
  gap:8px;margin:8px 0;}}
 .bgrid .cell{{border:1px solid {BORDER};padding:6px;cursor:pointer;
  background:{PANEL2};}}
 .bgrid .cell.sel{{border-color:{AETHER};}}
 .bgrid .fbanner{{width:100%;}}
-.bgrid .cap{{color:{FAINT};font-size:11px;margin-top:4px;
+.bgrid .cap{{color:{FAINT};margin-top:4px;
  text-align:center;overflow:hidden;text-overflow:ellipsis;}}
 input.ti{{background:{INK};color:{TEXT};border:1px solid {BORDER};
- font:inherit;padding:6px 1ch;width:100%;box-sizing:border-box;}}
+ font:inherit;padding:6px 1ch;width:100%;box-sizing:border-box;
+ caret-color:{GOLD};}}
+input.ti:focus,select.ti:focus,textarea.ti:focus{{outline:none;
+ border-color:{AETHER};}}
 select.ti{{background:{INK};color:{TEXT};border:1px solid {BORDER};
  font:inherit;padding:6px 1ch;}}
 .bar{{letter-spacing:.5px;color:{VIOLET_SOFT};}}
@@ -121,7 +127,7 @@ select.ti{{background:{INK};color:{TEXT};border:1px solid {BORDER};
 .facname:hover{{color:{AETHER};border-bottom-color:{AETHER};}}
 .back{{display:inline-block;color:{DIM};cursor:pointer;margin-bottom:10px;
  border:1px solid {BORDER};background:{PANEL};padding:5px 1.5ch;}}
-.back:hover{{color:{TEXT};border-color:{VIOLET};}}
+.back:hover{{background:{GOLD};border-color:{GOLD};color:{INK};}}
 .findrow{{display:flex;gap:1ch;margin-bottom:8px;align-items:center;}}
 .findrow .k{{color:{FAINT};letter-spacing:.08em;}}
 .lrow{{display:grid;grid-template-columns:3ch 1fr 9ch 9ch;gap:1ch;
@@ -134,17 +140,17 @@ select.ti{{background:{INK};color:{TEXT};border:1px solid {BORDER};
  border-bottom:1px dashed {BORDER};align-items:center;}}
 .drow .who .sub{{color:{FAINT};}}
 .rowbtns{{display:flex;gap:6px;}}
-.btn.mini{{padding:3px 1ch;font-size:12px;}}
-.btn.armed{{border-color:#f4645f;color:#f4645f;}}
+.btn.mini{{padding:3px 1ch;}}
+.btn.armed{{border-color:{RED};color:{RED};}}
 .tag{{color:{VIOLET_SOFT};}}
-.tag.founder{{color:#f5a524;}}
+.tag.founder{{color:{GOLD};}}
 .deskmsg{{color:{DIM};padding:6px 0 0;min-height:18px;}}
-.deskmsg.bad{{color:#f4645f;}}
+.deskmsg.bad{{color:{RED};}}
 .deskmsg.good{{color:{AETHER};}}
 .deskbar{{border:1px solid {BORDER};
  background:{PANEL};color:{DIM};padding:9px 2ch;margin-top:10px;
  cursor:pointer;letter-spacing:.06em;}}
-.deskbar:hover{{color:{TEXT};border-color:{VIOLET};}}
+.deskbar:hover{{background:{GOLD};border-color:{GOLD};color:{INK};}}
 .savebar{{display:flex;gap:6px;margin-top:6px;}}
 .savebar input{{flex:1;}}
 /* ── 042: the sound bar — pinned under everything, ANSI like the rest */
@@ -152,10 +158,10 @@ select.ti{{background:{INK};color:{TEXT};border:1px solid {BORDER};
  background:{PANEL};border-top:1px solid {BORDER};
  display:flex;justify-content:center;gap:8px;padding:6px 12px;}}
 .sndbtn{{display:flex;align-items:center;gap:1ch;background:none;
- border:1px solid {BORDER};color:{TEXT};font:inherit;font-size:12px;
+ border:1px solid {BORDER};color:{DIM};font:inherit;
  letter-spacing:.14em;text-transform:uppercase;padding:5px 1.5ch;
  cursor:pointer;border-radius:0;}}
-.sndbtn:hover{{border-color:{VIOLET};}}
+.sndbtn:hover{{color:{TEXT};}}
 .sndbtn.off{{color:{DIM};}}
 .sndbtn.off .sndico{{opacity:.35;}}
 .sndico{{width:16px;height:16px;background:currentColor;flex:none;
@@ -163,8 +169,8 @@ select.ti{{background:{INK};color:{TEXT};border:1px solid {BORDER};
  -webkit-mask-repeat:no-repeat;image-rendering:pixelated;}}
 /* ── 051: the postbox — feedback, replies, the admin desk ── */
 .sndbtn{{position:relative;}}
-.fbbadge{{position:absolute;top:-7px;right:-7px;background:#f4645f;
- color:#000;font-size:10px;line-height:1;padding:2px 4px;font-weight:700;
+.fbbadge{{position:absolute;top:-7px;right:-7px;background:{AETHER};
+ color:{INK};line-height:1;padding:2px 4px;
  letter-spacing:0;}}
 #fbpanel{{display:none;position:fixed;inset:0;z-index:110;background:{INK};
  overflow-y:auto;}}
@@ -177,14 +183,14 @@ textarea.ti{{background:{INK};color:{TEXT};border:1px solid {BORDER};
  border-bottom:1px dashed {BORDER};cursor:pointer;align-items:baseline;}}
 .fbrow .fbsub{{color:{TEXT};min-width:0;}}
 .fbrow:hover .fbsub{{color:{AETHER};}}
-.fbrow .sub{{color:{FAINT};font-size:12px;overflow:hidden;
+.fbrow .sub{{color:{FAINT};overflow:hidden;
  text-overflow:ellipsis;white-space:nowrap;}}
-.fbnew{{color:#f4645f;font-weight:700;font-size:12px;}}
+.fbnew{{color:{AETHER};}}
 .fbmsg{{border:1px solid {BORDER};background:{PANEL};padding:8px 2ch;
  margin:10px 0;max-width:85%;}}
-.fbmsg.me{{margin-left:15%;border-color:{VIOLET};}}
+.fbmsg.me{{margin-left:15%;border-color:{GOLD};}}
 .fbmsg.them{{margin-right:15%;}}
-.fbmsg .meta{{color:{FAINT};font-size:11px;text-transform:uppercase;
+.fbmsg .meta{{color:{FAINT};text-transform:uppercase;
  letter-spacing:.08em;margin-bottom:5px;}}
 .fbmsg .mbody{{white-space:pre-wrap;overflow-wrap:anywhere;}}
 .fbatt{{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;}}
@@ -195,8 +201,8 @@ textarea.ti{{background:{INK};color:{TEXT};border:1px solid {BORDER};
 .fbthumbs .twrap{{position:relative;}}
 .fbthumbs img{{max-width:90px;max-height:70px;border:1px solid {BORDER};
  display:block;}}
-.fbthumbs .tx{{position:absolute;top:-7px;right:-7px;background:#000;
- color:#f4645f;border:1px solid #f4645f;font:inherit;font-size:10px;
+.fbthumbs .tx{{position:absolute;top:-7px;right:-7px;background:{INK};
+ color:{RED};border:1px solid {RED};font:inherit;
  line-height:1;padding:2px 4px;cursor:pointer;}}
 #fblight{{display:none;position:fixed;inset:0;z-index:130;
  background:#000000dd;align-items:center;justify-content:center;
@@ -453,7 +459,10 @@ function wireOptions() {
   const btns = [...game.querySelectorAll('button.opt, button.nrow, '
     + 'button.gtile, button.ptile, button.pclose')];
   const hint = game.querySelector('.reply');
-  btns.forEach(b => b.addEventListener('click', async () => {
+  btns.forEach(b => {
+    if (b.__wired) return;
+    b.__wired = true;
+    b.addEventListener('click', async () => {
     if (loading) return;
     if (window.__laSfx) window.__laSfx('click');   // 042
     loading = true;
@@ -471,6 +480,10 @@ function wireOptions() {
       if (d.refusal) {
         // 050: a rule said no — toast the line, no card swap, no
         // typewriter replay; the rows come straight back to hand.
+        // Adopt the answer's scene id: the stored card was re-stamped,
+        // and without this the 2s peek reads "scene changed" and
+        // reloads the whole card right after the toast.
+        if (d.scene_id) sceneId = d.scene_id;
         showToast(d.refusal);
         restore();
       } else {
@@ -480,7 +493,38 @@ function wireOptions() {
       restore();
       if (err.message !== 'auth') showErr(err.message);
     } finally { loading = false; }
-  }));
+  });
+  });
+  wireMore();
+}
+/* the presence grid's MORE N PLAYERS — fetches the rest of the room
+   (server caps at 200) and unfolds it into the same grid */
+function wireMore() {
+  const pm = game.querySelector('button.pmore');
+  if (!pm || pm.__wired) return;
+  pm.__wired = true;
+  pm.addEventListener('click', async () => {
+    pm.disabled = true;
+    try {
+      const d = await call('/pane/room_more', {});
+      const grid = game.querySelector('.pgrid');
+      if (grid && d.html) {
+        const have = new Set([...grid.querySelectorAll('.ptile')]
+          .map(b => b.dataset.opt));
+        const box = document.createElement('div');
+        box.innerHTML = d.html;
+        [...box.querySelectorAll('.ptile')].forEach(b => {
+          if (!have.has(b.dataset.opt)) grid.appendChild(b);
+        });
+      }
+      const row = pm.closest('.pmrow');
+      if (row) row.remove(); else pm.remove();
+      wireOptions();
+    } catch (err) {
+      pm.disabled = false;
+      if (err.message !== 'auth') showErr(err.message);
+    }
+  });
 }
 /* 041: the number row presses the menu — 1 clicks the first option row,
    2 the second, and so on. Quiet while any input owns the keyboard. */

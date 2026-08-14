@@ -21,7 +21,32 @@ gold, energy} — opt is "pv:<name>", the click that opens the profile.
 from __future__ import annotations
 
 FLOOR_ROOMS = ("gate_town", "warden_keep", "boss_keep", "memorial")
-ROOM_CAP = 70                  # 10 rows of 7 — beyond that, the crowd
+ROOM_CAP = 21                  # 3 rows of 7 — the first batch; the card
+                               # says MORE N PLAYERS for the rest
+
+# The grid's header names the room. Town rooms the plain way, floor
+# rooms by their floor number; anything unlisted falls back to the
+# location word itself.
+_ROOM_NAMES = {"town": "THE SQUARE", "forge": "THE FORGE",
+               "vault": "THE VAULT", "school": "THE SCHOOL",
+               "lodge": "THE LODGE", "fields": "THE FIELDS",
+               "arcanum": "THE ARCANUM", "apothecary": "THE APOTHECARY",
+               "board": "THE CONTRACT BOARD", "pawn": "THE PAWN SHOP",
+               "relay": "THE RELAY OFFICE", "stone": "THE STONE",
+               "guildhall": "THE GUILDHALL", "hall": "THE BANNER HALL"}
+
+
+def room_title(p: dict) -> str:
+    """'PLAYERS ON FLOOR 12' out in the tower, 'PLAYERS NOW IN THE
+    FORGE' around town."""
+    key = room_key(p)
+    if not key:
+        return "PLAYERS HERE"
+    loc = key.split(":", 1)[0]
+    if loc in FLOOR_ROOMS:
+        return f"PLAYERS ON FLOOR {max(1, int(p.get('floor') or 1))}"
+    name = _ROOM_NAMES.get(loc, f"THE {loc.upper()}")
+    return f"PLAYERS NOW IN {name}"
 
 
 def room_key(p: dict) -> str:
@@ -80,7 +105,13 @@ def mount(p: dict, scene) -> None:
     tiles = players_here(p)
     if tiles:
         scene.players_here = tiles
-        scene.players_title = "PLAYERS HERE"
+        scene.players_title = room_title(p)
+        # the TRUE room population, shipped beside the capped tiles —
+        # the card turns the difference into MORE N PLAYERS
+        counts = (p.get("_world") or {}).get("rooms_n") or {}
+        n = int(counts.get(room_key(p)) or 0)
+        # counts include the viewer; the grid never does
+        scene.players_total = max(len(tiles), n - 1)
 
 
 def valid_opts(scene) -> set[str]:

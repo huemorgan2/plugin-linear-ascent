@@ -37,8 +37,9 @@ def test_fight_card_and_escaping():
 
 
 def test_combat_numbers_are_colored():
-    # damage the player deals reads orange; HP the player loses reads red
-    from plugin_linear_ascent.render import ORANGE, RED, _combat_html
+    # damage the player deals reads bright; HP the player loses reads red
+    from plugin_linear_ascent.render import BRIGHT as ORANGE
+    from plugin_linear_ascent.render import RED, _combat_html
     line = ("Your Rusted Shiv bites deep — 9 damage the Feral boar won't "
             "shrug off. The Feral boar answers — your Scrapwood Buckler "
             "soak almost all of it: only −1 HP gets through.")
@@ -67,8 +68,9 @@ def test_combat_numbers_are_colored():
 
 def test_missed_swing_is_painted_ember():
     # 053: the whole miss sentence — through the School pointer — wears
-    # orange; the counter that follows still colors on its own.
-    from plugin_linear_ascent.render import ORANGE, RED, _combat_html
+    # the dim ink; the counter that follows still colors on its own.
+    from plugin_linear_ascent.render import DIM as ORANGE
+    from plugin_linear_ascent.render import RED, _combat_html
     line = ("ATTACK MISSED — your Rusted Sword swings wide (rank-1 "
             "hands). Improve at the School. The Grey wolf makes you "
             "pay for the fumble — −5 HP.")

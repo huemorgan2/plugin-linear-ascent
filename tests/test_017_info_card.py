@@ -160,18 +160,19 @@ def test_dossier_carries_the_lore():
 
 # ── the fight header ─────────────────────────────────────────────────────
 
-def test_enemy_head_is_one_line_hp_atk_def_nothing_more():
-    # 030 redo: one line on one ink plate — HP, ATK, DEF. Range, mods
-    # and pips left the art; they live in the [i] dossier now.
+def test_enemy_head_is_the_name_and_stats_ride_the_art():
+    # 009 redo again: the head is the NAME (plus range/[i]); the whole
+    # sheet is one line printed over the creature art — HP as a bar,
+    # ATK/DEF/SPEED as numbers on a black slab.
     html = render._enemy_head_html(_payload())            # 40/80
-    assert "HP 40/80" in html
-    assert "ATK 10" in html and "DEF 10" in html
-    assert render.VIOLET_SOFT in html                     # healthy HP ink
-    assert "piprow" not in html
-    assert "rchip" not in html and "mchip" not in html
-    assert "at range" not in html and "HALF" not in html
-    low = dict(_payload(), hp=8)                          # ≤30% reads red
-    assert render.RED in render._enemy_head_html(low)
+    assert "piprow" not in html and "HP 40/80" not in html
+    stat = render._estat_html(_payload())
+    assert "ATK 10" in stat and "DEF 10" in stat
+    assert render.GOLD in stat                            # bleeding → gold
+    low = dict(_payload(), hp=8)                          # ≤1/3 reads red
+    assert render.RED in render._estat_html(low)
+    full = dict(_payload(), hp=80)                        # whole reads green
+    assert render.OK in render._estat_html(full)
 
 
 def test_range_and_modifiers_moved_into_the_dossier():
@@ -208,14 +209,16 @@ def test_icon_grids_are_16_wide():
             assert len(row) == 16, (key, i)
 
 
-def test_headline_carries_every_number_including_hp():
-    # 048 total visibility reversed the 030 law: the headline now
-    # shows the whole sheet — HP, ATK, DEF, SPD — in plain text too.
+def test_headline_is_the_name_and_the_text_keeps_the_sheet():
+    # the 009 overlay: the headline is the name alone; the numbers ride
+    # the art line (HTML) and the enemy line (text surface).
     p, fl, s = _fight("warrior", 1, "grey_wolf")
-    for bit in ("HP", "ATK", "DEF", "SPD"):
-        assert bit in s.headline, (bit, s.headline)
-    # ... and it tracks the wound after the first exchange
+    assert s.headline.startswith("Grey wolf")
+    txt = s.to_text()
+    for bit in ("HP", "ATK", "DEF"):
+        assert bit in txt, (bit, txt)
+    # ... and the text line tracks the wound after the first exchange
     p["encounter"]["range"] = "close"
     s2 = combat.resolve_fight_action(p, fl, "attack")
     if s2.enemy:                          # fight still on
-        assert f"HP {max(0, p['encounter']['hp'])}" in s2.headline
+        assert f"HP {max(0, p['encounter']['hp'])}" in s2.to_text()

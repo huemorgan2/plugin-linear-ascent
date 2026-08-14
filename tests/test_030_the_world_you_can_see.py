@@ -47,8 +47,15 @@ def test_win_card_and_vault_share_the_coin_mask():
     coin_url = icons.icon_data_url("coin")
     assert coin_url in render._coin(37)
     assert coin_url in render._paint_amounts("◈ 1,240")
-    assert coin_url in render._strip_band_html(
+
+
+def test_vault_strip_shouts_in_the_big_font():
+    html = render._strip_band_html(
         {"art": "vault_interior", "text": "DEPOSITED: ◈ 1,240"})
+    assert 'class="bigtx"' in html
+    assert 'class="bwhite"' in html      # DEPOSITED: in white
+    assert 'class="bgold"' in html       # coin + count in gold
+    assert "█" in html                   # half-block pixel rows
 
 
 # ── Phase 2: pips from one grid ─────────────────────────────────────────
@@ -92,16 +99,17 @@ def test_pip_math_thirds():
     # …and the numeral always prints
 
 
-def test_enemy_head_is_one_hp_atk_def_line():
-    # the user's redo: "just the HP attack defense in one line on the
-    # top. nothing more." — icons yes, pips/range/mods no.
-    enemy = render._enemy_head_html(
-        {"name": "X", "hp": 5, "hp_max": 5, "atk": 12, "def": 0})
-    assert "HP 5/5" in enemy and "ATK 12" in enemy and "DEF 0" in enemy
-    assert icons.icon_data_url("sword") in enemy
-    assert icons.icon_data_url("armor") in enemy
-    assert "piprow" not in enemy
-    assert enemy.count('class="echip"') == 1
+def test_enemy_head_is_the_name_and_the_art_line_has_the_sheet():
+    # the 009 overlay redo: the head carries the NAME; HP/ATK/DEF live
+    # on one line over the creature art, bar for HP, numbers for the
+    # rest, black slab behind.
+    en = {"name": "X", "hp": 5, "hp_max": 5, "atk": 12, "def": 0}
+    enemy = render._enemy_head_html(en)
+    assert "X" not in enemy and "piprow" not in enemy
+    stat = render._estat_html(en)
+    assert "ATK 12" in stat and "DEF 0" in stat
+    assert render.OK in stat                     # whole HP reads green
+    assert 'class="estat"' in stat
 
 
 # ── Phase 2 (rewritten by 052): the race-keyed portrait ─────────────────
@@ -219,7 +227,8 @@ def test_strip_band_renders_art_and_gold_coin():
     html = render._strip_band_html(
         {"art": "vault_interior", "text": "DEPOSITED: ◈ 1,240"})
     assert "stripband" in html and "bart" in html
-    assert render.GOLD in html
+    assert 'class="bigtx"' in html               # the big ANSI letters
+    assert render.GOLD in render.SCENE_CSS       # gold ink is in the law
     assert render._strip_band_html({"art": "vault_interior"}) == ""
 
 
@@ -242,14 +251,13 @@ def test_paper_card_clamps_to_the_sheet():
     assert "aspect-ratio:320/150" not in render.SCENE_CSS
 
 
-def test_paper_is_light_newsprint_with_dark_ink():
-    # the redo: newsprint is LIGHT, the ink is dark — no more grain
-    # fighting dark text over a dark panel. 031 §12: the body flows in
-    # place (no absolute inset) and the masthead reads like a masthead.
+def test_paper_is_brown_ink_on_the_black_sheet():
+    # 009 terminal law: the Crier prints as brown ink on the black
+    # sheet — no light newsprint panel, the masthead is a reverse bar.
     assert (".paper{position:relative;margin:0 0 10px;background:"
-            + render.TEXT) in render.SCENE_CSS
-    assert ".paper .pbody{position:relative;z-index:1;" in render.SCENE_CSS
-    assert "border-bottom:3px double currentColor" in render.SCENE_CSS
+            + render.INK) in render.SCENE_CSS
+    assert "border:1px solid " + render.BROWN in render.SCENE_CSS
+    assert "color:" + render.BROWN in render.SCENE_CSS
 
 
 # ── Phase 6: a voice in every fields ────────────────────────────────────

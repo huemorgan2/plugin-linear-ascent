@@ -154,6 +154,8 @@ class Scene:
                                     # write damage there). A new TOP-LEVEL
                                     # key: old clients drop it.
     players_title: str = ""         # 042: heading over the grid — "" hides
+    players_total: int = 0          # the TRUE room population — the card
+                                    # says MORE N PLAYERS past the tiles
                                     # it ("PLAYERS HERE", "THE STRIKERS",
                                     # "THE HONORED FALLEN").
     refusal: str = ""               # 050: a rule said no — one short line
@@ -183,7 +185,9 @@ class Scene:
                          f"{self.awaits_text}")
         if self.enemy:
             en = self.enemy
-            lines.append(f"{en['name']} HP {en['hp']}/{en['hp_max']}")
+            _sp = (f" · SPD {en['mspd']}" if en.get("mspd") else "")
+            lines.append(f"{en['name']} HP {en['hp']}/{en['hp_max']} · "
+                         f"ATK {en['atk']} · DEF {en['def']}{_sp}")
             if en.get("tiers"):
                 lines.append("◈ " + " · ".join(en["tiers"]))
             # 030 Phase 7: the odds ride the text card too
@@ -225,6 +229,9 @@ class Scene:
                 rank = (f"{pl['rank']}. " if pl.get("rank") else "")
                 lines.append(f"· {rank}{pl.get('name', '?')} "
                              f"L{pl.get('level', 1)}{tag}{sub}")
+            extra = int(self.players_total or 0) - len(self.players_here)
+            if extra > 0:
+                lines.append(f"· … and {extra} more")
         if self.meters:
             m = self.meters
             stats = (f"   ATK {m.atk}   DEF {m.dfs}"
@@ -278,6 +285,7 @@ class Scene:
             "location": self.location,
             "players_here": self.players_here,
             "players_title": self.players_title,
+            "players_total": int(self.players_total or 0),
             "refusal": self.refusal,
         }
 
@@ -326,5 +334,6 @@ class Scene:
             location=d.get("location", ""),
             players_here=list(d.get("players_here", [])),
             players_title=d.get("players_title", ""),
+            players_total=int(d.get("players_total", 0) or 0),
             refusal=d.get("refusal", ""),
         )

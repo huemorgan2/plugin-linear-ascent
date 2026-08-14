@@ -64,7 +64,8 @@ def test_town_card_mounts_the_grid_but_fights_stay_clean():
     p = playing(world={"social": True,
                        "rooms": {"town": [tile("Bo")]}})
     s = core.current_scene(p)
-    assert s.players_here and s.players_title == "PLAYERS HERE"
+    assert s.players_here
+    assert s.players_title == "PLAYERS NOW IN THE SQUARE"
     from plugin_linear_ascent.engine.scene import Scene
     fight = Scene(eyebrow="", headline="", support="",
                   enemy={"name": "wolf"})
@@ -76,7 +77,7 @@ def test_scene_wire_carries_the_grid_top_level():
     p = playing(world={"social": True, "rooms": {"town": [tile("Bo")]}})
     d = core.current_scene(p).to_dict()
     assert d["players_here"][0]["opt"] == "pv:Bo"
-    assert d["players_title"] == "PLAYERS HERE"
+    assert d["players_title"] == "PLAYERS NOW IN THE SQUARE"
 
 
 # ── the profile page ─────────────────────────────────────────────────────

@@ -77,9 +77,10 @@ def test_fight_card_shows_every_number_and_sign():
                  {"blade": 6, "bow": 0, "staff": 0})
         s = _start(p, traits)
         e = p["encounter"]
+        txt = s.to_text()
         for bit in (f"HP {e['hp']}", f"ATK {e['atk']}",
                     f"DEF {e['def']}", "SPD"):
-            assert bit in s.headline, (traits, bit, s.headline)
+            assert bit in txt, (traits, bit, txt)
         assert sign in s.headline, (traits, s.headline)
 
 
@@ -103,12 +104,14 @@ def test_plain_monster_says_no_sign():
 def test_speed_word_rides_the_spd_number():
     p = _arm(_classless("048-v-spd"), "rusted_sword",
              {"blade": 6, "bow": 0, "staff": 0})
-    s = _start(p, ("armoured",))          # armoured — SPD 3 (slow)
-    assert "SPD 3 (slow)" in s.headline
+    from plugin_linear_ascent import render
+    s = _start(p, ("armoured",))          # armoured — SPD 3
+    assert "SPD 3" in s.to_text()
+    assert "SPEED 3" in render._estat_html(s.enemy)
     p2 = _arm(_classless("048-v-spd2"), "rusted_sword",
               {"blade": 6, "bow": 0, "staff": 0})
-    s2 = _start(p2, ("fly",))           # fly — SPD 7 (fast); alphas +1
-    assert "(fast)" in s2.headline
+    s2 = _start(p2, ("fly",))           # fly — SPD 7; alphas +1
+    assert "SPD 7" in s2.to_text()
 
 
 def test_hunt_menu_carries_no_stat_roster():

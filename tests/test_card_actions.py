@@ -31,7 +31,7 @@ def test_options_render_as_real_buttons():
     assert '<button type="button" class="opt" data-opt="fight">' in html
     assert '<button type="button" class="opt" data-opt="stray">' in html
     assert 'data-scene="nonce-7"' in html
-    assert "click an option" in html          # hint keeps the text fallback
+    assert "reply with a number" in html      # hint keeps the text fallback
 
 
 def test_card_script_posts_actions_to_the_plugin_route():
@@ -183,7 +183,7 @@ def test_pane_ui_serves_the_tabbed_app():
     assert "luna-auth" in html and "luna-ui-ready" in html
     assert "/pane/peek" not in html or True   # polling code present below
     assert "peek" in html and "visibilitychange" in html
-    assert "ui-monospace" in html             # same mono grammar as cards
+    assert '"VGA"' in html                    # the one bitmap font
 
 
 # ── Agent nudges (017): moments on big beats only; everything else silent ──

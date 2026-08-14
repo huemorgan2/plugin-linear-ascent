@@ -22,21 +22,25 @@ from . import economy, icons
 from .engine import tips
 from .engine.scene import Meters, Scene
 
-# ── tokens (design/chat_components.html) ─────────────────────────────────
-INK = "#0b0e14"
-PANEL = "#11151f"
-PANEL2 = "#161b28"
-BORDER = "#232a3a"
-DIM = "#8b93a7"
-FAINT = "#5b6275"
-TEXT = "#e6e9f2"
-GOLD = "#f5a524"
-AETHER = "#5eaefc"
-VIOLET = "#8b5cf6"
-VIOLET_SOFT = "#a78bfa"
-RED = "#f4645f"
-OK = "#3ad29f"
-ORANGE = "#ff9a3c"
+# ── tokens (009: the terminal law — worldd/static/site/mock/mock.css) ────
+INK = "#000000"
+PANEL = "#000000"
+PANEL2 = "#000000"
+BORDER = "#5b5952"
+DIM = "#5b5952"
+FAINT = "#5b5952"
+TEXT = "#adaba0"
+GOLD = "#f5b825"
+AETHER = "#45d0c0"
+VIOLET = "#d967c8"
+VIOLET_SOFT = "#d967c8"
+RED = "#f26541"
+OK = "#8ed24a"
+ORANGE = "#f5b825"
+BRIGHT = "#fbfbf7"
+ART = "#d9d9d3"
+ARTBRIGHT = "#fbfbf7"
+BROWN = "#b5722f"
 
 # 031 §1: the left stripe is retired everywhere — event colour lives in
 # the headline and banner tint, never a vertical line on the box edge.
@@ -59,6 +63,14 @@ _EVENTS = os.path.join(_ART_ROOT, "events")
 _SIGILS = os.path.join(_ART, "factions")
 # 030: full-body player portraits, 100×200 — one per armour forge tier.
 _PORTRAITS = os.path.join(_ART_ROOT, "portraits")
+# 009: ONE font everywhere — the homepage's bitmap IBM VGA 8×16, shipped
+# inside the card CSS as a data: url so both hosts (web pane and legacy
+# chat card) render it without a network fetch.
+_FONTS = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                      "content", "fonts")
+with open(os.path.join(_FONTS, "WebPlus_IBM_VGA_8x16.woff"), "rb") as _f:
+    _VGA_B64 = base64.b64encode(_f.read()).decode("ascii")
+FONT_STACK = '"VGA","Px437 IBM VGA8","Courier New",monospace'
 
 # 011 event animations tint by their moment, not the floor mood.
 _FX_TINT = {"ascent_open": VIOLET, "ascent_title": VIOLET_SOFT,
@@ -94,7 +106,7 @@ def _banner_tint(slug: str, variant: str = "") -> str:
         return VIOLET_SOFT
     if slug in _BOSS_SLUGS or slug.startswith("warden_"):
         return VIOLET
-    return DIM
+    return ART
 
 
 @lru_cache(maxsize=None)
@@ -318,17 +330,10 @@ def _paper_html(paper: dict) -> str:
     # items before the fold. Payload order is priority order (dawn,
     # night, census, warden, gossip); to_text keeps every item.
     items = items[:6]
-    url = _paper_tex_url()
+    # 009: no texture — the terminal law prints the Crier as brown ink
+    # on the black sheet; the words are the paper.
     tex = ""
-    cls = " noart"
-    if url:
-        # the grain sits a shade under the sheet — newsprint is LIGHT,
-        # the ink is dark; the texture must never fight the words.
-        tex = (f'<span class="ptex" aria-hidden="true" '
-               f'style="background-color:color-mix(in srgb,{FAINT} 22%,'
-               f"{TEXT});-webkit-mask-image:url('{url}');"
-               f"mask-image:url('{url}');\"></span>")
-        cls = ""
+    cls = ""
     close = ""
     if paper.get("closable"):
         close = ('<button type="button" class="pclose" data-opt="news_close" '
@@ -353,6 +358,84 @@ def _strip_art_url(slug: str) -> str | None:
     return None
 
 
+# ── 009: the big ANSI letters — cfonts-style block caps drawn with
+# half-block characters (▀▄█), three text lines tall. One font for every
+# number a screen shouts; digits and the coin wear gold, words wear white.
+_BIG = {
+    "0": ("111", "101", "101", "101", "111"),
+    "1": ("010", "110", "010", "010", "111"),
+    "2": ("111", "001", "111", "100", "111"),
+    "3": ("111", "001", "011", "001", "111"),
+    "4": ("101", "101", "111", "001", "001"),
+    "5": ("111", "100", "111", "001", "111"),
+    "6": ("111", "100", "111", "101", "111"),
+    "7": ("111", "001", "001", "010", "010"),
+    "8": ("111", "101", "111", "101", "111"),
+    "9": ("111", "101", "111", "001", "111"),
+    "A": ("111", "101", "111", "101", "101"),
+    "B": ("110", "101", "110", "101", "110"),
+    "C": ("111", "100", "100", "100", "111"),
+    "D": ("110", "101", "101", "101", "110"),
+    "E": ("111", "100", "111", "100", "111"),
+    "F": ("111", "100", "111", "100", "100"),
+    "G": ("111", "100", "101", "101", "111"),
+    "H": ("101", "101", "111", "101", "101"),
+    "I": ("111", "010", "010", "010", "111"),
+    "J": ("011", "001", "001", "101", "111"),
+    "K": ("101", "101", "110", "101", "101"),
+    "L": ("100", "100", "100", "100", "111"),
+    "M": ("10001", "11011", "10101", "10001", "10001"),
+    "N": ("1001", "1101", "1011", "1001", "1001"),
+    "O": ("111", "101", "101", "101", "111"),
+    "P": ("111", "101", "111", "100", "100"),
+    "Q": ("1110", "1010", "1010", "1110", "0001"),
+    "R": ("111", "101", "110", "101", "101"),
+    "S": ("111", "100", "111", "001", "111"),
+    "T": ("111", "010", "010", "010", "010"),
+    "U": ("101", "101", "101", "101", "111"),
+    "V": ("101", "101", "101", "101", "010"),
+    "W": ("10001", "10001", "10101", "11011", "10001"),
+    "X": ("101", "101", "010", "101", "101"),
+    "Y": ("101", "101", "010", "010", "010"),
+    "Z": ("111", "001", "010", "100", "111"),
+    ":": ("0", "1", "0", "1", "0"),
+    "-": ("000", "000", "111", "000", "000"),
+    ".": ("0", "0", "0", "0", "1"),
+    ",": ("00", "00", "00", "01", "10"),
+    "!": ("1", "1", "1", "0", "1"),
+    "/": ("001", "001", "010", "100", "100"),
+    "◎": ("01110", "10001", "10101", "10001", "01110"),
+    "◈": ("01110", "10001", "10101", "10001", "01110"),
+    " ": ("00", "00", "00", "00", "00"),
+}
+
+
+def _big_html(text: str) -> str:
+    """Three <div> lines of half-blocks; digits/coin gold, letters white."""
+    lines = [[], [], []]
+    for ch in str(text).upper():
+        g = _BIG.get(ch)
+        if g is None:
+            continue
+        gold = ch.isdigit() or ch in "◎◈,."
+        cls = "bgold" if gold else "bwhite"
+        w = max(len(r) for r in g)
+        grid = [r.ljust(w, "0") for r in g] + ["0" * w]
+        for li in range(3):
+            top, bot = grid[2 * li], grid[2 * li + 1]
+            s = "".join(
+                "█" if t == "1" and b == "1" else
+                "▀" if t == "1" else
+                "▄" if b == "1" else " "
+                for t, b in zip(top, bot))
+            lines[li].append((cls, s + " "))
+    out = []
+    for segs in lines:
+        row = "".join(f'<span class="{c}">{_e(s)}</span>' for c, s in segs)
+        out.append(f"<div>{row}</div>")
+    return f'<div class="bigtx">{"".join(out)}</div>'
+
+
 def _strip_band_html(strip: dict) -> str:
     """The strongbox shelf: one big number over a 320×50 art band on ink.
     The art is a dim backdrop; the text is the point and paints its own
@@ -364,11 +447,12 @@ def _strip_band_html(strip: dict) -> str:
     url = _strip_art_url(strip.get("art", ""))
     if url:
         art = (f'<span class="bart" aria-hidden="true" '
-               f'style="background-color:{PANEL2};'
+               f'style="background-color:{ART};'
                f"-webkit-mask-image:url('{url}');"
                f"mask-image:url('{url}');\"></span>")
-    return (f'<div class="stripband later">{art}'
-            f'<span class="btx">{_ep(text)}</span></div>')
+    band = f'<div class="stripband later">{art}</div>' if art else ""
+    return (f"{band}"
+            f'<div class="striptx later">{_big_html(text)}</div>')
 
 
 def _shard_html(note: str) -> str:
@@ -404,13 +488,13 @@ def _combat_html(line: str) -> str:
     # chit damage dealt. Purely semantic; the color still paints.
     s = _e(line)
     s = _HIT_MISS.sub(
-        lambda m: f'<span class="cmiss" style="color:{ORANGE}">'
+        lambda m: f'<span class="cmiss" style="color:{DIM}">'
                   f"{m.group(0)}</span>", s)
     s = _HIT_HP.sub(
         lambda m: f'<span class="chp" style="color:{RED}">'
                   f"{m.group(0)}</span>", s)
     s = _HIT_DMG.sub(
-        lambda m: f'<span class="chit" style="color:{ORANGE}">'
+        lambda m: f'<span class="chit" style="color:{BRIGHT}">'
                   f"{m.group(0)}</span>", s)
     return _sub_glyphs(_paint_amounts(s))
 
@@ -524,14 +608,14 @@ def _gallery_html(gallery: list[dict]) -> str:
         if art and slug.startswith("portrait_"):
             url, w, h = art
             pic = (f'<span class="gbox"><span class="gpic pchar" '
-                   f'style="background-color:{AETHER};'
+                   f'style="background-color:{ART};'
                    f"aspect-ratio:{w}/{h};"
                    f"height:{round(_CHAR_PIC_H * h / 200)}px;"
                    f"-webkit-mask-image:url('{url}');"
                    f"mask-image:url('{url}');\"></span></span>")
         elif art:
             url, w, h = art
-            pic = (f'<span class="gpic" style="background-color:{AETHER};'
+            pic = (f'<span class="gpic" style="background-color:{ART};'
                    f"aspect-ratio:{w}/{h};"
                    f"-webkit-mask-image:url('{url}');"
                    f"mask-image:url('{url}');\"></span>")
@@ -562,11 +646,9 @@ def _tile_portrait_url(race: str) -> str | None:
     return _portrait_data_url("human")
 
 
-def _players_here_html(scene: Scene) -> str:
-    tiles = getattr(scene, "players_here", None) or []
-    if not tiles:
-        return ""
-    title = _e(str(getattr(scene, "players_title", "") or "PLAYERS HERE"))
+def player_tiles_html(tiles: list) -> str:
+    """Just the tile buttons — the grid's cells. Public: worldd's
+    room_more endpoint renders the unfolded batch with the same hand."""
     cells = []
     for t in tiles:
         if not isinstance(t, dict) or not t.get("name"):
@@ -593,16 +675,31 @@ def _players_here_html(scene: Scene) -> str:
             f'<span class="pname">{_e(name)}</span>'
             f'<span class="plvl">L{int(t.get("level", 1) or 1)}</span>'
             f"{sub}</button>")
+    return "".join(cells)
+
+
+def _players_here_html(scene: Scene) -> str:
+    tiles = getattr(scene, "players_here", None) or []
+    if not tiles:
+        return ""
+    title = _e(str(getattr(scene, "players_title", "") or "PLAYERS HERE"))
+    cells = player_tiles_html(tiles)
     if not cells:
         return ""
+    shown = sum(1 for t in tiles if isinstance(t, dict) and t.get("name"))
+    total = int(getattr(scene, "players_total", 0) or 0)
+    more = ""
+    if total > shown:
+        more = (f'<div class="pmrow"><button type="button" class="pmore">'
+                f"MORE {total - shown} PLAYERS &gt;</button></div>")
     return (f'<div class="phere later"><div class="phead">{title}</div>'
-            f'<div class="pgrid">{"".join(cells)}</div></div>')
+            f'<div class="pgrid">{cells}</div>{more}</div>')
 
 
 def _blocks(cur: int, cap: int, cells: int = 10) -> str:
     cur = max(0, min(cur, cap))
     filled = round(cells * cur / cap) if cap else 0
-    return (f"{'█' * filled}"
+    return (f"{'▓' * filled}"
             f'<span class="off">{"░" * (cells - filled)}</span>')
 
 
@@ -752,7 +849,7 @@ def _profile_html(scene: Scene) -> str:
                    if getattr(m, "spd", 0) else "")
         right += ('<div class="piprows later">'
                   + _pip_row("sword", "ATK", m.atk, ORANGE, _TIP_ATK)
-                  + _pip_row("armor", "DEF", getattr(m, "dfs", 0), DIM,
+                  + _pip_row("armor", "DEF", getattr(m, "dfs", 0), TEXT,
                              _TIP_DEF)
                   + spd_row
                   + "</div>")
@@ -826,43 +923,51 @@ def _active_mods(en: dict) -> list[str]:
     return mods
 
 
-_TIP_EHEAD = ("The enemy's sheet — HP, then attack, defense and speed on "
-              "the same scale as your own rows. Everything else is in the "
-              "[i] dossier.")
+def _dossier_tip(dossier_html: str) -> str:
+    """009: the fold's words, flattened for the [i] tip — same facts,
+    no second source of truth."""
+    s = re.sub(r"<summary.*?</summary>", " ", dossier_html, flags=re.S)
+    s = re.sub(r"<[^>]+>", " ", s)
+    return re.sub(r"\s+", " ", html.unescape(s)).strip()
 
 
-def _enemy_head_html(en: dict) -> str:
-    """One line on one ink plate: HP · ATK · DEF · SPD. Nothing more rides
-    the art — range, modifiers and the story live in the [i] dossier.
-    041: no `later` class — the sheet must read the moment the scene
-    lands, not after the typewriter finishes."""
+def _estat_html(en: dict) -> str:
+    """009: the monster's sheet is ONE line printed over the creature
+    art, bottom-left, on a black ANSI slab — a bar where a bar reads
+    (HP), plain numbers where numbers read (ATK/DEF/SPEED). The bar
+    wears green while whole, gold while bleeding, red when a third
+    remains."""
     hp, cap = int(en.get("hp", 0)), max(1, int(en.get("hp_max", 1)))
-    low = hp * 10 <= cap * 3
-    hp_col = RED if low else VIOLET_SOFT
-    sw = icons.icon_data_url("sword")
-    ar = icons.icon_data_url("armor")
-    spd = ""
+    col = OK if hp >= cap else (GOLD if hp * 3 > cap else RED)
+    # each power wears its profile ink — HP green, ATK gold, SPD aether
+    segs = [f'<span style="color:{OK}">HP</span> '
+            f'<span style="color:{col}">{_blocks(hp, cap)}</span>']
+    segs.append(f'<span style="color:{GOLD}">ATK '
+                f"{int(en.get('atk', 0))}</span>")
+    segs.append(f"DEF {int(en.get('def', 0))}")
     if "mspd" in en:
-        bt = icons.icon_data_url("bolt")
-        spd = (f'<span class="st" style="color:{AETHER}">'
-               f'<span class="eg" aria-hidden="true" '
-               f"style=\"-webkit-mask-image:url('{bt}');"
-               f"mask-image:url('{bt}')\"></span>"
-               f'SPD {int(en.get("mspd", 0))}</span>')
-    return (f'<div class="ehead">'
-            f'<span class="echip" data-tip="{_e(_TIP_EHEAD)}">'
-            f'<span class="st" style="color:{hp_col}">HP {hp}/{cap}</span>'
-            f'<span class="st" style="color:{ORANGE}">'
-            f'<span class="eg" aria-hidden="true" '
-            f"style=\"-webkit-mask-image:url('{sw}');"
-            f"mask-image:url('{sw}')\"></span>"
-            f'ATK {int(en.get("atk", 0))}</span>'
-            f'<span class="st" style="color:{DIM}">'
-            f'<span class="eg" aria-hidden="true" '
-            f"style=\"-webkit-mask-image:url('{ar}');"
-            f"mask-image:url('{ar}')\"></span>"
-            f'DEF {int(en.get("def", 0))}</span>'
-            f"{spd}</span></div>")
+        segs.append(f'<span style="color:{AETHER}">SPEED '
+                    f"{int(en['mspd'])}</span>")
+    return ('<div class="estat" aria-label="enemy stats">'
+            + "   ".join(segs) + "</div>")
+
+
+def _enemy_head_html(en: dict, tip: str = "") -> str:
+    """009: the headline owns the name; the plate keeps only the range
+    word and the [i] dossier, then the live modifiers, dim. 041: no
+    `later` class — the sheet must read the moment the scene lands,
+    not after the typewriter finishes."""
+    rng = en.get("range", "")
+    rword = {"at_range": "◇ at range",
+             "close": "◇ close quarters"}.get(rng, "")
+    rhtml = f'<span class="erng">{rword}</span>' if rword else ""
+    info = (f'<span class="info" tabindex="0" role="note" '
+            f'data-tip="{_e(tip)}">i</span>' if tip else "")
+    plate = (f'<div class="eplate">{rhtml}{info}</div>'
+             if rhtml or info else "")
+    mods = "".join(f'<div class="emod">◇ {_e(m)}</div>'
+                   for m in _active_mods(en))
+    return f'<div class="ehead">{plate}{mods}</div>' 
 
 
 def _dossier_html(en: dict) -> str:
@@ -984,7 +1089,7 @@ def _option_tile_art(scene: Scene, oid: str, locked: bool) -> str:
         return ""
     url, _w, _h = art
     tint = FAINT if locked else (
-        VIOLET if slug.startswith("warden_") else DIM)
+        VIOLET if slug.startswith("warden_") else ART)
     return (f'<span class="farts"><span class="fart" aria-hidden="true" '
             f'style="background-color:{tint};'
             f"-webkit-mask-image:url('{url}');"
@@ -1000,7 +1105,7 @@ def _slot_cell(it: dict) -> str:
     # 025 §4: the same glyph in the style's ink — ember for keen steel,
     # frost for warded. Unstyled gear keeps the worn/packed contrast.
     tint = _STYLE_TINT.get(economy.style_of(slug)) or (
-        TEXT if equipped else DIM)
+        ART if equipped else DIM)
     count = int(it.get("count", 1))
     ct = (f'<span class="ct">{count}</span>'
           if count > 1 and not equipped else "")
@@ -1478,20 +1583,15 @@ def render_scene_fragment(scene: Scene) -> str:
     elif banner:
         url, w, h = banner
         tint = _banner_tint(scene.banner, scene.banner_variant)
-    plate_on_art = False
     if fx or split or banner:
         banner_html = (
             f'<div class="banner" style="background-color:{tint};'
             f"aspect-ratio:{w}/{h};"
             f"-webkit-mask-image:url('{url}');"
             f"mask-image:url('{url}');\"{swap_attr}></div>")
-        # 030 Phase 7: the stat plate sits top-right ON the art whenever
-        # there is art to sit on — one visual language with the player's
-        # pip rows, so a matchup reads at a glance.
         if scene.enemy:
             banner_html = (f'<div class="bwrap">{banner_html}'
-                           f"{_enemy_head_html(scene.enemy)}</div>")
-            plate_on_art = True
+                           f"{_estat_html(scene.enemy)}</div>")
         parts.append(banner_html)
 
     # 027: the notice board owns the top of the card — above the location,
@@ -1503,16 +1603,17 @@ def render_scene_fragment(scene: Scene) -> str:
         parts.append(_paper_html(scene.paper))
 
     parts.append(f'<div class="eyebrow type">{_e(scene.eyebrow)}</div>')
-    hl_col = _HEADLINE.get(scene.event_kind, TEXT)
+    hl_col = _HEADLINE.get(scene.event_kind, BRIGHT)
     # 030: an amount wears its colour even in a headline (law 1)
     parts.append(f'<div class="headline type" style="color:{hl_col}">'
                  f"{_ep(scene.headline)}</div>")
     if scene.enemy:
-        # 003: the always-on enemy bar + range chip, and the [i] badge
-        # (top-right of the card — over the banner when there is one).
-        if not plate_on_art:
-            parts.append(_enemy_head_html(scene.enemy))
-        parts.append(_dossier_html(scene.enemy))
+        # 009: the plate rides under the name — the foe's meter in the
+        # player's grammar; the [i] carries the dossier as a tip, the
+        # <details> fold stays below as the full sheet.
+        dossier = _dossier_html(scene.enemy)
+        parts.append(_enemy_head_html(scene.enemy, _dossier_tip(dossier)))
+        parts.append(dossier)
     if scene.support:
         parts.append(f'<div class="support type">{_ep(scene.support)}</div>')
     # 030 Phase 4: the art band with one big number (the vault shelf).
@@ -1632,8 +1733,7 @@ def render_scene_fragment(scene: Scene) -> str:
         wall = (f'<div class="ggrid">{"".join(cards)}</div>'
                 if cards else "")
         parts.append(f'<div class="options later">{wall}{"".join(rows)}'
-                     f'<div class="reply">click an option — or reply '
-                     f"with a number</div></div>")
+                     "</div>")
 
     # 031 §11: the activity band — what tonight is already set to do,
     # a filled box with no outline at the foot of the options.
@@ -1667,37 +1767,39 @@ def render_scene_fragment(scene: Scene) -> str:
 # The card grammar — shared by the legacy chat card document and the 009
 # game pane. Pure presentation tokens; hosts add their own page CSS.
 SCENE_CSS = f"""
+@font-face{{font-family:"VGA";
+ src:url(data:font/woff;base64,{_VGA_B64}) format("woff");}}
 .card{{background:{PANEL};border:1px solid {BORDER};
  border-radius:0;margin:0;padding:12px 2ch 10px;color:{TEXT};
- font:14px/1.6 ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+ font:16px/1.5 {FONT_STACK};
+ -webkit-font-smoothing:none;font-smooth:never;text-rendering:optimizeSpeed;
  font-variant-numeric:tabular-nums;overflow:hidden;position:relative;}}
-/* ── 017/003: enemy header + [i] dossier ── */
-.ehead{{display:flex;margin-top:6px;color:{DIM};}}
-/* 030: one line at the top of the art — HP · ATK · DEF on a solid ink
-   plate (the black-background rule); the [i] badge keeps the corner. */
+/* ── 009: the enemy plate — the foe's meter in the player's grammar ── */
 .bwrap{{position:relative;}}
-.bwrap .ehead{{position:absolute;top:8px;right:46px;margin:0;z-index:2;}}
-.echip{{display:inline-flex;align-items:center;gap:1.5ch;background:{INK};
- border:1px solid {BORDER};padding:2px 8px;font-size:12px;cursor:help;}}
-.echip .st{{display:inline-flex;align-items:center;gap:.5ch;
- font-variant-numeric:tabular-nums;white-space:nowrap;}}
-.echip .eg{{vertical-align:0;}}
-.dx summary{{position:absolute;top:8px;right:8px;z-index:3;
- list-style:none;display:flex;align-items:center;padding:1px .6ch;
- background:{INK};border:1px solid {AETHER};color:{AETHER};
- cursor:help;user-select:none;font-style:italic;font-size:13px;
- line-height:1.5;}}
+.estat{{position:absolute;left:12px;bottom:12px;background:{INK};
+ padding:0 1ch;white-space:pre;color:{BRIGHT};}}
+.estat .off{{color:{DIM};}}
+.ehead{{margin-top:6px;}}
+.banner+.notices,.banner+.paper{{margin-top:10px;}}
+.banner+.headline{{margin-top:10px;}}
+.eplate{{display:flex;align-items:baseline;gap:1ch;}}
+.eplate .erng{{color:{DIM};white-space:nowrap;}}
+.eplate .info{{margin-left:auto;}}
+.emod{{color:{DIM};}}
+.dx{{margin:4px 0 0;}}
+.dx summary{{list-style:none;display:inline-flex;color:{DIM};
+ cursor:pointer;user-select:none;padding:0;background:none;border:0;}}
 .dx summary::-webkit-details-marker{{display:none;}}
-.dx summary::before{{content:"[";font-style:normal;}}
-.dx summary::after{{content:"]";font-style:normal;}}
-.dx summary:hover,.dx[open] summary{{background:{AETHER};color:{INK};}}
-.dossier{{border:1px solid {AETHER};background:color-mix(in srgb,
- {AETHER} 6%,{PANEL});padding:10px 1.5ch;margin:8px 0 2px;}}
+.dx summary::before{{content:"[";}}
+.dx summary::after{{content:"] dossier";}}
+.dx summary:hover,.dx[open] summary{{color:{AETHER};}}
+.dossier{{border:1px solid {AETHER};background:{INK};
+ padding:10px 1.5ch;margin:8px 0 2px;}}
 .dhead{{color:{AETHER};text-transform:uppercase;letter-spacing:.08em;
- font-size:12px;margin-bottom:6px;}}
+ margin-bottom:6px;}}
 .drw{{display:flex;gap:1ch;align-items:flex-start;padding:3px 0;
  color:{DIM};}}
-.drw b{{color:{TEXT};font-weight:700;}}
+.drw b{{color:{TEXT};}}
 .drw .dmark{{color:{VIOLET_SOFT};flex:none;width:16px;text-align:center;}}
 .ticon{{width:16px;height:16px;flex:none;display:inline-block;
  margin-top:3px;mask-size:100% 100%;-webkit-mask-size:100% 100%;
@@ -1718,72 +1820,55 @@ SCENE_CSS = f"""
 .tally .tnum{{font-variant-numeric:tabular-nums;}}
 .tally .tsr{{position:absolute;width:1px;height:1px;overflow:hidden;
  clip:rect(0 0 0 0);white-space:nowrap;}}
-.dlore{{color:{FAINT};font-style:italic;margin-top:6px;
+.dlore{{color:{FAINT};margin-top:6px;
  border-top:1px dashed {BORDER};padding-top:6px;}}
-.banner{{display:block;width:calc(100% + 4ch);margin:-12px -2ch 10px;
+.banner{{display:block;width:calc(100% + 4ch);margin:-12px -2ch 0;
  mask-size:100% 100%;-webkit-mask-size:100% 100%;mask-repeat:no-repeat;
  -webkit-mask-repeat:no-repeat;image-rendering:pixelated;
  border-bottom:1px solid {BORDER};}}
 /* ── 027: the notice board. Blue is the notification ink — it never
    means a stat, only "something waits for you". ── */
-.notices{{border:1px solid {AETHER};
- background:color-mix(in srgb,{AETHER} 7%,{PANEL});
+.notices{{border:1px solid {BORDER};background:{INK};
  padding:8px 1.5ch 9px;margin:0 0 10px;}}
 .nhead{{color:{AETHER};text-transform:uppercase;letter-spacing:.14em;
- font-size:11px;margin-bottom:5px;}}
+ margin-bottom:5px;}}
 .nrow{{display:flex;align-items:center;gap:1ch;width:100%;margin-top:4px;
  background:transparent;border:1px solid transparent;border-radius:0;
  padding:4px .5ch;font:inherit;color:{TEXT};text-align:left;
  cursor:pointer;}}
-.nrow:hover:not(:disabled){{border-color:{AETHER};
- background:color-mix(in srgb,{AETHER} 10%,{PANEL});}}
+.nrow:hover:not(:disabled){{border-color:{AETHER};}}
 .nrow:focus-visible{{outline:1px solid {AETHER};outline-offset:1px;}}
-.nrow .nk{{flex:none;color:{AETHER};font-size:11px;letter-spacing:.12em;
+.nrow .nk{{flex:none;color:{AETHER};letter-spacing:.12em;
  min-width:8ch;}}
 .nrow .ntx{{flex:1;min-width:0;color:{DIM};}}
 .nrow:hover .ntx{{color:{TEXT};}}
 .nrow .ngo{{flex:none;color:{FAINT};}}
 .nrow:hover .ngo{{color:{AETHER};}}
 .nb,.badge{{flex:none;display:inline-block;min-width:2ch;padding:0 .5ch;
- background:{AETHER};color:{INK};font-weight:700;text-align:center;
+ background:{AETHER};color:{INK};text-align:center;
  font-variant-numeric:tabular-nums;}}
 .badge{{margin-left:1ch;}}
 .opt:hover .badge{{background:{TEXT};}}
-/* ── 030 Phase 5: the Morning Crier's broadsheet — a LIGHT sheet, dark
-   ink, like paper. Only the artless fallback stays a dark board. ── */
-/* 031 §12: the Crier reads as an actual newspaper — light sheet,
-   centered masthead over a double rule, serif headline, ruled items,
-   the ✕ folds it for the day. Height follows the news, not the art. */
-.paper{{position:relative;margin:0 0 10px;background:{TEXT};
- border:1px solid {BORDER};overflow:hidden;min-height:96px;}}
-.paper.noart{{background:{PANEL};}}
-.paper .ptex{{position:absolute;inset:0;mask-size:cover;
- -webkit-mask-size:cover;mask-position:center;-webkit-mask-position:center;
- mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;
- image-rendering:pixelated;}}
-.paper .pbody{{position:relative;z-index:1;
- padding:9px 2.5ch 10px 1.5ch;color:{INK};}}
-.paper.noart .pbody{{color:{TEXT};}}
-.paper .pmast{{font-weight:700;letter-spacing:.22em;font-size:12px;
- text-transform:uppercase;text-align:center;
- border-bottom:3px double currentColor;
- padding-bottom:4px;margin-bottom:6px;}}
-.paper .phl{{font-weight:700;margin-bottom:5px;text-wrap:balance;
- font-family:Georgia,"Times New Roman",serif;font-size:15px;
- line-height:1.35;}}
+/* ── 009: the Crier under the terminal law — a black sheet behind a
+   brown frame, brown ink, the masthead a brown reverse-video bar. ── */
+.paper{{position:relative;margin:0 0 10px;background:{INK};
+ border:1px solid {BROWN};}}
+.paper .pbody{{padding:0 1ch 8px;color:{BROWN};}}
+.paper .pmast{{letter-spacing:.22em;text-transform:uppercase;
+ text-align:center;background:{BROWN};color:{INK};
+ margin:0 -1ch 6px;padding:0 1ch;}}
+.paper .phl{{margin-bottom:5px;text-wrap:balance;}}
 .paper .pit{{display:-webkit-box;-webkit-line-clamp:2;
  -webkit-box-orient:vertical;overflow:hidden;padding:3px 0 2px;
- border-top:1px dotted color-mix(in srgb,currentColor 45%,transparent);}}
+ border-top:1px dotted {BROWN};}}
 .paper .pit::before{{content:"· ";}}
-.paper .pclose{{position:absolute;top:6px;right:6px;z-index:2;
- background:transparent;border:1px solid {FAINT};color:{INK};font:inherit;
- line-height:1.2;cursor:pointer;padding:1px .6ch;border-radius:0;}}
-.paper .pclose:hover{{border-color:{INK};background:{INK};color:{TEXT};}}
-.paper.noart .pclose{{background:{INK};border-color:{BORDER};color:{DIM};}}
-.paper.noart .pclose:hover{{color:{TEXT};border-color:{TEXT};}}
+.paper .pclose{{position:absolute;top:0;right:0;z-index:2;
+ background:transparent;border:0;color:{INK};font:inherit;
+ line-height:1.5;cursor:pointer;padding:0 .6ch;}}
+.paper .pclose:hover{{background:{INK};color:{BROWN};}}
 /* ── 027: the card's own input ── */
-.ask{{margin:10px 0 0;padding:10px 0 0;border-top:1px dashed {BORDER};
- display:block;}}
+.ask{{margin:10px 0 0;padding:8px 1ch;border:1px solid {AETHER};
+ background:{INK};display:block;}}
 .ask .alab{{display:block;color:{DIM};margin-bottom:5px;}}
 .ask .arow{{display:flex;gap:6px;align-items:stretch;}}
 .ask .ti{{flex:1;min-width:0;background:{INK};border:1px solid {AETHER};
@@ -1792,7 +1877,7 @@ SCENE_CSS = f"""
 .ask .ti::placeholder{{color:{FAINT};}}
 .ask .ti:focus{{outline:none;border-color:{TEXT};}}
 .ask .asend{{flex:none;background:{AETHER};border:1px solid {AETHER};
- color:{INK};font:inherit;font-weight:700;letter-spacing:.08em;
+ color:{INK};font:inherit;letter-spacing:.08em;
  padding:6px 2ch;border-radius:0;cursor:pointer;}}
 .ask .asend:hover:not(:disabled){{background:{TEXT};border-color:{TEXT};}}
 .ask .asend:disabled{{opacity:.5;cursor:default;}}
@@ -1802,15 +1887,15 @@ SCENE_CSS = f"""
 .gtile{{display:flex;flex-direction:column;gap:4px;background:{PANEL2};
  border:1px solid {BORDER};border-radius:0;padding:6px;font:inherit;
  color:{TEXT};text-align:left;cursor:pointer;}}
-.gtile:hover:not(:disabled){{border-color:{AETHER};}}
+.gtile:hover:not(:disabled){{border-color:{GOLD};}}
 .gtile:focus-visible{{outline:1px solid {AETHER};outline-offset:1px;}}
 .gtile .gpic{{display:block;width:100%;aspect-ratio:320/112;
  mask-size:100% 100%;-webkit-mask-size:100% 100%;mask-repeat:no-repeat;
  -webkit-mask-repeat:no-repeat;image-rendering:pixelated;}}
 .gtile .gpic.none{{background:{BORDER};}}
-.gtile:hover .gpic{{background-color:{TEXT};}}
+.gtile:hover .gpic{{background-color:{GOLD};}}
 .gtile .glab{{color:{TEXT};}}
-.gtile .gsub{{color:{FAINT};font-size:12px;}}
+.gtile .gsub{{color:{FAINT};}}
 /* ── 052: character cards — three climbers on one ground line ── */
 .gal.chars{{grid-template-columns:repeat(3,1fr);}}
 .gal.chars .gtile{{align-items:center;text-align:center;
@@ -1820,19 +1905,30 @@ SCENE_CSS = f"""
 .gal.chars .gpic.pchar{{display:block;width:auto;
  mask-size:100% 100%;-webkit-mask-size:100% 100%;mask-repeat:no-repeat;
  -webkit-mask-repeat:no-repeat;image-rendering:pixelated;}}
-.gal.chars .glab{{font-weight:700;letter-spacing:.08em;margin-top:6px;}}
+.gal.chars .glab{{letter-spacing:.08em;margin-top:6px;}}
 .gal.chars .gsub{{min-height:3.2em;}}
 /* ── 042: the presence grid — seven faces to a row ── */
 .phere{{margin:12px 0 0;}}
 .phere .phead{{color:{FAINT};text-transform:uppercase;
- letter-spacing:.1em;font-size:11px;margin-bottom:6px;}}
+ letter-spacing:.1em;margin-bottom:6px;}}
 .pgrid{{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;}}
+.pmrow{{display:flex;justify-content:flex-end;margin-top:4px;}}
+.pmore{{background:none;border:0;padding:0 1ch;font:inherit;
+ color:{TEXT};cursor:pointer;}}
+.pmore:hover,.pmore:focus-visible{{background:{TEXT};color:{INK};
+ outline:none;}}
+.pmore:disabled{{color:{DIM};background:none;cursor:default;}}
 .ptile{{display:flex;flex-direction:column;align-items:center;gap:2px;
  background:{PANEL2};border:1px solid {BORDER};border-radius:0;
  padding:5px 2px 4px;font:inherit;color:{TEXT};cursor:pointer;
  min-width:0;}}
-.ptile:hover:not(:disabled){{border-color:{AETHER};}}
-.ptile:focus-visible{{outline:1px solid {AETHER};outline-offset:1px;}}
+.ptile:hover:not(:disabled),.ptile:focus-visible{{background:{GOLD};
+ border-color:{GOLD};outline:none;color:{INK};}}
+.ptile:hover:not(:disabled) .pface,.ptile:focus-visible .pface{{
+ filter:brightness(0);}}
+.ptile:hover:not(:disabled) .pname,.ptile:hover:not(:disabled) .plvl,
+.ptile:hover:not(:disabled) .psub,.ptile:focus-visible .pname,
+.ptile:focus-visible .plvl,.ptile:focus-visible .psub{{color:{INK};}}
 .ptile .pfbox{{position:relative;display:flex;height:72px;
  align-items:flex-end;}}
 .ptile .pface{{display:block;height:56px;width:auto;
@@ -1841,99 +1937,149 @@ SCENE_CSS = f"""
 .ptile .pface.none{{display:block;height:56px;width:28px;
  background:{BORDER};}}
 .ptile .pzzz{{position:absolute;top:-2px;right:-14px;background:{INK};
- border:1px solid {AETHER};color:{AETHER};font-size:9px;
+ border:1px solid {AETHER};color:{AETHER};
  padding:0 3px;letter-spacing:.06em;}}
 .ptile .prank{{position:absolute;top:-2px;left:-14px;background:{INK};
- border:1px solid {BORDER};color:{DIM};font-size:9px;padding:0 3px;
+ border:1px solid {BORDER};color:{DIM};padding:0 3px;
  font-variant-numeric:tabular-nums;}}
 .ptile .pname{{max-width:100%;overflow:hidden;text-overflow:ellipsis;
- white-space:nowrap;font-size:11px;color:{TEXT};}}
-.ptile .plvl{{font-size:10px;color:{FAINT};
+ white-space:nowrap;color:{BRIGHT};}}
+.ptile .plvl{{color:{FAINT};
  font-variant-numeric:tabular-nums;}}
 .ptile .psub{{max-width:100%;overflow:hidden;text-overflow:ellipsis;
- white-space:nowrap;font-size:10px;color:{DIM};
+ white-space:nowrap;color:{DIM};
  font-variant-numeric:tabular-nums;}}
 /* ── 027: the pack popup — click an item, act on it ── */
 .pmenu{{position:fixed;z-index:100;min-width:220px;max-width:300px;
  background:{INK};border:1px solid {AETHER};
- box-shadow:0 4px 18px rgba(0,0,0,.55);padding:8px 1.5ch;color:{TEXT};
- font:13px/1.55 ui-monospace,"SF Mono",Menlo,Consolas,monospace;}}
+ padding:8px 1.5ch;color:{TEXT};
+ font:16px/1.5 {FONT_STACK};-webkit-font-smoothing:none;}}
 .pmenu .phead{{color:{AETHER};text-transform:uppercase;
- letter-spacing:.1em;font-size:11px;margin-bottom:6px;}}
+ letter-spacing:.1em;margin-bottom:6px;}}
 .pmenu .pact{{display:flex;gap:1ch;align-items:center;width:100%;
- background:{PANEL2};border:1px solid {BORDER};border-radius:0;
- color:{TEXT};font:inherit;text-align:left;padding:5px 1ch;
- margin-top:4px;cursor:pointer;}}
-.pmenu .pact:hover:not(:disabled){{border-color:{AETHER};}}
+ background:none;border:0;border-radius:0;
+ color:{TEXT};font:inherit;text-align:left;padding:2px 0;
+ margin-top:2px;cursor:pointer;}}
+.pmenu .pact:hover:not(:disabled){{background:{GOLD};color:{INK};}}
+.pmenu .pact:hover:not(:disabled) .phint{{color:{INK};}}
 .pmenu .pact .phint{{margin-left:auto;color:{FAINT};}}
 .pmenu .pwhy{{color:{DIM};}}
 .inv .item{{font:inherit;border-radius:0;padding:0;}}
 .inv .item.act{{cursor:pointer;}}
 .inv .item.act:hover,.inv .item.act:focus-visible{{
- border-color:{DIM};}}
+ border-color:{GOLD};}}
 .inv .item.act:hover .picon,.inv .item.act:focus-visible .picon{{
- background-color:{AETHER} !important;}}
-.eyebrow{{color:{FAINT};text-transform:uppercase;letter-spacing:.08em;}}
-.headline{{font-weight:700;margin:4px 0 0;text-wrap:balance;}}
-.support{{color:{DIM};}}
-.shard{{display:flex;gap:1ch;
- background:color-mix(in srgb,{AETHER} 5%,{PANEL});
- padding:8px 1.5ch;margin-top:8px;color:{DIM};}}
+ background-color:{GOLD} !important;}}
+.eyebrow{{background:{TEXT};color:{INK};text-transform:uppercase;
+ letter-spacing:.08em;margin:0 -2ch;padding:0 1ch;}}
+.card>.eyebrow:first-child{{margin-top:-12px;}}
+.headline{{margin:4px 0 0;text-wrap:balance;}}
+.support{{color:{TEXT};}}
+.shard{{display:flex;gap:1ch;margin-top:8px;color:{DIM};}}
 .shard .glyph{{color:{AETHER};flex:none;}}
 .body{{margin:6px 0 0;white-space:pre-wrap;}}
 /* ── 031 §9: the NPC block — portrait left of the words ── */
 .npcbox{{float:left;display:flex;flex-direction:column;align-items:center;
- gap:3px;margin:8px 2ch 4px 0;}}
+ gap:3px;margin:8px 2ch 4px 0;border:1px solid {BORDER};background:{INK};
+ padding:4px 4px 2px;}}
 .npcbox .npcimg{{width:80px;aspect-ratio:100/200;display:block;
  mask-size:100% 100%;-webkit-mask-size:100% 100%;mask-repeat:no-repeat;
  -webkit-mask-repeat:no-repeat;image-rendering:pixelated;}}
-.npcbox .npclab{{color:{DIM};text-transform:uppercase;
- letter-spacing:.12em;font-size:11px;}}
-/* ── 031 §11: the activity band — a filled box, no outline ── */
-.actband{{margin-top:10px;padding:8px 1.5ch;border:0;
- background:color-mix(in srgb,{VIOLET_SOFT} 14%,{PANEL});
- color:{VIOLET_SOFT};letter-spacing:.02em;}}
-/* ── 030: the art band — one big number on a dark shelf ── */
-.stripband{{position:relative;display:flex;align-items:center;
- justify-content:center;margin:8px 0 0;background:{INK};
- border:1px solid {BORDER};aspect-ratio:320/50;overflow:hidden;}}
+.npcbox .npclab{{color:{BRIGHT};text-transform:uppercase;
+ letter-spacing:.12em;}}
+/* ── 009: the activity band — a gold reverse-video bar ── */
+.actband{{margin-top:10px;padding:0 1ch;
+ background:{GOLD};color:{INK};letter-spacing:.02em;}}
+/* ── 009: the art band — art above, the amount in a bordered box ── */
+.stripband{{position:relative;margin:8px 0 0;background:{INK};
+ border:1px solid {BORDER};border-bottom:0;aspect-ratio:320/50;
+ overflow:hidden;}}
 .stripband .bart{{position:absolute;inset:0;mask-size:cover;
  -webkit-mask-size:cover;mask-position:center;-webkit-mask-position:center;
  mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;
  image-rendering:pixelated;}}
-.stripband .btx{{position:relative;z-index:1;font-size:18px;
- font-weight:700;letter-spacing:.06em;font-variant-numeric:tabular-nums;}}
-.stripband .btx .eg{{width:18px;height:18px;vertical-align:-3px;}}
+.striptx{{margin:8px 0 0;border:1px solid {BORDER};padding:0 1ch;
+ text-align:center;color:{BRIGHT};letter-spacing:.06em;
+ font-variant-numeric:tabular-nums;}}
+.stripband+.striptx{{margin-top:0;}}
+.striptx .eg{{width:18px;height:18px;vertical-align:-3px;}}
+.bigtx{{line-height:1;letter-spacing:0;padding:5px 0 4px;
+ text-align:center;overflow:hidden;}}
+.bigtx div{{white-space:pre;}}
+.bigtx .bwhite{{color:{BRIGHT};}}
+.bigtx .bgold{{color:{GOLD};}}
 /* ── 007: folded shop shelves (▣ markers) ── */
 .fold{{margin:6px 0 0;}}
 .fold summary{{list-style:none;cursor:pointer;user-select:none;
- color:{VIOLET_SOFT};}}
+ color:{DIM};}}
+.fold summary:hover,.fold[open] summary{{color:{BRIGHT};}}
 .fold summary::-webkit-details-marker{{display:none;}}
 .fold summary::before{{content:"▸ ";color:{FAINT};}}
 .fold[open] summary::before{{content:"▾ ";}}
 .fold .body{{margin-left:1ch;}}
-.options{{clear:both;margin:10px 0 0;padding:10px 0 0;
- border-top:1px dashed {BORDER};
- display:flex;flex-direction:column;gap:5px;}}
+.options{{clear:both;margin:10px 0 0;
+ display:flex;flex-direction:column;
+ border-top:1px dashed {BORDER};border-bottom:1px dashed {BORDER};
+ padding:6px 0;}}
+.options+.ident,.options+.rail{{border-top:0;padding-top:0;}}
 .opt{{display:flex;align-items:center;gap:1ch;width:100%;
- background:{PANEL2};border:1px solid {BORDER};padding:6px 1.5ch;
+ background:none;border:0;padding:.3rem 0;
  font:inherit;color:inherit;text-align:left;border-radius:0;
  cursor:pointer;}}
-.opt:hover:not(:disabled){{border-color:{VIOLET};}}
-.opt.locked .lbl,.opt.locked .key{{color:{DIM};}}
-.opt.locked .hint{{color:{FAINT};}}
-.opt.locked:hover:not(:disabled){{border-color:{BORDER};}}
-.opt:focus-visible{{outline:1px solid {VIOLET};outline-offset:1px;}}
-.opt:disabled{{cursor:default;}}
-.opt.chosen{{border-color:{VIOLET};
- background:color-mix(in srgb,{VIOLET} 10%,{PANEL2});}}
-.opt.chosen .key{{color:{VIOLET};}}
-.opt.stale{{opacity:.45;}}
-.opt .key{{flex:none;color:{VIOLET_SOFT};}}
-.opt .key::before{{content:"[";color:{FAINT};}}
-.opt .key::after{{content:"]";color:{FAINT};}}
+/* 009: the dot leader — the line between a door and its price */
+.opt::after{{content:"· · · · · · · · · · · · · · · · · · · · · · · · "
+ "· · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · · ·";
+ order:1;flex:1;overflow:hidden;white-space:nowrap;color:{DIM};
+ text-align:left;min-width:2ch;}}
+.opt .hint{{order:2;margin-left:0;color:{DIM};text-align:right;
+ white-space:nowrap;}}
+.opt .lbl{{color:{BRIGHT};}}
+.opt .key{{flex:none;color:{GOLD};min-width:2ch;text-align:right;
+ white-space:pre;}}
+.opt .key::before{{content:"[";color:{DIM};}}
+.opt .key::after{{content:"]";color:{DIM};}}
 .opt .key.aether{{color:{AETHER};}}
-.opt .hint{{margin-left:auto;color:{FAINT};text-align:right;}}
+/* hover / focus = reverse video: black on gold across the whole line */
+.opt:hover:not(:disabled),.opt:focus-visible{{background:{GOLD};
+ outline:none;}}
+.opt:hover:not(:disabled) .key,.opt:hover:not(:disabled) .lbl,
+.opt:hover:not(:disabled) .hint,.opt:hover:not(:disabled) .amt,
+.opt:hover:not(:disabled) .key::before,
+.opt:hover:not(:disabled) .key::after,
+.opt:hover:not(:disabled)::after,
+.opt:focus-visible .key,.opt:focus-visible .lbl,.opt:focus-visible .hint,
+.opt:focus-visible .amt,.opt:focus-visible .key::before,
+.opt:focus-visible .key::after,.opt:focus-visible::after{{
+ color:{INK}!important;}}
+.opt:hover:not(:disabled) .badge,.opt:focus-visible .badge{{
+ background:{INK};color:{GOLD};}}
+/* painted spans INSIDE a hovered row (coin counts, lock lines, keys of
+   any colour) go black too — reverse video means ALL ink flips */
+.opt:hover:not(:disabled) .lbl *,.opt:hover:not(:disabled) .hint *,
+.opt:hover:not(:disabled) .amt *,.opt:hover:not(:disabled) .key *,
+.opt:focus-visible .lbl *,.opt:focus-visible .hint *,
+.opt:focus-visible .amt *,.opt:focus-visible .key *,
+.opt.chosen .lbl *,.opt.chosen .hint *{{color:{INK}!important;}}
+/* the locked row's grey hover flips its ink the same way */
+.opt.locked:hover:not(:disabled) .key,
+.opt.locked:hover:not(:disabled) .lbl,
+.opt.locked:hover:not(:disabled) .hint,
+.opt.locked:hover:not(:disabled) .lbl *,
+.opt.locked:hover:not(:disabled) .hint *,
+.opt.locked:hover:not(:disabled) .key::before,
+.opt.locked:hover:not(:disabled) .key::after,
+.opt.locked:hover:not(:disabled)::after{{color:{INK}!important;}}
+.opt.locked .lbl,.opt.locked .key,.opt.locked .key::before,
+.opt.locked .key::after{{color:{DIM};}}
+.opt.locked .hint{{color:{DIM};}}
+.opt.locked:hover:not(:disabled),.opt.locked:focus-visible{{
+ background:{DIM};}}
+.opt:disabled{{cursor:default;}}
+.opt.chosen{{background:{GOLD};}}
+.opt.chosen .key,.opt.chosen .lbl,.opt.chosen .hint,
+.opt.chosen .key::before,.opt.chosen .key::after,.opt.chosen::after{{
+ color:{INK}!important;}}
+.opt.stale{{opacity:.45;}}
 .opt .gicon{{width:32px;height:32px;flex:none;display:inline-block;
  background-color:{DIM};mask-size:100% 100%;-webkit-mask-size:100% 100%;
  mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;
@@ -1945,10 +2091,10 @@ SCENE_CSS = f"""
  mask-size:cover;-webkit-mask-size:cover;mask-position:center;
  -webkit-mask-position:center;mask-repeat:no-repeat;
  -webkit-mask-repeat:no-repeat;image-rendering:pixelated;}}
-.opt.ftile:hover .fart{{background-color:{TEXT};}}
-.opt.ftile.locked:hover .fart{{background-color:{FAINT};}}
-.opt:hover .gicon{{background-color:{TEXT};}}
-.opt.locked .gicon,.opt.locked:hover .gicon{{background-color:{FAINT};}}
+.opt.ftile:hover .fart{{background-color:{INK};}}
+.opt.ftile.locked:hover .fart{{background-color:{INK};}}
+.opt:hover .gicon{{background-color:{INK};}}
+.opt.locked .gicon,.opt.locked:hover .gicon{{background-color:{INK};}}
 .orow{{display:flex;align-items:stretch;gap:5px;}}
 .orow .opt{{flex:1;min-width:0;}}
 /* ── 031 §14: the card wall — a shop shelf you look at, not read ── */
@@ -1956,12 +2102,18 @@ SCENE_CSS = f"""
  gap:6px;margin-bottom:6px;}}
 .gcell{{position:relative;display:flex;}}
 .gcard{{flex-direction:column;align-items:center;justify-content:flex-start;
- gap:6px;padding:22px 1ch 12px;text-align:center;position:relative;}}
+ gap:6px;padding:22px 1ch 12px;text-align:center;position:relative;
+ border:1px solid {BORDER};}}
+.gcard::after{{content:none;}}
+.gcard .hint{{margin-left:0;}}
+.gcard:hover:not(:disabled) .hint,.gcard:hover:not(:disabled) .lbl{{
+ color:{INK}!important;}}
 .gcard .key{{position:absolute;top:5px;left:7px;}}
-.gcard .gicon{{width:56px;height:56px;background-color:{TEXT};}}
-.gcard:hover .gicon{{background-color:{GOLD};}}
-.gcard.locked .gicon,.gcard.locked:hover .gicon{{background-color:{FAINT};}}
-.gcard .lbl{{font-weight:700;line-height:1.3;}}
+.gcard .gicon{{width:56px;height:56px;background-color:{ART};}}
+.gcard:hover .gicon{{background-color:{INK};}}
+.gcard.locked .gicon{{background-color:{DIM};}}
+.gcard.locked:hover .gicon{{background-color:{INK};}}
+.gcard .lbl{{line-height:1.3;}}
 .gcard .hint{{margin-left:0;text-align:center;color:{DIM};
  display:block;white-space:nowrap;}}
 .gcard .hint+.hint{{margin-top:-3px;}}
@@ -1975,13 +2127,12 @@ SCENE_CSS = f"""
 .opt.locked .amt,.gcard.locked .amt{{color:{FAINT}!important;}}
 .gcell .info{{position:absolute;top:5px;right:5px;border:0;
  background:none;padding:0;}}
-.info{{flex:none;display:flex;align-items:center;padding:0 .5ch;
- background:{PANEL2};border:1px solid {BORDER};color:{FAINT};
- cursor:help;user-select:none;font-style:italic;}}
-.info::before{{content:"[";font-style:normal;}}
-.info::after{{content:"]";font-style:normal;}}
-.info:hover,.info:focus-visible{{color:{AETHER};border-color:{AETHER};
- outline:none;}}
+.info{{flex:none;display:flex;align-items:center;padding:0;
+ background:none;border:0;color:{DIM};
+ cursor:help;user-select:none;}}
+.info::before{{content:"[";}}
+.info::after{{content:"]";}}
+.info:hover,.info:focus-visible{{color:{AETHER};outline:none;}}
 .reply{{color:{FAINT};letter-spacing:.08em;margin-top:5px;}}
 .reply::before{{content:"· ";}}
 .rail{{display:flex;flex-wrap:wrap;align-items:center;gap:2ch;
@@ -2011,16 +2162,16 @@ SCENE_CSS = f"""
  padding-top:8px;border-top:1px dashed {BORDER};}}
 .ident .idl{{display:inline-flex;align-items:baseline;gap:1.5ch;
  min-width:0;}}
-.ident .idname{{font-weight:700;color:{TEXT};}}
+.ident .idname{{color:{BRIGHT};}}
 .ident .idwho{{color:{DIM};text-transform:uppercase;
- letter-spacing:.08em;font-size:12px;}}
-.ident .idfac{{color:{DIM};font-size:12px;cursor:help;
+ letter-spacing:.08em;}}
+.ident .idfac{{color:{DIM};cursor:help;
  white-space:nowrap;}}
-.ident .idfac b{{color:{TEXT};font-weight:700;}}
+.ident .idfac b{{color:{TEXT};}}
 .ident .idr{{margin-left:auto;display:inline-flex;gap:2ch;
  white-space:nowrap;}}
-.ident .idlv{{font-weight:700;color:{TEXT};cursor:help;}}
-.ident .idgold{{font-weight:700;color:{GOLD};cursor:help;}}
+.ident .idlv{{color:{BRIGHT};cursor:help;}}
+.ident .idgold{{color:{GOLD};cursor:help;}}
 .profile{{display:flex;gap:2ch;align-items:stretch;margin-top:8px;}}
 .profile .portrait{{flex:none;align-self:stretch;height:auto;width:auto;
  min-height:200px;image-rendering:pixelated;}}
@@ -2043,8 +2194,7 @@ SCENE_CSS = f"""
  display:block;margin-bottom:5px;}}
 .handrow{{display:flex;gap:2ch;margin-bottom:6px;}}
 .hcell{{display:inline-flex;flex-direction:column;gap:3px;}}
-.hlab{{color:{FAINT};text-transform:uppercase;letter-spacing:.08em;
- font-size:10px;}}
+.hlab{{color:{FAINT};letter-spacing:.08em;}}
 .slot{{position:relative;width:40px;height:40px;flex:none;
  background:{INK};border:1px solid {BORDER};display:inline-flex;
  align-items:center;justify-content:center;cursor:help;outline:none;}}
@@ -2057,14 +2207,14 @@ SCENE_CSS = f"""
  -webkit-mask-repeat:no-repeat;image-rendering:pixelated;}}
 .hcell .picon{{width:34px;height:34px;}}
 .slot .ct{{position:absolute;right:2px;bottom:0;color:{TEXT};
- font-size:11px;line-height:1.2;text-shadow:0 0 3px {INK};}}
+ line-height:1.2;}}
 .slot .dur{{position:absolute;left:3px;right:3px;bottom:2px;height:3px;
  background:{BORDER};}}
 .slot .durf{{display:block;height:100%;}}
-#tipbox{{position:fixed;display:none;z-index:99;max-width:340px;
- background:{INK};border:1px solid {VIOLET};color:{TEXT};
- padding:8px 1.5ch;font-size:12px;line-height:1.55;
- box-shadow:0 4px 18px rgba(0,0,0,.55);pointer-events:none;
+#tipbox{{position:fixed;display:none;z-index:99;max-width:44ch;
+ background:{INK};border:1px solid {AETHER};color:{TEXT};
+ padding:8px 1.5ch;font:16px/1.5 {FONT_STACK};
+ -webkit-font-smoothing:none;pointer-events:none;
  white-space:normal;}}
 .type.pending{{visibility:hidden;}}
 .cursor{{display:inline-block;width:.55em;height:1.05em;background:{AETHER};

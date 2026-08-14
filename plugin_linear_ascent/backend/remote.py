@@ -85,6 +85,10 @@ class WorldClient:
         from worldd's 30s cache, cheap by construction."""
         return await self._post("/v1/presence", {"player": luna_user})
 
+    async def room_more(self, luna_user: str) -> dict:
+        """The presence grid's unfold — the rest of the room, ≤200."""
+        return await self._post("/v1/room_more", {"player": luna_user})
+
     async def faction_list(self, luna_user: str, q: str = "") -> dict:
         """The ledger: top 10 by members; q searches server-side (015)."""
         return await self._post("/v1/faction/list",

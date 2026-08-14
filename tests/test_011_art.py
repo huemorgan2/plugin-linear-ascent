@@ -111,7 +111,7 @@ def test_variant_tint_overrides_default():
     assert render._banner_tint("feral_boar", "alpha") == render.GOLD
     assert render._banner_tint("feral_boar", "tough") == render.VIOLET_SOFT
     assert render._banner_tint("feral_boar", "runt") == render.FAINT
-    assert render._banner_tint("feral_boar", "") == render.DIM
+    assert render._banner_tint("feral_boar", "") == render.ART
 
 
 def test_variant_survives_scene_roundtrip():

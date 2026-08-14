@@ -398,6 +398,10 @@ def apply_choice(p: dict, option_id: str, text: str = "") -> Scene:
     valid = ({o.id for o in scene.options}
              | {str(g.get("opt", "")) for g in scene.gallery}
              | presence.valid_opts(scene))
+    # the MORE unfold appends faces past the shipped tiles — any pv:
+    # click is a door regardless (an unknown name reads a silent stone)
+    if option_id.startswith("pv:"):
+        valid = valid | {option_id}
     if option_id not in valid:
         # numbered fallback: "1".."9" resolve positionally
         if option_id.isdigit() and 1 <= int(option_id) <= len(scene.options):
@@ -1141,6 +1145,9 @@ def _dispatch_location(p: dict, oid: str) -> Scene:
                 "The Arcanum's door reads the hand on it — it wants "
                 f"level {economy.ARCANUM_LEVEL}. Climb first; the "
                 "star-charts will keep.")
+            s.refusal = (f"Entering the Arcanum requires level "
+                         f"{economy.ARCANUM_LEVEL} — you are level "
+                         f"{p['level']}")
             return s
         # 007: the other locked doors follow the Arcanum's grammar —
         # a level, a reason, no scene change.
@@ -1152,12 +1159,18 @@ def _dispatch_location(p: dict, oid: str) -> Scene:
             s.shard_note = (
                 "The Relay clerk sorts post for names the Stone knows — "
                 f"level {economy.RELAY_LEVEL} first. Letters keep.")
+            s.refusal = (f"Entering the Relay requires level "
+                         f"{economy.RELAY_LEVEL} — you are level "
+                         f"{p['level']}")
             return s
         if oid == "fields" and p["level"] < economy.FIELDS_LEVEL:
             s = _town_scene(p)
             s.shard_note = (
                 "The fields take climbers who can take a hit back — "
                 f"level {economy.FIELDS_LEVEL}. The tower first.")
+            s.refusal = (f"Entering the fields requires level "
+                         f"{economy.FIELDS_LEVEL} — you are level "
+                         f"{p['level']}")
             return s
         if oid == "board" and p["level"] < economy.BOARD_LEVEL:
             s = _town_scene(p)
@@ -1165,6 +1178,9 @@ def _dispatch_location(p: dict, oid: str) -> Scene:
                 "The board hangs work for names it trusts — level "
                 f"{economy.BOARD_LEVEL} first. The jobs will keep; "
                 "new ones every dawn.")
+            s.refusal = (f"Entering the board requires level "
+                         f"{economy.BOARD_LEVEL} — you are level "
+                         f"{p['level']}")
             return s
         p["location"] = oid
         return _build_scene(p)
@@ -1587,7 +1603,8 @@ def _gear_purchase(p: dict, g, scene_fn) -> Scene:
         s.shard_note = (f"{g.name} answers to level {req} hands — you are "
                         f"level {p['level']}. The Guildhall trains climbers "
                         "with a full XP bar and the fee in gold.")
-        s.refusal = f"Can't buy this — it needs a level {req} hand"
+        s.refusal = (f"Can't buy this — it needs a level {req} hand "
+                     f"— you are level {p['level']}")
         return s
     freq = economy.rung_floor_req(g)
     if freq > p["unlocked_floor"]:
@@ -1783,8 +1800,9 @@ def _arcanum_scene(p: dict) -> Scene:
         s = _town_scene(p)
         s.shard_note = (f"The Arcanum wants level {economy.ARCANUM_LEVEL} "
                         "hands. Climb first.")
-        s.refusal = (f"Can't enter — the Arcanum opens at level "
-                     f"{economy.ARCANUM_LEVEL}")
+        s.refusal = (f"Entering the Arcanum requires level "
+                     f"{economy.ARCANUM_LEVEL} — you are level "
+                     f"{p['level']}")
         return s
     opts, lines = [], []
     # 048: star-charts for every hand — the full staff line and the
@@ -2129,6 +2147,9 @@ def _lodge_action(p: dict, oid: str) -> Scene:
         s.shard_note = (f"The keeper plans nights for level "
                         f"{economy.NIGHT_SLOT_LEVEL} names. Climb — "
                         "the fire will still be here.")
+        s.refusal = (f"The night slot requires level "
+                     f"{economy.NIGHT_SLOT_LEVEL} — you are level "
+                     f"{p['level']}")
         return s
     if oid in ("night_rest", "night_work"):
         p["night"] = {"day": state.world_day(),
@@ -2831,7 +2852,8 @@ def _gate_pick(p: dict, oid: str) -> Scene:
         s.shard_note = (f"The lift is open, but floor {n} wants level {req} "
                         f"legs — you are level {p['level']}. Climb closer "
                         "to your weight first.")
-        s.refusal = f"Can't ride up — floor {n} wants level {req}"
+        s.refusal = (f"Can't ride up — floor {n} requires level {req} "
+                     f"— you are level {p['level']}")
         return s
     p["floor"] = n
     p["location"] = "gate_town"

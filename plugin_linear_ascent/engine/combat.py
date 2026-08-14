@@ -767,13 +767,9 @@ def fight_scene(p: dict, floor, opener: bool = False, note: str = "") -> Scene:
     _sign = economy.TYPE_SIGN.get(_profile(p).get("type", "plain"), "")
     return Scene(
         eyebrow=_eyebrow(p, floor),
-        # 003: the headline keeps ATK/DEF; HP lives in the always-on
-        # enemy bar (scene.enemy) from round one.
-        headline=(f"{e['name']}"
-                  f"{' ' + _sign if _sign else ''} — "
-                  f"HP {max(0, e['hp'])}/{e['hp_max']} · "
-                  f"ATK {e['atk']} · DEF {e['def']} · "
-                  f"SPD {_mspd(p)}{economy.speed_word(_mspd(p))}"),
+        # 009: the headline is the name alone — HP/ATK/DEF/SPEED live on
+        # the stat line printed over the creature art (scene.enemy).
+        headline=f"{e['name']}{' ' + _sign if _sign else ''}",
         support="It is between you and the way forward.",
         shard_note=_shard_advice(p, floor) if opener else "",
         body_lines=body,

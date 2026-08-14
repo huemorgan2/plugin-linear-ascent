@@ -329,6 +329,13 @@ def register_routes(app, ctx: PluginContext) -> None:
     async def pane_score(user=Depends(get_current_user)) -> dict:
         return await _proxy(_world().leaderboard(runtime.player_key()))
 
+    @router.post("/pane/room_more")
+    async def pane_room_more(user=Depends(get_current_user)) -> dict:
+        """The presence grid's MORE — solo mode has no room to unfold."""
+        if runtime.state["remote"] is None:
+            return {"ok": True, "html": "", "total": 0}
+        return await _proxy(_world().room_more(runtime.player_key()))
+
     @router.get("/pane/community")
     async def pane_community(user=Depends(get_current_user)) -> dict:
         """The faction news board — the desk (015) hangs off it."""
