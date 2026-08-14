@@ -7,15 +7,18 @@ Arcanum into the same card wall the Forge already is.
 
 ## What ships
 
-1. **Unique art per weapon** — 83 weapons: 27 swords + 27 bows + 27
-   staves (`economy.weapon_line`) plus the two door basics
-   (`basic_bow`, `worn_staff`). Two assets each:
+1. **Unique art per weapon** — 85 unique designs: 81 shop-line
+   weapons (27 swords + 27 bows + 27 staves, `economy.weapon_line`)
+   plus the four basics (`rusted_shiv`, `rusted_sword`, `basic_bow`,
+   `worn_staff`). The 60 `keen_`/`warded_` variants reuse their base
+   weapon's art with the existing `_STYLE_TINT` recolor — no extra
+   renders. Two assets each:
    - **Large portrait `100x160`** (white ink on alpha) — the hero
      image, shown on hover.
-   - **Icon `48x30`** (white ink on alpha) — replaces the shared glyph
-     on the Forge/Arcanum cards and anywhere the weapon icon renders
-     from FORGE gear (pack strip keeps 32×32 grid glyphs for
-     non-weapons; weapons switch to the new icons).
+   - **Icon `30x48`** (white ink on alpha, upright) — replaces the
+     shared glyph on the Forge/Arcanum cards and anywhere the weapon
+     icon renders from FORGE gear (pack strip keeps 32×32 grid glyphs
+     for non-weapons; weapons switch to the new icons).
 2. **Hover = the big picture.** The card's tooltip already supports
    server-authored HTML (`data-tiph`, rendered via TIP_JS innerHTML).
    Weapon cards embed the 100x160 as a data-URL `<img>` above the
@@ -54,12 +57,13 @@ Model designs the dither; post only enforces the grid:
    only where the ladder allows them, no text/border/watermark.
 2. Enforce: center-crop to 5:8 → LANCZOS to 100x160 →
    `autocontrast(cutoff=1)` → Bayer 8x8 → white ink on alpha.
-3. **Icon derived from the same raw** (no second model call): rotate
-   the raw 90° (blade horizontal, grip left), center-crop to 8:5 →
-   LANCZOS to 48x30 → autocontrast → Bayer. One render, two assets,
-   and the icon always matches its hero image.
+3. **Icon derived from the same raw** (no second model call): 30x48
+   is exactly the portrait's 5:8 aspect, so the icon is the same
+   upright center-crop downscaled — LANCZOS to 30x48 → autocontrast →
+   Bayer. One render, two assets, and the icon always matches its
+   hero image.
 4. Raws saved versioned in the plan folder (never shipped); shipped
-   PNGs are 1-bit and tiny (~1–3 KB each — ~250 KB total for all 83).
+   PNGs are 1-bit and tiny (~1–3 KB each — ~250 KB total for all 85).
 
 New tool: `tools/generate_weapon_art.py` — SCENES-style table built
 procedurally from `economy.weapon_line` + the ladder + per-name
@@ -69,13 +73,13 @@ identity hints; accepts slugs as args; skips existing unless
 ## Code touches
 
 - `icons.py` or `render.py`: weapon icon resolution — if
-  `content/art/weapons/icons/<slug>_48x30.png` exists, render it as
+  `content/art/weapons/icons/<slug>_30x48.png` exists, render it as
   the mask (same data-URL technique as banners); else fall back to
-  the old shared glyph. `.gicon` CSS size 32×32 → 48×30.
+  the old shared glyph. `.gicon` CSS size 32×32 → 30×48.
 - `render.py` card wall: weapon cards get `data-tiph` = `<img>` (large
   art data-URL, 100px wide) + colored params + prose.
 - `core.py` `_arcanum_scene`: `grid=True`, legend, one-line support.
-- Tests: every `weapon_line` slug resolves a 48x30 icon and a 100x160
+- Tests: every `weapon_line` slug resolves a 30x48 icon and a 100x160
   portrait; arcanum scene has `grid` set; a weapon card's tiph carries
   an `<img>`; ladder smoke (a rung-1 asset and a rung-10 asset exist
   and differ).
@@ -84,7 +88,7 @@ identity hints; accepts slugs as args; skips existing unless
 
 1. **P1 — this folder: 10 sample swords** (below) + this plan. STOP
    for review — roy judges the look before any bulk generation.
-2. **P2** — bulk-generate all 83 (≈83 model calls), review contact
+2. **P2** — bulk-generate all 85 (≈85 model calls), review contact
    sheets, regenerate the misses.
 3. **P3** — wire icons + hover + Arcanum card wall + tests, ship.
 
@@ -92,7 +96,7 @@ identity hints; accepts slugs as args; skips existing unless
 
 `swords/` holds, for each: `<slug>_raw.png` (model output),
 `<slug>_100x160.png` (shipped-spec white ink, previewed on panel),
-`<slug>_48x30.png` (icon), and a `contact_sheet.png` with all ten side
+`<slug>_30x48.png` (icon), and a `contact_sheet.png` with all ten side
 by side, poorest → mythic:
 
 scrap_dagger (1.0) · boarspine_shortsword (1.3) · iron_sword (1.5) ·

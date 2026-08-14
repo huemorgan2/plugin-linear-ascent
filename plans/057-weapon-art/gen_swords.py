@@ -3,7 +3,7 @@
 
 Pipeline per vision/1bit-images.md: the model DESIGNS the 1-bit dither;
 post-processing only enforces the grid. One render per sword yields both
-the 100x160 portrait and the 48x30 icon (raw rotated 90°).
+the 100x160 portrait and the 30x48 icon (same crop, smaller).
 
 Usage: LUNA_GEMINI_API_KEY=... python plans/057-weapon-art/gen_swords.py [slug ...]
 Outputs into plans/057-weapon-art/swords/.
@@ -29,7 +29,7 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 
 OUT = os.path.join(_HERE, "swords")
 LW, LH = 100, 160   # large portrait
-IW, IH = 48, 30     # icon
+IW, IH = 30, 48     # icon — same 5:8 as the portrait, upright
 PANEL = (0x11, 0x15, 0x1F)
 ART_TINT = (0xD9, 0xD9, 0xD3)
 
@@ -162,8 +162,9 @@ async def gen_one(slug: str, api_key: str) -> str:
     raw.save(os.path.join(OUT, f"{slug}_raw.png"))
     large = _enforce(raw, LW, LH)
     large.save(os.path.join(OUT, f"{slug}_{LW}x{LH}.png"))
-    # icon: same raw rotated 90° (blade horizontal, point right)
-    icon = _enforce(raw.rotate(-90, expand=True), IW, IH)
+    # icon: the same upright crop, just smaller — 30x48 shares the
+    # portrait's 5:8 aspect exactly
+    icon = _enforce(raw, IW, IH)
     icon.save(os.path.join(OUT, f"{slug}_{IW}x{IH}.png"))
     ink = sum(1 for y in range(LH) for x in range(LW)
               if large.load()[x, y][3]) / (LW * LH)
