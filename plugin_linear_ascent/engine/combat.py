@@ -1498,6 +1498,20 @@ def _victory(p: dict, floor) -> Scene:
         headline = (f"{e['name']} defeated"
                     + (" — the floor is opened" if first_clear else ""))
         support = "The wilds go quiet around you."
+    # PLAN3/PLAN4: the website's live 3D finisher — the creature, the
+    # player's race and the line of the weapon that landed the LAST blow.
+    # Wilds only; wardens keep their reels. Where the finisher plays, the
+    # old GIF ending is GONE from the card (fx=None): the 3D scene IS the
+    # ending, and "fx" inside the spec names the reel only as the
+    # client's degrade path (no WebGL / missing model).
+    kill3d = ({"id": e.get("id", ""), "race": p.get("race") or "",
+               "line": _LINE_OF_DTYPE.get(_damage_type(p), "blade"),
+               "breed": e.get("breed", ""),
+               "specimen": e.get("specimen", "common"),
+               "fx": _kill_fx(e, e["name"], first_clear,
+                              _damage_type(p), p)}
+              if e["kind"] == "wilds" and e.get("id")
+              and not first_clear else None)
     return Scene(
         eyebrow=_eyebrow(p, floor),
         headline=headline,
@@ -1514,17 +1528,9 @@ def _victory(p: dict, floor) -> Scene:
         # 045: the exit card carries the floor's tiles like the gate
         # town does — the reel branch keeps its two bare buttons.
         option_art=(None if first_clear else _floor_art(floor)),
-        fx=_kill_fx(e, e["name"], first_clear, _damage_type(p), p),
-        # PLAN3: the website's live 3D finisher — the creature, the
-        # player's race and the line of the weapon that landed the LAST
-        # blow (same instant _kill_fx reads). Wilds only; wardens keep
-        # their reels. Surfaces without the layer ignore the key.
-        kill3d=({"id": e.get("id", ""), "race": p.get("race") or "",
-                 "line": _LINE_OF_DTYPE.get(_damage_type(p), "blade"),
-                 "breed": e.get("breed", ""),
-                 "specimen": e.get("specimen", "common")}
-                if e["kind"] == "wilds" and e.get("id")
-                and not first_clear else None),
+        fx=(None if kill3d
+            else _kill_fx(e, e["name"], first_clear, _damage_type(p), p)),
+        kill3d=kill3d,
     )
 
 

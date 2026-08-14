@@ -1685,6 +1685,7 @@ def render_scene_fragment(scene: Scene) -> str:
     elif banner:
         url, w, h = banner
         tint = _banner_tint(scene.banner, scene.banner_variant)
+    k3 = getattr(scene, "kill3d", None)
     if fx or split or banner:
         banner_html = (
             f'<div class="banner" style="background-color:{tint};'
@@ -1695,6 +1696,14 @@ def render_scene_fragment(scene: Scene) -> str:
             banner_html = (f'<div class="bwrap">{banner_html}'
                            f"{_estat_html(scene.enemy)}</div>")
         parts.append(banner_html)
+    elif k3 and k3.get("id"):
+        # PLAN4: a floor-1 kill card ships its banner BARE — no ending
+        # GIF anywhere on it. The website's fight3d layer mounts the 3D
+        # scene in this slot; a surface without the layer (or a dead
+        # WebGL) shows the black band, and the client repaints the reel
+        # itself from the fx slug in data-kill3d.
+        parts.append('<div class="banner" style="background-color:#000;'
+                     'aspect-ratio:320/112;"></div>')
 
     # 027: the notice board owns the top of the card — above the location,
     # above the headline. It is not a menu row and must never look like one.

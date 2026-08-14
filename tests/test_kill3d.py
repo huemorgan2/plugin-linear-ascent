@@ -64,6 +64,20 @@ def test_wilds_victory_carries_kill3d():
     assert k3["specimen"] in ("common", "runt", "tough", "alpha")
 
 
+def test_kill3d_card_ships_no_ending_gif():
+    # PLAN4: where the 3D finisher plays, the old GIF ending is GONE —
+    # fx rides INSIDE the spec as the client's degrade slug, the card
+    # carries no reel, and the banner slot is bare black for the canvas.
+    p = _character("Sorrel")
+    s, _ = _hunt_victory(p)
+    assert s.fx is None
+    assert "fx" in s.kill3d                      # the degrade path's name
+    html = render_scene_fragment(s)
+    assert 'class="banner"' in html              # the mount slot exists
+    assert "mask-image" not in html.split('class="banner"', 1)[1] \
+        .split("></div>", 1)[0]                  # ...and wears no reel
+
+
 def test_kill3d_line_follows_the_class():
     p = _character("Fenn", clazz="sorcerer")
     s, _ = _hunt_victory(p)
