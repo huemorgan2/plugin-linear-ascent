@@ -70,6 +70,10 @@ def _pack_strip(p: dict) -> list[dict]:
         cell = {"slug": slug, "kind": slot, "count": 1,
                 "equipped": True,
                 "name": g.name + (f" +{hone}" if hone else "")}
+        # the tip's ATK is the HONED number — the hone rides the slot,
+        # so only worn steel carries it.
+        if slot == "weapon":
+            cell["atk"] = economy.honed_bonus(g.bonus, hone)
         # 005: paid gear carries its wear onto the strip — the bar and
         # the hover both read from this one number.
         left = (p.get("durability") or {}).get(slot)
@@ -91,7 +95,8 @@ def _pack_strip(p: dict) -> list[dict]:
             continue
         filled += 1
         cell = {"slug": slug, "kind": "weapon", "count": 1,
-                "held": True, "name": g.name + " · held"}
+                "held": True, "name": g.name + " · held",
+                "atk": g.bonus}
         left = (p.get("durability_pack") or {}).get(slug)
         if left is not None and economy.wears(g):
             pool = economy.item_pool(g)
@@ -125,6 +130,8 @@ def _pack_strip(p: dict) -> list[dict]:
         elif slug in economy.FORGE:
             g = economy.FORGE[slug]
             cell["name"], cell["kind"] = g.name, g.slot
+            if g.slot == "weapon":
+                cell["atk"] = g.bonus
             # 045: packed gear carries its wear too — a spare bought
             # used should say so before it's promoted to the hand.
             left = (p.get("durability_pack") or {}).get(slug)

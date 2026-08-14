@@ -541,7 +541,11 @@ _ITEM_TIPS: dict[str, str] = {
 }
 
 
-def item_tip(slug: str, equipped: bool = False) -> str:
+def item_tip(slug: str, equipped: bool = False,
+             bonus: int | None = None) -> str:
+    """`bonus` is the LIVE stat when the caller knows it (the honed
+    number on worn steel) — without it the tip quotes fresh-forge base
+    and a honed sword reads weaker than it hits."""
     t = _ITEM_TIPS.get(slug)
     if t:
         return t
@@ -551,6 +555,7 @@ def item_tip(slug: str, equipped: bool = False) -> str:
     g = economy.FORGE.get(slug)
     if g:
         stat = "ATK" if g.slot == "weapon" else "DEF"
+        shown = g.bonus if bonus is None else bonus
         # 045: durability on the tip — fresh-piece endurance; the pack
         # cell's hover carries the live left/total.
         end = (f", durability {economy.endurance(g):,}"
@@ -559,10 +564,10 @@ def item_tip(slug: str, equipped: bool = False) -> str:
             doing = ("every blow you land rides it"
                      if g.slot == "weapon"
                      else "it blunts every blow that lands on you")
-            return (f"{g.name} — your worn {g.slot}, {stat} +{g.bonus}"
+            return (f"{g.name} — your worn {g.slot}, {stat} +{shown}"
                     f"{end}: {doing}. The Forge sells the next tier; "
                     "honing pushes this one further.")
-        return (f"{g.name} — {g.slot}, {stat} +{g.bonus}{end}, riding "
+        return (f"{g.name} — {g.slot}, {stat} +{shown}{end}, riding "
                 "in your pack. Click it to put it on, or let the pawn "
                 "shop pay the day's rate (25–55%) toward your next "
                 "tier.")

@@ -533,3 +533,69 @@ def test_forge_trip_refused_mid_fight():
     assert p.get("encounter") is not None       # still in the fight
     assert p["location"] != "forge"
     assert "Not mid-fight" in s.shard_note
+
+
+# ── Roy's ask: the weapon's tip leads with ATK and DURABILITY in color,
+# and the ATK is the HONED number — a sharpened sword must read sharper.
+
+def _weapon_cell_html(p):
+    from plugin_linear_ascent import render
+    s = core.current_scene(p)
+    html = render.render_scene_fragment(s)
+    return html.split('data-slug="scrap_dagger"', 1)[0].rsplit("<button", 1)[1]
+
+
+def test_honing_sharpens_the_tooltip_atk():
+    p = _worn_smith()
+    g = economy.FORGE["scrap_dagger"]
+    base_cell = next(c for c in core._pack_strip(p)
+                     if c["slug"] == "scrap_dagger")
+    assert base_cell["atk"] == g.bonus
+    p["hone"]["weapon"] = 3
+    honed = next(c for c in core._pack_strip(p)
+                 if c["slug"] == "scrap_dagger")
+    want = economy.honed_bonus(g.bonus, 3)
+    assert honed["atk"] == want and want > g.bonus
+    cell = _weapon_cell_html(p)
+    assert f"ATK {want}" in cell
+    assert f"+{g.bonus}:" not in cell, "the tip still quotes fresh-forge base"
+
+
+def test_weapon_tip_leads_with_the_two_colored_params():
+    from plugin_linear_ascent import render
+    p = _worn_smith()
+    cell = _weapon_cell_html(p)
+    assert "data-tiph=" in cell
+    from html import unescape
+    tiph = unescape(cell.split('data-tiph="', 1)[1].split('"', 1)[0])
+    g = economy.FORGE["scrap_dagger"]
+    left = economy.endurance(g, p["durability"]["weapon"])
+    total = economy.endurance(g)
+    # params first — ATK gold, DURABILITY green — then the prose
+    assert tiph.index("ATK") < tiph.index("DURABILITY") < tiph.index("<br>")
+    assert render.GOLD in tiph and render.OK in tiph
+    assert f"DURABILITY {left:,}/{total:,}" in tiph
+    # the shared tipbox knows how to draw it, on the card and the pane
+    assert "data-tiph" in render.TIP_JS
+    from plugin_linear_ascent import pane
+    assert "data-tiph" in pane.render_pane()
+
+
+def test_broken_weapon_tip_bleeds_red():
+    from plugin_linear_ascent import render
+    p = _worn_smith()
+    p["durability"]["weapon"] = 0
+    cell = _weapon_cell_html(p)
+    from html import unescape
+    tiph = unescape(cell.split('data-tiph="', 1)[1].split('"', 1)[0])
+    assert f'color:{render.RED}">DURABILITY' in tiph
+
+
+def test_armor_tip_keeps_its_plain_text():
+    from plugin_linear_ascent import render
+    p = _worn_smith()
+    p["gear"]["armor"] = "padded_jerkin"
+    s = core.current_scene(p)
+    html = render.render_scene_fragment(s)
+    cell = html.split('data-slug="padded_jerkin"', 1)[0].rsplit("<button", 1)[1]
+    assert "data-tiph=" not in cell, "only weapons carry the param line"

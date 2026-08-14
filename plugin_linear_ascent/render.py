@@ -1109,7 +1109,7 @@ def _slot_cell(it: dict) -> str:
     count = int(it.get("count", 1))
     ct = (f'<span class="ct">{count}</span>'
           if count > 1 and not equipped else "")
-    tip = tips.item_tip(slug, equipped=equipped)
+    tip = tips.item_tip(slug, equipped=equipped, bonus=it.get("atk"))
     name = str(it.get("name", slug))
     tip = f"{name} — {tip}" if tip else name
     # 005: worn gear shows a hairline bar under its icon; the hover
@@ -1130,6 +1130,21 @@ def _slot_cell(it: dict) -> str:
         tip = (f"{tip} · " if tip else "") + (
             "broken — half strength until the Forge repairs it"
             if dur <= 0 else f"{wear} — repair at the Forge")
+    # weapons lead their tip with the two numbers that decide a fight,
+    # in ink the eye can split: ATK gold (the HONED number — core put
+    # it on the cell), DURABILITY green, red once it's broken. The
+    # HTML rides data-tiph; data-tip stays the plain-text fallback.
+    tiph_attr = ""
+    atk = it.get("atk")
+    if atk is not None:
+        left_n, total_n = it.get("dur_left"), it.get("dur_max")
+        dtxt = (f"{left_n:,}/{total_n:,}"
+                if left_n is not None and total_n else "∞")
+        dcol = RED if (dur is not None and dur <= 0) else OK
+        tiph = (f'<b style="color:{GOLD}">ATK {atk}</b> · '
+                f'<b style="color:{dcol}">DURABILITY {dtxt}</b>'
+                f'<br>{_e(tip)}')
+        tiph_attr = f' data-tiph="{_e(tiph)}"'
     # 027: the cell is a button — the popup lists what this thing can
     # do HERE, or says where it can be done. `acts` come from the
     # engine (core.pack_actions), never guessed client-side.
@@ -1141,7 +1156,7 @@ def _slot_cell(it: dict) -> str:
     return (
         f'<button type="button" class="slot item act'
         f'{" eq" if equipped else ""}" '
-        f'data-tip="{_e(tip)}" data-slug="{_e(slug)}" '
+        f'data-tip="{_e(tip)}"{tiph_attr} data-slug="{_e(slug)}" '
         f'data-name="{_e(name)}"'
         f"{act_attr}{why_attr}>"
         f'<span class="picon" style="background-color:{tint};'
@@ -1239,7 +1254,11 @@ TIP_JS = """(function () {
     // tips stay quiet.
     if (document.querySelector('.pmenu')) return hide();
     cur = el;
-    box.textContent = el.getAttribute('data-tip') || '';
+    /* data-tiph is trusted server-authored HTML (the colored ATK /
+       DURABILITY line); plain tips stay textContent */
+    var h = el.getAttribute('data-tiph');
+    if (h) box.innerHTML = h;
+    else box.textContent = el.getAttribute('data-tip') || '';
     if (!box.textContent) return hide();
     box.style.display = 'block';
     var r = el.getBoundingClientRect();
