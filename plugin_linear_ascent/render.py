@@ -1787,6 +1787,15 @@ def render_scene_fragment(scene: Scene) -> str:
     if getattr(scene, "enemy", None):
         fight = "warden" if scene.event_kind == "boss" else "wilds"
         dt += f' data-fight="{fight}"'
+    # PLAN3: the live 3D finisher's spec — the creature, the killing
+    # blow's race/line, and the SAME tint the creature's banner wears,
+    # so the canvas inks itself like the card. Only the website's
+    # fight3d layer reads it; everything else leaves the attr alone.
+    k3 = getattr(scene, "kill3d", None)
+    if k3 and k3.get("id"):
+        k3 = dict(k3)
+        k3["tint"] = _banner_tint(k3["id"], k3.get("specimen", ""))
+        dt += f' data-kill3d="{_e(_json.dumps(k3))}"'
     return (f'<div class="card" data-scene="{_e(scene.scene_id)}"{dt}>'
             + "".join(parts) + "</div>")
 

@@ -164,6 +164,15 @@ class Scene:
                                     # SKIPS the card swap; the in-card note
                                     # still rides for older clients. A new
                                     # TOP-LEVEL key: old clients drop it.
+    kill3d: dict | None = None      # PLAN3: the live 3D kill finisher —
+                                    # {id, race, line, breed, specimen},
+                                    # stamped on a wilds victory card only.
+                                    # The WEBSITE's fight3d layer mounts a
+                                    # canvas over the banner from it; every
+                                    # other surface (and any client without
+                                    # the bundle/WebGL/the GLB) ignores it
+                                    # and plays the fx GIF as today. A new
+                                    # TOP-LEVEL key: old clients drop it.
 
     def to_text(self) -> str:
         """Plain-text fallback — always works, cards are enhancement."""
@@ -287,6 +296,7 @@ class Scene:
             "players_title": self.players_title,
             "players_total": int(self.players_total or 0),
             "refusal": self.refusal,
+            "kill3d": self.kill3d,
         }
 
     @staticmethod
@@ -336,4 +346,5 @@ class Scene:
             players_title=d.get("players_title", ""),
             players_total=int(d.get("players_total", 0) or 0),
             refusal=d.get("refusal", ""),
+            kill3d=(dict(d["kill3d"]) if d.get("kill3d") else None),
         )

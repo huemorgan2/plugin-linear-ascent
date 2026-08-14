@@ -275,6 +275,17 @@ def start_encounter(p: dict, floor, enc, kind: str = "wilds",
         contracts.note_warden(p)
         weekly.note(p, "wardens")
     s = fight_scene(p, floor, opener=True)
+    # PLAN3 §C: the first-ever sighting of a creature gets its beat —
+    # the closeup banner is already the card's face (049 law); this
+    # line marks that you have never seen one before. Same card, same
+    # options — the fight is one click away exactly as always.
+    if kind == "wilds" and enc is not None and enc.id:
+        seen = p.setdefault("seen_creatures", [])
+        if enc.id not in seen:
+            seen.append(enc.id)
+            s.body_lines.insert(0, "▪ First sighting — nothing like it "
+                                   "in your ledger. Study it before "
+                                   "you swing.")
     # 007: first fight per type that hard-counters the class — the one
     # agent beat besides death and boss. A warden keeps "boss".
     if not s.event_kind and _matchup_moment(p, prof):
@@ -1504,6 +1515,16 @@ def _victory(p: dict, floor) -> Scene:
         # town does — the reel branch keeps its two bare buttons.
         option_art=(None if first_clear else _floor_art(floor)),
         fx=_kill_fx(e, e["name"], first_clear, _damage_type(p), p),
+        # PLAN3: the website's live 3D finisher — the creature, the
+        # player's race and the line of the weapon that landed the LAST
+        # blow (same instant _kill_fx reads). Wilds only; wardens keep
+        # their reels. Surfaces without the layer ignore the key.
+        kill3d=({"id": e.get("id", ""), "race": p.get("race") or "",
+                 "line": _LINE_OF_DTYPE.get(_damage_type(p), "blade"),
+                 "breed": e.get("breed", ""),
+                 "specimen": e.get("specimen", "common")}
+                if e["kind"] == "wilds" and e.get("id")
+                and not first_clear else None),
     )
 
 

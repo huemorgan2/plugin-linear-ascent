@@ -2821,7 +2821,9 @@ def _warden_slain_scene(p: dict, n: int) -> Scene:
         body_lines=body,
         options=[Option("next", "Next"),
                  Option("skip", "Skip")],
-        fx="warden_slain",
+        # warden_slain art was never generated (plan 033); until it is,
+        # the fall reel that ships carries the beat
+        fx="warden_fall",
         banner=f"warden_{n:03d}",
         tally=tally,
     )

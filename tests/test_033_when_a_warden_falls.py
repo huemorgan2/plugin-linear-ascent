@@ -123,7 +123,13 @@ def test_shared_kill_card_is_the_fall_reel():
     s = kill_current_warden(p)
     fl = schema.get_floor(1)
     assert s.headline == f"{fl.warden_name} falls"
-    assert s.fx == "warden_slain"
+    assert s.fx == "warden_fall"
+    # the fx slug must resolve to shipped art — a slug with no file
+    # silently degrades to the still banner (how warden_slain shipped
+    # broken: specified in generate_event_gifs.py, never rendered)
+    from plugin_linear_ascent import render
+    assert render._fx_data_url(s.fx) or render._fx_split(s.fx), \
+        f"no shipped art for fx={s.fx!r}"
     assert s.event_kind == "boss"
     assert {o.id for o in s.options} == {"next", "skip"}
     # the engine's half of the receipt; worldd lands xp/gold/loot on it
