@@ -3114,6 +3114,7 @@ def _school_scene(p: dict) -> Scene:
     return Scene(
         eyebrow="ROOTHOLLOW · THE SCHOOL",
         headline="The School",
+        banner="school",
         support="Any hand can hold any weapon. The School teaches it "
                 "to bite. Training spends the XP bar — the same pool "
                 "the Guildhall levels from.",

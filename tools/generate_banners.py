@@ -121,6 +121,16 @@ SCENES: dict[str, tuple[str, str]] = {
         "line of people below waiting at the wall of pigeonhole letter "
         "slots, one handing a letter up, one blinking beacon with a glow "
         "halo.", DIM),
+    "school": (
+        "a fight school training yard at golden late afternoon — a "
+        "packed-dirt sparring ring in the center where two climber "
+        "silhouettes cross wooden practice swords mid-clash, a grizzled "
+        "MASTER-AT-ARMS silhouette leaning on a spear watching them, a "
+        "row of students on a bench waiting their turn, straw practice "
+        "dummies and an archery butt with arrows in it along the fence, "
+        "a rack of training weapons by the gate, low sun throwing long "
+        "gradient shadows across the yard and a huge luminous gradient "
+        "sky behind the tower looming far off.", DIM),
     "guildhall": (
         "a CROWDED medieval guildhall interior seen straight-on from the "
         "entrance: a big round wooden table in the center foreground "

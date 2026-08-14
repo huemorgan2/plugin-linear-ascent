@@ -178,11 +178,17 @@ def test_pack_rides_the_profile_right_column_not_below():
 def test_every_visited_room_resolves_tall_art():
     for slug in ("forge", "lodge", "vault", "medlab", "relay", "guildhall",
                  "stone", "gate", "arcanum", "roothollow", "greenreach",
-                 "town_lamplit_steading"):
+                 "town_lamplit_steading", "school"):
         art = render._banner_data_url(slug)
         assert art is not None, slug
         _url, w, h = art
         assert (w, h) == (320, 200), (slug, w, h)
+
+
+def test_the_school_scene_wears_its_yard():
+    p = state.new_player("t030-school")
+    s = core._school_scene(p)
+    assert s.banner == "school"
 
 
 def test_deep_floor_zones_still_resolve_via_fallback():

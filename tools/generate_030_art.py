@@ -136,7 +136,7 @@ ELF_JOBS = {
 # banner set; the model just gets more sky and floor to fill.
 ROOM_SLUGS = ("forge", "lodge", "vault", "medlab", "relay", "guildhall",
               "stone", "gate", "arcanum", "roothollow", "greenreach",
-              "gnarl", "town_lamplit_steading")
+              "gnarl", "town_lamplit_steading", "school")
 
 BAND_JOBS = {
     "vault_interior": (
