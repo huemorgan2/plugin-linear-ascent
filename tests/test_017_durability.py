@@ -550,12 +550,12 @@ def test_honing_sharpens_the_tooltip_atk():
     g = economy.FORGE["scrap_dagger"]
     base_cell = next(c for c in core._pack_strip(p)
                      if c["slug"] == "scrap_dagger")
-    assert base_cell["atk"] == g.bonus
+    assert base_cell["stat_val"] == g.bonus
     p["hone"]["weapon"] = 3
     honed = next(c for c in core._pack_strip(p)
                  if c["slug"] == "scrap_dagger")
     want = economy.honed_bonus(g.bonus, 3)
-    assert honed["atk"] == want and want > g.bonus
+    assert honed["stat_val"] == want and want > g.bonus
     cell = _weapon_cell_html(p)
     assert f"ATK {want}" in cell
     assert f"+{g.bonus}:" not in cell, "the tip still quotes fresh-forge base"
@@ -591,11 +591,34 @@ def test_broken_weapon_tip_bleeds_red():
     assert f'color:{render.RED}">DURABILITY' in tiph
 
 
-def test_armor_tip_keeps_its_plain_text():
+def test_armor_tip_leads_with_the_honed_def():
     from plugin_linear_ascent import render
     p = _worn_smith()
     p["gear"]["armor"] = "padded_jerkin"
+    p["hone"]["armor"] = 2
     s = core.current_scene(p)
     html = render.render_scene_fragment(s)
     cell = html.split('data-slug="padded_jerkin"', 1)[0].rsplit("<button", 1)[1]
-    assert "data-tiph=" not in cell, "only weapons carry the param line"
+    g = economy.FORGE["padded_jerkin"]
+    want = economy.honed_bonus(g.bonus, 2)
+    assert f"DEF {want}" in cell and "data-tiph=" in cell
+
+
+def test_stacked_items_tip_leads_with_amount():
+    from plugin_linear_ascent import render
+    p = _worn_smith()
+    p["inventory"]["medgel"] = 7
+    s = core.current_scene(p)
+    html = render.render_scene_fragment(s)
+    cell = html.split('data-slug="medgel"', 1)[0].rsplit("<button", 1)[1]
+    assert "AMOUNT 7" in cell and "data-tiph=" in cell
+    assert render.VIOLET in cell
+
+
+def test_the_game_font_is_never_bold():
+    from plugin_linear_ascent import render
+    assert "b,strong{font-weight:normal;}" in render.SCENE_CSS
+    p = _worn_smith()
+    p["inventory"]["medgel"] = 2
+    html = render.render_scene_fragment(core.current_scene(p))
+    assert "<b>" not in html and "<b " not in html

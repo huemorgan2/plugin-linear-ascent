@@ -168,6 +168,7 @@ def test_enemy_head_is_the_name_and_stats_ride_the_art():
     assert "piprow" not in html and "HP 40/80" not in html
     stat = render._estat_html(_payload())
     assert "ATK 10" in stat and "DEF 10" in stat
+    assert "40/80" in stat                                # the number rides the bar
     assert render.GOLD in stat                            # bleeding → gold
     low = dict(_payload(), hp=8)                          # ≤1/3 reads red
     assert render.RED in render._estat_html(low)

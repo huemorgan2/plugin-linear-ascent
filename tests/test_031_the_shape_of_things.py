@@ -121,7 +121,7 @@ def test_ident_header_names_your_faction_with_a_tooltip():
     assert "faction" not in frag.split('class="ident')[1][:300]  # bannerless
     p["_world"] = {"faction": {"name": "Ironvow"}}
     frag = render.render_scene_fragment(core.current_scene(p))
-    assert "brother of the <b>Ironvow</b> faction" in frag
+    assert "brother of the Ironvow faction" in frag
     assert "faction house on Roothollow" in frag   # the tooltip points home
 
 

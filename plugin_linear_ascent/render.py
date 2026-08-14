@@ -494,7 +494,7 @@ def _combat_html(line: str) -> str:
         lambda m: f'<span class="chp" style="color:{RED}">'
                   f"{m.group(0)}</span>", s)
     s = _HIT_DMG.sub(
-        lambda m: f'<span class="chit" style="color:{BRIGHT}">'
+        lambda m: f'<span class="chit" style="color:{ORANGE}">'
                   f"{m.group(0)}</span>", s)
     return _sub_glyphs(_paint_amounts(s))
 
@@ -762,7 +762,7 @@ def _ident_html(m: Meters) -> str:
     fac = getattr(m, "faction", "")
     if fac:
         left += (f'<span class="idfac" data-tip="{_e(_TIP_FACTION)}">'
-                 f'brother of the <b>{_e(fac)}</b> faction</span>')
+                 f'brother of the {_e(fac)} faction</span>')
     gold = (f'<span class="mv" data-m="gold" data-v="{m.gold}">'
             f"{m.gold:,}</span>")
     right = (f'<span class="idlv" data-tip="{_e(_TIP_LV)}">'
@@ -941,7 +941,8 @@ def _estat_html(en: dict) -> str:
     col = OK if hp >= cap else (GOLD if hp * 3 > cap else RED)
     # each power wears its profile ink — HP green, ATK gold, SPD aether
     segs = [f'<span style="color:{OK}">HP</span> '
-            f'<span style="color:{col}">{_blocks(hp, cap)}</span>']
+            f'<span style="color:{col}">{_blocks(hp, cap)} '
+            f"{hp}/{cap}</span>"]
     segs.append(f'<span style="color:{GOLD}">ATK '
                 f"{int(en.get('atk', 0))}</span>")
     segs.append(f"DEF {int(en.get('def', 0))}")
@@ -976,7 +977,7 @@ def _dossier_html(en: dict) -> str:
 
     def row(icon: str, head: str, text: str, tint: str = DIM) -> None:
         rows.append(f'<div class="drw">{_ticon(icon, tint)}'
-                    f'<span><b>{_e(head)}</b> {_e(text)}</span></div>')
+                    f'<span>{_e(head)} {_e(text)}</span></div>')
 
     # 030 Phase 7: the story leads — who this thing is, before what it
     # does. "story" is the payload key; "lore" the pre-030 fallback.
@@ -1109,7 +1110,7 @@ def _slot_cell(it: dict) -> str:
     count = int(it.get("count", 1))
     ct = (f'<span class="ct">{count}</span>'
           if count > 1 and not equipped else "")
-    tip = tips.item_tip(slug, equipped=equipped, bonus=it.get("atk"))
+    tip = tips.item_tip(slug, equipped=equipped, bonus=it.get("stat_val"))
     name = str(it.get("name", slug))
     tip = f"{name} — {tip}" if tip else name
     # 005: worn gear shows a hairline bar under its icon; the hover
@@ -1130,20 +1131,27 @@ def _slot_cell(it: dict) -> str:
         tip = (f"{tip} · " if tip else "") + (
             "broken — half strength until the Forge repairs it"
             if dur <= 0 else f"{wear} — repair at the Forge")
-    # weapons lead their tip with the two numbers that decide a fight,
-    # in ink the eye can split: ATK gold (the HONED number — core put
-    # it on the cell), DURABILITY green, red once it's broken. The
-    # HTML rides data-tiph; data-tip stays the plain-text fallback.
+    # every item leads its tip with the numbers that matter, in ink the
+    # eye can split (color, never bold — the VGA face has none): ATK/DEF
+    # gold (the HONED number — core put it on the cell), DURABILITY
+    # green, red once it's broken, AMOUNT violet on stacks. The HTML
+    # rides data-tiph; data-tip stays the plain-text fallback.
     tiph_attr = ""
-    atk = it.get("atk")
-    if atk is not None:
+    params: list[str] = []
+    sval = it.get("stat_val")
+    if sval is not None:
+        params.append(f'<span style="color:{GOLD}">'
+                      f'{it.get("stat_name", "ATK")} {sval}</span>')
         left_n, total_n = it.get("dur_left"), it.get("dur_max")
         dtxt = (f"{left_n:,}/{total_n:,}"
                 if left_n is not None and total_n else "∞")
         dcol = RED if (dur is not None and dur <= 0) else OK
-        tiph = (f'<b style="color:{GOLD}">ATK {atk}</b> · '
-                f'<b style="color:{dcol}">DURABILITY {dtxt}</b>'
-                f'<br>{_e(tip)}')
+        params.append(f'<span style="color:{dcol}">'
+                      f'DURABILITY {dtxt}</span>')
+    if count > 1:
+        params.append(f'<span style="color:{VIOLET}">AMOUNT {count}</span>')
+    if params:
+        tiph = " · ".join(params) + f"<br>{_e(tip)}"
         tiph_attr = f' data-tiph="{_e(tiph)}"'
     # 027: the cell is a button — the popup lists what this thing can
     # do HERE, or says where it can be done. `acts` come from the
@@ -2230,6 +2238,9 @@ SCENE_CSS = f"""
 .slot .dur{{position:absolute;left:3px;right:3px;bottom:2px;height:3px;
  background:{BORDER};}}
 .slot .durf{{display:block;height:100%;}}
+/* the VGA bitmap has no bold face — synthesized bold smears into mud,
+   so bold is banned wherever this font renders; color carries emphasis */
+b,strong{{font-weight:normal;}}
 #tipbox{{position:fixed;display:none;z-index:99;max-width:44ch;
  background:{INK};border:1px solid {AETHER};color:{TEXT};
  padding:8px 1.5ch;font:16px/1.5 {FONT_STACK};

@@ -37,9 +37,8 @@ def test_fight_card_and_escaping():
 
 
 def test_combat_numbers_are_colored():
-    # damage the player deals reads bright; HP the player loses reads red
-    from plugin_linear_ascent.render import BRIGHT as ORANGE
-    from plugin_linear_ascent.render import RED, _combat_html
+    # damage the player deals reads orange; HP the player loses reads red
+    from plugin_linear_ascent.render import ORANGE, RED, _combat_html
     line = ("Your Rusted Shiv bites deep — 9 damage the Feral boar won't "
             "shrug off. The Feral boar answers — your Scrapwood Buckler "
             "soak almost all of it: only −1 HP gets through.")
