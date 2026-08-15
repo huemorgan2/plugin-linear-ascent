@@ -147,10 +147,18 @@ select.ti{{background:{INK};color:{TEXT};border:1px solid {BORDER};
 .deskmsg{{color:{DIM};padding:6px 0 0;min-height:18px;}}
 .deskmsg.bad{{color:{RED};}}
 .deskmsg.good{{color:{AETHER};}}
-.deskbar{{border:1px solid {BORDER};
- background:{PANEL};color:{DIM};padding:9px 2ch;margin-top:10px;
- cursor:pointer;letter-spacing:.06em;}}
-.deskbar:hover{{background:{GOLD};border-color:{GOLD};color:{INK};}}
+/* 061: the founding form on the COMMUNITY desk */
+.foundform{{margin-top:10px;padding-top:8px;border-top:1px dashed {BORDER};}}
+.frow{{display:flex;gap:1ch;align-items:center;margin-top:6px;flex-wrap:wrap;}}
+.frow .k{{color:{FAINT};letter-spacing:.08em;min-width:12ch;}}
+.frow input.ti{{flex:1;min-width:12ch;}}
+.frow input.ti.num{{flex:none;width:8ch;}}
+.bgrid.pick{{margin-top:4px;}}
+.bpick{{cursor:pointer;padding:3px;border:1px solid transparent;}}
+.bpick .fbanner{{background-color:{DIM};}}
+.bpick:hover .fbanner{{background-color:{TEXT};}}
+.bpick.on{{border-color:{GOLD};}}
+.bpick.on .fbanner{{background-color:{GOLD};}}
 .savebar{{display:flex;gap:6px;margin-top:6px;}}
 .savebar input{{flex:1;}}
 /* ── 042: the sound bar — pinned under everything, ANSI like the rest */
@@ -394,15 +402,6 @@ function showScene(d) {
     const art = game.querySelector('.bwrap, .banner') || game;
     requestAnimationFrame(() =>
       art.scrollIntoView({behavior: 'smooth', block: 'start'}));
-  }
-  // 015: the Guildhall opens straight onto the faction desk
-  if ((d.fragment || '').indexOf('THE GUILDHALL') !== -1) {
-    const bar = document.createElement('div');
-    bar.className = 'deskbar';
-    bar.textContent = '\u25ba FACTION DESK \u2014 the ledger, requests '
-      + 'and admin live in COMMUNITY';
-    bar.addEventListener('click', () => switchTab('community'));
-    game.appendChild(bar);
   }
   wireOptions();
   runFX(game);
@@ -687,7 +686,8 @@ function chipRow2(name, banners, left, right) {
     + '<span class="dim">' + right + '</span></div>';
 }
 
-/* ── 019: the pitch to the factionless — join here, or found there ──── */
+/* ── 019/061: the pitch to the factionless — join here, found here ── */
+let foundOpen = false, foundBanner = '';
 function renderCta(d) {
   if (d.in_faction) return '';
   let h = '<div class="panel"><div class="eyebrow">you climb in '
@@ -697,12 +697,41 @@ function renderCta(d) {
   if (d.requested)
     h += ' \u2014 you\u2019ve already knocked at ' + fac(d.requested)
       + ', their steward decides';
-  h += '.</div><div class="faint" style="margin-top:6px">Or raise your '
-    + 'own at the Guildhall in Roothollow \u2014 \u25c8 '
-    + num(d.found_fee || 300) + ', level ' + (d.found_min_level || 4)
-    + ' and up.</div>'
-    + '<button class="btn mini" id="ctahall" style="margin-top:8px">'
-    + 'THE GUILDHALL \u2192</button></div>';
+  h += ' \u2014 or raise your own: \u25c8 ' + num(d.found_fee || 300)
+    + ', level ' + (d.found_min_level || 4) + ' and up.</div>';
+  if (!foundOpen) {
+    h += '<button class="btn mini" id="foundopen" style="margin-top:8px">'
+      + 'START A NEW FACTION \u2192</button>';
+  } else {
+    const banners = d.banners || [];
+    if (!foundBanner || banners.indexOf(foundBanner) === -1)
+      foundBanner = banners[0] || 'wolf_howl';
+    h += '<div class="foundform" id="foundform">'
+      + '<div class="eyebrow">a new banner</div>'
+      + '<div class="frow"><span class="k">NAME</span>'
+      + '<input id="fd-name" class="ti" maxlength="24" minlength="3" '
+      + 'placeholder="3\u201324 letters"></div>'
+      + '<div class="frow"><span class="k">JOIN FEE</span>'
+      + '<input id="fd-fee" class="ti num" type="number" min="0" max="500" '
+      + 'value="0"> <span class="faint">\u25c8 0\u2013500, paid once by '
+      + 'each new member, into the store</span></div>'
+      + '<div class="frow"><span class="k">WEEKLY DUES</span>'
+      + '<input id="fd-dues" class="ti num" type="number" min="1" max="50" '
+      + 'value="5"> <span class="faint">\u25c8 1\u201350 a week from '
+      + 'every member, into the store</span></div>'
+      + '<div class="frow"><span class="k">SIGIL</span></div>'
+      + '<div class="bgrid pick">'
+      + banners.map(b => '<div class="bpick' + (b === foundBanner
+          ? ' on' : '') + '" data-banner="' + esc(b) + '" title="'
+          + esc(b) + '">' + sig(b) + '</div>').join('')
+      + '</div>'
+      + '<div class="rowbtns" style="margin-top:8px">'
+      + '<button class="btn" data-desk="found">RAISE THE BANNER \u2014 '
+      + '\u25c8 ' + num(d.found_fee || 300) + '</button>'
+      + '<button class="btn mini" id="foundclose">never mind</button>'
+      + '</div><div class="deskmsg" id="deskmsg"></div></div>';
+  }
+  h += '</div>';
   return h;
 }
 
@@ -902,8 +931,16 @@ function deskMsg(text, cls) {
 }
 
 community.addEventListener('click', async (e) => {
-  // 019: the CTA's founding pitch walks straight to the Guildhall card
-  if (e.target.closest('#ctahall')) { switchTab('game'); return; }
+  // 061: the CTA founds right here
+  if (e.target.closest('#foundopen')) { foundOpen = true; loadCommunity(); return; }
+  if (e.target.closest('#foundclose')) { foundOpen = false; loadCommunity(); return; }
+  const bp = e.target.closest('.bpick');
+  if (bp) {
+    foundBanner = bp.dataset.banner;
+    community.querySelectorAll('.bpick').forEach(x =>
+      x.classList.toggle('on', x === bp));
+    return;
+  }
   const back = e.target.closest('#back');
   if (back) { comm.view = 'board'; comm.name = ''; loadCommunity(); return; }
   const fname = e.target.closest('[data-fac]');
@@ -927,6 +964,16 @@ community.addEventListener('click', async (e) => {
   try {
     if (kind === 'request')
       await call('/pane/faction/request', {name: btn.dataset.name});
+    else if (kind === 'found') {
+      const q = id => community.querySelector(id);
+      const d = await call('/pane/faction/found', {
+        name: (q('#fd-name').value || '').trim(),
+        banner: foundBanner,
+        join_fee: parseInt(q('#fd-fee').value, 10) || 0,
+        weekly_dues: parseInt(q('#fd-dues').value, 10) || 5});
+      foundOpen = false;
+      comm.view = 'detail'; comm.name = d.faction;
+    }
     else if (kind === 'withdraw')
       await call('/pane/faction/cancel_request', {});
     else if (kind === 'rename') {

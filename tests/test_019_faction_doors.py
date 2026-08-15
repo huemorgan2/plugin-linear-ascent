@@ -114,7 +114,10 @@ def test_pane_ships_the_cta_join_buttons_and_tab_walks():
     html = pane.render_pane()
     assert "renderCta" in html                 # the pitch to the unbannered
     assert "ASK TO JOIN" in html               # inline on the ledger rows
-    assert "ctahall" in html                   # CTA → the Guildhall card
+    # 061: the CTA founds right here — no walk to the Guildhall
+    assert "ctahall" not in html
+    assert "/pane/faction/found" in html
+    assert "START A NEW FACTION" in html
     # 042: hall_ledger is a real door now (the in-game directory) —
     # the pane must NOT hijack it into a tab switch.
     assert "hall_ledger" not in html

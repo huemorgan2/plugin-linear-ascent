@@ -95,8 +95,9 @@ def test_hall_points_at_the_full_ledger_when_deep():
 
 def test_pane_ships_the_desk_surface():
     html = pane.render_pane()
-    for marker in ("THE GUILDHALL", "FACTION DESK",       # game-tab bar
-                   "/pane/factions", "/pane/faction/detail",
+    # 061: the game-tab FACTION DESK bar is gone — the card's own
+    # faction bar (render._faction_block) is the door now, always there
+    for marker in ("/pane/factions", "/pane/faction/detail",
                    "/pane/faction/rename", 'data-desk="approve"',
                    'data-desk="reject"', 'data-desk="kick"',
                    'data-desk="promote"', "ledgerlist", "ADMIN", "FOUNDER"):

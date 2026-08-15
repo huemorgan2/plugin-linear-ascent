@@ -945,25 +945,29 @@ _TIP_FAC_JOIN = ("The ledger lists every faction that flies. Ask to join "
 
 
 def _faction_block(m: Meters) -> str:
+    """061: one full-width bar at the foot of the card, always there —
+    the old Guildhall FACTION DESK bar's shape (border, dim words, the
+    whole bar paints gold on hover). The bar IS the button."""
     name = getattr(m, "faction", "") or ""
     if name:
         slug = getattr(m, "faction_banner", "") or ""
         art = _banner_data_url(slug) if slug else None
         sig = (f'<img class="facsig" src="{art[0]}" alt="">' if art
-               else '<span class="facsig blank"></span>')
+               else "")
         n = int(getattr(m, "faction_members", 0) or 0)
         on = int(getattr(m, "faction_online", 0) or 0)
         who = (f"{n} climber{'s' if n != 1 else ''}" if n else "")
         live = f"{on} online now" if n else ""
-        meta = " · ".join(x for x in (who, live) if x)
-        return (f'<div class="facblk later" data-fac="{_e(name)}">'
-                f'{sig}<div class="facmeta"><span class="facname">'
-                f'{_e(name)}</span>'
-                + (f'<span class="facsub">{meta}</span>' if meta else "")
-                + '</div>'
-                f'<button type="button" class="facbtn" '
-                f'data-play="faction" data-tip="{_e(_TIP_FAC_ACT)}">'
-                f'FACTION ACTIVITY \u2192</button></div>')
+        meta = " \u00b7 ".join(x for x in (who, live) if x)
+        return (f'<div class="facblk later" role="button" tabindex="0" '
+                f'data-fac="{_e(name)}" data-play="faction" '
+                f'data-tip="{_e(_TIP_FAC_ACT)}">'
+                f'<span class="facglyph">\u25ba</span>{sig}'
+                f'<span class="facname">{_e(name)}</span>'
+                + (f'<span class="facsub">\u00b7 {meta}</span>' if meta
+                   else "")
+                + '<span class="facbtn">FACTION ACTIVITY \u2192</span>'
+                '</div>')
     total = int(getattr(m, "factions_total", -1))
     if total == 0:
         count = "no faction flies yet — be the first"
@@ -973,17 +977,15 @@ def _faction_block(m: Meters) -> str:
         count = ""
     lock = ""
     if int(getattr(m, "level", 1) or 1) < _FACTION_FOUND_LEVEL:
-        lock = (f'<span class="facsub">found your own · '
+        lock = (f'<span class="facsub">\u00b7 found your own '
                 f'{_eglyph("lock")} level {_FACTION_FOUND_LEVEL}</span>')
-    return (f'<div class="facblk later none">'
-            f'<span class="facsig blank"></span>'
-            f'<div class="facmeta">'
-            f'<button type="button" class="facbtn join" '
+    return (f'<div class="facblk later none" role="button" tabindex="0" '
             f'data-tab="community" data-tip="{_e(_TIP_FAC_JOIN)}">'
-            f'JOIN A FACTION'
-            + (f' <span class="dim">\u00b7 {_e(count)}</span>' if count
+            f'<span class="facglyph">\u25ba</span>'
+            f'<span class="facbtn join">JOIN A FACTION</span>'
+            + (f'<span class="facsub">\u00b7 {_e(count)}</span>' if count
                else "")
-            + '</button>' + lock + '</div></div>')
+            + lock + '</div>')
 
 
 # ── 017/003: the enemy header + the [i] dossier ─────────────────────────
@@ -1339,7 +1341,7 @@ def _slot_cell(it: dict) -> str:
             tiph = (
                 '<span style="display:flex;gap:10px;'
                 'align-items:center;">'
-                f'<span style="flex:none;width:70px;height:112px;'
+                f'<span style="flex:none;width:105px;height:168px;'
                 f'background-color:{atint};'
                 f"-webkit-mask-image:url('{lurl}');"
                 f"mask-image:url('{lurl}');"
@@ -1468,7 +1470,7 @@ TIP_JS = """(function () {
     if (!box.textContent) return hide();
     box.style.display = 'block';
     var r = el.getBoundingClientRect();
-    box.style.maxWidth = Math.min(340, innerWidth - 16) + 'px';
+    box.style.maxWidth = Math.min(380, innerWidth - 16) + 'px';
     var x = Math.max(8, Math.min(r.left, innerWidth - box.offsetWidth - 8));
     var y = r.top - box.offsetHeight - 6;
     if (y < 4) y = Math.min(r.bottom + 6, innerHeight - box.offsetHeight - 4);
@@ -2514,24 +2516,27 @@ SCENE_CSS = f"""
 .profile .pcol{{flex:1;min-width:0;}}
 .profile .rail{{margin-top:0;padding-top:0;border-top:0;}}
 .profile .inv{{border-top:0;padding-top:0;margin-top:8px;}}
-/* ── 059: the faction block under the profile ── */
-.facblk{{display:flex;align-items:center;gap:1.5ch;margin-top:10px;
- padding-top:8px;border-top:1px dashed {BORDER};}}
-.facblk .facsig{{flex:none;height:40px;width:auto;
- image-rendering:pixelated;}}
-.facblk .facsig.blank{{width:0;height:40px;}}
-.facblk .facmeta{{flex:1;min-width:0;display:flex;flex-direction:column;
- gap:2px;}}
-.facblk .facname{{color:{BRIGHT};text-transform:uppercase;
- letter-spacing:.08em;}}
-.facblk .facsub{{color:{DIM};}}
+/* ── 059/061: the faction bar at the foot of the card — the old desk
+   bar's shape: full width, bordered, dim, paints gold whole on hover ── */
+.facblk{{display:flex;align-items:center;gap:1ch;margin-top:10px;
+ border:1px solid {BORDER};background:{PANEL};color:{DIM};
+ padding:9px 2ch;cursor:pointer;letter-spacing:.06em;
+ text-transform:uppercase;white-space:nowrap;overflow:hidden;
+ text-overflow:ellipsis;}}
+.facblk:hover,.facblk:focus-visible{{background:{GOLD};border-color:{GOLD};
+ color:{INK};outline:0;}}
+.facblk .facglyph{{flex:none;}}
+.facblk .facsig{{flex:none;height:60px;width:auto;
+ image-rendering:pixelated;margin:-4px 0;}}
+.facblk .facname{{color:{TEXT};}}
+.facblk .facbtn{{color:{TEXT};letter-spacing:.14em;}}
+.facblk .facbtn.join{{color:{TEXT};}}
+.facblk .facsub{{color:{DIM};text-transform:none;letter-spacing:.06em;}}
 .facblk .facsub .dim{{color:{DIM};}}
-.facbtn{{flex:none;background:none;border:1px solid {BORDER};
- color:{TEXT};font:inherit;letter-spacing:.14em;text-transform:uppercase;
- padding:5px 1.5ch;cursor:pointer;border-radius:0;white-space:nowrap;}}
-.facbtn:hover{{color:{BRIGHT};border-color:{TEXT};}}
-.facbtn.join{{align-self:flex-start;color:{GOLD};border-color:{GOLD};}}
-.facbtn.join .dim{{color:{DIM};letter-spacing:0;text-transform:none;}}
+.facblk .facbtn:not(.join){{margin-left:auto;}}
+.facblk:hover .facname,.facblk:hover .facbtn,.facblk:hover .facsub,
+.facblk:hover .facsub .dim,.facblk:focus-visible .facname,
+.facblk:focus-visible .facbtn,.facblk:focus-visible .facsub{{color:{INK};}}
 .piprows{{margin-top:8px;color:{DIM};}}
 .piprow{{display:flex;align-items:center;gap:1ch;margin-top:4px;
  cursor:help;}}
@@ -2593,8 +2598,7 @@ b,strong{{font-weight:normal;}}
  .profile .portrait{{align-self:flex-start;min-height:0;height:132px;}}
  .ident{{flex-wrap:wrap;row-gap:2px;}}
  .ident .idr{{margin-left:auto;}}
- .facblk{{flex-wrap:wrap;}}
- .facblk .facbtn{{margin-left:auto;}}
+ .facblk{{white-space:normal;flex-wrap:wrap;row-gap:2px;}}
  .rail{{gap:.5ch 1.5ch;}}
  .piprow .pips{{grid-template-columns:repeat(10,minmax(12px,18px));}}
  .pip{{width:100%;max-width:16px;}}

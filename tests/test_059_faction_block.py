@@ -8,7 +8,7 @@ opening the ledger, and the founding lock under level 4. The Guildhall
 says faction, offers Join a faction always, and wears the new header.
 """
 
-from plugin_linear_ascent import pane
+from plugin_linear_ascent import pane, render
 from plugin_linear_ascent.engine import combat, core, state
 from plugin_linear_ascent.render import render_scene_fragment
 
@@ -144,3 +144,25 @@ def test_guildhall_header_and_doors():
     assert found.label == "Found a new faction"
     for o in s.options:
         assert "banner" not in o.label.lower()
+
+
+# ── 061: the bar is the old desk bar's shape, and the CTA founds ─────────
+
+def test_the_faction_bar_is_one_full_width_door():
+    p = playing(world=loner_world(3))
+    frag = render_scene_fragment(core.current_scene(p))
+    blk = frag.split('class="facblk')[1].split("</div>")[0]
+    assert 'role="button"' in blk and 'data-tab="community"' in blk
+    assert "►" in blk                     # the desk bar's glyph
+    assert "<button" not in blk                # the whole bar is the button
+    html = render.render_scene(core.current_scene(p))
+    assert ".facblk:hover" in html and f"background:{render.GOLD}" in html
+    assert "deskbar" not in pane.render_pane()  # the old bar is gone
+
+
+def test_the_community_desk_founds_a_faction():
+    html = pane.render_pane()
+    assert "/pane/faction/found" in html
+    assert 'data-desk="found"' in html
+    assert "fd-name" in html and "fd-fee" in html and "fd-dues" in html
+    assert "bpick" in html                     # the sigil picker
