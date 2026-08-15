@@ -1396,7 +1396,9 @@ def _victory(p: dict, floor) -> Scene:
     if rested:
         lines.append(f"+ {rested} XP rested — ✦ {p['rested']} left "
                      "in the pool")
-    if e["kind"] == "wilds" and floor.floor <= economy.EARLY_COIN_FLOORS:
+    bounty = (e["kind"] == "wilds"
+              and floor.floor <= economy.EARLY_COIN_FLOORS)
+    if bounty:
         # 048 N8: the fade must never read as a nerf — name the bounty
         lines.append(f"+ ◈ {gold} gold (young-tower bounty)")
     else:
@@ -1521,10 +1523,11 @@ def _victory(p: dict, floor) -> Scene:
         meters=meters(p),
         event_kind=kind,
         # 025 §6: the haul, drawn. The lines above still SAY the numbers
-        # (the agent reads those); the card lays out one coin per gold and
-        # one shard per point of XP so a big kill looks like a big kill.
-        tally=[{"kind": "gold", "n": gold},
-               {"kind": "aether", "n": xp_landed}],
+        # (the agent reads those); the card shouts each amount in the big
+        # font and lays the marks under it — XP first, then the gold.
+        tally=[{"kind": "aether", "n": xp_landed},
+               dict({"kind": "gold", "n": gold},
+                    **({"note": "young-tower bounty"} if bounty else {}))],
         # 045: the exit card carries the floor's tiles like the gate
         # town does — the reel branch keeps its two bare buttons.
         option_art=(None if first_clear else _floor_art(floor)),

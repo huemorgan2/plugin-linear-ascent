@@ -371,10 +371,11 @@ def test_a_kill_carries_a_structured_tally():
 def test_the_card_draws_one_mark_per_point_then_switches_to_a_numeral():
     from plugin_linear_ascent import render
     small = render._tally_html([{"kind": "gold", "n": 37}])
-    assert small.count("<span class=\"eg\"") == 37
+    # 37 marks in the heap + the one icon beside the big amount
+    assert small.count("<span class=\"eg\"") == 38
     assert "37" not in small.replace("+37 gold", "")   # only in the label
     big = render._tally_html([{"kind": "gold", "n": 1240}])
-    assert big.count("<span class=\"eg\"") == 1
+    assert big.count("<span class=\"eg\"") == 1        # icon only, no heap
     assert "1,240" in big
     assert render._tally_html([{"kind": "gold", "n": 0}]) == ""
 

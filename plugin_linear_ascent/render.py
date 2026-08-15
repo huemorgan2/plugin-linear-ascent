@@ -446,15 +446,17 @@ _BIG = {
 }
 
 
-def _big_html(text: str) -> str:
-    """Three <div> lines of half-blocks; digits/coin gold, letters white."""
+def _big_html(text: str, tint: str = "") -> str:
+    """Three <div> lines of half-blocks; digits/coin gold, letters white.
+    A tint paints the WHOLE run one colour — the win card's XP shouts in
+    violet, its gold in gold, digits and word alike."""
     lines = [[], [], []]
     for ch in str(text).upper():
         g = _BIG.get(ch)
         if g is None:
             continue
         gold = ch.isdigit() or ch in "◎◈,."
-        cls = "bgold" if gold else "bwhite"
+        cls = "binh" if tint else ("bgold" if gold else "bwhite")
         w = max(len(r) for r in g)
         grid = [r.ljust(w, "0") for r in g] + ["0" * w]
         for li in range(3):
@@ -469,7 +471,8 @@ def _big_html(text: str) -> str:
     for segs in lines:
         row = "".join(f'<span class="{c}">{_e(s)}</span>' for c, s in segs)
         out.append(f"<div>{row}</div>")
-    return f'<div class="bigtx">{"".join(out)}</div>'
+    style = f' style="color:{tint}"' if tint else ""
+    return f'<div class="bigtx"{style}>{"".join(out)}</div>'
 
 
 def _strip_band_html(strip: dict) -> str:
@@ -545,6 +548,11 @@ def _combat_html(line: str) -> str:
 # apart before the number is read. At the cap the heap would stop scaling
 # and start costing DOM, so the numeral takes over.
 TALLY_CAP = 100
+# The plain reward lines stay on the TEXT surface (the agent reads them)
+# but leave the card when the tally shouts the same numbers big — one
+# haul, said once. Rested/assist/spoils lines don't match and stay.
+_TALLY_SAID = re.compile(
+    r"^\+ (?:◈ )?[\d,]+ (?:XP|gold)(?: \(young-tower bounty\))?$")
 # 030: XP wears VIOLET_SOFT everywhere now (law 3) — blue stays the
 # notification ink plus energy amounts, nothing else.
 _TALLY_MARK = {"gold": ("coin", GOLD), "aether": ("aether", VIOLET_SOFT)}
@@ -552,7 +560,11 @@ _TALLY_WORD = {"gold": "gold", "aether": "XP"}
 
 
 def _tally_html(tally: list[dict]) -> str:
-    rows = []
+    """One column per haul, side by side and centered: the amount shouts
+    in the big font ([icon] 8 XP · [icon] 36 GOLD, each in its own
+    colour), the marks heap under their own amount. Past the cap the
+    heap stays home — the big numeral already carries the size."""
+    cols = []
     for item in tally:
         kind = str(item.get("kind", ""))
         n = int(item.get("n", 0) or 0)
@@ -560,15 +572,21 @@ def _tally_html(tally: list[dict]) -> str:
             continue
         key, tint = _TALLY_MARK[kind]
         label = f"+{n:,} {_TALLY_WORD[kind]}"
-        if n >= TALLY_CAP:
-            body = (f'<span class="tnum" style="color:{tint}">'
-                    f"{_eglyph(key)} {n:,}</span>")
-        else:
-            body = (f'<span class="tmarks" style="color:{tint}" '
+        head = (f'<div class="thead" style="color:{tint}">'
+                f"{_eglyph(key)}"
+                f"{_big_html(f'{n:,} {_TALLY_WORD[kind]}', tint)}</div>")
+        heap = ""
+        if n < TALLY_CAP:
+            heap = (f'<span class="tmarks" style="color:{tint}" '
                     f'aria-hidden="true">' + _eglyph(key) * n + "</span>")
-        rows.append(f'<div class="tally" title="{_e(label)}">'
-                    f'<span class="tsr">{_e(label)}</span>{body}</div>')
-    return "".join(rows)
+        note = str(item.get("note", ""))
+        note_html = f'<div class="tnote">{_e(note)}</div>' if note else ""
+        cols.append(f'<div class="thaul" title="{_e(label)}">'
+                    f'<span class="tsr">{_e(label)}</span>'
+                    f"{head}{heap}{note_html}</div>")
+    if not cols:
+        return ""
+    return f'<div class="tallies">{"".join(cols)}</div>'
 
 
 # ── 027: the notice board ───────────────────────────────────────────────
@@ -1815,7 +1833,10 @@ def render_scene_fragment(scene: Scene) -> str:
                 f"</div>")
     in_fold = False
     in_callout = False
+    has_tally = bool(getattr(scene, "tally", None))
     for line in scene.body_lines:
+        if has_tally and _TALLY_SAID.match(line):
+            continue
         # 007: ▣ fold markers — long shop shelves collapse into a
         # <details> block (the [i]-dossier pattern, zero JS).
         if line.startswith("▣ "):
@@ -2023,14 +2044,20 @@ SCENE_CSS = f"""
  background-color:currentColor;mask-size:100% 100%;
  -webkit-mask-size:100% 100%;mask-repeat:no-repeat;
  -webkit-mask-repeat:no-repeat;image-rendering:pixelated;}}
-/* 025/006: the haul. Marks tile ten to a row and shrink a little so a
-   99-coin kill still reads as one heap instead of a wall of glyphs. */
-.tally{{margin:2px 0 0;line-height:1;}}
-.tally .tmarks{{display:inline-grid;grid-template-columns:repeat(10,14px);
+/* 025/006: the haul. The amount shouts in the big font, one column per
+   kind side by side and centered; marks tile ten to a row under their
+   own amount so a 99-coin kill still reads as one heap. */
+.tallies{{display:flex;flex-wrap:wrap;justify-content:center;
+ align-items:flex-start;gap:8px 4ch;margin:10px 0 2px;line-height:1;}}
+.thaul{{display:flex;flex-direction:column;align-items:center;gap:5px;}}
+.thead{{display:flex;align-items:center;gap:10px;}}
+.thead>.eg{{width:30px;height:30px;vertical-align:0;flex:none;}}
+.thead .bigtx{{padding:0;}}
+.thaul .tmarks{{display:inline-grid;grid-template-columns:repeat(10,14px);
  gap:1px;}}
-.tally .tmarks .eg{{width:14px;height:14px;vertical-align:0;}}
-.tally .tnum{{font-variant-numeric:tabular-nums;}}
-.tally .tsr{{position:absolute;width:1px;height:1px;overflow:hidden;
+.thaul .tmarks .eg{{width:14px;height:14px;vertical-align:0;}}
+.thaul .tnote{{color:{FAINT};}}
+.thaul .tsr{{position:absolute;width:1px;height:1px;overflow:hidden;
  clip:rect(0 0 0 0);white-space:nowrap;}}
 .dlore{{color:{FAINT};margin-top:6px;
  border-top:1px dashed {BORDER};padding-top:6px;}}
@@ -2220,6 +2247,7 @@ SCENE_CSS = f"""
 .bigtx div{{white-space:pre;}}
 .bigtx .bwhite{{color:{BRIGHT};}}
 .bigtx .bgold{{color:{GOLD};}}
+.bigtx .binh{{color:inherit;}}
 /* ── 007: folded shop shelves (▣ markers) ── */
 .fold{{margin:6px 0 0;}}
 .fold summary{{list-style:none;cursor:pointer;user-select:none;
