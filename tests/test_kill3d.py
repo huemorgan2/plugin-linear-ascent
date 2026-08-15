@@ -174,3 +174,59 @@ def test_old_wire_without_line_emits_no_rig():
                gold=0, race="elf")               # older engine: no line
     s = Scene(eyebrow="", headline="", meters=m, scene_id="x")
     assert "data-rig3d" not in render_scene_fragment(s)
+
+
+# ── wardens: the same finisher where a Warden model ships ───────────────
+
+def _warden_victory(p, floor=1, first_clear=False):
+    from plugin_linear_ascent.content import schema
+    from plugin_linear_ascent.engine import combat
+    if not p.get("floor"):
+        _to_floor(p)
+    if not first_clear:
+        p["unlocked_floor"] = max(p.get("unlocked_floor") or 0, floor + 1)
+    combat.start_encounter(p, schema.get_floor(floor), None, kind="warden")
+    for _ in range(30):
+        p["hp"] = 500
+        p["encounter"]["hp"] = 1
+        p["encounter"]["atk"] = 1
+        p["encounter"]["range"] = "close"
+        s = core.apply_choice(p, "attack")
+        if p["encounter"] is None:
+            return s
+    raise AssertionError("the warden never fell")
+
+
+def test_warden_fight_card_names_the_warden_model():
+    from plugin_linear_ascent.content import schema
+    from plugin_linear_ascent.engine import combat
+    p = _character("Brann")
+    _to_floor(p)
+    combat.start_encounter(p, schema.get_floor(1), None, kind="warden")
+    s = core.current_scene(p)
+    assert s.enemy["id"] == "warden_001"
+    assert 'data-foe3d="warden_001"' in render_scene_fragment(s)
+
+
+def test_repeat_warden_kill_plays_the_3d_banish():
+    p = _character("Brann")
+    s = _warden_victory(p, 1)
+    assert s.kill3d and s.kill3d["id"] == "warden_001"
+    assert s.kill3d["breed"] == "wrongmade"
+    assert s.fx is None                          # the scene IS the ending
+    assert s.kill3d["fx"] == "warden_001_evicted_human_blade"
+
+
+def test_first_clear_warden_keeps_the_reel():
+    p = _character("Brann")
+    s = _warden_victory(p, 1, first_clear=True)
+    assert s.kill3d is None                      # the fall reel owns it
+
+
+def test_deep_warden_without_a_model_keeps_the_reel():
+    from plugin_linear_ascent.engine import combat
+    assert 6 in combat.KILL3D_WARDEN_FLOORS
+    assert 7 not in combat.KILL3D_WARDEN_FLOORS
+    assert combat._foe_id({"id": "", "kind": "warden", "floor": 7}) \
+        == "warden_007"
+    assert combat._foe_id({"id": "", "kind": "warden"}) == ""

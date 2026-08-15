@@ -170,8 +170,12 @@ def test_repeat_warden_kill_stays_eviction_without_the_reel():
     s = slay(p)
     assert s.headline == f"{fl.warden_name} — evicted"
     # 049: the warden slug is rebuilt from the floor, so the fx ladder
-    # finds the typed floor-1 eviction reel for this race and weapon line
-    assert s.fx == "warden_001_evicted_human_blade"
+    # finds the typed floor-1 eviction reel for this race and weapon line;
+    # PLAN3: where a Warden model ships the 3D banish IS the ending and
+    # the reel rides inside kill3d as the client's degrade path
+    assert s.fx is None
+    assert s.kill3d["id"] == "warden_001"
+    assert s.kill3d["fx"] == "warden_001_evicted_human_blade"
 
 
 # ── kind and was thread from content to the runtime encounter ───────────

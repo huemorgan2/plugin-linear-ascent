@@ -57,6 +57,21 @@ _KILL_SUFFIX = {"melee": "melee", "ranged": "arrow", "magic": "magic"}
 _BREED_FX_VERB = {"native": "freed", "pressed": "fall",
                   "wrongmade": "evicted"}
 
+# the floors whose Warden has a fight3d model (worldd/static/site/fight3d/
+# monsters/warden_NNN.glb) — their kill plays the live 3D finisher; the
+# rest keep the reel. Extend as Wardens are modelled.
+KILL3D_WARDEN_FLOORS = frozenset(range(1, 7))
+
+
+def _foe_id(e: dict) -> str:
+    """The creature's asset slug: the encounter id, or warden_NNN for a
+    floor's Warden (whose encounter carries no id of its own)."""
+    if e.get("id"):
+        return str(e["id"])
+    if e.get("kind") == "warden" and e.get("floor"):
+        return f"warden_{int(e['floor']):03d}"
+    return ""
+
 # 049: the landing damage type names the weapon line of the last blow.
 _LINE_OF_DTYPE = {"melee": "blade", "ranged": "bow", "magic": "staff"}
 
@@ -497,7 +512,7 @@ def _enemy_payload(p: dict, floor) -> dict:
         "story": _lore(e, floor),
         # the creature's slug — the fight3d layer warms its model while
         # the fight is still on, so the kill card never waits on the wire
-        "id": e.get("id", ""),
+        "id": _foe_id(e),
         "drops": (_drop_ranges(p, floor) if e["kind"] == "wilds"
                   else _warden_drop_ranges(p, floor)
                   if e["kind"] == "warden" else None),
@@ -1522,14 +1537,19 @@ def _victory(p: dict, floor) -> Scene:
     # old GIF ending is GONE from the card (fx=None): the 3D scene IS the
     # ending, and "fx" inside the spec names the reel only as the
     # client's degrade path (no WebGL / missing model).
-    kill3d = ({"id": e.get("id", ""), "race": p.get("race") or "",
+    # Wardens too, where a Warden model ships (KILL3D_WARDEN_FLOORS):
+    # the same finisher, the creature id `warden_NNN`, breed wrongmade —
+    # the banish ending. Deeper Wardens keep their reels.
+    kill3d = ({"id": _foe_id(e), "race": p.get("race") or "",
                "line": _LINE_OF_DTYPE.get(_damage_type(p), "blade"),
                "breed": e.get("breed", ""),
                "specimen": e.get("specimen", "common"),
                "fx": _kill_fx(e, e["name"], first_clear,
                               _damage_type(p), p)}
-              if e["kind"] == "wilds" and e.get("id")
-              and not first_clear else None)
+              if _foe_id(e) and not first_clear
+              and (e["kind"] == "wilds"
+                   or int(e.get("floor", 0)) in KILL3D_WARDEN_FLOORS)
+              else None)
     return Scene(
         eyebrow=_eyebrow(p, floor),
         headline=headline,
