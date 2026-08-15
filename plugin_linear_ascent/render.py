@@ -1814,6 +1814,7 @@ def render_scene_fragment(scene: Scene) -> str:
                 f'<span class="npclab">{_e(npc.get("name", ""))}</span>'
                 f"</div>")
     in_fold = False
+    in_callout = False
     for line in scene.body_lines:
         # 007: ▣ fold markers — long shop shelves collapse into a
         # <details> block (the [i]-dossier pattern, zero JS).
@@ -1827,6 +1828,20 @@ def render_scene_fragment(scene: Scene) -> str:
                 parts.append("</details>")
                 in_fold = False
             continue
+        # 059: ▛ callout markers — a white-bordered box with a title,
+        # for the announcements a player must actually read (level-up).
+        if line.startswith("▛ "):
+            if in_callout:
+                parts.append("</div>")
+            parts.append(f'<div class="callout"><div class="callouth type">'
+                         f"{_ep(line[2:])}</div>")
+            in_callout = True
+            continue
+        if line == "▛.":
+            if in_callout:
+                parts.append("</div>")
+                in_callout = False
+            continue
         if line.startswith("−") or line.startswith("-"):
             # losses stay red; gains are NOT green — gold paints gold,
             # XP paints XP, everything else keeps the card's ink.
@@ -1834,6 +1849,8 @@ def render_scene_fragment(scene: Scene) -> str:
                          f"{_ep(line)}</div>")
         else:
             parts.append(f'<div class="body type">{_combat_html(line)}</div>')
+    if in_callout:
+        parts.append("</div>")
     if in_fold:
         parts.append("</details>")
     if getattr(scene, "tally", None):
@@ -2212,6 +2229,12 @@ SCENE_CSS = f"""
 .fold summary::before{{content:"▸ ";color:{FAINT};}}
 .fold[open] summary::before{{content:"▾ ";}}
 .fold .body{{margin-left:1ch;}}
+/* ── 059: the callout box (▛ markers) — white frame, white words ── */
+.callout{{border:1px solid {BRIGHT};padding:10px 12px;margin:10px 0 4px;
+ color:{BRIGHT};}}
+.callouth{{color:{BRIGHT};font-weight:bold;letter-spacing:.06em;
+ margin-bottom:6px;}}
+.callout .body{{color:{BRIGHT};margin:4px 0 0;}}
 .options{{clear:both;margin:10px 0 0;
  display:flex;flex-direction:column;
  border-top:1px dashed {BORDER};border-bottom:1px dashed {BORDER};

@@ -921,12 +921,18 @@ def guild_train(p: dict) -> Scene:
     # 020: levels are BOUGHT, so this card is guaranteed to be read —
     # it announces everything the new level opens and closes.
     from .. import unlocks
-    note = (f"+ LEVEL {p['level']} — the drill burns it into your "
-            "frame. Wounds close.")
+    # 059: a white box, plain English — no game slang. Every line is
+    # something the player can DO now (or must watch out for).
+    lines = [f"▛ LEVEL {p['level']} CLIMBERS CAN:",
+             f"You are now LEVEL {p['level']}. Your health is fully "
+             f"restored and your maximum health is higher "
+             f"({state.max_hp(p)} HP)."]
     for u in unlocks.just_reached(p, old_level, p["unlocked_floor"])[:4]:
         cost = f" ({u.cost})" if u.cost else ""
-        note += f"\n{unlocks.glyph(u)} {u.title}{cost} — {u.why}"
-    return guildhall_scene(p, note=note)
+        lines.append(f"{unlocks.glyph(u)} {u.title}{cost} — "
+                     f"{unlocks.plain(u)}")
+    lines.append("▛.")
+    return guildhall_scene(p, note="\n".join(lines))
 
 
 def _founding_scene(p: dict, st: dict, note: str = "") -> Scene:

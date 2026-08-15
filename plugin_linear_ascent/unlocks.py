@@ -223,6 +223,73 @@ def glyph(u: Unlock) -> str:
     return _GLYPH[u.effect]
 
 
+_PLAIN = {
+    "relay": "you can send letters to other players — writing is free, "
+             "and you can attach gold",
+    "found_guild": "you can start your own guild — you pick the join fee "
+                   "and the weekly dues, and you run its shared store",
+    "arcanum": "a second weapon shop opens (the Arcanum) — it sells "
+               "staves, focuses and relics for sorcerers",
+    "night_slot": "you get one action each night — sleep to heal and "
+                  "fight better tomorrow, or work a shift and get paid "
+                  "gold in the morning",
+    "strongbox": "the weekly strongbox opens — the monsters you kill and "
+                 "the floors you clear during the week earn you a pick of "
+                 "ONE reward when the week ends",
+    "carry3": "you can carry a third weapon into fights (buy the "
+              "training at the School)",
+    "mercy_ends": "WARNING — from now on, dying can cost you your "
+                  "equipment and part of the gold you carry",
+    "pvp_immunity_ends": "WARNING — from now on, other players can attack "
+                         "you in the fields; sleeping at the Lodge keeps "
+                         "you safe",
+    "pardon_ends": "WARNING — from now on, dying drops 90% of the gold "
+                   "you carry and one stack of items from your pack",
+}
+
+
+def plain(u: Unlock) -> str:
+    """The same fact as u.why, in plain English — for the level-up box,
+    where a player must understand what just changed without knowing
+    the game's slang."""
+    if u.id in _PLAIN:
+        return _PLAIN[u.id]
+    if u.id == "fields":
+        return (f"you can attack other players in the fields — a raid "
+                f"costs {economy.COST_PVP_ATTACK} energy, up to "
+                f"{economy.PVP_ATTACKS_PER_DAY} raids a day")
+    if u.id == "board":
+        return (f"the contract board opens — {economy.BOARD_JOBS_PER_DAY} "
+                "jobs a day that pay gold and XP; every player sees the "
+                "same jobs")
+    if u.id.startswith("gear_tier_"):
+        t = int(u.id.rsplit("_", 1)[1])
+        return f"the Forge will now sell you tier-{t} equipment"
+    if u.id.startswith("band1_rung_"):
+        return ("the shops sell the next step up of weapon, shield and "
+                "armor — each also comes in a 'keen' cut (hits harder, "
+                "wears out faster) or a 'warded' cut (lasts longer)")
+    if u.id.startswith("shoes_"):
+        g = economy.FORGE.get(u.id[len("shoes_"):])
+        sp = f" (+{g.speed} speed)" if g is not None else ""
+        return (f"new boots at the Forge{sp} — you get faster: better at "
+                "chasing, escaping and dodging")
+    if u.id.startswith("energy_cap_tier_"):
+        t = int(u.id.rsplit("_", 1)[1])
+        return (f"your energy cap rises to {economy.energy_cap(t)} once "
+                f"you wear tier-{t} armor — enough for one more fight "
+                "each day")
+    if u.id.startswith("relics_floor_"):
+        return "new relics (one-use battle items) are for sale in the shops"
+    if u.id.startswith("hone_reset_"):
+        return ("you can sharpen your equipment at the Forge again — the "
+                "sharpening limit starts fresh for this band of floors")
+    if u.id.startswith("milestone_"):
+        return ("a boss holds this floor — you cannot kill it alone; a "
+                "group must pledge energy together at the Guildhall")
+    return u.why
+
+
 def _entry_line(u: Unlock) -> str:
     cost = f" ({u.cost})" if u.cost else ""
     return f"{glyph(u)} {u.title}{cost} — {u.why}"
