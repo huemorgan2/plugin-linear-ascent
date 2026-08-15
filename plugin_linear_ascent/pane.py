@@ -196,6 +196,14 @@ select.ti{{background:{INK};color:{TEXT};border:1px solid {BORDER};
 .plyrow .sub{{color:{FAINT};white-space:nowrap;}}
 .plyrow.war .pline{{color:{GOLD};}}
 .plyrow.boss .pline{{color:{AETHER};}}
+/* 062: a fall reads red, a bought level reads aether */
+.plyrow.kill .pline{{color:{RED};}}
+.plyrow.levelup .pline{{color:{AETHER};}}
+.plyrow .plywho{{background:none;border:0;padding:0;margin:0;font:inherit;
+ color:inherit;cursor:pointer;text-decoration:underline dotted;
+ text-underline-offset:2px;}}
+.plyrow .plywho:hover,.plyrow .plywho:focus-visible{{color:{GOLD};
+ outline:0;}}
 /* 060: the two switches under the tabs — world / faction notices */
 .plysw{{display:flex;align-items:center;gap:1ch;margin:0 0 10px;
  color:{DIM};letter-spacing:.14em;text-transform:uppercase;}}
@@ -499,7 +507,7 @@ function wireOptions() {
   /* 027: everything that carries a data-opt acts the same way — menu rows,
      notice-board shortcuts, sigil tiles and the pack popup's actions. */
   const btns = [...game.querySelectorAll('button.opt, button.nrow, '
-    + 'button.gtile, button.ptile, button.pclose')];
+    + 'button.gtile, button.ptile, button.pclose, button.facdoor[data-opt]')];
   const hint = game.querySelector('.reply');
   btns.forEach(b => {
     if (b.__wired) return;
@@ -1156,6 +1164,17 @@ const PLY_WHEN = iso => {
   } catch (e) { return ''; }
 };
 
+/* 062: the actor's name in a row is a door to their page — the line
+   starts with the name (every emitter writes "<name> did …"), so only a
+   leading match is wrapped; anything else stays plain text. */
+function plyLine(r) {
+  const line = String(r.line || ''), who = String(r.actor || '');
+  if (who && line.startsWith(who)) {
+    return '<button type="button" class="plywho" data-pv="' + esc(who)
+      + '">' + esc(who) + '</button>' + esc(line.slice(who.length));
+  }
+  return esc(line);
+}
 function plyRender() {
   const t = n => '<button class="plytab' + (ply.tab === n ? ' on' : '')
     + '" data-ply="' + n + '">' + n + '</button>';
@@ -1181,7 +1200,7 @@ function plyRender() {
   } else {
     for (const r of ply.rows) {
       h += '<div class="plyrow ' + esc(r.kind || '') + '">'
-        + '<span class="pline">' + esc(r.line) + '</span>'
+        + '<span class="pline">' + plyLine(r) + '</span>'
         + '<span class="sub">'
         + (r.floor ? 'F' + esc(r.floor) + ' · ' : '')
         + PLY_WHEN(r.ts) + '</span></div>';
@@ -1233,7 +1252,25 @@ plyBtn.addEventListener('click', () => {
   if (window.__laSfx) window.__laSfx('click');
   if (ply.open) plyClose(); else plyOpen();
 });
-plyPanel.addEventListener('click', (e) => {
+plyPanel.addEventListener('click', async (e) => {
+  const who = e.target.closest('[data-pv]');
+  if (who) {
+    // 062: a name in the feed opens that climber's page on the Game tab
+    if (loading) return;
+    if (window.__laSfx) window.__laSfx('click');
+    loading = true;
+    try {
+      const d = await call('/act', {option: 'pv:' + who.dataset.pv,
+                                    scene_id: sceneId, mode: 'pane'});
+      plyClose(); switchTab('game');
+      if (d.refusal) { if (d.scene_id) sceneId = d.scene_id;
+                       showToast(d.refusal); }
+      else showScene(d);
+    } catch (err) {
+      if (err.message !== 'auth') showErr(err.message);
+    } finally { loading = false; }
+    return;
+  }
   const b = e.target.closest('[data-ply]');
   if (!b) return;
   const a = b.dataset.ply;

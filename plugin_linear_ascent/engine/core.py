@@ -409,6 +409,13 @@ def apply_choice(p: dict, option_id: str, text: str = "") -> Scene:
     # click is a door regardless (an unknown name reads a silent stone)
     if option_id.startswith("pv:"):
         valid = valid | {option_id}
+    # 062: the profile's faction bar is a door — from any room on the
+    # square (or a climber's page) it walks to town and into the hall.
+    if option_id == "go:hall" and not scene.enemy \
+            and p.get("location") in _NOTICE_ROOMS + ("profile",) \
+            and p["stage"] == "playing":
+        _dispatch(p, "town")
+        return _stamp(p, _dispatch(p, "hall"))
     if option_id not in valid:
         # numbered fallback: "1".."9" resolve positionally
         if option_id.isdigit() and 1 <= int(option_id) <= len(scene.options):
@@ -1088,7 +1095,7 @@ def _town_scene(p: dict) -> Scene:
     if fac and isinstance(fac.get("hall"), dict):
         gi = next((i for i, o in enumerate(opts) if o.id == "guildhall"),
                   len(opts) - 1)
-        opts.insert(gi + 1, Option("hall", "YOUR HALL",
+        opts.insert(gi + 1, Option("hall", "YOUR FACTION'S HALL",
                                    str(fac.get("name", "")),
                                    badge=_b("hall")))
     if w:

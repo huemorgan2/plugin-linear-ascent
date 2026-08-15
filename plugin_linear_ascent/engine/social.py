@@ -312,7 +312,7 @@ def guildhall_scene(p: dict, note: str = "") -> Scene:
             # warm row at the top of a civic floor.
             from . import hall as hall_mod
             opts.insert(0, Option(
-                "hall", f"YOUR HALL — the {fac['name']} table",
+                "hall", f"YOUR FACTION'S HALL — the {fac['name']} table",
                 hall_mod.tier_name(hall_d.get("room_tier", 1))))
             headline = "Where the factions fly"
             if hb is not None:
@@ -914,7 +914,7 @@ def guild_train(p: dict) -> Scene:
     p["hp"] = state.max_hp(p)
     _ledger(p, "levelup", gold=-fee, note=f"level {p['level']}")
     if p.get("_world") is not None:
-        _effect(p, "happening",
+        _effect(p, "happening", tag="levelup",
                 line=f"{p.get('name') or 'A climber'} bought level "
                      f"{p['level']} at the drillmaster",
                 meta={"level": p["level"]})

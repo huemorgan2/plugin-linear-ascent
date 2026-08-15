@@ -121,7 +121,7 @@ def test_square_grows_your_hall_door_for_members():
     p = member()
     s = core.apply_choice(p, "town")
     door = next(o for o in s.options if o.id == "hall")
-    assert door.label == "YOUR HALL"
+    assert door.label == "YOUR FACTION'S HALL"
     assert door.hint == "Ember Pact"
 
 
@@ -463,7 +463,7 @@ def test_guildhall_leads_with_your_hall_and_the_walls():
     p = member()
     s = core.apply_choice(p, "guildhall")
     assert s.options[0].id == "hall"
-    assert s.options[0].label == "YOUR HALL — the Ember Pact table"
+    assert s.options[0].label == "YOUR FACTION'S HALL — the Ember Pact table"
     assert s.headline == "Where the factions fly"
     body = s.body_lines
     assert any("THIS WEEK — THE ASCENT DEMANDS A CULL" in ln

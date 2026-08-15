@@ -85,8 +85,9 @@ def test_member_block_shows_banner_name_counts_and_the_door():
     assert 'data-fac="Ember Pact"' in blk
     assert '<img class="facsig"' in blk          # wolf_howl art exists
     assert "3 climbers" in blk and "2 online now" in blk
-    assert 'data-play="faction"' in blk
-    assert "FACTION ACTIVITY" in blk
+    assert 'data-opt="go:hall"' in blk           # banner + name = the door
+    assert "FACTION ACTIVITY" not in blk
+    assert "\u25ba" not in blk                    # no arrow glyph
     assert "JOIN A FACTION" not in blk
 
 
@@ -152,12 +153,46 @@ def test_the_faction_bar_is_one_full_width_door():
     p = playing(world=loner_world(3))
     frag = render_scene_fragment(core.current_scene(p))
     blk = frag.split('class="facblk')[1].split("</div>")[0]
-    assert 'role="button"' in blk and 'data-tab="community"' in blk
-    assert "►" in blk                     # the desk bar's glyph
-    assert "<button" not in blk                # the whole bar is the button
+    assert 'class="facdoor join" data-tab="community"' in blk
+    assert "\u25ba" not in blk                   # 062: no arrow glyph
     html = render.render_scene(core.current_scene(p))
-    assert ".facblk:hover" in html and f"background:{render.GOLD}" in html
+    # 062: no box — the card's dotted rule cuts the strip off; the door
+    # (banner + name) lights gold on hover
+    assert f"border-top:1px dashed {render.BORDER}" in html.split(".facblk{")[1]
+    assert ".facblk .facdoor:hover .facname" in html
     assert "deskbar" not in pane.render_pane()  # the old bar is gone
+
+
+def test_a_member_walks_into_the_hall_from_any_room_on_the_square():
+    from tests.test_032_banner_hall import the_hall
+    p = playing(world=member_world())
+    p["guild"] = "Ember Pact"
+    p["_world"]["faction"]["hall"] = the_hall()
+    p["location"] = "forge"
+    s = core.apply_choice(p, "go:hall")
+    assert p["location"] == "hall"
+    assert not s.refusal
+    # from the wilds the door stays shut (a fight is a fight)
+    q = playing(world=member_world())
+    q["guild"] = "Ember Pact"
+    q["location"] = "wilds"
+    q["floor"] = 1
+    s = core.apply_choice(q, "go:hall")
+    assert q["location"] == "wilds" and s.refusal
+
+
+def test_the_feed_colors_kills_and_levelups_and_links_the_actor():
+    html = pane.render_pane()
+    assert f".plyrow.kill .pline{{color:{render.RED};}}" in html
+    assert f".plyrow.levelup .pline{{color:{render.AETHER};}}" in html
+    assert 'data-pv=' in html and "function plyLine" in html
+
+
+def test_the_death_and_levelup_happenings_carry_a_tag():
+    import inspect
+    from plugin_linear_ascent.engine import combat as cmb, social as soc
+    assert '"tag": "kill"' in inspect.getsource(cmb._death)
+    assert 'tag="levelup"' in inspect.getsource(soc.guild_train)
 
 
 def test_the_community_desk_founds_a_faction():

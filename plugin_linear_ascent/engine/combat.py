@@ -1799,7 +1799,7 @@ def _death(p: dict, floor) -> Scene:
     _ledger(p, "death", gold=-lost_gold, note=e["name"])
     if p.get("_world") is not None:
         p.setdefault("_effects", []).append({
-            "kind": "happening", "floor": floor.floor,
+            "kind": "happening", "floor": floor.floor, "tag": "kill",
             "line": (f"{p.get('name') or 'A climber'} fell to a "
                      f"{e['name']} on floor {floor.floor}")})
     p["encounter"] = None
