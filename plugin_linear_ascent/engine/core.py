@@ -2586,7 +2586,7 @@ def _pawn_scene(p: dict) -> Scene:
                 g = economy.FORGE[slug]
                 opts.append(Option(f"donate_{slug}",
                                    f"Donate {g.name} to the armory",
-                                   "no coin — the banner keeps it"))
+                                   "no coin — the faction keeps it"))
     opts.append(Option("back", "Back to the square"))
     return Scene(
         eyebrow="ROOTHOLLOW · PAWN SHOP",
@@ -2666,7 +2666,7 @@ def _pawn_donate(p: dict, slug: str) -> Scene:
     s = _pawn_scene(p)
     s.body_lines.insert(
         0, f"The {g.name} goes to the "
-           f"{w['faction'].get('name', 'faction')} racks — the banner "
+           f"{w['faction'].get('name', 'faction')} racks — the faction "
            "keeps it now.")
     return s
 
@@ -3201,7 +3201,7 @@ def _school_train(p: dict, path: str) -> Scene:
                 "always",
                 "▪ a master pays 80% on the other paths' first "
                 "five ranks",
-                "▪ a tenth rank is toasted in every banner hall — "
+                "▪ a tenth rank is toasted in every faction hall — "
                 "the tower knows its masters by name",
             ],
             options=[Option("town", "So be it")],

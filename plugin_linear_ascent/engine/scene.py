@@ -56,8 +56,15 @@ class Meters:
     name: str = ""      # 031 §4: the profile header — who is climbing.
     race: str = ""      # "" = not sent (older engine): the header line
     clazz: str = ""     # simply omits the missing parts.
-    faction: str = ""   # the banner you swore to; "" = bannerless (or
-                        # an older engine that never sent it).
+    faction: str = ""   # the faction you swore to; "" = none (or an
+                        # older engine that never sent it).
+    # 059: the faction block under the profile — its banner slug, the
+    # table's size and how many of them are on the floors right now;
+    # for the unaffiliated, how many factions fly (-1 = not sent).
+    faction_banner: str = ""
+    faction_members: int = 0
+    faction_online: int = 0
+    factions_total: int = -1
 
 
 @dataclass

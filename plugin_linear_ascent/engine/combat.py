@@ -129,10 +129,22 @@ def meters(p: dict) -> Meters:
         # 048: the class field died — the wire slot carries the path of
         # the weapon in hand so old clients keep a sane header.
         clazz=economy.PATH_OF_LINE.get(_weapon_line(p), ""),
-        # the banner: worldd injects w["faction"] for members; local
+        # the faction: worldd injects w["faction"] for members; local
         # dev mode keeps the legacy doc-string guild name.
-        faction=(((p.get("_world") or {}).get("faction") or {})
-                 .get("name") or p.get("guild") or ""))
+        faction=(_wfac(p).get("name") or p.get("guild") or ""),
+        # 059: the block under the profile
+        faction_banner=str(_wfac(p).get("banner") or ""),
+        faction_members=int(_wfac(p).get("members_count")
+                            or len(_wfac(p).get("members") or [])),
+        faction_online=int(_wfac(p).get("online") or 0),
+        factions_total=(int((p.get("_world") or {}).get("factions_total"))
+                        if (p.get("_world") or {}).get("factions_total")
+                        is not None else -1))
+
+
+def _wfac(p: dict) -> dict:
+    fac = (p.get("_world") or {}).get("faction")
+    return fac if isinstance(fac, dict) else {}
 
 
 def _eyebrow(p: dict, floor) -> str:

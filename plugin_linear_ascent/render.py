@@ -772,8 +772,8 @@ _TIP_LV = ("LV — your level. Levels are bought at the Guildhall: a full "
            "XP bar plus the training fee in gold.")
 _TIP_GOLD = ("Carried gold — spendable anywhere but lost when you die. "
              "The Vault banks it safely at 5%/day interest.")
-_TIP_FACTION = ("Your banner. Go to the faction house on Roothollow "
-                "main street — the Guildhall — for the store, the "
+_TIP_FACTION = ("Your faction. Go to the Guildhall on Roothollow main "
+                "street — home of all the factions — for the store, the "
                 "armory and your brothers.")
 
 
@@ -921,6 +921,69 @@ def _profile_html(scene: Scene) -> str:
             + f'<div class="profile">'
             f'<img class="portrait later" src="{url}" alt="">'
             f'<div class="pcol">{right}</div></div>')
+
+
+# ── 059: the faction block — where you stand with the factions ──────────
+# Under the profile, full card width. A member: their banner on the
+# left, the faction's name, the table's size and how many of them are on
+# the floors right now, and a door into the Playing panel's faction tab.
+# The unaffiliated: one clear ask — JOIN A FACTION — with the count of
+# factions flying; it opens the ledger (every faction, ask to join from
+# any row). Founding is the only level-gated door (level 4), and that
+# is said in a faint second line. Neither button is a data-opt: both act
+# in the pane, no server round trip.
+
+_FACTION_FOUND_LEVEL = 4     # mirrors engine.social.FOUND_MIN_LEVEL
+
+_TIP_FAC_ACT = ("Open the Playing panel on your faction's tab — the "
+                "floors your people enter, the weapons they buy, the "
+                "wardens they strike.")
+_TIP_FAC_JOIN = ("The ledger lists every faction that flies. Ask to join "
+                 "any table whose door admits your level; a faction "
+                 "pools coin, racks shared gear and enters the weekly "
+                 "challenges.")
+
+
+def _faction_block(m: Meters) -> str:
+    name = getattr(m, "faction", "") or ""
+    if name:
+        slug = getattr(m, "faction_banner", "") or ""
+        art = _banner_data_url(slug) if slug else None
+        sig = (f'<img class="facsig" src="{art[0]}" alt="">' if art
+               else '<span class="facsig blank"></span>')
+        n = int(getattr(m, "faction_members", 0) or 0)
+        on = int(getattr(m, "faction_online", 0) or 0)
+        who = (f"{n} climber{'s' if n != 1 else ''}" if n else "")
+        live = f"{on} online now" if n else ""
+        meta = " · ".join(x for x in (who, live) if x)
+        return (f'<div class="facblk later" data-fac="{_e(name)}">'
+                f'{sig}<div class="facmeta"><span class="facname">'
+                f'{_e(name)}</span>'
+                + (f'<span class="facsub">{meta}</span>' if meta else "")
+                + '</div>'
+                f'<button type="button" class="facbtn" '
+                f'data-play="faction" data-tip="{_e(_TIP_FAC_ACT)}">'
+                f'FACTION ACTIVITY \u2192</button></div>')
+    total = int(getattr(m, "factions_total", -1))
+    if total == 0:
+        count = "no faction flies yet — be the first"
+    elif total > 0:
+        count = f"{total} faction{'s' if total != 1 else ''}"
+    else:
+        count = ""
+    lock = ""
+    if int(getattr(m, "level", 1) or 1) < _FACTION_FOUND_LEVEL:
+        lock = (f'<span class="facsub">found your own · '
+                f'{_eglyph("lock")} level {_FACTION_FOUND_LEVEL}</span>')
+    return (f'<div class="facblk later none">'
+            f'<span class="facsig blank"></span>'
+            f'<div class="facmeta">'
+            f'<button type="button" class="facbtn join" '
+            f'data-tab="community" data-tip="{_e(_TIP_FAC_JOIN)}">'
+            f'JOIN A FACTION'
+            + (f' <span class="dim">\u00b7 {_e(count)}</span>' if count
+               else "")
+            + '</button>' + lock + '</div></div>')
 
 
 # ── 017/003: the enemy header + the [i] dossier ─────────────────────────
@@ -1972,6 +2035,7 @@ def render_scene_fragment(scene: Scene) -> str:
 
     if scene.meters:
         parts.append(_profile_html(scene))   # pack rides its right column
+        parts.append(_faction_block(scene.meters))   # 059
     else:
         parts.append(_inventory_html(scene))
 
@@ -2450,6 +2514,24 @@ SCENE_CSS = f"""
 .profile .pcol{{flex:1;min-width:0;}}
 .profile .rail{{margin-top:0;padding-top:0;border-top:0;}}
 .profile .inv{{border-top:0;padding-top:0;margin-top:8px;}}
+/* ── 059: the faction block under the profile ── */
+.facblk{{display:flex;align-items:center;gap:1.5ch;margin-top:10px;
+ padding-top:8px;border-top:1px dashed {BORDER};}}
+.facblk .facsig{{flex:none;height:40px;width:auto;
+ image-rendering:pixelated;}}
+.facblk .facsig.blank{{width:0;height:40px;}}
+.facblk .facmeta{{flex:1;min-width:0;display:flex;flex-direction:column;
+ gap:2px;}}
+.facblk .facname{{color:{BRIGHT};text-transform:uppercase;
+ letter-spacing:.08em;}}
+.facblk .facsub{{color:{DIM};}}
+.facblk .facsub .dim{{color:{DIM};}}
+.facbtn{{flex:none;background:none;border:1px solid {BORDER};
+ color:{TEXT};font:inherit;letter-spacing:.14em;text-transform:uppercase;
+ padding:5px 1.5ch;cursor:pointer;border-radius:0;white-space:nowrap;}}
+.facbtn:hover{{color:{BRIGHT};border-color:{TEXT};}}
+.facbtn.join{{align-self:flex-start;color:{GOLD};border-color:{GOLD};}}
+.facbtn.join .dim{{color:{DIM};letter-spacing:0;text-transform:none;}}
 .piprows{{margin-top:8px;color:{DIM};}}
 .piprow{{display:flex;align-items:center;gap:1ch;margin-top:4px;
  cursor:help;}}
@@ -2511,6 +2593,8 @@ b,strong{{font-weight:normal;}}
  .profile .portrait{{align-self:flex-start;min-height:0;height:132px;}}
  .ident{{flex-wrap:wrap;row-gap:2px;}}
  .ident .idr{{margin-left:auto;}}
+ .facblk{{flex-wrap:wrap;}}
+ .facblk .facbtn{{margin-left:auto;}}
  .rail{{gap:.5ch 1.5ch;}}
  .piprow .pips{{grid-template-columns:repeat(10,minmax(12px,18px));}}
  .pip{{width:100%;max-width:16px;}}

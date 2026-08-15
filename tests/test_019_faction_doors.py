@@ -94,13 +94,17 @@ def test_hall_ledger_row_counts_the_world_and_opens_the_directory():
     s = core.apply_choice(p, "hall_ledger")
     assert p["location"] == "guildhall"        # a sub-state, not a warp
     assert p["guild_dir"] == {"page": 0, "q": ""}
-    assert s.headline == "Every banner that flies"
+    assert s.headline == "Every faction that flies"
 
 
-def test_no_ledger_row_when_no_banners_fly():
+def test_ledger_row_stays_when_no_factions_fly():
+    # 059: JOIN A FACTION is always a row — with no factions its hint
+    # says so, and the founding door sits right under it
     p = playing("Empty", world=hall_world(factions=[], factions_total=0))
     s = core.apply_choice(p, "guildhall")
-    assert not any(o.id == "hall_ledger" for o in s.options)
+    row = next(o for o in s.options if o.id == "hall_ledger")
+    assert row.label == "Join a faction"
+    assert "none fly yet" in row.hint
     assert any("first" in ln for ln in s.body_lines)
 
 

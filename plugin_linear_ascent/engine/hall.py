@@ -178,7 +178,7 @@ def _week_lines(fac: dict, hall: dict, lines: list, opts: list) -> None:
         opts.append(Option("enter_week", "ENTER THE WEEK",
                            f"◈ {cost} from the coffer (◈ {bal:,})"))
     else:
-        lines.append("the steward signs the banner in — nudge them")
+        lines.append("the steward signs the faction in — nudge them")
 
 
 def _hands_tag(m: dict) -> str:
@@ -257,7 +257,7 @@ def _home_scene(p: dict, fac: dict, hall: dict, note: str = "") -> Scene:
         if any(m.get("role") != "steward" and m.get("name") != p.get("name")
                for m in fac.get("members", [])):
             opts.append(Option("promote", "Raise a member to steward"))
-    opts.append(Option("guild_leave", "Leave the banner"))
+    opts.append(Option("guild_leave", "Leave the faction"))
     opts.append(Option("town", "Back to the square"))
     return Scene(
         eyebrow=_eyebrow(fac, hall),
@@ -313,7 +313,7 @@ def _coffer_scene(p: dict, fac: dict, hall: dict, note: str = "") -> Scene:
     return Scene(
         eyebrow=_eyebrow(fac, hall, "THE COFFER"),
         headline=f"The coffer holds ◈ {bal:,}",
-        support="Every coin in is the banner's for good — it leaves only "
+        support="Every coin in is the faction's for good — it leaves only "
                 "to the world, never to a pocket.",
         body_lines=lines,
         options=opts,
@@ -453,7 +453,7 @@ def _chest_put_scene(p: dict, fac: dict, hall: dict,
     for slug in _donatable(p):
         g = economy.FORGE[slug]
         oid = f"put_{slug}"
-        opts.append(Option(oid, g.name, "no coin — the banner keeps it"))
+        opts.append(Option(oid, g.name, "no coin — the faction keeps it"))
         art[oid] = slug
     opts.append(Option("hall_cancel", "Never mind"))
     return Scene(
@@ -494,7 +494,7 @@ def _chest_put(p: dict, slug: str, fac: dict, hall: dict) -> Scene:
     if "used" in chest:
         chest["used"] = int(chest["used"]) + 1
     return hall_scene(
-        p, note=f"+ the {g.name} goes into the chest — the banner keeps "
+        p, note=f"+ the {g.name} goes into the chest — the faction keeps "
                 "it now, your name on the socket.")
 
 
@@ -550,7 +550,7 @@ def _bunks_scene(p: dict, fac: dict, hall: dict, note: str = "") -> Scene:
         lines.append("tonight: "
                      + (", ".join(tonight) if tonight else "no one yet")
                      + f" — {open_} bed{'s' if open_ != 1 else ''} open")
-        lines.append("a banner bed buys the same night the Lodge sells — "
+        lines.append("a faction bed buys the same night the Lodge sells — "
                      "nothing finds you before dawn. Free; the dues "
                      "bought it.")
         opts.append(Option("bed_claim", "SLEEP HERE TONIGHT",
@@ -597,7 +597,7 @@ def _bed_claim(p: dict, fac: dict, hall: dict) -> Scene:
     _ledger(p, "hall_bed", gold=0, note=fac.get("name", ""))
     return hall_scene(
         p, note="+ a bunk is yours till dawn — nothing finds you under "
-                "the banner's roof.")
+                "the faction's roof.")
 
 
 # ── THE WORKS (032 §4/§5/§6/§8 — the coffer's sinks) ────────────────────
@@ -700,8 +700,8 @@ def _desk_scene(p: dict, fac: dict, hall: dict, note: str = "") -> Scene:
             body_lines=[note] if note else [],
             options=[Option("hall_cancel", "Never mind")],
             meters=meters(p),
-            awaits_text="the banner's new name",
-            ask={"kind": "text", "max": 24, "label": "the banner's new name",
+            awaits_text="the faction's new name",
+            ask={"kind": "text", "max": 24, "label": "the faction's new name",
                  "placeholder": str(fac.get("name", "")),
                  "submit": "RENAME"},
         )
@@ -725,7 +725,7 @@ def _desk_scene(p: dict, fac: dict, hall: dict, note: str = "") -> Scene:
                          "their papers hang at the Community desk")
         else:
             lines.append("No one waits at the desk.")
-    opts.append(Option("rename_banner", "Rename the banner",
+    opts.append(Option("rename_banner", "Rename the faction",
                        "3–24 letters — new colors for everyone"))
     opts.append(Option("hall_home", "Back to the hall"))
     return Scene(
@@ -810,10 +810,10 @@ def _enter_week(p: dict, fac: dict, hall: dict) -> Scene:
     wk = fac.get("week") or {}
     if fac.get("role") != "steward":
         return hall_scene(
-            p, note="the steward signs the banner in — nudge them")
+            p, note="the steward signs the faction in — nudge them")
     if wk.get("entered"):
         return hall_scene(
-            p, note="Your banner is already in this week's lists.")
+            p, note="Your faction is already in this week's lists.")
     cost = int(wk.get("entry_cost", 0) or 0)
     bal, _cap = _coffer_nums(fac, hall)
     if bal < cost:
@@ -964,7 +964,7 @@ def hall_text(p: dict, text: str) -> Scene:
     if kind == "rename":
         name = text.strip()[:24]
         if len(name) < 3:
-            return hall_scene(p, note="Three letters at least. Banners "
+            return hall_scene(p, note="Three letters at least. Factions "
                                       "need room for glory.")
         _effect(p, "faction_rename", name=name)
         old = fac.get("name", "")

@@ -129,7 +129,7 @@ def test_next_line_carries_the_threshold_and_the_closing_half():
     p = player(level=3, floor=1)
     line = unlocks.next_line(p)
     assert line.startswith("NEXT — LEVEL 4")
-    assert "banner" in line and "mercy" in line
+    assert "faction" in line and "mercy" in line
 
 
 def test_protections_active_names_both_shields_then_none():

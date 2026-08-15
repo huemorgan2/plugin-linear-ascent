@@ -118,7 +118,7 @@ def test_training_to_level_4_announces_both_halves():
     assert p["level"] == 4
     body = "\n".join(s.body_lines)
     assert "LEVEL 4" in body
-    assert "banner" in body           # the gift
+    assert "faction" in body          # the gift
     assert "mercy" in body            # the bill
 
 

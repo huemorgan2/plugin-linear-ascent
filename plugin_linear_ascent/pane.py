@@ -188,6 +188,37 @@ select.ti{{background:{INK};color:{TEXT};border:1px solid {BORDER};
 .plyrow .sub{{color:{FAINT};white-space:nowrap;}}
 .plyrow.war .pline{{color:{GOLD};}}
 .plyrow.boss .pline{{color:{AETHER};}}
+/* 060: the two switches under the tabs — world / faction notices */
+.plysw{{display:flex;align-items:center;gap:1ch;margin:0 0 10px;
+ color:{DIM};letter-spacing:.14em;text-transform:uppercase;}}
+.plysw .plytab[aria-pressed="false"]{{opacity:.55;text-decoration:line-through;}}
+/* 060: notices from the Playing button — a wide low strip pinned just
+   above the sound bar, a caret pointing down at ▶ playing, an ✕ top
+   right, gone by itself after 3 s. Several stack upward. */
+#plytoasts{{position:fixed;z-index:100;bottom:52px;left:50%;
+ transform:translateX(-50%);width:min(720px,calc(100vw - 24px));
+ display:flex;flex-direction:column-reverse;gap:6px;pointer-events:none;}}
+.plytoast{{position:relative;pointer-events:auto;background:{INK};
+ color:{TEXT};border:1px solid {TEXT};padding:6px 3.5ch 6px 1.5ch;
+ line-height:1.4;white-space:nowrap;overflow:hidden;
+ text-overflow:ellipsis;transition:transform .2s steps(4,end),
+ opacity .2s steps(4,end);}}
+.plytoast.in{{transform:translateY(6px);opacity:0;}}
+.plytoast .eyebrow{{display:inline;color:{DIM};margin:0 1ch 0 0;
+ letter-spacing:.14em;text-transform:uppercase;}}
+.plytoast .sub{{color:{FAINT};margin-left:1ch;}}
+.plytoast.war .pline{{color:{GOLD};}}
+.plytoast.boss .pline{{color:{AETHER};}}
+.plytoast .x{{position:absolute;top:2px;right:6px;background:none;
+ border:0;color:{DIM};font:inherit;cursor:pointer;padding:0 .5ch;
+ line-height:1.4;}}
+.plytoast .x:hover{{color:{TEXT};}}
+.plytoast:first-child::after{{content:"";position:absolute;left:50%;
+ bottom:-5px;width:8px;height:8px;background:{INK};
+ border-right:1px solid {TEXT};border-bottom:1px solid {TEXT};
+ transform:translateX(-50%) rotate(45deg);}}
+@media (prefers-reduced-motion: reduce){{
+ .plytoast{{transition:none;}}}}
 textarea.ti{{background:{INK};color:{TEXT};border:1px solid {BORDER};
  font:inherit;padding:6px 1ch;width:100%;box-sizing:border-box;
  min-height:110px;resize:vertical;display:block;}}
@@ -656,13 +687,13 @@ function chipRow2(name, banners, left, right) {
     + '<span class="dim">' + right + '</span></div>';
 }
 
-/* ── 019: the pitch to the unbannered — join here, or found there ───── */
+/* ── 019: the pitch to the factionless — join here, or found there ──── */
 function renderCta(d) {
   if (d.in_faction) return '';
-  let h = '<div class="panel"><div class="eyebrow">you climb '
-    + 'unbannered</div><div>A faction table means a shared armory, '
+  let h = '<div class="panel"><div class="eyebrow">you climb in '
+    + 'no faction</div><div>A faction table means a shared armory, '
     + 'weekly challenges, and people who notice when you fall. '
-    + 'Ask to join any banner below';
+    + 'Ask to join any faction below';
   if (d.requested)
     h += ' \u2014 you\u2019ve already knocked at ' + fac(d.requested)
       + ', their steward decides';
@@ -678,8 +709,8 @@ function renderCta(d) {
 /* ── THE LEDGER: top 10 + server-side search ────────────────────────── */
 function ledgerRows(d) {
   if (!d.factions.length)
-    return '<div class="faint">no banner answers to that name</div>';
-  const open = !d.in_faction;   // the unbannered can knock from any row
+    return '<div class="faint">no faction answers to that name</div>';
+  const open = !d.in_faction;   // the factionless can knock from any row
   return d.factions.map((f, i) => {
     let act = '';
     if (open)
@@ -699,12 +730,12 @@ function ledgerRows(d) {
 }
 
 function renderLedger(d) {
-  return '<div class="panel"><div class="eyebrow">the ledger \u2014 '
-    + num(d.total) + ' banner' + (d.total === 1 ? '' : 's')
-    + ' \u00b7 top 10 by table</div>'
+  return '<div class="panel"><div class="eyebrow">all the factions '
+    + '\u2014 ' + num(d.total) + ' fl' + (d.total === 1 ? 'ies' : 'y')
+    + (d.in_faction ? '' : ' \u00b7 ask to join any row') + '</div>'
     + '<div class="findrow"><span class="k">FIND</span>'
     + '<input id="find" class="ti" maxlength="24" '
-    + 'placeholder="a banner\u2019s name\u2026"></div>'
+    + 'placeholder="a faction\u2019s name\u2026"></div>'
     + '<div id="ledgerlist">' + ledgerRows(d) + '</div></div>';
 }
 
@@ -1002,12 +1033,70 @@ const plyPanel = document.getElementById('plypanel');
 const plyBtn = document.getElementById('plybtn');
 const plyCount = document.getElementById('plycount');
 let ply = {open: false, tab: 'world', cursor: 0, head: 0,
-           rows: [], faction: undefined, busy: false};
+           rows: [], faction: undefined, busy: false,
+           seen: -1, tbusy: false};
+
+/* 060: the two switches — world / faction notices, both on by default,
+   remembered like the sound buttons (a three-line copy of sfx's store:
+   the IIFEs don't share it). */
+const plyStore = {
+  get: (k) => { try { const v = localStorage.getItem(k);
+                      return v === null ? true : v === '1'; }
+                catch (e) { return true; } },
+  set: (k, v) => { try { localStorage.setItem(k, v ? '1' : '0'); }
+                   catch (e) {} },
+};
+const PLY_SW = {world: 'la_ply_world', faction: 'la_ply_faction'};
+const plyOn = (k) => plyStore.get(PLY_SW[k]);
+const PLY_TOAST_MS = 3000;
+const PLY_TOAST_MAX = 4;
 
 function plyUpdate(d) {
   if (d.online !== undefined) plyCount.textContent = num(d.online);
   if (d.feed_head !== undefined) ply.head = Number(d.feed_head) || 0;
   if (ply.open && ply.head > ply.cursor) plyLoad();
+  /* 060: the first head we ever see is the baseline — no burst of
+     history on load; after that, every move of the head is news and
+     the closed panel asks once for what landed. */
+  if (ply.seen < 0) { ply.seen = ply.head; return; }
+  if (ply.head > ply.seen && !ply.open) plyToastLoad();
+}
+
+async function plyToastLoad() {
+  if (ply.tbusy) return;
+  if (!plyOn('world') && !plyOn('faction')) { ply.seen = ply.head; return; }
+  ply.tbusy = true;
+  try {
+    const d = await call('/pane/playing/feed?scope=both&since=' + ply.seen);
+    ply.head = Math.max(ply.head, Number(d.head) || 0);
+    ply.seen = ply.head;
+    const rows = (d.rows || []).filter(r => plyOn(r.scope === 'faction'
+      ? 'faction' : 'world'));
+    // newest-first from the server; show oldest first, cap the burst
+    rows.slice(0, PLY_TOAST_MAX).reverse().forEach(plyToast);
+  } catch (e) {}
+  finally { ply.tbusy = false; }
+}
+
+function plyToast(r) {
+  let box = document.getElementById('plytoasts');
+  if (!box) {
+    box = document.createElement('div'); box.id = 'plytoasts';
+    document.body.appendChild(box);
+  }
+  const t = document.createElement('div');
+  t.className = 'plytoast in ' + esc(r.kind || '');
+  t.setAttribute('role', 'status');
+  t.innerHTML = '<span class="eyebrow">\u25b6 playing</span>'
+    + '<span class="pline">' + esc(r.line) + '</span>'
+    + (r.floor ? '<span class="sub">F' + esc(r.floor) + '</span>' : '')
+    + '<button type="button" class="x" aria-label="close">\u2715</button>';
+  const gone = () => { if (t.parentNode) t.remove(); };
+  t.querySelector('.x').addEventListener('click', gone);
+  box.appendChild(t);
+  requestAnimationFrame(() => t.classList.remove('in'));
+  while (box.children.length > PLY_TOAST_MAX) box.firstChild.remove();
+  setTimeout(gone, PLY_TOAST_MS);
 }
 
 const PLY_WHEN = iso => {
@@ -1023,16 +1112,21 @@ const PLY_WHEN = iso => {
 function plyRender() {
   const t = n => '<button class="plytab' + (ply.tab === n ? ' on' : '')
     + '" data-ply="' + n + '">' + n + '</button>';
+  const sw = k => '<button class="plytab" data-ply="sw:' + k
+    + '" aria-pressed="' + (plyOn(k) ? 'true' : 'false') + '">' + k
+    + ' ' + (plyOn(k) ? 'on' : 'off') + '</button>';
   let h = '<div class="fbwrap"><div class="eyebrow">PLAYING · '
     + esc(plyCount.textContent) + ' on the floors</div>'
     + '<div class="plytabs">' + t('world') + t('faction')
     + '<button class="plytab" data-ply="close" style="margin-left:auto">'
-    + 'close</button></div>';
+    + 'close</button></div>'
+    + '<div class="plysw"><span>notices</span>' + sw('world')
+    + sw('faction') + '</div>';
   if (ply.tab === 'faction' && ply.faction === null) {
-    h += '<div class="placeholder"><div class="eyebrow">no banner</div>'
-      + 'You climb alone. Join a faction at the Guildhall on any '
-      + 'milestone floor — or found your own.<br><br>'
-      + '<button class="plytab" data-ply="hall">to the guildhall'
+    h += '<div class="placeholder"><div class="eyebrow">no faction</div>'
+      + 'You climb alone. Join a faction — the ledger lists every one '
+      + 'that flies — or found your own at the Guildhall.<br><br>'
+      + '<button class="plytab" data-ply="hall">all the factions'
       + '</button></div>';
   } else if (!ply.rows.length) {
     h += '<div class="placeholder"><div class="eyebrow">quiet</div>'
@@ -1058,6 +1152,7 @@ async function plyLoad() {
     ply.faction = d.faction;
     ply.head = Math.max(ply.head, Number(d.head) || 0);
     ply.cursor = ply.head;
+    ply.seen = ply.head;      // 060: the open panel IS the notice
     if (d.rows && d.rows.length) {
       const seen = new Set(ply.rows.map(r => r.id));
       ply.rows = d.rows.filter(r => !seen.has(r.id)).concat(ply.rows)
@@ -1075,6 +1170,18 @@ function plyOpen() {
   plyLoad();
 }
 function plyClose() { ply.open = false; plyPanel.classList.remove('open'); }
+/* 059: the profile's faction block opens the panel on a tab */
+window.__laPlaying = (tab) => { ply.tab = tab || 'world'; plyOpen(); };
+game.addEventListener('click', (e) => {
+  const pl = e.target.closest('[data-play]');
+  if (pl) { if (window.__laSfx) window.__laSfx('click');
+            window.__laPlaying(pl.dataset.play); return; }
+  const tb = e.target.closest('[data-tab]');
+  if (tb && tb.closest('#game')) {
+    if (window.__laSfx) window.__laSfx('click');
+    switchTab(tb.dataset.tab);
+  }
+});
 plyBtn.addEventListener('click', () => {
   if (window.__laSfx) window.__laSfx('click');
   if (ply.open) plyClose(); else plyOpen();
@@ -1085,6 +1192,12 @@ plyPanel.addEventListener('click', (e) => {
   const a = b.dataset.ply;
   if (a === 'close') { plyClose(); return; }
   if (a === 'hall') { plyClose(); switchTab('community'); return; }
+  if (a.startsWith('sw:')) {
+    const k = a.slice(3);
+    plyStore.set(PLY_SW[k], !plyOn(k));
+    plyRender();
+    return;
+  }
   if (a !== ply.tab) { ply.tab = a; ply.cursor = 0; ply.rows = [];
                        plyRender(); plyLoad(); }
 });

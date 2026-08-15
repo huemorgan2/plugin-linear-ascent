@@ -122,7 +122,7 @@ def test_ident_header_names_your_faction_with_a_tooltip():
     p["_world"] = {"faction": {"name": "Ironvow"}}
     frag = render.render_scene_fragment(core.current_scene(p))
     assert "brother of the Ironvow faction" in frag
-    assert "faction house on Roothollow" in frag   # the tooltip points home
+    assert "home of all the factions" in frag   # the tooltip points home
 
 
 # ── §3: the slot-grid pack ───────────────────────────────────────────────

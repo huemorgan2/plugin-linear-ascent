@@ -166,7 +166,7 @@ def test_hall_home_wears_the_colors_and_the_room():
     assert "hall_desk" not in ids                 # members have no desk
     body = " ".join(s.body_lines)
     assert "THIS WEEK THE ASCENT DEMANDS A CULL" in body
-    assert "the steward signs the banner in" in body
+    assert "the steward signs the faction in" in body
     assert "DAY 3 · Brynn — web spinners eat arrows" in body
     assert "▪▪▪▫▫▫▫ 3/4" in body                  # the roster still reads
     assert "guild_leave" in ids and "town" in ids
@@ -464,7 +464,7 @@ def test_guildhall_leads_with_your_hall_and_the_walls():
     s = core.apply_choice(p, "guildhall")
     assert s.options[0].id == "hall"
     assert s.options[0].label == "YOUR HALL — the Ember Pact table"
-    assert s.headline == "Where the banners fly"
+    assert s.headline == "Where the factions fly"
     body = s.body_lines
     assert any("THIS WEEK — THE ASCENT DEMANDS A CULL" in ln
                for ln in body)
@@ -506,7 +506,7 @@ def test_banner_page_scores_room_and_the_ask():
     p = playing(world=seeker_world())
     core.apply_choice(p, "guildhall")
     s = core.apply_choice(p, "page_Ember Pact")
-    assert s.headline == "The Ember Pact banner"
+    assert s.headline == "The Ember Pact faction"
     assert s.banner == "wolf_howl"
     assert s.strip["art"] == "hall_room_2"
     body = " ".join(s.body_lines)
@@ -525,7 +525,7 @@ def test_banner_page_scores_room_and_the_ask():
     assert any(o.id == "join_Ember Pact" for o in s.options)
     # and the way back is the floor, not the square
     s = core.apply_choice(p, "guildhall")
-    assert s.headline == "Where the banners fly"
+    assert s.headline == "Where the factions fly"
     assert "banner_page" not in p
 
 

@@ -129,7 +129,7 @@ def profile_scene(p: dict, note: str = "") -> Scene:
                         f"{'s' if int(c['items']) != 1 else ''} racked")
         if int(c.get("warden", 0)):
             gave.append(f"{int(c['warden']):,} cut from Wardens")
-        lines.append(f"flies the {g} banner"
+        lines.append(f"of the {g} faction"
                      + (" — gave " + ", ".join(gave) if gave else ""))
     gear = [str(x) for x in (pr.get("gear") or []) if x]
     if gear:
@@ -360,7 +360,7 @@ def profile_action(p: dict, oid: str) -> Scene:
     if oid == "pf_loot":
         if pr.get("same_guild"):
             return profile_scene(
-                p, note="You drink under the same banner. The table "
+                p, note="You drink at the same faction table. The table "
                         "would never seat you again.")
         if pr.get("protected"):
             return profile_scene(

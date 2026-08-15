@@ -314,7 +314,7 @@ def guildhall_scene(p: dict, note: str = "") -> Scene:
             opts.insert(0, Option(
                 "hall", f"YOUR HALL — the {fac['name']} table",
                 hall_mod.tier_name(hall_d.get("room_tier", 1))))
-            headline = "Where the banners fly"
+            headline = "Where the factions fly"
             if hb is not None:
                 gallery = _civic_floor(p, hb, lines)
         else:
@@ -331,33 +331,33 @@ def guildhall_scene(p: dict, note: str = "") -> Scene:
         if hb is not None:
             gallery = _civic_floor(p, hb, lines)
             _join_rows(p, w, lines, opts)
-            headline = "Where the banners fly"
+            headline = "Where the factions fly"
         else:
             gallery = _hall_list(p, w["factions"], lines, opts)
-            headline = "Banners for hire"
+            headline = "Factions for hire"
     else:
         # local dev mode — legacy doc-string guilds, no purse
         mine = p.get("guild")
-        headline = f"The {mine} table" if mine else "Banners for hire"
+        headline = f"The {mine} table" if mine else "Factions for hire"
         if mine:
             roster = w.get("guild_roster", [])
-            lines.append(f"Your banner: {mine} — "
+            lines.append(f"Your faction: {mine} — "
                          + (", ".join(roster[:8]) if roster else "just you"))
-            opts.append(Option("guild_leave", "Leave the guild"))
+            opts.append(Option("guild_leave", "Leave the faction"))
         else:
             for g in w.get("guilds", [])[:6]:
                 opts.append(Option(f"join_{g}", f"Join {g}"))
             # 019: the founding door is always a row, locked below rank
             if p["level"] < FOUND_MIN_LEVEL:
-                opts.append(Option("found_guild", "Found a guild",
+                opts.append(Option("found_guild", "Found a new faction",
                                    f"🔒 level {FOUND_MIN_LEVEL} · "
                                    f"◈ {GUILD_FOUND_FEE}", locked=True))
             else:
-                opts.append(Option("found_guild", "Found a guild",
+                opts.append(Option("found_guild", "Found a new faction",
                                    f"◈ {GUILD_FOUND_FEE}"))
     opts.append(Option("town", "Back to the square"))
     return Scene(
-        eyebrow="ROOTHOLLOW · THE GUILDHALL",
+        eyebrow="ROOTHOLLOW · THE GUILDHALL — home of all the factions",
         headline=headline,
         support="Milestone Wardens fall to war parties, not heroes.",
         body_lines=lines,
@@ -428,7 +428,7 @@ def _member_panel(p: dict, fac: dict, lines: list, opts: list) -> None:
                                "store"))
         if len(fac.get("members", [])) > 1:
             opts.append(Option("kick", "Remove a member"))
-    opts.append(Option("guild_leave", "Leave the banner"))
+    opts.append(Option("guild_leave", "Leave the faction"))
 
 
 def _hall_list(p: dict, factions: list, lines: list,
@@ -440,11 +440,11 @@ def _hall_list(p: dict, factions: list, lines: list,
     w = world(p) or {}
     requested = w.get("faction_requested", "")
     # 020: a non-member learns what the feature IS before the price.
-    lines.append("A banner pools coin, fields a war party, racks shared "
+    lines.append("A faction pools coin, fields a war party, racks shared "
                  "gear and enters the world's weekly challenges — its "
                  "prize is minted, not taken.")
     if not factions:
-        lines.append(f"No banners fly yet. Yours could be the first — "
+        lines.append(f"No factions fly yet. Yours could be the first — "
                      f"level {FOUND_MIN_LEVEL}, ◈ {GUILD_FOUND_FEE}.")
     gallery: list[dict] = []
     for f in factions[:5]:
@@ -466,16 +466,7 @@ def _hall_list(p: dict, factions: list, lines: list,
                                f"join ◈ {f.get('join_fee', 0)} · dues "
                                f"◈ {f.get('weekly_dues', 0)}/wk"))
     total = int(w.get("factions_total", len(factions)))
-    if total:
-        opts.append(Option("hall_ledger", "Join a banner",
-                           f"{total} flying · the directory"))
-    if p["level"] < FOUND_MIN_LEVEL:
-        opts.append(Option("found_guild", "Raise a new banner",
-                           f"🔒 level {FOUND_MIN_LEVEL} · "
-                           f"◈ {GUILD_FOUND_FEE}", locked=True))
-    else:
-        opts.append(Option("found_guild", "Raise a new banner",
-                           f"◈ {GUILD_FOUND_FEE}"))
+    _faction_doors(p, total, opts)
     return gallery
 
 
@@ -502,12 +493,12 @@ def _civic_floor(p: dict, hb: dict, lines: list) -> list[dict]:
                      f"{hall_mod.progress_bar(prog, target, 6)} "
                      f"{prog:,}/{target:,}")
     if not standings:
-        lines.append("no banner has entered the week yet — the wall waits")
+        lines.append("no faction has entered the week yet — the wall waits")
     halls = [f for f in (hb.get("banners") or hb.get("hall") or [])
              if isinstance(f, dict)]
     halls.sort(key=lambda f: -int(f.get("wins", 0) or 0))
     if not halls:
-        lines.append("No banners fly yet — the wall waits for a "
+        lines.append("No factions fly yet — the wall waits for a "
                      "first sigil.")
     gallery: list[dict] = []
     for i, f in enumerate(halls[:10]):
@@ -528,7 +519,7 @@ def _join_rows(p: dict, w: dict, lines: list, opts: list) -> None:
     """The unaffiliated climber's rows under the civic floor — the tiles
     above are the ask; these keep the ledger and the founding door
     (019: always rows, locked below the rank)."""
-    lines.append("A banner pools coin, fields a war party, racks shared "
+    lines.append("A faction pools coin, fields a war party, racks shared "
                  "gear and enters the world's weekly challenges — its "
                  "prize is minted, not taken.")
     requested = w.get("faction_requested", "")
@@ -536,15 +527,24 @@ def _join_rows(p: dict, w: dict, lines: list, opts: list) -> None:
         lines.append(f"your request waits at the {requested} desk — "
                      "their page holds the cancel")
     total = int(w.get("factions_total", len(w.get("factions") or [])))
-    if total:
-        opts.append(Option("hall_ledger", "Join a banner",
-                           f"{total} flying · the directory"))
+    _faction_doors(p, total, opts)
+
+
+def _faction_doors(p: dict, total: int, opts: list) -> None:
+    """059: the two doors every unaffiliated climber sees at the hall —
+    JOIN (always a row: the directory, N factions — a level-1 climber
+    can join any table whose door admits them) and FOUND (locked below
+    the rank)."""
+    opts.append(Option("hall_ledger", "Join a faction",
+                       (f"{total} faction{'s' if total != 1 else ''} · "
+                        "the directory") if total else
+                       "none fly yet — found the first"))
     if p["level"] < FOUND_MIN_LEVEL:
-        opts.append(Option("found_guild", "Raise a new banner",
+        opts.append(Option("found_guild", "Found a new faction",
                            f"🔒 level {FOUND_MIN_LEVEL} · "
                            f"◈ {GUILD_FOUND_FEE}", locked=True))
     else:
-        opts.append(Option("found_guild", "Raise a new banner",
+        opts.append(Option("found_guild", "Found a new faction",
                            f"◈ {GUILD_FOUND_FEE}"))
 
 
@@ -567,7 +567,7 @@ def _dir_rows(p: dict) -> tuple[list[dict], int]:
 
 
 def _dir_gate(p: dict, r: dict) -> str:
-    """Why this banner's door is shut to the viewer — '' when it opens."""
+    """Why this faction's door is shut to the viewer — '' when it opens."""
     req = r.get("requirements") if isinstance(r.get("requirements"),
                                               dict) else {}
     min_level = int(req.get("min_level", 0) or 0)
@@ -584,12 +584,12 @@ def _guild_dir_scene(p: dict, note: str = "") -> Scene:
     if st.get("asking"):
         return Scene(
             eyebrow="ROOTHOLLOW · THE GUILDHALL · THE DIRECTORY",
-            headline="Search the banners",
+            headline="Search the factions",
             support="A name, or part of one.",
             options=[Option("gdir_clear", "Never mind")],
             meters=meters(p),
-            awaits_text="the banner name to search for",
-            ask={"kind": "text", "max": 24, "label": "search the banners",
+            awaits_text="the faction name to search for",
+            ask={"kind": "text", "max": 24, "label": "search the factions",
                  "placeholder": "part of a name", "submit": "SEARCH"},
         )
     rows, total = _dir_rows(p)
@@ -602,10 +602,10 @@ def _guild_dir_scene(p: dict, note: str = "") -> Scene:
     requested = w.get("faction_requested", "")
     mine = bool(w.get("faction")) or bool(p.get("guild"))
     if q:
-        lines.append(f"showing banners matching '{q}' — "
+        lines.append(f"showing factions matching '{q}' — "
                      f"{len(rows)} found")
     else:
-        lines.append(f"{total} banner{'s' if total != 1 else ''} fly in "
+        lines.append(f"{total} faction{'s' if total != 1 else ''} fly in "
                      "the world")
     if mine:
         lines.append("you already sit at a table — leave it before "
@@ -633,23 +633,23 @@ def _guild_dir_scene(p: dict, note: str = "") -> Scene:
                         "slug": str(r.get("banner") or ""),
                         "label": nm, "sub": " · ".join(bits)})
     if not rows:
-        lines.append("no banner answers that name — the wall is bare")
+        lines.append("no faction answers that name — the wall is bare")
     opts = [Option("gdir_search", "Search by name",
                    f"'{q}'" if q else "")]
     if q:
         opts.append(Option("gdir_clear", "Clear the search"))
     if page > 0:
-        opts.append(Option("gdir_prev", "Earlier banners",
+        opts.append(Option("gdir_prev", "Earlier factions",
                            f"page {page}/{pages}"))
     if page < pages - 1:
-        opts.append(Option("gdir_next", "More banners",
+        opts.append(Option("gdir_next", "More factions",
                            f"page {page + 2}/{pages}"))
     opts.append(Option("gdir_back", "Back to the hall"))
     opts.append(Option("town", "Back to the square"))
     return Scene(
         eyebrow="ROOTHOLLOW · THE GUILDHALL · THE DIRECTORY",
-        headline="Every banner that flies",
-        support="Meet a banner's terms and its table seats you today — "
+        headline="Every faction that flies",
+        support="Meet a faction's terms and its table seats you today — "
                 "invite-only desks take a request instead.",
         body_lines=lines,
         options=opts,
@@ -700,12 +700,12 @@ def _dir_join(p: dict, name: str) -> Scene:
     w = world(p) or {}
     if bool(w.get("faction")) or p.get("guild"):
         return _guild_dir_scene(
-            p, note="One banner per climber — leave your table first.")
+            p, note="One faction per climber — leave your table first.")
     rows, _ = _dir_rows(p)
     r = next((x for x in rows if str(x.get("name")) == name), None)
     if r is None:
         return _guild_dir_scene(
-            p, note="That banner came down while you read the wall.")
+            p, note="That faction came down while you read the wall.")
     if w.get("faction_requested", "") == name:
         return _guild_dir_scene(
             p, note=f"Your request already waits at the {name} desk.")
@@ -734,7 +734,7 @@ def _dir_join(p: dict, name: str) -> Scene:
     _effect(p, "faction_join", guild=name)
     return Scene(
         eyebrow="ROOTHOLLOW · THE GUILDHALL",
-        headline=f"The {name} banner takes you",
+        headline=f"The {name} faction takes you",
         support="Milestone Wardens fall to war parties, not heroes.",
         body_lines=[
             f"+ your chair scrapes in at the {name} table"
@@ -828,7 +828,7 @@ def _banner_page_scene(p: dict, note: str = "") -> Scene:
     row = next((f for f in halls if str(f.get("name")) == name), None)
     if row is None:
         p.pop("banner_page", None)
-        return guildhall_scene(p, note="That banner came down while you "
+        return guildhall_scene(p, note="That faction came down while you "
                                        "read the wall.")
     lines = note.split("\n") if note else []
     tier = int(row.get("room_tier", 1) or 1)
@@ -865,7 +865,7 @@ def _banner_page_scene(p: dict, note: str = "") -> Scene:
     opts.append(Option("town", "Back to the square"))
     return Scene(
         eyebrow=f"THE GUILDHALL · {name.upper()}",
-        headline=f"The {name} banner",
+        headline=f"The {name} faction",
         support="Milestone Wardens fall to war parties, not heroes.",
         body_lines=lines,
         options=opts,
@@ -944,14 +944,14 @@ def _founding_scene(p: dict, st: dict, note: str = "") -> Scene:
     opts = [Option("cancel_found", "Never mind")]
     awaits, ask, gallery = "", None, []
     if step == "name":
-        head, sup = "Name your banner", "3 to 24 letters."
+        head, sup = "Name your faction", "3 to 24 letters."
         lines = []
-        awaits = "the new banner's name"
-        ask = {"kind": "text", "max": 24, "label": "the banner's name",
+        awaits = "the new faction's name"
+        ask = {"kind": "text", "max": 24, "label": "the faction's name",
                "placeholder": "the name it flies under", "submit": "RAISE IT"}
     elif step == "banner":
         head, sup = f"A sigil for {st['name']}", \
-            "Pick the mark your banner flies."
+            "Pick the banner your faction flies."
         lines = []
         gallery = [{"opt": f"sig_{slug}", "slug": slug,
                     "label": slug.replace("_", " ").title()}
@@ -1121,7 +1121,7 @@ def guildhall_action(p: dict, oid: str, text: str = "") -> Scene:
                         "it before you raise your own.")
         if p["level"] < FOUND_MIN_LEVEL:
             return guildhall_scene(
-                p, note=f"The hall charters new banners for level "
+                p, note=f"The hall charters new factions for level "
                         f"{FOUND_MIN_LEVEL}+ climbers. Train first.")
         if p["gold"] < GUILD_FOUND_FEE:
             return guildhall_scene(
@@ -1133,7 +1133,7 @@ def guildhall_action(p: dict, oid: str, text: str = "") -> Scene:
             p["founding_guild"] = True
             return Scene(
                 eyebrow="ROOTHOLLOW · THE GUILDHALL",
-                headline="Name your banner",
+                headline="Name your faction",
                 support="Say it in chat — 3 to 24 letters.",
                 options=[],
                 meters=meters(p),

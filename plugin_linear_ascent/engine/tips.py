@@ -73,7 +73,7 @@ _TIPS: dict[str, str] = {
                   "in gold buys your next LEVEL — levels raise ATK, DEF "
                   "and HP and unlock higher gear tiers and higher floors: "
                   "no single thing advances the climb harder. Also: join "
-                  "or raise a banner, donate to its store, enter the "
+                  "or found a faction, donate to its store, enter the "
                   "week's challenge."),
     "stone": ("The world's record, free to read: where the frontier "
               "stands, which Wardens fell, whose names are cut in the "
@@ -380,7 +380,7 @@ def option_tip(oid: str) -> str:
         return t
     if oid == "found_guild":
         from . import social
-        return (f"Raise your own banner — level {social.FOUND_MIN_LEVEL} "
+        return (f"Found your own faction — level {social.FOUND_MIN_LEVEL} "
                 f"and ◈ {social.GUILD_FOUND_FEE}. You set the join fee "
                 "and the weekly dues, steward the store, enter the "
                 "world's weekly challenges and share their minted "
@@ -481,10 +481,10 @@ def option_tip(oid: str) -> str:
         name = oid.removeprefix("join_")
         return (f"Swear to {name}: the join fee moves into their store "
                 "and weekly dues follow. In return — a share of every "
-                "challenge prize the banner wins, and a hall that "
+                "challenge prize the faction wins, and a hall that "
                 "fights beside you.")
     if oid.startswith("sig_"):
-        return ("Fly this sigil as the banner's mark — it heads the "
+        return ("Fly this sigil as the faction's banner — it heads the "
                 "roll, the board and every prize note.")
     if oid.startswith("kick_"):
         who = oid.removeprefix("kick_")

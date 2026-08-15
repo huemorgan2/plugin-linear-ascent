@@ -210,7 +210,7 @@ def test_directory_join_charges_the_fee_and_emits_faction_join():
     core.apply_choice(p, "guildhall")
     core.apply_choice(p, "hall_ledger")
     s = core.apply_choice(p, "gjoin_Ember Pact")
-    assert "banner takes you" in s.headline
+    assert "faction takes you" in s.headline
     assert p["guild"] == "Ember Pact" and p["gold"] == 75
     assert {"kind": "faction_join",
             "guild": "Ember Pact"} in p["_effects"]

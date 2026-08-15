@@ -46,7 +46,7 @@ def registry() -> tuple[Unlock, ...]:
                "the Relay Office", "the square",
                "letters between climbers — free to write, gold rides along"),
         Unlock("found_guild", "level", social.FOUND_MIN_LEVEL, "opens",
-               "raise your own banner", "guildhall",
+               "found your own faction", "guildhall",
                "you set the join fee and dues, and steward the store",
                f"◈ {social.GUILD_FOUND_FEE}"),
         Unlock("fields", "level", economy.FIELDS_LEVEL, "opens",

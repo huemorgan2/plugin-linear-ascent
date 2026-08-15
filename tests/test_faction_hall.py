@@ -96,7 +96,7 @@ def test_founding_flow_sets_the_purse_numbers():
     p["gold"], p["level"] = 600, 4          # 015: founding takes rank
     core.apply_choice(p, "guildhall")
     s = core.apply_choice(p, "found_guild")
-    assert "Name your banner" in s.headline
+    assert "Name your faction" in s.headline
     s = core.apply_choice(p, "", "Night Ledger")
     assert "sigil" in s.headline.lower()
     # 027: the sigils are PICTURES — the step ships a gallery of tiles,
