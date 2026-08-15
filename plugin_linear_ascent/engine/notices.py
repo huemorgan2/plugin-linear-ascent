@@ -63,7 +63,7 @@ def _guildhall_notices(p: dict) -> list[dict]:
     if p["xp"] < economy.xp_need(p["level"]) or p["gold"] < fee:
         return []
     return [{
-        "door": "guildhall", "opt": "guildhall", "n": 1, "kind": "collect",
+        "door": "guildhall", "opt": "guildhall", "n": 1, "kind": "levelup",
         "text": (f"The Guildhall — your bar is full and the fee is in hand: "
                  f"LEVEL {p['level'] + 1} for ◈ {fee:,}"),
     }]

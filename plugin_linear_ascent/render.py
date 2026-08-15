@@ -594,7 +594,7 @@ def _tally_html(tally: list[dict]) -> str:
 # a row at the TOP of the card: the verb, the room, the number, the worth —
 # and the row is the shortcut. Blue is the notification ink everywhere in
 # this game now; it never means a stat.
-_NOTICE_WORD = {"collect": "COLLECT", "plan": "PLAN"}
+_NOTICE_WORD = {"collect": "COLLECT", "plan": "PLAN", "levelup": "LEVEL-UP"}
 
 
 def _notices_html(notices: list[dict]) -> str:
