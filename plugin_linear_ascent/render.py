@@ -1245,8 +1245,30 @@ def _slot_cell(it: dict) -> str:
                       f'DURABILITY {dtxt}</span>')
     if count > 1:
         params.append(f'<span style="color:{VIOLET}">AMOUNT {count}</span>')
-    if params:
-        tiph = " · ".join(params) + f"<br>{_e(tip)}"
+    # 058b: the hover tip carries the item's 100x160 portrait on its
+    # left — every pack item with shipped art, sword to relic. The art
+    # rides the tiph HTML with inline styles so both hosts (pane and
+    # chat card) show it without new tipbox CSS.
+    lurl = _gear_art_url(wart, "large") if wart else None
+    if params or lurl:
+        text = " · ".join(params) + (f"<br>{_e(tip)}" if params
+                                     else _e(tip))
+        if lurl:
+            atint = _STYLE_TINT.get(economy.style_of(slug)) or ART
+            tiph = (
+                '<span style="display:flex;gap:10px;'
+                'align-items:center;">'
+                f'<span style="flex:none;width:70px;height:112px;'
+                f'background-color:{atint};'
+                f"-webkit-mask-image:url('{lurl}');"
+                f"mask-image:url('{lurl}');"
+                f'-webkit-mask-size:contain;mask-size:contain;'
+                f'-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;'
+                f'-webkit-mask-position:center;mask-position:center;'
+                f'image-rendering:pixelated;"></span>'
+                f'<span style="min-width:0">{text}</span></span>')
+        else:
+            tiph = text
         tiph_attr = f' data-tiph="{_e(tiph)}"'
     # 027: the cell is a button — the popup lists what this thing can
     # do HERE, or says where it can be done. `acts` come from the

@@ -104,3 +104,21 @@ def test_the_pack_cell_wears_gear_art():
                               "name": "Scrapwood Buckler"})
     assert "picon gw" in cell
     assert render._gear_art_url("scrapwood_buckler", "icons") in cell
+
+
+def test_the_pack_tip_carries_the_portrait_on_the_left():
+    # 058b: hovering a pack item shows its 100x160 portrait inside the
+    # tip — for every item with shipped art, stat line or not
+    for slug, kind in (("scrapwood_buckler", "shield"),
+                       ("poison_arrows", "relic")):
+        cell = render._slot_cell({"slug": slug, "kind": kind,
+                                  "name": slug})
+        lurl = render._gear_art_url(slug, "large")
+        assert "data-tiph" in cell, slug
+        assert _e_url(lurl) in cell, slug
+
+
+def _e_url(url):
+    # data URLs survive _e() untouched except quoting — assert on the
+    # base64 payload to stay independent of attribute escaping
+    return url.split(",", 1)[1][:64]
