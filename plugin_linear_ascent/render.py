@@ -2050,6 +2050,14 @@ def render_scene_fragment(scene: Scene) -> str:
     if getattr(scene, "enemy", None):
         fight = "warden" if scene.event_kind == "boss" else "wilds"
         dt += f' data-fight="{fight}"'
+        # the foe's slug — fight3d warms only THIS creature's model
+        foe = str(scene.enemy.get("id", "") or "")
+        if foe:
+            dt += f' data-foe3d="{_e(foe)}"'
+    # the climber's rig — race:line — so fight3d warms one rig, not fifteen
+    m = scene.meters
+    if m and getattr(m, "race", "") and getattr(m, "line", ""):
+        dt += f' data-rig3d="{_e(m.race)}:{_e(m.line)}"'
     # PLAN3: the live 3D finisher's spec — the creature, the killing
     # blow's race/line, and the SAME tint the creature's banner wears,
     # so the canvas inks itself like the card. Only the website's

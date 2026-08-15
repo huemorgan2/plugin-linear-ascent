@@ -65,6 +65,9 @@ class Meters:
     faction_members: int = 0
     faction_online: int = 0
     factions_total: int = -1
+    # the weapon line in hand (blade/bow/staff; "" = not sent) — the
+    # website's fight3d layer warms exactly this rig instead of all of them
+    line: str = ""
 
 
 @dataclass

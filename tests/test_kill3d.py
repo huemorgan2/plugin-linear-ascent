@@ -142,3 +142,35 @@ def test_first_sighting_line_fires_once_per_creature():
             return
         assert any("First sighting" in ln for ln in lines), (again, lines)
     raise AssertionError("the first creature never came back in 40 hunts")
+
+
+# ── warm hints: the card names what fight3d should fetch, nothing more ──
+
+def test_playing_card_names_the_climbers_rig():
+    # every playing card: data-rig3d="race:line" — one rig, not fifteen
+    p = _character("Wren", clazz="archer")
+    _to_floor(p)
+    s = core.current_scene(p)
+    assert s.meters.line == "bow"
+    html = render_scene_fragment(s)
+    assert 'data-rig3d="human:bow"' in html
+    assert "data-foe3d" not in html              # no fight, no foe
+
+
+def test_fight_card_names_the_foe():
+    p = _character("Tam")
+    _to_floor(p)
+    s = core.apply_choice(p, "hunt")
+    foe = p["encounter"]["id"]
+    assert s.enemy["id"] == foe
+    html = render_scene_fragment(s)
+    assert f'data-foe3d="{foe}"' in html
+    assert 'data-rig3d="human:blade"' in html
+
+
+def test_old_wire_without_line_emits_no_rig():
+    from plugin_linear_ascent.engine.scene import Meters
+    m = Meters(hp=1, hp_max=1, energy=1, energy_max=1, xp=0, xp_need=1,
+               gold=0, race="elf")               # older engine: no line
+    s = Scene(eyebrow="", headline="", meters=m, scene_id="x")
+    assert "data-rig3d" not in render_scene_fragment(s)

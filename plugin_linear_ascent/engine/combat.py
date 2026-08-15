@@ -139,7 +139,8 @@ def meters(p: dict) -> Meters:
         faction_online=int(_wfac(p).get("online") or 0),
         factions_total=(int((p.get("_world") or {}).get("factions_total"))
                         if (p.get("_world") or {}).get("factions_total")
-                        is not None else -1))
+                        is not None else -1),
+        line=_LINE_OF_DTYPE.get(_damage_type(p), "blade"))
 
 
 def _wfac(p: dict) -> dict:
@@ -494,6 +495,9 @@ def _enemy_payload(p: dict, floor) -> dict:
     return {
         # 030 Phase 7: additive keys — old renderers drop them (wire law)
         "story": _lore(e, floor),
+        # the creature's slug — the fight3d layer warms its model while
+        # the fight is still on, so the kill card never waits on the wire
+        "id": e.get("id", ""),
         "drops": (_drop_ranges(p, floor) if e["kind"] == "wilds"
                   else _warden_drop_ranges(p, floor)
                   if e["kind"] == "warden" else None),
