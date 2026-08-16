@@ -225,8 +225,8 @@ def test_first_clear_warden_keeps_the_reel():
 
 def test_deep_warden_without_a_model_keeps_the_reel():
     from plugin_linear_ascent.engine import combat
-    assert 8 in combat.KILL3D_WARDEN_FLOORS
-    assert 9 not in combat.KILL3D_WARDEN_FLOORS
-    assert combat._foe_id({"id": "", "kind": "warden", "floor": 9}) \
-        == "warden_009"
+    assert 20 in combat.KILL3D_WARDEN_FLOORS
+    assert 21 not in combat.KILL3D_WARDEN_FLOORS
+    assert combat._foe_id({"id": "", "kind": "warden", "floor": 21}) \
+        == "warden_021"
     assert combat._foe_id({"id": "", "kind": "warden"}) == ""
