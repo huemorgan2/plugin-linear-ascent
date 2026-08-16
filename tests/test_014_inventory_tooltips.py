@@ -309,7 +309,9 @@ def test_fragment_has_glyphs_strip_and_tipbox_data():
     assert 'class="orow"' in frag
     assert 'class="info"' in frag and "data-tip=" in frag
     assert 'class="inv later"' in frag
-    assert 'class="picon"' in frag and "data:image/svg+xml" in frag
+    # 062: the Medgel wears its own shipped face (picon gw), the strip
+    # still carries the svg glyphs elsewhere
+    assert 'class="picon gw"' in frag and "data:image/svg+xml" in frag
     assert "Medgel" in frag
     # meters now use the instant tipbox, not the native title delay
     assert 'class="meter hp' in frag and 'title="' not in frag

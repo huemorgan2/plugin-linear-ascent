@@ -162,7 +162,7 @@ def _gear_art_slug(slug: str) -> str:
     g = economy.FORGE.get(slug)
     if g is not None:
         return g.base or slug
-    if slug in economy.RELICS:
+    if slug in economy.RELICS or slug in economy.APOTHECARY:
         return slug
     return ""
 
@@ -1172,6 +1172,7 @@ def _opt_gear_icon(oid: str, art_slug: str = "") -> str:
     if not (oid.startswith("buy_") or oid.startswith("wear_")):
         if art_slug and (art_slug in economy.FORGE
                          or art_slug in economy.RELICS
+                         or art_slug in economy.APOTHECARY
                          or art_slug == "arrow_pack"):
             slug = art_slug
         else:
@@ -1219,16 +1220,20 @@ def _gear_card_preview(oid: str, hint: str) -> str:
     slug = oid.split("_", 1)[1]
     g = economy.FORGE.get(slug)
     relic = economy.RELICS.get(slug) if g is None else None
+    # 062: the Medlab shelf previews too
+    ware = (economy.APOTHECARY.get(slug)
+            if g is None and relic is None else None)
     wart = _gear_art_slug(slug)
     lurl = _gear_art_url(wart, "large") if wart else None
-    if (g is None and relic is None) or not lurl:
+    if (g is None and relic is None and ware is None) or not lurl:
         return ""
-    name = g.name if g is not None else relic.name
+    name = (g.name if g is not None
+            else relic.name if relic is not None else ware.name)
     tint = _STYLE_TINT.get(economy.style_of(slug)) or ART
     parts = [t for t in (hint or "").split(" · ") if t]
-    pay = next((t for t in parts if t.startswith("pay ")), "")
+    pay = next((t for t in parts if t.startswith(("pay ", "◈ "))), "")
     if oid.startswith("buy_"):
-        act = _ep("buy " + pay[4:]) if pay else "buy it"
+        act = _ep("buy " + pay.removeprefix("pay ")) if pay else "buy it"
     else:
         act = "wear it"
     stats = _ep(" · ".join(t for t in parts if t != pay))
@@ -2006,8 +2011,11 @@ def render_scene_fragment(scene: Scene) -> str:
                 # the card stacks its facts — cost, stat, durability
                 # each on its own line (the button is a column flex,
                 # so every span is a line of its own)
+                # 062: a long note (the Medlab's "better loot …")
+                # wraps inside the card instead of spilling past it
                 stack = ("".join(
-                    f'<span class="hint">{_ep(part)}</span>'
+                    f'<span class="hint{" wrap" if len(part) > 14 else ""}">'
+                    f'{_ep(part)}</span>'
                     for part in o.hint.split(" · ") if part)
                     if o.hint else "")
                 # 057b: an item card grows a preview — a 20% bigger
@@ -2465,6 +2473,7 @@ SCENE_CSS = f"""
 .gcard .hint{{margin-left:0;text-align:center;color:{DIM};
  display:block;white-space:nowrap;}}
 .gcard .hint+.hint{{margin-top:-3px;}}
+.gcard .hint.wrap{{white-space:normal;line-height:1.3;max-width:100%;}}
 .gcard.locked .hint{{color:{FAINT};}}
 .gpip{{display:inline-block;width:11px;height:11px;margin:0 1px;
  vertical-align:-1px;mask-size:contain;-webkit-mask-size:contain;

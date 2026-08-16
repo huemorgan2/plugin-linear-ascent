@@ -1895,6 +1895,7 @@ def _medlab_scene(p: dict) -> Scene:
         support="The lamp hums. The shelves are stocked. The prices are firm.",
         body_lines=lines,
         options=opts,
+        grid=True,  # 062: the shelf is a card wall — every ware wears its face
         meters=combat.meters(p),
         banner="medlab",
     )

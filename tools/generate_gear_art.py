@@ -499,6 +499,32 @@ GEAR: dict[str, str] = {
         "a single rune-tablet of black slate with ONE deep-cut rune, "
         "the cut edges blazing white, hairline cracks spreading from "
         "the rune, hovering vertical, ominous and simple."),
+    # ── 062: the Medlab shelf — 5 apothecary wares, the object alone ──
+    "medgel": (
+        "a PLAIN medgel — a small squat glass jar with a screw lid, "
+        "half full of thick translucent healing gel that catches the "
+        "light, a plain paper label band, a smear on the rim, small "
+        "and honest, no glow."),
+    "trauma_kit": (
+        "a PLAIN field trauma kit — a compact canvas roll-pouch, "
+        "flap open, showing a rolled linen bandage, a small "
+        "stoppered vial and a curved needle, a stitched cross on the "
+        "flap, worn and practical, no glow."),
+    "trollblood_tonic": (
+        "a FORGED trollblood tonic — a tall narrow flask with a "
+        "wax-sealed cork, thick dark liquid inside with a faint slow "
+        "inner glow, a wired-on tag, condensation beads on the glass, "
+        "potent and heavy."),
+    "energy_cell": (
+        "a FORGED aether energy cell — a palm-sized cylindrical "
+        "canister of banded brass and glass, a bright energy core "
+        "visible through the glass window with soft light leaking at "
+        "the seams, contact caps at both ends, standing upright."),
+    "luck_charm": (
+        "a PLAIN luck charm — a small carved bone token on a leather "
+        "cord, a four-leaf clover cut into its face, a knot of red "
+        "thread, a single tiny bell, hanging vertical, humble and "
+        "hopeful, no glow."),
 }
 
 # martial shields (0.0 gate + 27) and the rest, in ladder order for
@@ -508,6 +534,7 @@ GROUPS = {
     "focuses": list(GEAR)[28:47],
     "armor": list(GEAR)[47:75],
     "shoes_relics": list(GEAR)[75:95],
+    "medlab": list(GEAR)[95:100],
 }
 
 

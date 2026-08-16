@@ -122,3 +122,57 @@ def _e_url(url):
     # data URLs survive _e() untouched except quoting — assert on the
     # base64 payload to stay independent of attribute escaping
     return url.split(",", 1)[1][:64]
+
+
+# ── 062: the Medlab shelf wears faces too ────────────────────────────────
+
+def test_every_apothecary_ware_ships_both_faces():
+    missing = [s for s in economy.APOTHECARY
+               if not (os.path.exists(os.path.join(
+                   ART, "icons", f"{s}_30x48.png"))
+                   and os.path.exists(os.path.join(
+                       ART, "large", f"{s}_100x160.png")))]
+    assert not missing, f"wares without art: {missing}"
+
+
+def test_the_medlab_row_and_card_wear_the_wares_face():
+    html = render._opt_gear_icon("buy_medgel")
+    assert "gicon gw" in html
+    assert render._gear_art_url("medgel", "icons") in html
+    prev = render._gear_card_preview("buy_medgel", "◈ 25 · heals 40")
+    assert 'class="wprev"' in prev
+    assert render._gear_art_url("medgel", "large") in prev
+    assert economy.APOTHECARY["medgel"].name in prev
+    assert "25" in prev
+
+
+def test_the_medlab_scene_previews_every_ware():
+    p = create_character(fresh("Nurse"))
+    p["location"] = "medlab"
+    html = render.render_scene(core.current_scene(p))
+    for slug in economy.APOTHECARY:
+        assert render._gear_art_url(slug, "large") in html, slug
+
+
+def test_the_pack_cell_wears_a_wares_face():
+    cell = render._slot_cell({"slug": "medgel", "kind": "consumable",
+                              "name": "Medgel"})
+    assert render._gear_art_url("medgel", "icons") in cell
+    assert "data-tiph" in cell
+
+
+def test_no_shipped_face_has_a_frame_rule():
+    """The generator sometimes draws a border; strip_art_frames.py erases
+    it. Guard: no outer column of a portrait is a near-solid vertical
+    line."""
+    from PIL import Image
+    bad = []
+    for fn in os.listdir(os.path.join(ART, "large")):
+        im = Image.open(os.path.join(ART, "large", fn)).convert("RGBA")
+        a = im.split()[3].load()
+        w, h = im.size
+        for x in (0, 1, 2, w - 3, w - 2, w - 1):
+            if sum(1 for y in range(h) if a[x, y] > 128) > h * 0.7:
+                bad.append(fn)
+                break
+    assert not bad, bad
