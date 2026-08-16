@@ -60,7 +60,7 @@ _BREED_FX_VERB = {"native": "freed", "pressed": "fall",
 # the floors whose Warden has a fight3d model (worldd/static/site/fight3d/
 # monsters/warden_NNN.glb) — their kill plays the live 3D finisher; the
 # rest keep the reel. Extend as Wardens are modelled.
-KILL3D_WARDEN_FLOORS = frozenset(range(1, 7))
+KILL3D_WARDEN_FLOORS = frozenset(range(1, 9))
 
 
 def _foe_id(e: dict) -> str:
