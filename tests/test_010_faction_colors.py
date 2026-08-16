@@ -123,6 +123,67 @@ def test_desk_recolor_emits_the_effect_and_follows_at_once():
     assert s.meters.faction_color == "orchard-green"
 
 
+# ── The strip wears the ink (phase 3) ────────────────────────────────────
+
+def strip(color):
+    w = member_world()
+    w["faction"]["color"] = color
+    w["faction"]["members_count"] = 2
+    p = playing(world=w)
+    p["guild"] = "Ember Pact"
+    frag = render.render_scene_fragment(core.current_scene(p))
+    return frag.split('class="facblk')[1].split("</div>")[0]
+
+
+def test_strip_door_carries_the_faction_ink_as_a_custom_property():
+    assert "--fac:#f26541" in strip("ember-red")
+    # legacy factions (no color on the wire) keep today's exact violet
+    assert f"--fac:{render.VIOLET_SOFT}" in strip("")
+
+
+def test_strip_sigil_is_the_half_res_mask_not_an_img():
+    blk = strip("ember-red")
+    assert "<img" not in blk
+    assert 'class="facsig"' in blk and "mask-image:url(" in blk
+    # half-res art: the 160x56 file, not the 320x112 one
+    half = render._sigil_half_data_url("wolf_howl")
+    full = render._banner_data_url("wolf_howl")
+    assert half and half[1:] == (160, 56)
+    assert half[0] in blk
+    assert len(half[0]) < len(full[0])           # ~1/4 the bytes
+    # 60px tall at 160:56 keeps the old footprint: ~171px wide
+    assert "width:171px" in blk
+
+
+def test_hall_galleries_keep_full_res():
+    # _banner_data_url never resolves the 160x56 file
+    assert render._banner_data_url("wolf_howl")[1:] == (320, 112)
+
+
+def test_strip_css_hover_is_flat_color_no_growth_no_glow():
+    p = playing(world=member_world())
+    p["guild"] = "Ember Pact"
+    page = render.render_scene(core.current_scene(p))
+    css = page.split(".facblk{")[1].split(".piprows")[0]
+    assert "scale(" not in css and "drop-shadow" not in css
+    assert f"background:var(--fac,{render.VIOLET_SOFT})" in css
+    # the ink flips to black for contrast, banner and name both
+    assert "color:#000" in css and "background-color:#000" in css
+    # the counts' rules stay untouched next door
+    assert f".facblk .facsub .dim{{color:{render.DIM};}}" in page
+
+
+def test_join_door_keeps_the_gold_text_hover():
+    p = playing(world={"social": True, "factions": [],
+                       "factions_total": 3, "faction_banners": [],
+                       "hall_board": {"banners": []}})
+    page = render.render_scene(core.current_scene(p))
+    assert ".facdoor.join:hover" in page
+    assert (f".facblk .facdoor.join:focus-visible .facname{{\n"
+            f" color:{render.GOLD};border-bottom-color:{render.GOLD};}}"
+            in page)
+
+
 def test_desk_recolor_never_mind_changes_nothing():
     p = member(role="steward")
     enter_hall(p)

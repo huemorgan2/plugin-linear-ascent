@@ -18,7 +18,7 @@ import os
 import re
 from functools import lru_cache
 
-from . import economy, icons
+from . import colors as _colors, economy, icons
 from .engine import tips
 from .engine.scene import Meters, Scene
 
@@ -138,6 +138,22 @@ def _banner_data_url(slug: str) -> tuple[str, int, int] | None:
                 b64 = base64.b64encode(open(path, "rb").read()).decode()
                 w, h = (int(n) for n in size.split("x"))
                 return f"data:image/png;base64,{b64}", w, h
+    return None
+
+
+@lru_cache(maxsize=None)
+def _sigil_half_data_url(slug: str) -> tuple[str, int, int] | None:
+    """(data_url, width, height) of the strip's half-res sigil.
+
+    010: the card strip alone downshifts to 160x56 — deliberately not a
+    size in _banner_data_url, so hall galleries and banner pages keep
+    full res. A missing half falls back rather than blank the strip."""
+    for size in ("160x56", "320x112"):
+        path = os.path.join(_SIGILS, f"{slug}_{size}.png")
+        if os.path.exists(path):
+            b64 = base64.b64encode(open(path, "rb").read()).decode()
+            w, h = (int(n) for n in size.split("x"))
+            return f"data:image/png;base64,{b64}", w, h
     return None
 
 
@@ -953,9 +969,16 @@ def _faction_block(m: Meters) -> str:
     name = getattr(m, "faction", "") or ""
     if name:
         slug = getattr(m, "faction_banner", "") or ""
-        art = _banner_data_url(slug) if slug else None
-        sig = (f'<img class="facsig" src="{art[0]}" alt="">' if art
-               else "")
+        art = _sigil_half_data_url(slug) if slug else None
+        sig = ""
+        if art:
+            # 010: white-on-transparent art as a CSS mask — the ink is
+            # background-color, so hover can flip it without a filter.
+            width = round(60 * art[1] / art[2])
+            sig = (f'<span class="facsig" style="width:{width}px;'
+                   f"-webkit-mask-image:url('{art[0]}');"
+                   f"mask-image:url('{art[0]}');\"></span>")
+        ink = _colors.faction_ink(getattr(m, "faction_color", "") or "")
         n = int(getattr(m, "faction_members", 0) or 0)
         on = int(getattr(m, "faction_online", 0) or 0)
         meta = ""
@@ -963,7 +986,8 @@ def _faction_block(m: Meters) -> str:
             meta = (f'<span class="facsub"><span>{n} climber'
                     f"{'s' if n != 1 else ''}</span>"
                     f'<span>{on} online now</span></span>')
-        return (f'<div class="facblk later" data-fac="{_e(name)}">'
+        return (f'<div class="facblk later" data-fac="{_e(name)}" '
+                f'style="--fac:{ink}">'
                 f'<button type="button" class="facdoor" data-opt="go:hall" '
                 f'data-tip="{_e(_TIP_FAC_ACT)}">{sig}'
                 f'<span class="facname">{_e(name)}</span></button>'
@@ -2564,21 +2588,32 @@ SCENE_CSS = f"""
  border-top:1px dashed {BORDER};padding:8px 0 0;color:{DIM};
  letter-spacing:.06em;text-transform:uppercase;min-width:0;}}
 .facblk .facdoor{{display:flex;align-items:center;gap:1ch;flex:none;
- max-width:100%;min-width:0;background:none;border:0;padding:0;margin:0;
- font:inherit;letter-spacing:inherit;text-transform:inherit;color:{TEXT};
- cursor:pointer;text-align:left;}}
-.facblk .facsig{{flex:none;height:60px;width:auto;
+ max-width:100%;min-width:0;background:none;border:0;margin:0;
+ padding:2px 1ch 2px 0;font:inherit;letter-spacing:inherit;
+ text-transform:inherit;color:{TEXT};cursor:pointer;text-align:left;
+ transition:background-color .12s;}}
+.facblk .facsig{{flex:none;height:60px;background-color:{ARTBRIGHT};
  image-rendering:pixelated;margin:-4px 0;
- transition:filter .12s,transform .12s;}}
+ mask-size:100% 100%;-webkit-mask-size:100% 100%;
+ mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;
+ transition:background-color .12s;}}
 .facblk .facname{{color:{TEXT};letter-spacing:.14em;
  border-bottom:1px solid transparent;transition:color .12s,
  border-color .12s;white-space:nowrap;overflow:hidden;
  text-overflow:ellipsis;}}
+/* 010: the door hovers in the faction's own ink — a flat block behind
+   banner + name only; no growth, no glow; the counts stay put. */
+.facblk .facdoor:hover,.facblk .facdoor:focus-visible{{
+ background:var(--fac,{VIOLET_SOFT});}}
 .facblk .facdoor:hover .facname,.facblk .facdoor:focus-visible .facname{{
- color:{GOLD};border-bottom-color:{GOLD};}}
+ color:#000;border-bottom-color:transparent;}}
 .facblk .facdoor:hover .facsig,.facblk .facdoor:focus-visible .facsig{{
- filter:brightness(1.35) drop-shadow(0 0 4px {GOLD});
- transform:scale(1.06);}}
+ background-color:#000;}}
+.facblk .facdoor.join:hover,.facblk .facdoor.join:focus-visible{{
+ background:none;}}
+.facblk .facdoor.join:hover .facname,
+.facblk .facdoor.join:focus-visible .facname{{
+ color:{GOLD};border-bottom-color:{GOLD};}}
 .facblk .facdoor:focus-visible{{outline:0;}}
 .facblk .facsub{{display:flex;flex-direction:column;align-items:flex-start;
  gap:1px;color:{DIM};text-transform:none;letter-spacing:.06em;

@@ -83,7 +83,9 @@ def test_member_block_shows_banner_name_counts_and_the_door():
     frag = render_scene_fragment(core.current_scene(p))
     blk = frag.split('class="facblk')[1]
     assert 'data-fac="Ember Pact"' in blk
-    assert '<img class="facsig"' in blk          # wolf_howl art exists
+    # 010: masked span, not an <img> — the sigil tints via CSS mask
+    assert '<span class="facsig"' in blk         # wolf_howl art exists
+    assert "mask-image:url(" in blk
     assert "3 climbers" in blk and "2 online now" in blk
     assert 'data-opt="go:hall"' in blk           # banner + name = the door
     assert "FACTION ACTIVITY" not in blk
