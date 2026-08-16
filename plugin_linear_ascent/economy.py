@@ -2164,6 +2164,26 @@ def endurance(item: GearItem, left: int | None = None) -> int:
     return pool
 
 
+def gear_card_stats(item: GearItem, left: int | None = None) -> str:
+    """011: a pack piece's numbers as one hint fragment — the stat it
+    grants, the durability it carries (a worn piece says what's left of
+    full, in the same units `endurance` puts on every shop card), and
+    its style word. Reused by every card that shows a piece leaving the
+    pack: the chest's PUT wall, the pawn shop's donate rows."""
+    stat = ("+{} spd".format(item.speed) if item.slot == "shoes"
+            else ("+{} ATK".format(item.bonus) if item.slot == "weapon"
+                  else "+{} DEF".format(item.bonus)))
+    if left is not None and left < item_pool(item):
+        dur = (f"durability {endurance(item, left):,} "
+               f"of {endurance(item):,}")
+    else:
+        dur = f"durability {endurance(item):,}"
+    parts = [stat, dur]
+    if item.style:
+        parts.append(STYLE_WORD[item.style])
+    return " · ".join(parts)
+
+
 def repair_price(item: GearItem, missing_frac: float) -> int:
     """The Forge mends for a fraction of what the smith charged.
     046: repair is a RUNNING cost — the pillar-riding sticker price is

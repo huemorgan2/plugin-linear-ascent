@@ -496,7 +496,13 @@ def _chest_put_scene(p: dict, fac: dict, hall: dict,
     for slug in _donatable(p):
         g = economy.FORGE[slug]
         oid = f"put_{slug}"
-        opts.append(Option(oid, g.name, "no coin — the faction keeps it"))
+        # 011: the card says WHAT leaves the pack — stat, durability
+        # (worn pieces show left-of-full), style — before the law line.
+        left = (p.get("durability_pack") or {}).get(slug)
+        opts.append(Option(
+            oid, g.name,
+            f"{economy.gear_card_stats(g, left)} · "
+            "no coin — the faction keeps it"))
         art[oid] = slug
     opts.append(Option("hall_cancel", "Never mind"))
     return Scene(

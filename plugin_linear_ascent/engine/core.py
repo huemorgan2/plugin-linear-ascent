@@ -2593,9 +2593,14 @@ def _pawn_scene(p: dict) -> Scene:
                          f"racks hold {len(rack)}/{cap}.")
             for slug in donatable:
                 g = economy.FORGE[slug]
-                opts.append(Option(f"donate_{slug}",
-                                   f"Donate {g.name} to the armory",
-                                   "no coin — the faction keeps it"))
+                # 011: same card law as the chest's PUT wall — the row
+                # says what the piece is before it says what it costs.
+                left = (p.get("durability_pack") or {}).get(slug)
+                opts.append(Option(
+                    f"donate_{slug}",
+                    f"Donate {g.name} to the armory",
+                    f"{economy.gear_card_stats(g, left)} · "
+                    "no coin — the faction keeps it"))
     opts.append(Option("back", "Back to the square"))
     return Scene(
         eyebrow="ROOTHOLLOW · PAWN SHOP",
