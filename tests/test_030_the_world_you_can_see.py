@@ -142,6 +142,30 @@ def test_armor_tier_wardrobe_is_gone():
         assert render._portrait_data_url(tier) is None, tier
 
 
+def test_gmail_gate_swaps_portrait_for_the_connect_box():
+    """010: a portrait_locked scene (an unlinked web account) shows the
+    'Connect Gmail' box in the portrait's place, never the face; the meters
+    and pack still ride the right column. Unset, the face returns."""
+    s = _scene_with_race("human")
+    assert 'class="portrait' in render._profile_html(s)   # face by default
+
+    s.portrait_locked = True
+    html = render._profile_html(s)
+    assert 'class="vbox"' in html and "Connect Gmail" in html
+    assert 'class="portrait' not in html                  # no face when locked
+    assert 'href="/auth/google/start"' in html
+    assert "<svg" in html                                 # the 4-ink G glyph
+    assert 'class="pcol"' in html                         # meters still ride
+
+
+def test_google_g_is_a_multi_ink_svg():
+    g = render.google_g()
+    assert g.startswith("<svg") and g.endswith("</svg>")
+    # four Google inks, mapped to the game palette
+    for ink in ("#45d0c0", "#f26541", "#f5b825", "#8ed24a"):
+        assert ink in g
+
+
 def test_portrait_missing_art_degrades_to_bare_rail():
     s = Scene(eyebrow="E", headline="H",
               meters=Meters(10, 10, 5, 24, 0, 100, 0, atk=12, dfs=6))

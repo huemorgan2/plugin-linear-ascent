@@ -890,6 +890,66 @@ def _portrait_data_url(slug: str) -> str | None:
     return art[0] if art else None
 
 
+# ── 010: the Gmail glyph + the profile's "connect Gmail" box ────────────
+# The 4-ink 16×16 Google "G", drawn in the game's own inks — no true blue
+# in the warmed-CGA 16, so cyan-teal energy stands in for Google blue.
+# Authored once here and mirrored by the website door, so both wear the
+# exact same glyph. See plans/010's gen_google_g.py for the shape.
+
+_G_BLUE, _G_RED, _G_YELLOW, _G_GREEN = "#45d0c0", "#f26541", "#f5b825", "#8ed24a"
+
+
+def _g_cell(x: int, y: int) -> str | None:
+    import math
+    cx = cy = 7.5
+    inner, outer = 3.4, 7.35
+    dx, dy = x - cx, y - cy
+    d = math.hypot(dx, dy)
+    if 7 <= y <= 8 and 7.0 <= x <= 12.0 and d <= outer:
+        return _G_BLUE                       # the crossbar tongue
+    if d < inner or d > outer:
+        return None
+    ang = math.degrees(math.atan2(-dy, dx))
+    if 3 < ang < 48:
+        return None                          # the mouth notch
+    if -48 <= ang <= 3:
+        return _G_BLUE
+    if 48 <= ang < 140:
+        return _G_RED
+    if ang >= 140 or ang <= -140:
+        return _G_YELLOW
+    return _G_GREEN
+
+
+@lru_cache(maxsize=1)
+def google_g() -> str:
+    """Inline <svg> of the 4-ink Google G, 16×16, crisp when scaled."""
+    rects = []
+    for y in range(16):
+        for x in range(16):
+            c = _g_cell(x, y)
+            if c:
+                rects.append(f'<rect x="{x}" y="{y}" width="1" '
+                             f'height="1" fill="{c}"/>')
+    return ('<svg class="gicon-svg" xmlns="http://www.w3.org/2000/svg" '
+            'viewBox="0 0 16 16" shape-rendering="crispEdges">'
+            + "".join(rects) + "</svg>")
+
+
+def _connect_box_html() -> str:
+    """010: an account not yet linked to Gmail has no face — the portrait's
+    place holds an invitation instead. Only the website's unlinked (legacy)
+    accounts ever see this; new climbers are Gmail from step one."""
+    return ('<div class="vbox" role="group" aria-label="Connect Gmail">'
+            '<div class="vtitle">Connect Gmail</div>'
+            '<div class="vsub">Your climber\'s look appears once your '
+            'account is linked to Gmail.</div>'
+            '<div class="vrule"></div>'
+            '<a class="vgoogle" href="/auth/google/start">'
+            + google_g()
+            + ' <span>connect <u>Gmail</u></span></a></div>')
+
+
 def _pip_row(key: str, label: str, stat: int, tint: str, tip: str,
              per_half: float = 3) -> str:
     halves = max(0, min(20, round(stat / per_half)))
@@ -928,6 +988,12 @@ def _profile_html(scene: Scene) -> str:
     # left, everything the climber carries to its right, never below.
     right += _inventory_html(scene)
     ident = _ident_html(m)
+    # 010: the face is a Gmail privilege — a not-yet-linked (legacy) web
+    # account holds the connect box where its portrait would stand. The
+    # flag is set only by worldd's web pane; Luna surfaces never gate it.
+    if getattr(scene, "portrait_locked", False):
+        return (ident + '<div class="profile">' + _connect_box_html()
+                + f'<div class="pcol">{right}</div></div>')
     url = _portrait_data_url(_portrait_slug(scene))
     if not url:
         return ident + right
@@ -2582,6 +2648,21 @@ SCENE_CSS = f"""
 .profile .pcol{{flex:1;min-width:0;}}
 .profile .rail{{margin-top:0;padding-top:0;border-top:0;}}
 .profile .inv{{border-top:0;padding-top:0;margin-top:8px;}}
+/* 010: the "connect Gmail" box stands where the portrait would — same
+   footprint (100:200), so the profile keeps its shape for legacy accounts */
+.profile .vbox{{flex:none;width:140px;aspect-ratio:100/200;
+ border:1px solid {BORDER};background:{SLATE};display:flex;
+ flex-direction:column;gap:6px;align-items:center;justify-content:center;
+ text-align:center;padding:8px;}}
+.vbox .vtitle{{color:{BRIGHT};text-transform:uppercase;}}
+.vbox .vsub{{color:{DIM};line-height:1.4;font-size:.85em;}}
+.vbox .vrule{{width:100%;border-top:1px solid {BORDER};margin:2px 0;}}
+.vbox .vgoogle{{display:inline-flex;align-items:center;gap:.75ch;
+ color:{BRIGHT};text-decoration:none;}}
+.vbox .vgoogle u{{color:{AETHER};text-decoration:none;}}
+.vbox .vgoogle:hover u{{color:{GOLD};}}
+.vbox .gicon-svg{{width:16px;height:16px;image-rendering:pixelated;
+ vertical-align:-3px;}}
 /* ── 059/062: the faction strip at the foot of the card — no box, the
    card's own dotted rule above it; banner + name are the door ── */
 .facblk{{display:flex;align-items:center;gap:1.5ch;margin-top:10px;
