@@ -2162,14 +2162,19 @@ SCENE_CSS = f"""
  background:transparent;border:1px solid transparent;border-radius:0;
  padding:4px .5ch;font:inherit;color:{TEXT};text-align:left;
  cursor:pointer;}}
-.nrow:hover:not(:disabled){{border-color:{AETHER};}}
-.nrow:focus-visible{{outline:1px solid {AETHER};outline-offset:1px;}}
+/* hover / focus = reverse video: black on aether across the whole row,
+   no outline — the same read as .opt's black-on-gold */
+.nrow:hover:not(:disabled),.nrow:focus-visible{{background:{AETHER};
+ border-color:{AETHER};outline:none;color:{INK};}}
 .nrow .nk{{flex:none;color:{AETHER};letter-spacing:.12em;
  min-width:8ch;}}
 .nrow .ntx{{flex:1;min-width:0;color:{DIM};}}
-.nrow:hover .ntx{{color:{TEXT};}}
 .nrow .ngo{{flex:none;color:{FAINT};}}
-.nrow:hover .ngo{{color:{AETHER};}}
+.nrow:hover:not(:disabled) .nk,.nrow:hover:not(:disabled) .ntx,
+.nrow:hover:not(:disabled) .ngo,.nrow:focus-visible .nk,
+.nrow:focus-visible .ntx,.nrow:focus-visible .ngo{{color:{INK};}}
+.nrow:hover:not(:disabled) .nb,.nrow:focus-visible .nb{{
+ background:{INK};color:{AETHER};}}
 .nb,.badge{{flex:none;display:inline-block;min-width:2ch;padding:0 .5ch;
  background:{AETHER};color:{INK};text-align:center;
  font-variant-numeric:tabular-nums;}}

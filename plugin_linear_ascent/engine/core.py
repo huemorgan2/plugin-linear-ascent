@@ -1443,6 +1443,9 @@ def _forge_scene(p: dict) -> Scene:
     cap = economy.max_hone(p["unlocked_floor"])
     price = economy.hone_price(p["unlocked_floor"])
     hone_xp = economy.hone_xp(p["unlocked_floor"])
+    # every bench row wears the piece's own 1-bit icon (option_art
+    # resolves gear slugs to the same glyph the shop rows use)
+    mend_art: dict[str, str] = {}
     for slot in economy.HONE_SLOTS:
         slug = p["gear"].get(slot)
         lvl = state.hone_level(p, slot)
@@ -1450,12 +1453,12 @@ def _forge_scene(p: dict) -> Scene:
             name = economy.FORGE[slug].name
             opts.append(Option(f"hone_{slot}", f"Hone {name} +{lvl + 1}",
                                f"pay ◈ {price:,} · +{hone_xp} XP"))
+            mend_art[f"hone_{slot}"] = slug
     # 005: the repair bench — every worn PAID piece on the body gets a
     # row; price scales with the missing fraction, XP mirrors honing.
     # 0.29.4: a held repair token adds a FREE row per worn piece — the
     # token finally spends where its name promised.
     tokens = p["inventory"].get("repair_token", 0)
-    mend_art: dict[str, str] = {}
     for slot in economy.DURABILITY_SLOTS:
         g = economy.FORGE.get(p["gear"].get(slot) or "")
         left = (p.get("durability") or {}).get(slot)
@@ -1471,8 +1474,6 @@ def _forge_scene(p: dict) -> Scene:
             f"pay ◈ {rprice:,} · +{hone_xp} XP · "
             f"durability {economy.endurance(g, left):,} → "
             f"{economy.endurance(g):,}"))
-        # the mend row wears the piece's own 1-bit icon (option_art
-        # resolves gear slugs to the same glyph the shop rows use)
         mend_art[f"repair_{slot}"] = g.slug
         if tokens > 0:
             opts.append(Option(

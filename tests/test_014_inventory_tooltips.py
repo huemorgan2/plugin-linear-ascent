@@ -327,3 +327,19 @@ def test_tip_js_ships_in_both_hosts():
     assert "tipbox" in render.render_scene(
         Scene(eyebrow="X", headline="Y"))
     assert "tipbox" in pane.render_pane()
+
+
+def test_hone_rows_wear_the_pieces_icon():
+    # the honing bench names each piece's gear slug in option_art, so the
+    # row draws the same 1-bit icon the shop and repair rows use
+    p = create_character(fresh())
+    p["gold"] = 5000
+    p["unlocked_floor"] = 2                     # cap +1 in the first band
+    p["gear"]["weapon"] = "scrap_dagger"
+    s = choose(p, "forge")
+    hone = [o for o in s.options if o.id == "hone_weapon"]
+    assert hone, [o.id for o in s.options]
+    assert s.option_art["hone_weapon"] == "scrap_dagger"
+    html = render.render_scene_fragment(s)
+    row = html.split('data-opt="hone_weapon"', 1)[1].split("</button>", 1)[0]
+    assert 'class="gicon' in row
