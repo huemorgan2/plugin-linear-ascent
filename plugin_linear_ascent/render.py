@@ -26,6 +26,7 @@ from .engine.scene import Meters, Scene
 INK = "#000000"
 PANEL = "#000000"
 PANEL2 = "#000000"
+SLATE = "#1f2024"     # 062: the solid box's ground
 BORDER = "#5b5952"
 DIM = "#5b5952"
 FAINT = "#5b5952"
@@ -1926,6 +1927,20 @@ def render_scene_fragment(scene: Scene) -> str:
                 parts.append("</div>")
                 in_callout = False
             continue
+        # 062: ▜ solid-box markers — a filled box with a title band,
+        # for the hall's weekly goal (no border, background colour).
+        if line.startswith("▜ "):
+            if in_callout:
+                parts.append("</div>")
+            parts.append(f'<div class="callout solid"><div class="callouth '
+                         f'type">{_ep(line[2:])}</div>')
+            in_callout = True
+            continue
+        if line == "▜.":
+            if in_callout:
+                parts.append("</div>")
+                in_callout = False
+            continue
         if line.startswith("−") or line.startswith("-"):
             # losses stay red; gains are NOT green — gold paints gold,
             # XP paints XP, everything else keeps the card's ink.
@@ -2335,6 +2350,13 @@ SCENE_CSS = f"""
 .callouth{{color:{BRIGHT};font-weight:bold;letter-spacing:.06em;
  margin-bottom:6px;}}
 .callout .body{{color:{BRIGHT};margin:4px 0 0;}}
+/* 062: the solid variant (▜ markers) — no frame; a slate ground with a
+   gold title band; the words stay bright on it */
+.callout.solid{{border:0;background:{SLATE};padding:0 0 10px;
+ margin:12px 0 6px;}}
+.callout.solid .callouth{{background:{GOLD};color:{INK};padding:6px 12px;
+ margin:0 0 8px;letter-spacing:.12em;text-transform:uppercase;}}
+.callout.solid .body{{padding:0 12px;}}
 .options{{clear:both;margin:10px 0 0;
  display:flex;flex-direction:column;
  border-top:1px dashed {BORDER};border-bottom:1px dashed {BORDER};

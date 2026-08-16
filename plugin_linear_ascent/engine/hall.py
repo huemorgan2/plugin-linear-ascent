@@ -148,37 +148,80 @@ def hall_scene(p: dict, note: str = "") -> Scene:
     return _home_scene(p, fac, hall, note)
 
 
+_GOAL_VERB = {"hoard": "earn ◈ {t:,} of gold together",
+              "cull": "fell {t:,} monsters together",
+              "climb": "win {t:,} XP together"}
+_GOAL_UNIT = {"hoard": "◈", "cull": "kills", "climb": "XP"}
+
+
+def _pct(x: float) -> str:
+    return f"{x * 100:.0f}%"
+
+
 def _week_lines(fac: dict, hall: dict, lines: list, opts: list) -> None:
-    """032 §9: THE WEEK box — the loudest thing on the page. Entered →
-    progress, pips, projection. Not entered → the offer, and the way in
-    as a proper option row (019 law), never prose."""
+    """032 §9 / 062: THE WEEK box — the loudest thing on the page. One
+    solid box (▜ markers) that says the goal, the days left, how far the
+    banner is, and — in the prize's own arithmetic — what meeting it
+    pays: the pool is base% × target, scaled by attendance (member
+    act-days over the 4 needed each): under half → nothing, every day
+    all week → ×1.75. Not entered → the same box plus the way in as a
+    proper option row (019 law), never prose."""
     wk = fac.get("week") or {}
-    kind = str(wk.get("kind", "hoard")).upper()
+    kind = str(wk.get("kind", "hoard")).lower()
     bal, _cap = _coffer_nums(fac, hall)
-    if wk.get("entered"):
-        prog = int(wk.get("progress", 0) or 0)
-        target = max(1, int(wk.get("target", 1) or 1))
-        lines.append(f"THE WEEK — {kind} · {prog:,} / {target:,}")
-        lines.append(f"{progress_bar(prog, target, 12)} "
-                     f"{min(100, round(100 * prog / target))}%")
-        att = int(wk.get("attended", 0) or 0)
-        req = int(wk.get("required", 0) or 0)
+    target = max(1, int(wk.get("target", 0) or 0))
+    prog = int(wk.get("progress", 0) or 0)
+    att = int(wk.get("attended", 0) or 0)
+    req = int(wk.get("required", 0) or 0)
+    base = float(wk.get("base_pct", 0) or 0) or (
+        0.15 if len(fac.get("members", [])) <= 3 else 0.20)
+    entered = bool(wk.get("entered"))
+    day = state.world_day()
+    left = 7 - day % 7
+    verb = _GOAL_VERB.get(kind, _GOAL_VERB["hoard"]).format(t=target)
+    unit = _GOAL_UNIT.get(kind, "")
+    lines.append(f"\u259c THIS WEEK'S GOAL \u2014 {kind.upper()}")
+    lines.append(f"Reach {target:,} {unit} \u2014 {verb}")
+    lines.append(f"days left: {left}")
+    if entered:
+        lines.append(f"goal completed {progress_bar(prog, target, 12)} "
+                     f"{min(100, round(100 * prog / target))}% "
+                     f"({prog:,} / {target:,})")
         if 0 < req <= 14:
-            lines.append("▪" * min(att, req) + "▫" * max(0, req - att)
-                         + f" {att}/{req}")
+            lines.append("attendance " + "\u25aa" * min(att, req)
+                         + "\u25ab" * max(0, req - att) + f" {att}/{req}")
         elif req:
             lines.append(f"attendance {att}/{req}")
-        lines.append(f"on pace for ×{float(wk.get('multiplier', 0)):.2f} — "
-                     "the prize is minted at week's turn")
+    else:
+        lines.append("goal completed " + "\u2591" * 12
+                     + " 0% \u2014 not entered yet")
+    # the prize, in its own arithmetic
+    if kind == "hoard":
+        def prize(m: float) -> str:
+            return f"\u25c8 {round(base * target * m):,} split by attendance"
+    else:
+        buff = "HP" if kind == "cull" else "XP"
+        def prize(m: float) -> str:
+            return f"+{round(base * m * 100)}% {buff} all next week"
+    lines.append("reaching it at half attendance (2 of 4 days each) gets "
+                 f"all faction members {prize(0.5)}")
+    lines.append("reaching it at full attendance (4 days each) gets "
+                 f"all faction members {prize(1.0)}")
+    lines.append("reaching it with everyone in every day gets "
+                 f"all faction members {prize(1.75)}")
+    lines.append("under half attendance the week pays nothing")
+    if entered:
+        lines.append(f"on pace for \u00d7{float(wk.get('multiplier', 0)):.2f}"
+                     " \u2014 the prize is minted at week's turn")
+    lines.append("\u259c.")
+    if entered:
         return
-    lines.append(f"THIS WEEK THE ASCENT DEMANDS A {kind} — target "
-                 f"{int(wk.get('target', 0) or 0):,}")
     cost = int(wk.get("entry_cost", 0) or 0)
     if fac.get("role") == "steward":
         opts.append(Option("enter_week", "ENTER THE WEEK",
-                           f"◈ {cost} from the coffer (◈ {bal:,})"))
+                           f"\u25c8 {cost} from the coffer (\u25c8 {bal:,})"))
     else:
-        lines.append("the steward signs the faction in — nudge them")
+        lines.append("the steward signs the faction in \u2014 nudge them")
 
 
 def _hands_tag(m: dict) -> str:

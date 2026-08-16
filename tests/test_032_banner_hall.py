@@ -165,7 +165,16 @@ def test_hall_home_wears_the_colors_and_the_room():
         assert door in ids
     assert "hall_desk" not in ids                 # members have no desk
     body = " ".join(s.body_lines)
-    assert "THIS WEEK THE ASCENT DEMANDS A CULL" in body
+    assert "▜ THIS WEEK'S GOAL — CULL" in body       # 062: the solid box
+    assert "Reach 100 kills — fell 100 monsters together" in body
+    assert "days left:" in body
+    assert "not entered yet" in body
+    # the prize in its own arithmetic: 15% base × attendance multiplier
+    assert "half attendance (2 of 4 days each) gets all faction members +8% HP" in body
+    assert "full attendance (4 days each) gets all faction members +15% HP" in body
+    assert "everyone in every day gets all faction members +26% HP" in body
+    assert "under half attendance the week pays nothing" in body
+    assert "▜." in body
     assert "the steward signs the faction in" in body
     assert "DAY 3 · Brynn — web spinners eat arrows" in body
     assert "▪▪▪▫▫▫▫ 3/4" in body                  # the roster still reads
@@ -176,8 +185,8 @@ def test_entered_week_shows_progress_pips_and_projection():
     p = member(entered=True)
     s = enter_hall(p)
     body = " ".join(s.body_lines)
-    assert "THE WEEK — CULL · 12 / 100" in body
-    assert "▪▪▪▪▫▫▫▫ 4/8" in body                 # attendance
+    assert "goal completed ▓░░░░░░░░░░░ 12% (12 / 100)" in body
+    assert "attendance ▪▪▪▪▫▫▫▫ 4/8" in body        # attendance
     assert "on pace for ×0.50" in body
     assert not any(o.id == "enter_week" for o in s.options)
 
