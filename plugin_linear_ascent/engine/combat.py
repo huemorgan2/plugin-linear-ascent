@@ -149,6 +149,7 @@ def meters(p: dict) -> Meters:
         faction=(_wfac(p).get("name") or p.get("guild") or ""),
         # 059: the block under the profile
         faction_banner=str(_wfac(p).get("banner") or ""),
+        faction_color=str(_wfac(p).get("color") or ""),
         faction_members=int(_wfac(p).get("members_count")
                             or len(_wfac(p).get("members") or [])),
         faction_online=int(_wfac(p).get("online") or 0),

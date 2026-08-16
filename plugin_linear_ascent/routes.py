@@ -53,6 +53,10 @@ class FactionNameIn(BaseModel):
     name: str = Field(min_length=1, max_length=24)
 
 
+class FactionColorIn(BaseModel):
+    color: str = Field(min_length=1, max_length=24)
+
+
 class FactionTargetIn(BaseModel):
     tenant: str = Field(min_length=1, max_length=64)
     player: str = Field(min_length=1, max_length=128)
@@ -408,6 +412,12 @@ def register_routes(app, ctx: PluginContext) -> None:
                                   user=Depends(get_current_user)) -> dict:
         return await _proxy(
             _world().faction_rename(runtime.player_key(), body.name))
+
+    @router.post("/pane/faction/recolor")
+    async def pane_faction_recolor(body: FactionColorIn,
+                                   user=Depends(get_current_user)) -> dict:
+        return await _proxy(
+            _world().faction_recolor(runtime.player_key(), body.color))
 
     @router.post("/pane/faction/enter")
     async def pane_faction_enter(user=Depends(get_current_user)) -> dict:

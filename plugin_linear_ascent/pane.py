@@ -23,7 +23,10 @@ whenever the session changes; the pane also answers 401s by asking again
 
 from __future__ import annotations
 
+import json as _json
+
 from . import icons
+from .colors import FACTION_COLORS
 from .render import (AETHER, ART, BORDER, BRIGHT, DIM, FAINT, FONT_STACK,
                      GOLD, INK, INTERACT_JS, PANEL, PANEL2, RED, SCENE_CSS,
                      SWAP_JS, TEXT, TIP_JS, VIOLET, VIOLET_SOFT)
@@ -161,6 +164,12 @@ select.ti{{background:{INK};color:{TEXT};border:1px solid {BORDER};
 .bpick.on .fbanner{{background-color:{GOLD};}}
 .savebar{{display:flex;gap:6px;margin-top:6px;}}
 .savebar input{{flex:1;}}
+/* 010: the color roster — nine flat 1-bit swatches, the pick ringed */
+.cgrid{{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap;}}
+.cpick{{width:26px;height:26px;border:1px solid {BORDER};padding:0;
+ cursor:pointer;border-radius:0;}}
+.cpick:hover{{border-color:{TEXT};}}
+.cpick.on{{border-color:{GOLD};outline:1px solid {GOLD};}}
 /* ── 042: the sound bar — pinned under everything, ANSI like the rest */
 .sndbar{{position:fixed;left:0;right:0;bottom:0;z-index:40;
  background:{PANEL};border-top:1px solid {BORDER};
@@ -330,6 +339,19 @@ const sig = (slug, cls) => {
   return '<div class="fbanner ' + (cls || '') + '" style="mask-image:url(\''
     + u + '\');-webkit-mask-image:url(\'' + u + '\')"></div>';
 };
+/* 010: the faction color roster — [slug, name, ink], colors.py's order.
+   Swatch buttons carry caller-chosen attrs: the found form picks local
+   state (data-fcolor), the admin desk saves on the spot (data-desk). */
+const FCOLORS = __FCOLORS__;
+const cname = slug => {
+  const c = FCOLORS.find(c => c[0] === slug);
+  return c ? c[1] : slug;
+};
+const swatches = (cur, attr) => '<div class="cgrid">'
+  + FCOLORS.map(c => '<button class="cpick' + (c[0] === cur ? ' on' : '')
+    + '" ' + attr + ' data-color="' + c[0] + '" title="' + c[1]
+    + '" style="background:' + c[2] + '"></button>').join('')
+  + '</div>';
 const bar = (cur, cap, cells) => {
   cells = cells || 20;
   const f = cap > 0 ? Math.max(0, Math.min(cells,
@@ -695,7 +717,7 @@ function chipRow2(name, banners, left, right) {
 }
 
 /* ── 019/061: the pitch to the factionless — join here, found here ── */
-let foundOpen = false, foundBanner = '';
+let foundOpen = false, foundBanner = '', foundColor = 'warden-violet';
 function renderCta(d) {
   if (d.in_faction) return '';
   let h = '<div class="panel"><div class="eyebrow">you climb in '
@@ -727,6 +749,10 @@ function renderCta(d) {
       + '<input id="fd-dues" class="ti num" type="number" min="1" max="50" '
       + 'value="5"> <span class="faint">\u25c8 1\u201350 a week from '
       + 'every member, into the store</span></div>'
+      + '<div class="frow"><span class="k">COLOR</span>'
+      + '<span class="faint">' + cname(foundColor)
+      + ' — the ink your banner flies</span></div>'
+      + swatches(foundColor, 'data-fcolor="1"')
       + '<div class="frow"><span class="k">SIGIL</span></div>'
       + '<div class="bgrid pick">'
       + banners.map(b => '<div class="bpick' + (b === foundBanner
@@ -905,6 +931,9 @@ function renderFaction(d) {
       + '<div class="savebar"><input id="rn" class="ti" maxlength="24" '
       + 'value="' + esc(d.name) + '">'
       + '<button class="btn" data-desk="rename">SAVE</button></div>'
+      + '<div class="faint" style="margin-top:8px">the color it flies — '
+      + cname(d.color) + '; a pick saves at once</div>'
+      + swatches(d.color, 'data-desk="recolor"')
       + '<div class="deskmsg" id="deskmsg"></div></div>';
     h += '<div class="panel"><div class="eyebrow">admin desk \u2014 '
       + 'requests</div>'
@@ -949,6 +978,12 @@ community.addEventListener('click', async (e) => {
       x.classList.toggle('on', x === bp));
     return;
   }
+  const cp = e.target.closest('.cpick[data-fcolor]');
+  if (cp) {
+    foundColor = cp.dataset.color;
+    loadCommunity();               // the COLOR line names the pick
+    return;
+  }
   const back = e.target.closest('#back');
   if (back) { comm.view = 'board'; comm.name = ''; loadCommunity(); return; }
   const fname = e.target.closest('[data-fac]');
@@ -977,6 +1012,7 @@ community.addEventListener('click', async (e) => {
       const d = await call('/pane/faction/found', {
         name: (q('#fd-name').value || '').trim(),
         banner: foundBanner,
+        color: foundColor,
         join_fee: parseInt(q('#fd-fee').value, 10) || 0,
         weekly_dues: parseInt(q('#fd-dues').value, 10) || 5});
       foundOpen = false;
@@ -989,7 +1025,9 @@ community.addEventListener('click', async (e) => {
       const d = await call('/pane/faction/rename',
         {name: (rn ? rn.value : '').trim()});
       comm.name = d.name || comm.name;
-    } else if (kind === 'enter')
+    } else if (kind === 'recolor')
+      await call('/pane/faction/recolor', {color: btn.dataset.color});
+    else if (kind === 'enter')
       await call('/pane/faction/enter', {});
     else
       await call('/pane/faction/' + kind,
@@ -1621,6 +1659,9 @@ def render_pane(api_base: str = _API, web: bool = False) -> str:
 <script>{_JS.replace("__API__", api_base)
            .replace("__WEB__", "true" if web else "false")
            .replace("__SWAP_JS__", SWAP_JS)
-           .replace("__COIN__", icons.icon_data_url("coin"))}</script>
+           .replace("__COIN__", icons.icon_data_url("coin"))
+           .replace("__FCOLORS__", _json.dumps(
+               [[slug, nm, ink]
+                for slug, (nm, ink) in FACTION_COLORS.items()]))}</script>
 <script>{TIP_JS}</script>
 <script>{SFX_JS}</script></body></html>"""

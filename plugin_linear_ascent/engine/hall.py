@@ -51,7 +51,7 @@ _DOOR_IDS = ("hall_coffer", "hall_chest", "hall_board", "hall_bunks",
 _DOOR_ART = {oid: oid for oid in _DOOR_IDS if oid != "hall_desk"}
 
 _STATE_KEYS = ("hall_area", "hall_ask", "hall_putting", "hall_kicking",
-               "hall_promoting")
+               "hall_promoting", "hall_recoloring")
 
 
 def tier_name(t) -> str:
@@ -130,6 +130,8 @@ def hall_scene(p: dict, note: str = "") -> Scene:
         return _kick_prompt(p, fac, hall, note)
     if p.get("hall_promoting"):
         return _promote_prompt(p, fac, hall, note)
+    if p.get("hall_recoloring"):
+        return _recolor_prompt(p, fac, hall, note)
     area = p.get("hall_area")
     if area == "coffer":
         return _coffer_scene(p, fac, hall, note)
@@ -776,6 +778,8 @@ def _desk_scene(p: dict, fac: dict, hall: dict, note: str = "") -> Scene:
             lines.append("No one waits at the desk.")
     opts.append(Option("rename_banner", "Rename the faction",
                        "3–24 letters — new colors for everyone"))
+    opts.append(Option("recolor_banner", "Change the colors",
+                       "the ink the banner flies — nine to pick from"))
     opts.append(Option("hall_home", "Back to the hall"))
     return Scene(
         eyebrow=_eyebrow(fac, hall, "THE DESK"),
@@ -827,6 +831,28 @@ def _kick_prompt(p: dict, fac: dict, hall: dict, note: str = "") -> Scene:
         headline="Who leaves the table?",
         support="Kicking a no-show lifts their dead weight off the "
                 "attendance ratio.",
+        body_lines=[note] if note else [],
+        options=opts,
+        meters=meters(p),
+    )
+
+
+def _recolor_prompt(p: dict, fac: dict, hall: dict,
+                    note: str = "") -> Scene:
+    """010: the desk's color row — nine named 1-bit inks; the current
+    one is marked. The strip on every member's card hovers in it."""
+    from .. import colors as colors_mod
+    cur = str(fac.get("color") or "")
+    opts = []
+    for slug, (nm, _ink) in colors_mod.FACTION_COLORS.items():
+        sub = "flying now" if slug == cur else ""
+        opts.append(Option(f"hcol_{slug}", nm, sub))
+    opts.append(Option("hall_cancel", "Never mind"))
+    return Scene(
+        eyebrow=_eyebrow(fac, hall, "THE DESK"),
+        headline="The color the banner flies",
+        support="One of the nine inks of the world — every member's "
+                "card follows at once.",
         body_lines=[note] if note else [],
         options=opts,
         meters=meters(p),
@@ -913,6 +939,19 @@ def hall_action(p: dict, oid: str) -> Scene:
                 p, note=f"+ {target} keeps the keys now too — two hands "
                         "on the desk.")
         return hall_scene(p)
+    if p.get("hall_recoloring"):
+        p.pop("hall_recoloring", None)
+        if oid.startswith("hcol_"):
+            from .. import colors as colors_mod
+            slug = oid.removeprefix("hcol_")
+            if slug in colors_mod.FACTION_COLORS:
+                _effect(p, "faction_recolor", color=slug)
+                fac["color"] = slug
+                return hall_scene(
+                    p, note="+ the banner flies "
+                            f"{colors_mod.faction_color_name(slug)} now — "
+                            "every card follows at once.")
+        return hall_scene(p)
     if p.get("hall_ask"):
         p.pop("hall_ask", None)
         return hall_scene(p, note="Never mind, then."
@@ -969,6 +1008,9 @@ def hall_action(p: dict, oid: str) -> Scene:
         return _req_act(p, oid, fac, hall)
     if oid == "rename_banner":
         p["hall_ask"] = "rename"
+        return hall_scene(p)
+    if oid == "recolor_banner":
+        p["hall_recoloring"] = True
         return hall_scene(p)
     if oid == "kick" and fac.get("role") == "steward":
         p["hall_kicking"] = True

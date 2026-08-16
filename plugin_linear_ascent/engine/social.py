@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import datetime as dt
 
+from .. import colors as colors_mod
 from .. import economy
 from . import state
 from .combat import _ledger, meters
@@ -957,6 +958,16 @@ def _founding_scene(p: dict, st: dict, note: str = "") -> Scene:
                     "label": slug.replace("_", " ").title()}
                    for slug in _sigil_picks(st.get("name", ""),
                                             st.get("slugs") or [])]
+    elif step == "color":
+        # 010: the color it flies — nine named 1-bit inks, nothing else.
+        # The strip on every member's card hovers in this ink.
+        head, sup = f"The color {st['name']} flies", \
+            "One of the nine inks of the world. Changeable at the desk."
+        lines = []
+        opts = ([Option(f"col_{slug}", nm)
+                 for slug, nm in ((s, colors_mod.faction_color_name(s))
+                                  for s in (st.get("colors") or []))]
+                + opts)
     elif step == "fee":
         head = "Set the join fee"
         sup = (f"◈ 0 to {JOIN_FEE_MAX}. Every climber who joins pays it "
@@ -1051,7 +1062,13 @@ def guildhall_action(p: dict, oid: str, text: str = "") -> Scene:
             return guildhall_scene(p, note="The charter stays blank.")
         if oid.startswith("sig_") and st.get("step") == "banner":
             st["banner"] = oid.removeprefix("sig_")
-            st["step"] = "fee"
+            st["step"] = "color" if st.get("colors") else "fee"
+            return _founding_scene(p, st)
+        if oid.startswith("col_") and st.get("step") == "color":
+            slug = oid.removeprefix("col_")
+            if slug in (st.get("colors") or []):
+                st["color"] = slug
+                st["step"] = "fee"
             return _founding_scene(p, st)
         return _founding_scene(p, st)
     if isinstance(p.get("guild_dir"), dict):
@@ -1139,7 +1156,10 @@ def guildhall_action(p: dict, oid: str, text: str = "") -> Scene:
                 meters=meters(p),
             )
         p["founding_guild"] = {"step": "name",
-                               "slugs": w.get("faction_banners") or []}
+                               "slugs": w.get("faction_banners") or [],
+                               # 010: an old server sends no roster —
+                               # the color step simply doesn't appear
+                               "colors": w.get("faction_colors") or []}
         return _founding_scene(p, p["founding_guild"])
     if oid == "donate" and fac:
         p["faction_donating"] = True
@@ -1294,12 +1314,13 @@ def guildhall_found(p: dict, text: str) -> Scene:
                                                f"to {DUES_MAX}.")
         p.pop("founding_guild", None)
         return _found_finish(p, st["name"], st.get("banner", ""),
-                             st.get("fee", 0), dues)
+                             st.get("fee", 0), dues,
+                             color=st.get("color", ""))
     return _founding_scene(p, st)
 
 
 def _found_finish(p: dict, name: str, banner: str, join_fee: int,
-                  dues: int) -> Scene:
+                  dues: int, color: str = "") -> Scene:
     if len(name) < 3:
         return guildhall_scene(p, note="Three letters at least. Banners "
                                        "need room for glory.")
@@ -1311,7 +1332,7 @@ def _found_finish(p: dict, name: str, banner: str, join_fee: int,
     p["guild"] = name
     _ledger(p, "guild_found", gold=-GUILD_FOUND_FEE, note=name)
     _effect(p, "guild_found", guild=name, banner=banner,
-            join_fee=join_fee, weekly_dues=dues)
+            join_fee=join_fee, weekly_dues=dues, color=color)
     # 027: its own card, not the hall's. worldd is the single writer, so the
     # snapshot in hand still holds no faction — rendering the hall here put
     # "No banners fly yet. Yours could be the first" directly under the line

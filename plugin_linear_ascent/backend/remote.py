@@ -104,11 +104,12 @@ class WorldClient:
         return await self._post("/v1/faction/status", {"player": luna_user})
 
     async def faction_create(self, luna_user: str, name: str, banner: str,
-                             join_fee: int = 0,
-                             weekly_dues: int = 5) -> dict:
+                             join_fee: int = 0, weekly_dues: int = 5,
+                             color: str = "") -> dict:
         return await self._post("/v1/faction/create", {
             "player": luna_user, "name": name, "banner": banner,
-            "join_fee": join_fee, "weekly_dues": weekly_dues})
+            "join_fee": join_fee, "weekly_dues": weekly_dues,
+            "color": color})
 
     async def faction_join(self, luna_user: str, faction: str) -> dict:
         return await self._post("/v1/faction/join", {
@@ -163,6 +164,10 @@ class WorldClient:
     async def faction_rename(self, luna_user: str, name: str) -> dict:
         return await self._post("/v1/faction/rename",
                                 {"player": luna_user, "name": name})
+
+    async def faction_recolor(self, luna_user: str, color: str) -> dict:
+        return await self._post("/v1/faction/recolor",
+                                {"player": luna_user, "color": color})
 
     async def faction_promote(self, luna_user: str, target_tenant: str,
                               target_player: str) -> dict:

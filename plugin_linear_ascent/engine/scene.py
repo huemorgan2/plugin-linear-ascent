@@ -62,6 +62,9 @@ class Meters:
     # table's size and how many of them are on the floors right now;
     # for the unaffiliated, how many factions fly (-1 = not sent).
     faction_banner: str = ""
+    # 010: the banner's named ink (roster slug, colors.py); "" = not
+    # sent / never chosen — the renderer falls back to warden-violet.
+    faction_color: str = ""
     faction_members: int = 0
     faction_online: int = 0
     factions_total: int = -1
