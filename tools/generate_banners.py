@@ -99,7 +99,7 @@ SCENES: dict[str, tuple[str, str]] = {
         "gradient wedge, chimney smoke drifting as a soft dithered "
         "gradient into a starry sky.", DIM),
     "arcanum": (
-        "inside a tall narrow mage shop at night — floor-to-ceiling "
+        "inside a tall narrow magic shop at night — floor-to-ceiling "
         "shelves of orbs, prisms and rolled star-charts climbing into "
         "gradient darkness, a long counter with the SHOPKEEPER "
         "silhouette holding up a glowing focus crystal whose light "

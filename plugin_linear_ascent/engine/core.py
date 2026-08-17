@@ -1058,7 +1058,7 @@ def _town_scene(p: dict) -> Scene:
         Option("gate", "The Tower Gate", "leave town and climb"),
         Option("forge", "The Forge", "gear", badge=_b("forge")),
         Option("arcanum", "The Arcanum",
-               "mage gear" if _door_open(p, economy.ARCANUM_LEVEL)
+               "magic gear" if _door_open(p, economy.ARCANUM_LEVEL)
                else f"🔒 level {economy.ARCANUM_LEVEL}",
                locked=not _door_open(p, economy.ARCANUM_LEVEL)),
         Option("medlab", "Apothecary & Medlab", "potions"),
@@ -1831,7 +1831,7 @@ def _arcanum_scene(p: dict) -> Scene:
     # focuses at list price; the trained rank is the only gate.
     _rack(p, economy.weapon_line("sorcerer"), opts, lines)
     _rack(p, economy.gear_rungs("shield", "sorcerer"), opts, lines)
-    _relic_rows(p, "arcanum", opts, lines)    # 006: the mage relics
+    _relic_rows(p, "arcanum", opts, lines)    # 006: the magic relics
     opts.append(Option("back", "Back to the square"))
     # 057: the Arcanum is the Forge's twin now — a card wall, not prose
     # above a list. One line of explanation survives as the shard note;

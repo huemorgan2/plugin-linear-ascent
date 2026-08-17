@@ -2278,7 +2278,7 @@ RELICS: dict[str, Relic] = {r.slug: r for r in [
           "five uses a hook, one burned per fight",
           0.4, 6, "forge", count=5, line="warrior"),
     # 010 retune (2026-07-28): vials 0.3→0.1 DI. One vial is one FIGHT,
-    # so at 0.3 the mage's wall-push cost 3.6× the warrior's net and
+    # so at 0.3 the caster's wall-push cost 3.6× the warrior's net and
     # broke the stacked-drain ceiling at every band; 0.1 puts all three
     # classes' per-push cost in the same 0.08–0.12 DI lane.
     Relic("strip_potion", "Resistance-Strip Potion",

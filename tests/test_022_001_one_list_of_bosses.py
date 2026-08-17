@@ -148,7 +148,7 @@ def test_finishing_the_pool_pays_nothing_locally():
 
 
 def test_shared_warden_cannot_be_slept_past():
-    p = playing("Mage", world=warden_world(1))
+    p = playing("Magic", world=warden_world(1))
     # 048: sleep follows the staff in hand at rank 6, not a class
     p["training"]["staff"] = 6
     p["gear"]["weapon"] = "worn_staff"

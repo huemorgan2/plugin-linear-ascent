@@ -646,7 +646,7 @@ def test_the_drain_with_a_daily_wall_push_still_leaves_room():
     cheapest quiver, sorcerer one vial. The whole stack — repairs +
     death line + the push — stays under the same 40% ceiling for every
     class at every band. This gate is what repriced the quivers
-    0.3→0.2 DI and the mage vials 0.3→0.1 DI (2026-07-28)."""
+    0.3→0.2 DI and the magic vials 0.3→0.1 DI (2026-07-28)."""
     for tier in range(1, 11):
         base, di, fl = _daily_drain(tier)
         push = {

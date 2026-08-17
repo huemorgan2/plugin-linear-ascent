@@ -88,7 +88,7 @@ chilling-tools, and knows to the hour when a gallery will flood.
   the Sac-Spire.*
 - **The chilling-tools — tools.** The watchers' cold-irons and stasis-flasks
   for slowing a hatch by hand, cached in the Husk Gallery. *Seed: take them to
-  still the Incubatory even without a mage.*
+  still the Incubatory even without magic.*
 - **Hatchling-tonic — brew.** A tonic of the sacs' quickening humor; restores
   a climber with the raw vitality of new life, closing wounds fast.
 

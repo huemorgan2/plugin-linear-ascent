@@ -179,7 +179,7 @@ is the shape.
   stats, priced in DI. Consumables are **progression tools, not
   farming tools** (a kill pays ~DI/30; every breaker costs more), and
   each class's wall-push costs the same **0.08–0.12 DI** lane
-  (2026-07-28 retune: quivers 0.3→0.2, piercing 0.5→0.35, mage vials
+  (2026-07-28 retune: quivers 0.3→0.2, piercing 0.5→0.35, magic vials
   0.3→0.1).
 - **The stacked-drain ceiling:** repairs + the death line + one
   wall-push a day stays **≤40% of daily income** for every class at
