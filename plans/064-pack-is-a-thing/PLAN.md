@@ -39,3 +39,15 @@ placed in the guild box."
 ## Rollback
 `git revert`; a `pack_N` slug left in an inventory renders as a plain
 "pack N" item (unknown slugs already do) and the broker ignores it.
+
+## Execution status
+- Done 2026-08-17. Plugin c494094 (game 0.87.1), root 7bdde34.
+- economy.PACKS (5 tiers, pack_6..pack_18); art shipped both sizes
+  (content/art/gear/{large,icons}/pack_N_*); Forge `buy_pack` renders
+  as a card with the next tier's face + grow-in preview; `_forge_pack`
+  keeps the old pack in the inventory; broker sells it (price × rate);
+  guild chest PUT accepts it (plugin + worldd armory shelf/deposit).
+- tests/test_064_pack_item.py 8/8; full plugin suite 1223 pass, 3
+  pre-existing combat failures from the concurrent session (017/026);
+  worldd tests/test_armory.py 6/6.
+- Local 8777 restarted on 0.87.1. Not deployed, not published.
