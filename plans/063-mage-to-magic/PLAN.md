@@ -46,3 +46,12 @@ content/*.yaml, tips.py, render.py, worldd/app: 0 hits.
 ## Operational notes
 Concurrent session holds uncommitted hunks in core.py / economy.py —
 stage only the mage hunks (`git apply --cached` of a filtered diff).
+
+## Execution status (2026-08-17)
+- Done. Plugin commits `6f2d368` (plan, guard test, 0.86.1) + follow-up
+  `HEAD` with the hunks (the first commit lost its staged hunks to a
+  concurrent session's git op); root `aeb2fa6` vendors from the plugin
+  HEAD via a temp worktree (working tree held foreign uncommitted hunks).
+- Sweep after: 0 whole-word "mage" in plugin_linear_ascent, tests, tools,
+  content, worldd/app, mock. tests/test_063_no_mage.py 4/4 pass.
+- Not deployed / not published.
