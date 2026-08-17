@@ -1466,8 +1466,10 @@ def _slot_cell(it: dict) -> str:
         f"</span>{ct}{durbar}</button>")
 
 
-_PACK_COLS = 6
-_PACK_MIN_SLOTS = 12
+# 012: the grid draws the pack's CAPACITY — one square per slot the
+# player owns (scene.pack_slots; 0 = an old scene half, draw the items
+# and this many blanks at least). Rows flow to the card's edge.
+_PACK_MIN_SLOTS = 6
 
 
 def _inventory_html(scene: Scene) -> str:
@@ -1517,11 +1519,28 @@ def _inventory_html(scene: Scene) -> str:
             '— the Forge sells steel"></span>')
     hrow.append(f'<span class="hcell"><span class="hlab">shield'
                 f"</span>{cell}</span>")
-    n = len(rest)
-    total = max(_PACK_MIN_SLOTS, -(-n // _PACK_COLS) * _PACK_COLS)
-    cells = [_slot_cell(it) for it in rest]
-    cells += ['<span class="slot empty"></span>'] * (total - n)
-    return (f'<div class="inv later"><span class="invlbl">pack</span>'
+    # worn armor/shoes sit in the grid (bright) but are not pack stacks —
+    # capacity counts only what is packed.
+    worn = [it for it in rest if it.get("equipped")]
+    packed = [it for it in rest if not it.get("equipped")]
+    n = len(packed)
+    cap = int(getattr(scene, "pack_slots", 0) or 0)
+    total = len(worn) + max(cap or _PACK_MIN_SLOTS, n)
+    cells = [_slot_cell(it) for it in worn]
+    for i, it in enumerate(packed):
+        cell = _slot_cell(it)
+        if cap and i >= cap:
+            # over capacity — the thing is yours (loot never drops for
+            # a bookkeeping rule) but shops won't open a new stack until
+            # the pack is back under; the red dashed border says so.
+            cell = cell.replace('class="slot item act',
+                                'class="slot item act over', 1)
+        cells.append(cell)
+    cells += ['<span class="slot empty"></span>'] * (total - len(cells))
+    lbl = "pack"
+    if cap:
+        lbl = f"pack {n}/{cap}" + (" · over" if n > cap else "")
+    return (f'<div class="inv later"><span class="invlbl">{lbl}</span>'
             f'<div class="handrow">{"".join(hrow)}</div>'
             f'<div class="slotgrid">{"".join(cells)}</div></div>')
 
@@ -2717,17 +2736,18 @@ SCENE_CSS = f"""
 .handrow{{display:flex;gap:2ch;margin-bottom:6px;}}
 .hcell{{display:inline-flex;flex-direction:column;gap:3px;}}
 .hlab{{color:{FAINT};letter-spacing:.08em;}}
-.slot{{position:relative;width:40px;height:40px;flex:none;
+.slot{{position:relative;width:60px;height:60px;flex:none;
  background:{INK};border:1px solid {BORDER};display:inline-flex;
  align-items:center;justify-content:center;cursor:help;outline:none;}}
-.hcell .slot{{width:50px;height:50px;}}
+.hcell .slot{{width:75px;height:75px;}}
 .slot.empty{{border-style:dashed;opacity:.5;}}
-.slotgrid{{display:grid;grid-template-columns:repeat({_PACK_COLS},40px);
- gap:4px;}}
-.picon{{width:28px;height:28px;flex:none;display:inline-block;
+.slot.over{{border-style:dashed;border-color:{RED};}}
+/* 012: rows flow to the card's edge — as many squares as fit */
+.slotgrid{{display:flex;flex-wrap:wrap;gap:6px;}}
+.picon{{width:42px;height:42px;flex:none;display:inline-block;
  mask-size:100% 100%;-webkit-mask-size:100% 100%;mask-repeat:no-repeat;
  -webkit-mask-repeat:no-repeat;image-rendering:pixelated;}}
-.hcell .picon{{width:34px;height:34px;}}
+.hcell .picon{{width:51px;height:51px;}}
 /* 057: weapon art is 30x48 upright — in the square pack cell it sits
    centered at its own aspect instead of stretching to fill */
 .picon.gw{{mask-size:contain;-webkit-mask-size:contain;
@@ -2765,11 +2785,11 @@ b,strong{{font-weight:normal;}}
  .rail{{gap:.5ch 1.5ch;}}
  .piprow .pips{{grid-template-columns:repeat(10,minmax(12px,18px));}}
  .pip{{width:100%;max-width:16px;}}
- .slotgrid{{grid-template-columns:repeat({_PACK_COLS},minmax(32px,40px));
-  max-width:100%;}}
- .slot{{width:auto;min-width:32px;aspect-ratio:1;height:auto;}}
- .hcell .slot{{width:44px;height:44px;}}
- .picon{{width:24px;height:24px;}}
+ .slotgrid{{max-width:100%;}}
+ .slot{{width:48px;height:48px;}}
+ .hcell .slot{{width:66px;height:66px;}}
+ .picon{{width:36px;height:36px;}}
+ .hcell .picon{{width:45px;height:45px;}}
 }}
 @media (prefers-reduced-motion: reduce){{
  .type.pending{{visibility:visible;}}

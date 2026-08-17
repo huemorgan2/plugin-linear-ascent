@@ -322,6 +322,14 @@ for _r, _t in _RACE_ANGLE.items():
 # ── prefix rules — the dynamic ids ───────────────────────────────────────
 
 def _buy_tip(slug: str) -> str:
+    if slug == "pack":
+        tiers = " · ".join(f"{n} slots at level {lv} (◈ {gd})"
+                           for lv, n, gd in economy.PACK_TIERS)
+        return (f"A larger pack — the basic one holds "
+                f"{economy.PACK_BASE_SLOTS} stacks; each size up adds "
+                f"three: {tiers}. Shops won't open a new stack in a "
+                "full pack; loot still lands and shows in red until "
+                "you make room.")
     g = economy.FORGE.get(slug)
     if g:
         freq = economy.rung_floor_req(g)

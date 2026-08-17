@@ -104,6 +104,8 @@ class Scene:
                                     # every playing scene. Entries:
                                     # {slug, name, count, kind, equipped?}
                                     # kind ∈ weapon|shield|armor|item
+    pack_slots: int = 0             # 012: the pack's capacity — cells the
+                                    # grid draws; 0 = unlimited (legacy)
     notices: list[dict] = field(default_factory=list)
                                     # 027: the notice board — what WAITS for
                                     # the player, drawn at the top of the
@@ -293,6 +295,7 @@ class Scene:
             "scene_id": self.scene_id,
             "awaits_text": self.awaits_text,
             "inventory": self.inventory,
+            "pack_slots": self.pack_slots,
             "tally": self.tally,
             "notices": self.notices,
             "ask": self.ask,
@@ -343,6 +346,7 @@ class Scene:
             scene_id=d.get("scene_id", ""),
             awaits_text=d.get("awaits_text", ""),
             inventory=list(d.get("inventory", [])),
+            pack_slots=int(d.get("pack_slots", 0) or 0),
             tally=list(d.get("tally", [])),
             notices=list(d.get("notices", [])),
             ask=(dict(d["ask"]) if d.get("ask") else None),

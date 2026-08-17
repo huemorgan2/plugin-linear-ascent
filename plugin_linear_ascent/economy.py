@@ -789,6 +789,26 @@ CARRY2_XP, CARRY2_GOLD = 60, 30                 # 2nd slot — level 1
 CARRY3_LEVEL = 8
 CARRY3_XP, CARRY3_GOLD_ANCHOR = 500, 200        # 3rd slot
 
+# 012: the pack has a size. A slot is a STACK (one slug, any count);
+# the basic pack holds six, and the Forge sells larger ones in tiers of
+# three, gated by level. Sequential — each tier needs the one before.
+PACK_BASE_SLOTS = 6
+PACK_TIERS: tuple[tuple[int, int, int], ...] = (
+    (3, 9, 40),      # (level, slots, gold)
+    (6, 12, 120),
+    (9, 15, 300),
+    (12, 18, 600),
+)
+
+
+def pack_next_tier(slots: int) -> tuple[int, int, int] | None:
+    """The next (level, slots, gold) above what the player owns, or None
+    at the top."""
+    for tier in PACK_TIERS:
+        if tier[1] > slots:
+            return tier
+    return None
+
 
 def carry3_gold(frontier: int) -> int:
     return round(CARRY3_GOLD_ANCHOR * pillar(frontier))

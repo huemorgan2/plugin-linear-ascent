@@ -35,6 +35,7 @@ def _stamp(p: dict, scene: Scene) -> Scene:
     scene.scene_id = f"s{p.get('act_seq', 0)}"
     scene.location = str(p.get("location") or "")   # 042: the music key
     scene.inventory = _pack_strip(p)
+    scene.pack_slots = pack_cap(p)
     if (not scene.notices and not scene.enemy
             and p.get("location") in _NOTICE_ROOMS):
         scene.notices = notices.pending(p)
@@ -52,6 +53,37 @@ def _stamp(p: dict, scene: Scene) -> Scene:
         if why:
             cell["why"] = why
     return scene
+
+
+# ── 012: the pack has a size ─────────────────────────────────────────────
+# A slot is a stack: one slug, any count. Shops refuse to OPEN a new
+# stack in a full pack (before gold moves); every other gain lands — loot
+# is never dropped by a bookkeeping rule, the grid just shows the
+# surplus in red until the player sells, uses or buys a bigger pack.
+
+def pack_cap(p: dict) -> int:
+    return max(1, int(p.get("pack_slots") or economy.PACK_BASE_SLOTS))
+
+
+def pack_used(p: dict) -> int:
+    return sum(1 for n in (p.get("inventory") or {}).values() if n > 0)
+
+
+def pack_can_take(p: dict, slug: str) -> bool:
+    """True if `slug` fits: it already has a stack, or a slot is free."""
+    if (p.get("inventory") or {}).get(slug, 0) > 0:
+        return True
+    return pack_used(p) < pack_cap(p)
+
+
+def _pack_full(p: dict, scene_fn, what: str) -> Scene:
+    used, cap = pack_used(p), pack_cap(p)
+    s = scene_fn(p)
+    s.shard_note = (f"Your pack is full — {used}/{cap} slots — and the "
+                    f"{what} has nowhere to go. Use, sell or donate "
+                    "something, or buy a larger pack at the Forge.")
+    s.refusal = f"Can't buy this — pack full ({used}/{cap} slots)"
+    return s
 
 
 def _pack_strip(p: dict) -> list[dict]:
@@ -1393,6 +1425,8 @@ def _relic_buy(p: dict, slug: str, scene_fn) -> Scene:
                         "suffers no company. One, exactly.")
         s.refusal = "Can't buy this — you already hold one"
         return s
+    if not pack_can_take(p, slug):                           # 012
+        return _pack_full(p, scene_fn, r.name)
     price = economy.relic_price(slug, p["unlocked_floor"])
     if p["gold"] < price:
         s = scene_fn(p)
@@ -1487,6 +1521,22 @@ def _forge_scene(p: dict) -> Scene:
             for slot in economy.HONE_SLOTS if state.hone_level(p, slot))
         lines.append(f"Honing bench: up to +{cap} per piece this band"
                      + (f" — yours: {honed}" if honed else ""))
+    # 012: the pack rack — ONE row, the next size up. Below its level
+    # the row shows LOCKED with the level on it (049.2: a locked row
+    # that names its gate, never a bare hint beside a buyable look).
+    have = pack_cap(p)
+    nxt = economy.pack_next_tier(have)
+    if nxt:
+        lvl_req, slots, gold = nxt
+        level = int(p.get("level", 1))
+        if level < lvl_req:
+            opts.append(Option(
+                "buy_pack", f"Larger pack — {slots} slots",
+                f"🔒 level {lvl_req} · ◈ {gold:,}", locked=True))
+        else:
+            opts.append(Option(
+                "buy_pack", f"Larger pack — {slots} slots",
+                f"pay ◈ {gold:,} · {have} → {slots} slots"))
     opts.append(Option("back", "Back to the square"))
     tier = economy.gear_tier_for_floor(p["unlocked_floor"])
     # 031 §14: the Forge is a card wall now — no prose above the racks.
@@ -1642,6 +1692,8 @@ def _gear_purchase(p: dict, g, scene_fn) -> Scene:
         # fresh pool, nothing on your body moves. Wear in the pack is
         # tracked per slug: a fresh copy only claims the key when no
         # stashed copy holds it (the armory takes donations as-is).
+        if not pack_can_take(p, g.slug):                     # 012
+            return _pack_full(p, scene_fn, "spare")
         p["gold"] -= price
         p["inventory"][g.slug] = p["inventory"].get(g.slug, 0) + 1
         p.setdefault("durability_pack", {}).setdefault(
@@ -1651,6 +1703,12 @@ def _gear_purchase(p: dict, g, scene_fn) -> Scene:
         s.body_lines.insert(0, (f"+ {g.name} — a spare for the pack "
                                 "(the armory takes donations)"))
         return s
+    # 012: the old piece rides to the pack — only if the pack has room
+    # for it (a paid piece or gate basic; the scrap bin takes the rest).
+    if old and (economy.FORGE[old].price > 0
+                or old in economy.BASIC_WEAPONS) \
+            and not pack_can_take(p, old):
+        return _pack_full(p, scene_fn, f"{economy.FORGE[old].name} you wear")
     p["gold"] -= price
     p["gear"][g.slot] = g.slug
     # 048 phase 3: the hand changed — held[0] follows, the old piece
@@ -1762,6 +1820,9 @@ def _basic_buy(p: dict, slug: str, scene_fn) -> Scene:
                        "the Forge mends gate steel for a coin."
         s.refusal = "Can't buy this — you already carry one"
         return s
+    if len(p.get("held") or []) >= max(1, int(p.get("slots", 1))) \
+            and not pack_can_take(p, slug):                  # 012
+        return _pack_full(p, scene_fn, g.name)
     price = economy.BASIC_WEAPON_PRICE
     if p["gold"] < price:
         s = scene_fn(p)
@@ -1785,7 +1846,43 @@ def _basic_buy(p: dict, slug: str, scene_fn) -> Scene:
     return s
 
 
+def _forge_pack(p: dict) -> Scene:
+    """012: the next pack tier — level gate, sequential, gold only."""
+    have = pack_cap(p)
+    nxt = economy.pack_next_tier(have)
+    if not nxt:
+        s = _forge_scene(p)
+        s.shard_note = (f"Your pack already holds {have} — the smith "
+                        "has nothing larger.")
+        s.refusal = "Can't buy this — your pack is the largest made"
+        return s
+    lvl_req, slots, gold = nxt
+    level = int(p.get("level", 1))
+    if level < lvl_req:
+        s = _forge_scene(p)
+        s.shard_note = (f"The {slots}-slot pack opens at level {lvl_req} "
+                        f"— you're level {level}.")
+        s.refusal = (f"Can't buy this — it opens at level {lvl_req} "
+                     f"(you: {level})")
+        return s
+    if p["gold"] < gold:
+        s = _forge_scene(p)
+        s.shard_note = (f"The {slots}-slot pack is ◈ {gold:,} and you "
+                        f"carry ◈ {p['gold']:,}.")
+        s.refusal = f"Can't buy this — not enough gold (◈ {gold:,} needed)"
+        return s
+    p["gold"] -= gold
+    p["pack_slots"] = slots
+    combat._ledger(p, "buy", gold=-gold, note=f"pack {slots}")
+    s = _forge_scene(p)
+    s.body_lines.insert(0, f"+ a larger pack — {slots} slots now "
+                           f"(was {have}). The straps take the weight.")
+    return s
+
+
 def _forge_buy(p: dict, oid: str) -> Scene:
+    if oid == "buy_pack":
+        return _forge_pack(p)
     if oid.startswith("hone_") and oid.removeprefix("hone_") in \
             economy.HONE_SLOTS:
         return _forge_hone(p, oid.removeprefix("hone_"))
@@ -1914,6 +2011,9 @@ def _medlab_buy(p: dict, oid: str) -> Scene:
         s.shard_note = "One cell a day. Your heart is not a reactor."
         s.refusal = "Can't buy this — one energy cell a day"
         return s
+    if slug not in ("energy_cell", "luck_charm") \
+            and not pack_can_take(p, slug):                  # 012
+        return _pack_full(p, _medlab_scene, item.name)
     if p["gold"] < item.price:
         s = _medlab_scene(p)
         s.shard_note = f"That's ◈ {item.price} and you carry ◈ {p['gold']}."

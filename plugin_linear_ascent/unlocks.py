@@ -72,6 +72,13 @@ def registry() -> tuple[Unlock, ...]:
                "the third carry slot", "the School",
                "a veteran's grip — three weapons into every fight",
                f"{economy.CARRY3_XP} XP + coin"),
+    ] + [
+        # 012: the pack tiers — a larger pack at the Forge every 3 levels
+        Unlock(f"pack{slots}", "level", lvl, "opens",
+               f"the {slots}-slot pack", "the Forge",
+               f"three more stacks on your back — ◈ {gold}")
+        for lvl, slots, gold in economy.PACK_TIERS
+    ] + [
         # ── level, closes — the protections that expire ──
         Unlock("mercy_ends", "level",
                economy.BEGINNER_MERCY_MAX_LEVEL + 1, "closes",
@@ -262,6 +269,9 @@ def plain(u: Unlock) -> str:
         return (f"the contract board opens — {economy.BOARD_JOBS_PER_DAY} "
                 "jobs a day that pay gold and XP; every player sees the "
                 "same jobs")
+    if u.id.startswith("pack") and u.id[4:].isdigit():
+        return (f"the Forge will sell you a {u.id[4:]}-slot pack — three "
+                "more kinds of things fit in your bag")
     if u.id.startswith("gear_tier_"):
         t = int(u.id.rsplit("_", 1)[1])
         return f"the Forge will now sell you tier-{t} equipment"

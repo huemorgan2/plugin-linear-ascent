@@ -504,6 +504,9 @@ def ensure_current(p: dict) -> None:
     # overflow returns to the pack instead of vanishing.
     if "slots" not in p:
         p["slots"] = 1
+    # 012: the pack's capacity — six for everyone who never bought more.
+    if "pack_slots" not in p:
+        p["pack_slots"] = economy.PACK_BASE_SLOTS
     held = p.setdefault("held", [])
     w = (p.get("gear") or {}).get("weapon")
     if w:
