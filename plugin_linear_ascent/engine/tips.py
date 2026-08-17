@@ -329,7 +329,9 @@ def _buy_tip(slug: str) -> str:
                 f"{economy.PACK_BASE_SLOTS} stacks; each size up adds "
                 f"three: {tiers}. Shops won't open a new stack in a "
                 "full pack; loot still lands and shows in red until "
-                "you make room.")
+                "you make room. Your old pack rides inside the new one "
+                "— sell it at the pawn shop or put it in the faction "
+                "chest.")
     g = economy.FORGE.get(slug)
     if g:
         freq = economy.rung_floor_req(g)

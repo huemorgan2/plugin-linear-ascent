@@ -178,7 +178,8 @@ def _gear_art_slug(slug: str) -> str:
     g = economy.FORGE.get(slug)
     if g is not None:
         return g.base or slug
-    if slug in economy.RELICS or slug in economy.APOTHECARY:
+    if slug in economy.RELICS or slug in economy.APOTHECARY \
+            or slug in economy.PACKS:
         return slug
     return ""
 
@@ -1263,10 +1264,14 @@ def _opt_gear_icon(oid: str, art_slug: str = "") -> str:
         if art_slug and (art_slug in economy.FORGE
                          or art_slug in economy.RELICS
                          or art_slug in economy.APOTHECARY
+                         or art_slug in economy.PACKS
                          or art_slug == "arrow_pack"):
             slug = art_slug
         else:
             return ""
+    elif oid == "buy_pack" and art_slug in economy.PACKS:
+        # 064: the Forge's pack row names the NEXT tier's face
+        slug = art_slug
     else:
         slug = oid.split("_", 1)[1]
     # 057/058: an item wears its OWN face when the art ships — the
@@ -1297,7 +1302,7 @@ def _opt_gear_icon(oid: str, art_slug: str = "") -> str:
             f"mask-image:url('{url}')\"></span>")
 
 
-def _gear_card_preview(oid: str, hint: str) -> str:
+def _gear_card_preview(oid: str, hint: str, art_slug: str = "") -> str:
     """057b: the item preview — not a tooltip. The card's own face
     grows: a sibling card 20% larger in every direction, the 100x160
     portrait at full card scale, the name, the stat line, and a buy
@@ -1308,10 +1313,12 @@ def _gear_card_preview(oid: str, hint: str) -> str:
     if not oid.startswith(("buy_", "wear_")):
         return ""
     slug = oid.split("_", 1)[1]
+    if oid == "buy_pack" and art_slug in economy.PACKS:
+        slug = art_slug           # 064: the next pack tier's face
     g = economy.FORGE.get(slug)
     relic = economy.RELICS.get(slug) if g is None else None
-    # 062: the Medlab shelf previews too
-    ware = (economy.APOTHECARY.get(slug)
+    # 062: the Medlab shelf previews too; 064: the packs
+    ware = (economy.APOTHECARY.get(slug) or economy.PACKS.get(slug)
             if g is None and relic is None else None)
     wart = _gear_art_slug(slug)
     lurl = _gear_art_url(wart, "large") if wart else None
@@ -2134,7 +2141,10 @@ def render_scene_fragment(scene: Scene) -> str:
                 # data-wprev flag tells TIP_JS to intercept). Locked
                 # cards keep their plain "why is the gate shut" click.
                 prev = ("" if getattr(o, "locked", False)
-                        else _gear_card_preview(o.id, o.hint or ""))
+                        else _gear_card_preview(
+                            o.id, o.hint or "",
+                            (getattr(scene, "option_art", None) or {})
+                            .get(o.id) or ""))
                 wflag = ' data-wprev="1"' if prev else ""
                 card = (f'<button type="button" class="opt gcard{opt_cls}" '
                         f'data-opt="{_e(o.id)}"{wflag}>'

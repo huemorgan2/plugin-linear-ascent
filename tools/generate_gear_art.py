@@ -525,6 +525,31 @@ GEAR: dict[str, str] = {
         "cord, a four-leaf clover cut into its face, a knot of red "
         "thread, a single tiny bell, hanging vertical, humble and "
         "hopeful, no glow."),
+    # ── 064: the packs — five tiers, the bag alone, growing each step ──
+    "pack_6": (
+        "a PLAIN traveler's pack — a small worn leather knapsack with "
+        "one flap and a single buckle strap, two thin shoulder straps, "
+        "slightly slumped, patched at one corner, standing upright, "
+        "modest and honest, no glow."),
+    "pack_9": (
+        "a PLAIN climber's pack — a mid-sized leather-and-canvas "
+        "rucksack with a flap and two buckle straps, a rolled blanket "
+        "lashed under the flap, a side pocket, standing upright, "
+        "sturdy, no glow."),
+    "pack_12": (
+        "a PLAIN porter's pack — a large canvas rucksack on a light "
+        "wooden frame, three buckle straps, two side pockets, a coil "
+        "of rope hung off one side, standing upright, no glow."),
+    "pack_15": (
+        "a FORGED expedition pack — a tall reinforced leather pack "
+        "with riveted brass corners, four buckle straps, a top-loading "
+        "cinch collar, tool loops holding a small hammer, standing "
+        "upright, heavy and serious, no glow."),
+    "pack_18": (
+        "a FORGED warden's field pack — a very tall banded-leather "
+        "pack with brass fittings and a faint arcane sigil stamped on "
+        "the flap glowing softly, five buckle straps, side pouches, a "
+        "lantern hooked on, standing upright, the biggest bag made."),
 }
 
 # martial shields (0.0 gate + 27) and the rest, in ladder order for
@@ -535,6 +560,7 @@ GROUPS = {
     "armor": list(GEAR)[47:75],
     "shoes_relics": list(GEAR)[75:95],
     "medlab": list(GEAR)[95:100],
+    "packs": list(GEAR)[100:105],
 }
 
 

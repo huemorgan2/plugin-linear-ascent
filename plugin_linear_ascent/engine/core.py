@@ -159,6 +159,9 @@ def _pack_strip(p: dict) -> list[dict]:
             cell["name"] = economy.APOTHECARY[slug].name
         elif slug in economy.RELICS:
             cell["name"], cell["kind"] = economy.RELICS[slug].name, "relic"
+        elif slug in economy.PACKS:
+            # 064: an old pack riding in the new one
+            cell["name"], cell["kind"] = economy.PACKS[slug].name, "pack"
         elif slug in economy.FORGE:
             g = economy.FORGE[slug]
             cell["name"], cell["kind"] = g.name, g.slot
@@ -1529,14 +1532,20 @@ def _forge_scene(p: dict) -> Scene:
     if nxt:
         lvl_req, slots, gold = nxt
         level = int(p.get("level", 1))
+        # 064: the pack is a card like every other buyable — the next
+        # tier's face rides scene.option_art; the old pack stays yours.
+        pk = economy.PACKS.get(economy.pack_slug(slots))
+        label = f"{pk.name} — {slots} slots" if pk else \
+            f"Larger pack — {slots} slots"
         if level < lvl_req:
             opts.append(Option(
-                "buy_pack", f"Larger pack — {slots} slots",
+                "buy_pack", label,
                 f"🔒 level {lvl_req} · ◈ {gold:,}", locked=True))
         else:
             opts.append(Option(
-                "buy_pack", f"Larger pack — {slots} slots",
+                "buy_pack", label,
                 f"pay ◈ {gold:,} · {have} → {slots} slots"))
+        mend_art["buy_pack"] = economy.pack_slug(slots)
     opts.append(Option("back", "Back to the square"))
     tier = economy.gear_tier_for_floor(p["unlocked_floor"])
     # 031 §14: the Forge is a card wall now — no prose above the racks.
@@ -1874,9 +1883,20 @@ def _forge_pack(p: dict) -> Scene:
     p["gold"] -= gold
     p["pack_slots"] = slots
     combat._ledger(p, "buy", gold=-gold, note=f"pack {slots}")
+    # 064: the old pack goes INTO the new one — an item now, sold at
+    # the broker or put in the faction chest. Three more slots than it
+    # had, so it always fits.
+    old = economy.pack_slug(have)
+    inv = p.setdefault("inventory", {})
+    if old in economy.PACKS:
+        inv[old] = int(inv.get(old, 0)) + 1
     s = _forge_scene(p)
     s.body_lines.insert(0, f"+ a larger pack — {slots} slots now "
-                           f"(was {have}). The straps take the weight.")
+                           f"(was {have}). The straps take the weight."
+                           + (f" Your old {economy.PACKS[old].name} rides "
+                              "inside it — the broker buys it, or the "
+                              "faction chest takes it."
+                              if old in economy.PACKS else ""))
     return s
 
 
@@ -2637,6 +2657,10 @@ def _pawn_sundry(p: dict, slug: str) -> tuple[str, int]:
     if slug == "repair_token":
         return ("repair token",
                 max(1, int(economy.REPAIR_TOKEN_VALUE * rate)))
+    if slug in economy.PACKS:
+        # 064: an outgrown pack sells at its tier's price × rate
+        pk = economy.PACKS[slug]
+        return (pk.name, max(1, int(pk.price * rate)))
     it = economy.APOTHECARY[slug]
     return (it.name, max(1, int(it.price * rate)))
 
@@ -2652,7 +2676,8 @@ def _pawn_scene(p: dict) -> Scene:
     # get a row too (0.29.4: they used to be invisible here, which read
     # as the broker refusing).
     sundries = [k for k in p["inventory"]
-                if k in economy.APOTHECARY or k == "repair_token"]
+                if k in economy.APOTHECARY or k == "repair_token"
+                or k in economy.PACKS]
     opts = []
     lines = [f"The broker pays {round(rate * 100)}% today. Tomorrow is "
              "another mood."]
@@ -2743,7 +2768,8 @@ def _pawn_action(p: dict, oid: str) -> Scene:
                             f"{economy.RELICS[slug].name}")
         return s
     if slug in p["inventory"] and (slug in economy.APOTHECARY
-                                   or slug == "repair_token"):
+                                   or slug == "repair_token"
+                                   or slug in economy.PACKS):
         name, offer = _pawn_sundry(p, slug)
         p["inventory"][slug] -= 1
         if p["inventory"][slug] <= 0:

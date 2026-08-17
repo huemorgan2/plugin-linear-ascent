@@ -398,9 +398,18 @@ def _donate(p: dict, amt: int, fac: dict, hall: dict) -> Scene:
 # ── THE CHEST (032 §6 — the armory, reborn as a card wall) ──────────────
 
 def _donatable(p: dict) -> list[str]:
+    """Paid Forge steel — and, 064, an outgrown pack riding in the
+    new one."""
     inv = p.get("inventory") or {}
     return [k for k, n in inv.items()
-            if n > 0 and k in economy.FORGE and economy.FORGE[k].price > 0]
+            if n > 0 and ((k in economy.FORGE and economy.FORGE[k].price > 0)
+                          or k in economy.PACKS)]
+
+
+def _chest_name(slug: str) -> str:
+    if slug in economy.PACKS:
+        return economy.PACKS[slug].name
+    return economy.FORGE[slug].name
 
 
 def _chest_scene(p: dict, fac: dict, hall: dict, note: str = "") -> Scene:
@@ -496,8 +505,16 @@ def _chest_put_scene(p: dict, fac: dict, hall: dict,
     opts: list[Option] = []
     art: dict[str, str] = {}
     for slug in _donatable(p):
-        g = economy.FORGE[slug]
         oid = f"put_{slug}"
+        if slug in economy.PACKS:
+            # 064: an old pack — the card says how many slots it held
+            pk = economy.PACKS[slug]
+            opts.append(Option(
+                oid, pk.name,
+                f"{pk.slots} slots · no coin — the faction keeps it"))
+            art[oid] = slug
+            continue
+        g = economy.FORGE[slug]
         # 011: the card says WHAT leaves the pack — stat, durability
         # (worn pieces show left-of-full), style — before the law line.
         left = (p.get("durability_pack") or {}).get(slug)
@@ -523,8 +540,10 @@ def _chest_put_scene(p: dict, fac: dict, hall: dict,
 def _chest_put(p: dict, slug: str, fac: dict, hall: dict) -> Scene:
     w = world(p) or {}
     g = economy.FORGE.get(slug)
+    is_pack = slug in economy.PACKS          # 064
     rack = w.get("armory")
-    if (g is None or g.price <= 0 or rack is None
+    if ((g is None and not is_pack) or (g is not None and g.price <= 0)
+            or rack is None
             or (p.get("inventory") or {}).get(slug, 0) <= 0):
         return hall_scene(p)
     chest = hall.get("chest") or {}
@@ -540,12 +559,13 @@ def _chest_put(p: dict, slug: str, fac: dict, hall: dict) -> Scene:
     _effect(p, "armory_deposit", slug=slug, uses_left=uses)
     _ledger(p, "armory_give", gold=0, note=slug)
     # optimistic: the socket fills; worldd stamps the real row id
-    rack.append({"id": -1, "slug": slug, "name": g.name,
+    name = _chest_name(slug)
+    rack.append({"id": -1, "slug": slug, "name": name,
                  "donor": p.get("name") or "you", "frac": 1.0})
     if "used" in chest:
         chest["used"] = int(chest["used"]) + 1
     return hall_scene(
-        p, note=f"+ the {g.name} goes into the chest — the faction keeps "
+        p, note=f"+ the {name} goes into the chest — the faction keeps "
                 "it now, your name on the socket.")
 
 

@@ -801,6 +801,30 @@ PACK_TIERS: tuple[tuple[int, int, int], ...] = (
 )
 
 
+# 064: the pack is a THING. Buying a bigger one leaves the old one in
+# your hands — an item that sells at the broker (price × rate) or goes
+# in the faction chest. One slug per tier; the starter is worth ◈ 20.
+@dataclass(frozen=True)
+class PackItem:
+    slug: str
+    name: str
+    slots: int
+    price: int
+
+
+PACKS: dict[str, PackItem] = {i.slug: i for i in [
+    PackItem("pack_6", "Traveler's pack", 6, 20),
+    PackItem("pack_9", "Climber's pack", 9, 40),
+    PackItem("pack_12", "Porter's pack", 12, 120),
+    PackItem("pack_15", "Expedition pack", 15, 300),
+    PackItem("pack_18", "Warden's field pack", 18, 600),
+]}
+
+
+def pack_slug(slots: int) -> str:
+    return f"pack_{int(slots)}"
+
+
 def pack_next_tier(slots: int) -> tuple[int, int, int] | None:
     """The next (level, slots, gold) above what the player owns, or None
     at the top."""
