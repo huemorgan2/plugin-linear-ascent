@@ -2005,7 +2005,7 @@ def _abar(hp: int, cap: int, cls: str) -> str:
     hp = max(0, min(int(hp), cap))
     col = OK if hp >= cap else (GOLD if hp * 3 > cap else RED)
     return (f'<span class="abar {cls}" data-hp="{hp}" data-max="{cap}" '
-            f'style="color:{col}"><span class="blocks">{_blocks(hp, cap)}'
+            f'style="color:{col}"><span class="blocks">{_blocks(hp, cap, 20)}'
             f'</span> <span class="anum">{hp}/{cap}</span></span>')
 
 
@@ -2139,24 +2139,27 @@ def _arena_tiles_html(scene, later: bool = True) -> str:
         # 067 phase 5: the item's own 30×48 face (the pack's icons),
         # drawn as a pixelated <img> so it scales crisp with the scene;
         # the 16×16 glyph only where no art ships.
+        # 067 phase 7 (roy): the tile IS the pack's cell — the same 60px
+        # black box, the same 42px `.picon` mask (art `.gw` when it
+        # ships, the 16×16 glyph otherwise), the same ART ink; no border.
+        # `[n] LABEL` and the [i] sit outside the box.
         wart = _gear_art_slug(t.get("art") or "")
         wurl = _gear_art_url(wart, "icons") if wart else None
-        if wurl:
-            icon = (f'<img class="aart{" locked" if locked else ""}" '
-                    f'src="{wurl}" alt="" draggable="false">')
-        else:
-            # the 16×16 grid glyph as an <img> too — the SVG scales crisp,
-            # a mask would blur at 4×
-            gurl = icons.icon_data_url(t.get("icon") or "focus")
-            icon = (f'<img class="aart glyph{" locked" if locked else ""}" '
-                    f'src="{gurl}" alt="" draggable="false">')
+        murl, pcls = ((wurl, " gw") if wurl
+                      else (icons.icon_data_url(t.get("icon") or "focus"), ""))
+        ink = DIM if locked else ART
+        icon = (f'<span class="abox"><span class="picon{pcls}" '
+                f'style="background-color:{ink};'
+                f"-webkit-mask-image:url('{murl}');mask-image:url('{murl}')\">"
+                '</span>{atk}</span>')
         hint = (f'<span class="ahint">{_ep(o.hint)}</span>' if o.hint else "")
         # 069 phase 5: an attack tile carries the ATK its own weapon
         # swings with — three blades, three numbers
         atk = (f'<span class="aatk">ATK {int(t["atk"])}</span>'
                if t.get("atk") is not None else "")
+        icon = icon.replace("{atk}", atk)
         btn = (f'<button type="button" class="{cls}" data-opt="{_e(o.id)}" '
-               f'title="{_e(o.label)}">{icon}{atk}'
+               f'title="{_e(o.label)}">{icon}'
                f'<span class="atxt"><span class="key{key_cls}">{i}</span> '
                f'<span class="lbl">{_e(t.get("label") or o.label)}</span></span>'
                f'{hint}</button>')
@@ -2510,13 +2513,21 @@ SCENE_CSS = f"""
 /* 067 phase 6: one row along the top, half a line down — the climber's
    slab left, the foe's right, both top-aligned; a frame too narrow for
    both wraps the foe's slab under (still flush right). */
-.ahuds{{position:absolute;left:0;right:0;top:.5em;z-index:3;display:flex;
+.ahuds{{position:absolute;left:.5em;right:.5em;top:.5em;z-index:3;display:flex;
  justify-content:space-between;align-items:flex-start;flex-wrap:wrap;
  gap:4px;pointer-events:none;}}
-.astat{{background:{INK};padding:0 .5ch;white-space:pre;color:{BRIGHT};
+/* 067 phase 7 (roy): no slab box — the ink sits on black only where
+   there is text; the scene shows between the lines */
+.astat{{background:none;padding:0;white-space:pre;color:{BRIGHT};
  pointer-events:auto;}}
+.astat>div{{background:{INK};width:fit-content;padding:0 .5ch;}}
 .astat .off{{color:{DIM};}}
 .astat.foe{{margin-left:auto;text-align:right;}}
+.astat.foe>div{{margin-left:auto;}}
+/* a narrow stage (phone): the slabs drop to 12px so both still share
+   the top line with the 20-cell bars */
+@container (max-width: 600px){{.astat{{font-size:12px;line-height:1.4;}}
+ .astat .aico{{width:12px;height:12px;vertical-align:-2px;}}}}
 .astat .aname{{color:{BRIGHT};}}
 .astat .aico{{width:16px;height:16px;vertical-align:-3px;margin:0 0 0 4px;}}
 .astat .aico.lead{{outline:1px solid {GOLD};outline-offset:1px;}}
@@ -2551,35 +2562,36 @@ SCENE_CSS = f"""
    the item art scales with the scene (cqw — 1× on the 320 frame). The
    selectors out-rank the generic .options/.opt rules further down. */
 .banner.arena{{container-type:inline-size;}}
-.banner.arena .options.arena-opts{{position:absolute;left:0;right:0;bottom:0;
- z-index:6;margin:0;border:0;padding:4px 4px 6px;
- background:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.7) 40%);}}
-.options.arena-opts{{flex-direction:row;flex-wrap:wrap;gap:4px;
- justify-content:center;align-items:flex-end;}}
+/* 067 phase 7 (roy): one line along the foot of the stage, half a line
+   up; each tile is the pack's cell (60px black box, 42px picon, ART
+   ink, no border) with `[n] LABEL` under it and the [i] outside. */
+.banner.arena .options.arena-opts{{position:absolute;left:0;right:0;
+ bottom:.5em;z-index:6;margin:0;border:0;padding:0 4px;background:none;}}
+.options.arena-opts{{flex-direction:row;flex-wrap:wrap;gap:2px 8px;
+ justify-content:center;align-items:flex-start;}}
 .arena-opts.busy .atile{{pointer-events:none;opacity:.45;}}
-.arena-opts .atcell{{position:relative;display:flex;}}
-.arena-opts .opt.atile{{position:relative;flex-direction:column;align-items:center;
- justify-content:flex-end;width:auto;min-width:17cqw;padding:4px 3px 3px;
- background:{INK};border:1px solid {BORDER};gap:2px;text-align:center;}}
+.arena-opts .atcell{{position:relative;display:flex;padding-right:16px;}}
+.arena-opts .opt.atile{{position:relative;flex-direction:column;
+ align-items:center;justify-content:flex-start;width:auto;min-width:0;
+ padding:0;background:none;border:0;gap:2px;text-align:center;}}
 .arena-opts .opt.atile::after{{content:none;}}
-.arena-opts .atile .aico{{width:10cqw;height:10cqw;margin:0 0 5cqw;}}
-.arena-opts .aart{{display:block;width:9.4cqw;height:15cqw;
- image-rendering:pixelated;-ms-interpolation-mode:nearest-neighbor;}}
-.arena-opts .aart.glyph{{width:10cqw;height:10cqw;margin:2.5cqw 0;}}
-.arena-opts .aart.locked{{opacity:.35;}}
+.arena-opts .abox{{position:relative;width:60px;height:60px;flex:none;
+ background:{INK};display:inline-flex;align-items:center;
+ justify-content:center;}}
+.arena-opts .abox .picon{{width:42px;height:42px;}}
+.arena-opts .opt.atile:hover:not(:disabled) .abox,
+.arena-opts .opt.atile:focus-visible .abox{{outline:1px solid {BRIGHT};}}
 .arena-opts .atile .atxt{{white-space:nowrap;font-size:12px;
- letter-spacing:.04em;}}
+ letter-spacing:.04em;background:{INK};padding:0 3px;line-height:1.3;}}
 .arena-opts .atile .atxt .key{{min-width:0;}}
 .arena-opts .atile .ahint{{display:none;}}
-.arena-opts .atile .aatk{{position:absolute;top:2px;right:3px;
+.arena-opts .atile .aatk{{position:absolute;top:1px;left:2px;
  color:{GOLD};font-size:.72em;line-height:1;pointer-events:none;}}
 .astat .apouch{{display:flex;align-items:center;gap:.5ch;color:{ART};}}
 .astat .apouch .picon{{width:14px;height:14px;}}
 .arena-opts .atile.locked .lbl{{color:{DIM};}}
-.arena-opts .opt.atile:hover:not(:disabled),
-.arena-opts .opt.atile:focus-visible{{border-color:{BRIGHT};}}
-.atcell .info{{position:absolute;top:3px;right:3px;border:0;
- font-size:11px;}}
+.atcell .info{{position:absolute;top:0;right:0;border:0;
+ font-size:11px;background:{INK};line-height:1.2;}}
 /* ── 009: the enemy plate — the foe's meter in the player's grammar ── */
 .bwrap{{position:relative;}}
 .estat{{position:absolute;left:12px;bottom:12px;background:{INK};

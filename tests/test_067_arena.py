@@ -207,8 +207,12 @@ def test_phase5_round_card_dress():
     # the tiles are inside the banner, with the bow's and the arrows' art
     assert 'class="options arena-opts"' in banner       # phase 6: no `later`
     assert banner.count('class="opt atile') == len(s.options)
-    assert banner.count('class="aart"') >= 2           # bow + poison arrows
-    assert 'class="aart glyph"' in banner              # RUN keeps its glyph
+    # phase 7: the pack's own cell — 60px .abox, 42px .picon mask in ART
+    assert banner.count('class="abox"') == len(s.options)
+    assert banner.count('class="picon gw"') >= 2       # bow + poison arrows art
+    assert 'class="picon"' in banner                   # RUN keeps its glyph
+    assert f"background-color:{render.ART}" in banner
+    assert banner.count("▓") + banner.count("░") == 40  # 20-cell bars, both sides
     after = html.split('<div class="alog"', 1)[1]
     assert "arena-opts" not in after                   # nothing under the stage
     assert 'class="profile"' not in html and "facblk" not in html
