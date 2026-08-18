@@ -177,3 +177,48 @@ def test_wire_round_trip():
     s, fl = _hunt(p, 6)
     d = s.to_dict()
     assert Scene.from_dict(d).arena == s.arena
+
+
+# ── 067 phase 5: the card redressed (roy, 2026-08-18) ─────────────────────
+def test_phase5_round_card_dress():
+    """The HUD is the regular fight's ANSI slab (▓░ via _blocks, both
+    sides), the tiles ride INSIDE the stage with the item's own art, and
+    no profile / faction strip renders under a live fight."""
+    p = _climber(clazz="archer")
+    p["quiver"] = {"poison_arrows": 3}
+    s, fl = _hunt(p, 6)
+    p["encounter"]["range"] = "close"
+    p["encounter"]["profile"] = {"type": "plain", "flying": False,
+                                 "bulwark": False, "speed": 5}
+    s = combat.resolve_fight_action(p, fl, "attack")
+    assert s.arena and s.arena["phase"] == "round"
+    tiles = s.arena["tiles"]
+    assert tiles["attack"]["art"] == "basic_bow"
+    assert tiles["nock_poison_arrows"]["art"] == "poison_arrows"
+    html = render.render_scene_fragment(s)
+    banner = html.split('class="banner arena"', 1)[1].split('<div class="alog"', 1)[0]
+    # both slabs, ANSI blocks, the number, ATK/DEF/SPEED words
+    assert banner.count('class="astat ') == 2
+    assert banner.count("▓") >= 2 and 'class="off"' in banner
+    assert 'class="abar me"' in banner and 'class="abar foe"' in banner
+    assert "SPEED " in banner and "ATK " in banner and "DEF " in banner
+    assert "ahud" not in html and "afill" not in html
+    # the tiles are inside the banner, with the bow's and the arrows' art
+    assert 'class="options later arena-opts"' in banner
+    assert banner.count('class="opt atile') == len(s.options)
+    assert banner.count('class="aart"') >= 2           # bow + poison arrows
+    assert 'class="aart glyph"' in banner              # RUN keeps its glyph
+    after = html.split('<div class="alog"', 1)[1]
+    assert "arena-opts" not in after                   # nothing under the stage
+    assert 'class="profile"' not in html and "facblk" not in html
+    assert 'class="rail' not in html
+
+
+def test_phase5_opener_keeps_tiles_below_and_profile():
+    p = _climber(clazz="archer")
+    s, fl = _hunt(p, 6)
+    assert s.arena and s.arena["phase"] == "opener"
+    html = render.render_scene_fragment(s)
+    assert 'class="banner arena"' not in html
+    assert 'class="options later arena-opts"' in html
+    assert 'class="profile"' in html or 'class="rail' in html

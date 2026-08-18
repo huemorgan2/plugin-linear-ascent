@@ -241,26 +241,57 @@ def _foe(p: dict) -> dict:
     }
 
 
+# 067 phase 5: the tile shows the ITEM's own face — the charm the
+# use_ row spends, the arrows the nock_ row nocks; spells and the
+# treeline shot ride the weapon that casts/looses them.
+_USE_ITEM = {
+    "throw_net": "entangling_net", "use_hook": "sky_hook",
+    "use_strip": "strip_potion", "use_curse": "curse_scroll",
+    "use_polymorph": "polymorph_dust", "use_veil": "veil_draught",
+    "use_apple": "golden_apple", "use_severing": "severing_word",
+    "drink_tonic": "trollblood_tonic",
+}
+_WEAPON_ROWS = ("sleep_spell", "treeline_shot", "shield_wall", "stand")
+
+
 def tile(option_id: str, p: dict) -> dict:
-    """The tile face for an option — icon key + short label. attack rows
-    read the weapon; everything else the table."""
+    """The tile face for an option — icon key + short label + the art
+    slug (067 phase 5: the render draws the item's own 30×48 face when
+    it ships; the icon key is the fallback glyph). attack rows read the
+    weapon; everything else the table."""
+    lead = (p.get("gear") or {}).get("weapon") or ""
     if option_id == "attack":
         from .combat import _train_path
         path = _train_path(p)
         return {"icon": _PATH_ICON.get(path, "sword"),
-                "label": _PATH_LABEL.get(path, "ATTACK")}
+                "label": _PATH_LABEL.get(path, "ATTACK"), "art": lead}
     if option_id.startswith("attack_"):
         slug = option_id.removeprefix("attack_")
         g = economy.FORGE.get(slug)
         path = economy.PATH_OF_LINE.get(g.line, "blade") if g else "blade"
         return {"icon": _PATH_ICON.get(path, "sword"),
-                "label": _PATH_LABEL.get(path, "ATTACK")}
-    if option_id.startswith("use_") or option_id.startswith("nock_"):
+                "label": _PATH_LABEL.get(path, "ATTACK"), "art": slug}
+    if option_id.startswith("nock_") or option_id.startswith("drink_"):
         slug = option_id.split("_", 1)[1]
-        return {"icon": slug, "label": slug.replace("_", " ").upper()[:12]}
+        slug = _USE_ITEM.get(option_id, slug)
+        return {"icon": slug, "label": slug.replace("_", " ").upper()[:12],
+                "art": slug}
+    if option_id in _USE_ITEM:
+        slug = _USE_ITEM[option_id]
+        return {"icon": slug,
+                "label": _TILE_LABEL.get(option_id)
+                or slug.replace("_", " ").upper()[:12], "art": slug}
+    if option_id.startswith("use_"):
+        slug = option_id.split("_", 1)[1]
+        return {"icon": slug, "label": slug.replace("_", " ").upper()[:12],
+                "art": slug}
+    art = ""
+    if option_id in _WEAPON_ROWS:
+        art = (p.get("gear") or {}).get("shield") or "" \
+            if option_id in ("shield_wall", "stand") else lead
     return {"icon": _TILE_ICON.get(option_id) or "focus",
             "label": _TILE_LABEL.get(option_id) or
-            option_id.replace("_", " ").upper()[:12]}
+            option_id.replace("_", " ").upper()[:12], "art": art}
 
 
 def _synth_move(a: dict, e: dict, p: dict) -> dict | None:
