@@ -89,9 +89,11 @@ _TIPS: dict[str, str] = {
              "butter of the climb: every kill pays gold and XP, and "
              "deeper floors pay more. This is the steady engine that "
              "buys everything else."),
-    "heal": ("The healer's tent: full HP for ◈ 5 × floor. One kill more "
-             "than covers it — far cheaper than dying, which takes your "
-             "carried gold and breaks your armor and shield."),
+    "heal": ("The healer's tent bills by the wound: a whole bar costs "
+             "six kills' gold, a scratch a fraction of one. Still far "
+             "cheaper than dying, which takes your carried gold and "
+             "breaks your armor and shield. Dawn closes every wound "
+             "for free."),
     "stew": ("Hunter's stew: ◈ 2 for +5 HP, repeatable. The cheap "
              "top-up when a full heal would waste coin."),
     "school": ("Train your weapon paths — blade, bow, staff — rank 0 to "

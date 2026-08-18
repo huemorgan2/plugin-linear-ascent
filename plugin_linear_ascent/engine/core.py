@@ -3098,7 +3098,9 @@ def _gate_town_art(fl) -> dict:
 
 
 def _gate_town_options(p: dict, fl) -> list[Option]:
-    heal_price = economy.healer_tent_price(fl.floor)
+    # 065: the wound bill — priced for THIS wound, on the row
+    heal_price = economy.healer_tent_price(fl.floor, p["hp"],
+                                           state.max_hp(p))
     opts = [Option("hunt", "Hunt the wilds", "1 ⚡")]
     # 039 §2: from floor 4 the wilds have a dangerous end — an informed
     # opt-in, priced on the row before the click.
@@ -3113,7 +3115,8 @@ def _gate_town_options(p: dict, fl) -> list[Option]:
                            f"pay ◈ {economy.STEW_PRICE} · "
                            f"+{economy.STEW_HEAL_HP} HP"))
         opts.append(Option("heal", "The healer's tent",
-                           f"pay ◈ {heal_price}"))
+                           f"pay ◈ {heal_price} · "
+                           f"+{state.max_hp(p) - p['hp']} HP"))
         # 014: the pack heals finally have a mouth — usable at the camp
         # fire (the tonic stays the only MID-fight heal, per 013).
         for slug in ("medgel", "trauma_kit"):
@@ -3499,7 +3502,8 @@ def _gate_town_action(p: dict, oid: str) -> Scene:
         combat._ledger(p, "energy", note="wilds deep")
         return combat.start_encounter(p, fl, enc, "wilds", deep=True)
     if oid == "heal":
-        price = economy.healer_tent_price(fl.floor)
+        price = economy.healer_tent_price(fl.floor, p["hp"],
+                                          state.max_hp(p))
         if p["gold"] < price:
             s = _gate_town_scene(p)
             s.shard_note = f"The healer wants ◈ {price} you don't carry."

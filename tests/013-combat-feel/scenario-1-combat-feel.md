@@ -3,7 +3,7 @@
 Goal: enemies always hurt at least a little (armor blunts, never
 nullifies), every battle line explains WHY (weapon named, armor named,
 blocked amount shown), the fight opener shows YOUR numbers, and HP is a
-real cost (healer's tent ◈ 5×floor).
+real cost (healer's tent bills by the wound — 065: a whole bar is six kills' base gold).
 
 ## Steps
 
@@ -23,7 +23,8 @@ real cost (healer's tent ◈ 5×floor).
    braced Stand, which may read `Nothing gets through — guard held.`).
 5. Win. **Expect:** `The <name> goes down — no match for your <weapon>.`
 6. Back at the gate town with missing HP: **Expect** the healer's tent
-   priced at ◈ 5×floor (◈ 5 on floor 1), stew still ◈ 2 for +5 HP.
+   row quoting THIS wound's bill — `pay ◈ N · +M HP`, N = ceil(6 × base
+   gold × M / max HP) — stew still ◈ 2 for +5 HP.
 7. Strike the shared frontier Warden (if live): the counter line shows
    the blunted amount — `it answers for <n> (your armor blunted <m>)`.
 
@@ -32,4 +33,4 @@ real cost (healer's tent ◈ 5×floor).
 - No zero-damage animal hits outside a braced Stand — HP always moves.
 - Every combat line names the gear that caused the number shown.
 - The opener always shows the player's own ATK/DEF with gear names.
-- Tent ◈ 5×floor; one kill's gold still covers a full heal.
+- Tent bill scales with the wound; a whole bar costs ~6 kills, a scratch under one.

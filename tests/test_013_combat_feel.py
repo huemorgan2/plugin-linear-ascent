@@ -1,7 +1,7 @@
 """013 — combat feel: armor blunts but never nullifies (chip damage),
 battle texts explain WHY (weapon named, armor named, blocks shown), the
 fight opener shows your own ATK/DEF, and HP is scarcer than gold (the
-healer's tent costs 5×floor)."""
+healer's tent bills by the wound — 065)."""
 
 from plugin_linear_ascent import economy
 from plugin_linear_ascent.content import schema
@@ -166,20 +166,29 @@ def test_victory_line_names_the_weapon():
 
 # ── HP scarcer than gold ─────────────────────────────────────────────────
 
-def test_healer_tent_costs_five_per_floor():
+def test_healer_tent_bills_by_the_wound():
+    """065: the tent charges for the HP it mends — the row quotes the
+    bill for THIS wound, and the ledger takes exactly that."""
     p = at_gate_town(create_character(fresh()))
     p["hp"] = 10
+    price = economy.healer_tent_price(1, 10, state.max_hp(p))
+    assert price == economy.healer_tent_price(1, 10, state.max_hp(p))
     s = core.current_scene(p)
     heal = next(o for o in s.options if o.id == "heal")
-    assert "◈ 5" in heal.hint
+    assert f"◈ {price}" in heal.hint
+    assert f"+{state.max_hp(p) - 10} HP" in heal.hint
     gold = p["gold"]
     choose(p, "heal")
-    assert p["gold"] == gold - 5 * 1
+    assert p["gold"] == gold - price
     assert p["hp"] == state.max_hp(p)
 
 
-def test_tent_still_costs_less_than_one_kill():
+def test_a_whole_bar_costs_six_kills_a_scratch_a_fraction():
     for f in (1, 5, 25, 60, 95):
-        # 046: the tent is a RUNNING cost — it rides the income pillar,
-        # same as the kill, so the ratio holds at every depth
-        assert economy.healer_tent_price(f) < economy.gold_per_kill(f)
+        # 065: the ratio holds at every depth — both ride base gold
+        full = economy.healer_tent_price(f)
+        assert full == economy.tent_full_price(f)
+        assert full >= economy.TENT_FULL_KILLS * economy.base_gold_per_kill(f) - 1
+        assert economy.healer_tent_price(f, 90, 100) < economy.gold_per_kill(f)
+        assert economy.healer_tent_price(f, 100, 100) == 0
+        assert economy.healer_tent_price(f, 99, 100) >= 1

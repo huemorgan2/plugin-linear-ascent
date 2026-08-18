@@ -29,11 +29,15 @@ def test_kill_rewards_jump_per_band():
     # the income pillar from the floor-1 anchor of 8. 048: slope 3.0
     # (the School sink), and the young-tower bounty rides gold ≤ 10
     assert economy.xp_per_kill(5) == 29
-    assert economy.gold_per_kill(5) == 31     # 20 base × 1.6 bounty
+    # 065: 20 base × 1.6 bounty = 32, but coin rides ≥ 1.25 × the
+    # kill's XP — the floor rule pays 36 here
+    assert economy.gold_per_kill(5) == 36
+    assert economy.base_gold_per_kill(5) == 20
     assert economy.xp_per_kill(95) == 70
     assert economy.gold_per_kill(95) == max(
         1, round(8 * economy.income_pillar(95)))
-    assert economy.gold_per_kill(11) == 75
+    assert economy.gold_per_kill(11) == 92    # 065: 74 xp × 1.25
+    assert economy.gold_per_kill(14) == 146   # the pillar is back on top
 
 
 def test_xp_need_curve():

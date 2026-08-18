@@ -910,13 +910,22 @@ def early_coin_mult(floor: int) -> float:
     return 2.0 - 0.1 * (floor - 1) if floor <= EARLY_COIN_FLOORS else 1.0
 
 
+KILL_GOLD_OVER_XP = 1.25       # 065: the coin on a kill rides at least
+                               # a quarter above its aether, at the mean
+
+
 def gold_per_kill(bar: int) -> int:
     """Base gold per kill. 043: takes the creature's BAR — coin follows
     toughness. 046: the anchor rides the INCOME pillar; the old
     linear × band-jump ladder is retired (BAND_INCOME_JUMP with it).
-    048: the young-tower bounty rides IN the paycheck."""
+    048: the young-tower bounty rides IN the paycheck. 065: the 012
+    law — XP is always below the kill's gold — is a FLOOR here: 048's
+    steeper XP slope crossed the pillar on floors 7–10, so the paycheck
+    never sits under KILL_GOLD_OVER_XP × the kill's XP. Pocket coin,
+    like the bounty; base_gold_per_kill (the ladders) is untouched."""
     return max(1, round(GOLD_PER_KILL_ANCHOR * income_pillar(bar)
-                        * early_coin_mult(bar)))
+                        * early_coin_mult(bar)),
+               round(xp_per_kill(bar) * KILL_GOLD_OVER_XP))
 
 
 def base_gold_per_kill(bar: int) -> int:
@@ -927,12 +936,36 @@ def base_gold_per_kill(bar: int) -> int:
     return max(1, round(GOLD_PER_KILL_ANCHOR * income_pillar(bar)))
 
 
-def healer_tent_price(floor: int) -> int:
-    """Full heal at the tent. 046: a RUNNING cost — it rides the income
-    curve (◈5 anchor), the same slice of a hunting day on every floor;
-    the old 5×floor line outgrows deep-floor income and flips it
-    negative."""
+def tent_running_cost(floor: int) -> int:
+    """The design ESTIMATE of an average tent visit (◈5 × income pillar)
+    — the running-cost slice every price ladder was anchored on (046).
+    065: the tent itself no longer charges this flat; it charges by the
+    wound (healer_tent_price). The estimate stays so no ladder moves."""
     return max(1, round(HEALER_TENT_PER_FLOOR * income_pillar(floor)))
+
+
+TENT_FULL_KILLS = 6            # 065: a full bar from the brink costs six
+                               # kills' base gold — losing HP is a bill
+
+
+def tent_full_price(floor: int) -> int:
+    """065: what the tent charges to mend a WHOLE bar on this floor."""
+    return max(1, round(TENT_FULL_KILLS * base_gold_per_kill(floor)))
+
+
+def healer_tent_price(floor: int, hp: int = 0, hp_max: int = 0) -> int:
+    """The wound bill. 065: the tent charges by the HP it mends —
+    tent_full_price × missing/hp_max, at least ◈1 for any wound. Called
+    without a bar it quotes the full bill (the death card: you came in
+    at 1 HP). The old flat ◈5×pillar (046) let a 500-HP bar refill for
+    half a kill's gold; the wound had no price, so HP had none."""
+    full = tent_full_price(floor)
+    if hp_max <= 0:
+        return full
+    missing = max(0, min(hp_max, hp_max - hp))
+    if missing <= 0:
+        return 0
+    return max(1, math.ceil(full * missing / hp_max))
 
 
 def daily_income(floor: int) -> int:
@@ -940,7 +973,7 @@ def daily_income(floor: int) -> int:
     (≈30 fights, a tent visit every ~3 fights now that chip damage is
     real). Anchors hone prices and the tier price ladder — not paid to
     anyone directly."""
-    return round((base_gold_per_kill(floor) - healer_tent_price(floor) / 3)
+    return round((base_gold_per_kill(floor) - tent_running_cost(floor) / 3)
                  * 30)   # 048: un-bountied — prices/fees must not ride the gift
 
 
@@ -2424,13 +2457,15 @@ def relic_stock(shop: str, frontier: int, lines) -> list[Relic]:
 # The law: dawn closes every wound — HP restores to FULL at the world-day
 # boundary and ONLY there. No daytime trickle, so mid-session healing
 # still costs gold and still buys time: stew (2g, +5 HP, repeatable) →
-# healer's tent (5×floor, full) → potions for mid-fight emergencies.
+# healer's tent (065: by the wound — a full bar is TENT_FULL_KILLS
+# kills' base gold) → potions for mid-fight emergencies.
 # The Lodge's old +20-at-dawn special case is retired — the Lodge sells
 # a SAFE night (nobody finds you), never health.
 
 STEW_PRICE = 2
 STEW_HEAL_HP = 5
-HEALER_TENT_PER_FLOOR = 5      # full heal: ◈ 5 × floor (was 2 pre-013)
+HEALER_TENT_PER_FLOOR = 5      # the running-cost ESTIMATE anchor (046);
+                               # 065: the tent bills by the wound now
 
 # ── §7 Bank, death, lodge, presents ──────────────────────────────────────
 

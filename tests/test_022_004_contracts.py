@@ -266,7 +266,7 @@ def test_unfinished_work_expires_at_the_tick(monkeypatch):
 
 def test_mid_session_healing_still_costs_the_pre_phase_rates():
     assert economy.STEW_PRICE == 2 and economy.STEW_HEAL_HP == 5
-    assert economy.HEALER_TENT_PER_FLOOR == 5
+    assert economy.HEALER_TENT_PER_FLOOR == 5   # the running-cost anchor
     p = create_character(fresh())
     p["hp"] = 6
     state.touch_daily(p)                    # mid-day: dawn does nothing

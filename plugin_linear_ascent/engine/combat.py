@@ -1383,8 +1383,11 @@ def _victory(p: dict, floor) -> Scene:
         gold = round(state.rng_jitter(p, economy.gold_per_kill(bar),
                                       0.50 if not lucky else 0.25) * fade)
         # 008: hard specimens pay more, runts pay less
-        gold = round(
-            gold * economy.SPECIMENS[e.get("specimen", "common")]["gold"])
+        spec = economy.SPECIMENS[e.get("specimen", "common")]
+        gold = round(gold * spec["gold"])
+        # 065: the easy kill teaches less — XP rides the specimen's HP
+        # scale (runt ×.55 … alpha ×2), expected value ≈ the common's
+        xp = round(xp * spec["hp"])
         # 017: a hard profile pays for the diagnosis it demands
         gold = round(gold * economy.profile_gold_mult(_profile(p)))
         xp = max(1, xp)
@@ -1399,6 +1402,11 @@ def _victory(p: dict, floor) -> Scene:
     buff = state.faction_buff_pct(p, "xp")
     if buff:
         xp = round(xp * (1 + buff / 100))     # 010: CLIMB week blessing
+    if e["kind"] != "warden":
+        # 065: the kill law, after every multiplier and jitter — the
+        # coin on a wilds kill card is never below its aether. Wardens
+        # keep their own tables (gold ≫ xp already).
+        gold = max(gold, xp + 1)
     # 022/005: rested aether pays out here and ONLY here — on a kill's
     # XP, never on contract or strongbox payouts. The bar is hard: once
     # it fills, more XP (and the rested that would ride it) goes nowhere.
@@ -1685,7 +1693,8 @@ def _death(p: dict, floor) -> Scene:
                        "like this again.",
             body_lines=save_lines,
             options=[Option("heal", "The healer's tent",
-                            f"pay ◈ {economy.healer_tent_price(floor.floor)}"),
+                            f"pay ◈ {economy.healer_tent_price(floor.floor)}"
+                            " · the whole bar"),
                      Option("town", "Limp back to Roothollow")],
             meters=meters(p),
             event_kind="death",
