@@ -307,6 +307,50 @@ _TIPS: dict[str, str] = {
     "guild_leave": ("Fold your colors and go. Dues stop, prize shares "
                     "stop, the store keeps what it holds. The hall "
                     "always takes you back — for the join fee."),
+    "leave_confirm": ("Final: your name comes off the roster now. Dues "
+                      "stop, prize shares stop, the coffer keeps what it "
+                      "holds. Coming back costs the join fee again."),
+    "hall_cancel": "Back out — nothing changes.",
+    "hall_home": "Back to the hall's front room — the doors and the week.",
+
+    # ── 068: the faction hall, every door explained ──
+    "hall_coffer": ("The faction's shared purse. Members drop carried gold "
+                    "in; it pays weekly challenge entries and hall "
+                    "improvements, and never comes back to a pocket. Gold "
+                    "in the coffer can't die with you."),
+    "hall_chest": ("The faction's shared gear chest. Members put paid "
+                   "Forge steel in for free; any member takes one piece a "
+                   "day, wear included. Buy a bigger chest here for more "
+                   "slots."),
+    "hall_board": ("The bulletin board — one line per member per day, "
+                   "newest on top. Warnings, plans, brags; the newest "
+                   "line hangs over the hall door."),
+    "hall_bunks": ("Faction beds: a member sleeps here for free and "
+                   "nothing finds them before dawn — the same safe night "
+                   "the Lodge sells. One claim a night, first come first "
+                   "bunked. Beds are bought from the coffer, from a hall "
+                   "of your own up."),
+    "hall_works": ("Improve the faction's hall from the coffer: a bigger "
+                   "room, a deeper coffer, a bigger chest, more beds. "
+                   "Bought once, kept forever; only the steward buys."),
+    "hall_desk": ("Steward's desk: take joiners in or turn them away, "
+                  "rename the faction, change the colour it flies."),
+    "chest_put": ("Hang a piece from your pack in the chest — no coin, "
+                  "wear travels with it, your name stays on it. Any "
+                  "member can take it, one piece a day."),
+    "bed_claim": ("Take a faction bed tonight — free. Nothing finds you "
+                  "before dawn; one claim a night, by name."),
+    "write_note": ("Pin one line on the board — 64 letters, one per day; "
+                   "writing again replaces today's line."),
+    "rename_banner": ("Steward's call: a new name, 3–24 letters. Every "
+                      "list and every member's card learns it at once."),
+    "recolor_banner": ("Steward's call: pick the ink the faction flies — "
+                       "the banner and every member's card follow at "
+                       "once."),
+    "promote": ("Steward's call: hand a member the keys too — they enter "
+                "the week, buy improvements and run the desk beside you."),
+    "donate_custom": ("Type a sum of carried gold for the coffer. It "
+                      "stays the faction's for good."),
     "cancel_found": "Back out — nothing charged, nothing signed.",
     "cancel_donate": "Back out — your coin stays in your pocket.",
     "cancel_kick": "Back out — the roll stays as it is.",
@@ -431,12 +475,38 @@ def option_tip(oid: str) -> str:
                 "a few XP.")
     if oid.startswith("donate_"):
         slug = oid.removeprefix("donate_")
+        if slug.isdigit():
+            return (f"Drop ◈ {slug} of carried gold in the coffer. It is "
+                    "the faction's for good — pays challenge entries and "
+                    "hall improvements, never a pocket.")
         g = economy.FORGE.get(slug)
         name = g.name if g else "it"
         return (f"Hang {name} on your faction's armory racks — no coin "
                 "changes hands, and its wear travels with it exactly as "
                 "it is. Any member can take one piece a day at the "
                 "Guildhall. Generosity, not a market.")
+    if oid.startswith("put_"):
+        slug = oid.removeprefix("put_")
+        g = economy.FORGE.get(slug)
+        name = g.name if g else "this"
+        return (f"Put {name} in the faction chest — free, wear rides with "
+                "it, your name stays on it. Any member can take it, one "
+                "piece a day.")
+    if oid.startswith("work_"):
+        return ("Buy this improvement from the coffer — steward's call. "
+                "Bought once, kept forever, never downgraded.")
+    if oid.startswith(("hcol_", "col_")):
+        return ("Fly this ink — the banner and every member's card follow "
+                "at once.")
+    if oid.startswith("req_ok_"):
+        return ("Take them in — they get a chair, the join fee lands in "
+                "the coffer as they sit.")
+    if oid.startswith("req_no_"):
+        return "Turn them away — their paper comes off the desk."
+    if oid.startswith("promote_"):
+        who = oid.removeprefix("promote_")
+        return (f"Raise {who} to steward — keys to the desk, the works "
+                "and the week, beside yours.")
     if oid.startswith("take_arm_"):
         return ("Lift this piece off the faction racks into your pack — "
                 "free, wear included, exactly as the donor left it. One "

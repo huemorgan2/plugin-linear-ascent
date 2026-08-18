@@ -165,10 +165,12 @@ def test_hall_home_wears_the_colors_and_the_room():
         assert door in ids
     assert "hall_desk" not in ids                 # members have no desk
     body = " ".join(s.body_lines)
-    assert "▜ THIS WEEK'S GOAL — CULL" in body       # 062: the solid box
-    assert "Reach 100 kills — fell 100 monsters together" in body
+    # 068: not entered → the PROMOTION box, not an empty goal
+    assert "▜ ENTER THIS WEEK'S CHALLENGE — CULL — win up to +26% HP" in body
+    assert "fell 100 monsters together (100 kills)" in body
     assert "days left:" in body
     assert "not entered yet" in body
+    assert "goal completed" not in body
     # the prize in its own arithmetic: 15% base × attendance multiplier
     assert "half attendance (2 of 4 days each) gets all faction members +8% HP" in body
     assert "full attendance (4 days each) gets all faction members +15% HP" in body
@@ -195,7 +197,7 @@ def test_steward_enters_the_week_from_the_coffer():
     p = member(role="steward")
     s = enter_hall(p)
     row = next(o for o in s.options if o.id == "enter_week")
-    assert "◈ 10 from the coffer (◈ 140)" in row.hint
+    assert row.hint == "◈ 10 of ◈ 140 in the coffer"
     s = core.apply_choice(p, "enter_week")
     assert fx(p, "faction_enter")
     assert p["_world"]["faction"]["hall"]["coffer"]["bal"] == 130

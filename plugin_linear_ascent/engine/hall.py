@@ -15,6 +15,7 @@ out only to the world (entries, furnishings). Nobody pockets the store.
 
 from __future__ import annotations
 
+from .. import colors as colors_mod
 from .. import economy
 from . import state
 from .combat import _ledger, meters
@@ -48,10 +49,11 @@ _DOOR_IDS = ("hall_coffer", "hall_chest", "hall_board", "hall_bunks",
 
 # option art for the doors — 1-bit masks, generated in the art phase;
 # a missing file degrades to a plain text row.
-_DOOR_ART = {oid: oid for oid in _DOOR_IDS if oid != "hall_desk"}
+_DOOR_ART = {oid: oid for oid in _DOOR_IDS
+             if oid not in ("hall_desk", "hall_works")}   # 068: no icon
 
 _STATE_KEYS = ("hall_area", "hall_ask", "hall_putting", "hall_kicking",
-               "hall_promoting", "hall_recoloring")
+               "hall_promoting", "hall_recoloring", "hall_leaving")
 
 
 def tier_name(t) -> str:
@@ -104,6 +106,20 @@ def _eyebrow(fac: dict, hall: dict | None, sub: str = "") -> str:
     return f"{name} · {sub}"
 
 
+def _ink(fac: dict) -> str:
+    """068: the faction's own ink — every hall banner is painted in it."""
+    return colors_mod.faction_ink(str(fac.get("color") or ""))
+
+
+def _chest_work(hall: dict) -> dict | None:
+    """068: the works row that sells the next chest, or None."""
+    for wrow in hall.get("works") or []:
+        if isinstance(wrow, dict) and _work_id(wrow) in ("chest", "chest_up",
+                                                          "hall_chest_up"):
+            return wrow
+    return None
+
+
 def _coffer_nums(fac: dict, hall: dict) -> tuple[int, int]:
     c = hall.get("coffer") or {}
     return (int(c.get("bal", fac.get("store", 0)) or 0),
@@ -132,6 +148,8 @@ def hall_scene(p: dict, note: str = "") -> Scene:
         return _promote_prompt(p, fac, hall, note)
     if p.get("hall_recoloring"):
         return _recolor_prompt(p, fac, hall, note)
+    if p.get("hall_leaving"):
+        return _leave_prompt(p, fac, hall, note)
     area = p.get("hall_area")
     if area == "coffer":
         return _coffer_scene(p, fac, hall, note)
@@ -182,10 +200,18 @@ def _week_lines(fac: dict, hall: dict, lines: list, opts: list) -> None:
     left = 7 - day % 7
     verb = _GOAL_VERB.get(kind, _GOAL_VERB["hoard"]).format(t=target)
     unit = _GOAL_UNIT.get(kind, "")
-    lines.append(f"\u259c THIS WEEK'S GOAL \u2014 {kind.upper()}")
-    lines.append(f"Reach {target:,} {unit} \u2014 {verb}")
-    lines.append(f"days left: {left}")
+    # the prize, in its own arithmetic
+    if kind == "hoard":
+        def prize(m: float) -> str:
+            return f"\u25c8 {round(base * target * m):,} split by attendance"
+    else:
+        buff = "HP" if kind == "cull" else "XP"
+        def prize(m: float) -> str:
+            return f"+{round(base * m * 100)}% {buff} all next week"
     if entered:
+        lines.append(f"\u259c THIS WEEK'S GOAL \u2014 {kind.upper()}")
+        lines.append(f"Reach {target:,} {unit} \u2014 {verb}")
+        lines.append(f"days left: {left}")
         lines.append(f"goal completed {progress_bar(prog, target, 12)} "
                      f"{min(100, round(100 * prog / target))}% "
                      f"({prog:,} / {target:,})")
@@ -195,16 +221,14 @@ def _week_lines(fac: dict, hall: dict, lines: list, opts: list) -> None:
         elif req:
             lines.append(f"attendance {att}/{req}")
     else:
-        lines.append("goal completed " + "\u2591" * 12
-                     + " 0% \u2014 not entered yet")
-    # the prize, in its own arithmetic
-    if kind == "hoard":
-        def prize(m: float) -> str:
-            return f"\u25c8 {round(base * target * m):,} split by attendance"
-    else:
-        buff = "HP" if kind == "cull" else "XP"
-        def prize(m: float) -> str:
-            return f"+{round(base * m * 100)}% {buff} all next week"
+        # 068: not entered — a PROMOTION, not an empty goal. What the
+        # challenge is, what it pays at most, and the way in.
+        lines.append(f"\u259c ENTER THIS WEEK'S CHALLENGE \u2014 "
+                     f"{kind.upper()} \u2014 win up to {prize(1.75)}")
+        lines.append(f"this week your faction would need to {verb} "
+                     f"({target:,} {unit})")
+        lines.append(f"days left: {left} \u2014 the faction is not entered "
+                     "yet; nothing counts until it is")
     lines.append("reaching it at half attendance (2 of 4 days each) gets "
                  f"all faction members {prize(0.5)}")
     lines.append("reaching it at full attendance (4 days each) gets "
@@ -220,8 +244,8 @@ def _week_lines(fac: dict, hall: dict, lines: list, opts: list) -> None:
         return
     cost = int(wk.get("entry_cost", 0) or 0)
     if fac.get("role") == "steward":
-        opts.append(Option("enter_week", "ENTER THE WEEK",
-                           f"\u25c8 {cost} from the coffer (\u25c8 {bal:,})"))
+        opts.append(Option("enter_week", "Pay to enter this week's challenge",
+                           f"\u25c8 {cost} of \u25c8 {bal:,} in the coffer"))
     else:
         lines.append("the steward signs the faction in \u2014 nudge them")
 
@@ -289,7 +313,8 @@ def _home_scene(p: dict, fac: dict, hall: dict, note: str = "") -> Scene:
         opts.append(Option("hall_bunks", "THE BUNKS",
                            "🔒 beds fit from a hall of your own",
                            locked=True))
-    opts.append(Option("hall_works", "THE WORKS", "buy up the hall"))
+    opts.append(Option("hall_works", "Improve the faction's hall",
+                       "beds, chest, coffer, room"))
     if steward:
         pend = int(fac.get("pending_requests", 0) or 0)
         opts.append(Option("hall_desk", "THE DESK",
@@ -302,7 +327,8 @@ def _home_scene(p: dict, fac: dict, hall: dict, note: str = "") -> Scene:
         if any(m.get("role") != "steward" and m.get("name") != p.get("name")
                for m in fac.get("members", [])):
             opts.append(Option("promote", "Raise a member to steward"))
-    opts.append(Option("guild_leave", "Leave the faction"))
+    opts.append(Option("guild_leave", "Leave the faction", "asks first",
+                       danger=True))
     opts.append(Option("town", "Back to the square"))
     return Scene(
         eyebrow=_eyebrow(fac, hall),
@@ -312,6 +338,7 @@ def _home_scene(p: dict, fac: dict, hall: dict, note: str = "") -> Scene:
         options=opts,
         meters=meters(p),
         banner=str(fac.get("banner") or "") or "guildhall",
+        banner_ink=_ink(fac) if fac.get("banner") else "",
         strip={"art": f"hall_room_{tier}", "text": tier_name(tier)},
         option_art=dict(_DOOR_ART),
     )
@@ -364,6 +391,7 @@ def _coffer_scene(p: dict, fac: dict, hall: dict, note: str = "") -> Scene:
         options=opts,
         meters=meters(p),
         banner=str(fac.get("banner") or ""),
+        banner_ink=_ink(fac) if fac.get("banner") else "",
     )
 
 
@@ -443,8 +471,7 @@ def _chest_scene(p: dict, fac: dict, hall: dict, note: str = "") -> Scene:
                      + f"— {open_slots} open socket"
                        f"{'s' if open_slots != 1 else ''} of {cap}")
     else:
-        lines.append(f"every socket filled — {used} of {cap}. "
-                     "The works sell a bigger chest.")
+        lines.append(f"every socket filled — {used} of {cap}.")
     if took and rack:
         lines.append("you already took your piece today — the racks "
                      "open again tomorrow")
@@ -456,6 +483,24 @@ def _chest_scene(p: dict, fac: dict, hall: dict, note: str = "") -> Scene:
     elif donatable:
         opts.append(Option("chest_put", "PUT IN — from your pack",
                            "🔒 every socket filled", locked=True))
+    # 068: the bigger chest is bought HERE — same works row, same effect
+    cw = _chest_work(hall)
+    if cw is not None:
+        price = int(cw.get("price", 0) or 0)
+        bal, _cap = _coffer_nums(fac, hall)
+        steward = fac.get("role") == "steward"
+        afford = bool(cw.get("affordable", price <= bal))
+        import re
+        m = re.search(r"(\d+) slots", str(cw.get("label") or ""))
+        slots = f"{m.group(1)} slots · " if m else ""
+        if not steward:
+            hint = f"🔒 ◈ {price:,} · the steward buys it"
+        elif afford:
+            hint = f"{slots}◈ {price:,} of ◈ {bal:,}"
+        else:
+            hint = f"🔒 ◈ {price:,} · the coffer holds ◈ {bal:,}"
+        opts.append(Option(f"work_{_work_id(cw)}", "Buy a bigger chest",
+                           hint, locked=not (steward and afford)))
     opts.append(Option("hall_home", "Back to the hall"))
     return Scene(
         eyebrow=_eyebrow(fac, hall, "THE CHEST"),
@@ -551,7 +596,7 @@ def _chest_put(p: dict, slug: str, fac: dict, hall: dict) -> Scene:
     if len(rack) >= cap:
         return hall_scene(
             p, note=f"Every socket is filled — {len(rack)} of {cap}. "
-                    "The works sell a bigger chest.")
+                    "A bigger chest is sold right here.")
     p["inventory"][slug] -= 1
     if p["inventory"][slug] <= 0:
         del p["inventory"][slug]
@@ -700,7 +745,7 @@ def _works_scene(p: dict, fac: dict, hall: dict, note: str = "") -> Scene:
     opts.append(Option("hall_home", "Back to the hall"))
     return Scene(
         eyebrow=_eyebrow(fac, hall, "THE WORKS"),
-        headline="Buy up the hall",
+        headline="Improve the faction's hall",
         support="Coffer gold goes to the world and never back to a "
                 "pocket — the 010 law, kept.",
         body_lines=lines,
@@ -744,6 +789,11 @@ def _work_buy(p: dict, wid: str, fac: dict, hall: dict) -> Scene:
     elif kind == "hall_bed_buy":
         beds = hall.setdefault("beds", {})
         beds["count"] = int(beds.get("count", 0) or 0) + 1
+    elif kind == "hall_chest_up":
+        # 068: worldd's ladder doubles (4→8→16→32); the sockets grow on
+        # the same card, worldd's next snapshot is the truth
+        chest = hall.setdefault("chest", {})
+        chest["cap"] = int(chest.get("cap", 4) or 4) * 2
     return hall_scene(
         p, note=f"+ {label} — ◈ {price:,} from the coffer, gone to the "
                 "world. The hall keeps what it buys.")
@@ -867,7 +917,8 @@ def _recolor_prompt(p: dict, fac: dict, hall: dict,
     for slug, (nm, _ink) in colors_mod.FACTION_COLORS.items():
         sub = "flying now" if slug == cur else ""
         opts.append(Option(f"hcol_{slug}", nm, sub))
-    opts.append(Option("hall_cancel", "Never mind"))
+    opts.append(Option("hall_cancel",
+                       "Back to the desk without changing color"))
     return Scene(
         eyebrow=_eyebrow(fac, hall, "THE DESK"),
         headline="The color the banner flies",
@@ -896,6 +947,34 @@ def _promote_prompt(p: dict, fac: dict, hall: dict,
         body_lines=[note] if note else [],
         options=opts,
         meters=meters(p),
+    )
+
+
+def _leave_prompt(p: dict, fac: dict, hall: dict, note: str = "") -> Scene:
+    """068: leaving is final and used to fire on one tap. It asks first,
+    in words that can't be read as 'back to town'."""
+    name = str(fac.get("name", "the faction"))
+    lines = [note] if note else []
+    lines.append(f"You are about to leave {name} and no longer be part of "
+                 "it \u2014 no access to the faction hall, no part in its "
+                 "weekly challenges or their prizes.")
+    lines.append("Dues stop. What you paid in stays in the coffer; the "
+                 "chest keeps what you hung in it. Coming back costs the "
+                 "join fee again.")
+    return Scene(
+        eyebrow=_eyebrow(fac, hall),
+        headline=f"Leave {name}?",
+        support="Once you go, the door only reopens for the join fee.",
+        body_lines=lines,
+        options=[
+            Option("leave_confirm", "Leave the faction",
+                   "final", danger=True),
+            Option("hall_cancel", "Back to the faction hall"),
+            Option("town", "Don't leave the faction \u2014 go to town"),
+        ],
+        meters=meters(p),
+        banner=str(fac.get("banner") or ""),
+        banner_ink=_ink(fac) if fac.get("banner") else "",
     )
 
 
@@ -972,6 +1051,14 @@ def hall_action(p: dict, oid: str) -> Scene:
                             f"{colors_mod.faction_color_name(slug)} now — "
                             "every card follows at once.")
         return hall_scene(p)
+    if p.get("hall_leaving"):
+        p.pop("hall_leaving", None)
+        if oid == "leave_confirm":
+            from . import social
+            clear_state(p)
+            p["location"] = "guildhall"
+            return social.guildhall_action(p, "leave_confirm")
+        return hall_scene(p)
     if p.get("hall_ask"):
         p.pop("hall_ask", None)
         return hall_scene(p, note="Never mind, then."
@@ -998,10 +1085,8 @@ def hall_action(p: dict, oid: str) -> Scene:
     if oid == "enter_week":
         return _enter_week(p, fac, hall)
     if oid == "guild_leave":
-        from . import social
-        clear_state(p)
-        p["location"] = "guildhall"
-        return social.guildhall_action(p, "guild_leave")
+        p["hall_leaving"] = True
+        return hall_scene(p)
     if oid == "donate_custom":
         p["hall_ask"] = "donate"
         return hall_scene(p)

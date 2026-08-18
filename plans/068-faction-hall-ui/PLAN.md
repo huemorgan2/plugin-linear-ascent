@@ -99,3 +99,28 @@ data or wire shape changes on worldd — the effects emitted are the same
 
 Version bump + `worldd/tools/vendor_game.sh` after tests; deploy only on
 roy's word.
+
+## Execution status (2026-08-18)
+
+Done, all eight, one phase. Game 0.91.0, vendored into worldd. Not deployed.
+
+- Wire: `Option.danger` rides beside options as `option_danger` (like
+  `option_badges`); `Scene.banner_ink` is a new top-level key. Old clients
+  drop both.
+- Confirmation cards are backed by state (`hall_leaving`, `guild_leaving`)
+  because `apply_choice` validates ids against the rebuilt scene; `town`
+  pops both.
+- Chest hint carries slots and price ("8 slots · ◈ 150 of ◈ 400"); labels
+  shortened after a 420px render wrapped ("beds, chest, coffer, room",
+  "asks first", "◈ 10 of ◈ 140 in the coffer").
+- Tests: `tests/test_068_hall_ui.py` (15), plus `test_032_banner_hall` and
+  `test_faction_hall` updated for the two-step leave and the promotion box.
+  Full suite: 1255 passed, 6 failed — the same 6 balance tests that fail
+  on main before this change (017 fire arrow, 017 speed chase ×2, 022
+  retune, engine ×2).
+- Render check: seven playwright screenshots of the engine's HTML at 760px
+  (home unentered, chest, chest bought, leave prompt, recolor, home
+  entered, works) — red banner ink, red leave row, nine swatches,
+  promotion box without a bar, [i] on every row.
+- Dojo scenario written: `luna/dojo/tests/068-hall-ui/scenario.md`. Runs
+  against a worldd once 0.91.0 is deployed.

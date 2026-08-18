@@ -35,6 +35,10 @@ class Option:
     badge: int = 0          # 027: things waiting behind this door — drawn
                             # as a bright blue count chip. The text
                             # surface writes it as "(n)" after the label.
+    danger: bool = False    # 068: a row that ends something (leave the
+                            # faction) — drawn in red so it never reads
+                            # as navigation. Older clients drop it via
+                            # _known.
 
 
 @dataclass
@@ -85,6 +89,10 @@ class Scene:
     event_kind: str = ""    # "" | loot | death | letter | boss | present | matchup
     banner: str = ""                # banner slug, "" = no banner
     banner_variant: str = ""        # 008 specimen: "" | runt | tough | alpha — retints the art
+    banner_ink: str = ""            # 068: a hex the banner mask is painted
+                                    # in — the faction's own ink inside its
+                                    # hall. "" = the renderer's tint table.
+                                    # Top-level, optional: old clients drop it.
     fx: str = ""                    # 011 event animation slug (kill GIFs, gate open, title)
     scene_id: str = ""              # nonce — ascent_choose must echo the ids of THIS scene
     awaits_text: str = ""           # 010: "" | what the scene wants typed in
@@ -295,10 +303,12 @@ class Scene:
             # never heard of costs it the whole world. Unknown TOP-LEVEL keys
             # are dropped by every version ever shipped.
             "option_badges": {o.id: o.badge for o in self.options if o.badge},
+            "option_danger": [o.id for o in self.options if o.danger],
             "meters": vars(self.meters) if self.meters else None,
             "event_kind": self.event_kind,
             "banner": self.banner,
             "banner_variant": self.banner_variant,
+            "banner_ink": self.banner_ink,
             "fx": self.fx,
             "scene_id": self.scene_id,
             "awaits_text": self.awaits_text,
@@ -335,11 +345,14 @@ class Scene:
             md["xp_need"] = md.pop("mana_max")
         meters = Meters(**_known(Meters, md)) if md else None
         badges = dict(d.get("option_badges") or {})
+        danger = set(d.get("option_danger") or [])
         options = []
         for raw in d.get("options", []):
             opt = Option(**_known(Option, raw))
             if not opt.badge:
                 opt.badge = int(badges.get(opt.id, 0) or 0)
+            if opt.id in danger:
+                opt.danger = True
             options.append(opt)
         return Scene(
             eyebrow=d.get("eyebrow", ""),
@@ -352,6 +365,7 @@ class Scene:
             event_kind=d.get("event_kind", ""),
             banner=d.get("banner", ""),
             banner_variant=d.get("banner_variant", ""),
+            banner_ink=d.get("banner_ink", ""),
             fx=d.get("fx", ""),
             scene_id=d.get("scene_id", ""),
             awaits_text=d.get("awaits_text", ""),

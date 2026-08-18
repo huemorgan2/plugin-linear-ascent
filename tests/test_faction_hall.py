@@ -232,6 +232,11 @@ def test_leave_emits_and_folds_the_colors():
     p["guild"] = "Ember Pact"
     core.apply_choice(p, "guildhall")
     s = core.apply_choice(p, "guild_leave")
+    # 068: it asks first — red row, and the confirm is its own id
+    assert p.get("guild") == "Ember Pact"
+    assert s.headline == "Leave Ember Pact?"
+    assert next(o for o in s.options if o.id == "leave_confirm").danger
+    s = core.apply_choice(p, "leave_confirm")
     assert p.get("guild") is None
     assert fx(p, "guild_leave")
     # and the card doesn't still seat you at the table you walked out of

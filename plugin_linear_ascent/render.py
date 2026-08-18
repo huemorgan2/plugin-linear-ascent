@@ -2072,6 +2072,9 @@ def render_scene_fragment(scene: Scene) -> str:
     elif banner:
         url, w, h = banner
         tint = _banner_tint(scene.banner, scene.banner_variant)
+        # 068: inside its own hall the sigil flies the faction's ink
+        if getattr(scene, "banner_ink", "") and scene.banner in sigil_slugs():
+            tint = scene.banner_ink
     k3 = getattr(scene, "kill3d", None)
     # 067: the arena owns the slot after the opener — a bare 320×300
     # band with the HUD in it; the website's arena3d layer paints the 3D
@@ -2234,8 +2237,18 @@ def render_scene_fragment(scene: Scene) -> str:
             # 019: a locked row is dimmed but stays a button — clicking
             # it is how the player asks why the gate is shut.
             opt_cls = " locked" if getattr(o, "locked", False) else ""
+            # 068: a row that ends something is red — never navigation
+            if getattr(o, "danger", False):
+                opt_cls += " danger"
             hint = (f'<span class="hint">{_ep(o.hint)}</span>'
                     if o.hint else "")
+            # 068: a colour pick wears its ink as a box before the name
+            swatch = ""
+            if o.id.startswith(("hcol_", "col_")):
+                cslug = o.id.split("_", 1)[1]
+                if cslug in _colors.FACTION_COLORS:
+                    swatch = (f'<span class="swatch" style="background:'
+                              f'{_colors.faction_ink(cslug)}"></span>')
             gicon = _opt_gear_icon(
                 o.id, (getattr(scene, "option_art", None) or {})
                 .get(o.id) or "")
@@ -2290,7 +2303,7 @@ def render_scene_fragment(scene: Scene) -> str:
             btn = (f'<button type="button" class="opt{opt_cls}" '
                    f'data-opt="{_e(o.id)}">'
                    f'<span class="key{key_cls}">{i}</span>{tile}{gicon}'
-                   f'<span class="lbl">{_ep(o.label)}</span>{badge}'
+                   f'{swatch}<span class="lbl">{_ep(o.label)}</span>{badge}'
                    f"{hint}</button>")
             rows.append(f'<div class="orow">{btn}{info}</div>')
         wall = (f'<div class="ggrid">{"".join(cards)}</div>'
@@ -2752,6 +2765,15 @@ SCENE_CSS = f"""
 .opt.locked:hover:not(:disabled),.opt.locked:focus-visible{{
  background:{DIM};}}
 .opt:disabled{{cursor:default;}}
+/* 068: the danger row — red label and key; hover flips to black on red */
+.opt.danger .lbl,.opt.danger .key{{color:{RED};}}
+.opt.danger:hover:not(:disabled),.opt.danger:focus-visible{{
+ background:{RED};}}
+/* 068: the colour swatch — a filled box before a colour's name */
+.opt .swatch{{flex:none;display:inline-block;width:1.1em;height:1.1em;
+ border:1px solid {DIM};}}
+.opt:hover:not(:disabled) .swatch,.opt:focus-visible .swatch{{
+ border-color:{INK};}}
 .opt.chosen{{background:{GOLD};}}
 .opt.chosen .key,.opt.chosen .lbl,.opt.chosen .hint,
 .opt.chosen .key::before,.opt.chosen .key::after,.opt.chosen::after{{

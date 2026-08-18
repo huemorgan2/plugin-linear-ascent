@@ -328,7 +328,8 @@ def _pack_use(p: dict, oid: str) -> Scene | None:
         p["location"] = "forge"
         p["floor"] = 0
         for k in ("hall_area", "hall_ask", "hall_putting", "hall_kicking",
-                  "hall_promoting", "banner_page", "guild_dir",
+                  "hall_promoting", "hall_leaving", "guild_leaving",
+                  "banner_page", "guild_dir",
                   "door_rules", "profile_view", "profile_back",
                   "profile_pay", "profile_gift", "profile_loot"):
             p.pop(k, None)
@@ -1191,7 +1192,8 @@ def _dispatch_location(p: dict, oid: str) -> Scene:
         # 032: stepping onto the square drops any hall or banner-page
         # sub-state — the doors reopen fresh
         for k in ("hall_area", "hall_ask", "hall_putting", "hall_kicking",
-                  "hall_promoting", "banner_page", "guild_dir",
+                  "hall_promoting", "hall_leaving", "guild_leaving",
+                  "banner_page", "guild_dir",
                   "door_rules", "profile_view", "profile_back",
                   "profile_pay", "profile_gift", "profile_loot"):
             p.pop(k, None)

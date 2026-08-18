@@ -262,10 +262,38 @@ def _pips(days: int, required: int) -> str:
     return "▪" * d + "▫" * (7 - d) + f" {d}/{required}"
 
 
+def _leave_prompt(p: dict, fac: dict | None) -> Scene:
+    """068: leaving is final — it asks first, in words that can't be
+    read as "back to town". The hall runs its own copy of this card
+    from p["hall_leaving"] and posts leave_confirm here."""
+    g = p.get("guild") or (fac or {}).get("name") or "the faction"
+    return Scene(
+        eyebrow="ROOTHOLLOW · THE GUILDHALL",
+        headline=f"Leave {g}?",
+        support="Once you go, the door only reopens for the join fee.",
+        body_lines=[
+            f"You are about to leave {g} and no longer be part of it "
+            "\u2014 no access to the faction hall, no part in its "
+            "weekly challenges or their prizes.",
+            "Dues stop. What you paid in stays in the coffer; the "
+            "chest keeps what you hung in it.",
+        ],
+        options=[Option("leave_confirm", "Leave the faction", "final",
+                        danger=True),
+                 Option("guildhall", "Back to the Guildhall"),
+                 Option("town", "Don't leave the faction \u2014 go to "
+                                "town")],
+        meters=meters(p),
+        banner="guildhall",
+    )
+
+
 def guildhall_scene(p: dict, note: str = "") -> Scene:
     st = p.get("founding_guild")
     if isinstance(st, dict):
         return _founding_scene(p, st, note)
+    if p.get("guild_leaving"):
+        return _leave_prompt(p, (world(p) or {}).get("faction"))
     if p.get("faction_donating"):
         return _donate_prompt(p, note)
     if p.get("faction_kicking"):
@@ -344,7 +372,8 @@ def guildhall_scene(p: dict, note: str = "") -> Scene:
             roster = w.get("guild_roster", [])
             lines.append(f"Your faction: {mine} — "
                          + (", ".join(roster[:8]) if roster else "just you"))
-            opts.append(Option("guild_leave", "Leave the faction"))
+            opts.append(Option("guild_leave", "Leave the faction",
+                               "asks first", danger=True))
         else:
             for g in w.get("guilds", [])[:6]:
                 opts.append(Option(f"join_{g}", f"Join {g}"))
@@ -429,7 +458,8 @@ def _member_panel(p: dict, fac: dict, lines: list, opts: list) -> None:
                                "store"))
         if len(fac.get("members", [])) > 1:
             opts.append(Option("kick", "Remove a member"))
-    opts.append(Option("guild_leave", "Leave the faction"))
+    opts.append(Option("guild_leave", "Leave the faction", "asks first",
+                       danger=True))
 
 
 def _hall_list(p: dict, factions: list, lines: list,
@@ -1071,6 +1101,12 @@ def guildhall_action(p: dict, oid: str, text: str = "") -> Scene:
                 st["step"] = "fee"
             return _founding_scene(p, st)
         return _founding_scene(p, st)
+    if p.get("guild_leaving"):
+        # 068: the confirm card owns its ids; anything but the red row
+        # is "no"
+        p.pop("guild_leaving", None)
+        if oid != "leave_confirm":
+            return guildhall_scene(p)
     if isinstance(p.get("guild_dir"), dict):
         # 042: the directory owns its own ids while it is open
         return _guild_dir_action(p, oid)
@@ -1217,6 +1253,9 @@ def guildhall_action(p: dict, oid: str, text: str = "") -> Scene:
         _effect(p, "guild_join", guild=g)
         return guildhall_scene(p, note=f"+ you drink under the {g} banner now")
     if oid == "guild_leave":
+        p["guild_leaving"] = True
+        return _leave_prompt(p, fac)
+    if oid == "leave_confirm":
         g = p.pop("guild", None) or (fac or {}).get("name")
         if g:
             _effect(p, "guild_leave", guild=g)
