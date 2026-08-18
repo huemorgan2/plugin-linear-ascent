@@ -11,7 +11,7 @@ import datetime as dt
 
 from .. import economy, unlocks
 from ..content import schema
-from . import combat, contracts, names, notices, state, weekly
+from . import combat, contracts, labs, names, notices, state, weekly
 from .scene import Meters, Option, Scene
 
 
@@ -34,6 +34,7 @@ def _stamp(p: dict, scene: Scene) -> Scene:
     playing scene the same way. 027: so does the notice board, in town."""
     scene.scene_id = f"s{p.get('act_seq', 0)}"
     scene.location = str(p.get("location") or "")   # 042: the music key
+    scene.labs = labs.enabled_keys(p)                # 067: the flask
     scene.inventory = _pack_strip(p)
     scene.pack_slots = pack_cap(p)
     if (not scene.notices and not scene.enemy
@@ -414,6 +415,17 @@ def apply_choice(p: dict, option_id: str, text: str = "") -> Scene:
     if option_id == "news_close":
         p["news_day"] = state.world_day()
         return _stamp(p, _build_scene(p))
+
+    # 067: the Labs card — reached from the bottom bar's flask, valid
+    # from any room (the bar is outside the row list). Not mid-fight or
+    # mid-creation: the switch would change the card under the player.
+    if labs.is_labs_option(option_id):
+        if p["stage"] != "playing" or p.get("encounter") \
+                or p.get("movie_floor"):
+            scene = _build_scene(p)
+            scene.refusal = "Labs opens between fights — finish this first"
+            return _stamp(p, scene)
+        return _stamp(p, labs.handle(p, option_id, _build_scene))
 
     # 030 Phase 8: mid-reel every click is the next beat ("skip" cuts to
     # the arrival card). A stray id ("hunt" sent before the arrival card)

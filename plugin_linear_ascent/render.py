@@ -2207,6 +2207,10 @@ def render_scene_fragment(scene: Scene) -> str:
         k3 = dict(k3)
         k3["tint"] = _banner_tint(k3["id"], k3.get("specimen", ""))
         dt += f' data-kill3d="{_e(_json.dumps(k3))}"'
+    # 067: which Labs experiments are on — the bar's flask reads it
+    lb = getattr(scene, "labs", None)
+    if lb:
+        dt += f' data-labs="{_e(",".join(lb))}"'
     return (f'<div class="card" data-scene="{_e(scene.scene_id)}"{dt}>'
             + "".join(parts) + "</div>")
 

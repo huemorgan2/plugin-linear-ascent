@@ -1290,6 +1290,23 @@ plyBtn.addEventListener('click', () => {
   if (window.__laSfx) window.__laSfx('click');
   if (ply.open) plyClose(); else plyOpen();
 });
+// 067: the Labs flask — a real act (the card is the engine's), and the
+// button reads ON while any experiment is switched on (data-labs).
+const labsBtn = document.getElementById('labsbtn');
+if (labsBtn) {
+  labsBtn.addEventListener('click', () => {
+    if (window.__laSfx) window.__laSfx('click');
+    window.__laAct('labs');
+  });
+  const paintLabs = () => {
+    const c = game.querySelector('.card');
+    const on = !!(c && c.dataset.labs);
+    labsBtn.classList.toggle('off', !on);
+    labsBtn.querySelector('.sndlab').textContent = on ? 'labs on' : 'labs';
+  };
+  new MutationObserver(paintLabs).observe(game, {childList: true});
+  paintLabs();
+}
 plyPanel.addEventListener('click', async (e) => {
   const who = e.target.closest('[data-pv]');
   if (who) {
@@ -1617,6 +1634,7 @@ def render_pane(api_base: str = _API, web: bool = False) -> str:
     spk = icons.icon_data_url("speaker")
     note = icons.icon_data_url("note")
     post = icons.icon_data_url("postbox")
+    flask = icons.icon_data_url("flask")
     return f"""<!doctype html><html><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">{title}
 <style>{_CSS}</style></head><body>
@@ -1647,6 +1665,9 @@ def render_pane(api_base: str = _API, web: bool = False) -> str:
     style="mask-image:url('{post}');-webkit-mask-image:url('{post}')"
     aria-hidden="true"></span><span class="sndlab">feedback</span><span
     id="fbbadge" class="fbbadge" hidden></span></button>
+  <button id="labsbtn" class="sndbtn off" data-tip="Labs — experiments you can switch on and off"><span class="sndico"
+    style="mask-image:url('{flask}');-webkit-mask-image:url('{flask}')"
+    aria-hidden="true"></span><span class="sndlab">labs</span></button>
   <button id="fbadmin" class="sndbtn" hidden><span class="sndico"
     style="mask-image:url('{post}');-webkit-mask-image:url('{post}')"
     aria-hidden="true"></span><span class="sndlab">admin</span><span

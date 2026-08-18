@@ -201,6 +201,14 @@ _TIPS: dict[str, str] = {
                "◈ 150 × level. How veterans pull friends up the "
                "tower."),
 
+    # ── 067: labs ──
+    "labs_toggle_arena": ("Arena: on floors 6 and 7 the fight becomes a "
+                          "turn-based 3D scene — your strike, then the "
+                          "creature's, with the numbers over the heads. "
+                          "Same rules, same dice. Off = the fight card "
+                          "you know."),
+    "labs_back": "Back to where you stood.",
+
     # ── the fight card ──
     "attack": ("Trade blows — your ATK against its DEF, then its ATK "
                "against yours. The straight road to the kill and the "

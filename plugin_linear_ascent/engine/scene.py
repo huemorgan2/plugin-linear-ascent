@@ -188,6 +188,14 @@ class Scene:
                                     # the bundle/WebGL/the GLB) ignores it
                                     # and plays the fx GIF as today. A new
                                     # TOP-LEVEL key: old clients drop it.
+    labs: list[str] = field(default_factory=list)
+                                    # 067: Labs experiments switched on
+                                    # for this player (keys). The bar's
+                                    # flask reads it; a feature card
+                                    # carries its own payload (arena).
+    arena: dict | None = None       # 067: the arena's turn script —
+                                    # floors 6–7 with labs.arena on;
+                                    # None everywhere else.
 
     def to_text(self) -> str:
         """Plain-text fallback — always works, cards are enhancement."""
@@ -313,6 +321,8 @@ class Scene:
             "players_total": int(self.players_total or 0),
             "refusal": self.refusal,
             "kill3d": self.kill3d,
+            "labs": list(self.labs),
+            "arena": self.arena,
         }
 
     @staticmethod
@@ -364,4 +374,6 @@ class Scene:
             players_total=int(d.get("players_total", 0) or 0),
             refusal=d.get("refusal", ""),
             kill3d=(dict(d["kill3d"]) if d.get("kill3d") else None),
+            labs=list(d.get("labs") or []),
+            arena=(dict(d["arena"]) if d.get("arena") else None),
         )

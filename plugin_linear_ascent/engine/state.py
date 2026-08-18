@@ -76,6 +76,8 @@ def new_player(luna_user: str) -> dict:
         # equipped weapon, the School sells the 2nd and 3rd slot.
         "slots": 1,
         "held": [economy.STARTER_WEAPON.slug],
+        # 067: Labs — experimental features, off until switched on
+        "labs": {},
     }
 
 
@@ -232,6 +234,8 @@ def ensure_current(p: dict) -> None:
     p["gear"].setdefault("shoes", None)    # 004: the shoes ladder
     p.setdefault("durability", {})         # 005: wear per equipped slot
     p.setdefault("durability_pack", {})    # 005: wear stashed with the pack
+    if not isinstance(p.get("labs"), dict):
+        p["labs"] = {}                     # 067: Labs flags
     if p["gear"].get("weapon") is None:
         # pre-c4ab270 doc: never received the free starter weapon.
         p["gear"]["weapon"] = economy.STARTER_WEAPON.slug
