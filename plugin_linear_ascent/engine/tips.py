@@ -621,23 +621,27 @@ def option_tip(oid: str) -> str:
 _ITEM_TIPS: dict[str, str] = {
     # 027: where a thing COMES FROM belongs in its tip — a pack that keeps
     # filling up with something is a question the game should answer.
-    "medgel": ("Medgel — +25 HP. Click it here to use it, anywhere out of "
-               "a fight. They pile up because nine alpha kills in ten "
-               "leave one behind (and presents carry them too): the pack "
-               "is your health bar between fights, so spend them."),
-    "trauma_kit": ("Trauma kit — +80 HP, used from the pack out of a "
-                   "fight. The deep patch for deep floors, where one bad "
-                   "round costs more than the kit did."),
+    "medgel": ("Medgel — +25 HP. Click it here to use it out of a fight; "
+               "set ONE in the charm pouch and it can be drunk mid-fight. "
+               "They pile up because nine alpha kills in ten leave one "
+               "behind (and presents carry them too): the pack is your "
+               "health bar between fights, so spend them."),
+    "trauma_kit": ("Trauma kit — +80 HP, from the pack out of a fight; "
+                   "set in the charm pouch it can be drunk mid-fight. The "
+                   "deep patch for deep floors, where one bad round costs "
+                   "more than the kit did."),
     "trollblood_tonic": ("Trollblood tonic — full heal, drinkable "
-                         "MID-fight, the only one that is. Carried for "
-                         "the round a Warden has you at the edge."),
+                         "MID-fight from the charm pouch only; in the "
+                         "pack it does nothing. Carried for the round a "
+                         "Warden has you at the edge."),
     "energy_cell": ("Energy cell — +5 energy on the spot, one a day. Energy "
                     "is the day's clock: a cell is five extra hunts' "
                     "worth of climbing."),
-    "luck_charm": ("Luck charm — fortune leans your way until tomorrow: "
-                   "better loot and present rolls. Click it to crack one "
-                   "(once a day is all it does); alphas and Wardens drop "
-                   "them about one time in ten."),
+    "luck_charm": ("Luck charm — fortune leans your way while it sits in "
+                   "the charm pouch: the rare drop comes 25 points more "
+                   "often, for 20 victories, then it is spent. In the "
+                   "pack it does nothing; alphas and Wardens drop them "
+                   "about one time in ten."),
     "arrows": ("Bought arrows from the old armory ledger — bows no "
                "longer burn them; a trained hand's quiver looks after "
                "itself. A keepsake of a stricter era."),

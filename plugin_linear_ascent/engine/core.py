@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import datetime as dt
 
-from .. import economy, unlocks
+from .. import economy, icons, unlocks
 from ..content import schema
 from . import combat, contracts, labs, names, notices, state, weekly
 from .scene import Meters, Option, Scene
@@ -36,6 +36,7 @@ def _stamp(p: dict, scene: Scene) -> Scene:
     scene.location = str(p.get("location") or "")   # 042: the music key
     scene.labs = labs.enabled_keys(p)                # 067: the flask
     scene.inventory = _pack_strip(p)
+    scene.slots = _slot_map(p)                      # 069: the gear map
     scene.pack_slots = pack_cap(p)
     if (not scene.notices and not scene.enemy
             and p.get("location") in _NOTICE_ROOMS):
@@ -87,63 +88,93 @@ def _pack_full(p: dict, scene_fn, what: str) -> Scene:
     return s
 
 
+def _gear_cell(p: dict, slug: str, slot: str, worn: bool) -> dict:
+    """069: one gear cell — the worn/held piece with its honed number
+    and its wear. `slot` is the durability slot; `worn` says whether the
+    piece is the one on the body / in the lead hand (its wear lives in
+    `durability[slot]`) or a held side-arm (`durability_pack[slug]`)."""
+    g = economy.FORGE[slug]
+    hone = state.hone_level(p, slot, slug) if slot == "weapon" \
+        else (state.hone_level(p, slot) if worn else 0)
+    cell = {"slug": slug, "kind": slot, "count": 1, "equipped": True,
+            "name": g.name + (f" +{hone}" if hone else "")}
+    cell["stat_name"] = "ATK" if slot == "weapon" else "DEF"
+    cell["stat_val"] = economy.honed_bonus(g.bonus, hone)
+    left = ((p.get("durability") or {}).get(slot) if worn
+            else (p.get("durability_pack") or {}).get(slug))
+    if left is not None and economy.wears(g):
+        pool = economy.item_pool(g)
+        cell["dur"] = max(0.0, min(1.0, left / pool)) if pool else 1.0
+        cell["dur_left"] = economy.endurance(g, left)
+        cell["dur_max"] = economy.endurance(g)
+    return cell
+
+
+def _slot_map(p: dict) -> list[dict]:
+    """069: the seven slots around the portrait — ALWAYS all seven, each
+    in one of three states: locked (grey box + lock, the hover says how
+    to open it), empty (dotted), filled (the icon; the popover carries
+    the slot's acts from `slot_actions`)."""
+    if p.get("stage") != "playing":
+        return []
+    out: list[dict] = []
+    rows = {"left": 0, "right": 0}
+    lead = (p.get("gear") or {}).get("weapon")
+    for sl in economy.SLOTS:
+        d = {"key": sl.key, "side": sl.side, "row": rows[sl.side],
+             "label": sl.label, "kind": sl.kind, "state": "empty",
+             "lock_text": "", "slug": "", "name": "", "icon": "",
+             "count": 0}
+        rows[sl.side] += 1
+        lock = economy.slot_lock(p, sl.key)
+        slug = economy.slot_item(p, sl.key)
+        if lock:
+            d["state"] = "locked"
+            d["lock_text"] = lock
+            d["icon"] = "lock"
+        elif slug:
+            d["state"] = "filled"
+            d["slug"] = slug
+            if slug in economy.FORGE:
+                dslot = "weapon" if sl.kind == "weapon" else sl.key
+                cell = _gear_cell(p, slug, dslot,
+                                  worn=(sl.kind != "weapon" or slug == lead))
+                d.update(cell)
+                d["lead"] = bool(sl.kind == "weapon" and slug == lead)
+                d["icon"] = icons.icon_key(slug, dslot)
+            else:
+                d["count"] = 1
+                if slug in economy.APOTHECARY:
+                    d["name"] = economy.APOTHECARY[slug].name
+                elif slug in economy.RELICS:
+                    d["name"] = economy.RELICS[slug].name
+                else:
+                    d["name"] = slug.replace("_", " ")
+                d["icon"] = icons.icon_key(slug, "item")
+                if slug == "luck_charm":
+                    d["charm_dur"] = int(p.get("charm_dur") or 0)
+            acts, why = slot_actions(p, sl.key)
+            if acts:
+                d["acts"] = [{"opt": o.id, "label": o.label, "hint": o.hint}
+                             for o in acts]
+            if why:
+                d["why"] = why
+        else:
+            d["icon"] = {"weapon": "weapon", "shield": "shield",
+                         "armor": "armor", "shoes": "shoes",
+                         "charm": "luck_charm"}.get(sl.kind, "pack")
+        out.append(d)
+    return out
+
+
 def _pack_strip(p: dict) -> list[dict]:
-    """014: what the player carries — equipped gear first (hone level in
-    the name), then pack items. Rendered under the meters as 1-bit
-    icons; empty before the character exists."""
+    """014: what the player carries. 069: the PACK only — worn and held
+    gear moved to the slot map (`_slot_map`); a pack stack is a thing
+    that does nothing until it is set in a slot. Rendered under the
+    gear map as 1-bit icons; empty before the character exists."""
     if p.get("stage") != "playing":
         return []
     strip: list[dict] = []
-    for slot in ("weapon", "shield", "armor", "shoes"):
-        slug = (p.get("gear") or {}).get(slot)
-        g = economy.FORGE.get(slug) if slug else None
-        if not g:
-            continue
-        hone = state.hone_level(p, slot)
-        cell = {"slug": slug, "kind": slot, "count": 1,
-                "equipped": True,
-                "name": g.name + (f" +{hone}" if hone else "")}
-        # the tip's leading stat is the HONED number — the hone rides
-        # the slot, so only worn steel carries it.
-        cell["stat_name"] = "ATK" if slot == "weapon" else "DEF"
-        cell["stat_val"] = economy.honed_bonus(g.bonus, hone)
-        # 005: paid gear carries its wear onto the strip — the bar and
-        # the hover both read from this one number.
-        left = (p.get("durability") or {}).get(slot)
-        if left is not None and economy.wears(g):
-            pool = economy.item_pool(g)
-            cell["dur"] = max(0.0, min(1.0, left / pool)) if pool else 1.0
-            # 045: the hover names the number, not just the fraction.
-            cell["dur_left"] = economy.endurance(g, left)
-            cell["dur_max"] = economy.endurance(g)
-        strip.append(cell)
-    # 049.1: side-arms ride the carry slots, not the pack — but the
-    # strip must still SHOW them. A bought blade that vanished from
-    # every surface read as lost (it wasn't — it was held).
-    lead = (p.get("gear") or {}).get("weapon")
-    filled = 1 if lead else 0
-    for slug in (p.get("held") or []):
-        g = economy.FORGE.get(slug)
-        if not g or slug == lead:
-            continue
-        filled += 1
-        cell = {"slug": slug, "kind": "weapon", "count": 1,
-                "held": True, "name": g.name + " · held",
-                "stat_name": "ATK", "stat_val": g.bonus}
-        left = (p.get("durability_pack") or {}).get(slug)
-        if left is not None and economy.wears(g):
-            pool = economy.item_pool(g)
-            cell["dur"] = max(0.0, min(1.0, left / pool)) if pool else 1.0
-            cell["dur_left"] = economy.endurance(g, left)
-            cell["dur_max"] = economy.endurance(g)
-        strip.append(cell)
-    # 049.2: a BOUGHT slot with nothing in it still draws — an empty
-    # square where the next weapon goes. Paying for a slot and seeing
-    # no change on the sheet read as the purchase not happening.
-    for _ in range(max(0, int(p.get("slots", 1)) - filled)):
-        strip.append({"slug": "", "kind": "weapon", "count": 0,
-                      "held": True, "empty_slot": True,
-                      "name": "open weapon slot"})
     pack = p.get("inventory") or {}
     order = sorted(pack.items(),
                    key=lambda kv: (kv[0] not in economy.APOTHECARY, kv[0]))
@@ -193,6 +224,136 @@ def _pack_strip(p: dict) -> list[dict]:
 PACK_USE_IDS = ("use_medgel", "use_trauma_kit", "use_weapon_oil")
 POUCH_ONLY_WHY = ("Nothing works from the pack — set it in your charm "
                   "pouch and it will offer itself in the fight.")
+NOT_IN_A_FIGHT = "Not in a fight — set it before you go down."
+LAST_BLADE = "You keep one blade in hand."
+
+
+def pack_full_why(p: dict) -> str:
+    return (f"Pack full ({pack_used(p)}/{pack_cap(p)}). Sell or drop "
+            "something, or buy a bigger pack at the forge.")
+
+
+def _wear_level_req(slug: str) -> int:
+    g = economy.FORGE.get(slug)
+    return economy.rung_player_level_req(g) if g else 0
+
+
+def slot_actions(p: dict, key: str) -> tuple[list[Option], str]:
+    """069: what a SLOT can do — the popover on the gear map. Locked →
+    the lock text; empty → nothing; filled → 'Move to the pack' (and the
+    Forge trip for worn steel). Refusals that never change with the
+    click (a fight, the last blade) come back as `why` with no row; the
+    pack-full case keeps its row and refuses on the click, in red."""
+    if p.get("stage") != "playing":
+        return [], ""
+    lock = economy.slot_lock(p, key)
+    if lock:
+        return [], lock
+    slug = economy.slot_item(p, key)
+    if not slug:
+        return [], ""
+    if p.get("encounter"):
+        return [], NOT_IN_A_FIGHT
+    if key in economy.WEAPON_SLOT_KEYS and \
+            len([w for w in (p.get("held") or []) if w in economy.FORGE]) <= 1:
+        return [], LAST_BLADE
+    opts: list[Option] = []
+    if slug in economy.FORGE:
+        g = economy.FORGE[slug]
+        fix, _ = pack_actions(p, slug)
+        opts.extend(o for o in fix if o.id.startswith("forge_fix_"))
+        name = g.name
+    elif slug in economy.APOTHECARY:
+        name = economy.APOTHECARY[slug].name
+    elif slug in economy.RELICS:
+        name = economy.RELICS[slug].name
+    else:
+        name = slug.replace("_", " ")
+    hint = f"the {name} rides in the pack — it does nothing there"
+    if not pack_can_take(p, slug):
+        hint = pack_full_why(p)
+    opts.append(Option(f"unequip_{key}", "Move to the pack", hint))
+    return opts, ""
+
+
+def _unequip(p: dict, key: str) -> Scene:
+    """069: a slot item goes back to the pack. Weapons leave their slot
+    (the lead pointer moves to the first blade left), a bow's quiver
+    returns to the pack with it, oil on that blade is lost, worn steel
+    carries its wear along; the shield's and armour's honing resets."""
+    s_lock = economy.slot_lock(p, key)
+    slug = economy.slot_item(p, key)
+    if s_lock or not slug:
+        s = _build_scene(p)
+        s.shard_note = s_lock or "Nothing there."
+        return s
+    if p.get("encounter"):
+        s = _build_scene(p)
+        s.shard_note = NOT_IN_A_FIGHT
+        return s
+    inv = p.setdefault("inventory", {})
+    held = [w for w in (p.get("held") or []) if w in economy.FORGE]
+    if key in economy.WEAPON_SLOT_KEYS and len(held) <= 1:
+        s = _build_scene(p)
+        s.shard_note = LAST_BLADE
+        return s
+    # capacity: the piece, plus every quiver stack that comes back with
+    # the last bow
+    need = [slug]
+    quiver_back = {}
+    if key in economy.WEAPON_SLOT_KEYS:
+        def _ranged(w):
+            g = economy.FORGE.get(w)
+            return bool(g) and economy.DAMAGE_TYPE.get(g.line) == "ranged"
+        if _ranged(slug) and not any(_ranged(w) for w in held if w != slug):
+            quiver_back = {k: n for k, n in (p.get("quiver") or {}).items()
+                           if n > 0}
+            need.extend(quiver_back)
+    free = pack_cap(p) - pack_used(p)
+    opening = [x for x in dict.fromkeys(need) if inv.get(x, 0) <= 0]
+    if len(opening) > free:
+        s = _build_scene(p)
+        s.shard_note = pack_full_why(p)
+        s.refusal = f"Can't move it — pack full ({pack_used(p)}/{pack_cap(p)})"
+        return s
+    notes = []
+    if key in economy.WEAPON_SLOT_KEYS:
+        if p["gear"].get("weapon") == slug:
+            other = next(w for w in held if w != slug)
+            combat._promote_held(p, other)     # swaps the wear pools too
+        p["held"] = [w for w in (p.get("held") or []) if w != slug]
+        if (p.get("oil") or {}).pop(slug, None):
+            notes.append("the oil dries on the shelf")
+        for k, n in quiver_back.items():
+            inv[k] = inv.get(k, 0) + n
+            p["quiver"].pop(k, None)
+        if quiver_back:
+            notes.append("the quiver comes back to the pack with the bow")
+    else:
+        p["gear"][key] = None
+        if key in economy.DURABILITY_SLOTS:
+            left = (p.get("durability") or {}).pop(key, None)
+            if left is not None:
+                p.setdefault("durability_pack", {})[slug] = left
+        if key in ("shield", "armor") and state.hone_level(p, key):
+            state.set_hone(p, key, 0)
+            notes.append("its honing is lost")
+    inv[slug] = inv.get(slug, 0) + 1
+    combat._ledger(p, "use", note=f"unequip {slug}")
+    if slug in economy.FORGE:
+        name = economy.FORGE[slug].name
+    elif slug in economy.APOTHECARY:
+        name = economy.APOTHECARY[slug].name
+    elif slug in economy.RELICS:
+        name = economy.RELICS[slug].name
+    else:
+        name = slug.replace("_", " ")
+    s = _build_scene(p)
+    line = f"▪ the {name} goes to your pack — it does nothing there"
+    if notes:
+        line += " (" + "; ".join(notes) + ")"
+    s.body_lines.insert(0, line)
+    return s
 
 
 def pack_actions(p: dict, slug: str) -> tuple[list[Option], str]:
@@ -220,7 +381,8 @@ def pack_actions(p: dict, slug: str) -> tuple[list[Option], str]:
     # The salves: a number in the effect string ("heal_25"). The tonic's
     # "heal_full" is a fight item and answers below.
     if item and item.effect.startswith("heal_") \
-            and item.effect != "heal_full" and have:
+            and item.effect != "heal_full" and have \
+            and slug not in economy.CHARM_KINDS:
         amount = int(item.effect.rsplit("_", 1)[1])
         if p["hp"] >= state.max_hp(p):
             return [], ("You're whole. Keep it sealed for when you're "
@@ -247,12 +409,35 @@ def pack_actions(p: dict, slug: str) -> tuple[list[Option], str]:
                        f"×{have} into the quiver")], ""
     if slug == "repair_token":
         return [], "The Forge spends it: one full mend, free."
-    if slug in economy.CHARM_KINDS and have and not (
-            item and item.effect.startswith("heal_")
-            and item.effect != "heal_full"):
-        # 069: relics, the tonic and the luck charm act from the POUCH
-        # (phase 4 adds the wear row here)
-        return [], POUCH_ONLY_WHY
+    if slug in economy.CHARM_KINDS and have:
+        # 069: relics, potions and the luck charm act from the POUCH —
+        # the pack row SETS them there (a salve keeps its road use too)
+        lock = economy.slot_lock(p, "charm")
+        rows: list[Option] = []
+        salve = bool(item and item.effect.startswith("heal_")
+                     and item.effect != "heal_full")
+        if salve:
+            amount = int(item.effect.rsplit("_", 1)[1])
+            if p["hp"] < state.max_hp(p):
+                rows.append(Option(f"use_{slug}", f"Use a {item.name}",
+                                   f"+{amount} HP · {have} left"))
+        if lock:
+            # the pouch's lock reads on the SLOT; a salve row stands on
+            # its own, a whole body hears why it has none
+            if rows:
+                return rows, ""
+            return [], (("You're whole. Keep it sealed for when you're "
+                         "not — it heals the same at any level.")
+                        if salve else lock)
+        worn = (p.get("gear") or {}).get("charm")
+        if worn == slug:
+            return rows, "One is already in your pouch."
+        wname = (economy.APOTHECARY[worn].name if worn in economy.APOTHECARY
+                 else economy.RELICS[worn].name if worn in economy.RELICS
+                 else worn)
+        hint = f"swap out the {wname}" if worn else "into the charm pouch"
+        rows.append(Option(f"wear_{slug}", "Set in pouch", hint))
+        return rows, ""
     if slug in economy.FORGE:
         # 045: gear promotes itself from the pack — one weapon held, one
         # shield, one armour; the slot decides which.
@@ -276,15 +461,15 @@ def pack_actions(p: dict, slug: str) -> tuple[list[Option], str]:
                         if g.slot in ("weapon", "shield")
                         else "Already worn.")
         if g.slot in economy.DURABILITY_SLOTS and have:
-            if g.slot == "weapon":
-                label = "Use this"
-            elif g.slot == "shield":
-                label = ("Hold this focus" if g.line == "sorcerer"
-                         else "Use as shield")
-            elif g.slot == "armor":
-                label = "Wear this"
+            # 069: the level gate reads on the pack row, before the tap
+            req = _wear_level_req(slug)
+            if p["level"] < req:
+                return [], (f"🔒 level {req} — {g.name} answers to level "
+                            f"{req} hands; you are level {p['level']}.")
+            if g.slot in ("weapon", "shield"):
+                label = "Hold"
             else:
-                label = "Wear these"
+                label = "Wear"
             worn = p["gear"].get(g.slot)
             hint = (f"swap out the {economy.FORGE[worn].name}"
                     if worn and worn in economy.FORGE else "from your pack")
@@ -309,9 +494,13 @@ def _pack_use(p: dict, oid: str) -> Scene | None:
     wearing = oid.startswith("wear_")
     fixing = oid.startswith("forge_fix_")
     nocking = oid.startswith("nock_") and not p.get("encounter")
+    unequipping = oid.startswith("unequip_") and \
+        oid.removeprefix("unequip_") in {sl.key for sl in economy.SLOTS}
     if oid not in PACK_USE_IDS and not wearing and not fixing \
-            and not nocking:
+            and not nocking and not unequipping:
         return None
+    if unequipping:
+        return _unequip(p, oid.removeprefix("unequip_"))
     if p.get("encounter"):
         if wearing or fixing:
             # 048 phase 3: the promote is refused mid-fight WITH a
@@ -1808,11 +1997,85 @@ def _gear_purchase(p: dict, g, scene_fn) -> Scene:
     return s
 
 
+def _wear_charm(p: dict, slug: str, scene_fn) -> Scene:
+    """069: set a charm / potion / relic in the pouch from the pack; the
+    one there goes back to the pack (capacity checked first)."""
+    lock = economy.slot_lock(p, "charm")
+    if lock:
+        s = scene_fn(p)
+        s.shard_note = lock
+        return s
+    if p.get("encounter"):
+        s = scene_fn(p)
+        s.shard_note = NOT_IN_A_FIGHT
+        return s
+    inv = p.setdefault("inventory", {})
+    if inv.get(slug, 0) <= 0:
+        return scene_fn(p)
+    old = p["gear"].get("charm")
+    if old == slug:
+        s = scene_fn(p)
+        s.shard_note = "One is already in your pouch."
+        return s
+    if old and inv.get(old, 0) <= 0 and inv.get(slug, 0) > 1 \
+            and pack_used(p) >= pack_cap(p):
+        s = scene_fn(p)
+        s.shard_note = pack_full_why(p)
+        s.refusal = f"Can't swap — pack full ({pack_used(p)}/{pack_cap(p)})"
+        return s
+    inv[slug] -= 1
+    if inv[slug] <= 0:
+        del inv[slug]
+    if old:
+        inv[old] = inv.get(old, 0) + 1
+    p["gear"]["charm"] = slug
+    if slug == "luck_charm" and int(p.get("charm_dur") or 0) <= 0:
+        p["charm_dur"] = economy.CHARM_POOL
+    name = (economy.APOTHECARY[slug].name if slug in economy.APOTHECARY
+            else economy.RELICS[slug].name if slug in economy.RELICS
+            else slug)
+    combat._ledger(p, "use", note=f"pouch {slug}")
+    s = scene_fn(p)
+    line = f"+ {name} in the pouch — it acts from there"
+    if old:
+        oname = (economy.APOTHECARY[old].name if old in economy.APOTHECARY
+                 else economy.RELICS[old].name if old in economy.RELICS
+                 else old)
+        line += f"; the {oname} goes to your pack"
+    s.body_lines.insert(0, line)
+    return s
+
+
 def _wear_from_pack(p: dict, slug: str, scene_fn) -> Scene:
+    if slug in economy.CHARM_KINDS and slug not in economy.FORGE:
+        return _wear_charm(p, slug, scene_fn)
     g = economy.FORGE.get(slug)
     if not g or (p.get("inventory") or {}).get(slug, 0) <= 0:
         return scene_fn(p)
+    req = _wear_level_req(slug)
+    if p["level"] < req:
+        s = scene_fn(p)
+        s.shard_note = (f"🔒 level {req} — {g.name} answers to level {req} "
+                        f"hands; you are level {p['level']}.")
+        s.refusal = f"Can't wear this — it needs a level {req} hand"
+        return s
     old = p["gear"].get(g.slot)
+    # 069: a full hand / a worn piece sends the OLD one to the pack —
+    # refuse first if the pack can't take it (the stack being worn may
+    # free a slot, which counts)
+    held = p.get("held") or []
+    cap = max(1, int(p.get("slots", 1)))
+    to_pack = old if g.slot != "weapon" else (
+        old if (slug not in held and len(held) >= cap) else None)
+    if to_pack and economy.FORGE.get(to_pack) \
+            and (economy.FORGE[to_pack].price > 0
+                 or to_pack in economy.BASIC_WEAPONS) \
+            and not pack_can_take(p, to_pack) \
+            and p["inventory"][slug] > 1:
+        s = scene_fn(p)
+        s.shard_note = pack_full_why(p)
+        s.refusal = f"Can't swap — pack full ({pack_used(p)}/{pack_cap(p)})"
+        return s
     p["inventory"][slug] -= 1
     if p["inventory"][slug] <= 0:
         del p["inventory"][slug]

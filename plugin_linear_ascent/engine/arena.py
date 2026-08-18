@@ -186,13 +186,17 @@ def _me(p: dict) -> dict:
         if not g:
             continue
         path = economy.PATH_OF_LINE.get(g.line, "blade")
+        # 069: hone rides the slug — every held blade shows its own
+        bonus = economy.honed_bonus(g.bonus,
+                                    state.hone_level(p, "weapon", slug))
         weapons.append({
             "slug": slug, "name": g.name, "path": path,
             "lead": slug == lead,
             "rank": int((p.get("training") or {}).get(path, 0)),
-            # 069: hone rides the slug — every held blade shows its own
-            "bonus": economy.honed_bonus(g.bonus,
-                                         state.hone_level(p, "weapon", slug)),
+            "bonus": bonus,
+            # 069 phase 5: the ATK this blade swings with — no "main
+            # weapon bonus", each weapon is its own attack
+            "atk": economy.player_atk(int(p.get("level", 1)), bonus),
             "broken": bool(state.is_broken(p, "weapon")) if slug == lead
             else False,
         })
@@ -205,8 +209,22 @@ def _me(p: dict) -> dict:
                            "bonus": state.gear_bonus(p, slot),
                            "broken": bool(state.is_broken(p, slot))}
     lvl = int(p.get("level", 1))
+    # 069 phase 5: what sits in the charm pouch — the HUD marks it under
+    # the climber's HP (a luck charm with its pool, a potion by name)
+    charm = None
+    cslug = p["gear"].get("charm") if p.get("charm_slot") else None
+    if cslug:
+        charm = {"slug": cslug,
+                 "name": (economy.APOTHECARY[cslug].name
+                          if cslug in economy.APOTHECARY else
+                          economy.RELICS[cslug].name
+                          if cslug in economy.RELICS else
+                          cslug.replace("_", " ")),
+                 "dur": int(p.get("charm_dur") or 0)
+                 if cslug == "luck_charm" else None}
     return {
         "hp": max(0, int(p["hp"])), "hp_max": state.max_hp(p),
+        "charm": charm,
         "atk": state.atk(p), "atk_base": economy.player_atk(lvl, 0),
         "def": state.dfs(p), "def_base": economy.player_def(lvl, 0, 0),
         "spd": economy.player_speed(p),
@@ -251,8 +269,18 @@ _USE_ITEM = {
     "use_polymorph": "polymorph_dust", "use_veil": "veil_draught",
     "use_apple": "golden_apple", "use_severing": "severing_word",
     "drink_tonic": "trollblood_tonic",
+    "drink_medgel": "medgel", "drink_trauma_kit": "trauma_kit",
 }
 _WEAPON_ROWS = ("sleep_spell", "treeline_shot", "shield_wall", "stand")
+
+
+def _weapon_atk(p: dict, slug: str) -> int | None:
+    """069 phase 5: the ATK a given held weapon swings with."""
+    g = economy.FORGE.get(slug or "")
+    if not g:
+        return None
+    bonus = economy.honed_bonus(g.bonus, state.hone_level(p, "weapon", slug))
+    return economy.player_atk(int(p.get("level", 1)), bonus)
 
 
 def tile(option_id: str, p: dict) -> dict:
@@ -265,13 +293,15 @@ def tile(option_id: str, p: dict) -> dict:
         from .combat import _train_path
         path = _train_path(p)
         return {"icon": _PATH_ICON.get(path, "sword"),
-                "label": _PATH_LABEL.get(path, "ATTACK"), "art": lead}
+                "label": _PATH_LABEL.get(path, "ATTACK"), "art": lead,
+                "atk": _weapon_atk(p, lead)}
     if option_id.startswith("attack_"):
         slug = option_id.removeprefix("attack_")
         g = economy.FORGE.get(slug)
         path = economy.PATH_OF_LINE.get(g.line, "blade") if g else "blade"
         return {"icon": _PATH_ICON.get(path, "sword"),
-                "label": _PATH_LABEL.get(path, "ATTACK"), "art": slug}
+                "label": _PATH_LABEL.get(path, "ATTACK"), "art": slug,
+                "atk": _weapon_atk(p, slug)}
     if option_id.startswith("nock_") or option_id.startswith("drink_"):
         slug = option_id.split("_", 1)[1]
         slug = _USE_ITEM.get(option_id, slug)

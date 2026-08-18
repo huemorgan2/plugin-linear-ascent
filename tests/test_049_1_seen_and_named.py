@@ -64,13 +64,14 @@ def test_v8_docs_holding_a_pigsticker_wake_with_a_scrap_dagger():
 def test_the_pack_strip_draws_the_held_side_arm():
     p = _archer_with_dagger("Seenhand")
     p.setdefault("durability_pack", {})["scrap_dagger"] = 100.0
-    strip = core._pack_strip(p)
+    strip = core._slot_map(p)                 # 069: held steel = a slot
     cell = next(c for c in strip if c["slug"] == "scrap_dagger")
-    assert cell.get("held") is True
-    assert "held" in cell["name"]
+    assert cell["state"] == "filled" and cell["key"] == "weapon2"
+    assert cell.get("lead") is False
     assert cell.get("dur_left") is not None
-    # the lead hand is not doubled
+    # the lead hand is not doubled, and nothing worn rides the pack strip
     assert sum(1 for c in strip if c["slug"] == "basic_bow") == 1
+    assert not [c for c in core._pack_strip(p) if c["slug"] == "scrap_dagger"]
 
 
 def test_at_range_the_steel_row_shows_locked_and_refuses():

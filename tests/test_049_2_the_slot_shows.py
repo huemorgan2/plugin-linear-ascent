@@ -31,16 +31,17 @@ def _character(name):
 def test_a_bought_empty_slot_draws_an_open_square():
     p = _character("Openhand")
     p["slots"] = 2                      # bought, nothing riding it yet
-    strip = core._pack_strip(p)
-    marks = [c for c in strip if c.get("empty_slot")]
-    assert len(marks) == 1
-    assert marks[0]["kind"] == "weapon" and marks[0]["held"]
+    # 069: the open grip is an EMPTY weapon slot on the gear map
+    marks = [c for c in core._slot_map(p)
+             if c["kind"] == "weapon" and c["state"] == "empty"]
+    assert len(marks) == 1 and marks[0]["key"] == "weapon2"
 
 
 def test_one_slot_owned_means_no_open_square():
     p = _character("Onehand")
     assert int(p.get("slots", 1)) == 1
-    assert not [c for c in core._pack_strip(p) if c.get("empty_slot")]
+    weapons = [c for c in core._slot_map(p) if c["kind"] == "weapon"]
+    assert [c["state"] for c in weapons] == ["filled", "locked", "locked"]
 
 
 def test_the_hand_row_draws_lead_held_and_open_slots():
@@ -50,13 +51,12 @@ def test_the_hand_row_draws_lead_held_and_open_slots():
     p["held"] = ["basic_bow", "scrap_dagger"]
     p["slots"] = 3                      # third bought, still open
     scene = core.current_scene(p)
-    html = render._inventory_html(scene)
-    hand = html.split('class="slotgrid"')[0]
+    html = render.render_scene_fragment(scene)
+    hand = html.split('class="gearmap"')[1].split('class="pcol"')[0]
     assert 'data-slug="basic_bow"' in hand
     assert 'data-slug="scrap_dagger"' in hand
-    assert ">held<" in hand
-    assert ">open slot<" in hand
-    assert "open weapon slot" in hand
+    assert 'data-key="weapon3"' in hand and 'slot gm empty' in hand
+    assert "weapon 3 — an open grip" in hand
     # the side-arm left the pack grid
     grid = html.split('class="slotgrid"')[1]
     assert 'data-slug="scrap_dagger"' not in grid

@@ -204,6 +204,13 @@ class Scene:
     arena: dict | None = None       # 067: the arena's turn script —
                                     # floors 6–7 with labs.arena on;
                                     # None everywhere else.
+    slots: list[dict] = field(default_factory=list)
+                                    # 069: the gear map — the seven slots
+                                    # around the portrait, always all
+                                    # seven: {key, side, row, label,
+                                    # state: locked|empty|filled,
+                                    # lock_text, slug, name, kind, icon,
+                                    # count, dur, acts, why}
 
     def to_text(self) -> str:
         """Plain-text fallback — always works, cards are enhancement."""
@@ -333,6 +340,7 @@ class Scene:
             "kill3d": self.kill3d,
             "labs": list(self.labs),
             "arena": self.arena,
+            "slots": self.slots,
         }
 
     @staticmethod
@@ -390,4 +398,5 @@ class Scene:
             kill3d=(dict(d["kill3d"]) if d.get("kill3d") else None),
             labs=list(d.get("labs") or []),
             arena=(dict(d["arena"]) if d.get("arena") else None),
+            slots=list(d.get("slots") or []),
         )

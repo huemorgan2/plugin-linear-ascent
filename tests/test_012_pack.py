@@ -199,4 +199,6 @@ def test_grid_draws_capacity_and_flows():
     src = open(render.__file__, encoding="utf-8").read()
     assert ".slotgrid{{display:flex;flex-wrap:wrap" in src
     assert ".slot{{position:relative;width:60px;height:60px" in src
-    assert ".hcell .slot{{width:75px;height:75px;}}" in src
+    # 069: the hand row is gone — the gear map draws its own slots
+    assert ".hcell" not in src
+    assert ".gearmap{{display:grid" in src

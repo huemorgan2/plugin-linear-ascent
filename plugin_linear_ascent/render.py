@@ -985,26 +985,95 @@ def _profile_html(scene: Scene) -> str:
                              _TIP_DEF)
                   + spd_row
                   + "</div>")
-    # the pack lives in the profile's right column — portrait on the
-    # left, everything the climber carries to its right, never below.
-    right += _inventory_html(scene)
     ident = _ident_html(m)
+    # 069: the pack rides UNDER the profile block, full width — the gear
+    # map (slots either side of the portrait) takes the left, the meters
+    # and pip rows the right.
+    pack = _inventory_html(scene)
     # 010: the face is a Gmail privilege — a not-yet-linked (legacy) web
     # account holds the connect box where its portrait would stand. The
     # flag is set only by worldd's web pane; Luna surfaces never gate it.
     if getattr(scene, "portrait_locked", False):
-        return (ident + '<div class="profile">' + _connect_box_html()
-                + f'<div class="pcol">{right}</div></div>')
-    url = _portrait_data_url(_portrait_slug(scene))
-    if not url:
-        return ident + right
-    # a real <img>, not a masked div: with the height stretched to the
-    # column, width:auto keeps the 1:2 ratio from the PNG itself — the
-    # one sizing rule every webview agrees on. The ink is baked white.
+        figure = _connect_box_html()
+    else:
+        url = _portrait_data_url(_portrait_slug(scene))
+        if not url:
+            return ident + right + pack
+        # a real <img>, not a masked div: with the height set to the slot
+        # column's, width:auto keeps the 1:2 ratio from the PNG itself —
+        # the one sizing rule every webview agrees on. The ink is baked
+        # white.
+        figure = f'<img class="portrait later" src="{url}" alt="">'
     return (ident
-            + f'<div class="profile">'
-            f'<img class="portrait later" src="{url}" alt="">'
-            f'<div class="pcol">{right}</div></div>')
+            + '<div class="profile">'
+            + _gearmap_html(scene, figure)
+            + f'<div class="pcol">{right}</div></div>'
+            + pack)
+
+
+# ── 069: the gear map — seven slots around the figure ────────────────────
+# Minecraft's grammar: the figure in the middle, LEFT column top→bottom
+# charm/potion · armour · boots, RIGHT column shield · weapon · weapon 2 ·
+# weapon 3. Every slot is ALWAYS drawn, in one of three states: locked
+# (dark grey box, a lock, the hover says how to open it and at what
+# level), empty (dotted, nothing in it), filled (the icon; the click
+# offers "Move to the pack"). Nothing in the pack counts — only what
+# sits here.
+
+_SLOT_EMPTY_TIP = {
+    "charm": "charm pouch — empty. Set a luck charm, a potion or a "
+             "relic from the pack; only what sits here acts in a fight.",
+    "armor": "armour — none worn. Wear a piece from the pack; it counts "
+             "only on your back.",
+    "shoes": "boots — none worn. Wear a pair from the pack; speed comes "
+             "only from worn boots.",
+    "shield": "shield — none held. Hold one from the pack.",
+    "weapon": "weapon — an open grip. Hold a blade, bow or staff from "
+              "the pack.",
+    "weapon2": "weapon 2 — an open grip. Hold a second weapon from the "
+               "pack; each weapon in hand is its own attack.",
+    "weapon3": "weapon 3 — an open grip. Hold a third weapon from the "
+               "pack.",
+}
+
+
+def _slotmap_cell(d: dict) -> str:
+    """One slot of the gear map in its state."""
+    key = str(d.get("key", ""))
+    st = d.get("state", "empty")
+    if st == "locked":
+        url = icons.icon_data_url("lock")
+        tip = str(d.get("lock_text") or "Locked.")
+        return (f'<span class="slot gm locked" data-key="{_e(key)}" '
+                f'data-tip="{_e(tip)}" tabindex="0">'
+                f'<span class="picon" style="background-color:#555;'
+                f"-webkit-mask-image:url('{url}');mask-image:url('{url}');"
+                '"></span></span>')
+    if st != "filled" or not d.get("slug"):
+        tip = _SLOT_EMPTY_TIP.get(key, f"{d.get('label', key)} — empty")
+        return (f'<span class="slot gm empty" data-key="{_e(key)}" '
+                f'data-tip="{_e(tip)}"></span>')
+    cell = _slot_cell(d)
+    lead = ' lead' if d.get("lead") else ''
+    return cell.replace('class="slot item act',
+                        f'class="slot gm item act{lead}', 1) \
+               .replace('<button type="button" ',
+                        f'<button type="button" data-key="{_e(key)}" ', 1)
+
+
+def _gearmap_html(scene: Scene, figure: str) -> str:
+    slots = list(getattr(scene, "slots", None) or [])
+    if not slots:
+        # an old scene half (pre-069 server) — the figure alone
+        return figure
+    left = "".join(_slotmap_cell(d) for d in slots
+                   if d.get("side") == "left")
+    right = "".join(_slotmap_cell(d) for d in slots
+                    if d.get("side") == "right")
+    return ('<div class="gearmap">'
+            f'<div class="slotcol left">{left}</div>'
+            f'<div class="pwrap">{figure}</div>'
+            f'<div class="slotcol right">{right}</div></div>')
 
 
 # ── 059: the faction block — where you stand with the factions ──────────
@@ -1392,6 +1461,9 @@ def _slot_cell(it: dict) -> str:
     tip = tips.item_tip(slug, equipped=equipped, bonus=it.get("stat_val"))
     name = str(it.get("name", slug))
     tip = f"{name} — {tip}" if tip else name
+    if it.get("charm_dur"):
+        # 069: a worn luck charm names its remaining pool
+        tip += f" · {int(it['charm_dur'])} victories of fortune left"
     # 005: worn gear shows a hairline bar under its icon; the hover
     # names the number ("62% — repair at the Forge").
     dur = it.get("dur")
@@ -1480,60 +1552,18 @@ _PACK_MIN_SLOTS = 6
 
 
 def _inventory_html(scene: Scene) -> str:
-    """031 §3: the pack is a slot grid now — squares that fill with
-    what you carry, blanks where nothing does. The weapon in use and
-    the shield are promoted to two larger boxes on top; armor and
-    shoes keep their bright equipped tint inside the grid. Swapping
-    weapons stays the cell popup's job (wear_*), and buying better
-    steel still auto-promotes at the Forge."""
-    if not scene.inventory:
+    """031 §3: the pack is a slot grid — squares that fill with what you
+    carry, blanks where nothing does. 069: the PACK ONLY — worn and held
+    gear live in the gear map above; a pack stack does nothing until it
+    is set in a slot (the cell popup's wear_* / Set in pouch)."""
+    if not scene.inventory and not getattr(scene, "slots", None):
         return ""
-    hand: dict[str, dict] = {}
-    side: list[dict] = []
-    rest: list[dict] = []
-    for it in scene.inventory:
-        kind = it.get("kind", "")
-        if it.get("equipped") and kind in ("weapon", "shield") \
-                and kind not in hand:
-            hand[kind] = it
-        elif kind == "weapon" and it.get("held"):
-            # 049.2: side-arms and bought-but-empty slots are HAND
-            # cells, not pack clutter — one square per carry slot the
-            # player owns, so a bought slot visibly exists.
-            side.append(it)
-        else:
-            rest.append(it)
-    hrow = []
-    it = hand.get("weapon")
-    cell = (_slot_cell(it) if it else
-            '<span class="slot empty" data-tip="no weapon in hand '
-            '— the Forge sells steel"></span>')
-    hrow.append(f'<span class="hcell"><span class="hlab">in hand'
-                f"</span>{cell}</span>")
-    for it in side:
-        if it.get("empty_slot"):
-            cell = ('<span class="slot empty" data-tip="an open weapon '
-                    'slot — the Forge sells steel"></span>')
-            lab = "open slot"
-        else:
-            cell = _slot_cell(it)
-            lab = "held"
-        hrow.append(f'<span class="hcell"><span class="hlab">{lab}'
-                    f"</span>{cell}</span>")
-    it = hand.get("shield")
-    cell = (_slot_cell(it) if it else
-            '<span class="slot empty" data-tip="no shield '
-            '— the Forge sells steel"></span>')
-    hrow.append(f'<span class="hcell"><span class="hlab">shield'
-                f"</span>{cell}</span>")
-    # worn armor/shoes sit in the grid (bright) but are not pack stacks —
-    # capacity counts only what is packed.
-    worn = [it for it in rest if it.get("equipped")]
-    packed = [it for it in rest if not it.get("equipped")]
+    packed = [it for it in scene.inventory
+              if not it.get("equipped") and not it.get("held")]
     n = len(packed)
     cap = int(getattr(scene, "pack_slots", 0) or 0)
-    total = len(worn) + max(cap or _PACK_MIN_SLOTS, n)
-    cells = [_slot_cell(it) for it in worn]
+    total = max(cap or _PACK_MIN_SLOTS, n)
+    cells = []
     for i, it in enumerate(packed):
         cell = _slot_cell(it)
         if cap and i >= cap:
@@ -1548,7 +1578,6 @@ def _inventory_html(scene: Scene) -> str:
     if cap:
         lbl = f"pack {n}/{cap}" + (" · over" if n > cap else "")
     return (f'<div class="inv later"><span class="invlbl">{lbl}</span>'
-            f'<div class="handrow">{"".join(hrow)}</div>'
             f'<div class="slotgrid">{"".join(cells)}</div></div>')
 
 
@@ -1712,7 +1741,7 @@ INTERACT_JS = """(function () {
   }
 
   function wirePack(root) {
-    root.querySelectorAll('.inv .item').forEach(function (it) {
+    root.querySelectorAll('.inv .item, .gearmap .item').forEach(function (it) {
       if (it.dataset.wired) return;
       it.dataset.wired = '1';
       it.addEventListener('click', function (e) {
@@ -1810,12 +1839,17 @@ INTERACT_JS = """(function () {
       var img = pr.querySelector('.portrait');
       var col = pr.querySelector('.pcol');
       if (!img || !col) return;
+      /* 069: the figure stands between the slot columns — it takes the
+         taller column's height (4 slots + gaps), never the meters' */
+      var h = 0;
+      pr.querySelectorAll('.slotcol').forEach(function (c) {
+        h = Math.max(h, c.offsetHeight); });
       if (phone) {
-        img.style.height = '132px';
+        img.style.height = (h || 210) + 'px';
         img.style.width = 'auto';
         return;
       }
-      img.style.height = Math.max(200, col.offsetHeight) + 'px';
+      img.style.height = Math.max(200, h || col.offsetHeight) + 'px';
       img.style.width = 'auto';
     });
   }
@@ -1969,9 +2003,22 @@ def _astat_html(side: dict, cls: str, speed_key: str) -> str:
     if speed_key in side:
         segs.append(f'<span style="color:{AETHER}">SPEED '
                     f"{int(side[speed_key])}</span>")
+    # 069 phase 5: the pouch under the climber's HP — the charm or potion
+    # that acts in this fight (nothing in the pack does)
+    charm = side.get("charm") or {}
+    pouch = ""
+    if charm.get("slug"):
+        url = icons.icon_data_url(icons.icon_key(str(charm["slug"]), "item"))
+        n = charm.get("dur")
+        pouch = (f'<div class="apouch"><span class="picon" style="'
+                 f'background-color:{GOLD};-webkit-mask-image:url(\'{url}\');'
+                 f'mask-image:url(\'{url}\');"></span> '
+                 f'{_e(str(charm.get("name", "")))}'
+                 + (f' <span style="color:{GOLD}">×{int(n)}</span>'
+                    if n is not None else "") + '</div>')
     return (f'<div class="astat {cls}"><div><span style="color:{OK}">HP</span> '
             f'{_abar(side.get("hp", 0), side.get("hp_max", 1), cls)}</div>'
-            f'<div>{"   ".join(segs)}</div></div>')
+            f'<div>{"   ".join(segs)}</div>{pouch}</div>')
 
 
 def _arena_hud_html(a: dict) -> str:
@@ -2037,8 +2084,12 @@ def _arena_tiles_html(scene) -> str:
             icon = (f'<img class="aart glyph{" locked" if locked else ""}" '
                     f'src="{gurl}" alt="" draggable="false">')
         hint = (f'<span class="ahint">{_ep(o.hint)}</span>' if o.hint else "")
+        # 069 phase 5: an attack tile carries the ATK its own weapon
+        # swings with — three blades, three numbers
+        atk = (f'<span class="aatk">ATK {int(t["atk"])}</span>'
+               if t.get("atk") is not None else "")
         btn = (f'<button type="button" class="{cls}" data-opt="{_e(o.id)}" '
-               f'title="{_e(o.label)}">{icon}'
+               f'title="{_e(o.label)}">{icon}{atk}'
                f'<span class="atxt"><span class="key{key_cls}">{i}</span> '
                f'<span class="lbl">{_e(t.get("label") or o.label)}</span></span>'
                f'{hint}</button>')
@@ -2427,7 +2478,7 @@ SCENE_CSS = f"""
  justify-content:center;align-items:flex-end;}}
 .arena-opts.busy .atile{{pointer-events:none;opacity:.45;}}
 .arena-opts .atcell{{position:relative;display:flex;}}
-.arena-opts .opt.atile{{flex-direction:column;align-items:center;
+.arena-opts .opt.atile{{position:relative;flex-direction:column;align-items:center;
  justify-content:flex-end;width:auto;min-width:17cqw;padding:4px 3px 3px;
  background:{INK};border:1px solid {BORDER};gap:2px;text-align:center;}}
 .arena-opts .opt.atile::after{{content:none;}}
@@ -2440,6 +2491,10 @@ SCENE_CSS = f"""
  letter-spacing:.04em;}}
 .arena-opts .atile .atxt .key{{min-width:0;}}
 .arena-opts .atile .ahint{{display:none;}}
+.arena-opts .atile .aatk{{position:absolute;top:2px;right:3px;
+ color:{GOLD};font-size:.72em;line-height:1;pointer-events:none;}}
+.astat .apouch{{display:flex;align-items:center;gap:.5ch;color:{ART};}}
+.astat .apouch .picon{{width:14px;height:14px;}}
 .arena-opts .atile.locked .lbl{{color:{DIM};}}
 .arena-opts .opt.atile:hover:not(:disabled),
 .arena-opts .opt.atile:focus-visible{{border-color:{BRIGHT};}}
@@ -2904,10 +2959,31 @@ SCENE_CSS = f"""
  white-space:nowrap;}}
 .ident .idlv{{color:{BRIGHT};cursor:help;}}
 .ident .idgold{{color:{GOLD};cursor:help;}}
-.profile{{display:flex;gap:2ch;align-items:stretch;margin-top:8px;}}
-.profile .portrait{{flex:none;align-self:stretch;height:auto;width:auto;
+.profile{{display:flex;gap:2ch;align-items:flex-start;margin-top:8px;}}
+.profile .portrait{{flex:none;height:auto;width:auto;
  min-height:200px;image-rendering:pixelated;}}
 .profile .pcol{{flex:1;min-width:0;}}
+/* ── 069: the gear map — slots either side of the figure. The columns
+   are the height (4 × 60 + 3 × 6); the figure stretches to match. ── */
+.gearmap{{display:grid;grid-template-columns:auto auto auto;gap:0 8px;
+ align-items:stretch;flex:none;}}
+.gearmap .slotcol{{display:flex;flex-direction:column;gap:6px;}}
+.gearmap .pwrap{{display:flex;align-items:stretch;justify-content:center;
+ min-width:60px;}}
+.gearmap .pwrap .portrait{{height:258px;}}
+.gearmap .pwrap .vbox{{width:120px;}}
+.slot.gm.locked{{background:#222;border:2px solid #555;opacity:1;
+ cursor:help;}}
+.slot.gm.locked .picon{{width:26px;height:26px;}}
+.slot.gm.empty{{border:2px dotted {BORDER};background:transparent;
+ opacity:.9;}}
+.slot.gm.lead{{border-color:{GOLD};}}
+.gearmap .item{{font:inherit;border-radius:0;padding:0;}}
+.gearmap .item.act{{cursor:pointer;}}
+.gearmap .item.act:hover,.gearmap .item.act:focus-visible{{
+ border-color:{GOLD};}}
+.gearmap .item.act:hover .picon,.gearmap .item.act:focus-visible .picon{{
+ background-color:{GOLD} !important;}}
 .profile .rail{{margin-top:0;padding-top:0;border-top:0;}}
 .profile .inv{{border-top:0;padding-top:0;margin-top:8px;}}
 /* 010: the "connect Gmail" box stands where the portrait would — same
@@ -2976,13 +3052,9 @@ SCENE_CSS = f"""
 .inv{{margin-top:8px;padding-top:8px;border-top:1px dashed {BORDER};}}
 .invlbl{{color:{FAINT};text-transform:uppercase;letter-spacing:.08em;
  display:block;margin-bottom:5px;}}
-.handrow{{display:flex;gap:2ch;margin-bottom:6px;}}
-.hcell{{display:inline-flex;flex-direction:column;gap:3px;}}
-.hlab{{color:{FAINT};letter-spacing:.08em;}}
 .slot{{position:relative;width:60px;height:60px;flex:none;
  background:{INK};border:1px solid {BORDER};display:inline-flex;
  align-items:center;justify-content:center;cursor:help;outline:none;}}
-.hcell .slot{{width:75px;height:75px;}}
 .slot.empty{{border-style:dashed;opacity:.5;}}
 .slot.over{{border-style:dashed;border-color:{RED};}}
 /* 012: rows flow to the card's edge — as many squares as fit */
@@ -2990,7 +3062,6 @@ SCENE_CSS = f"""
 .picon{{width:42px;height:42px;flex:none;display:inline-block;
  mask-size:100% 100%;-webkit-mask-size:100% 100%;mask-repeat:no-repeat;
  -webkit-mask-repeat:no-repeat;image-rendering:pixelated;}}
-.hcell .picon{{width:51px;height:51px;}}
 /* 057: weapon art is 30x48 upright — in the square pack cell it sits
    centered at its own aspect instead of stretching to fill */
 .picon.gw{{mask-size:contain;-webkit-mask-size:contain;
@@ -3020,8 +3091,11 @@ b,strong{{font-weight:normal;}}
    the meters keep the full width beside it, and the pack's fixed 40px
    grid relaxes so six slots never overflow a 360px screen. ── */
 @media (max-width: 520px){{
- .profile{{gap:1.5ch;align-items:flex-start;}}
- .profile .portrait{{align-self:flex-start;min-height:0;height:132px;}}
+ .profile{{gap:1.5ch;align-items:flex-start;flex-wrap:wrap;}}
+ .profile .portrait{{align-self:flex-start;min-height:0;height:210px;}}
+ .gearmap{{margin:0 auto;}}
+ .gearmap .pwrap .portrait{{height:210px;}}
+ .profile .pcol{{flex-basis:100%;}}
  .ident{{flex-wrap:wrap;row-gap:2px;}}
  .ident .idr{{margin-left:auto;}}
  .facblk{{flex-wrap:wrap;row-gap:4px;}}
@@ -3030,9 +3104,7 @@ b,strong{{font-weight:normal;}}
  .pip{{width:100%;max-width:16px;}}
  .slotgrid{{max-width:100%;}}
  .slot{{width:48px;height:48px;}}
- .hcell .slot{{width:66px;height:66px;}}
  .picon{{width:36px;height:36px;}}
- .hcell .picon{{width:45px;height:45px;}}
 }}
 @media (prefers-reduced-motion: reduce){{
  .type.pending{{visibility:visible;}}

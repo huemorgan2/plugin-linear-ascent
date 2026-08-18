@@ -376,3 +376,285 @@ def test_the_pouch_is_bought_once_and_ledgered():
     assert not any(o.id == "buy_charm_slot" for o in s.options)
     s = core._school_charm(p)                # forced: the deeper guard
     assert "already" in s.shard_note
+
+
+# ── phase 4: wear into a slot, move to the pack ─────────────────────────
+
+def _fill_pack(p, n=None):
+    n = core.pack_cap(p) if n is None else n
+    fillers = [s for s in economy.RELICS if s not in economy.CHARM_KINDS
+               and s not in economy.QUIVER_SLUGS][:1]
+    junk = ["repair_token", "energy_cell", "medgel", "trauma_kit",
+            "poison_arrows", "fire_arrows", "slowing_arrows",
+            "piercing_arrows"] + fillers
+    for slug in junk[:n]:
+        p["inventory"][slug] = 1
+    assert core.pack_used(p) >= n
+
+
+def test_unequip_armor_refused_when_the_pack_is_full():
+    p = _warrior("069-unarm-full")
+    _fill_pack(p)
+    before = dict(p["gear"]), dict(p["inventory"])
+    acts, why = core.slot_actions(p, "armor")
+    assert [o.id for o in acts] == ["unequip_armor"]
+    assert "Pack full" in acts[0].hint
+    s = _choose(p, "unequip_armor")
+    assert "Pack full" in s.shard_note and "forge" in s.shard_note
+    assert (dict(p["gear"]), dict(p["inventory"])) == before
+
+
+def test_unequip_armor_moves_it_and_the_def_drops():
+    p = _warrior("069-unarm")
+    _fill_pack(p, core.pack_cap(p) - 1)
+    armor = p["gear"]["armor"]
+    dfs0 = state.dfs(p)
+    s = _choose(p, "unequip_armor")
+    assert p["gear"]["armor"] is None
+    assert p["inventory"][armor] == 1
+    assert state.dfs(p) < dfs0
+    assert "does nothing there" in s.body_lines[0]
+    # and back on again from the pack
+    acts, _ = core.pack_actions(p, armor)
+    assert [o.id for o in acts] == [f"wear_{armor}"] and acts[0].label == "Wear"
+    _choose(p, f"wear_{armor}")
+    assert p["gear"]["armor"] == armor and state.dfs(p) == dfs0
+
+
+def test_shoes_above_your_level_are_refused_with_the_lock():
+    p = _warrior("069-shoes")
+    p["level"] = 9
+    p["inventory"]["wayfarers_treads"] = 1
+    acts, why = core.pack_actions(p, "wayfarers_treads")
+    assert acts == [] and "🔒 level 11" in why
+    s = _choose(p, "wear_wayfarers_treads")
+    assert p["gear"]["shoes"] != "wayfarers_treads"
+    p["level"] = 11
+    _choose(p, "wear_wayfarers_treads")
+    assert p["gear"]["shoes"] == "wayfarers_treads"
+
+
+def test_a_bow_into_the_open_second_slot_and_back_to_the_pack():
+    p = _warrior("069-bow2", slots=2)
+    sword = p["gear"]["weapon"]
+    p["inventory"]["basic_bow"] = 1
+    acts, _ = core.pack_actions(p, "basic_bow")
+    assert acts[0].id == "wear_basic_bow" and acts[0].label == "Hold"
+    _choose(p, "wear_basic_bow")
+    assert economy.slot_item(p, "weapon2") == "basic_bow"
+    assert economy.slot_item(p, "weapon") == sword
+    # a quiver bound to it comes back with it
+    p["quiver"] = {"poison_arrows": 4}
+    p["oil"] = {"basic_bow": 3}
+    s = _choose(p, "unequip_weapon2")
+    assert p["held"] == [sword] and p["gear"]["weapon"] == sword
+    assert p["inventory"]["basic_bow"] == 1
+    assert p["inventory"]["poison_arrows"] == 4 and p["quiver"] == {}
+    assert p["oil"] == {}
+    assert "oil dries" in s.body_lines[0]
+
+
+def test_the_lead_can_go_to_the_pack_and_the_next_blade_leads():
+    p = _warrior("069-unlead", slots=2)
+    sword = p["gear"]["weapon"]
+    p["inventory"]["basic_bow"] = 1
+    _choose(p, "wear_basic_bow")                 # bow leads, slot 2
+    assert p["gear"]["weapon"] == "basic_bow"
+    _choose(p, "unequip_weapon2")                # the lead leaves
+    assert p["held"] == [sword] and p["gear"]["weapon"] == sword
+    assert p["durability"].get("weapon") is not None
+
+
+def test_the_last_blade_stays_in_hand():
+    p = _warrior("069-last")
+    acts, why = core.slot_actions(p, "weapon")
+    assert acts == [] and why == core.LAST_BLADE
+    s = _choose(p, "unequip_weapon")
+    assert s.shard_note == core.LAST_BLADE
+    assert p["held"] == [p["gear"]["weapon"]]
+
+
+def test_slot_actions_read_locked_and_empty_and_fight():
+    p = _warrior("069-slotacts", slots=1)
+    acts, why = core.slot_actions(p, "weapon2")
+    assert acts == [] and "second grip" in why
+    p["slots"] = 2
+    assert core.slot_actions(p, "weapon2") == ([], "")
+    p["charm_slot"] = True
+    p["gear"]["charm"] = "luck_charm"
+    acts, _ = core.slot_actions(p, "charm")
+    assert [o.id for o in acts] == ["unequip_charm"]
+    from plugin_linear_ascent.content import schema
+    fl = schema.get_floor(1)
+    enc = next(e for e in fl.encounters if e.id == "feral_boar")
+    combat.start_encounter(p, fl, enc)
+    acts, why = core.slot_actions(p, "charm")
+    assert acts == [] and why == core.NOT_IN_A_FIGHT
+    s = _choose(p, "unequip_charm")
+    assert s.shard_note == core.NOT_IN_A_FIGHT
+    assert p["gear"]["charm"] == "luck_charm"
+
+
+def test_set_in_pouch_needs_the_pouch_and_swaps_the_old_one_out():
+    p = _warrior("069-pouchset")
+    p["inventory"]["luck_charm"] = 1
+    acts, why = core.pack_actions(p, "luck_charm")
+    assert acts == [] and f"level {economy.CHARM_SLOT_LEVEL}" in why
+    s = _choose(p, "wear_luck_charm")
+    assert p["gear"]["charm"] is None
+    p["charm_slot"] = True
+    acts, _ = core.pack_actions(p, "luck_charm")
+    assert [(o.id, o.label) for o in acts] == [("wear_luck_charm", "Set in pouch")]
+    _choose(p, "wear_luck_charm")
+    assert p["gear"]["charm"] == "luck_charm"
+    assert p["charm_dur"] == economy.CHARM_POOL
+    assert "luck_charm" not in p["inventory"]
+    p["inventory"]["trollblood_tonic"] = 1
+    acts, _ = core.pack_actions(p, "trollblood_tonic")
+    assert "swap out" in acts[0].hint
+    _choose(p, "wear_trollblood_tonic")
+    assert p["gear"]["charm"] == "trollblood_tonic"
+    assert p["inventory"]["luck_charm"] == 1
+    # a salve keeps its road use next to the pouch row
+    p["hp"] = 1
+    p["inventory"]["medgel"] = 2
+    acts, _ = core.pack_actions(p, "medgel")
+    assert [o.id for o in acts] == ["use_medgel", "wear_medgel"]
+    # the pouch empties back to the pack
+    _choose(p, "unequip_charm")
+    assert p["gear"]["charm"] is None
+    assert p["inventory"]["trollblood_tonic"] == 1
+
+
+def test_wear_refuses_when_the_old_piece_has_no_room():
+    p = _warrior("069-wearfull", slots=1)
+    sword = p["gear"]["weapon"]
+    _fill_pack(p, core.pack_cap(p) - 1)
+    p["inventory"]["basic_bow"] = 2               # full now; the swap frees no slot
+    assert core.pack_used(p) == core.pack_cap(p)
+    s = _choose(p, "wear_basic_bow")
+    assert p["gear"]["weapon"] == sword
+    assert "Pack full" in s.shard_note
+    p["inventory"]["basic_bow"] = 1               # the stack frees a slot
+    _choose(p, "wear_basic_bow")
+    assert p["gear"]["weapon"] == "basic_bow"
+    assert p["inventory"][sword] == 1
+
+
+# ── phase 5: the gear map on the card ───────────────────────────────────
+
+def _frag(p):
+    from plugin_linear_ascent import render
+    return render.render_scene_fragment(core.current_scene(p))
+
+
+def test_the_scene_carries_all_seven_slots_and_they_round_trip():
+    from plugin_linear_ascent.engine.scene import Scene
+    p = _warrior("069-r-seven", slots=1)
+    s = core.current_scene(p)
+    keys = [d["key"] for d in s.slots]
+    assert keys == ["charm", "armor", "shoes",
+                    "shield", "weapon", "weapon2", "weapon3"]
+    assert [d["side"] for d in s.slots] == ["left"] * 3 + ["right"] * 4
+    by = {d["key"]: d for d in s.slots}
+    assert by["charm"]["state"] == "locked" and "level 9" in by["charm"]["lock_text"]
+    assert by["weapon2"]["state"] == "locked" and by["weapon3"]["state"] == "locked"
+    assert by["weapon"]["state"] == "filled" and by["weapon"]["lead"] is True
+    assert by["shoes"]["state"] == "empty"
+    back = Scene.from_dict(s.to_dict())
+    assert back.slots == s.slots
+    # nothing worn rides the pack strip
+    assert not [c for c in s.inventory if c.get("equipped")]
+
+
+def test_the_card_draws_the_three_slot_states():
+    p = _warrior("069-r-states", slots=2)
+    frag = _frag(p)
+    gm = frag.split('class="gearmap"')[1].split('class="pcol"')[0]
+    # locked: grey box + lock, the hover says the level
+    assert 'class="slot gm locked" data-key="charm"' in gm
+    assert "School, level 9" in gm
+    # empty: dotted, and the tip names what goes there
+    assert 'class="slot gm empty" data-key="shoes"' in gm
+    assert "boots — none worn" in gm
+    assert 'class="slot gm empty" data-key="weapon2"' in gm
+    # filled: the item cell with its acts, the lead marked
+    assert 'data-key="weapon" class="slot gm item act lead' in gm
+    assert "unequip_weapon" not in gm          # last blade — no row
+    assert "unequip_armor" in gm and "Move to the pack" in gm
+    # columns in order, portrait between them
+    left = gm.split('class="slotcol left"')[1].split('class="pwrap"')[0]
+    right = gm.split('class="slotcol right"')[1]
+    assert [k for k in ("charm", "armor", "shoes")
+            if f'data-key="{k}"' in left] == ["charm", "armor", "shoes"]
+    assert 'data-key="shield"' in right and 'data-key="weapon3"' in right
+    assert 'class="portrait later"' in gm.split('class="pwrap"')[1]
+
+
+def test_the_pack_grid_is_pack_only_and_sits_under_the_profile():
+    p = _warrior("069-r-pack", slots=1)
+    p["inventory"]["medgel"] = 2
+    frag = _frag(p)
+    assert 'class="handrow"' not in frag and 'class="hcell"' not in frag
+    grid = frag.split('class="slotgrid"')[1]
+    assert 'data-slug="medgel"' in grid
+    assert 'data-slug="rusted_sword"' not in grid
+    assert frag.index('class="gearmap"') < frag.index('class="slotgrid"')
+    # the pack row is a wear row from here
+    assert "wear_" not in grid or "Set in pouch" not in grid
+
+
+def test_a_worn_luck_charm_draws_in_the_pouch_with_its_pool():
+    p = _warrior("069-r-charm", slots=1)
+    p["charm_slot"] = True
+    p["gear"]["charm"] = "luck_charm"
+    p["charm_dur"] = 7
+    s = core.current_scene(p)
+    d = next(x for x in s.slots if x["key"] == "charm")
+    assert d["state"] == "filled" and d["charm_dur"] == 7
+    assert d["icon"] == "luck_charm"
+    frag = _frag(p)
+    assert "7 victories of fortune left" in frag
+    assert "unequip_charm" in frag
+
+
+def test_the_gear_map_css_and_wiring_are_in_the_renderer():
+    from plugin_linear_ascent import render
+    src = open(render.__file__, encoding="utf-8").read()
+    assert ".gearmap{{display:grid;grid-template-columns:auto auto auto" in src
+    assert ".slot.gm.locked{{background:#222;border:2px solid #555" in src
+    assert ".slot.gm.empty{{border:2px dotted" in src
+    assert ".slot.gm.lead{{border-color:" in src
+    assert "'.inv .item, .gearmap .item'" in src
+    assert "pr.querySelectorAll('.slotcol')" in src
+
+
+def test_the_arena_payload_carries_the_pouch_and_per_weapon_atk():
+    from plugin_linear_ascent.engine import arena
+    p = _warrior("069-arena", slots=2)
+    p["level"] = 10
+    p["training"]["bow"] = 6
+    p["held"] = ["rusted_sword", "basic_bow"]
+    p["durability_pack"] = {"basic_bow": 100.0}
+    p["charm_slot"] = True
+    p["gear"]["charm"] = "luck_charm"
+    p["charm_dur"] = 9
+    me = arena._me(p)
+    assert me["charm"] == {"slug": "luck_charm", "name": "Luck charm", "dur": 9}
+    atks = {w["slug"]: w["atk"] for w in me["weapons"]}
+    assert atks["rusted_sword"] == economy.player_atk(
+        10, economy.honed_bonus(economy.FORGE["rusted_sword"].bonus, 0))
+    assert atks["basic_bow"] == economy.player_atk(
+        10, economy.FORGE["basic_bow"].bonus)
+    state.set_hone(p, "weapon", 2, "basic_bow")   # honed → its own number
+    atks = {w["slug"]: w["atk"] for w in arena._me(p)["weapons"]}
+    assert atks["basic_bow"] == economy.player_atk(
+        10, economy.honed_bonus(economy.FORGE["basic_bow"].bonus, 2))
+    assert atks["rusted_sword"] != atks["basic_bow"]
+    assert arena.tile("attack_basic_bow", p)["atk"] == atks["basic_bow"]
+    assert arena.tile("attack", p)["atk"] == atks["rusted_sword"]
+    p["gear"]["charm"] = "medgel"
+    assert arena._me(p)["charm"] == {"slug": "medgel", "name": "Medgel",
+                                     "dur": None}
+    p["charm_slot"] = False
+    assert arena._me(p)["charm"] is None

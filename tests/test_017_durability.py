@@ -242,6 +242,7 @@ def _worn_smith(gold=10_000, xp=None):
     p["gold"] = gold
     p["xp"] = economy.xp_need(1) if xp is None else xp
     p["gear"]["weapon"] = "scrap_dagger"
+    p["held"] = ["scrap_dagger"]            # 069: held is the slot order
     p["durability"]["weapon"] = economy.durability_pool(1) // 2
     p["location"] = "forge"
     return p
@@ -353,9 +354,10 @@ def test_migration_arms_only_the_basic_weapon_never_the_gate_kit():
 def test_pack_strip_carries_the_fraction():
     p = create_character(fresh("stripy"))
     p["gear"]["weapon"] = "scrap_dagger"
+    p["held"] = ["scrap_dagger"]            # 069: held is the slot order
     pool = economy.durability_pool(1)
     p["durability"]["weapon"] = pool // 4
-    strip = core._pack_strip(p)
+    strip = core._slot_map(p)                 # 069: worn steel sits here
     cell = next(c for c in strip if c["slug"] == "scrap_dagger")
     assert abs(cell["dur"] - 0.25) < 0.01
 
@@ -550,11 +552,11 @@ def _weapon_cell_html(p):
 def test_honing_sharpens_the_tooltip_atk():
     p = _worn_smith()
     g = economy.FORGE["scrap_dagger"]
-    base_cell = next(c for c in core._pack_strip(p)
+    base_cell = next(c for c in core._slot_map(p)
                      if c["slug"] == "scrap_dagger")
     assert base_cell["stat_val"] == g.bonus
     state.set_hone(p, "weapon", 3)
-    honed = next(c for c in core._pack_strip(p)
+    honed = next(c for c in core._slot_map(p)
                  if c["slug"] == "scrap_dagger")
     want = economy.honed_bonus(g.bonus, 3)
     assert honed["stat_val"] == want and want > g.bonus

@@ -132,8 +132,9 @@ def test_pack_is_a_slot_grid_with_a_promoted_hand_row():
     p["inventory"]["medgel"] = 2
     frag = render.render_scene_fragment(core.current_scene(p))
     assert 'class="slotgrid"' in frag
-    assert 'class="handrow"' in frag
-    assert "in hand" in frag
+    # 069: the hand row became the gear map — seven slots round the figure
+    assert 'class="handrow"' not in frag
+    assert 'class="gearmap"' in frag
     assert 'class="slot empty"' in frag     # blocked spaces wait for loot
 
 

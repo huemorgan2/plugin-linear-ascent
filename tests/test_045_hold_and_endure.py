@@ -52,7 +52,7 @@ def test_pack_shield_offers_use_as_shield_and_equips():
     p["durability_pack"] = {g.slug: 77}
     acts, why = core.pack_actions(p, g.slug)
     assert [o.id for o in acts] == [f"wear_{g.slug}"]
-    assert acts[0].label == "Use as shield"
+    assert acts[0].label == "Hold"                   # 069: "Hold" / "Wear"
     s = core.apply_choice(p, f"wear_{g.slug}")
     assert p["gear"]["shield"] == g.slug
     assert p["inventory"].get(g.slug) is None
@@ -70,8 +70,14 @@ def test_pack_weapon_offers_use_this_and_swaps_old_to_pack():
     p["gear"]["weapon"] = w1.slug
     p["durability"]["weapon"] = economy.item_pool(w1)
     p["inventory"][w2.slug] = 1
+    # 069: the level gate reads on the pack row — under it, no row
+    req = economy.rung_player_level_req(w2)
+    if p["level"] < req:
+        acts, why = core.pack_actions(p, w2.slug)
+        assert acts == [] and f"level {req}" in why
+        p["level"] = req
     acts, _ = core.pack_actions(p, w2.slug)
-    assert acts[0].label == "Use this"
+    assert acts[0].label == "Hold"
     core.apply_choice(p, f"wear_{w2.slug}")
     assert p["gear"]["weapon"] == w2.slug
     assert p["inventory"][w1.slug] == 1              # old piece goes back

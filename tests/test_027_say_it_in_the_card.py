@@ -360,7 +360,7 @@ def test_the_count_survives_the_round_trip_for_a_current_install():
     p["bank"], p["bank_day"] = 300, state.world_day_f() - 2
     back = Scene.from_dict(core.current_scene(p).to_dict())
     assert door(back, "vault").badge == 10       # 041: 2 days × 5 slices
-    assert back.notices and back.inventory
+    assert back.notices and back.slots         # 069: the gear map rides too
 
 
 def test_a_field_from_a_newer_engine_is_ignored_not_fatal():
