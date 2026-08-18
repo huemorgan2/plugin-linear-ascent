@@ -42,3 +42,16 @@ numbers sit side by side.
 ## Rollback
 `git revert` the plugin commit. Banked XP stays; the next kill pays the
 new scale.
+
+## Execution status
+- Done 2026-08-18. Plugin 00cfe89 (game 0.89.0), root 18fefcd.
+- XP_PER_KILL_SLOPE 3.0→1.5: xp/kill f1 3→2, f5 29→14, f6 36→18,
+  f9 59→30, f12 81→41. Kills per level at level==floor f6 10→20,
+  f29 24→48. Pace sim: one-path cap 15.9→31.1 days (508→995 kills),
+  blade 10 still at body level 9.
+- KILL_GOLD_OVER_XP 1.25→2.0: mean gold f9 57→60, f11 75; f5 back to
+  the pillar × bounty (36→31). Card law xp = min(xp, gold // 2).
+- Tests: test_065 6/6 (rewritten to the 2× law); plugin suite 1226
+  pass, same 6 pre-existing failures as 065 (verified on HEAD via
+  stash). worldd untouched (vendor only).
+- Local 8777 restarted on 0.89.0. Not deployed, not published.
