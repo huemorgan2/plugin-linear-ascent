@@ -203,9 +203,9 @@ def test_phase5_round_card_dress():
     assert banner.count("▓") >= 2 and 'class="off"' in banner
     assert 'class="abar me"' in banner and 'class="abar foe"' in banner
     assert "SPEED " in banner and "ATK " in banner and "DEF " in banner
-    assert "ahud" not in html and "afill" not in html
+    assert 'class="ahud"' not in html and "afill" not in html
     # the tiles are inside the banner, with the bow's and the arrows' art
-    assert 'class="options later arena-opts"' in banner
+    assert 'class="options arena-opts"' in banner       # phase 6: no `later`
     assert banner.count('class="opt atile') == len(s.options)
     assert banner.count('class="aart"') >= 2           # bow + poison arrows
     assert 'class="aart glyph"' in banner              # RUN keeps its glyph
@@ -223,3 +223,73 @@ def test_phase5_opener_keeps_tiles_below_and_profile():
     assert 'class="banner arena"' not in html
     assert 'class="options later arena-opts"' in html
     assert 'class="profile"' in html or 'class="rail' in html
+
+
+# ── 067 phase 6: named, aligned HUD; kind icons; tiles on every live card ─
+def test_phase6_hud_names_gear_and_kind_icons():
+    p = _climber(clazz="archer")
+    p["gear"]["armor"] = "padded_jerkin"
+    s, fl = _hunt(p, 6)
+    e = p["encounter"]
+    e["range"] = "close"
+    e["profile"] = {"type": "armoured", "flying": True, "bulwark": True,
+                    "speed": 5}
+    e["def"] = 40
+    e["hp"] = e["hp_max"] = 5000
+    s = combat.resolve_fight_action(p, fl, "attack")
+    assert s.arena["foe"]["armoured"] and s.arena["foe"]["flying"]
+    html = render.render_scene_fragment(s)
+    banner = html.split('class="banner arena"', 1)[1].split('<div class="alog"', 1)[0]
+    huds = banner.split('<div class="ahuds">', 1)[1]
+    assert huds.count('class="aname"') == 2
+    assert p["name"].upper() in huds and e["name"].upper() in huds
+    # order: climber's slab first (left), foe's second (right)
+    assert huds.index('class="astat me"') < huds.index('class="astat foe"')
+    foe = huds.split('class="astat foe"', 1)[1]
+    assert "t_wing" in foe or 'data-tip="Flying' in foe
+    assert 'data-tip="Armoured' in foe
+    assert 'data-tip="Bulwark' in foe
+    # the armour icon rides right after DEF n
+    import re
+    assert re.search(r'DEF \d+<span class="aico"[^>]*data-tip="Armoured', foe)
+    me = huds.split('class="astat me"', 1)[1].split('class="astat foe"', 1)[0]
+    assert 'class="agear"' in me
+    assert 'class="aico lead"' in me                # the bow in hand
+    assert 'data-tip="Padded Jerkin' in me
+
+
+def test_phase6_magic_resist_level_on_foe_name():
+    p = _climber(clazz="sorcerer")
+    s, fl = _hunt(p, 6)
+    e = p["encounter"]
+    e["range"] = "close"
+    e["profile"] = {"type": "magic_resist", "flying": False,
+                    "bulwark": False, "speed": 5}
+    e["hp"] = e["hp_max"] = 5000
+    s = combat.resolve_fight_action(p, fl, "attack")
+    pct = s.arena["foe"]["resist_pct"]
+    assert pct > 0
+    html = render.render_scene_fragment(s)
+    foe = html.split('class="astat foe"', 1)[1]
+    assert f"MR {pct}%" in foe and 'data-tip="Magic resistance' in foe
+
+
+def test_phase6_end_card_keeps_tiles_in_stage():
+    p = _climber()
+    s, fl = _hunt(p, 6)
+    e = p["encounter"]
+    e["range"] = "close"
+    e["hp"] = 1
+    e["profile"] = {"type": "plain", "flying": False, "bulwark": False,
+                    "speed": 5}
+    p["training"]["blade"] = 10
+    s = combat.resolve_fight_action(p, fl, "attack")
+    assert s.arena and s.arena["phase"] == "victory"
+    assert s.options
+    html = render.render_scene_fragment(s)
+    banner = html.split('class="banner arena"', 1)[1].split('<div class="alog"', 1)[0] \
+        if '<div class="alog"' in html else html.split('class="banner arena"', 1)[1]
+    assert 'class="options arena-opts"' in banner
+    assert banner.count('class="opt atile') == len(s.options)
+    assert html.count("arena-opts") == 1               # never a second copy under
+    assert 'class="profile"' not in html

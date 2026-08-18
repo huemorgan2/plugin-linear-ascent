@@ -33,6 +33,14 @@ _TILE_ICON = {
     "treeline_shot": "bow",
     "drink_tonic": "trollblood_tonic",
     "flare": "aether",
+    # 067 phase 6: the end card's borrowed gate-town menu, as tiles
+    "hunt": "sword", "hunt_deep": "sword", "keep": "lock",
+    "talk": "speaker", "gate": "back", "town": "back", "next": "back",
+    "skip": "back", "forge": "t_wrench", "heal": "heart", "stew": "flask",
+    "medlab": "medgel", "lodge": "note", "vault": "coin", "pawn": "coin",
+    "school": "note", "hall": "note", "guildhall": "note",
+    "arcanum": "aether", "grants": "coin", "board": "postbox",
+    "stone": "shard",
 }
 _PATH_ICON = {"blade": "sword", "bow": "bow", "staff": "staff"}
 _PATH_LABEL = {"blade": "BLADE", "bow": "BOW", "staff": "MAGIC"}
@@ -48,6 +56,13 @@ _TILE_LABEL = {
     "treeline_shot": "TREELINE",
     "drink_tonic": "TONIC",
     "flare": "FLARE",
+    "hunt": "HUNT", "hunt_deep": "HUNT DEEP", "keep": "KEEP",
+    "talk": "TALK", "gate": "GATE", "town": "TOWN", "next": "NEXT",
+    "skip": "SKIP", "forge": "FORGE", "heal": "HEAL", "stew": "STEW",
+    "medlab": "MEDLAB", "lodge": "LODGE", "vault": "VAULT", "pawn": "PAWN",
+    "school": "SCHOOL", "hall": "HALL", "guildhall": "GUILD",
+    "arcanum": "ARCANUM", "grants": "GRANTS", "board": "BOARD",
+    "stone": "STONE",
 }
 
 

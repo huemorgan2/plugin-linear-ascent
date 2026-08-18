@@ -1972,14 +1972,28 @@ _ARENA_TYPE = {   # the foe's kind badge: glyph key, ink, word
 }
 
 
-def _aicon(key: str, ink: str = "", cls: str = "") -> str:
+def _aicon(key: str, ink: str = "", cls: str = "", tip: str = "") -> str:
     if not key:
         return ""
     url = icons.icon_data_url(key)
     st = f"background-color:{ink};" if ink else ""
-    return (f'<span class="aico{(" " + cls) if cls else ""}" style="{st}'
+    tp = f' data-tip="{_e(tip)}" tabindex="0" role="note"' if tip else ""
+    return (f'<span class="aico{(" " + cls) if cls else ""}"{tp} style="{st}'
             f"-webkit-mask-image:url('{url}');mask-image:url('{url}')\">"
             "</span>")
+
+
+# 067 phase 6: the foe's kind, spelt out for the [i]-less reader
+_TIP_KIND = {
+    "fly": "Flying — out of reach of a blade until it dives; "
+           "arrows and spells find it.",
+    "armoured": "Armoured — the DEF is plate; blades glance, "
+                "arrows bite less, magic passes.",
+    "magic_resist": "Magic resistance — spells lose this share of their "
+                    "bite; steel and arrows are unhurt.",
+    "bulwark": "Bulwark — holds its ground; you cannot push it back.",
+}
+_PATH_GLYPH = {"blade": "sword", "bow": "bow", "staff": "staff"}
 
 
 def _abar(hp: int, cap: int, cls: str) -> str:
@@ -1995,11 +2009,15 @@ def _abar(hp: int, cap: int, cls: str) -> str:
             f'</span> <span class="anum">{hp}/{cap}</span></span>')
 
 
-def _astat_html(side: dict, cls: str, speed_key: str) -> str:
-    """One black ANSI slab, the `_estat_html` grammar exactly: line 1
-    `HP ▓▓▓░ n/m`, line 2 `ATK n   DEF n   SPEED n`."""
+def _astat_html(side: dict, cls: str, speed_key: str, name: str = "",
+                name_extra: str = "", def_extra: str = "",
+                tail: str = "") -> str:
+    """One black ANSI slab, the `_estat_html` grammar: `NAME` (067
+    phase 6 — bright, with the kind icons after it), `HP ▓▓▓░ n/m`,
+    `ATK n DEF n SPEED n` (the armour icon rides after DEF), then any
+    tail line (the climber's gear glyphs)."""
     segs = [f'<span style="color:{GOLD}">ATK {int(side.get("atk", 0))}</span>',
-            f"DEF {int(side.get('def', 0))}"]
+            f"DEF {int(side.get('def', 0))}{def_extra}"]
     if speed_key in side:
         segs.append(f'<span style="color:{AETHER}">SPEED '
                     f"{int(side[speed_key])}</span>")
@@ -2016,28 +2034,67 @@ def _astat_html(side: dict, cls: str, speed_key: str) -> str:
                  f'{_e(str(charm.get("name", "")))}'
                  + (f' <span style="color:{GOLD}">×{int(n)}</span>'
                     if n is not None else "") + '</div>')
-    return (f'<div class="astat {cls}"><div><span style="color:{OK}">HP</span> '
+    nm = (f'<div class="aname">{_e(str(name or side.get("name") or "").upper())}'
+          f'{name_extra}</div>')
+    return (f'<div class="astat {cls}">{nm}<div><span style="color:{OK}">HP</span> '
             f'{_abar(side.get("hp", 0), side.get("hp_max", 1), cls)}</div>'
-            f'<div>{"   ".join(segs)}</div>{pouch}</div>')
+            f'<div>{" ".join(segs)}</div>{pouch}{tail}</div>')
 
 
 def _arena_hud_html(a: dict) -> str:
-    """067 phase 5 (roy): both sheets wear the non-labs fight's look —
-    the VGA face at card size on black, ▓░ bars, HP green / ATK gold /
-    SPEED aether — the climber's slab top-left, the foe's under it on
-    the right. No names, no glyph rows: the headline names the foe, the
-    tiles show the gear, the [i] keeps the type."""
+    """067 phase 6 (roy): one row along the top of the stage — the
+    climber's slab left, the foe's right, both named, both top-aligned
+    a half line down. The climber's slab ends in a gear line (every
+    weapon in hand — the lead outlined gold, a broken one red — armour,
+    shield); the foe's name carries its kind icons (flying aether,
+    magic resistance violet with its level, bulwark gold) and the
+    armour icon rides on the DEF when the foe is armoured."""
     me, foe = a.get("me") or {}, a.get("foe") or {}
-    return _astat_html(me, "me", "spd") + _astat_html(foe, "foe", "spd")
+    gear = []
+    for w in me.get("weapons") or []:
+        key = _PATH_GLYPH.get(str(w.get("path", "blade")), "sword")
+        cls = ("lead" if w.get("lead") else "") + (" broken" if w.get("broken") else "")
+        ink = RED if w.get("broken") else (GOLD if w.get("lead") else TEXT)
+        tip = str(w.get("name", "")) + (" — in hand" if w.get("lead") else "") \
+            + (" — BROKEN" if w.get("broken") else "")
+        gear.append(_aicon(key, ink, cls.strip(), tip))
+    guard = me.get("guard") or {}
+    for slot, key in (("armor", "armor"), ("shield", "shield")):
+        g = guard.get(slot)
+        if g:
+            broken = bool(g.get("broken"))
+            tip = str(g.get("name", "")) + (f' +{int(g.get("bonus", 0))}'
+                                            if g.get("bonus") else "") \
+                + (" — BROKEN" if broken else "")
+            gear.append(_aicon(key, RED if broken else TEXT,
+                               "broken" if broken else "", tip))
+    tail = f'<div class="agear">{"".join(gear)}</div>' if gear else ""
+    kinds = ""
+    if foe.get("flying"):
+        kinds += _aicon("t_wing", AETHER, "", _TIP_KIND["fly"])
+    if foe.get("resist_pct"):
+        kinds += (_aicon("t_resist", VIOLET, "", _TIP_KIND["magic_resist"])
+                  + f'<span class="akw" style="color:{VIOLET}">MR '
+                  f'{int(foe["resist_pct"])}%</span>')
+    if foe.get("bulwark"):
+        kinds += _aicon("t_bulwark", GOLD, "", _TIP_KIND["bulwark"])
+    dext = (_aicon("t_armor", ORANGE, "", _TIP_KIND["armoured"])
+            if foe.get("armoured") else "")
+    return ('<div class="ahuds">'
+            + _astat_html(me, "me", "spd", tail=tail)
+            + _astat_html(foe, "foe", "spd", name_extra=kinds, def_extra=dext)
+            + "</div>")
 
 
 def _arena_banner_html(scene) -> str:
     a = scene.arena or {}
     w, h = int(a.get("w", 320)), int(a.get("h", 300))
-    # 067 phase 5: the tiles live INSIDE the scene, along its bottom edge
-    # — nothing but the log renders under the stage.
-    tiles = (_arena_tiles_html(scene)
-             if scene.options and a.get("tiles") and a.get("phase") == "round"
+    # 067 phase 5/6: the tiles live INSIDE the scene, along its bottom
+    # edge, on EVERY live card that has options (round, victory, death,
+    # fled) — nothing but the log renders under the stage. No `later`:
+    # they are there at once, arena3d holds them while the beats play.
+    tiles = (_arena_tiles_html(scene, later=False)
+             if scene.options and a.get("phase") != "opener"
              else "")
     return (f'<div class="banner arena" style="background-color:#000;'
             f'aspect-ratio:{w}/{h};" data-a3d-slot="1">'
@@ -2054,7 +2111,15 @@ def _arena_log_html(a: dict) -> str:
             + "</div>")
 
 
-def _arena_tiles_html(scene) -> str:
+def _arena_tile_fallback(o, phase: str = "") -> dict:
+    from .engine import arena as _arena_mod
+    t = _arena_mod.tile(o.id, {})
+    if not _arena_mod._TILE_LABEL.get(o.id):
+        t["label"] = o.label[:12].upper()
+    return t
+
+
+def _arena_tiles_html(scene, later: bool = True) -> str:
     """The option tiles: an icon on a black box, `[n] LABEL` under it,
     the [i] pinned to the corner. Numbering runs on scene.options order
     so the pane's 1..9 keys pick the same button."""
@@ -2062,7 +2127,9 @@ def _arena_tiles_html(scene) -> str:
     tiles = a.get("tiles") or {}
     cells = []
     for i, o in enumerate(scene.options, 1):
-        t = tiles.get(o.id) or {"icon": "focus", "label": o.label[:12].upper()}
+        # 067 phase 6: the end card's menu (built after the payload) has
+        # no tiles on the wire — the tables in arena.tile() dress it
+        t = tiles.get(o.id) or _arena_tile_fallback(o, str(a.get("phase", "")))
         key_cls = " aether" if o.aether else ""
         locked = bool(getattr(o, "locked", False))
         cls = "opt atile" + (" locked" if locked else "")
@@ -2094,7 +2161,8 @@ def _arena_tiles_html(scene) -> str:
                f'<span class="lbl">{_e(t.get("label") or o.label)}</span></span>'
                f'{hint}</button>')
         cells.append(f'<div class="atcell">{btn}{info}</div>')
-    return f'<div class="options later arena-opts">{"".join(cells)}</div>'
+    return (f'<div class="options{" later" if later else ""} arena-opts">'
+            f'{"".join(cells)}</div>')
 
 
 def render_scene_fragment(scene: Scene) -> str:
@@ -2267,8 +2335,8 @@ def render_scene_fragment(scene: Scene) -> str:
     if scene.options and ar and ar.get("tiles") \
             and ar.get("phase") == "opener":
         parts.append(_arena_tiles_html(scene))
-    elif arena_live and ar.get("tiles") and ar.get("phase") == "round":
-        pass    # 067 phase 5: the round's tiles ride inside the stage
+    elif arena_live:
+        pass    # 067 phase 5/6: a live card's tiles ride inside the stage
     elif scene.options:
         # 031 §14: grid mode — a scene may ask for a card wall instead of
         # rows. Options that resolve a gear icon become picture cards;
@@ -2439,10 +2507,22 @@ SCENE_CSS = f"""
  -webkit-mask-image:none;mask-image:none;}}
 .banner.arena canvas{{position:absolute;inset:0;width:100%;height:100%;
  image-rendering:pixelated;display:block;}}
-.astat{{position:absolute;z-index:3;background:{INK};padding:0 1ch;
- white-space:pre;color:{BRIGHT};pointer-events:none;}}
+/* 067 phase 6: one row along the top, half a line down — the climber's
+   slab left, the foe's right, both top-aligned; a frame too narrow for
+   both wraps the foe's slab under (still flush right). */
+.ahuds{{position:absolute;left:0;right:0;top:.5em;z-index:3;display:flex;
+ justify-content:space-between;align-items:flex-start;flex-wrap:wrap;
+ gap:4px;pointer-events:none;}}
+.astat{{background:{INK};padding:0 .5ch;white-space:pre;color:{BRIGHT};
+ pointer-events:auto;}}
 .astat .off{{color:{DIM};}}
-.astat.me{{left:0;top:0;}} .astat.foe{{right:0;top:2.6em;text-align:right;}}
+.astat.foe{{margin-left:auto;text-align:right;}}
+.astat .aname{{color:{BRIGHT};}}
+.astat .aico{{width:16px;height:16px;vertical-align:-3px;margin:0 0 0 4px;}}
+.astat .aico.lead{{outline:1px solid {GOLD};outline-offset:1px;}}
+.astat .agear{{line-height:1.2;padding:2px 0 3px;}}
+.astat .agear .aico{{margin:0 6px 0 0;}}
+.astat .akw{{margin-left:3px;font-size:12px;}}
 .aico{{display:inline-block;width:14px;height:14px;vertical-align:-2px;
  background-color:{TEXT};mask-size:100% 100%;-webkit-mask-size:100% 100%;
  mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;
