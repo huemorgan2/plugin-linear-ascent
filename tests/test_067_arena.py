@@ -185,7 +185,8 @@ def test_phase5_round_card_dress():
     sides), the tiles ride INSIDE the stage with the item's own art, and
     no profile / faction strip renders under a live fight."""
     p = _climber(clazz="archer")
-    p["quiver"] = {"poison_arrows": 3}
+    p["quiver"] = {"poison_arrows": 3}          # 069+: the bow's quiver
+    p["inventory"]["poison_arrows"] = 3         # ≤ 0.91: the pack
     s, fl = _hunt(p, 6)
     p["encounter"]["range"] = "close"
     p["encounter"]["profile"] = {"type": "plain", "flying": False,
