@@ -1,10 +1,10 @@
 """065 — coin over aether, the wound bill.
 
-1. A kill's gold is never below its XP: the mean paycheck rides ≥ 1.25 ×
-   the kill's XP on every floor (the 012 law, restored as a floor after
-   048's steeper XP slope crossed it on floors 7–10), specimens scale XP
-   as they scale HP, and the rolled numbers on the card obey the law
-   after every jitter and multiplier.
+1. A kill's gold is never below twice its XP (066; 065 said 1.25×): the
+   mean paycheck rides ≥ KILL_GOLD_OVER_XP × the kill's XP on every
+   floor, specimens scale XP as they scale HP, and the rolled numbers on
+   the card obey the law after every jitter and multiplier — XP is
+   clamped down to half the coin, coin is never inflated.
 2. The tent bills by the wound: a whole bar costs six kills' base gold,
    a scratch a fraction; the gate-town row quotes THIS wound's bill and
    the death card the whole bar.
@@ -23,7 +23,7 @@ def _user(tag):
 
 # ── 1. coin over aether ──────────────────────────────────────────────────
 
-def test_mean_gold_rides_a_quarter_over_xp_on_every_floor():
+def test_mean_gold_rides_twice_over_xp_on_every_floor():
     for f in range(1, 31):
         assert economy.gold_per_kill(f) >= round(
             economy.xp_per_kill(f) * economy.KILL_GOLD_OVER_XP) - 1, f
@@ -56,15 +56,15 @@ def _climber(tag, floor=6):
     return p
 
 
-def test_the_card_never_writes_gold_below_xp():
-    """100 rolled floor-6 kills across every specimen: gold > xp on
+def test_the_card_never_writes_xp_above_half_the_gold():
+    """100 rolled floor-6 kills across every specimen: xp ≤ gold / 2 on
     each — after jitter (gold ±50%), the specimen and the profile."""
     seen = set()
     for i in range(100):
         spec = ("runt", "common", "tough", "alpha")[i % 4]
         p = _climber(f"law-{i}")
         xp, gold = _wilds_kill(p, 6, spec)
-        assert xp > 0 and gold > xp, (i, spec, xp, gold)
+        assert xp > 0 and xp <= gold // 2, (i, spec, xp, gold)
         seen.add(spec)
     assert len(seen) == 4
 
@@ -76,8 +76,11 @@ def test_the_easy_kill_teaches_less(monkeypatch):
     alpha_xp, alpha_gold = _wilds_kill(_climber("alpha"), 6, "alpha")
     assert runt_xp < com_xp < alpha_xp
     assert runt_gold < com_gold < alpha_gold
-    assert runt_xp == round(economy.xp_per_kill(6)
-                            * economy.SPECIMENS["runt"]["hp"])
+    # 066: the runt's XP is its HP share of the kill, then the card law
+    # (xp ≤ gold / 2) — the ×0.45 gold runt teaches even less
+    assert runt_xp == min(round(economy.xp_per_kill(6)
+                                * economy.SPECIMENS["runt"]["hp"]),
+                          runt_gold // 2)
     assert com_gold >= round(com_xp * economy.KILL_GOLD_OVER_XP) - 1
 
 

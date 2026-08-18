@@ -1403,10 +1403,11 @@ def _victory(p: dict, floor) -> Scene:
     if buff:
         xp = round(xp * (1 + buff / 100))     # 010: CLIMB week blessing
     if e["kind"] != "warden":
-        # 065: the kill law, after every multiplier and jitter — the
-        # coin on a wilds kill card is never below its aether. Wardens
-        # keep their own tables (gold ≫ xp already).
-        gold = max(gold, xp + 1)
+        # 066: the kill law, after every multiplier and jitter — the
+        # aether on a wilds kill card is never above HALF its coin. XP is
+        # clamped down; coin is never inflated to meet it (065 did that).
+        # Wardens keep their own tables (gold ≫ xp already).
+        xp = min(xp, max(1, gold // 2))
     # 022/005: rested aether pays out here and ONLY here — on a kill's
     # XP, never on contract or strongbox payouts. The bar is hard: once
     # it fills, more XP (and the rested that would ride it) goes nowhere.

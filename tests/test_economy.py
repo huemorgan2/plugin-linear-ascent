@@ -26,17 +26,16 @@ def test_monster_stats_match_design_table():
 
 def test_kill_rewards_jump_per_band():
     # 046: XP syncs level to floor (slope·bar^1.5 ÷ wedge), gold rides
-    # the income pillar from the floor-1 anchor of 8. 048: slope 3.0
-    # (the School sink), and the young-tower bounty rides gold ≤ 10
-    assert economy.xp_per_kill(5) == 29
-    # 065: 20 base × 1.6 bounty = 32, but coin rides ≥ 1.25 × the
-    # kill's XP — the floor rule pays 36 here
-    assert economy.gold_per_kill(5) == 36
+    # the income pillar from the floor-1 anchor of 8. 066: slope 1.5
+    # (aether is scarce), and the young-tower bounty rides gold ≤ 10
+    assert economy.xp_per_kill(5) == 14
+    assert economy.gold_per_kill(5) == 31     # 8 × pillar × 1.6 bounty
     assert economy.base_gold_per_kill(5) == 20
-    assert economy.xp_per_kill(95) == 70
+    assert economy.xp_per_kill(95) == 35
     assert economy.gold_per_kill(95) == max(
         1, round(8 * economy.income_pillar(95)))
-    assert economy.gold_per_kill(11) == 92    # 065: 74 xp × 1.25
+    assert economy.gold_per_kill(11) == 75    # 066: max(75, 37 xp × 2)
+    assert economy.gold_per_kill(9) == 60     # 066: 30 xp × 2 over 57
     assert economy.gold_per_kill(14) == 146   # the pillar is back on top
 
 
@@ -120,11 +119,11 @@ def test_caps_and_race_nudges():
 
 
 def test_xp_pool_costs_scale_with_floor():
-    # 006: XP costs are priced in frontier kills (048: kill = 3.0×bar);
+    # 006: XP costs are priced in frontier kills (066: kill = 1.5×bar);
     # 045 dropped the scan, so its cost row is gone.
-    assert economy.hone_xp(1) == 2            # half of 3
-    assert economy.hone_xp(17) == 56          # half of 112 (046 xp law)
-    assert economy.sleep_xp_cost(5) == 29     # exactly the kill skipped
+    assert economy.hone_xp(1) == 1            # half of 2
+    assert economy.hone_xp(17) == 28          # half of 56 (046 xp law)
+    assert economy.sleep_xp_cost(5) == 14     # exactly the kill skipped
 
 
 def test_level_gates():

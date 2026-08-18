@@ -882,9 +882,9 @@ def warden_profile(floor: int) -> dict:
     return profile_from_traits(())
 
 
-XP_PER_KILL_SLOPE = 3.0        # 048: was 2.4 — +25% funds the School
-                               # sink so the one-path climber keeps the
-                               # level≈floor pace while training
+XP_PER_KILL_SLOPE = 1.5        # 066: was 3.0 (048) — aether is scarce:
+                               # ~20 kills a level at level == floor,
+                               # cap in ~31 days = the era's solo band
 
 
 def xp_per_kill(bar: int) -> int:
@@ -910,8 +910,8 @@ def early_coin_mult(floor: int) -> float:
     return 2.0 - 0.1 * (floor - 1) if floor <= EARLY_COIN_FLOORS else 1.0
 
 
-KILL_GOLD_OVER_XP = 1.25       # 065: the coin on a kill rides at least
-                               # a quarter above its aether, at the mean
+KILL_GOLD_OVER_XP = 2.0        # 066: the coin on a kill rides at least
+                               # twice its aether, at the mean (065: 1.25)
 
 
 def gold_per_kill(bar: int) -> int:
