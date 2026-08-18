@@ -1,5 +1,5 @@
 name = "plugin-linear-ascent"
-version = "0.92.0"
+version = "0.93.0"
 entry = "plugin_linear_ascent"
 sdk_version = "0"
 license = "MIT"
