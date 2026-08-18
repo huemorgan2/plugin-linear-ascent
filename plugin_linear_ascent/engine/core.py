@@ -190,7 +190,9 @@ def _pack_strip(p: dict) -> list[dict]:
 # The law that does NOT change: the trollblood tonic is still the only heal
 # that goes down mid-fight (013). Everything else waits for the fight to
 # end, and the popup says so instead of leaving the player guessing.
-PACK_USE_IDS = ("use_medgel", "use_trauma_kit", "use_luck_charm")
+PACK_USE_IDS = ("use_medgel", "use_trauma_kit", "use_weapon_oil")
+POUCH_ONLY_WHY = ("Nothing works from the pack — set it in your charm "
+                  "pouch and it will offer itself in the fight.")
 
 
 def pack_actions(p: dict, slug: str) -> tuple[list[Option], str]:
@@ -205,23 +207,14 @@ def pack_actions(p: dict, slug: str) -> tuple[list[Option], str]:
     item = economy.APOTHECARY.get(slug)
 
     if fighting:
-        # In a fight the pack offers exactly what the fight offers: the
-        # relic and quiver rows the encounter already earned.
-        from . import tips
-        opts = []
-        for o in combat._relic_options(p):
-            oslug = (o.id.removeprefix("nock_") if o.id.startswith("nock_")
-                     else tips._FIGHT_RELIC.get(o.id, ""))
-            if oslug == slug:
-                opts.append(o)
-        if slug == "trollblood_tonic" and have:
-            opts.append(Option("drink_tonic", "Drink trollblood tonic",
-                               "full heal"))
-        if opts:
-            return opts, ""
-        if item and item.effect.startswith("heal_"):
-            return [], ("Both hands are busy — only the trollblood tonic "
-                        "goes down mid-fight. This keeps until it's over.")
+        # 069: in a fight the pack offers NOTHING — the pouch and the
+        # bow's quiver are the only things that act, and they are set
+        # before the fight.
+        if slug in economy.QUIVER_SLUGS:
+            return [], ("Loose arrows do nothing — bind them to your bow "
+                        "before the fight.")
+        if slug in economy.CHARM_KINDS:
+            return [], POUCH_ONLY_WHY
         return [], "Nothing this one can do in the middle of this."
 
     # The salves: a number in the effect string ("heal_25"). The tonic's
@@ -234,17 +227,32 @@ def pack_actions(p: dict, slug: str) -> tuple[list[Option], str]:
                         "not — it heals the same at any level.")
         return [Option(f"use_{slug}", f"Use a {item.name}",
                        f"+{amount} HP · {have} left")], ""
-    if slug == "luck_charm" and have:
-        if p["flags"].get("luck_day") == state.world_day():
-            return [], "Fortune already leans your way today."
-        return [Option("use_luck_charm", "Break the luck charm",
-                       f"better loot till tomorrow · {have} left")], ""
-    if slug == "trollblood_tonic" and have:
-        return [], "Saved for a fight — it is the only heal that works in one."
+    if slug == "weapon_oil" and have:
+        # 069: oil is applied on the road to the blade that LEADS
+        lead = p["gear"].get("weapon") or ""
+        g = economy.FORGE.get(lead)
+        if not g or economy.DAMAGE_TYPE.get(g.line, "melee") == "magic":
+            return [], "Oil wants steel or a bowstring — not a focus."
+        if state.oil_left(p) > 0:
+            return [], (f"The {g.name} is already slick — "
+                        f"{state.oil_left(p)} strikes left.")
+        return [Option("use_weapon_oil", f"Slick the {g.name}",
+                       f"{economy.OIL_STRIKES} strikes +25% · {have} left")], ""
+    if slug in economy.QUIVER_SLUGS and have:
+        # 069: arrows bind to a held bow — the whole stack moves
+        if not any(economy.DAMAGE_TYPE.get(economy.FORGE[w].line) == "ranged"
+                   for w in (p.get("held") or []) if w in economy.FORGE):
+            return [], "Arrows want a bow in hand."
+        return [Option(f"nock_{slug}", "Bind to your bow",
+                       f"×{have} into the quiver")], ""
     if slug == "repair_token":
         return [], "The Forge spends it: one full mend, free."
-    if slug in economy.RELICS:
-        return [], "Carried into the fight — it offers itself when it can act."
+    if slug in economy.CHARM_KINDS and have and not (
+            item and item.effect.startswith("heal_")
+            and item.effect != "heal_full"):
+        # 069: relics, the tonic and the luck charm act from the POUCH
+        # (phase 4 adds the wear row here)
+        return [], POUCH_ONLY_WHY
     if slug in economy.FORGE:
         # 045: gear promotes itself from the pack — one weapon held, one
         # shield, one armour; the slot decides which.
@@ -300,7 +308,9 @@ def _pack_use(p: dict, oid: str) -> Scene | None:
     in a fight. Returns None when the id isn't a pack action."""
     wearing = oid.startswith("wear_")
     fixing = oid.startswith("forge_fix_")
-    if oid not in PACK_USE_IDS and not wearing and not fixing:
+    nocking = oid.startswith("nock_") and not p.get("encounter")
+    if oid not in PACK_USE_IDS and not wearing and not fixing \
+            and not nocking:
         return None
     if p.get("encounter"):
         if wearing or fixing:
@@ -340,7 +350,8 @@ def _pack_use(p: dict, oid: str) -> Scene | None:
                             f"{g.name} onto the anvil. The repair row "
                             "is on the wall.")
         return s
-    slug = oid.removeprefix("wear_" if wearing else "use_")
+    slug = oid.removeprefix("wear_" if wearing else
+                            "nock_" if nocking else "use_")
     acts, why = pack_actions(p, slug)
     if not any(o.id == oid for o in acts):
         s = _build_scene(p)
@@ -349,10 +360,20 @@ def _pack_use(p: dict, oid: str) -> Scene | None:
     if wearing:
         # 045: promote from the pack — same swap the Forge row performs.
         return _wear_from_pack(p, slug, _build_scene)
-    if slug == "luck_charm":
-        p["flags"]["luck_day"] = state.world_day()
-        note = ("+ the charm cracks in your fist — fortune leans your way "
-                "until tomorrow")
+    if nocking:
+        # 069: the whole stack binds to the bow's quiver
+        n = p["inventory"].pop(slug)
+        p.setdefault("quiver", {})[slug] = p["quiver"].get(slug, 0) + n
+        combat._ledger(p, "use", note=f"quiver {slug}")
+        s = _build_scene(p)
+        s.body_lines.insert(0, (f"+ {economy.RELICS[slug].name} ×{n} into "
+                                "the quiver — they fly from the bow now"))
+        return s
+    if slug == "weapon_oil":
+        lead = p["gear"]["weapon"]
+        p.setdefault("oil", {})[lead] = economy.OIL_STRIKES
+        note = (f"+ you slick the {economy.FORGE[lead].name} — the next "
+                f"{economy.OIL_STRIKES} strikes bite +25%")
     else:
         item = economy.APOTHECARY[slug]
         amount = int(item.effect.rsplit("_", 1)[1])
@@ -656,9 +677,8 @@ def _maybe_present(p: dict) -> Scene | None:
         return None
     # 009: luck is a DAY now (charm-bought) — the racial bonus retired
     # with the halfling listing.
-    lucky = p["flags"].get("luck_day") == state.world_day()
     table = list(economy.PRESENT_TABLE)
-    if lucky:
+    if combat.lucky(p):                        # 069: a WORN charm
         table = [(w + (5 if k in ("jackpot", "gold") else 0), k)
                  for w, k in table]
     kind = state.rng_pick(p, table)
@@ -2054,8 +2074,7 @@ def _medlab_buy(p: dict, oid: str) -> Scene:
         s.shard_note = "One cell a day. Your heart is not a reactor."
         s.refusal = "Can't buy this — one energy cell a day"
         return s
-    if slug not in ("energy_cell", "luck_charm") \
-            and not pack_can_take(p, slug):                  # 012
+    if slug != "energy_cell" and not pack_can_take(p, slug):    # 012
         return _pack_full(p, _medlab_scene, item.name)
     if p["gold"] < item.price:
         s = _medlab_scene(p)
@@ -2070,8 +2089,10 @@ def _medlab_buy(p: dict, oid: str) -> Scene:
         state.gain_energy(p, 5)
         note += " — ⚡ +5"
     elif slug == "luck_charm":
-        p["flags"]["luck_day"] = state.world_day()
-        note += " — fortune leans your way until tomorrow"
+        # 069: it lands in the pack — wear it in the charm pouch to
+        # feel it (nothing works from the pack)
+        p["inventory"][slug] = p["inventory"].get(slug, 0) + 1
+        note += " — set it in your charm pouch; it does nothing in the pack"
     else:
         p["inventory"][slug] = p["inventory"].get(slug, 0) + 1
     s = _medlab_scene(p)

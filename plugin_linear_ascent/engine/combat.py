@@ -458,6 +458,27 @@ def _lore(e: dict, floor) -> str:
     return base or line
 
 
+def alpha_drop_table(p: dict) -> list[tuple[int, str]]:
+    """006 §3.8 / 069: the alpha spoils — a worn luck charm adds
+    CHARM_LOOT_PCT to the rare entry. The dossier reads THIS table."""
+    rare = economy.ALPHA_CHARM_PCT + (economy.CHARM_LOOT_PCT if lucky(p) else 0)
+    return [(100 - economy.ALPHA_CHARM_PCT, "medgel"), (rare, "luck_charm")]
+
+
+def warden_drop_table(p: dict) -> list[tuple[int, str]]:
+    rare = economy.WARDEN_CHARM_PCT + (economy.CHARM_LOOT_PCT if lucky(p) else 0)
+    return [(100 - economy.WARDEN_CHARM_PCT, "trollblood_tonic"),
+            (rare, "luck_charm")]
+
+
+def rare_loot_pct(p: dict, kind: str) -> int:
+    """069: the rare-entry chance in whole percent for the dossier —
+    same table the kill rolls."""
+    table = alpha_drop_table(p) if kind == "alpha" else warden_drop_table(p)
+    total = sum(w for w, _ in table)
+    return round(100 * table[-1][0] / total)
+
+
 def _drop_ranges(p: dict, floor) -> dict:
     """030 Phase 7: the dossier says the odds — coin and XP ranges from
     the SAME math _victory rolls (jitter band × fade × specimen ×
@@ -561,50 +582,82 @@ def _shard_advice(p: dict, floor) -> str:
             "That thing hits harder than you do. Running costs pride, not gold.")
 
 
+def pouch(p: dict) -> str | None:
+    """069: the slug in the charm pouch — the ONLY relic/potion that can
+    act in a fight. The pack is inert."""
+    return (p.get("gear") or {}).get("charm") or None
+
+
+def spend_pouch(p: dict) -> None:
+    """069: the pouch item is used up — the slot empties."""
+    p["gear"]["charm"] = None
+
+
+def lucky(p: dict) -> bool:
+    """069: fortune is a WORN charm now — passive while it sits in the
+    pouch (drop tables, the tight gold band, the sweeter present)."""
+    return pouch(p) == "luck_charm"
+
+
+def _wear_charm(p: dict) -> str:
+    """069: a worn luck charm wears one point per victory; at zero it
+    crumbles. Returns the line to print, or ''."""
+    if not lucky(p):
+        return ""
+    left = int(p.get("charm_dur") or 0) - 1
+    if left <= 0:
+        p["gear"]["charm"] = None
+        p["charm_dur"] = 0
+        return "▪ the luck charm crumbles to dust — its fortune is spent"
+    p["charm_dur"] = left
+    return ""
+
+
 def _relic_options(p: dict) -> list[Option]:
     """006: a relic's fight option appears only when it can actually do
-    its one dramatic thing — ownership is rare, the list stays short."""
+    its one dramatic thing. 069: and only from the charm POUCH — the
+    pack offers nothing. Arrows come from the bow's quiver."""
     e = p["encounter"]
-    inv = p["inventory"]
+    charm = pouch(p)
+    quiver = p.get("quiver") or {}
     prof = _profile(p)
     opts: list[Option] = []
     if _damage_type(p) == "ranged":
         for slug in economy.QUIVER_SLUGS:
-            if inv.get(slug) and e.get("nocked") != slug:
+            if quiver.get(slug) and e.get("nocked") != slug:
                 r = economy.RELICS[slug]
                 opts.append(Option(f"nock_{slug}",
                                    f"Nock {r.name.lower()}",
-                                   f"×{inv[slug]}"))
-    if inv.get("weapon_oil") and _damage_type(p) != "magic" \
-            and state.oil_left(p) <= 0:
-        opts.append(Option("use_oil", "Slick your weapon",
-                           f"{economy.OIL_STRIKES} strikes +25%"))
-    if inv.get("entangling_net") and e["kind"] != "warden" \
+                                   f"×{quiver[slug]}"))
+    if charm == "entangling_net" and e["kind"] != "warden" \
             and not e.get("netted"):
-        opts.append(Option("throw_net", "Throw the net",
-                           f"×{inv['entangling_net']}"))
-    if inv.get("sky_hook") and prof.get("flying"):
-        opts.append(Option("use_hook", "Set the sky-hook",
-                           f"{inv['sky_hook']} uses left"))
-    if inv.get("strip_potion") and prof.get("type") == "magic_resist":
+        opts.append(Option("throw_net", "Throw the net", "from the pouch"))
+    if charm == "sky_hook" and prof.get("flying"):
+        opts.append(Option("use_hook", "Set the sky-hook", "from the pouch"))
+    if charm == "strip_potion" and prof.get("type") == "magic_resist":
         opts.append(Option("use_strip", "Hurl the strip potion",
                            "spellguard, gone"))
-    if inv.get("curse_scroll") and prof.get("type") == "armoured":
+    if charm == "curse_scroll" and prof.get("type") == "armoured":
         opts.append(Option("use_curse", "Read the curse scroll",
                            "its plate, halved"))
-    if inv.get("polymorph_dust") and e["kind"] != "warden":
+    if charm == "polymorph_dust" and e["kind"] != "warden":
         opts.append(Option("use_polymorph", "Cast the polymorph dust",
                            "no loot, no XP"))
     if not e.get("life_used"):
-        if inv.get("veil_draught") and not e.get("veiled"):
+        if charm == "veil_draught" and not e.get("veiled"):
             opts.append(Option("use_veil", "Drink the veil draught",
                                "untouchable till you strike"))
-        if inv.get("golden_apple") and e.get("apple_hp", 0) <= 0:
+        if charm == "golden_apple" and e.get("apple_hp", 0) <= 0:
             opts.append(Option("use_apple", "Eat the golden apple",
                                "overshield"))
-    if inv.get("severing_word") and e["kind"] != "warden":
+    if charm == "severing_word" and e["kind"] != "warden":
         opts.append(Option("use_severing", "Speak the Severing Word",
                            "it ends"))
+    if charm in ("medgel", "trauma_kit"):
+        item = economy.APOTHECARY[charm]
+        amount = int(item.effect.rsplit("_", 1)[1])
+        opts.append(Option(f"drink_{charm}", f"Use the {item.name.lower()}",
+                           f"+{amount} HP · costs the round"))
     return opts
 
 
@@ -762,7 +815,7 @@ def fight_scene(p: dict, floor, opener: bool = False, note: str = "") -> Scene:
                 "treeline_shot", "Treeline shot",
                 f"needs Bow rank {economy.TREELINE_RANK} (you: {r})",
                 locked=True, aether=True))
-    if p["inventory"].get("trollblood_tonic"):
+    if pouch(p) == "trollblood_tonic":
         opts.append(Option("drink_tonic", "Drink trollblood tonic", "full heal"))
     # 022/008: below a quarter bar, a dying climber can call the floor —
     # once per fight, world mode only (a flare needs someone to see it).
@@ -1230,13 +1283,14 @@ def _quiver_shot(p: dict) -> tuple[float, bool, str]:
     'slow'. Empty quivers un-nock themselves."""
     e = p["encounter"]
     slug = e.get("nocked", "")
+    quiver = p.setdefault("quiver", {})
     if not slug or _damage_type(p) != "ranged" \
-            or p["inventory"].get(slug, 0) <= 0:
+            or quiver.get(slug, 0) <= 0:
         e.pop("nocked", None)
         return 1.0, False, ""
-    p["inventory"][slug] -= 1
-    if p["inventory"][slug] <= 0:
-        del p["inventory"][slug]
+    quiver[slug] -= 1
+    if quiver[slug] <= 0:
+        del quiver[slug]
         e.pop("nocked", None)
     if slug == "piercing_arrows":
         return 1.0, True, ""
@@ -1282,7 +1336,8 @@ def _apply_shot_effect(p: dict, effect: str) -> str:
 _ROUND_ACTIONS = frozenset({
     "attack", "close_in", "open_distance", "create_distance", "run",
     "stand", "shield_wall", "sleep_spell", "treeline_shot", "drink_tonic",
-    "use_oil", "throw_net", "use_hook", "use_strip", "use_curse",
+    "drink_medgel", "drink_trauma_kit",
+    "throw_net", "use_hook", "use_strip", "use_curse",
     "use_veil", "use_apple"})
 
 
@@ -1427,10 +1482,9 @@ def _victory(p: dict, floor) -> Scene:
         # the F−2 snack from the base formula, no threat multiplier.
         bar = economy.creature_bar(floor.floor, e.get("traits") or ())
         xp = round(state.rng_jitter(p, economy.xp_per_kill(bar), 0.25) * fade)
-        # 009: luck is a DAY now — the halfling racial bonus is retired.
-        lucky = p["flags"].get("luck_day") == state.world_day()
+        # 009/069: luck is a WORN charm — the halfling bonus is retired.
         gold = round(state.rng_jitter(p, economy.gold_per_kill(bar),
-                                      0.50 if not lucky else 0.25) * fade)
+                                      0.50 if not lucky(p) else 0.25) * fade)
         # 008: hard specimens pay more, runts pay less
         spec = economy.SPECIMENS[e.get("specimen", "common")]
         gold = round(gold * spec["gold"])
@@ -1513,8 +1567,7 @@ def _victory(p: dict, floor) -> Scene:
     if e.get("specimen") == "alpha":
         # 006 §3.8 faucet cut: charms drop 30% → 10% — bought relics
         # need the free ones scarce.
-        loot = state.rng_pick(p, [(100 - economy.ALPHA_CHARM_PCT, "medgel"),
-                                  (economy.ALPHA_CHARM_PCT, "luck_charm")])
+        loot = state.rng_pick(p, alpha_drop_table(p))
         p["inventory"][loot] = p["inventory"].get(loot, 0) + 1
         lines.append(f"▪ alpha spoils: {economy.APOTHECARY[loot].name}")
 
@@ -1536,11 +1589,12 @@ def _victory(p: dict, floor) -> Scene:
                 lines.append(f"{unlocks.glyph(u)} {u.title} — {u.why}")
         # guaranteed rare-loot roll (006 §3.8: charm 40% → 12% — the
         # gate is ≤ 1/3 of the old rate, and 15 missed it by a hair)
-        loot = state.rng_pick(
-            p, [(100 - economy.WARDEN_CHARM_PCT, "trollblood_tonic"),
-                (economy.WARDEN_CHARM_PCT, "luck_charm")])
+        loot = state.rng_pick(p, warden_drop_table(p))
         p["inventory"][loot] = p["inventory"].get(loot, 0) + 1
         lines.append(f"▪ rare loot: {economy.APOTHECARY[loot].name}")
+    worn = _wear_charm(p)                    # 069: the charm wears
+    if worn:
+        lines.append(worn)
     _arena = arena.payload(p, floor, "victory")   # 067: the last beat
     p["encounter"] = None
     p["location"] = "gate_town"
@@ -1761,10 +1815,8 @@ def _death(p: dict, floor) -> Scene:
     # 006: the Stone of Undying cancels the death itself — but only one
     # life-guard works per fight, and the daily save comes first (free
     # things spend before bought things).
-    if p["inventory"].get("stone_of_undying") and not e.get("life_used"):
-        p["inventory"]["stone_of_undying"] -= 1
-        if p["inventory"]["stone_of_undying"] <= 0:
-            del p["inventory"]["stone_of_undying"]
+    if pouch(p) == "stone_of_undying" and not e.get("life_used"):
+        spend_pouch(p)                     # 069: from the pouch only
         e["life_used"] = True
         p["hp"] = max(1, round(state.max_hp(p) * economy.STONE_REVIVE_PCT))
         return fight_scene(p, floor, note=(
@@ -1785,26 +1837,17 @@ def _death(p: dict, floor) -> Scene:
             lines.append(f"− ◈ {lost_gold} carried gold, gone")
         lines.append("▪ your gear survives — the tower is gentler with "
                      "the newly arrived")
-    elif p["inventory"].get("reincarnation_spell"):
+    elif pouch(p) == "reincarnation_spell":
         # 006 §3.6 protected: one spell burns — nothing is lost and the
-        # whole kit repairs to full. The ONLY leak: spare spells.
+        # whole kit repairs to full. 069: it burns from the POUCH; a
+        # spare in the pack is inert (and no longer leaks).
         lost_gold = 0
-        p["inventory"]["reincarnation_spell"] -= 1
+        spend_pouch(p)
         _repair_everything(p)
         lines.append("▪ the Weapon Reincarnation Spell burns instead of "
                      "you — nothing is lost")
         lines.append("▪ every weapon and armor piece stands repaired, "
                      "as if new-forged")
-        spares = p["inventory"].get("reincarnation_spell", 0)
-        leaked = sum(1 for _ in range(spares)
-                     if state.roll_ok(p, economy.SPARE_SPELL_LEAK))
-        if leaked:
-            p["inventory"]["reincarnation_spell"] -= leaked
-            lines.append(f"− {leaked} SPARE spell"
-                         + ("s" if leaked > 1 else "")
-                         + " lost in the flare — hoarded magic leaks")
-        if p["inventory"].get("reincarnation_spell", 0) <= 0:
-            p["inventory"].pop("reincarnation_spell", None)
     else:
         # 006 §3.6 unprotected: a random bite of gold, every paid weapon
         # rolls the void, the guard slots take wear instead of death.
@@ -2024,7 +2067,7 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
     # 006: nocking is free — switching arrows doesn't spend the round.
     if option_id.startswith("nock_"):
         slug = option_id.removeprefix("nock_")
-        if slug in economy.QUIVER_SLUGS and p["inventory"].get(slug):
+        if slug in economy.QUIVER_SLUGS and (p.get("quiver") or {}).get(slug):
             e["nocked"] = slug
             r = economy.RELICS[slug]
             return fight_scene(p, floor, note=(
@@ -2032,39 +2075,18 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
                 f"{r.effect}."))
         return fight_scene(p, floor)
 
-    if option_id == "use_oil" and p["inventory"].get("weapon_oil") \
-            and _damage_type(p) != "magic":
-        p["inventory"]["weapon_oil"] -= 1
-        if p["inventory"]["weapon_oil"] <= 0:
-            del p["inventory"]["weapon_oil"]
-        p.setdefault("oil", {})[p["gear"]["weapon"]] = economy.OIL_STRIKES
-        hit = _monster_hit(p)
-        if p["hp"] <= 0:
-            return _death(p, floor)
-        chase = _advance_chase(p)
-        return fight_scene(p, floor, note=(
-            f"You slick the {weapon_name(p)} — the next "
-            f"{economy.OIL_STRIKES} strikes bite +25%. "
-            + _counter_text(p, hit,
-                            lead=f"{_the(e['name'])} presses while you pour")
-            + (f" {chase}" if chase else "")))
-
-    if option_id == "throw_net" and p["inventory"].get("entangling_net") \
+    if option_id == "throw_net" and pouch(p) == "entangling_net" \
             and e["kind"] != "warden":
-        p["inventory"]["entangling_net"] -= 1
-        if p["inventory"]["entangling_net"] <= 0:
-            del p["inventory"]["entangling_net"]
+        spend_pouch(p)
         e["netted"] = True
         return fight_scene(p, floor, note=(
             f"The net blooms open and drops — {_the(e['name'], False)} goes down "
             "thrashing in cord. Its round is spent, and it closes no "
             "ground through the mesh."))
 
-    if option_id == "use_hook" and p["inventory"].get("sky_hook") \
+    if option_id == "use_hook" and pouch(p) == "sky_hook" \
             and _profile(p).get("flying"):
-        p["inventory"]["sky_hook"] -= 1
-        if p["inventory"]["sky_hook"] <= 0:
-            del p["inventory"]["sky_hook"]
+        spend_pouch(p)
         prof = _profile(p)
         prof["flying"] = False
         # 048: grounded is grounded — it fights as a plain thing now,
@@ -2082,11 +2104,9 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
                             lead=f"{_the(e['name'])} comes down swinging")
             + (f" {chase}" if chase else "")))
 
-    if option_id == "use_strip" and p["inventory"].get("strip_potion") \
+    if option_id == "use_strip" and pouch(p) == "strip_potion" \
             and _profile(p).get("type") == "magic_resist":
-        p["inventory"]["strip_potion"] -= 1
-        if p["inventory"]["strip_potion"] <= 0:
-            del p["inventory"]["strip_potion"]
+        spend_pouch(p)
         prof = _profile(p)
         prof["type"] = "plain"
         e["profile"] = prof
@@ -2100,11 +2120,9 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
             + _counter_text(p, hit)
             + (f" {chase}" if chase else "")))
 
-    if option_id == "use_curse" and p["inventory"].get("curse_scroll") \
+    if option_id == "use_curse" and pouch(p) == "curse_scroll" \
             and _profile(p).get("type") == "armoured":
-        p["inventory"]["curse_scroll"] -= 1
-        if p["inventory"]["curse_scroll"] <= 0:
-            del p["inventory"]["curse_scroll"]
+        spend_pouch(p)
         prof = _profile(p)
         prof["type"] = "plain"
         e["profile"] = prof
@@ -2118,11 +2136,9 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
             + _counter_text(p, hit)
             + (f" {chase}" if chase else "")))
 
-    if option_id == "use_polymorph" and p["inventory"].get("polymorph_dust") \
+    if option_id == "use_polymorph" and pouch(p) == "polymorph_dust" \
             and e["kind"] != "warden":
-        p["inventory"]["polymorph_dust"] -= 1
-        if p["inventory"]["polymorph_dust"] <= 0:
-            del p["inventory"]["polymorph_dust"]
+        spend_pouch(p)
         name = e["name"]
         p["encounter"] = None
         p["location"] = "gate_town"
@@ -2135,28 +2151,24 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
             options=_after_fight_options(p, floor),
             meters=meters(p))
 
-    if option_id == "use_veil" and p["inventory"].get("veil_draught"):
+    if option_id == "use_veil" and pouch(p) == "veil_draught":
         if e.get("life_used"):
             return fight_scene(p, floor, note=(
                 "One life-guard per fight — something protective has "
                 "already spent itself here."))
-        p["inventory"]["veil_draught"] -= 1
-        if p["inventory"]["veil_draught"] <= 0:
-            del p["inventory"]["veil_draught"]
+        spend_pouch(p)
         e["veiled"] = True
         e["life_used"] = True
         return fight_scene(p, floor, note=(
             "The draught goes down cold — the world slides off you. "
             "Nothing can touch you until your first strike lands."))
 
-    if option_id == "use_apple" and p["inventory"].get("golden_apple"):
+    if option_id == "use_apple" and pouch(p) == "golden_apple":
         if e.get("life_used"):
             return fight_scene(p, floor, note=(
                 "One life-guard per fight — something protective has "
                 "already spent itself here."))
-        p["inventory"]["golden_apple"] -= 1
-        if p["inventory"]["golden_apple"] <= 0:
-            del p["inventory"]["golden_apple"]
+        spend_pouch(p)
         e["apple_hp"] = round(state.max_hp(p) * economy.APPLE_SHIELD_MULT)
         e["life_used"] = True
         hit = _monster_hit(p)
@@ -2170,11 +2182,9 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
             + _counter_text(p, hit)
             + (f" {chase}" if chase else "")))
 
-    if option_id == "use_severing" and p["inventory"].get("severing_word") \
+    if option_id == "use_severing" and pouch(p) == "severing_word" \
             and e["kind"] != "warden":
-        p["inventory"]["severing_word"] -= 1
-        if p["inventory"]["severing_word"] <= 0:
-            del p["inventory"]["severing_word"]
+        spend_pouch(p)
         e["hp"] = 0
         e["_fx_note"] = ""
         s = _victory(p, floor)
@@ -2206,10 +2216,26 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
                "no torch burns close, but flares carry. ")
             + f"{_the(e['name'])} flinches from the light."))
 
-    if option_id == "drink_tonic":
-        p["inventory"]["trollblood_tonic"] -= 1
-        if p["inventory"]["trollblood_tonic"] <= 0:
-            del p["inventory"]["trollblood_tonic"]
+    if option_id in ("drink_medgel", "drink_trauma_kit") \
+            and pouch(p) == option_id.removeprefix("drink_"):
+        item = economy.APOTHECARY[pouch(p)]
+        amount = int(item.effect.rsplit("_", 1)[1])
+        spend_pouch(p)
+        before = p["hp"]
+        p["hp"] = min(state.max_hp(p), p["hp"] + amount)
+        healed = p["hp"] - before
+        hit = _monster_hit(p)
+        if p["hp"] <= 0:
+            return _death(p, floor)
+        chase = _advance_chase(p)
+        return fight_scene(p, floor, note=(
+            f"The {item.name.lower()} does its work — +{healed} HP. "
+            + _counter_text(p, hit,
+                            lead=f"{_the(e['name'])} strikes while you tend")
+            + (f" {chase}" if chase else "")))
+
+    if option_id == "drink_tonic" and pouch(p) == "trollblood_tonic":
+        spend_pouch(p)
         p["hp"] = state.max_hp(p)
         hit = _monster_hit(p)
         if p["hp"] <= 0:

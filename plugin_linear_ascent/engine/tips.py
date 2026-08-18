@@ -243,10 +243,20 @@ _TIPS: dict[str, str] = {
                         "the monster may rake you once as you pull "
                         "away; faster legs shrink that chance. Costs "
                         "the round."),
-    "drink_tonic": ("Trollblood tonic — the ONLY heal that works "
-                    "mid-fight: full HP, the round keeps going. Carried "
-                    "for exactly the moment a Warden has you at the "
-                    "edge."),
+    "drink_tonic": ("Trollblood tonic — from the charm pouch: full HP, "
+                    "the round keeps going. Worn for exactly the "
+                    "moment a Warden has you at the edge."),
+    "drink_medgel": ("A Medgel from the charm pouch — +25 HP mid-fight. "
+                     "The monster still answers this round. Only what "
+                     "sits in the pouch acts; the pack is inert."),
+    "drink_trauma_kit": ("A Trauma kit from the charm pouch — +50 HP "
+                         "mid-fight. The monster still answers this "
+                         "round. Only what sits in the pouch acts; the "
+                         "pack is inert."),
+    "use_weapon_oil": ("Slick the blade that leads — +25% damage for the "
+                       "next 10 strikes, applied on the road, never in "
+                       "a fight. The oil rides that weapon; swap hands "
+                       "and the other blade is dry."),
     "shield_wall": ("Blade craft, rank 4 — a shield on the arm: plant it "
                     "and take the round "
                     "on it. You deal nothing, you take nothing — resets "
@@ -542,7 +552,8 @@ def option_tip(oid: str) -> str:
                 "where Warden glory waits.")
     if oid.startswith("nock_"):
         return item_tip(oid.removeprefix("nock_")) + \
-            " Nocking is free — the switch doesn't spend your round."
+            (" Bound to your bow before the fight; in the fight the "
+             "switch is free — it doesn't spend your round.")
     if oid.startswith("use_") or oid == "throw_net":
         # 006 fight options carry short ids; map back to the relic.
         slug = _FIGHT_RELIC.get(oid, oid.removeprefix("use_"))

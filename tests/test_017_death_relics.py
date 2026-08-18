@@ -53,8 +53,25 @@ def _fight(clazz="warrior", floor_no=1, enc_id="feral_boar",
     p = create_character(fresh(user or f"r6-{clazz}-{enc_id}"), clazz=clazz)
     p["level"] = max(floor_no, 1)
     p["hp"] = 999                      # relic mechanics, not survival
+    # 069: the pack is inert. Arrows ride in the quiver, oil on the lead
+    # blade, and ONE charm-kind sits in the pouch (extra units go to the
+    # pack, where they do nothing — the tests assert exactly that).
+    p["charm_slot"] = True
     for slug, n in inv.items():
-        p["inventory"][slug] = n
+        if slug in economy.QUIVER_SLUGS:
+            p["quiver"][slug] = n
+        elif slug == "weapon_oil":
+            # slicked before the fight, from the pack: the flask is spent
+            p["oil"][p["gear"]["weapon"]] = economy.OIL_STRIKES
+        elif slug in economy.CHARM_KINDS:
+            if p["gear"]["charm"] is None:
+                p["gear"]["charm"] = slug
+                if n > 1:
+                    p["inventory"][slug] = n - 1
+            else:
+                p["inventory"][slug] = n
+        else:
+            p["inventory"][slug] = n
     combat.start_encounter(p, fl, enc)
     # relic mechanics, not the specimen lottery: the roll is seeded off
     # the world day, so an alpha's +speed would make these day-flaky.
@@ -195,10 +212,10 @@ def test_nocking_is_free_and_the_shot_spends_one_arrow():
     hp0, php0 = p["encounter"]["hp"], p["hp"]
     act(p, fl, "nock_poison_arrows")
     assert p["encounter"]["nocked"] == "poison_arrows"
-    assert p["inventory"]["poison_arrows"] == 5    # nocking spends nothing
+    assert p["quiver"]["poison_arrows"] == 5       # nocking spends nothing
     assert p["encounter"]["hp"] == hp0 and p["hp"] == php0
     act(p, fl, "attack")
-    assert p["inventory"]["poison_arrows"] == 4
+    assert p["quiver"]["poison_arrows"] == 4
 
 
 def test_poison_ticks_true_damage_and_never_stacks():
@@ -285,17 +302,25 @@ def test_fire_arrow_bursts_half_again():
 def test_oil_buffs_ten_strikes_then_the_flask_is_gone():
     p, fl = _fight("warrior", floor_no=2, enc_id="shellback_tortoise",
                    weapon_oil=1)
-    act(p, fl, "use_oil")
+    # 069: the flask is slicked on from the pack BEFORE the fight
     assert state.oil_left(p) == economy.OIL_STRIKES
     assert "weapon_oil" not in p["inventory"]
+    s = combat.fight_scene(p, fl)
+    assert not any(o.id == "use_oil" for o in s.options)
     act(p, fl, "attack")
     assert state.oil_left(p) == economy.OIL_STRIKES - 1
 
 
 def test_oil_never_touches_a_caster():
-    p, fl = _fight("sorcerer", weapon_oil=1)
+    p, fl = _fight("sorcerer")
+    p["inventory"]["weapon_oil"] = 1
     s = combat.fight_scene(p, fl)
-    assert not any(o.id == "use_oil" for o in s.options)
+    assert not any(o.id in ("use_oil", "use_weapon_oil") for o in s.options)
+    p["encounter"] = None
+    s = core._pack_use(p, "use_weapon_oil")
+    assert state.oil_left(p) == 0
+    assert p["inventory"]["weapon_oil"] == 1
+    assert s.shard_note
 
 
 def test_the_net_spends_the_monsters_round():
@@ -387,11 +412,13 @@ def test_the_apple_overshields_and_rots():
 
 
 def test_one_life_guard_per_fight():
-    p, fl = _fight("warrior", veil_draught=1, golden_apple=1)
+    p, fl = _fight("warrior", veil_draught=1)
     act(p, fl, "use_veil")
+    assert p["gear"]["charm"] is None              # the pouch is spent
+    p["gear"]["charm"] = "golden_apple"            # a second guard, set
     s = act(p, fl, "use_apple")
     assert "One life-guard per fight" in " ".join(s.body_lines)
-    assert p["inventory"]["golden_apple"] == 1     # nothing was spent
+    assert p["gear"]["charm"] == "golden_apple"    # nothing was spent
 
 
 def test_the_stone_cancels_the_death_itself():
@@ -403,7 +430,7 @@ def test_the_stone_cancels_the_death_itself():
     assert p["encounter"] is not None              # the fight goes on
     assert p["hp"] == max(1, round(state.max_hp(p)
                                    * economy.STONE_REVIVE_PCT))
-    assert "stone_of_undying" not in p["inventory"]
+    assert p["gear"]["charm"] is None              # the pouch burned it
     assert p["encounter"]["life_used"]
     assert "Stone of Undying" in " ".join(s.body_lines)
 
@@ -416,7 +443,7 @@ def test_the_stone_works_once_per_fight():
     p["hp"] = 0
     combat._death(p, fl)
     assert p["encounter"] is None                  # this death stood
-    assert p["inventory"]["stone_of_undying"] == 1
+    assert p["gear"]["charm"] == "stone_of_undying"
 
 
 # ── the severing word ────────────────────────────────────────────────────
@@ -425,7 +452,7 @@ def test_the_severing_word_simply_ends_it():
     p, fl = _fight("sorcerer", severing_word=1)
     s = act(p, fl, "use_severing")
     assert p["encounter"] is None
-    assert "severing_word" not in p["inventory"]
+    assert p["gear"]["charm"] is None
     assert "simply over" in " ".join(s.body_lines)
 
 
@@ -445,7 +472,9 @@ def _doomed(user, level=5, gold=1000, bank=500, spells=0, **gear):
     p["gold"], p["bank"] = gold, bank
     p["daily"]["death_save"] = True
     if spells:
-        p["inventory"]["reincarnation_spell"] = spells
+        p["gear"]["charm"] = "reincarnation_spell"
+        if spells > 1:
+            p["inventory"]["reincarnation_spell"] = spells - 1
     for slot, slug in gear.items():
         p["gear"][slot] = slug
         g = economy.FORGE[slug]
@@ -461,7 +490,7 @@ def test_the_free_save_comes_before_bought_things():
     p["hp"] = 0
     combat._death(p, fl)
     assert p["hp"] == 1                            # the shard caught you
-    assert p["inventory"]["reincarnation_spell"] == 1
+    assert p["gear"]["charm"] == "reincarnation_spell"
 
 
 def test_mercy_still_holds_below_level_four():
@@ -514,7 +543,7 @@ def test_protected_death_loses_nothing_and_mends_everything():
     s = combat._death(p, fl)
     assert p["gold"] == 1000                       # death took NOTHING
     assert p["gear"]["weapon"] == "scrap_dagger"
-    assert "reincarnation_spell" not in p["inventory"]
+    assert p["gear"]["charm"] is None
     assert p["durability"]["weapon"] == economy.item_pool(
         economy.FORGE["scrap_dagger"])
     assert p["durability"]["armor"] == economy.item_pool(
@@ -524,22 +553,21 @@ def test_protected_death_loses_nothing_and_mends_everything():
     assert "nothing is lost" in " ".join(s.body_lines)
 
 
-def test_spare_spells_leak_half_the_time():
-    leaked = 0
-    trials = 200
-    p, fl = _doomed("r6-hoarder", weapon="scrap_dagger")
-    for _ in range(trials):
-        p["inventory"]["reincarnation_spell"] = 3
-        p["gold"], p["hp"] = 1000, 0
-        p["daily"]["death_save"] = True
-        fl2 = schema.get_floor(1)
-        enc = next(e for e in fl2.encounters if e.id == "feral_boar")
-        combat.start_encounter(p, fl2, enc)
-        p["encounter"]["range"] = "close"
-        combat._death(p, fl)
-        leaked += 2 - p["inventory"].get("reincarnation_spell", 0)
-    # two spares each rolling 50% → expected one leak per death
-    assert 0.35 <= leaked / (2 * trials) <= 0.65, leaked / (2 * trials)
+def test_spare_spells_in_the_pack_neither_fire_nor_leak():
+    # 069: the pack is inert. A spell in the POUCH burns; three spares in
+    # the pack stay three, and with an empty pouch the death stands.
+    p, fl = _doomed("r6-hoarder", spells=1, weapon="scrap_dagger")
+    p["inventory"]["reincarnation_spell"] = 3
+    combat._death(p, fl)
+    assert p["gold"] == 1000
+    assert p["gear"]["charm"] is None
+    assert p["inventory"]["reincarnation_spell"] == 3
+    # pouch empty, pack full of spells: unprotected
+    p, fl = _doomed("r6-hoarder2", weapon="scrap_dagger")
+    p["inventory"]["reincarnation_spell"] = 3
+    combat._death(p, fl)
+    assert p["gold"] < 1000
+    assert p["inventory"]["reincarnation_spell"] == 3
 
 
 # ── the faucet cuts (§3.8) ───────────────────────────────────────────────

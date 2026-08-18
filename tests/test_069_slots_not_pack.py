@@ -166,3 +166,162 @@ def test_charm_kinds_are_the_pouch_things_only():
     assert economy.slot_for("luck_charm") == "charm"
     assert economy.slot_for("basic_bow") == "weapon"
     assert economy.slot_for("repair_token") is None
+
+
+# ── phase 2: effects move to the slots ─────────────────────────────────
+
+def _in_fight(uid="069-f", clazz="warrior", floor_no=1, enc_id="feral_boar"):
+    from plugin_linear_ascent.content import schema
+    p = _fresh(uid)
+    make_character(p, clazz=clazz)
+    p["level"] = max(floor_no, 1)
+    p["hp"] = 999
+    p["charm_slot"] = True
+    fl = schema.get_floor(floor_no)
+    enc = next(e for e in fl.encounters if e.id == enc_id)
+    combat.start_encounter(p, fl, enc)
+    p["encounter"]["range"] = "close"
+    return p, fl
+
+
+def _fight_ids(p, fl):
+    return [o.id for o in combat.fight_scene(p, fl).options]
+
+
+def test_a_full_pack_is_the_same_fight_as_an_empty_one():
+    a, fl = _in_fight("069-inert-a")
+    b, _ = _in_fight("069-inert-b")
+    for slug in economy.CHARM_KINDS:
+        b["inventory"][slug] = 1
+    for slug in economy.QUIVER_SLUGS:
+        b["inventory"][slug] = 5
+    b["inventory"]["weapon_oil"] = 1
+    assert _fight_ids(a, fl) == _fight_ids(b, fl)
+    assert combat.alpha_drop_table(a) == combat.alpha_drop_table(b)
+    assert combat.warden_drop_table(a) == combat.warden_drop_table(b)
+    assert not combat.lucky(b)
+    # death: a spell in the pack does not save you
+    b["level"] = 5
+    b["daily"]["death_save"] = True
+    b["gold"] = 1000
+    b["hp"] = 0
+    combat._death(b, fl)
+    assert b["gold"] < 1000
+    assert b["inventory"]["reincarnation_spell"] == 1
+
+
+def test_the_pouch_offers_itself_and_empties_on_use():
+    p, fl = _in_fight("069-pouch")
+    p["gear"]["charm"] = "trollblood_tonic"
+    assert "drink_tonic" in _fight_ids(p, fl)
+    p["hp"] = 5
+    combat.resolve_fight_action(p, fl, "drink_tonic")
+    assert p["gear"]["charm"] is None
+    assert p["hp"] > 5
+    assert "drink_tonic" not in _fight_ids(p, fl)
+
+
+def test_the_medgel_heals_from_the_pouch_only():
+    p, fl = _in_fight("069-medgel")
+    p["inventory"]["medgel"] = 3
+    assert "drink_medgel" not in _fight_ids(p, fl)
+    acts, why = core.pack_actions(p, "medgel")
+    assert acts == [] and why
+    p["gear"]["charm"] = "medgel"
+    assert "drink_medgel" in _fight_ids(p, fl)
+    p["hp"] = 5
+    combat.resolve_fight_action(p, fl, "drink_medgel")
+    assert p["gear"]["charm"] is None
+    assert p["inventory"]["medgel"] == 3           # the pack untouched
+    assert p["hp"] > 5
+
+
+def test_the_stone_in_the_pack_lets_you_die_the_stone_in_the_pouch_does_not():
+    for where in ("pack", "pouch"):
+        p, fl = _in_fight(f"069-stone-{where}")
+        p["level"] = 5
+        p["daily"]["death_save"] = True
+        if where == "pack":
+            p["inventory"]["stone_of_undying"] = 1
+        else:
+            p["gear"]["charm"] = "stone_of_undying"
+        p["hp"] = 0
+        combat._death(p, fl)
+        if where == "pack":
+            assert p["encounter"] is None
+            assert p["inventory"]["stone_of_undying"] == 1
+        else:
+            assert p["encounter"] is not None
+            assert p["gear"]["charm"] is None
+
+
+def test_arrows_bind_on_the_road_and_the_quiver_spends_them():
+    p, fl = _in_fight("069-quiver", clazz="archer")
+    p["inventory"]["poison_arrows"] = 5
+    acts, why = core.pack_actions(p, "poison_arrows")
+    assert acts == [] and "before the fight" in why
+    assert "nock_poison_arrows" not in _fight_ids(p, fl)
+    s = core.apply_choice(p, "nock_poison_arrows")
+    assert p["quiver"] == {} and p["inventory"]["poison_arrows"] == 5
+    p["encounter"] = None
+    acts, _ = core.pack_actions(p, "poison_arrows")
+    assert [o.id for o in acts] == ["nock_poison_arrows"]
+    core.apply_choice(p, "nock_poison_arrows")
+    assert p["quiver"] == {"poison_arrows": 5}
+    assert "poison_arrows" not in p["inventory"]
+    from plugin_linear_ascent.content import schema
+    enc = next(e for e in fl.encounters if e.id == "feral_boar")
+    combat.start_encounter(p, fl, enc)
+    p["encounter"]["range"] = "close"
+    assert "nock_poison_arrows" in _fight_ids(p, fl)
+    combat.resolve_fight_action(p, fl, "nock_poison_arrows")
+    combat.resolve_fight_action(p, fl, "attack")
+    assert p["quiver"]["poison_arrows"] == 4
+
+
+def test_oil_is_slicked_from_the_pack_on_the_road_never_in_a_fight():
+    p, fl = _in_fight("069-oilroad")
+    p["inventory"]["weapon_oil"] = 1
+    acts, why = core.pack_actions(p, "weapon_oil")
+    assert acts == [] and why
+    assert not any(o.startswith("use_") for o in _fight_ids(p, fl)
+                   if "oil" in o)
+    p["encounter"] = None
+    acts, _ = core.pack_actions(p, "weapon_oil")
+    assert [o.id for o in acts] == ["use_weapon_oil"]
+    core.apply_choice(p, "use_weapon_oil")
+    assert state.oil_left(p) == economy.OIL_STRIKES
+    assert "weapon_oil" not in p["inventory"]
+    acts, why = core.pack_actions(p, "weapon_oil")
+    assert acts == []
+
+
+def test_a_worn_luck_charm_fattens_the_rare_drop_and_wears_out():
+    p, fl = _in_fight("069-luck")
+    base = combat.rare_loot_pct(p, "alpha")
+    p["gear"]["charm"] = "luck_charm"
+    p["charm_dur"] = 2
+    assert combat.lucky(p)
+    assert combat.rare_loot_pct(p, "alpha") > base
+    assert combat.rare_loot_pct(p, "warden") > combat.rare_loot_pct(
+        _fresh("069-plain"), "warden")
+    assert combat._wear_charm(p) == ""
+    assert p["charm_dur"] == 1
+    assert "crumbles" in combat._wear_charm(p)
+    assert p["gear"]["charm"] is None and not combat.lucky(p)
+
+
+def test_a_luck_charm_in_the_pack_is_not_luck():
+    p = _fresh("069-luckpack")
+    make_character(p, clazz="warrior")
+    p["inventory"]["luck_charm"] = 3
+    assert not combat.lucky(p)
+    assert combat.rare_loot_pct(p, "alpha") == economy.ALPHA_CHARM_PCT
+
+
+def test_wear_is_refused_mid_fight_with_a_reason():
+    p, fl = _in_fight("069-wearfight")
+    p["inventory"]["basic_bow"] = 1
+    s = core.apply_choice(p, "wear_basic_bow")
+    assert p["gear"]["weapon"] != "basic_bow"
+    assert "mid-fight" in s.shard_note

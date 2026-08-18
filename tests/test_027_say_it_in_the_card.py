@@ -7,7 +7,8 @@ chat, and a banner it drew as a filename.
 """
 
 from plugin_linear_ascent import economy, render
-from plugin_linear_ascent.engine import contracts, core, notices, state
+from plugin_linear_ascent.content import schema
+from plugin_linear_ascent.engine import combat, contracts, core, notices, state
 
 
 def playing(name="Sayer", world=None):
@@ -170,25 +171,34 @@ def test_the_tonic_is_still_the_only_heal_in_a_fight():
     while not p.get("encounter"):
         core.apply_choice(p, "hunt")
     p["hp"] = 10
+    # 069: in a fight the pack is inert — every row is refused with a why
     acts, why = core.pack_actions(p, "medgel")
-    assert acts == [] and "mid-fight" in why
-    tonic, _ = core.pack_actions(p, "trollblood_tonic")
-    assert [o.id for o in tonic] == ["drink_tonic"]
+    assert acts == [] and why
+    tonic, why = core.pack_actions(p, "trollblood_tonic")
+    assert tonic == [] and "pouch" in why.lower()
     s = core.apply_choice(p, "use_medgel")
     assert p["inventory"]["medgel"] == 1             # the fight refused it
     assert p.get("encounter")                        # and the fight goes on
+    # …the pouch is the only thing that acts
+    p["gear"]["charm"] = "trollblood_tonic"
+    fl = schema.get_floor(1)
+    opts = [o.id for o in combat.fight_scene(p, fl).options]
+    assert "drink_tonic" in opts and "drink_medgel" not in opts
+    p["gear"]["charm"] = "medgel"
+    opts = [o.id for o in combat.fight_scene(p, fl).options]
+    assert "drink_medgel" in opts and "drink_tonic" not in opts
 
 
-def test_a_charm_found_on_a_kill_can_finally_be_cracked():
-    """Charms dropped for versions with no way to use one but a sale."""
+def test_a_charm_in_the_pack_is_inert_and_says_so():
+    """069: a charm is WORN in the pouch — the pack row has no use verb."""
     p = playing("lucky")
     p["inventory"]["luck_charm"] = 1
-    acts, _ = core.pack_actions(p, "luck_charm")
-    assert [o.id for o in acts] == ["use_luck_charm"]
+    acts, why = core.pack_actions(p, "luck_charm")
+    assert not any(o.id == "use_luck_charm" for o in acts)
+    assert "pouch" in why.lower() or acts
     core.apply_choice(p, "use_luck_charm")
-    assert p["flags"]["luck_day"] == state.world_day()
-    assert "luck_charm" not in p["inventory"]
-    assert core.pack_actions(p, "luck_charm")[0] == []
+    assert "luck_day" not in p["flags"]
+    assert p["inventory"]["luck_charm"] == 1
 
 
 def test_a_thing_with_nothing_to_do_here_says_where_it_can():

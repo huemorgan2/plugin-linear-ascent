@@ -159,12 +159,17 @@ def test_migrated_halfling_gets_the_human_energy_cap():
         economy.energy_cap(p["level"], "") + 1
 
 
-def test_luck_day_and_charm_survive_the_retirement():
+def test_a_bought_charm_lands_in_the_pack_and_does_nothing_there():
+    # 069: luck is worn, not owned — the buy fills the pack, not the day
     p = create_character(fresh("lucky-human"))
     p["gold"] = economy.APOTHECARY["luck_charm"].price
     p["location"] = "medlab"
     choose(p, "buy_luck_charm")
-    assert p["flags"].get("luck_day") == state.world_day()
+    assert p["inventory"].get("luck_charm") == 1
+    assert "luck_day" not in p["flags"]
+    assert not combat.lucky(p)
+    p["gear"]["charm"] = "luck_charm"
+    assert combat.lucky(p)
 
 
 # ── kill FX: family × landing damage type ────────────────────────────────

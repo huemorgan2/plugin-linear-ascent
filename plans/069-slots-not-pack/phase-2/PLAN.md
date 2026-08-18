@@ -37,3 +37,24 @@ oiled weapon slot) works as before.
 ## Rollback
 `git revert`; docs with `quiver`/dict-oil load on phase-1 engine
 (keys ignored / migrated).
+
+## Execution status
+Executed 2026-08-18. combat.py: `pouch/spend_pouch/lucky/_wear_charm`;
+`_relic_options` reads the pouch and the quiver only; `drink_medgel` /
+`drink_trauma_kit` fight rows (+HP, monster answers); `use_oil` row gone;
+stone/spell/tonic/veil/apple/severing/net/hook/strip/curse/polymorph all
+guard `pouch(p)==slug` and empty the slot; spare-spell leak removed;
+drop tables `alpha_drop_table(p)`/`warden_drop_table(p)` +CHARM_LOOT_PCT
+when lucky, `rare_loot_pct`; charm wears one per victory. core.py: pack
+offers nothing in a fight (arrows: "bind before the fight"; charm kinds:
+POUCH_ONLY_WHY); on the road `use_weapon_oil` slicks the lead,
+`nock_<slug>` moves the stack to `quiver`; luck charm buy lands in the
+pack, no `luck_day` writes/reads remain. tips: drink_medgel /
+drink_trauma_kit / use_weapon_oil / nock_. Tests: 9 new in
+test_069 (inert pack == empty pack for options, odds, death; pouch
+tonic/medgel; stone pack vs pouch; nock road-only + quiver decrement;
+oil road-only; worn luck fattens rare drop and wears out; pack luck is
+not luck; wear refused mid-fight); test_017_death_relics `_fight`
+routes kwargs to quiver/oil/pouch, spare-spell test rewritten to "pack
+spells neither fire nor leak"; test_017_characters / test_027 updated.
+Suite: 1273 passed, 6 pre-existing failures (unchanged list).
