@@ -52,3 +52,17 @@ GMAIL / pack) still under the fight. After this phase:
 ## Rollback
 `git revert` the phase-5 commit in plugin + worldd; re-vendor 0.91.0;
 deploy.sh. No data migration.
+
+## Execution status (2026-08-18)
+- Done. Plugin commits be0ab82 + bd8d191 on main (on top of 069 phases
+  1–4, unreleased); the SAME two commits cherry-picked onto db35540
+  (0.91.0) as branch `release/0.92.0` — that tree is what worldd vendors
+  and ships, so production = 0.91.0 + this phase, no 069 in it.
+- Tests: `tests/test_067_arena.py` 10/10, `test_067_labs.py` 6/6; full
+  plugin suite 1256 pass / 6 pre-existing fails on the release tree
+  (identical set on db35540); worldd 193/193.
+- Dojo 0037 (`dojo/results/0037-067p5-arena-dress-2026-08-18/`): 26/26
+  against the release tree; desktop (1440) + mobile (420) stills of the
+  regular vs arena card in `desktop/`.
+- Follow-ups noted, not done: the 320×300 stage stretches to the full
+  760px card on desktop (as the regular banner does) — no cap asked for.
