@@ -81,3 +81,24 @@
 ## Rollback
 `git revert` the plugin commit and the worldd commit. No state
 migration: gold/xp already banked stay; the tent reprices live.
+
+## Execution status
+- Done 2026-08-18. Plugin a3e6ae8 (game 0.88.0), root e320db5.
+- Phase 1: `KILL_GOLD_OVER_XP = 1.25` floors `gold_per_kill`
+  (f5 31→36, f9 57→74, f11 75→92; f13+ unchanged); specimen HP scale
+  rides XP; wilds kills clamp `gold = max(gold, xp + 1)` after every
+  multiplier. Warden gate (gold(F+1) < warden_gold(F)) holds to f20.
+- Phase 2: `healer_tent_price(floor, hp, hp_max)` = ceil(6 × base gold
+  × missing/max); f6 whole bar ◈144 (was ◈15), f9 ◈288 (was ◈30);
+  gate row `pay ◈ N · +M HP`; death card quotes the whole bar;
+  `tent_running_cost` keeps daily_income (no ladder moved).
+- Phase 3: fight3d.js — `mCenterNow` caches the last centre and never
+  throws on a banished foe; effect updates try/catch in `frame()` and
+  `resetStage()`. Verified by code review + `node --check`; headless
+  Chrome/SwiftShader renders the stage but never reaches the impact
+  frame inside a bounded run, so no before/after screenshot.
+- Tests: test_065 6/6; plugin suite 1226 pass, 6 pre-existing failures
+  (verified failing on HEAD before my change; day-dependent draws +
+  the concurrent session's combat work); worldd 190 pass, 1
+  pre-existing (test_leaderboard_marks_only_you).
+- Local 8777 restarted on 0.88.0. Not deployed, not published.
