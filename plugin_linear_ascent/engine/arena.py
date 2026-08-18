@@ -297,7 +297,12 @@ def payload(p: dict, floor, phase: str = "round",
         return None
     a = e.pop("_arena", None)
     events: list[dict] = []
+    start = None
     if isinstance(a, dict):
+        start = {"me_hp": int(a.get("hp0", p.get("hp", 0)) or 0),
+                 "foe_hp": int(a.get("foe0", e.get("hp", 0)) or 0),
+                 "range": a.get("range0", "close"),
+                 "gap": int(a.get("gap0", 0) or 0)}
         events = list(a.get("ev") or [])
         first_me = next((x for x in events if x.get("who") == "me"), None)
         if first_me is None:
@@ -325,6 +330,7 @@ def payload(p: dict, floor, phase: str = "round",
         "range": {"state": e.get("range", "close"),
                   "gap": int(e.get("gap", 0) or 0)
                   if e.get("range") == "at_range" else 0},
+        "start": start,
         "events": events,
         "log": [ev["text"] for ev in events if ev.get("text")],
         "note": note,

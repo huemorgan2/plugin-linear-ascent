@@ -2016,7 +2016,7 @@ def _arena_log_html(a: dict) -> str:
     if not lines:
         return ""
     return ('<div class="alog">'
-            + "".join(f'<div class="aline type">{_ep(ln)}</div>'
+            + "".join(f'<div class="aline">{_ep(ln)}</div>'
                       for ln in lines)
             + "</div>")
 
