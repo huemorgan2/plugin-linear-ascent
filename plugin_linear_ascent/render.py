@@ -2294,13 +2294,13 @@ def render_scene_fragment(scene: Scene) -> str:
                 opt_cls += " danger"
             hint = (f'<span class="hint">{_ep(o.hint)}</span>'
                     if o.hint else "")
-            # 068: a colour pick wears its ink as a box before the name
+            # 068: a colour pick wears its ink as two block glyphs before the name
             swatch = ""
             if o.id.startswith(("hcol_", "col_")):
                 cslug = o.id.split("_", 1)[1]
                 if cslug in _colors.FACTION_COLORS:
-                    swatch = (f'<span class="swatch" style="background:'
-                              f'{_colors.faction_ink(cslug)}"></span>')
+                    swatch = (f'<span class="swatch" style="color:'
+                              f'{_colors.faction_ink(cslug)}">██</span>')
             gicon = _opt_gear_icon(
                 o.id, (getattr(scene, "option_art", None) or {})
                 .get(o.id) or "")
@@ -2830,11 +2830,8 @@ SCENE_CSS = f"""
 .opt.danger .lbl,.opt.danger .key{{color:{RED};}}
 .opt.danger:hover:not(:disabled),.opt.danger:focus-visible{{
  background:{RED};}}
-/* 068: the colour swatch — a filled box before a colour's name */
-.opt .swatch{{flex:none;display:inline-block;width:1.1em;height:1.1em;
- border:1px solid {DIM};}}
-.opt:hover:not(:disabled) .swatch,.opt:focus-visible .swatch{{
- border-color:{INK};}}
+/* 068: the colour swatch — two block glyphs in the ink before a colour's name */
+.opt .swatch{{flex:none;line-height:1;}}
 .opt.chosen{{background:{GOLD};}}
 .opt.chosen .key,.opt.chosen .lbl,.opt.chosen .hint,
 .opt.chosen .key::before,.opt.chosen .key::after,.opt.chosen::after{{

@@ -127,7 +127,7 @@ def test_recolor_rows_wear_a_swatch_and_name_the_way_back():
     html = render.render_scene_fragment(s)
     assert html.count('class="swatch"') == len(colors.FACTION_COLORS)
     for slug, (_nm, ink) in colors.FACTION_COLORS.items():
-        assert f'style="background:{ink}"' in html
+        assert f'style="color:{ink}">\u2588\u2588</span>' in html
     s = core.apply_choice(p, "hall_cancel")
     assert s.eyebrow == "EMBER PACT · THE DESK"
     assert not fx(p, "faction_recolor")
