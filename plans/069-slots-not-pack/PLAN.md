@@ -190,3 +190,10 @@ keys until phase 6 confirms) so a reverted engine reads the doc.
 - Death items (stone/reincarnation) become one-per-slot — the spare
   leak rule dies with them.
 - Arrows bind to the bow (row 7) rather than the charm slot.
+
+## Execution status (whole plan)
+Phases 1–6 done: 885d519 (v11 doc), e15de03 (pack grants nothing),
+46a7a94 (weapon slots + hone per slug), b7831fb/989ffd6 (charm pouch +
+gear map, arena pouch/per-weapon ATK), 1828648 (0.93.0). 36 tests in
+test_069_slots_not_pack.py; dojo 0038 42/42. Vendored into worldd, not
+deployed.
