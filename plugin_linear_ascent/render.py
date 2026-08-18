@@ -1929,6 +1929,124 @@ __TIP_JS__</script>""".replace("__ACT__", _ACT_PATH) \
                       .replace("__SWAP_JS__", SWAP_JS)
 
 
+# ── 067: the arena card — HUD, tiles, log ─────────────────────────────
+_ARENA_TYPE = {   # the foe's kind badge: glyph key, ink, word
+    "fly": ("t_wing", AETHER, "FLYING"),
+    "armoured": ("t_armor", ORANGE, "ARMOURED"),
+    "magic_resist": ("t_resist", VIOLET, "MAGIC RES"),
+    "plain": ("", TEXT, "REGULAR"),
+}
+
+
+def _aicon(key: str, ink: str = "", cls: str = "") -> str:
+    if not key:
+        return ""
+    url = icons.icon_data_url(key)
+    st = f"background-color:{ink};" if ink else ""
+    return (f'<span class="aico{(" " + cls) if cls else ""}" style="{st}'
+            f"-webkit-mask-image:url('{url}');mask-image:url('{url}')\">"
+            "</span>")
+
+
+def _abar(hp: int, cap: int, cls: str) -> str:
+    cap = max(1, int(cap))
+    hp = max(0, min(int(hp), cap))
+    col = OK if hp >= cap else (GOLD if hp * 3 > cap else RED)
+    pct = round(100 * hp / cap)
+    return (f'<span class="abar {cls}" data-hp="{hp}" data-max="{cap}">'
+            f'<span class="afill" style="width:{pct}%;background:{col}">'
+            f'</span><span class="anum">{hp}/{cap}</span></span>')
+
+
+def _arena_hud_html(a: dict) -> str:
+    me, foe = a.get("me") or {}, a.get("foe") or {}
+    # ── left: the climber ──
+    weps = "".join(
+        _aicon({"blade": "sword", "bow": "bow", "staff": "staff"}
+               .get(w.get("path"), "sword"),
+               RED if w.get("broken") else (BRIGHT if w.get("lead") else DIM),
+               "lead" if w.get("lead") else "")
+        for w in me.get("weapons") or [])
+    guard = me.get("guard") or {}
+    gicons = "".join(
+        _aicon(k if k != "armor" else "armor",
+               RED if v.get("broken") else TEXT)
+        for k, v in guard.items() if k in ("shield", "armor"))
+    left = (f'<div class="ahud l"><div class="aname">{_e(me.get("name") or "You")}</div>'
+            f'{_abar(me.get("hp", 0), me.get("hp_max", 1), "me")}'
+            f'<div class="astat"><span style="color:{AETHER}">SPD {int(me.get("spd", 0))}</span>'
+            f' <span>DEF {int(me.get("def", 0))}</span>'
+            f' <span style="color:{GOLD}">ATK {int(me.get("atk", 0))}</span></div>'
+            f'<div class="agear">{weps}{gicons}</div></div>')
+    # ── right: the foe ──
+    t = str(foe.get("type") or "plain")
+    key, ink, word = _ARENA_TYPE.get(t, _ARENA_TYPE["plain"])
+    badges = []
+    if foe.get("flying"):
+        badges.append(_aicon("t_wing", AETHER) + '<span style="color:%s">FLYING</span>' % AETHER)
+    if foe.get("armoured"):
+        badges.append(_aicon("t_armor", ORANGE) + '<span style="color:%s">ARMOURED</span>' % ORANGE)
+    if foe.get("resist_pct"):
+        badges.append(_aicon("t_resist", VIOLET)
+                      + '<span style="color:%s">MAGIC RES %d%%</span>'
+                      % (VIOLET, int(foe["resist_pct"])))
+    if not badges:
+        badges.append(f'<span style="color:{TEXT}">REGULAR</span>')
+    if foe.get("bulwark"):
+        badges.append(_aicon("t_bulwark", GOLD) + f'<span style="color:{GOLD}">BULWARK</span>')
+    akind = "".join(f'<span class="akb">{b}</span>' for b in badges)
+    right = (f'<div class="ahud r"><div class="aname">{_e(foe.get("name") or "")}</div>'
+             f'{_abar(foe.get("hp", 0), foe.get("hp_max", 1), "foe")}'
+             f'<div class="astat"><span>DEF {int(foe.get("def", 0))}</span>'
+             f' <span style="color:{AETHER}">SPD {int(foe.get("spd", 0))}</span></div>'
+             f'<div class="akind">{akind}</div></div>')
+    return left + right
+
+
+def _arena_banner_html(scene) -> str:
+    a = scene.arena or {}
+    w, h = int(a.get("w", 320)), int(a.get("h", 300))
+    return (f'<div class="banner arena" style="background-color:#000;'
+            f'aspect-ratio:{w}/{h};" data-a3d-slot="1">'
+            f'{_arena_hud_html(a)}<div class="afloats"></div></div>')
+
+
+def _arena_log_html(a: dict) -> str:
+    lines = [ln for ln in (a.get("log") or []) if ln]
+    if not lines:
+        return ""
+    return ('<div class="alog">'
+            + "".join(f'<div class="aline type">{_ep(ln)}</div>'
+                      for ln in lines)
+            + "</div>")
+
+
+def _arena_tiles_html(scene) -> str:
+    """The option tiles: an icon on a black box, `[n] LABEL` under it,
+    the [i] pinned to the corner. Numbering runs on scene.options order
+    so the pane's 1..9 keys pick the same button."""
+    a = scene.arena or {}
+    tiles = a.get("tiles") or {}
+    cells = []
+    for i, o in enumerate(scene.options, 1):
+        t = tiles.get(o.id) or {"icon": "focus", "label": o.label[:12].upper()}
+        key_cls = " aether" if o.aether else ""
+        locked = bool(getattr(o, "locked", False))
+        cls = "opt atile" + (" locked" if locked else "")
+        tip = tips.option_tip(o.id) or o.hint or ""
+        info = (f'<span class="info" tabindex="0" role="note" '
+                f'data-tip="{_e(tip)}">i</span>' if tip else "")
+        icon = _aicon(t.get("icon") or "focus", DIM if locked else BRIGHT)
+        hint = (f'<span class="ahint">{_ep(o.hint)}</span>' if o.hint else "")
+        btn = (f'<button type="button" class="{cls}" data-opt="{_e(o.id)}" '
+               f'title="{_e(o.label)}">{icon}'
+               f'<span class="atxt"><span class="key{key_cls}">{i}</span> '
+               f'<span class="lbl">{_e(t.get("label") or o.label)}</span></span>'
+               f'{hint}</button>')
+        cells.append(f'<div class="atcell">{btn}{info}</div>')
+    return f'<div class="options later arena-opts">{"".join(cells)}</div>'
+
+
 def render_scene_fragment(scene: Scene) -> str:
     """The scene panel itself — one `<div class="card">` with the full card
     grammar. Shared verbatim by the legacy chat card (render_scene wraps it
@@ -1955,7 +2073,16 @@ def render_scene_fragment(scene: Scene) -> str:
         url, w, h = banner
         tint = _banner_tint(scene.banner, scene.banner_variant)
     k3 = getattr(scene, "kill3d", None)
-    if fx or split or banner:
+    # 067: the arena owns the slot after the opener — a bare 320×300
+    # band with the HUD in it; the website's arena3d layer paints the 3D
+    # into it. The opener keeps the creature's close-up (roy: first the
+    # image, the 3D after the first strike).
+    ar = getattr(scene, "arena", None)
+    arena_live = bool(ar) and ar.get("phase") not in ("opener",)
+    if arena_live:
+        parts.append(_arena_banner_html(scene))
+        parts.append(_arena_log_html(ar))
+    elif fx or split or banner:
         banner_html = (
             f'<div class="banner" style="background-color:{tint};'
             f"aspect-ratio:{w}/{h};"
@@ -1992,7 +2119,8 @@ def render_scene_fragment(scene: Scene) -> str:
         # player's grammar; the [i] carries the dossier as a tip, the
         # <details> fold stays below as the full sheet.
         dossier = _dossier_html(scene.enemy)
-        parts.append(_enemy_head_html(scene.enemy, _dossier_tip(dossier)))
+        if not arena_live:
+            parts.append(_enemy_head_html(scene.enemy, _dossier_tip(dossier)))
         parts.append(dossier)
     if scene.support:
         parts.append(f'<div class="support type">{_ep(scene.support)}</div>')
@@ -2019,8 +2147,11 @@ def render_scene_fragment(scene: Scene) -> str:
     in_fold = False
     in_callout = False
     has_tally = bool(getattr(scene, "tally", None))
+    arena_note = (ar or {}).get("note") if arena_live else ""
     for line in scene.body_lines:
         if has_tally and _TALLY_SAID.match(line):
+            continue
+        if arena_note and line == arena_note:
             continue
         # 007: ▣ fold markers — long shop shelves collapse into a
         # <details> block (the [i]-dossier pattern, zero JS).
@@ -2080,7 +2211,10 @@ def render_scene_fragment(scene: Scene) -> str:
     if getattr(scene, "ask", None):
         parts.append(_ask_html(scene.ask))
 
-    if scene.options:
+    if scene.options and ar and ar.get("tiles") \
+            and ar.get("phase") in ("opener", "round"):
+        parts.append(_arena_tiles_html(scene))
+    elif scene.options:
         # 031 §14: grid mode — a scene may ask for a card wall instead of
         # rows. Options that resolve a gear icon become picture cards;
         # the rest (hone, repair, back…) stay rows underneath. Numbering
@@ -2203,10 +2337,17 @@ def render_scene_fragment(scene: Scene) -> str:
     # so the canvas inks itself like the card. Only the website's
     # fight3d layer reads it; everything else leaves the attr alone.
     k3 = getattr(scene, "kill3d", None)
-    if k3 and k3.get("id"):
+    if k3 and k3.get("id") and not ar:
         k3 = dict(k3)
         k3["tint"] = _banner_tint(k3["id"], k3.get("specimen", ""))
         dt += f' data-kill3d="{_e(_json.dumps(k3))}"'
+    if ar:
+        # 067: the arena's script — the same tint law as kill3d
+        ar = dict(ar)
+        fid = str((ar.get("foe") or {}).get("id") or "")
+        ar["tint"] = (_banner_tint(fid, (ar.get("foe") or {})
+                                   .get("specimen", "")) if fid else TEXT)
+        dt += f' data-arena="{_e(_json.dumps(ar))}"'
     # 067: which Labs experiments are on — the bar's flask reads it
     lb = getattr(scene, "labs", None)
     if lb:
@@ -2225,6 +2366,66 @@ SCENE_CSS = f"""
  font:16px/1.5 {FONT_STACK};
  -webkit-font-smoothing:none;font-smooth:never;text-rendering:optimizeSpeed;
  font-variant-numeric:tabular-nums;overflow:hidden;position:relative;}}
+
+/* ── 067: the arena card ── */
+.banner.arena{{position:relative;overflow:hidden;
+ -webkit-mask-image:none;mask-image:none;}}
+.banner.arena canvas{{position:absolute;inset:0;width:100%;height:100%;
+ image-rendering:pixelated;display:block;}}
+.ahud{{position:absolute;top:6px;z-index:3;font-size:13px;line-height:1.25;
+ color:{TEXT};background:rgba(0,0,0,.72);padding:4px 6px;
+ max-width:46%;pointer-events:none;}}
+.ahud.l{{left:6px;}} .ahud.r{{right:6px;text-align:right;}}
+.ahud .aname{{color:{BRIGHT};text-transform:uppercase;letter-spacing:.06em;
+ white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}}
+.abar{{display:block;position:relative;height:8px;background:#222;
+ border:1px solid {BORDER};margin:3px 0;min-width:96px;}}
+.abar .afill{{display:block;height:100%;transition:width .5s ease;}}
+.abar .anum{{position:absolute;right:0;top:-15px;font-size:11px;
+ color:{TEXT};}}
+.ahud.l .abar .anum{{right:auto;left:0;}}
+.ahud .astat span{{white-space:nowrap;}}
+.aico{{display:inline-block;width:14px;height:14px;vertical-align:-2px;
+ background-color:{TEXT};mask-size:100% 100%;-webkit-mask-size:100% 100%;
+ mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;
+ image-rendering:pixelated;margin:0 2px;}}
+.ahud .agear .aico{{width:16px;height:16px;}}
+.ahud .agear .aico.lead{{outline:1px solid {GOLD};outline-offset:1px;}}
+.akind .akb{{display:inline-block;margin-left:6px;white-space:nowrap;
+ font-size:11px;letter-spacing:.06em;}}
+.afloats{{position:absolute;inset:0;z-index:4;pointer-events:none;
+ overflow:hidden;}}
+.afloat{{position:absolute;transform:translate(-50%,-50%);
+ background:#000;color:{RED};padding:1px 6px;font-size:16px;
+ white-space:nowrap;animation:afloat .9s ease-out forwards;}}
+.afloat.blocked{{color:{TEXT};}} .afloat.foe{{color:{GOLD};}}
+.afloat.miss{{color:{BRIGHT};animation:ajitter 1s linear forwards;}}
+@keyframes afloat{{0%{{opacity:1;margin-top:0;}}
+ 100%{{opacity:0;margin-top:-34px;}}}}
+@keyframes ajitter{{0%,100%{{opacity:1;}}
+ 10%{{margin-left:-6px;}}20%{{margin-left:6px;}}30%{{margin-left:-5px;}}
+ 40%{{margin-left:5px;}}50%{{margin-left:-3px;}}60%{{margin-left:3px;}}
+ 70%{{margin-left:0;}}90%{{opacity:1;}}100%{{opacity:0;}}}}
+.alog{{margin:8px 0 0;padding:0 1ch;border-top:1px dashed {BORDER};}}
+.alog .aline{{color:{TEXT};}}
+.alog .aline.pending{{display:none;}}
+.arena-opts{{flex-direction:row;flex-wrap:wrap;gap:6px;
+ justify-content:center;}}
+.arena-opts.busy .atile{{pointer-events:none;opacity:.45;}}
+.atcell{{position:relative;display:flex;}}
+.atile{{flex-direction:column;align-items:center;justify-content:flex-start;
+ width:76px;padding:6px 2px 4px;background:{INK};border:1px solid {BORDER};
+ gap:3px;}}
+.atile::after{{content:none;}}
+.atile .aico{{width:32px;height:32px;margin:0;}}
+.atile .atxt{{white-space:nowrap;font-size:12px;letter-spacing:.04em;}}
+.atile .atxt .key{{min-width:0;}}
+.atile .ahint{{display:none;}}
+.atile.locked .lbl{{color:{DIM};}}
+.atile:hover:not(:disabled) .aico,.atile:focus-visible .aico{{
+ background-color:{INK};}}
+.atcell .info{{position:absolute;top:3px;right:3px;border:0;
+ font-size:11px;}}
 /* ── 009: the enemy plate — the foe's meter in the player's grammar ── */
 .bwrap{{position:relative;}}
 .estat{{position:absolute;left:12px;bottom:12px;background:{INK};

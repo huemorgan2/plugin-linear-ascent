@@ -11,7 +11,7 @@ import datetime as dt
 import os
 
 from .. import economy
-from . import contracts, state, weekly
+from . import arena, contracts, state, weekly
 from .scene import Meters, Option, Scene
 
 _CREATURES = os.path.join(os.path.dirname(os.path.abspath(__file__)),
@@ -397,9 +397,12 @@ def _advance_chase(p: dict) -> str:
         e["gap"] = gap
         if gap <= 0:
             e["range"] = "close"
+            arena.record(p, who="foe", kind="move", what="close", gap=0)
             return f"{_the(e['name'])} closes the gap — it is on you now."
+        arena.record(p, who="foe", kind="move", what="advance", gap=gap)
         return (f"{_the(e['name'])} eats a length of the open ground — "
                 f"{gap} between you now.")
+    arena.record(p, who="foe", kind="move", what="hold", gap=_gap(p))
     return f"{_the(e['name'])} comes on across open ground."
 
 
@@ -808,7 +811,12 @@ def fight_scene(p: dict, floor, opener: bool = False, note: str = "") -> Scene:
         body.append(f"{hot} blades hot on this floor.")
     body += state.presence_delta_lines(p, floor.floor)
     _sign = economy.TYPE_SIGN.get(_profile(p).get("type", "plain"), "")
+    # 067: the arena's script rides the card on floors where Labs has it
+    # on; None everywhere else (the renderer never notices).
+    _arena = arena.payload(p, floor, "opener" if opener else "round",
+                           options=opts, note=note)
     return Scene(
+        arena=_arena,
         eyebrow=_eyebrow(p, floor),
         # 009: the headline is the name alone — HP/ATK/DEF/SPEED live on
         # the stat line printed over the creature art (scene.enemy).
@@ -874,11 +882,15 @@ def _monster_hit(p: dict, halved: bool = False, least: int = 0,
         # in close quarters the tangled round IS the answer; at range
         # the net's last service is blocking the close (_advance_chase).
         e.pop("netted", None)
+        arena.record(p, who="foe", kind="strike", outcome="netted")
         return {"dmg": 0, "raw": 0, "blocked": 0, "netted": True}
     if e.get("veiled"):
+        arena.record(p, who="foe", kind="strike", outcome="veiled")
         return {"dmg": 0, "raw": 0, "blocked": 0, "veiled": True}
     dodge = economy.dodge_pct(economy.player_speed(p), _mspd(p))
     if not no_dodge and dodge and state.roll_ok(p, dodge / 100):
+        arena.record(p, who="foe", kind="strike", outcome="dodged",
+                     me_hp=max(0, p["hp"]))
         return {"dmg": 0, "raw": 0, "blocked": 0, "dodged": True}
     if _range_state(p) == "at_range":
         halved = True
@@ -925,6 +937,12 @@ def _monster_hit(p: dict, halved: bool = False, least: int = 0,
                             * (lo + atk_full) / 2))
         e["hp"] -= back
         hit["riposte"] = back
+    # 067: the creature's beat — dmg landed, blocked = what DEF ate
+    arena.record(p, who="foe", kind="strike",
+                 outcome="blocked" if dmg <= 0 else "hit",
+                 dmg=int(dmg), raw=int(raw), blocked=int(blocked),
+                 halved=bool(halved), riposte=int(hit.get("riposte", 0)),
+                 me_hp=max(0, p["hp"]), foe_hp=max(0, e["hp"]))
     return hit
 
 
@@ -1172,6 +1190,29 @@ def _player_hit(p: dict, mult: float = 1.0, pierce: bool = False) -> int:
         unit = economy.pool_unit(int(e.get("floor", 1)))
         dmg = min(dmg, max(1, unit - _cut_this_fight(e)))
     e["hp"] -= dmg
+    # 067: the arena's beat — same number the text will say
+    if dmg > 0:
+        _mt = _profile(p).get("type", "plain")
+        _mult = economy.TYPE_MULT.get(_mt, {}).get(path, 1.0)
+        _why = ""
+        if _mult <= 0.2:
+            _why = f"its {economy.TYPE_NAME[_mt]} sign turns most of it"
+        elif _mult < 1.0:
+            _why = f"its {economy.TYPE_NAME[_mt]} sign halves it"
+        arena.record(p, who="me", kind="strike", outcome="hit",
+                     path=path, weapon=weapon_name(p), dmg=int(dmg),
+                     raw=int(round(raw * mult)),
+                     blocked=max(0, int(round(raw * mult)) - int(dmg))
+                     if path != "staff" else 0,
+                     crit=bool(crit), why=_why, foe_hp=max(0, e["hp"]))
+    else:
+        _mt = _profile(p).get("type", "plain")
+        arena.record(p, who="me", kind="strike", outcome="glance",
+                     path=path, weapon=weapon_name(p), dmg=0,
+                     why=("it flies — steel can't touch it"
+                          if _mt == "fly" and path == "blade"
+                          else "its hide turns the blow"),
+                     foe_hp=max(0, e["hp"]))
     return dmg
 
 
@@ -1492,6 +1533,7 @@ def _victory(p: dict, floor) -> Scene:
                 (economy.WARDEN_CHARM_PCT, "luck_charm")])
         p["inventory"][loot] = p["inventory"].get(loot, 0) + 1
         lines.append(f"▪ rare loot: {economy.APOTHECARY[loot].name}")
+    _arena = arena.payload(p, floor, "victory")   # 067: the last beat
     p["encounter"] = None
     p["location"] = "gate_town"
     kind = "boss" if e["kind"] == "warden" else "loot"
@@ -1560,7 +1602,13 @@ def _victory(p: dict, floor) -> Scene:
               and (e["kind"] == "wilds"
                    or int(e.get("floor", 0)) in KILL3D_WARDEN_FLOORS)
               else None)
+    if _arena and kill3d:
+        # the arena owns the slot and plays the finisher itself; the
+        # kill3d spec still rides (tint, degrade reel) but is not
+        # mounted — render drops data-kill3d when data-arena is set.
+        _arena["kill3d"] = dict(kill3d)
     return Scene(
+        arena=_arena,
         eyebrow=_eyebrow(p, floor),
         headline=headline,
         support=support,
@@ -1662,6 +1710,7 @@ def _death(p: dict, floor) -> Scene:
     e = p["encounter"]
     cause = _defeat_cause(p, e)
     daily = p["daily"]
+    _arena = arena.payload(p, floor, "death")     # 067: the last beat
     if not daily.get("death_save"):
         daily["death_save"] = True
         _report_shared_strike(p)   # 022/001: the wounds you left persist
@@ -1687,6 +1736,7 @@ def _death(p: dict, floor) -> Scene:
         if save_tax:
             _ledger(p, "death", gold=-save_tax, note=e["name"])
         return Scene(
+            arena=_arena,
             eyebrow=_eyebrow(p, floor),
             headline="Your shardmind drags you out",
             support="Everything goes white, then very loud, then quiet.",
@@ -1839,6 +1889,7 @@ def _death(p: dict, floor) -> Scene:
     p["hp"] = state.max_hp(p)
     lines.append("Banked gold untouched. The Vault keeps its word.")
     return Scene(
+        arena=_arena,
         eyebrow="ROOTHOLLOW · THE SQUARE",
         headline="You wake at the foot of the Stone",
         support="Dying in the Ascent means waking in Roothollow. It always has.",
@@ -1915,6 +1966,7 @@ def resolve_fight_action(p: dict, floor, option_id: str) -> Scene:
     e = p.get("encounter") or {}
     spends = option_id in _ROUND_ACTIONS or option_id.startswith("use_")
     keep = spends and e.get("shared") and e.get("kind") == "warden"
+    arena.begin(p, option_id)     # 067: the arena's script starts here
     s = _resolve_round(p, floor, option_id)
     e = p.get("encounter")
     if e and e.pop("_no_round", None):
@@ -2257,6 +2309,7 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
             # keep — turning your back on a gate is a price, not a button.
             chance = min(chance, economy.WARDEN_FLEE_MAX)
         if e.pop("rescued", None) or state.roll_ok(p, chance):
+            _arena = arena.payload(p, floor, "fled")   # 067: last beat
             dealt = _report_shared_strike(p)   # 022/001: wounds persist
             p["encounter"] = None
             p["location"] = "gate_town"
@@ -2266,6 +2319,7 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
                              "the Warden holds your wounds for the next "
                              "blade")
             return Scene(
+                arena=_arena,
                 eyebrow=_eyebrow(p, floor),
                 headline="You break away",
                 support="No shame the grass will remember.",
@@ -2465,7 +2519,12 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
         # whole line ember so a missed swing is never read as a hit.
         wide = (f"ATTACK MISSED — your {weapon_name(p)} swings wide "
                 f"(rank-{rank} hands). Improve at the School.")
+        arena.record(p, who="me", kind="strike", outcome="miss",
+                     path=_train_path(p), weapon=weapon_name(p),
+                     rank=rank, miss_pct=economy.TRAIN_MISS_PCT(rank),
+                     foe_hp=max(0, e["hp"]))
         if unreachable:
+            arena.record(p, who="foe", kind="strike", outcome="none")
             chase = _advance_chase(p)
             return fight_scene(p, floor, note=(
                 wide + " It cannot reach you to make you pay."
@@ -2494,6 +2553,7 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
         fxn = "The shaft goes through plate like paper."
     if unreachable:
         # 031 §7: the shot flies, nothing flies back — the gap is armor.
+        arena.record(p, who="foe", kind="strike", outcome="none")
         chase = _advance_chase(p)
         return fight_scene(p, floor, note=(
             f"{_strike_text(p, dmg)}"
