@@ -46,12 +46,12 @@ def test_buying_a_spare_fills_the_pack_not_the_body():
     p["gold"] = 1_000
     core.apply_choice(p, "forge")
     core.apply_choice(p, "buy_scrap_dagger")
-    p["hone"]["weapon"] = 2                    # sharpened on the body
+    state.set_hone(p, "weapon", 2)             # sharpened on the body
     dur = dict(p["durability"])
     s = core.apply_choice(p, "buy_scrap_dagger")
     assert p["inventory"]["scrap_dagger"] == 1   # the spare, in the pack
     assert p["gear"]["weapon"] == "scrap_dagger"
-    assert p["hone"]["weapon"] == 2            # nothing on the body moved
+    assert state.hone_level(p, "weapon") == 2  # nothing on the body moved
     assert p["durability"] == dur
     assert p["gold"] == 1_000 - 200 - 200
     assert "durability_pack" in p and "scrap_dagger" in p["durability_pack"]

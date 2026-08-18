@@ -72,6 +72,12 @@ def registry() -> tuple[Unlock, ...]:
                "the third carry slot", "the School",
                "a veteran's grip — three weapons into every fight",
                f"{economy.CARRY3_XP} XP + coin"),
+        # 069: the charm pouch — the seventh slot
+        Unlock("charm_slot", "level", economy.CHARM_SLOT_LEVEL, "opens",
+               "the charm pouch", "the School",
+               "one charm or potion at your belt — a luck charm for the "
+               "loot, a tonic or a relic for the fight",
+               f"{economy.CHARM_SLOT_XP} XP + coin"),
     ] + [
         # 012: the pack tiers — a larger pack at the Forge every 3 levels
         Unlock(f"pack{slots}", "level", lvl, "opens",
@@ -245,6 +251,9 @@ _PLAIN = {
                  "ONE reward when the week ends",
     "carry3": "you can carry a third weapon into fights (buy the "
               "training at the School)",
+    "charm_slot": "you can wear a charm pouch — one luck charm or one "
+                  "potion at your belt, the only place either works (buy "
+                  "the pouch at the School)",
     "mercy_ends": "WARNING — from now on, dying can cost you your "
                   "equipment and part of the gold you carry",
     "pvp_immunity_ends": "WARNING — from now on, other players can attack "

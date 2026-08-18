@@ -35,3 +35,17 @@ identical to 0.90.0.
 ## Rollback
 `git revert`; v11 keeps legacy `hone["weapon"]` and int-oil untouched
 (copied, not moved) until phase 6, so 0.90.0 engine reads the doc.
+
+## Execution status
+Done 2026-08-18. `economy.SLOTS`/`slot_lock`/`slot_item`/`slot_for`/
+`CHARM_KINDS`, charm-pouch constants; `state` v11 (`gear.charm`,
+`charm_slot`, `quiver`, `oil` dict, `charm_dur`, hone `weapon:<slug>`,
+`hone_key/hone_level/set_hone/oil_left`); `_promote_held`, forge buy and
+`_wear_from_pack` keep slot order (lead is a pointer; a free slot takes
+the new blade, a full hand swaps the lead's slot); death promote replaces
+in place; arena payload hones per slug; unlock `charm_slot` registered.
+Deviation from the plan: `hone["weapon"]` is DELETED on migration (copied
+to the slug key first) rather than kept — a rollback to 0.91 loses weapon
+hone until the next hone pass; accepted. Tests: 9 new
+(`test_069_slots_not_pack.py`), 12 old tests updated to the new keys;
+suite 1264 passed / 6 pre-existing failures.

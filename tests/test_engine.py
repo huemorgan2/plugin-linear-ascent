@@ -179,7 +179,7 @@ def test_backfill_heals_bare_handed_doc_with_apology():
     s = core.current_scene(p)
     assert p["gear"]["weapon"] == economy.STARTER_WEAPON.slug
     assert p["gold"] == gold + economy.VAULT_APOLOGY_GOLD
-    assert p["hone"] == {slot: 0 for slot in economy.HONE_SLOTS}
+    assert p["hone"] == {"shield": 0, "armor": 0}   # 069: weapon hone rides the slug
     assert "Vault" in s.eyebrow or "Vault" in s.headline   # apology letter
 
 
@@ -198,20 +198,20 @@ def test_honing_buy_flow_and_reset_on_purchase():
     choose(p, "forge")
     choose(p, "buy_scrap_dagger")
     s = choose(p, "hone_weapon")
-    assert p["hone"]["weapon"] == 1
+    assert state.hone_level(p, "weapon") == 1
     assert p["xp"] == economy.xp_need(1) - hone_xp  # ✦ charged alongside gold
     # 046: a hone step is one floor's growth on the piece — ×1.3
     assert state.gear_bonus(p, "weapon") == economy.honed_bonus(8, 1)
     choose(p, "hone_weapon")
-    assert p["hone"]["weapon"] == 2
+    assert state.hone_level(p, "weapon") == 2
     s = choose(p, "hone_weapon")             # at cap — refused
-    assert p["hone"]["weapon"] == 2
+    assert state.hone_level(p, "weapon") == 2
     # 007: the worn rung leaves the rack — the hone-lives-on-the-item
     # rule now shows on the NEXT rung's purchase instead of a re-buy
     p["level"] = 6
     choose(p, "buy_iron_sword")
     assert p["gear"]["weapon"] == "iron_sword"
-    assert p["hone"]["weapon"] == 0
+    assert state.hone_level(p, "weapon") == 0
 
 
 def test_honing_refused_without_xp():
@@ -222,7 +222,7 @@ def test_honing_refused_without_xp():
     choose(p, "forge")
     gold_before = p["gold"]
     s = choose(p, "hone_weapon")
-    assert p["hone"]["weapon"] == 0          # atomic refusal:
+    assert state.hone_level(p, "weapon") == 0  # atomic refusal:
     assert p["gold"] == gold_before          # neither currency charged
     assert "XP" in s.shard_note
 

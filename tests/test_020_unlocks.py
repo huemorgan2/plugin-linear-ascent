@@ -28,6 +28,7 @@ def test_every_level_gate_constant_has_a_registry_entry():
         "NIGHT_SLOT_LEVEL": economy.NIGHT_SLOT_LEVEL,
         "STRONGBOX_LEVEL": economy.STRONGBOX_LEVEL,
         "CARRY3_LEVEL": economy.CARRY3_LEVEL,
+        "CHARM_SLOT_LEVEL": economy.CHARM_SLOT_LEVEL,
         "FOUND_MIN_LEVEL": social.FOUND_MIN_LEVEL,
         # protections register at the level they EXPIRE
         "BEGINNER_MERCY_MAX_LEVEL": economy.BEGINNER_MERCY_MAX_LEVEL + 1,
@@ -45,7 +46,7 @@ def test_no_gate_constant_was_forgotten_by_this_test():
     either in the guard or explicitly exempted here."""
     known = {"ARCANUM_LEVEL", "RELAY_LEVEL", "FIELDS_LEVEL", "BOARD_LEVEL",
              "NIGHT_SLOT_LEVEL", "STRONGBOX_LEVEL", "CARRY3_LEVEL",
-             "BEGINNER_MERCY_MAX_LEVEL",
+             "CHARM_SLOT_LEVEL", "BEGINNER_MERCY_MAX_LEVEL",
              "BEGINNER_PROTECTION_MAX_LEVEL", "DEATH_NO_PARDON_LEVEL"}
     # DEATH_FREE_MAX_LEVEL is not a gate — it's the 043.2 free-death
     # window inside the mercy band, invisible in the unlock registry.

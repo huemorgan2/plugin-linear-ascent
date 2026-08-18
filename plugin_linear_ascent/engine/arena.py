@@ -190,8 +190,9 @@ def _me(p: dict) -> dict:
             "slug": slug, "name": g.name, "path": path,
             "lead": slug == lead,
             "rank": int((p.get("training") or {}).get(path, 0)),
-            "bonus": economy.honed_bonus(g.bonus, state.hone_level(p, "weapon"))
-            if slug == lead else g.bonus,
+            # 069: hone rides the slug — every held blade shows its own
+            "bonus": economy.honed_bonus(g.bonus,
+                                         state.hone_level(p, "weapon", slug)),
             "broken": bool(state.is_broken(p, "weapon")) if slug == lead
             else False,
         })

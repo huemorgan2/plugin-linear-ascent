@@ -259,7 +259,7 @@ def test_playing_scenes_carry_the_pack():
 
 def test_honed_gear_names_its_level():
     p = create_character(fresh())
-    p["hone"]["weapon"] = 2
+    state.set_hone(p, "weapon", 2)
     s = core.current_scene(p)
     assert s.inventory[0]["name"] == "Rusted Sword +2"
 

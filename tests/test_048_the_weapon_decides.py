@@ -466,7 +466,9 @@ def test_promote_with_a_free_slot_keeps_both():
     p["inventory"]["basic_bow"] = 1
     _choose(p, "wear_basic_bow")
     assert p["gear"]["weapon"] == "basic_bow"
-    assert p["held"] == ["basic_bow", sword]
+    # 069: held is the SLOT order — the sword keeps slot 1, the bow
+    # takes the free slot 2 and leads (gear["weapon"] is the pointer)
+    assert p["held"] == [sword, "basic_bow"]
     assert sword not in p["inventory"]
 
 

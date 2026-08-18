@@ -286,10 +286,10 @@ def test_oil_buffs_ten_strikes_then_the_flask_is_gone():
     p, fl = _fight("warrior", floor_no=2, enc_id="shellback_tortoise",
                    weapon_oil=1)
     act(p, fl, "use_oil")
-    assert p["oil"] == economy.OIL_STRIKES
+    assert state.oil_left(p) == economy.OIL_STRIKES
     assert "weapon_oil" not in p["inventory"]
     act(p, fl, "attack")
-    assert p["oil"] == economy.OIL_STRIKES - 1
+    assert state.oil_left(p) == economy.OIL_STRIKES - 1
 
 
 def test_oil_never_touches_a_caster():

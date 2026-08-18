@@ -69,7 +69,7 @@ def test_halfling_is_not_choosable_at_the_gate():
 
 
 def test_new_docs_are_current():
-    assert fresh()["version"] == 10       # 052: the dwarf line reads GIANT
+    assert fresh()["version"] == 11       # 069: hone per weapon, oil per weapon
 
 
 # ── doc v4 migration: halfling → human ───────────────────────────────────

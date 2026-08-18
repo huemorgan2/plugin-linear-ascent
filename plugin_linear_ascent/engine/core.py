@@ -99,7 +99,7 @@ def _pack_strip(p: dict) -> list[dict]:
         g = economy.FORGE.get(slug) if slug else None
         if not g:
             continue
-        hone = (p.get("hone") or {}).get(slot, 0)
+        hone = state.hone_level(p, slot)
         cell = {"slug": slug, "kind": slot, "count": 1,
                 "equipped": True,
                 "name": g.name + (f" +{hone}" if hone else "")}
@@ -288,7 +288,7 @@ def pack_actions(p: dict, slug: str) -> tuple[list[Option], str]:
                                     .get(path, 0)):
                     hint += (f" · untrained {path} — miss "
                              f"{economy.TRAIN_MISS_PCT(0)}%, weak swings")
-            if (p.get("hone") or {}).get(g.slot):
+            if g.slot != "weapon" and state.hone_level(p, g.slot):
                 hint += " · honing resets"
             return [Option(f"wear_{slug}", label, hint)], ""
         return [], "The Forge swaps gear in and out of the pack."
@@ -1613,7 +1613,7 @@ def _forge_hone(p: dict, slot: str) -> Scene:
         return s
     p["gold"] -= price
     state.spend_xp(p, xp_cost)
-    p["hone"][slot] = lvl + 1
+    state.set_hone(p, slot, lvl + 1)
     combat._ledger(p, "hone", gold=-price, xp=-xp_cost,
                    note=f"{slot} +{lvl + 1}")
     s = _forge_scene(p)
@@ -1737,15 +1737,17 @@ def _gear_purchase(p: dict, g, scene_fn) -> Scene:
     # 048 phase 3: the hand changed — held[0] follows, the old piece
     # leaves the held list (it rides to the pack below, not both).
     if g.slot == "weapon":
+        # 069: the new blade takes the lead's SLOT — held is slot order
         held = p.setdefault("held", [])
-        if old in held:
-            held.remove(old)
         if g.slug in held:
             held.remove(g.slug)
-        held.insert(0, g.slug)
+        if old in held:
+            held[held.index(old)] = g.slug
+        else:
+            held.insert(0, g.slug)
         del held[max(1, int(p.get("slots", 1))):]
-    if g.slot in p.get("hone", {}):
-        p["hone"][g.slot] = 0        # honing lives on the item it honed
+    if g.slot != "weapon":
+        state.set_hone(p, g.slot, 0)  # honing lives on the item it honed
     # 005: wear lives on the item too — stash the old piece's remaining
     # uses with the pack (it comes back as worn as it left), fresh pool
     # on the new one.
@@ -1795,8 +1797,8 @@ def _wear_from_pack(p: dict, slug: str, scene_fn) -> Scene:
     if p["inventory"][slug] <= 0:
         del p["inventory"][slug]
     p["gear"][g.slot] = slug
-    if g.slot in p.get("hone", {}):
-        p["hone"][g.slot] = 0
+    if g.slot != "weapon":
+        state.set_hone(p, g.slot, 0)
     # 005: swap the wear along with the piece — no fresh pool for free.
     stash = p.setdefault("durability_pack", {})
     old_dur = (p.get("durability") or {}).pop(g.slot, None)
@@ -1809,13 +1811,20 @@ def _wear_from_pack(p: dict, slug: str, scene_fn) -> Scene:
     # instead of bumping it to the pack; held[0] is always the hand.
     kept = False
     if g.slot == "weapon":
+        # 069: held is slot order — a free slot takes the new blade and
+        # the old one stays where it was; a full hand swaps the lead's
+        # slot. The lead pointer moves to the new blade either way.
         held = p.setdefault("held", [])
-        if slug in held:
-            held.remove(slug)
-        held.insert(0, slug)
         cap = max(1, int(p.get("slots", 1)))
-        kept = bool(old) and old in held[1:cap]
+        if slug not in held:
+            if len(held) < cap:
+                held.append(slug)
+            elif old in held:
+                held[held.index(old)] = slug
+            else:
+                held.insert(0, slug)
         del held[cap:]
+        kept = bool(old) and old in held and old != slug
     note = f"+ {g.name} back on"
     if kept:
         note += (f" — the {economy.FORGE[old].name} stays in your "

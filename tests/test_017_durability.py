@@ -553,7 +553,7 @@ def test_honing_sharpens_the_tooltip_atk():
     base_cell = next(c for c in core._pack_strip(p)
                      if c["slug"] == "scrap_dagger")
     assert base_cell["stat_val"] == g.bonus
-    p["hone"]["weapon"] = 3
+    state.set_hone(p, "weapon", 3)
     honed = next(c for c in core._pack_strip(p)
                  if c["slug"] == "scrap_dagger")
     want = economy.honed_bonus(g.bonus, 3)

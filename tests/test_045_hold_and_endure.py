@@ -75,7 +75,7 @@ def test_pack_weapon_offers_use_this_and_swaps_old_to_pack():
     core.apply_choice(p, f"wear_{w2.slug}")
     assert p["gear"]["weapon"] == w2.slug
     assert p["inventory"][w1.slug] == 1              # old piece goes back
-    assert p["hone"]["weapon"] == 0
+    assert state.hone_level(p, "weapon") == 0
 
 
 def test_no_promotion_mid_fight():

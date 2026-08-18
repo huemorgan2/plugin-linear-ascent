@@ -576,7 +576,7 @@ def _relic_options(p: dict) -> list[Option]:
                                    f"Nock {r.name.lower()}",
                                    f"×{inv[slug]}"))
     if inv.get("weapon_oil") and _damage_type(p) != "magic" \
-            and p.get("oil", 0) <= 0:
+            and state.oil_left(p) <= 0:
         opts.append(Option("use_oil", "Slick your weapon",
                            f"{economy.OIL_STRIKES} strikes +25%"))
     if inv.get("entangling_net") and e["kind"] != "warden" \
@@ -1122,9 +1122,14 @@ def _promote_held(p: dict, slug: str) -> None:
     lead hand's comes back out (fresh pool if it never wore)."""
     held = p.setdefault("held", [])
     old = p["gear"].get("weapon")
-    if slug in held:
-        held.remove(slug)
-    held.insert(0, slug)
+    # 069: held is the slot order — the lead is a pointer, no reorder.
+    # A slug that is not held (death promotes the basic) takes the lead's
+    # slot; an empty hand gets the first slot.
+    if slug not in held:
+        if old in held:
+            held[held.index(old)] = slug
+        else:
+            held.insert(0, slug)
     p["gear"]["weapon"] = slug
     if old == slug:
         return
@@ -1153,9 +1158,12 @@ def _player_hit(p: dict, mult: float = 1.0, pierce: bool = False) -> int:
             m = 1.0        # 048: the long draw pays only rank-8 hands
         mult *= m
     # 006: ten oiled strikes hit harder — physical weapons only.
-    if p.get("oil", 0) > 0 and _damage_type(p) != "magic":
+    if state.oil_left(p) > 0 and _damage_type(p) != "magic":
         mult *= economy.OIL_MULT
-        p["oil"] -= 1
+        lead = p["gear"]["weapon"]
+        p["oil"][lead] -= 1
+        if p["oil"][lead] <= 0:
+            del p["oil"][lead]
     # 048: the trained hand sets the floor of the swing — rank 5 is the
     # old [ATK/2, ATK] band; rank 10 never swings below 70%.
     atk_full = state.atk(p)
@@ -1842,17 +1850,18 @@ def _death(p: dict, floor) -> Scene:
             g = economy.FORGE[slug]
             lost_names.append(g.name)
             if where == "equipped":
-                held = p.setdefault("held", [])
-                if slug in held:
-                    held.remove(slug)
+                # 069: the basic takes the dead blade's SLOT (promote
+                # replaces the lead in place — held order is the slots).
                 # 049: the lost weapon's wear dies with it — clear the
                 # slot BEFORE the promote, which now moves pools around
                 # (a packed spare's stash entry is its own and stays).
                 (p.get("durability") or {}).pop("weapon", None)
                 basic = (economy.CLASS_STARTERS.get(g.line)
                          or economy.STARTER_WEAPON)
+                # 069: the hone died with the blade (per-slug key)
+                state.set_hone(p, "weapon", 0, slug)
+                (p.get("oil") or {}).pop(slug, None)
                 _promote_held(p, basic.slug)
-                p["hone"]["weapon"] = 0
             else:
                 p["inventory"][slug] -= 1
                 if p["inventory"][slug] <= 0:
@@ -2028,7 +2037,7 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
         p["inventory"]["weapon_oil"] -= 1
         if p["inventory"]["weapon_oil"] <= 0:
             del p["inventory"]["weapon_oil"]
-        p["oil"] = economy.OIL_STRIKES
+        p.setdefault("oil", {})[p["gear"]["weapon"]] = economy.OIL_STRIKES
         hit = _monster_hit(p)
         if p["hp"] <= 0:
             return _death(p, floor)

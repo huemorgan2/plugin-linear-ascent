@@ -37,7 +37,7 @@ def world_day_f(at: dt.datetime | None = None) -> float:
 def new_player(luna_user: str) -> dict:
     ts = now().isoformat()
     return {
-        "version": 10,
+        "version": 11,
         "luna_user": luna_user,
         "stage": "intro",              # intro → creation_race → creation_name → playing
         "name": None, "race": None,
@@ -47,8 +47,18 @@ def new_player(luna_user: str) -> dict:
         "floor": 0, "location": "town",
         "gear": {"weapon": economy.STARTER_WEAPON.slug,
                  "shield": economy.GATE_SHIELD.slug,
-                 "armor": economy.GATE_ARMOR.slug, "shoes": None},
-        "hone": {s: 0 for s in economy.HONE_SLOTS},
+                 "armor": economy.GATE_ARMOR.slug, "shoes": None,
+                 "charm": None},
+        # 069: hone keys — "shield", "armor", and "weapon:<slug>" (a
+        # weapon's hone rides the weapon, not the hand it sits in).
+        "hone": {"shield": 0, "armor": 0},
+        # 069: the charm pouch (School, level 9), the bow's quiver
+        # {arrow_slug: count}, oil per weapon {slug: strikes left}, and
+        # the worn charm's wear pool.
+        "charm_slot": False,
+        "quiver": {},
+        "oil": {},
+        "charm_dur": 0,
         # 005: staged onboarding — a slot gets a durability entry only
         # when its first wearing piece arrives. 049: the basic weapon
         # wears, so migrate()'s self-heal grants its pool on first load;
@@ -72,8 +82,9 @@ def new_player(luna_user: str) -> dict:
         # 048: trained rank 0–10 per weapon path — the player's skill.
         # Creation trains the starting path; the School sells the rest.
         "training": {"blade": 0, "bow": 0, "staff": 0},
-        # 048 phase 3: CARRY — weapon slugs in hand; held[0] IS the
-        # equipped weapon, the School sells the 2nd and 3rd slot.
+        # 048 phase 3 / 069: CARRY — weapon slugs in slot order
+        # (weapon, weapon2, weapon3); gear["weapon"] points at the one
+        # that LEADS. The School sells the 2nd and 3rd slot.
         "slots": 1,
         "held": [economy.STARTER_WEAPON.slug],
         # 067: Labs — experimental features, off until switched on
@@ -229,9 +240,14 @@ def ensure_current(p: dict) -> None:
     """Upgrade an older player document in place. Runs at every engine
     entry point, so docs created before a fix are healed on any backend
     (local plugin DB and worldd alike) the next time they're touched."""
-    p.setdefault("hone", {s: 0 for s in economy.HONE_SLOTS})
+    p.setdefault("hone", {"shield": 0, "armor": 0})
     p.setdefault("news_day", -1)       # 007: existing docs get the crier
     p["gear"].setdefault("shoes", None)    # 004: the shoes ladder
+    p["gear"].setdefault("charm", None)    # 069: the charm pouch
+    p.setdefault("charm_slot", False)
+    p.setdefault("charm_dur", 0)
+    if not isinstance(p.get("quiver"), dict):
+        p["quiver"] = {}
     p.setdefault("durability", {})         # 005: wear per equipped slot
     p.setdefault("durability_pack", {})    # 005: wear stashed with the pack
     if not isinstance(p.get("labs"), dict):
@@ -513,9 +529,10 @@ def ensure_current(p: dict) -> None:
         p["pack_slots"] = economy.PACK_BASE_SLOTS
     held = p.setdefault("held", [])
     w = (p.get("gear") or {}).get("weapon")
-    if w:
-        if w in held:
-            held.remove(w)
+    # 069: held is the SLOT ORDER (weapon, weapon2, weapon3) and
+    # gear["weapon"] is a pointer into it — no reordering on a swing.
+    # A lead that fell out of the list is put back in the first slot.
+    if w and w not in held:
         held.insert(0, w)
     cap = max(1, int(p["slots"]))
     for slug in held[cap:]:
@@ -524,6 +541,25 @@ def ensure_current(p: dict) -> None:
             p.setdefault("inventory", {})[slug] = \
                 p["inventory"].get(slug, 0) + 1
     del held[cap:]
+    if w and w not in held:
+        # the cap pushed the lead out — the first slot leads instead
+        p["gear"]["weapon"] = held[0] if held else w
+        if not held:
+            held.append(w)
+    # 069 v11: hone rides the weapon slug; oil is a per-weapon dict.
+    if p.get("version", 1) < 11:
+        hone = p.setdefault("hone", {})
+        lead = (p.get("gear") or {}).get("weapon")
+        if "weapon" in hone:
+            if lead:
+                hone[hone_key(p, "weapon")] = int(hone.get("weapon") or 0)
+            del hone["weapon"]
+        oil = p.get("oil")
+        if not isinstance(oil, dict):
+            p["oil"] = {lead: int(oil)} if (lead and oil) else {}
+        p["version"] = 11
+    if not isinstance(p.get("oil"), dict):
+        p["oil"] = {}
     # 049: the basic weapons wear now — a wearing weapon in the hand
     # without a pool gets a full one (fresh docs, death promotes).
     wg = economy.FORGE.get((p.get("gear") or {}).get("weapon") or "")
@@ -567,8 +603,33 @@ def wear_gear(p: dict, slot: str, n: int = 1) -> bool:
 
 # ── Derived stats ────────────────────────────────────────────────────────
 
-def hone_level(p: dict, slot: str) -> int:
-    return int((p.get("hone") or {}).get(slot, 0))
+def hone_key(p: dict, slot: str, slug: str | None = None) -> str:
+    """069: the p["hone"] key for a slot — weapons hone per slug
+    ("weapon:<slug>"), the shield and armour per slot."""
+    if slot == "weapon":
+        slug = slug or (p.get("gear") or {}).get("weapon") or ""
+        return f"weapon:{slug}"
+    return slot
+
+
+def hone_level(p: dict, slot: str, slug: str | None = None) -> int:
+    return int((p.get("hone") or {}).get(hone_key(p, slot, slug), 0))
+
+
+def set_hone(p: dict, slot: str, level: int, slug: str | None = None) -> None:
+    hone = p.setdefault("hone", {})
+    key = hone_key(p, slot, slug)
+    if level:
+        hone[key] = int(level)
+    else:
+        hone.pop(key, None)
+
+
+def oil_left(p: dict, slug: str | None = None) -> int:
+    """069: oiled strikes left on a weapon (default: the lead)."""
+    slug = slug or (p.get("gear") or {}).get("weapon") or ""
+    oil = p.get("oil")
+    return int(oil.get(slug, 0)) if isinstance(oil, dict) else 0
 
 
 def gear_bonus(p: dict, slot: str) -> int:

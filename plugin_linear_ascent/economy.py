@@ -838,6 +838,16 @@ def carry3_gold(frontier: int) -> int:
     return round(CARRY3_GOLD_ANCHOR * pillar(frontier))
 
 
+# 069: the charm pouch — the seventh slot, one charm or potion at the
+# belt. Sold at the School once, level 9 and up.
+CHARM_SLOT_LEVEL = 9
+CHARM_SLOT_XP, CHARM_SLOT_GOLD_ANCHOR = 400, 250
+
+
+def charm_slot_gold(frontier: int) -> int:
+    return round(CHARM_SLOT_GOLD_ANCHOR * pillar(frontier))
+
+
 def train_xp_cost(rank: int, discounted: bool = False) -> int:
     xp = train_xp(rank)
     if discounted and rank <= MASTERY_DISCOUNT_MAX_RANK:
@@ -2410,6 +2420,85 @@ SLOW_ARROW_DELTA = 2
 STONE_REVIVE_PCT = 0.30
 APPLE_SHIELD_MULT = 2.0
 APPLE_DECAY = 0.20             # the overshield rots 20% of itself a round
+
+# 069: a worn luck charm — passive while it sits in the charm pouch:
+# +CHARM_LOOT_PCT on the rare entry of both drop tables, the tight gold
+# band, the sweeter present roll. It wears one point per victory.
+CHARM_LOOT_PCT = 25
+CHARM_POOL = 20
+
+# 069: the slot map — the only gear that counts is gear in a slot.
+# Left column, top→bottom: charm · armor · shoes. Right column: shield ·
+# weapon · weapon2 · weapon3. `weapon2/3` are views on p["held"][1:].
+# Nothing in the pack has any effect on the player.
+@dataclass(frozen=True)
+class Slot:
+    key: str
+    side: str          # "left" | "right"
+    label: str
+    kind: str          # "charm" | "armor" | "shoes" | "shield" | "weapon"
+
+
+SLOTS: tuple[Slot, ...] = (
+    Slot("charm", "left", "charm / potion", "charm"),
+    Slot("armor", "left", "armour", "armor"),
+    Slot("shoes", "left", "boots", "shoes"),
+    Slot("shield", "right", "shield", "shield"),
+    Slot("weapon", "right", "weapon", "weapon"),
+    Slot("weapon2", "right", "weapon 2", "weapon"),
+    Slot("weapon3", "right", "weapon 3", "weapon"),
+)
+WEAPON_SLOT_KEYS = ("weapon", "weapon2", "weapon3")
+
+# What the charm pouch takes: the luck charm, the apothecary heals, and
+# every relic that fires by hand in a fight. Arrows ride the bow, oil
+# rides the blade — neither is a pouch thing.
+CHARM_KINDS: tuple[str, ...] = tuple(
+    ["luck_charm", "medgel", "trauma_kit", "trollblood_tonic"]
+    + [r.slug for r in RELICS.values()
+       if r.slug not in QUIVER_SLUGS and r.slug != "weapon_oil"])
+
+
+def slot_lock(p: dict, key: str) -> str | None:
+    """069: why a slot is closed for THIS player, or None when it is
+    open. The text is the hover on the grey box."""
+    if key == "weapon2":
+        if int(p.get("slots", 1)) < 2:
+            return (f"Locked — the second grip. School: {CARRY2_XP} XP "
+                    f"and ◈ {CARRY2_GOLD}.")
+    elif key == "weapon3":
+        if int(p.get("slots", 1)) < 3:
+            return (f"Locked — the third grip. School, level "
+                    f"{CARRY3_LEVEL}: {CARRY3_XP} XP and a fee.")
+    elif key == "charm":
+        if not p.get("charm_slot"):
+            return (f"Locked — the charm pouch. School, level "
+                    f"{CHARM_SLOT_LEVEL}: {CHARM_SLOT_XP} XP and a fee. "
+                    "Holds one charm or potion.")
+    return None
+
+
+def slot_item(p: dict, key: str) -> str | None:
+    """069: the slug sitting in a slot, or None."""
+    if key in ("weapon2", "weapon3"):
+        i = 1 if key == "weapon2" else 2
+        held = p.get("held") or []
+        return held[i] if len(held) > i else None
+    if key == "weapon":
+        held = p.get("held") or []
+        return held[0] if held else (p.get("gear") or {}).get("weapon")
+    return (p.get("gear") or {}).get(key)
+
+
+def slot_for(slug: str) -> str | None:
+    """069: which slot kind a slug can occupy — 'weapon' for any weapon
+    (the concrete weapon slot is picked at wear time)."""
+    g = FORGE.get(slug)
+    if g:
+        return g.slot
+    if slug in CHARM_KINDS:
+        return "charm"
+    return None
 
 # 006 §3.6 death economy (level > BEGINNER_MERCY_MAX_LEVEL, unprotected)
 # 031 §8: death is taxed at EVERY level — even the daily shard save takes
