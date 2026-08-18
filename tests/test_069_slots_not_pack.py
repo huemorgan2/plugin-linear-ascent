@@ -325,3 +325,54 @@ def test_wear_is_refused_mid_fight_with_a_reason():
     s = core.apply_choice(p, "wear_basic_bow")
     assert p["gear"]["weapon"] != "basic_bow"
     assert "mid-fight" in s.shard_note
+
+
+# ── phase 3: the School sells the pouch ────────────────────────────────
+
+def _at_school(uid, level, xp=10 ** 5, gold=10 ** 6):
+    p = _warrior(uid)
+    p["level"] = level
+    p["xp"] = xp
+    p["gold"] = gold
+    p["charm_slot"] = False
+    p["location"] = "school"
+    return p
+
+
+def test_the_pouch_row_is_locked_under_level_nine():
+    p = _at_school("069-school8", 8)
+    s = core.current_scene(p)
+    row = next(o for o in s.options if o.id == "buy_charm_slot")
+    assert row.locked and f"level {economy.CHARM_SLOT_LEVEL}" in row.hint
+    s = _choose(p, "buy_charm_slot")
+    assert p["charm_slot"] is False
+    assert f"level {economy.CHARM_SLOT_LEVEL}" in s.shard_note
+
+
+def test_the_pouch_wants_its_xp_and_its_fee():
+    p = _at_school("069-school9-xp", 9, xp=10)
+    s = _choose(p, "buy_charm_slot")
+    assert p["charm_slot"] is False and "XP" in s.shard_note
+    p = _at_school("069-school9-gold", 9, gold=1)
+    s = _choose(p, "buy_charm_slot")
+    assert p["charm_slot"] is False and "fee" in s.shard_note
+
+
+def test_the_pouch_is_bought_once_and_ledgered():
+    p = _at_school("069-school9", 9)
+    s = core.current_scene(p)
+    row = next(o for o in s.options if o.id == "buy_charm_slot")
+    assert not row.locked
+    xp0, gold0 = p["xp"], p["gold"]
+    fee = economy.charm_slot_gold(max(1, p["unlocked_floor"]))
+    s = _choose(p, "buy_charm_slot")
+    assert p["charm_slot"] is True
+    assert p["xp"] == xp0 - economy.CHARM_SLOT_XP
+    assert p["gold"] == gold0 - fee
+    assert "POUCH" in s.body_lines[0]
+    assert any(r.get("note") == "charm pouch" for r in p["_ledger"])
+    assert economy.slot_lock(p, "charm") is None
+    s = core.current_scene(p)
+    assert not any(o.id == "buy_charm_slot" for o in s.options)
+    s = core._school_charm(p)                # forced: the deeper guard
+    assert "already" in s.shard_note

@@ -23,3 +23,13 @@ the row is visible, locked, and explains why.
 ## Rollback
 `git revert`; a doc with `charm_slot=True` on the phase-2 engine still
 has the slot (flag already exists there).
+
+## Execution status
+Executed 2026-08-18. `_school_scene`: POUCH line always present (owned /
+locked "opens at level 9" / priced `CHARM_SLOT_XP` XP + `charm_slot_gold`);
+`buy_charm_slot` row locked under 9, hidden once owned. `_school_charm`
+mirrors `_school_carry` (owned / level / XP / fee refusals, ledger note
+"charm pouch", "+ POUCH" line). tips: `buy_charm_slot`. Tests: 3 new in
+test_069 (locked row + refusal at 8; XP and fee refusals at 9; success
+deltas + ledger + row hidden + second buy refused). Suite: 1276 passed,
+6 pre-existing failures.

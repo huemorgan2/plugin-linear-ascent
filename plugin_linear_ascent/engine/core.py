@@ -3312,6 +3312,24 @@ def _school_scene(p: dict) -> Scene:
                                "Unlock the 3rd weapon slot",
                                f"{economy.CARRY3_XP} XP + ◈ {gold3}"))
     lines.append(carry)
+    # 069: the charm pouch — the seventh slot. Always on the menu:
+    # owned → named in the line; under level 9 → LOCKED with the level.
+    level = int(p.get("level", 1))
+    if p.get("charm_slot"):
+        lines.append("◇ POUCH — one charm or potion rides at your belt")
+    else:
+        goldc = economy.charm_slot_gold(front)
+        if level < economy.CHARM_SLOT_LEVEL:
+            lines.append(f"◇ POUCH locked — opens at level "
+                         f"{economy.CHARM_SLOT_LEVEL}")
+            opts.append(Option("buy_charm_slot", "Unlock the charm pouch",
+                               f"locked — level {economy.CHARM_SLOT_LEVEL} "
+                               f"(you: {level})", locked=True))
+        else:
+            lines.append(f"◇ POUCH — {economy.CHARM_SLOT_XP} XP + "
+                         f"◈ {goldc} · one charm or potion at your belt")
+            opts.append(Option("buy_charm_slot", "Unlock the charm pouch",
+                               f"{economy.CHARM_SLOT_XP} XP + ◈ {goldc}"))
     opts.append(Option("back", "Back to the square"))
     return Scene(
         eyebrow="ROOTHOLLOW · THE SCHOOL",
@@ -3340,7 +3358,38 @@ def _school_action(p: dict, oid: str) -> Scene:
             return _school_mastery(p, path)
     if oid in ("buy_carry2", "buy_carry3"):
         return _school_carry(p, oid)
+    if oid == "buy_charm_slot":
+        return _school_charm(p)
     return _school_scene(p)
+
+
+def _school_charm(p: dict) -> Scene:
+    """069: the charm pouch — bought once, level 9 and up."""
+    if p.get("charm_slot"):
+        return _school_refuse(p, "The pouch already hangs at your belt.")
+    level = int(p.get("level", 1))
+    if level < economy.CHARM_SLOT_LEVEL:
+        return _school_refuse(
+            p, f"The pouch opens at level {economy.CHARM_SLOT_LEVEL} — "
+               f"you're level {level}.")
+    xp = economy.CHARM_SLOT_XP
+    gold = economy.charm_slot_gold(max(1, p["unlocked_floor"]))
+    if p["xp"] < xp:
+        return _school_refuse(
+            p, f"The pouch wants {xp} XP — your bar holds {p['xp']}.")
+    if p["gold"] < gold:
+        return _school_refuse(
+            p, f"The pouch's fee is ◈ {gold} — you carry "
+               f"◈ {p['gold']:,}.")
+    p["xp"] -= xp
+    p["gold"] -= gold
+    p["charm_slot"] = True
+    combat._ledger(p, "train", gold=-gold, xp=-xp, note="charm pouch")
+    s = _school_scene(p)
+    s.body_lines.insert(
+        0, "+ POUCH — one charm or potion rides at your belt now. Set "
+           "it from the pack; only what sits there acts in a fight.")
+    return s
 
 
 def _school_refuse(p: dict, why: str) -> Scene:

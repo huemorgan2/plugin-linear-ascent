@@ -246,6 +246,12 @@ _TIPS: dict[str, str] = {
     "drink_tonic": ("Trollblood tonic — from the charm pouch: full HP, "
                     "the round keeps going. Worn for exactly the "
                     "moment a Warden has you at the edge."),
+    "buy_charm_slot": ("The charm pouch — the seventh slot, at your "
+                       "belt. It holds ONE thing: a luck charm (fatter "
+                       "rare drops while worn), a healing potion or a "
+                       "relic — and only what sits in the pouch acts in "
+                       "a fight; the pack is inert. School, level 9, "
+                       "bought once."),
     "drink_medgel": ("A Medgel from the charm pouch — +25 HP mid-fight. "
                      "The monster still answers this round. Only what "
                      "sits in the pouch acts; the pack is inert."),
