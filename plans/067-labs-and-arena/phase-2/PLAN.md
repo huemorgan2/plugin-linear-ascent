@@ -46,3 +46,6 @@ text already says — and the fight card renders the arena variant
 
 ## Rollback
 Revert. Hooks are no-ops when `enabled` is False.
+
+## Execution status
+Done 2026-08-18 — commit 14dd4fa (+ 067 phase 3 commit adds `start` to the payload). Recorder hooks in combat choke points, `Scene.arena` top-level field, arena card on floors 6–7 with the flag on; nothing anywhere else (dojo 0036: floor 5 with labs on and floor 6 with labs off both render the regular card).

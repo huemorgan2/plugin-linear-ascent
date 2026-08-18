@@ -21,3 +21,6 @@ stills cropped to 16:15 with the ground on the lower third.
 
 ## Rollback
 Delete `backgrounds300/`; arena3d falls back to a black ground.
+
+## Execution status
+Done 2026-08-18 — commit 0b9ef6d + regen commit. 14 sheets 320×7200 1-bit in `worldd/static/site/fight3d/backgrounds300/`. First pass: 6/14 stills came back letterboxed (Gemini drew a cinematic strip inside the square → black bands on stage); prompt hardened ("fills the whole canvas, no letterbox / bars / border"), the 6 regenerated, all sheets rebuilt and eyeballed frame 0.

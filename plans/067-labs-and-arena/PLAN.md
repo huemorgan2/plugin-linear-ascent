@@ -146,3 +146,6 @@ Each phase is one commit; `git revert` in reverse order. The player
 flag `labs.arena` is inert without `arena.py` hooks (a doc with the
 key loads on any older engine — unknown keys are kept). Sheets are
 additive files. `fight3d.js?v=` bump reverts with the file.
+
+## Execution status
+All four phases executed and verified 2026-08-18; game 0.90.0. Tests: plugin 1240 passed / 6 pre-existing failures (017 relics, 017 speed chase ×2, 022 retune, engine ×2 — unrelated, failing on HEAD before this plan); worldd 193 passed. Dojo: `luna/dojo/tests/labs-arena/` → results `dojo/results/0036-067-labs-arena-2026-08-18/` (26/26 + 3 supplementary). Not deployed — awaiting the word.

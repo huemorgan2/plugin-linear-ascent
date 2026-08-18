@@ -56,3 +56,7 @@ it. The scene persists across card swaps for the same fight.
 ## Rollback
 Remove the arena3d script tag; revert fight3d.js (kill scene works
 without the exports).
+
+## Execution status
+Done 2026-08-18 — plugin commit (arena.py `start`, render.py `.aline`), root commit 66e192e (arena3d.js, fight3d.js createStage/renderFrame/exports, webplay import map, tests/test_067_arena3d.py) + a follow-up: tiles are held from the moment the card lands (`holdTiles`) and always handed back in `finally` (`releaseTiles`) — dojo run 1 caught the gap.
+Dojo 0036 (26/26 + 3 supplementary fights): 320×300 canvas persists across turns, beats separated, floats MISS / −N HP / BLOCKED / DODGE, log revealed per beat, victory banish + freed native, death; no console errors. Not seen in-browser: open-distance walk-back (never offered in those fights).

@@ -33,3 +33,6 @@ else changes for anyone.
 ## Rollback
 Revert the commit. A doc carrying `labs` loads on the previous engine
 (unknown key kept, ignored).
+
+## Execution status
+Done 2026-08-18 — commit ab7767a. `p["labs"]` dict + `engine/labs.py`, flask on the bar (`#labsbtn`, reads "labs"/"labs on" from `data-labs`), Labs card with the arena switch. Dojo 0036: switch off→ON→off round-trips in UI and DB (`doc->'labs'->>'arena'`).
