@@ -47,7 +47,7 @@ def test_off_everywhere_else():
     assert s.arena is None
 
 
-def test_opener_keeps_the_close_up_and_carries_tiles():
+def test_opener_keeps_the_close_up_and_regular_menu():
     p = _climber()
     s, fl = _hunt(p, 6)
     assert s.arena and s.arena["phase"] == "opener"
@@ -56,7 +56,10 @@ def test_opener_keeps_the_close_up_and_carries_tiles():
     assert set(s.arena["tiles"]) == {o.id for o in s.options}
     html = render.render_scene_fragment(s)
     assert 'class="banner arena"' not in html        # the close-up stays
-    assert 'class="opt atile' in html                 # the tiles are here
+    # 067 phase 8 (roy): tiles ONLY in the fight itself — the opener
+    # keeps the regular menu
+    assert 'class="opt atile' not in html and "arena-opts" not in html
+    assert 'class="options later"' in html
     assert 'data-arena="' in html
 
 
@@ -94,7 +97,7 @@ def test_round_script_same_numbers_and_order():
     assert a["foe"]["hp"] == max(0, e["hp"])
     html = render.render_scene_fragment(s)
     assert 'class="banner arena"' in html
-    assert "aspect-ratio:320/300" in html
+    assert "aspect-ratio:320/160" in html            # phase 8: the 160 band
     assert 'class="alog"' in html
     assert "data-kill3d" not in html
     raw = html.split('data-arena="', 1)[1].split('"', 1)[0]
@@ -197,35 +200,45 @@ def test_phase5_round_card_dress():
     assert tiles["attack"]["art"] == "basic_bow"
     assert tiles["nock_poison_arrows"]["art"] == "poison_arrows"
     html = render.render_scene_fragment(s)
-    banner = html.split('class="banner arena"', 1)[1].split('<div class="alog"', 1)[0]
+    # 067 phase 8 (roy): the tiles are a TOOLBAR under the stage —
+    # banner, then arena-opts, then the log, in that order
+    assert html.index('class="banner arena"') \
+        < html.index('class="options arena-opts"') \
+        < html.index('<div class="alog"')
+    stage = html.split('class="banner arena"', 1)[1] \
+                .split('class="options arena-opts"', 1)[0]
+    bar = html.split('class="options arena-opts"', 1)[1] \
+              .split('<div class="alog"', 1)[0]
     # both slabs, ANSI blocks, the number, ATK/DEF/SPEED words
-    assert banner.count('class="astat ') == 2
-    assert banner.count("▓") >= 2 and 'class="off"' in banner
-    assert 'class="abar me"' in banner and 'class="abar foe"' in banner
-    assert "SPEED " in banner and "ATK " in banner and "DEF " in banner
+    assert stage.count('class="astat ') == 2
+    assert stage.count("▓") >= 2 and 'class="off"' in stage
+    assert 'class="abar me"' in stage and 'class="abar foe"' in stage
+    assert "SPEED " in stage and "ATK " in stage and "DEF " in stage
     assert 'class="ahud"' not in html and "afill" not in html
-    # the tiles are inside the banner, with the bow's and the arrows' art
-    assert 'class="options arena-opts"' in banner       # phase 6: no `later`
-    assert banner.count('class="opt atile') == len(s.options)
-    # phase 7: the pack's own cell — 60px .abox, 42px .picon mask in ART
-    assert banner.count('class="abox"') == len(s.options)
-    assert banner.count('class="picon gw"') >= 2       # bow + poison arrows art
-    assert 'class="picon"' in banner                   # RUN keeps its glyph
-    assert f"background-color:{render.ART}" in banner
-    assert banner.count("▓") + banner.count("░") == 40  # 20-cell bars, both sides
+    # no tile ever rides over the picture
+    assert 'class="opt atile' not in stage
+    assert bar.count('class="opt atile') == len(s.options)
+    # the pack's own cell — .abox + .picon mask in ART (art `.gw`)
+    assert bar.count('class="abox"') == len(s.options)
+    assert bar.count('class="picon gw"') >= 2          # bow + poison arrows art
+    assert 'class="picon"' in bar                      # RUN keeps its glyph
+    assert f"background-color:{render.ART}" in bar
+    assert stage.count("▓") + stage.count("░") == 40   # 20-cell bars, both sides
     after = html.split('<div class="alog"', 1)[1]
-    assert "arena-opts" not in after                   # nothing under the stage
+    assert "arena-opts" not in after                   # nothing under the log
+    assert html.count('class="options arena-opts"') == 1
     assert 'class="profile"' not in html and "facblk" not in html
     assert 'class="rail' not in html
 
 
-def test_phase5_opener_keeps_tiles_below_and_profile():
+def test_phase5_opener_keeps_regular_menu_and_profile():
     p = _climber(clazz="archer")
     s, fl = _hunt(p, 6)
     assert s.arena and s.arena["phase"] == "opener"
     html = render.render_scene_fragment(s)
     assert 'class="banner arena"' not in html
-    assert 'class="options later arena-opts"' in html
+    assert "arena-opts" not in html                 # phase 8: regular menu
+    assert 'class="options later"' in html
     assert 'class="profile"' in html or 'class="rail' in html
 
 
@@ -278,7 +291,10 @@ def test_phase6_magic_resist_level_on_foe_name():
     assert f"MR {pct}%" in foe and 'data-tip="Magic resistance' in foe
 
 
-def test_phase6_end_card_keeps_tiles_in_stage():
+def test_phase8_victory_card_regular_menu_and_tally_over_scene():
+    """067 phase 8 (roy): the fight over, the card is a regular card
+    again — the town/gate menu as rows, the profile back — and the win
+    tally (XP/GOLD) rides OVER the rendered scene, said once."""
     p = _climber()
     s, fl = _hunt(p, 6)
     e = p["encounter"]
@@ -291,9 +307,16 @@ def test_phase6_end_card_keeps_tiles_in_stage():
     assert s.arena and s.arena["phase"] == "victory"
     assert s.options
     html = render.render_scene_fragment(s)
-    banner = html.split('class="banner arena"', 1)[1].split('<div class="alog"', 1)[0] \
-        if '<div class="alog"' in html else html.split('class="banner arena"', 1)[1]
-    assert 'class="options arena-opts"' in banner
-    assert banner.count('class="opt atile') == len(s.options)
-    assert html.count("arena-opts") == 1               # never a second copy under
-    assert 'class="profile"' not in html
+    assert 'class="banner arena"' in html               # the scene stays
+    assert "arena-opts" not in html and 'class="opt atile' not in html
+    assert 'class="options later"' in html              # the regular menu
+    # every option is a regular row/button
+    assert html.count('data-opt="') >= len(s.options)
+    # the tally over the scene, inside the banner, exactly once
+    if getattr(s, "tally", None):
+        banner = html.split('class="banner arena"', 1)[1] \
+                     .split('<div class="eyebrow', 1)[0]
+        assert 'class="awin later"' in banner
+        assert html.count('class="tallies"') == 1
+    # the profile is back on the end card
+    assert 'class="profile"' in html or 'class="inv later"' in html

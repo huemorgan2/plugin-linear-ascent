@@ -570,7 +570,8 @@ def test_the_scene_carries_all_seven_slots_and_they_round_trip():
 def test_the_card_draws_the_three_slot_states():
     p = _warrior("069-r-states", slots=2)
     frag = _frag(p)
-    gm = frag.split('class="gearmap"')[1].split('class="pcol"')[0]
+    assert 'class="gearmap later"' in frag
+    gm = frag.split('class="gearmap later"')[1].split('class="pcol"')[0]
     # locked: grey box + lock, the hover says the level
     assert 'class="slot gm locked" data-key="charm"' in gm
     assert "School, level 9" in gm
@@ -599,7 +600,7 @@ def test_the_pack_grid_is_pack_only_and_sits_under_the_profile():
     grid = frag.split('class="slotgrid"')[1]
     assert 'data-slug="medgel"' in grid
     assert 'data-slug="rusted_sword"' not in grid
-    assert frag.index('class="gearmap"') < frag.index('class="slotgrid"')
+    assert frag.index('class="gearmap later"') < frag.index('class="slotgrid"')
     # the pack row is a wear row from here
     assert "wear_" not in grid or "Set in pouch" not in grid
 

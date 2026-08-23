@@ -52,7 +52,7 @@ def test_the_hand_row_draws_lead_held_and_open_slots():
     p["slots"] = 3                      # third bought, still open
     scene = core.current_scene(p)
     html = render.render_scene_fragment(scene)
-    hand = html.split('class="gearmap"')[1].split('class="pcol"')[0]
+    hand = html.split('class="gearmap later"')[1].split('class="pcol"')[0]
     assert 'data-slug="basic_bow"' in hand
     assert 'data-slug="scrap_dagger"' in hand
     assert 'data-key="weapon3"' in hand and 'slot gm empty' in hand

@@ -1070,7 +1070,8 @@ def _gearmap_html(scene: Scene, figure: str) -> str:
                    if d.get("side") == "left")
     right = "".join(_slotmap_cell(d) for d in slots
                     if d.get("side") == "right")
-    return ('<div class="gearmap">'
+    # later: hide with the rest of the profile during the typewriter.
+    return ('<div class="gearmap later">'
             f'<div class="slotcol left">{left}</div>'
             f'<div class="pwrap">{figure}</div>'
             f'<div class="slotcol right">{right}</div></div>')
@@ -2088,17 +2089,21 @@ def _arena_hud_html(a: dict) -> str:
 
 def _arena_banner_html(scene) -> str:
     a = scene.arena or {}
-    w, h = int(a.get("w", 320)), int(a.get("h", 300))
-    # 067 phase 5/6: the tiles live INSIDE the scene, along its bottom
-    # edge, on EVERY live card that has options (round, victory, death,
-    # fled) — nothing but the log renders under the stage. No `later`:
-    # they are there at once, arena3d holds them while the beats play.
-    tiles = (_arena_tiles_html(scene, later=False)
-             if scene.options and a.get("phase") != "opener"
-             else "")
+    w = int(a.get("w", 320))
+    # 067 phase 8 (roy): the stage the card shows is a 320×160 band —
+    # half the 3D frame's height. The layer keeps rendering its 320×300
+    # frame; CSS windows the actor band (same px per row, nothing
+    # squashes) and the floats layer wears the same window. Tiles no
+    # longer ride inside the scene — they sit UNDER it (the fragment).
+    # Victory: the win tally lands OVER the scene, centered.
+    tally = ""
+    if a.get("phase") == "victory" and getattr(scene, "tally", None):
+        inner = _tally_html(scene.tally)
+        if inner:
+            tally = f'<div class="awin later">{inner}</div>'
     return (f'<div class="banner arena" style="background-color:#000;'
-            f'aspect-ratio:{w}/{h};" data-a3d-slot="1">'
-            f'{_arena_hud_html(a)}<div class="afloats"></div>{tiles}</div>')
+            f'aspect-ratio:{w}/160;" data-a3d-slot="1">'
+            f'{_arena_hud_html(a)}<div class="afloats"></div>{tally}</div>')
 
 
 def _arena_log_html(a: dict) -> str:
@@ -2139,10 +2144,11 @@ def _arena_tiles_html(scene, later: bool = True) -> str:
         # 067 phase 5: the item's own 30×48 face (the pack's icons),
         # drawn as a pixelated <img> so it scales crisp with the scene;
         # the 16×16 glyph only where no art ships.
-        # 067 phase 7 (roy): the tile IS the pack's cell — the same 60px
-        # black box, the same 42px `.picon` mask (art `.gw` when it
-        # ships, the 16×16 glyph otherwise), the same ART ink; no border.
-        # `[n] LABEL` and the [i] sit outside the box.
+        # 067 phase 7/8 (roy): the tile is the pack's cell at HALF size —
+        # a 30px black box, a 21px `.picon` mask (art `.gw` when it
+        # ships, the 16×16 glyph otherwise), the same ART ink; no
+        # border. The label rides UNDER the box, the ATK a small gold
+        # line of its own under the label, the [i] outside.
         wart = _gear_art_slug(t.get("art") or "")
         wurl = _gear_art_url(wart, "icons") if wart else None
         murl, pcls = ((wurl, " gw") if wurl
@@ -2151,18 +2157,17 @@ def _arena_tiles_html(scene, later: bool = True) -> str:
         icon = (f'<span class="abox"><span class="picon{pcls}" '
                 f'style="background-color:{ink};'
                 f"-webkit-mask-image:url('{murl}');mask-image:url('{murl}')\">"
-                '</span>{atk}</span>')
+                '</span></span>')
         hint = (f'<span class="ahint">{_ep(o.hint)}</span>' if o.hint else "")
         # 069 phase 5: an attack tile carries the ATK its own weapon
         # swings with — three blades, three numbers
         atk = (f'<span class="aatk">ATK {int(t["atk"])}</span>'
                if t.get("atk") is not None else "")
-        icon = icon.replace("{atk}", atk)
         btn = (f'<button type="button" class="{cls}" data-opt="{_e(o.id)}" '
                f'title="{_e(o.label)}">{icon}'
                f'<span class="atxt"><span class="key{key_cls}">{i}</span> '
                f'<span class="lbl">{_e(t.get("label") or o.label)}</span></span>'
-               f'{hint}</button>')
+               f'{atk}{hint}</button>')
         cells.append(f'<div class="atcell">{btn}{info}</div>')
     return (f'<div class="options{" later" if later else ""} arena-opts">'
             f'{"".join(cells)}</div>')
@@ -2203,8 +2208,14 @@ def render_scene_fragment(scene: Scene) -> str:
     # image, the 3D after the first strike).
     ar = getattr(scene, "arena", None)
     arena_live = bool(ar) and ar.get("phase") not in ("opener",)
+    # 067 phase 8 (roy): the icon tiles exist ONLY in the fight itself.
+    # Opener and end cards (victory/death/fled) use the regular menu.
+    arena_round = bool(ar) and ar.get("phase") == "round"
     if arena_live:
         parts.append(_arena_banner_html(scene))
+        if arena_round and scene.options:
+            # the toolbar: one row of tiles DIRECTLY under the stage
+            parts.append(_arena_tiles_html(scene, later=False))
         parts.append(_arena_log_html(ar))
     elif fx or split or banner:
         banner_html = (
@@ -2328,18 +2339,18 @@ def render_scene_fragment(scene: Scene) -> str:
         parts.append("</div>")
     if in_fold:
         parts.append("</details>")
-    if getattr(scene, "tally", None):
+    # 067 phase 8: on the arena's victory card the tally rides OVER the
+    # scene (`.awin` in the banner) — never said twice on one card.
+    if getattr(scene, "tally", None) \
+            and not (arena_live and (ar or {}).get("phase") == "victory"):
         parts.append(_tally_html(scene.tally))
     if getattr(scene, "gallery", None):
         parts.append(_gallery_html(scene.gallery))
     if getattr(scene, "ask", None):
         parts.append(_ask_html(scene.ask))
 
-    if scene.options and ar and ar.get("tiles") \
-            and ar.get("phase") == "opener":
-        parts.append(_arena_tiles_html(scene))
-    elif arena_live:
-        pass    # 067 phase 5/6: a live card's tiles ride inside the stage
+    if scene.options and arena_round:
+        pass    # 067 phase 8: the round's tiles already sit under the stage
     elif scene.options:
         # 031 §14: grid mode — a scene may ask for a card wall instead of
         # rows. Options that resolve a gear icon become picture cards;
@@ -2445,8 +2456,9 @@ def render_scene_fragment(scene: Scene) -> str:
     if getattr(scene, "players_here", None):
         parts.append(_players_here_html(scene))
 
-    if arena_live:
-        pass    # 067 phase 5: no profile under a live fight (roy)
+    if arena_round:
+        pass    # 067 phase 5/8: no profile under the fight ITSELF (roy);
+        # the end cards are regular cards again and keep theirs
     elif scene.meters:
         parts.append(_profile_html(scene))   # pack rides its right column
         parts.append(_faction_block(scene.meters))   # 059
@@ -2507,8 +2519,14 @@ SCENE_CSS = f"""
 
 /* ── 067: the arena card ── */
 .banner.arena{{position:relative;overflow:hidden;
- -webkit-mask-image:none;mask-image:none;}}
-.banner.arena canvas{{position:absolute;inset:0;width:100%;height:100%;
+ -webkit-mask-image:none;mask-image:none;
+ /* phase 8 (roy): the card shows a 320×160 band. The 3D layer keeps
+    its 320×300 frame; the canvas (and the floats layer with it) is
+    windowed on the actor band — same px per row, nothing squashes:
+    height 300/160, top pulled up to start the window at row 95. */
+ --awin-h:187.5%;--awin-top:-59.4%;}}
+.banner.arena canvas{{position:absolute;left:0;width:100%;
+ top:var(--awin-top);height:var(--awin-h);
  image-rendering:pixelated;display:block;}}
 /* 067 phase 6: one row along the top, half a line down — the climber's
    slab left, the foe's right, both top-aligned; a frame too narrow for
@@ -2527,7 +2545,19 @@ SCENE_CSS = f"""
 /* a narrow stage (phone): the slabs drop to 12px so both still share
    the top line with the 20-cell bars */
 @container (max-width: 600px){{.astat{{font-size:12px;line-height:1.4;}}
- .astat .aico{{width:12px;height:12px;vertical-align:-2px;}}}}
+ .astat .aico{{width:12px;height:12px;vertical-align:-2px;}}
+ /* phase 8: the win tally shrinks with the 160 band so it never
+    swallows the scene on a phone */
+ .awin .tallies{{font-size:9px;padding:4px 1ch;gap:0 14px;}}
+ .awin .thead>.eg{{width:16px;height:16px;}}
+ .awin .thaul .tmarks{{grid-template-columns:repeat(10,9px);}}
+ .awin .thaul .tmarks .eg{{width:9px;height:9px;}}}}
+/* phase 8: a phone-narrow stage — the HP line is 31ch of pre (20 blocks
+   + the numbers); at 12px two slabs with a 3-digit foe HP outgrow the
+   row and the foe slab wraps under. 10px keeps both on the top line. */
+@container (max-width: 440px){{.astat{{font-size:10px;}}
+ .astat .aico{{width:10px;height:10px;vertical-align:-1px;}}
+ .astat .apouch .picon{{width:12px;height:12px;}}}}
 .astat .aname{{color:{BRIGHT};}}
 .astat .aico{{width:16px;height:16px;vertical-align:-3px;margin:0 0 0 4px;}}
 .astat .aico.lead{{outline:1px solid {GOLD};outline-offset:1px;}}
@@ -2540,8 +2570,11 @@ SCENE_CSS = f"""
  image-rendering:pixelated;margin:0 2px;}}
 .akind .akb{{display:inline-block;margin-left:6px;white-space:nowrap;
  font-size:11px;letter-spacing:.06em;}}
-.afloats{{position:absolute;inset:0;z-index:4;pointer-events:none;
- overflow:hidden;}}
+/* the floats layer wears the SAME window as the canvas so screenOf()'s
+   percentages (of the full 320×300 frame) keep landing on the heads;
+   the banner's overflow clips what falls outside the band */
+.afloats{{position:absolute;left:0;right:0;top:var(--awin-top,0);
+ height:var(--awin-h,100%);z-index:4;pointer-events:none;}}
 .afloat{{position:absolute;--dx:0px;
  transform:translate(calc(-50% + var(--dx)),-50%);
  background:#000;color:{RED};padding:1px 6px;font-size:16px;
@@ -2558,35 +2591,38 @@ SCENE_CSS = f"""
 .alog{{margin:8px 0 0;padding:0 1ch;border-top:1px dashed {BORDER};}}
 .alog .aline{{color:{TEXT};}}
 .alog .aline.pending{{display:none;}}
-/* 067 phase 5: the tiles ride inside the stage, along its bottom edge;
-   the item art scales with the scene (cqw — 1× on the 320 frame). The
-   selectors out-rank the generic .options/.opt rules further down. */
 .banner.arena{{container-type:inline-size;}}
-/* 067 phase 7 (roy): one line along the foot of the stage, half a line
-   up; each tile is the pack's cell (60px black box, 42px picon, ART
-   ink, no border) with `[n] LABEL` under it and the [i] outside. */
-.banner.arena .options.arena-opts{{position:absolute;left:0;right:0;
- bottom:.5em;z-index:6;margin:0;border:0;padding:0 4px;background:none;}}
-.options.arena-opts{{flex-direction:row;flex-wrap:wrap;gap:2px 8px;
- justify-content:center;align-items:flex-start;}}
+/* 067 phase 8 (roy): the tiles are a TOOLBAR in the card's flow,
+   directly under the stage — never over the picture. Each tile is the
+   pack's cell at half size (30px black box, 21px picon, ART ink, no
+   border), the label under the box, the ATK a small gold line under
+   the label, the [i] outside. Round cards only. */
+.options.arena-opts{{flex-direction:row;flex-wrap:wrap;gap:2px 10px;
+ justify-content:center;align-items:flex-start;margin:6px 0 0;
+ border:0;padding:0;background:none;}}
 .arena-opts.busy .atile{{pointer-events:none;opacity:.45;}}
-.arena-opts .atcell{{position:relative;display:flex;padding-right:16px;}}
+.arena-opts .atcell{{position:relative;display:flex;padding-right:14px;}}
 .arena-opts .opt.atile{{position:relative;flex-direction:column;
  align-items:center;justify-content:flex-start;width:auto;min-width:0;
  padding:0;background:none;border:0;gap:2px;text-align:center;}}
 .arena-opts .opt.atile::after{{content:none;}}
-.arena-opts .abox{{position:relative;width:60px;height:60px;flex:none;
+.arena-opts .abox{{position:relative;width:30px;height:30px;flex:none;
  background:{INK};display:inline-flex;align-items:center;
  justify-content:center;}}
-.arena-opts .abox .picon{{width:42px;height:42px;}}
+.arena-opts .abox .picon{{width:21px;height:21px;}}
 .arena-opts .opt.atile:hover:not(:disabled) .abox,
 .arena-opts .opt.atile:focus-visible .abox{{outline:1px solid {BRIGHT};}}
 .arena-opts .atile .atxt{{white-space:nowrap;font-size:12px;
- letter-spacing:.04em;background:{INK};padding:0 3px;line-height:1.3;}}
+ letter-spacing:.04em;padding:0 3px;line-height:1.3;}}
 .arena-opts .atile .atxt .key{{min-width:0;}}
 .arena-opts .atile .ahint{{display:none;}}
-.arena-opts .atile .aatk{{position:absolute;top:1px;left:2px;
- color:{GOLD};font-size:.72em;line-height:1;pointer-events:none;}}
+.arena-opts .atile .aatk{{color:{GOLD};font-size:10px;line-height:1.1;
+ pointer-events:none;}}
+/* the win tally over the settled scene */
+.banner.arena .awin{{position:absolute;inset:0;z-index:5;display:flex;
+ align-items:center;justify-content:center;pointer-events:none;}}
+.banner.arena .awin .tallies{{background:{INK};padding:6px 2ch;
+ margin:0;}}
 .astat .apouch{{display:flex;align-items:center;gap:.5ch;color:{ART};}}
 .astat .apouch .picon{{width:14px;height:14px;}}
 .arena-opts .atile.locked .lbl{{color:{DIM};}}

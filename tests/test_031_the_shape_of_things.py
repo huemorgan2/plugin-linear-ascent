@@ -134,7 +134,7 @@ def test_pack_is_a_slot_grid_with_a_promoted_hand_row():
     assert 'class="slotgrid"' in frag
     # 069: the hand row became the gear map — seven slots round the figure
     assert 'class="handrow"' not in frag
-    assert 'class="gearmap"' in frag
+    assert 'class="gearmap later"' in frag
     assert 'class="slot empty"' in frag     # blocked spaces wait for loot
 
 
