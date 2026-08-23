@@ -577,11 +577,15 @@ _TALLY_MARK = {"gold": ("coin", GOLD), "aether": ("aether", VIOLET_SOFT)}
 _TALLY_WORD = {"gold": "gold", "aether": "XP"}
 
 
-def _tally_html(tally: list[dict]) -> str:
+def _tally_html(tally: list[dict], lean: bool = False) -> str:
     """One column per haul, side by side and centered: the amount shouts
     in the big font ([icon] 8 XP · [icon] 36 GOLD, each in its own
     colour), the marks heap under their own amount. Past the cap the
-    heap stays home — the big numeral already carries the size."""
+    heap stays home — the big numeral already carries the size.
+
+    `lean` (067 phase 8, roy): the arena victory overlay — only the big
+    amount lines, no mark heaps and no note, no slab behind; the scene
+    stays visible through it."""
     cols = []
     for item in tally:
         kind = str(item.get("kind", ""))
@@ -594,17 +598,19 @@ def _tally_html(tally: list[dict]) -> str:
                 f"{_eglyph(key)}"
                 f"{_big_html(f'{n:,} {_TALLY_WORD[kind]}', tint)}</div>")
         heap = ""
-        if n < TALLY_CAP:
+        if not lean and n < TALLY_CAP:
             heap = (f'<span class="tmarks" style="color:{tint}" '
                     f'aria-hidden="true">' + _eglyph(key) * n + "</span>")
         note = str(item.get("note", ""))
-        note_html = f'<div class="tnote">{_e(note)}</div>' if note else ""
+        note_html = ("" if lean else
+                     (f'<div class="tnote">{_e(note)}</div>' if note else ""))
         cols.append(f'<div class="thaul" title="{_e(label)}">'
                     f'<span class="tsr">{_e(label)}</span>'
                     f"{head}{heap}{note_html}</div>")
     if not cols:
         return ""
-    return f'<div class="tallies">{"".join(cols)}</div>'
+    cls = "tallies lean" if lean else "tallies"
+    return f'<div class="{cls}">{"".join(cols)}</div>'
 
 
 # ── 027: the notice board ───────────────────────────────────────────────
@@ -2095,10 +2101,11 @@ def _arena_banner_html(scene) -> str:
     # frame; CSS windows the actor band (same px per row, nothing
     # squashes) and the floats layer wears the same window. Tiles no
     # longer ride inside the scene — they sit UNDER it (the fragment).
-    # Victory: the win tally lands OVER the scene, centered.
+    # Victory: the win amounts land OVER the scene, centered — the lean
+    # tally (big lines only, no slab, no mark heaps) so the scene shows.
     tally = ""
     if a.get("phase") == "victory" and getattr(scene, "tally", None):
-        inner = _tally_html(scene.tally)
+        inner = _tally_html(scene.tally, lean=True)
         if inner:
             tally = f'<div class="awin later">{inner}</div>'
     return (f'<div class="banner arena" style="background-color:#000;'
@@ -2144,11 +2151,11 @@ def _arena_tiles_html(scene, later: bool = True) -> str:
         # 067 phase 5: the item's own 30×48 face (the pack's icons),
         # drawn as a pixelated <img> so it scales crisp with the scene;
         # the 16×16 glyph only where no art ships.
-        # 067 phase 7/8 (roy): the tile is the pack's cell at HALF size —
-        # a 30px black box, a 21px `.picon` mask (art `.gw` when it
-        # ships, the 16×16 glyph otherwise), the same ART ink; no
-        # border. The label rides UNDER the box, the ATK a small gold
-        # line of its own under the label, the [i] outside.
+        # 067 phase 8 v2 (roy): the tile is a ROW — a big 76px black box
+        # (56px `.picon` mask, art `.gw` when it ships, the glyph
+        # otherwise, ART ink, no border) with a text column on its
+        # RIGHT: `[n]` one line, the label the next, the ATK a gold
+        # line, the [i] the last — every line the card's own 16px.
         wart = _gear_art_slug(t.get("art") or "")
         wurl = _gear_art_url(wart, "icons") if wart else None
         murl, pcls = ((wurl, " gw") if wurl
@@ -2165,9 +2172,9 @@ def _arena_tiles_html(scene, later: bool = True) -> str:
                if t.get("atk") is not None else "")
         btn = (f'<button type="button" class="{cls}" data-opt="{_e(o.id)}" '
                f'title="{_e(o.label)}">{icon}'
-               f'<span class="atxt"><span class="key{key_cls}">{i}</span> '
-               f'<span class="lbl">{_e(t.get("label") or o.label)}</span></span>'
-               f'{atk}{hint}</button>')
+               f'<span class="atxt"><span class="key{key_cls}">{i}</span>'
+               f'<span class="lbl">{_e(t.get("label") or o.label)}</span>'
+               f'{atk}{hint}</span></button>')
         cells.append(f'<div class="atcell">{btn}{info}</div>')
     return (f'<div class="options{" later" if later else ""} arena-opts">'
             f'{"".join(cells)}</div>')
@@ -2523,8 +2530,12 @@ SCENE_CSS = f"""
  /* phase 8 (roy): the card shows a 320×160 band. The 3D layer keeps
     its 320×300 frame; the canvas (and the floats layer with it) is
     windowed on the actor band — same px per row, nothing squashes:
-    height 300/160, top pulled up to start the window at row 95. */
- --awin-h:187.5%;--awin-top:-59.4%;}}
+    height 300/160; top pulled up so rows 115–275 show and the actors
+    (rows ~150–240) sit centered — sky cut above, ground cut below.
+    arena3d.js copies these two vars onto the canvas inline (its
+    createStage ships inset:0/height:100% inline, which beats any
+    stylesheet rule — the squash bug of 0.96.0). */
+ --awin-h:187.5%;--awin-top:-71.9%;}}
 .banner.arena canvas{{position:absolute;left:0;width:100%;
  top:var(--awin-top);height:var(--awin-h);
  image-rendering:pixelated;display:block;}}
@@ -2546,12 +2557,10 @@ SCENE_CSS = f"""
    the top line with the 20-cell bars */
 @container (max-width: 600px){{.astat{{font-size:12px;line-height:1.4;}}
  .astat .aico{{width:12px;height:12px;vertical-align:-2px;}}
- /* phase 8: the win tally shrinks with the 160 band so it never
-    swallows the scene on a phone */
- .awin .tallies{{font-size:9px;padding:4px 1ch;gap:0 14px;}}
- .awin .thead>.eg{{width:16px;height:16px;}}
- .awin .thaul .tmarks{{grid-template-columns:repeat(10,9px);}}
- .awin .thaul .tmarks .eg{{width:9px;height:9px;}}}}
+ /* phase 8: the win amounts shrink with the 160 band so they never
+    swallow the scene on a phone */
+ .awin .tallies{{font-size:9px;gap:0 14px;}}
+ .awin .thead>.eg{{width:16px;height:16px;}}}}
 /* phase 8: a phone-narrow stage — the HP line is 31ch of pre (20 blocks
    + the numbers); at 12px two slabs with a 3-digit foe HP outgrow the
    row and the foe slab wraps under. 10px keeps both on the top line. */
@@ -2592,42 +2601,48 @@ SCENE_CSS = f"""
 .alog .aline{{color:{TEXT};}}
 .alog .aline.pending{{display:none;}}
 .banner.arena{{container-type:inline-size;}}
-/* 067 phase 8 (roy): the tiles are a TOOLBAR in the card's flow,
-   directly under the stage — never over the picture. Each tile is the
-   pack's cell at half size (30px black box, 21px picon, ART ink, no
-   border), the label under the box, the ATK a small gold line under
-   the label, the [i] outside. Round cards only. */
-.options.arena-opts{{flex-direction:row;flex-wrap:wrap;gap:2px 10px;
+/* 067 phase 8 v2 (roy): the tiles are a TOOLBAR in the card's flow,
+   directly under the stage — never over the picture. Each tile is a
+   ROW: a big 76px black box (56px picon, ART ink, no border) with a
+   4-line text column on its RIGHT — [n], the label, the gold ATK, the
+   [i] — every line the card's own 16px; the icon spans all four
+   lines. Round cards only. */
+.options.arena-opts{{flex-direction:row;flex-wrap:wrap;gap:8px 14px;
  justify-content:center;align-items:flex-start;margin:6px 0 0;
  border:0;padding:0;background:none;}}
 .arena-opts.busy .atile{{pointer-events:none;opacity:.45;}}
-.arena-opts .atcell{{position:relative;display:flex;padding-right:14px;}}
-.arena-opts .opt.atile{{position:relative;flex-direction:column;
- align-items:center;justify-content:flex-start;width:auto;min-width:0;
- padding:0;background:none;border:0;gap:2px;text-align:center;}}
+.arena-opts .atcell{{position:relative;display:flex;}}
+.arena-opts .opt.atile{{position:relative;flex-direction:row;
+ align-items:flex-start;justify-content:flex-start;width:auto;
+ min-width:0;padding:0;background:none;border:0;gap:8px;
+ text-align:left;}}
 .arena-opts .opt.atile::after{{content:none;}}
-.arena-opts .abox{{position:relative;width:30px;height:30px;flex:none;
+.arena-opts .abox{{position:relative;width:76px;height:76px;flex:none;
  background:{INK};display:inline-flex;align-items:center;
  justify-content:center;}}
-.arena-opts .abox .picon{{width:21px;height:21px;}}
+.arena-opts .abox .picon{{width:56px;height:56px;}}
 .arena-opts .opt.atile:hover:not(:disabled) .abox,
 .arena-opts .opt.atile:focus-visible .abox{{outline:1px solid {BRIGHT};}}
-.arena-opts .atile .atxt{{white-space:nowrap;font-size:12px;
- letter-spacing:.04em;padding:0 3px;line-height:1.3;}}
-.arena-opts .atile .atxt .key{{min-width:0;}}
+.arena-opts .atile .atxt{{display:flex;flex-direction:column;
+ align-items:flex-start;height:76px;white-space:nowrap;
+ letter-spacing:.04em;padding:0;line-height:1.2;}}
+.arena-opts .atile .atxt .key{{min-width:0;text-align:left;}}
 .arena-opts .atile .ahint{{display:none;}}
-.arena-opts .atile .aatk{{color:{GOLD};font-size:10px;line-height:1.1;
+.arena-opts .atile .aatk{{color:{GOLD};line-height:1.2;
  pointer-events:none;}}
-/* the win tally over the settled scene */
+/* the win amounts over the settled scene — no slab, no mark heaps
+   (roy): the big lines float clear and the scene stays visible */
 .banner.arena .awin{{position:absolute;inset:0;z-index:5;display:flex;
  align-items:center;justify-content:center;pointer-events:none;}}
-.banner.arena .awin .tallies{{background:{INK};padding:6px 2ch;
- margin:0;}}
+.banner.arena .awin .tallies{{background:none;padding:0;margin:0;}}
 .astat .apouch{{display:flex;align-items:center;gap:.5ch;color:{ART};}}
 .astat .apouch .picon{{width:14px;height:14px;}}
 .arena-opts .atile.locked .lbl{{color:{DIM};}}
-.atcell .info{{position:absolute;top:0;right:0;border:0;
- font-size:11px;background:{INK};line-height:1.2;}}
+/* the [i] is the column's LAST line — a sibling of the button (a
+   focusable tip can't live inside one), pinned where line 4 falls:
+   left of the 76px box + 8px gap, bottom of the 76px row. */
+.atcell .info{{position:absolute;left:84px;bottom:0;border:0;
+ background:none;line-height:1.2;}}
 /* ── 009: the enemy plate — the foe's meter in the player's grammar ── */
 .bwrap{{position:relative;}}
 .estat{{position:absolute;left:12px;bottom:12px;background:{INK};

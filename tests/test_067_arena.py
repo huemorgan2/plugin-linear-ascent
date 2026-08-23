@@ -317,6 +317,9 @@ def test_phase8_victory_card_regular_menu_and_tally_over_scene():
         banner = html.split('class="banner arena"', 1)[1] \
                      .split('<div class="eyebrow', 1)[0]
         assert 'class="awin later"' in banner
-        assert html.count('class="tallies"') == 1
+        # 0.96.1 (roy): the overlay is the LEAN tally — big lines only,
+        # no mark heaps, no note, no slab behind the amounts
+        assert html.count('class="tallies lean"') == 1
+        assert "tmarks" not in banner and "tnote" not in banner
     # the profile is back on the end card
     assert 'class="profile"' in html or 'class="inv later"' in html

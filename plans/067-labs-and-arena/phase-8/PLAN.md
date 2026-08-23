@@ -86,3 +86,30 @@ deploy.sh, republish 0.95.0 zip.
   regular rows.
 - Released: 0.96.0 vendored, deployed, marketplace-published — shas in
   the root commit and 0041/summary.md.
+
+## Execution status — 0.96.1 follow-up (2026-08-24, roy's three reports on live 0.96.0)
+
+- **The squash (report 1).** The stage was CONDENSED, not cropped: the
+  320×300 3D frame stretched into the 160 band (1.875× vertical
+  squash). Root cause: `createStage` (worldd fight3d.js) assigns
+  `inset:0;height:100%` INLINE on the canvas, which beats the phase-8
+  stylesheet window — the CSS rule silently never applied. Run 0041
+  had recorded the evidence (canvas rect = banner box) but no check
+  asserted the rect. Fix in worldd `arena3d.js attach()`: copy the
+  slot's computed `--awin-top`/`--awin-h` onto the canvas as inline
+  styles (`?v=4`); render.py keeps the single source of truth. Window
+  retuned to rows 115–275 (`--awin-top:-71.9%`) so the actors
+  (~150–240) sit centered — sky cut above, ground below. The dojo now
+  asserts the RENDERED rect (0042: h/band = 1.864, top/band = −0.717).
+- **Victory overlay (report 2).** The tally slab blocked the scene.
+  `_tally_html(lean=True)`: big amount lines only — no black slab, no
+  pip heaps, no note. pytest asserts `tallies lean` + no `tmarks` in
+  the banner.
+- **Toolbar tiles (report 3).** Tiles rebuilt as ROWS: 76px box (56px
+  picon) with a 4-line 16px text column on the right — `[n]`, label,
+  gold ATK, `[i]` pinned to the last line.
+- Verification: dojo run 0042 — 36/36 (one harness fix: the S11 gap
+  check assumed a single-row toolbar; big tiles wrap on a phone).
+  Victory-lean covered by supplementary captures at 1440/420 (the
+  walkthrough's fight died, content-random). Plugin suite: 6
+  pre-existing fails, 1296 passed. Released as 0.96.1.
