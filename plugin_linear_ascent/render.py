@@ -2640,6 +2640,11 @@ def render_scene_fragment(scene: Scene) -> str:
     dt = f' data-dtype="{_e(dtype)}"' if dtype else ""
     loc = str(getattr(scene, "location", "") or "")
     dt += f' data-loc="{_e(loc)}"' if loc else ""
+    # 076: the ride's direction — the pane plays the lift transition
+    # over this card. Only "up"/"down" ever ride the wire.
+    lift = str(getattr(scene, "lift", "") or "")
+    if lift in ("up", "down"):
+        dt += f' data-lift="{_e(lift)}"'
     if getattr(scene, "enemy", None):
         fight = "warden" if scene.event_kind == "boss" else "wilds"
         dt += f' data-fight="{fight}"'

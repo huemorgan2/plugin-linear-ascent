@@ -225,20 +225,56 @@ EVENTS: dict[str, dict] = {
     },
     "lift_ascent": {
         "prompt": (
-            "a massive industrial cage lift at the base of the colossal "
-            "tower, its heavy riveted iron doors standing open, thick "
-            "white steam pouring out around them and pooling on the "
-            "ground. A lone dark human silhouette walks calmly through "
-            "the steam and steps inside the lift. Huge exposed gears, "
-            "cogs and chains along the doorframe begin to turn and the "
-            "iron doors grind shut with bursts of steam. One beat of "
-            "stillness — then the whole lift cage ROCKETS straight up "
-            "the tower rail with tremendous speed, fast as a bullet "
-            "train, a vertical motion-blurred streak of steam and "
-            "sparks, gone into the sky in an instant, leaving only "
-            "drifting steam at the empty platform. The FINAL SECOND is "
-            "a perfectly still tableau: the empty platform, doors gone "
-            "up, thin steam hanging, absolutely nothing moving."),
+            "an ELEVATOR CAR standing AT platform level at the base of "
+            "the colossal tower — a boxy riveted iron elevator cabin "
+            "with a lit interior, its two sliding iron doors standing "
+            "open, its floor flush with the platform floor. INSIDE the "
+            "lit cabin, clearly visible through the open doorway, "
+            "several dark human silhouettes already stand waiting as "
+            "passengers. Thin steam drifts around the doorframe. The "
+            "platform outside the elevator is COMPLETELY EMPTY — no "
+            "person, figure or bystander ever stands or appears "
+            "outside the cabin at any point in the whole shot. Huge "
+            "exposed gears, cogs and chains beside the doorframe turn "
+            "and the two iron doors slide SHUT from the sides with a "
+            "burst of steam, closing over the passengers. One beat of "
+            "stillness — then the whole elevator car LAUNCHES "
+            "straight UPWARD, RISING toward the TOP of the frame and "
+            "exiting the frame at the TOP edge — the car moves UP, "
+            "never down, climbing the tower rail with tremendous "
+            "speed, fast as a bullet train, a vertical motion-blurred "
+            "streak of steam and sparks trailing BELOW it as it rises "
+            "into the sky in an instant, leaving the empty shaft "
+            "doorway and drifting steam at the bottom. The FINAL "
+            "SECOND is a perfectly still tableau: the deserted "
+            "platform, elevator gone up and out of the top of the "
+            "frame, thin steam hanging, absolutely nothing moving."),
+        "tint": DIM, "seconds": 8, "loop": False, "hold_ms": 1500,
+    },
+    "lift_descent": {
+        "prompt": (
+            "an ELEVATOR CAR standing AT platform level at the base of "
+            "the colossal tower — a boxy riveted iron elevator cabin "
+            "with a lit interior, its two sliding iron doors standing "
+            "open, its floor flush with the platform floor. INSIDE the "
+            "lit cabin, clearly visible through the open doorway, "
+            "several dark human silhouettes already stand waiting as "
+            "passengers. Thin steam drifts around the doorframe. The "
+            "platform outside the elevator is COMPLETELY EMPTY — no "
+            "person, figure or bystander ever stands or appears "
+            "outside the cabin at any point in the whole shot. Huge "
+            "exposed gears, cogs and chains beside the doorframe turn "
+            "and the two iron doors slide SHUT from the sides with a "
+            "burst of steam, closing over the passengers. One beat of "
+            "stillness — then the "
+            "whole elevator car PLUNGES straight DOWN the tower rail "
+            "below the platform with tremendous speed, fast as a "
+            "bullet train, a vertical motion-blurred streak of steam "
+            "and sparks, dropping out of sight in an instant, leaving "
+            "the empty shaft doorway and drifting steam. The FINAL "
+            "SECOND is a perfectly still tableau: the deserted "
+            "platform, elevator gone down, thin steam hanging, "
+            "absolutely nothing moving."),
         "tint": DIM, "seconds": 8, "loop": False, "hold_ms": 1500,
     },
     "ascent_open": {

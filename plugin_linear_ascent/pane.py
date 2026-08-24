@@ -296,6 +296,15 @@ textarea.ti{{background:{INK};color:{TEXT};border:1px solid {BORDER};
  padding:20px;cursor:pointer;}}
 #fblight.open{{display:flex;}}
 #fblight img{{max-width:100%;max-height:100%;border:1px solid {BORDER};}}
+#liftlay{{position:fixed;inset:0;z-index:140;background:#000000cc;
+ display:flex;align-items:center;justify-content:center;
+ opacity:0;transition:opacity .35s;pointer-events:none;}}
+#liftlay.on{{opacity:1;}}
+#liftlay .car{{width:min(92vw,640px);aspect-ratio:320/112;
+ background-color:#8b93a7;
+ -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+ -webkit-mask-size:contain;mask-size:contain;
+ -webkit-mask-position:center;mask-position:center;}}
 """
 
 # Plain string on purpose: real braces everywhere — no f-string doubling.
@@ -441,10 +450,14 @@ function swapFX() { __SWAP_JS__ }
 
 /* ── the game loop: swap fragments in place, act directly ───────────── */
 const game = document.getElementById('game');
-function showScene(d) {
+function showScene(d, quiet) {
   sceneId = d.scene_id || '';
   fast = false;             // 041: every fresh card starts at ink speed
   game.innerHTML = d.fragment;
+  // 076: an arrival card marked data-lift rides the elevator — but only
+  // when the card came from an act; boot loads and peek re-syncs pass
+  // quiet so a reload never replays the ride.
+  if (!quiet) playLift();
   // 041: on the phone a new scene walks the page back up to its art —
   // without this the player lands mid-card and reads bottom-first.
   if (matchMedia('(max-width: 520px)').matches) {
@@ -463,6 +476,37 @@ function showScene(d) {
   if (WEB) armHistory();    // browser back = the card's own back door
   // 051: the first working scene proves auth — light the postbox badge
   if (!fbPolled) { fbPolled = true; fbPoll(); }
+}
+/* ── 076: the lift ride — darken, play the car once, reveal ─────────
+   The new place card is already in the DOM behind the overlay; the GIF
+   is white ink masked over the DIM tint (the house pattern). The ?t=
+   nonce restarts the one-shot GIF from frame 0 (038: Chromium shares
+   animation clocks for identical URLs — the nonce is load-bearing). */
+const LIFT_MS = 5200;   // ~5.1s of ride; the fade starts as the baked-in
+                        // final-frame hold begins.
+let liftTimer = 0;
+function playLift() {
+  const card = game.querySelector('[data-lift]');
+  const dir = card ? card.dataset.lift : '';
+  if (dir !== 'up' && dir !== 'down') return;
+  const old = document.getElementById('liftlay');
+  if (old) { clearTimeout(liftTimer); old.remove(); }
+  const lay = document.createElement('div');
+  lay.id = 'liftlay';
+  const car = document.createElement('div');
+  car.className = 'car';
+  const u = "url('" + (dir === 'up'
+    ? '/static/fxart/lift_ascent_320x112.gif'
+    : '/static/fxart/lift_descent_320x112.gif')
+    + '?t=' + Date.now() + "')";   // full filename — bare slugs 404
+  car.style.webkitMaskImage = u; car.style.maskImage = u;
+  lay.appendChild(car);
+  document.body.appendChild(lay);
+  requestAnimationFrame(() => lay.classList.add('on'));
+  liftTimer = setTimeout(() => {
+    lay.classList.remove('on');            // 0.35s fade reveals the place
+    setTimeout(() => lay.remove(), 400);
+  }, LIFT_MS);
 }
 /* ── browser back walks the game home (WEB only) ────────────────────
    Every card that carries a back-style row arms one history entry and
@@ -633,7 +677,7 @@ document.addEventListener('keydown', (e) => {
 async function loadScene(force) {
   if (loading || (!WEB && !token && !force)) return;
   loading = true;
-  try { showScene(await call('/pane/scene', {})); }
+  try { showScene(await call('/pane/scene', {}), true); }  // 076: no ride
   catch (err) { if (err.message !== 'auth') showErr(err.message); }
   finally { loading = false; }
 }

@@ -1418,6 +1418,9 @@ def _dispatch_location(p: dict, oid: str) -> Scene:
 
     # global navigation
     if oid == "town":
+        # 076: coming down from a floor above ground is a lift ride —
+        # the square's card carries the descent animation.
+        _went_down = int(p.get("floor") or 0) > 0
         p["location"] = "town"
         p["floor"] = 0
         # 032: stepping onto the square drops any hall or banner-page
@@ -1428,7 +1431,10 @@ def _dispatch_location(p: dict, oid: str) -> Scene:
                   "door_rules", "profile_view", "profile_back",
                   "profile_pay", "profile_gift", "profile_loot"):
             p.pop(k, None)
-        return _town_scene(p)
+        s = _town_scene(p)
+        if _went_down:
+            s.lift = "down"
+        return s
     town_menus = ("forge", "arcanum", "medlab", "lodge", "vault", "pawn",
                   "stone", "gate", "relay", "fields", "guildhall", "hall",
                   "board", "sleep_menu", "school")
@@ -1476,6 +1482,8 @@ def _dispatch_location(p: dict, oid: str) -> Scene:
                          f"{economy.BOARD_LEVEL} — you are level "
                          f"{p['level']}")
             return s
+        if oid == "gate":
+            p["gate_from"] = int(p.get("floor") or 0)   # 076: ride origin
         p["location"] = oid
         return _build_scene(p)
     if oid == "back":
@@ -3347,6 +3355,9 @@ def _gate_pick(p: dict, oid: str) -> Scene:
         s.refusal = (f"Can't ride up — floor {n} requires level {req} "
                      f"— you are level {p['level']}")
         return s
+    # 076: the true origin — the camp's gate shortcut zeroes p["floor"]
+    # on the way into the lobby, so it stashes gate_from first.
+    old_floor = int(p.pop("gate_from", p.get("floor") or 0) or 0)
     p["floor"] = n
     p["location"] = "gate_town"
     # 056: faction grain — the world feed doesn't care which lift you
@@ -3360,10 +3371,17 @@ def _gate_pick(p: dict, oid: str) -> Scene:
     # 030 Phase 8: the first time a character sets foot on a floor —
     # old name or new — the floor introduces itself: a short movie,
     # once per floor, skippable on every beat.
+    # 076: the arrival card carries the ride's direction — the pane plays
+    # the matching lift animation over it. Same-floor picks stay silent.
+    lift = "up" if n > old_floor else ("down" if n < old_floor else "")
     if not p["flags"].get(f"floor_seen_{n}"):
         p["movie_floor"], p["movie_beat"] = n, 0
-        return _floor_movie_scene(p)
-    return _floor_arrival_scene(p, n)
+        s = _floor_movie_scene(p)
+        s.lift = lift
+        return s
+    s = _floor_arrival_scene(p, n)
+    s.lift = lift
+    return s
 
 
 def _floor_arrival_scene(p: dict, n: int) -> Scene:
@@ -3806,6 +3824,9 @@ def _gate_town_action(p: dict, oid: str) -> Scene:
     if oid == "gate":
         # 048 retro: the lift to the Gate runs from every camp — pick
         # the next floor without walking the square first.
+        # 076: the gate lobby zeroes p["floor"], so the ride's true
+        # origin is stashed here and consumed by _gate_pick.
+        p["gate_from"] = int(p.get("floor") or 0)
         p["location"] = "gate"
         p["floor"] = 0
         return _gate_scene(p)

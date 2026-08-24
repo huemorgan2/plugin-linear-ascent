@@ -221,6 +221,12 @@ class Scene:
                                     # — look, worn slots, parameters.
                                     # Not the viewer's profile. Old
                                     # clients drop the key.
+    lift: str = ""                  # 076: "up" | "down" when THIS scene is
+                                    # the arrival of a lift ride (gate pick
+                                    # or return to Roothollow) — the pane
+                                    # plays the lift transition over the
+                                    # card. "" everywhere else. A new
+                                    # TOP-LEVEL key: old clients drop it.
 
     def to_text(self) -> str:
         """Plain-text fallback — always works, cards are enhancement."""
@@ -394,6 +400,7 @@ class Scene:
             "slots": self.slots,
             "figure3d": self.figure3d,
             "avatar": (dict(self.avatar) if self.avatar else None),
+            "lift": self.lift,
         }
 
     @staticmethod
@@ -460,4 +467,5 @@ class Scene:
             slots=list(d.get("slots") or []),
             figure3d=(dict(d["figure3d"]) if d.get("figure3d") else None),
             avatar=(dict(d["avatar"]) if d.get("avatar") else None),
+            lift=d.get("lift", ""),
         )
