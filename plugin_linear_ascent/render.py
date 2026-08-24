@@ -621,10 +621,38 @@ def _tally_html(tally: list[dict], lean: bool = False) -> str:
 _NOTICE_WORD = {"collect": "COLLECT", "plan": "PLAN", "levelup": "LEVEL-UP"}
 
 
+def _weekpick_html(nt: dict) -> str:
+    """070: ANSI number rail inside waiting-for-you — one square around
+    the numbers, labels outside, click a row to choose."""
+    choices = list(nt.get("choices") or [])
+    rows = []
+    for c in choices:
+        hint = str(c.get("hint") or "")
+        hint_h = (f'<span class="whint">{_ep(hint)}</span>' if hint else "")
+        title = _e(str(c.get("title") or ""))
+        body = _ep(str(c.get("text") or ""))
+        rows.append(
+            f'<button type="button" class="wrow" '
+            f'data-opt="{_e(str(c.get("opt") or ""))}">'
+            f'<span class="wnum">{int(c.get("n") or 0)}</span>'
+            f'<span class="wtx"><span class="wtitle">{title}</span>'
+            f' — {body}</span>{hint_h}</button>')
+    if not rows:
+        return (f'<div class="weekbox"><div class="whead">'
+                f'{_ep(str(nt.get("text", "")))}</div></div>')
+    return (f'<div class="weekbox">'
+            f'<div class="whead">{_ep(str(nt.get("text", "")))}</div>'
+            f'<div class="wbody"><div class="wrail" aria-hidden="true"></div>'
+            f'<div class="wlist">{"".join(rows)}</div></div></div>')
+
+
 def _notices_html(notices: list[dict]) -> str:
     rows = []
     for nt in notices:
         kind = str(nt.get("kind", "collect"))
+        if kind == "weekpick":
+            rows.append(_weekpick_html(nt))
+            continue
         word = _NOTICE_WORD.get(kind, "COLLECT")
         n = int(nt.get("n", 0) or 0)
         chip = f'<span class="nb">{n}</span>' if n > 0 else ""
@@ -798,7 +826,7 @@ _TIP_GOLD = ("Carried gold — spendable anywhere but lost when you die. "
              "The Vault banks it safely at 5%/day interest.")
 _TIP_FACTION = ("Your faction. Go to the Guildhall on Roothollow main "
                 "street — home of all the factions — for the store, the "
-                "armory and your brothers.")
+                "armory and your kin.")
 
 
 def _meters_html(m: Meters) -> str:
@@ -840,7 +868,7 @@ def _ident_html(m: Meters) -> str:
     fac = getattr(m, "faction", "")
     if fac:
         left += (f'<span class="idfac" data-tip="{_e(_TIP_FACTION)}">'
-                 f'brother of the {_e(fac)} faction</span>')
+                 f'of {_e(fac)}</span>')
     gold = (f'<span class="mv" data-m="gold" data-v="{m.gold}">'
             f"{m.gold:,}</span>")
     right = (f'<span class="idlv" data-tip="{_e(_TIP_LV)}">'
@@ -1009,7 +1037,20 @@ def _profile_html(scene: Scene) -> str:
         # column's, width:auto keeps the 1:2 ratio from the PNG itself —
         # the one sizing rule every webview agrees on. The ink is baked
         # white.
-        figure = f'<img class="portrait later" src="{url}" alt="">'
+        # 071: Labs figure3d replaces the PNG with a same-size canvas;
+        # the <img> stays as a hidden fallback if WebGL is dead.
+        fig = getattr(scene, "figure3d", None)
+        if fig and fig.get("race"):
+            w, h = (int((fig.get("px") or [100, 200])[0]),
+                    int((fig.get("px") or [100, 200])[1]))
+            spec = _e(_json.dumps(fig, separators=(",", ":")))
+            figure = (
+                f'<img class="portrait later figure3d-fallback" src="{url}" '
+                f'alt="" hidden>'
+                f'<canvas class="portrait later figure3d" width="{w}" '
+                f'height="{h}" data-figure3d="{spec}"></canvas>')
+        else:
+            figure = f'<img class="portrait later" src="{url}" alt="">'
     return (ident
             + '<div class="profile">'
             + _gearmap_html(scene, figure)
@@ -1043,7 +1084,7 @@ _SLOT_EMPTY_TIP = {
 }
 
 
-def _slotmap_cell(d: dict) -> str:
+def _slotmap_cell(d: dict, *, readonly: bool = False) -> str:
     """One slot of the gear map in its state."""
     key = str(d.get("key", ""))
     st = d.get("state", "empty")
@@ -1059,12 +1100,36 @@ def _slotmap_cell(d: dict) -> str:
         tip = _SLOT_EMPTY_TIP.get(key, f"{d.get('label', key)} — empty")
         return (f'<span class="slot gm empty" data-key="{_e(key)}" '
                 f'data-tip="{_e(tip)}"></span>')
-    cell = _slot_cell(d)
+    cell_d = dict(d)
+    if readonly:
+        cell_d["equipped"] = True
+        cell_d.pop("acts", None)
+        cell_d.pop("why", None)
+    cell = _slot_cell(cell_d, readonly=readonly)
     lead = ' lead' if d.get("lead") else ''
+    if readonly:
+        return cell.replace('class="slot item',
+                            f'class="slot gm item{lead}', 1) \
+                   .replace('<span ',
+                            f'<span data-key="{_e(key)}" ', 1)
     return cell.replace('class="slot item act',
                         f'class="slot gm item act{lead}', 1) \
                .replace('<button type="button" ',
                         f'<button type="button" data-key="{_e(key)}" ', 1)
+
+
+def _gearmap_from_slots(slots: list, figure: str, *,
+                        readonly: bool = False) -> str:
+    if not slots:
+        return figure
+    left = "".join(_slotmap_cell(d, readonly=readonly) for d in slots
+                   if d.get("side") == "left")
+    right = "".join(_slotmap_cell(d, readonly=readonly) for d in slots
+                    if d.get("side") == "right")
+    return ('<div class="gearmap later">'
+            f'<div class="slotcol left">{left}</div>'
+            f'<div class="pwrap">{figure}</div>'
+            f'<div class="slotcol right">{right}</div></div>')
 
 
 def _gearmap_html(scene: Scene, figure: str) -> str:
@@ -1072,15 +1137,75 @@ def _gearmap_html(scene: Scene, figure: str) -> str:
     if not slots:
         # an old scene half (pre-069 server) — the figure alone
         return figure
-    left = "".join(_slotmap_cell(d) for d in slots
-                   if d.get("side") == "left")
-    right = "".join(_slotmap_cell(d) for d in slots
-                    if d.get("side") == "right")
-    # later: hide with the rest of the profile during the typewriter.
-    return ('<div class="gearmap later">'
-            f'<div class="slotcol left">{left}</div>'
-            f'<div class="pwrap">{figure}</div>'
-            f'<div class="slotcol right">{right}</div></div>')
+    return _gearmap_from_slots(slots, figure)
+
+
+def player_avatar_html(sheet: dict) -> str:
+    """072: another climber's public look — ident, figure, worn slots,
+    meters and pip rows. Read-only. Not the viewer's profile (no pack,
+    no live counters, no unequip)."""
+    if not isinstance(sheet, dict) or not sheet.get("name"):
+        return ""
+    name = str(sheet.get("name") or "")
+    race = str(sheet.get("race") or "")
+    clazz = str(sheet.get("clazz") or "")
+    who = " ".join(x for x in (race, clazz) if x)
+    fac = str(sheet.get("faction") or sheet.get("guild") or "")
+    left = f'<span class="idname">{_e(name)}</span>'
+    if who:
+        left += f'<span class="idwho">{_e(who)}</span>'
+    if fac:
+        left += f'<span class="idfac">of {_e(fac)}</span>'
+    gold = int(sheet.get("gold", 0) or 0)
+    level = int(sheet.get("level", 1) or 1)
+    right = (f'<span class="idlv">LEVEL {level}</span>'
+             f'<span class="idgold">COINS {_eglyph("coin")} '
+             f"{gold:,}</span>")
+    ident = (f'<div class="ident later"><span class="idl">{left}</span>'
+             f'<span class="idr">{right}</span></div>')
+    slug = race if race and _portrait_art(race) else "human"
+    url = _portrait_data_url(slug)
+    figure = (f'<img class="portrait later" src="{url}" alt="">'
+              if url else "")
+    slots = [sl for sl in (sheet.get("slots") or [])
+             if isinstance(sl, dict)]
+    gear = _gearmap_from_slots(slots, figure, readonly=True)
+    hp = int(sheet.get("hp", 0) or 0)
+    hp_max = int(sheet.get("hp_max", 0) or 0) or max(hp, 1)
+    energy = int(sheet.get("energy", 0) or 0)
+    energy_max = int(sheet.get("energy_max", 0) or 0) or max(energy, 1)
+    xp = int(sheet.get("xp", 0) or 0)
+    xp_need = int(sheet.get("xp_need", 0) or 0) or max(xp, 1)
+    low = " low" if hp * 10 <= hp_max * 3 else ""
+    meters = (
+        f'<div class="rail later">'
+        f'<span class="meter hp{low}" data-tip="{_e(_TIP_HP)}">'
+        f"<span>HP {hp:,}/{hp_max}</span>"
+        f'<span class="blocks" aria-hidden="true">'
+        f"{_blocks(hp, hp_max)}</span></span>"
+        f'<span class="meter en" data-tip="{_e(_TIP_EN)}">'
+        f"<span>{_eglyph('bolt')} {energy:,}/{energy_max}</span>"
+        f'<span class="blocks" aria-hidden="true">'
+        f"{_blocks(energy, energy_max)}</span></span>"
+        f'<span class="meter ae" data-tip="{_e(_TIP_XP)}">'
+        f"<span>XP {xp:,}/{xp_need:,}</span>"
+        f'<span class="blocks" aria-hidden="true">'
+        f"{_blocks(xp, xp_need)}</span></span>"
+        f"</div>")
+    atk = int(sheet.get("atk", 0) or 0)
+    dfs = int(sheet.get("dfs", 0) or 0)
+    spd = int(sheet.get("spd", 0) or 0)
+    pips = ""
+    if atk or dfs or spd:
+        spd_row = (_pip_row("bolt", "SPD", spd, AETHER, _TIP_SPD,
+                            per_half=0.5) if spd else "")
+        pips = ('<div class="piprows later">'
+                + _pip_row("sword", "ATK", atk, ORANGE, _TIP_ATK)
+                + _pip_row("armor", "DEF", dfs, TEXT, _TIP_DEF)
+                + spd_row + "</div>")
+    return (f'<div class="pavatar later">{ident}'
+            f'<div class="profile">{gear}'
+            f'<div class="pcol">{meters}{pips}</div></div></div>')
 
 
 # ── 059: the faction block — where you stand with the factions ──────────
@@ -1445,9 +1570,10 @@ def _option_tile_art(scene: Scene, oid: str, locked: bool) -> str:
             f"mask-image:url('{url}');\"></span></span>")
 
 
-def _slot_cell(it: dict) -> str:
+def _slot_cell(it: dict, *, readonly: bool = False) -> str:
     """One pack slot — a square button holding the icon, the ×count and
-    the wear bar; the name lives in the tip and the action popup."""
+    the wear bar; the name lives in the tip and the action popup.
+    readonly: a span, no acts — used by the other-climber avatar."""
     slug = it.get("slug", "")
     equipped = bool(it.get("equipped"))
     url = icons.icon_data_url(icons.icon_key(slug, it.get("kind", "")))
@@ -1537,11 +1663,21 @@ def _slot_cell(it: dict) -> str:
     # 027: the cell is a button — the popup lists what this thing can
     # do HERE, or says where it can be done. `acts` come from the
     # engine (core.pack_actions), never guessed client-side.
-    acts = it.get("acts") or []
+    acts = [] if readonly else (it.get("acts") or [])
     act_attr = (f" data-acts=\"{_e(_json.dumps(acts))}\""
                 if acts else "")
-    why_attr = (f' data-why="{_e(str(it.get("why")))}"'
-                if it.get("why") else "")
+    why_attr = ("" if readonly else
+                (f' data-why="{_e(str(it.get("why")))}"'
+                 if it.get("why") else ""))
+    if readonly:
+        return (
+            f'<span class="slot item'
+            f'{" eq" if equipped else ""}" '
+            f'data-tip="{_e(tip)}"{tiph_attr} data-slug="{_e(slug)}" '
+            f'data-name="{_e(name)}">'
+            f'<span class="picon{picon_cls}" style="background-color:{tint};'
+            f"-webkit-mask-image:url('{url}');mask-image:url('{url}');\">"
+            f"</span>{ct}{durbar}</span>")
     return (
         f'<button type="button" class="slot item act'
         f'{" eq" if equipped else ""}" '
@@ -1928,7 +2064,7 @@ let d=0;for(const el of later){setTimeout(()=>el.classList.add('shown'),d);d+=fa
    input all act through the same one door (window.__laAct). */
 (function () {
   var btns = Array.prototype.slice.call(document.querySelectorAll(
-    'button.opt, button.nrow, button.gtile, button.ptile, '
+    'button.opt, button.nrow, button.wrow, button.gtile, button.ptile, '
     + 'button.pclose'));
   var acted = false;
   var hint = document.querySelector('.reply');
@@ -2273,6 +2409,10 @@ def render_scene_fragment(scene: Scene) -> str:
         parts.append(_enemy_head_html(scene.enemy))
     if scene.support:
         parts.append(f'<div class="support type">{_ep(scene.support)}</div>')
+    # 072: another climber's public sheet — on top, before the words.
+    av = getattr(scene, "avatar", None)
+    if av:
+        parts.append(player_avatar_html(av))
     # 030 Phase 4: the art band with one big number (the vault shelf).
     # getattr: a strip-less Scene from an older engine must render fine.
     if getattr(scene, "strip", None):
@@ -2729,7 +2869,29 @@ SCENE_CSS = f"""
 .nrow:focus-visible .ntx,.nrow:focus-visible .ngo{{color:{INK};}}
 .nrow:hover:not(:disabled) .nb,.nrow:focus-visible .nb{{
  background:{INK};color:{AETHER};}}
-.nb,.badge{{flex:none;display:inline-block;min-width:2ch;padding:0 .5ch;
+/* 070: last week's reward — one square around the numbers, labels out. */
+.weekbox{{margin-top:8px;}}
+.whead{{color:{AETHER};margin-bottom:6px;}}
+.wbody{{position:relative;}}
+.wrail{{position:absolute;left:0;top:0;bottom:0;width:4.4ch;
+ border:1px solid {AETHER};border-radius:0;box-sizing:border-box;
+ pointer-events:none;}}
+.wlist{{display:flex;flex-direction:column;padding:3px 0;}}
+.wrow{{display:flex;align-items:center;gap:1ch;width:100%;
+ background:transparent;border:1px solid transparent;border-radius:0;
+ padding:4px 0;font:inherit;color:{TEXT};text-align:left;cursor:pointer;}}
+.wnum{{flex:none;width:4.4ch;text-align:center;color:{AETHER};
+ font-variant-numeric:tabular-nums;position:relative;z-index:1;}}
+.wtx{{flex:1;min-width:0;color:{DIM};}}
+.wtitle{{color:{TEXT};}}
+.whint{{flex:none;color:{GOLD};padding-right:.5ch;}}
+.wrow:hover:not(:disabled) .wtx,.wrow:focus-visible .wtx{{
+ background:{AETHER};color:{INK};}}
+.wrow:hover:not(:disabled) .wtitle,.wrow:focus-visible .wtitle,
+.wrow:hover:not(:disabled) .whint,.wrow:focus-visible .whint{{
+ color:{INK};}}
+.wrow:hover:not(:disabled),.wrow:focus-visible{{outline:none;}}
+.nb,.badge{{flex:none;display:inline-block;min-width:2ch;padding:0 .5ch;}}
  background:{AETHER};color:{INK};text-align:center;
  font-variant-numeric:tabular-nums;}}
 .badge{{margin-left:1ch;}}
@@ -3104,6 +3266,10 @@ SCENE_CSS = f"""
  white-space:nowrap;}}
 .ident .idlv{{color:{BRIGHT};cursor:help;}}
 .ident .idgold{{color:{GOLD};cursor:help;}}
+.pavatar{{margin:6px 0 12px;padding-bottom:10px;
+ border-bottom:1px dashed {BORDER};}}
+.pavatar .ident{{margin-top:0;padding-top:0;border-top:0;}}
+.pavatar .gearmap .item{{cursor:help;}}
 .profile{{display:flex;gap:2ch;align-items:flex-start;margin-top:8px;}}
 .profile .portrait{{flex:none;height:auto;width:auto;
  min-height:200px;image-rendering:pixelated;}}
@@ -3116,6 +3282,8 @@ SCENE_CSS = f"""
 .gearmap .pwrap{{display:flex;align-items:stretch;justify-content:center;
  min-width:60px;}}
 .gearmap .pwrap .portrait{{height:258px;}}
+.gearmap .pwrap canvas.figure3d{{display:block;image-rendering:pixelated;
+ width:auto;}}
 .gearmap .pwrap .vbox{{width:120px;}}
 .slot.gm.locked{{background:#222;border:2px solid #555;opacity:1;
  cursor:help;}}

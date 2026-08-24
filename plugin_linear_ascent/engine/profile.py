@@ -23,6 +23,74 @@ from .social import _effect, world
 LOOT_COOLDOWN_S = 3600         # one attempt per attacker per target per hour
 LOOT_COST = economy.COST_PVP_ATTACK
 
+_AVATAR_KEYS = (
+    "name", "level", "race", "clazz", "faction",
+    "gold", "energy", "energy_max", "xp", "xp_need",
+    "hp", "hp_max", "atk", "dfs", "spd", "slots", "sleeping",
+)
+
+
+def public_slots(d: dict) -> list[dict]:
+    """The seven gear slots, no acts — safe to show anyone."""
+    from . import core
+    src = d if d.get("stage") == "playing" else {**d, "stage": "playing"}
+    out = []
+    for sl in core._slot_map(src):
+        sl = dict(sl)
+        sl.pop("acts", None)
+        sl.pop("why", None)
+        out.append(sl)
+    return out
+
+
+def public_sheet(d: dict, *, energy: int | None = None) -> dict:
+    """Reusable climber sheet. Bank never rides. Slot acts stripped."""
+    from . import state
+    lvl = int(d.get("level", 1))
+    fac = d.get("guild") or d.get("faction") or ""
+    if energy is None:
+        if "energy_val" in d:
+            energy = int(state.energy_now(d))
+        else:
+            energy = int(d.get("energy") or 0)
+    try:
+        from . import figure3d
+        fig = figure3d.sheet(d)
+    except ImportError:
+        fig = None
+    return {
+        "name": str(d.get("name") or ""),
+        "level": lvl,
+        "race": str(d.get("race") or ""),
+        "clazz": str(d.get("clazz") or ""),
+        "faction": str(fac),
+        "gold": int(d.get("gold", 0)),
+        "energy": int(energy),
+        "energy_max": int(state.energy_cap_of(d)),
+        "xp": int(d.get("xp", 0)),
+        "xp_need": int(economy.xp_need(lvl)),
+        "hp": int(d.get("hp", 1)),
+        "hp_max": int(state.max_hp(d)),
+        "atk": int(state.atk(d)),
+        "dfs": int(state.dfs(d)),
+        "spd": int(economy.player_speed(d)),
+        "slots": public_slots(d),
+        "sleeping": bool(d.get("sleeping")),
+        "figure3d": fig,
+    }
+
+
+def avatar_from_payload(pr: dict) -> dict:
+    """Pick the public sheet off worldd's profile payload."""
+    out = {k: pr[k] for k in _AVATAR_KEYS if k in pr}
+    if "faction" not in out and pr.get("guild"):
+        out["faction"] = pr["guild"]
+    if out.get("slots"):
+        out["slots"] = [
+            {k: v for k, v in dict(sl).items() if k not in ("acts", "why")}
+            for sl in out["slots"] if isinstance(sl, dict)]
+    return out
+
 
 def open_profile(p: dict, name: str) -> Scene:
     """A tile was clicked — remember where to come back to."""
@@ -92,33 +160,9 @@ def profile_scene(p: dict, note: str = "") -> Scene:
     if p.get("profile_loot"):
         return _loot_confirm_scene(p, pr, note)
     lines = note.split("\n") if note else []
-    race = str(pr.get("race") or "").title()
-    if race:
-        lines.append(race)
-    # 048: the classes died — the public page shows the trained hands.
-    # Rank 10 reads GOLD, a studied mastery reads MASTER; older worldd
-    # payloads carry no training key and the line simply doesn't render.
-    tr = pr.get("training") or {}
-    if isinstance(tr, dict) and any(
-            int(tr.get(k) or 0) for k in ("blade", "bow", "staff")):
-        ms = pr.get("mastery") or {}
-        parts = []
-        for glyph, path in (("⚔", "blade"), ("➶", "bow"), ("✦", "staff")):
-            r = int(tr.get(path) or 0)
-            word = f"{glyph} {r}"
-            if r >= 10:
-                word += " MASTER" if ms.get(path) else " GOLD"
-            parts.append(word)
-        lines.append("hands: " + " · ".join(parts))
     if pr.get("sleeping"):
         lines.append("Asleep — the tower keeps their bunk warm.")
-    lines.append(f"carries ◈ {int(pr.get('gold', 0)):,} · "
-                 f"⚡ {int(pr.get('energy', 0))}")
-    if pr.get("atk") or pr.get("dfs"):
-        lines.append(f"ATK {int(pr.get('atk', 0))} · "
-                     f"DEF {int(pr.get('dfs', 0))} · "
-                     f"HP {int(pr.get('hp', 0))}/{int(pr.get('hp_max', 0))}")
-    g = pr.get("guild")
+    g = pr.get("guild") or pr.get("faction")
     if g:
         c = pr.get("contribution") or {}
         gave = []
@@ -129,11 +173,8 @@ def profile_scene(p: dict, note: str = "") -> Scene:
                         f"{'s' if int(c['items']) != 1 else ''} racked")
         if int(c.get("warden", 0)):
             gave.append(f"{int(c['warden']):,} cut from Wardens")
-        lines.append(f"of the {g} faction"
-                     + (" — gave " + ", ".join(gave) if gave else ""))
-    gear = [str(x) for x in (pr.get("gear") or []) if x]
-    if gear:
-        lines.append("carries: " + ", ".join(gear[:6]))
+        if gave:
+            lines.append("gave " + ", ".join(gave))
     inv = [x for x in (pr.get("inventory") or []) if isinstance(x, dict)]
     if inv:
         packed = ", ".join(
@@ -143,7 +184,7 @@ def profile_scene(p: dict, note: str = "") -> Scene:
         lines.append(f"in the pack: {packed}")
     mins = pr.get("last_seen_min")
     if pr.get("lootable"):
-        lines.append("Their camp sits quiet — no move in over an hour.")
+        lines.append("Still for over an hour — a loot here favors you.")
     elif isinstance(mins, int):
         lines.append("Active recently — a loot here answers at double "
                      "their strength.")
@@ -158,28 +199,21 @@ def profile_scene(p: dict, note: str = "") -> Scene:
         opts.append(Option("pf_gift", "Gift an item", "from your pack"))
     cd = _loot_cd_left(p, name)
     if pr.get("same_guild"):
-        opts.append(Option("pf_loot", "Loot their camp",
+        opts.append(Option("pf_loot", "Loot them",
                            "🔒 not a guildmate", locked=True))
     elif pr.get("protected"):
-        opts.append(Option("pf_loot", "Loot their camp",
+        opts.append(Option("pf_loot", "Loot them",
                            "🔒 under the tower's protection", locked=True))
     elif cd:
-        opts.append(Option("pf_loot", "Loot their camp",
+        opts.append(Option("pf_loot", "Loot them",
                            f"🔒 again in {max(1, cd // 60)}m", locked=True))
     else:
-        risk = ("their camp is cold — the odds favor you"
+        risk = ("they're still — the odds favor you"
                 if pr.get("lootable")
                 else "ACTIVE — they strike back at 200%")
-        opts.append(Option("pf_loot", "Loot their camp",
+        opts.append(Option("pf_loot", "Loot them",
                            f"{LOOT_COST} ⚡ · {risk}"))
     opts.append(Option("back", "Step away"))
-    tile = {"opt": f"pv:{name}", "name": name,
-            "level": int(pr.get("level", 1)),
-            "race": str(pr.get("race") or ""),
-            "armor": str(pr.get("armor") or ""),
-            "sleeping": bool(pr.get("sleeping")),
-            "gold": int(pr.get("gold", 0)),
-            "energy": int(pr.get("energy", 0))}
     return Scene(
         eyebrow="THE STONE OF NAMES · A CLIMBER'S PAGE",
         headline=f"{name} — LEVEL {int(pr.get('level', 1))}",
@@ -188,7 +222,7 @@ def profile_scene(p: dict, note: str = "") -> Scene:
         body_lines=lines,
         options=opts,
         meters=meters(p),
-        players_here=[tile],
+        avatar=avatar_from_payload(pr),
     )
 
 
@@ -226,6 +260,7 @@ def _pay_scene(p: dict, pr: dict, note: str = "") -> Scene:
         body_lines=[ln for ln in note.split("\n") if ln] if note else [],
         options=opts,
         meters=meters(p),
+        avatar=avatar_from_payload(pr),
     )
 
 
@@ -252,6 +287,7 @@ def _gift_scene(p: dict, pr: dict, note: str = "") -> Scene:
         body_lines=[note] if note else [],
         options=opts,
         meters=meters(p),
+        avatar=avatar_from_payload(pr),
     )
 
 
@@ -259,8 +295,8 @@ def _loot_confirm_scene(p: dict, pr: dict, note: str = "") -> Scene:
     name = str(pr.get("name") or p.get("profile_view"))
     lines = [note] if note else []
     if pr.get("lootable"):
-        lines.append("Their camp has sat quiet for over an hour. They "
-                     "still defend it in their sleep — a quarter of "
+        lines.append("They've been still for over an hour. They still "
+                     "defend themselves in their sleep — a quarter of "
                      "their strength answers you.")
     else:
         lines.append("They are AWAKE AND MOVING. The loot fails and "
@@ -270,14 +306,15 @@ def _loot_confirm_scene(p: dict, pr: dict, note: str = "") -> Scene:
                  "attempt with your name on it.")
     return Scene(
         eyebrow="THE STONE OF NAMES · A CLIMBER'S PAGE",
-        headline=f"Rob {name}'s camp?",
-        support="Looting is an action — your own camp reads as active "
+        headline=f"Loot {name}?",
+        support="Looting is an action — you read as active "
                 "for the next hour.",
         body_lines=lines,
         options=[Option("pf_loot_go", "Do it", f"{LOOT_COST} ⚡"),
                  Option("pf_cancel", "Walk away")],
         meters=meters(p),
         event_kind="matchup",
+        avatar=avatar_from_payload(pr),
     )
 
 
@@ -368,7 +405,7 @@ def profile_action(p: dict, oid: str) -> Scene:
                         "few days on the climb.")
         if _loot_cd_left(p, name):
             return profile_scene(
-                p, note="You cased that camp within the hour. Let the "
+                p, note="You already tried them within the hour. Let the "
                         "dust settle.")
         p["profile_loot"] = True
         return _loot_confirm_scene(p, pr)
@@ -378,7 +415,7 @@ def profile_action(p: dict, oid: str) -> Scene:
             return profile_scene(p)
         if _loot_cd_left(p, name):
             return profile_scene(
-                p, note="You cased that camp within the hour.")
+                p, note="You already tried them within the hour.")
         if not state.spend_energy(p, LOOT_COST):
             s = profile_scene(
                 p, note=f"A raid takes {LOOT_COST} ⚡ you don't have.")
@@ -389,6 +426,6 @@ def profile_action(p: dict, oid: str) -> Scene:
         _ledger(p, "loot_try", note=name)
         _effect(p, "loot_attempt", target_name=name)
         return profile_scene(
-            p, note=f"You slip toward {name}'s camp… the tower will "
+            p, note=f"You move on {name}… the tower will "
                     "carry word of how it went.")
     return profile_scene(p)

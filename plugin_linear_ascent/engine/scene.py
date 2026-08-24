@@ -211,16 +211,56 @@ class Scene:
                                     # state: locked|empty|filled,
                                     # lock_text, slug, name, kind, icon,
                                     # count, dur, acts, why}
+    figure3d: dict | None = None    # 071: Labs 3D climber in the profile
+                                    # — {v, race, lead, worn, paths, px}.
+                                    # None when labs.figure3d is off.
+                                    # Old clients drop the key.
+    avatar: dict | None = None      # 072: another climber's public sheet
+                                    # — look, worn slots, parameters.
+                                    # Not the viewer's profile. Old
+                                    # clients drop the key.
 
     def to_text(self) -> str:
         """Plain-text fallback — always works, cards are enhancement."""
         lines = [self.eyebrow, self.headline]
         if self.support:
             lines.append(self.support)
+        # 072: the subject's public sheet — the card draws it; the
+        # agent names the same numbers.
+        if self.avatar:
+            a = self.avatar
+            who = " ".join(x for x in (
+                str(a.get("race") or ""), str(a.get("clazz") or "")) if x)
+            fac = str(a.get("faction") or a.get("guild") or "")
+            lines.append(
+                f"{a.get('name', '?')} {who} L{int(a.get('level', 1) or 1)}"
+                + (f" of the {fac} faction" if fac else "")
+                + f" · ◈ {int(a.get('gold', 0)):,}")
+            hp, hpm = int(a.get("hp", 0)), int(a.get("hp_max", 0) or 0)
+            en, enm = int(a.get("energy", 0)), int(a.get("energy_max", 0) or 0)
+            if hpm or enm or a.get("atk"):
+                lines.append(
+                    f"HP {hp}/{hpm or hp} · energy {en}"
+                    + (f"/{enm}" if enm else "")
+                    + f" · ATK {int(a.get('atk', 0))}"
+                    + f" · DEF {int(a.get('dfs', 0))}"
+                    + (f" · SPD {int(a['spd'])}" if a.get("spd") else ""))
+            worn = [str(sl.get("name") or sl.get("slug"))
+                    for sl in (a.get("slots") or [])
+                    if isinstance(sl, dict) and sl.get("state") == "filled"
+                    and (sl.get("name") or sl.get("slug"))]
+            if worn:
+                lines.append("wears: " + ", ".join(worn[:7]))
         # 027: the notice board reads as words on every surface — the card
         # draws it, the agent says it.
         for nt in self.notices:
             lines.append(f"! {nt.get('text', '')}")
+            if nt.get("kind") == "weekpick":
+                for c in nt.get("choices") or []:
+                    hint = f"  {c['hint']}" if c.get("hint") else ""
+                    lines.append(
+                        f"!  {c.get('n', '')}  {c.get('title', '')} — "
+                        f"{c.get('text', '')}{hint}")
         # 030 Phase 5: the agent reads the same paper the card draws.
         if self.paper and self.paper.get("items"):
             lines.append("— THE MORNING CRIER —")
@@ -341,6 +381,8 @@ class Scene:
             "labs": list(self.labs),
             "arena": self.arena,
             "slots": self.slots,
+            "figure3d": self.figure3d,
+            "avatar": (dict(self.avatar) if self.avatar else None),
         }
 
     @staticmethod
@@ -399,4 +441,6 @@ class Scene:
             labs=list(d.get("labs") or []),
             arena=(dict(d["arena"]) if d.get("arena") else None),
             slots=list(d.get("slots") or []),
+            figure3d=(dict(d["figure3d"]) if d.get("figure3d") else None),
+            avatar=(dict(d["avatar"]) if d.get("avatar") else None),
         )
