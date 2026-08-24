@@ -21,9 +21,9 @@
    the right hand.
 7. Open Labs, turn Figure 3D off, return to the profile, and capture a final
    screenshot and DOM snapshot.
-8. Turn Figure 3D on again. Open Labs and return to the same profile 20 times,
-   recording click-to-card-swap duration for the first five and last five
-   swaps.
+8. Turn Figure 3D on again. Make the same harmless, profile-bearing menu
+   selection 20 times, recording click-to-card-swap duration for the first
+   five and last five swaps.
 
 ## Expected behavior
 - Off uses the unchanged PNG portrait and has no `canvas.figure3d`.
@@ -52,5 +52,6 @@
 - Toggle the feature twice and inspect the scene payload: only
   `labs.figure3d` and the optional `figure3d` scene key change.
 - During the 20-swap run, inspect browser console and runtime diagnostics:
-  there is one connected `canvas.figure3d`, no detached canvas retains a live
-  RAF, and no additional model GLBs transfer after the initial cached load.
+  there is one connected `canvas.figure3d`, the same renderer is rebound to
+  replacement cards, no detached canvas retains a live RAF, and no additional
+  model GLBs transfer after the initial cached load.

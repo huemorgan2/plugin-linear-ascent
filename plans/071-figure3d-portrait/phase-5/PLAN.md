@@ -10,11 +10,13 @@ live on ascent-worldd. Default still off.
 - Bump `version.py` + `luna-plugin.toml` to 0.98.0.
 - Dojo: flask → Figure 3D on → profile canvas breathes → hover a
   slot → colour → off → PNG is back.
-- On every game-card mutation, drop disconnected Figure3D canvases:
-  cancel their RAF, dispose render targets/materials/renderer, and remove
-  them from the live registry before mounting the replacement.
-- Run 20 Labs/back swaps with Figure3D on and confirm interaction latency
-  remains flat with no WebGL context-loss warnings.
+- On every game-card mutation, rebind a compatible detached Figure3D stage
+  to the replacement card. Drop anything still disconnected: cancel its RAF,
+  dispose render targets/materials/renderer, and remove it from the registry.
+- Cap the pixel-art idle at 15 FPS and skip frames while the portrait is
+  offscreen or the document is hidden.
+- Run 20 profile-bearing menu swaps with Figure3D on and confirm interaction
+  latency remains flat with no WebGL context-loss warnings.
 - `worldd/tools/deploy.sh`.
 
 ## Verification
@@ -53,3 +55,15 @@ Rollback: revert the Figure3D JavaScript and restore the prior module URL.
 leaks the detached portrait's WebGL renderer, two render targets, and RAF
 loop. The cleanup regression scenario is written; implementation and the
 20-swap browser verification follow.
+
+2026-08-24 — Implemented and locally verified. Compatible replacement cards
+reuse the same WebGL stage; obsolete canvases cancel RAF and dispose both
+render targets, post materials, and the renderer/context. Rendering is capped
+at 15 FPS and pauses offscreen. In a real authenticated `/play` session, 20
+menu selections kept the same canvas on all 20, stayed at exactly 1 live /
+1 connected renderer, and loaded 0 additional GLBs (resource count 4 → 4).
+A direct 20-card mutation stress test averaged 2.3 ms for the first five and
+5.4 ms for the last five, with the same canvas throughout; removing the
+portrait returned diagnostics to 0 / 0. Targeted worldd checks passed (4),
+`node --check` passed, and `/health` returned in 2 ms after stale v5 pages
+were unloaded. Deployment remains deferred.

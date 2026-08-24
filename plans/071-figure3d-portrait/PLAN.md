@@ -139,9 +139,10 @@ Player bodies are **not** regenerated — the fight3d Tripo rigs
   updated for the second row.
 - `/play` loads `figure3d.js` once next to arena3d. WebGL-dead:
   the PNG portrait is shown.
-- With Figure3D on, make 20 Labs/back scene swaps. Only the connected
-  portrait owns a live renderer/RAF; latency must not grow across the run,
-  and Chromium must not report lost/excess WebGL contexts.
+- With Figure3D on, make 20 profile-bearing menu swaps. A compatible stage
+  is rebound to the replacement card; only the connected portrait owns a
+  live renderer/RAF, latency must not grow across the run, and Chromium must
+  not report lost/excess WebGL contexts.
 
 ## Rollback
 One commit per phase. Revert in reverse. The flag is inert without
@@ -179,3 +180,13 @@ Plan written 2026-08-24.
   Root cause is an unbounded renderer/RAF leak: detached portrait canvases
   remain in `lives`, and their animation loops never stop. The performance
   regression scenario and cleanup implementation are now in progress.
+- 2026-08-24 — performance fix verified locally. Card replacements with the
+  same race/gear spec rebind the existing canvas; unmatched detached stages
+  cancel RAF and dispose their render targets, materials, renderer, and
+  context. The idle is capped at 15 FPS and pauses offscreen. Twenty real
+  authenticated menu selections reused one canvas on all 20, held diagnostics
+  at 1 live / 1 connected, and transferred no additional GLBs (4 → 4).
+  A direct 20-card mutation stress test kept the same canvas and measured
+  2.3 ms first-five versus 5.4 ms last-five averages; removing the portrait
+  returned diagnostics to 0 / 0. Four targeted worldd tests and `node --check`
+  pass. Deployment remains deferred.
