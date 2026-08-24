@@ -207,3 +207,40 @@ animation acts as the transition loader.
 
 **Rollback.** Revert the `.car`/`.ink` CSS and DOM change. The lift direction
 wire field and destination scene remain unaffected.
+
+## Execution status — opaque loader follow-up (2026-08-24)
+
+- Implemented an opaque black `.car` stage with a separate masked `.ink`
+  layer in plugin source and the local worldd vendor.
+- Preserved and regression-tested destination-first ordering:
+  `game.innerHTML = d.fragment` runs before `playLift()`, while the destination
+  wiring and effects continue beneath the overlay.
+- Targeted plugin verification: `11 passed`.
+- Targeted worldd verification: `2 passed` (`-k 076`).
+- Full plugin suite: `1356 passed, 1 skipped, 1 xfailed, 4 failed`; all four
+  failures are the already-recorded unrelated class/kill3d failures from the
+  original 076 dojo run.
+- Local browser: ascent and descent both PASS. Each showed a 640x224 opaque
+  `rgb(0, 0, 0)` stage, the correct nonce-bearing GIF on `.ink`, destination
+  `data-loc` present during the overlay, removal in about 5.6 seconds, and an
+  immediately usable destination. No console or network errors.
+- Deployment was not performed.
+
+## Execution status (2026-08-24, original plan — not the opaque-stage follow-up)
+
+- Phase 1 (plugin): committed 898015b, version 0.99.1. Targeted tests
+  10/10; full suite 1342 passed, 4 pre-existing failures filed
+  (test_033 treeline, test_048 no_clazz, test_kill3d ×2 — reproduced at
+  pre-076 HEAD 0c734e7).
+- Dojo 0047 (local): 21/21 PASS, screenshots in
+  `dojo/results/0047-076-lift-transitions-2026-08-24/`.
+- Phase 2 (worldd): committed 588b712 — vendor re-cut from plugin
+  committed HEAD (the prior vendor was a stale 0.99.0 cut), two 076
+  tests added to test_web_play.py. test_names / presence / social_api /
+  leaderboard failures were shared-:5434-DB contention from a concurrent
+  pytest run — 32/32 pass on an isolated database (3× for test_names).
+  Not a 074 regression.
+- Deploy: dep-da681pojo6nc73c5dnvg, 0.97.3 → 0.99.1 live.
+- Post-deploy: both fxart GIFs 200 image/gif (163831 / 152630 bytes) on
+  production; dojo walkthrough re-run against production — 21/21 PASS
+  (ascent + descent rides observed, reload quiet, refusal rideless).
