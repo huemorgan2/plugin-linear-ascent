@@ -219,13 +219,16 @@ def test_week_tick_opens_the_box_and_one_pick_closes_it(monkeypatch):
     _advance_days(monkeypatch, 7)
     choose(p, "town")
     s = choose(p, "vault")
-    picks = [o.id for o in s.options if o.id.startswith("pick_")]
+    # 070: the prizes live on the notice board, not the Vault menu.
+    assert not any(o.id.startswith("pick_") for o in s.options)
+    week = next(n for n in s.notices if n.get("kind") == "weekpick")
+    picks = [c["opt"] for c in week["choices"]]
     assert set(picks) == {"pick_gold", "pick_aether"}   # 2 slots at 4 pts
     rested = p.get("rested", 0)
     s = choose(p, "pick_aether")
     assert p["rested"] == rested + economy.strongbox_aether(p["level"])
     assert weekly.sync(p)["pending"] is None
-    assert not any(o.id.startswith("pick_") for o in s.options)
+    assert not any(n.get("kind") == "weekpick" for n in s.notices)
 
 
 def test_pick_beyond_the_open_slots_is_refused(monkeypatch):

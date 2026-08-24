@@ -373,7 +373,7 @@ def profile_action(p: dict, oid: str) -> Scene:
         _effect(p, "grant", to_name=name, net=net, gross=amt)
         return profile_scene(
             p, note=f"+ ◈ {net:,} moves to {name} "
-                    f"(◈ {amt - net:,} burned)")
+                    f"(◈ {amt - net:,} fee from the Vault's courier)")
     if oid == "pf_gift":
         p["profile_gift"] = True
         return _gift_scene(p, pr)

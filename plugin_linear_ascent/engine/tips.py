@@ -166,19 +166,17 @@ _TIPS: dict[str, str] = {
                          "clerk keeps only a month of them. Come by "
                          "often and the vault works for you."),
 
-    # ── the strongbox picks (022/005) ──
-    "pick_gold": ("The strongbox's sure slot: a lump of gold, about "
-                  "half a hunting day at your frontier floor. Always "
-                  "on offer — the fallback if you never pick."),
-    "pick_aether": ("The strongbox's second slot: a lump of rested "
-                    "aether — bonus XP that rides your next kills at "
-                    "+25% each. Pick it before a hunting week."),
-    "pick_token": ("The strongbox's third slot: a repair token — one "
-                   "FREE mend of any worn piece at the Forge. Worth "
-                   "the most when your steel is expensive."),
-    "pick_relic": ("The strongbox's third slot: a luck charm — better "
-                   "loot and present rolls until tomorrow. Crack it "
-                   "before a long day."),
+    # ── last week's reward (022/005, copy 070) ──
+    "pick_gold": ("About as much as half a day's hunting. It is added "
+                  "to the gold you are carrying. If you never choose, "
+                  "this is what you get."),
+    "pick_aether": ("Your next fights will give extra experience, "
+                    "until this bonus runs out."),
+    "pick_token": ("The Forge will fully repair one piece of gear you "
+                   "are wearing, for free."),
+    "pick_relic": ("You will find better loot while you wear it. It "
+                   "goes into your pack. Put it in the charm slot on "
+                   "your profile to use it."),
 
     # ── vault desk ──
     "deposit_all": ("Everything into the vault. Banked gold survives "

@@ -229,7 +229,7 @@ def grant_action(p: dict, oid: str) -> Scene:
         _ledger(p, "grant_out", gold=-amt, note=f"to {target}")
         _effect(p, "grant", to_name=target, net=net, gross=amt)
         return grant_scene(p, note=f"+ ◈ {net:,} moves to {target} "
-                                   f"(◈ {amt - net:,} burned)")
+                                   f"(◈ {amt - net:,} fee from the Vault's courier)")
     return grant_scene(p)
 
 

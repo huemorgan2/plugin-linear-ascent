@@ -134,7 +134,11 @@ def test_the_card_draws_the_notice_as_a_notice_not_a_menu_row():
 
 
 def test_blue_is_the_notification_ink():
-    assert render.AETHER in render.SCENE_CSS.split(".nb,")[1][:200]
+    css = render.SCENE_CSS
+    assert render.AETHER in css.split(".nb{")[1][:200]
+    badge = css.split(".badge{")[1][:280]
+    assert render.AETHER in badge
+    assert "border:" in badge
 
 
 # ── the pack has a mouth ─────────────────────────────────────────────────

@@ -19,7 +19,7 @@ import re
 from functools import lru_cache
 
 from . import colors as _colors, economy, icons
-from .engine import tips
+from .engine import notices, tips
 from .engine.scene import Meters, Scene
 
 # ── tokens (009: the terminal law — worldd/static/site/mock/mock.css) ────
@@ -2568,7 +2568,12 @@ def render_scene_fragment(scene: Scene) -> str:
             # 027: the count leaves the label and becomes a blue chip —
             # a notification reads as a notification, at a glance.
             bn = int(getattr(o, "badge", 0) or 0)
-            badge = f'<span class="badge">{bn}</span>' if bn else ""
+            if bn:
+                btip = notices.badge_tip(o.id)
+                badge = (f'<span class="badge" tabindex="0" role="note" '
+                         f'data-tip="{_e(btip)}">{bn}</span>')
+            else:
+                badge = ""
             # 014: the whisper glyph — [i] OUTSIDE the button, so tapping
             # it never fires the option; tip resolves by option id.
             # 031 §14: the card wall keeps it too, pinned to the corner.
@@ -2930,11 +2935,14 @@ SCENE_CSS = f"""
 .wrow:hover:not(:disabled) .whint,.wrow:focus-visible .whint{{
  color:{INK};}}
 .wrow:hover:not(:disabled),.wrow:focus-visible{{outline:none;}}
-.nb,.badge{{flex:none;display:inline-block;min-width:2ch;padding:0 .5ch;}}
+.nb{{flex:none;display:inline-block;min-width:2ch;padding:0 .5ch;
  background:{AETHER};color:{INK};text-align:center;
  font-variant-numeric:tabular-nums;}}
-.badge{{margin-left:1ch;}}
-.opt:hover .badge{{background:{TEXT};}}
+.badge{{flex:none;display:inline-block;min-width:2ch;padding:0 .4ch;
+ margin-left:1ch;color:{AETHER};background:transparent;
+ border:2px solid {AETHER};text-align:center;
+ font-variant-numeric:tabular-nums;box-sizing:border-box;
+ cursor:help;}}
 /* ── 009: the Crier under the terminal law — a black sheet behind a
    brown frame, brown ink, the masthead a brown reverse-video bar. ── */
 .paper{{position:relative;margin:0 0 10px;background:{INK};
@@ -3152,7 +3160,7 @@ SCENE_CSS = f"""
 .opt:focus-visible .key::after,.opt:focus-visible::after{{
  color:{INK}!important;}}
 .opt:hover:not(:disabled) .badge,.opt:focus-visible .badge{{
- background:{INK};color:{GOLD};}}
+ background:transparent;color:{AETHER};border-color:{AETHER};}}
 /* painted spans INSIDE a hovered row (coin counts, lock lines, keys of
    any colour) go black too — reverse video means ALL ink flips */
 .opt:hover:not(:disabled) .lbl *,.opt:hover:not(:disabled) .hint *,

@@ -55,6 +55,10 @@ def _stamp(p: dict, scene: Scene) -> Scene:
                             for o in acts]
         if why:
             cell["why"] = why
+    # 070: the week-pick receipt rides the next card, wherever they are.
+    note = p.pop("strongbox_note", None)
+    if note:
+        scene.body_lines = [note, *list(scene.body_lines)]
     return scene
 
 
@@ -621,6 +625,18 @@ def apply_choice(p: dict, option_id: str, text: str = "") -> Scene:
     if used is not None:
         return _stamp(p, used)
 
+    # 070: last week's reward — the ANSI box on the notice board. Valid
+    # from any room the board rides; not mid-fight.
+    if (option_id or "").startswith("pick_") \
+            and p.get("stage") == "playing" \
+            and p.get("level", 1) >= economy.STRONGBOX_LEVEL:
+        if p.get("encounter") or p.get("movie_floor"):
+            scene = _build_scene(p)
+            scene.refusal = "Choose after the fight."
+            return _stamp(p, scene)
+        if weekly.pick(p, option_id):
+            return _stamp(p, _build_scene(p))
+
     # 030 Phase 5: the paper's ✕ — closing the Crier stamps the same
     # news_day guard the delivery keys on, so closed stays closed until
     # dawn. Valid wherever the paper shows, hence outside the row list.
@@ -648,7 +664,7 @@ def apply_choice(p: dict, option_id: str, text: str = "") -> Scene:
 
     scene = _build_scene(p)
     if p.get("location") in _NOTICE_ROOMS and not scene.enemy:
-        doors = {nt["opt"] for nt in notices.pending(p)}
+        doors = {nt.get("opt") for nt in notices.pending(p) if nt.get("opt")}
         if option_id in doors and option_id not in {o.id for o in scene.options}:
             # the notice row is a shortcut to the door: walk to the square
             # and open it, exactly as a player would with two clicks.
@@ -2866,9 +2882,6 @@ def _vault_scene(p: dict) -> Scene:
                      "reward from what you earned.")
     if p["level"] >= economy.STRONGBOX_LEVEL:
         box = weekly.sync(p)
-        note = p.pop("strongbox_note", None)
-        if note:
-            lines.append(note)
         pts = weekly.points(p, box)
         n = weekly.slots(p)
         lines.append(f"strongbox — this week: {box['kills']} kills · "
@@ -2876,12 +2889,6 @@ def _vault_scene(p: dict) -> Scene:
                      f"{max(0, p['unlocked_floor'] - box['floor0'])} floors "
                      f"= {pts} points, {n} slot{'s' if n != 1 else ''} open "
                      f"(thresholds {'/'.join(map(str, economy.STRONGBOX_THRESHOLDS))}).")
-        pending = box.get("pending")
-        if pending:
-            lines.append(f"last week's box is OPEN — {pending['slots']} "
-                         "slot(s). Pick exactly one.")
-            for o, label, hint in weekly.rewards(p, pending["slots"]):
-                opts.append(Option(o, label, hint))
     if p["gold"] > 0:
         opts += [Option("deposit_all", "Deposit everything", f"◈ {p['gold']:,}"),
                  Option("deposit_half", "Deposit half", f"◈ {p['gold'] // 2:,}")]
@@ -2917,12 +2924,6 @@ def _vault_action(p: dict, oid: str) -> Scene:
             combat._ledger(p, "interest", gold=total)
             s.body_lines.insert(0, f"+ ◈ {total:,} interest banked — the "
                                 "clerk stamps every stub")
-        return s
-    if oid.startswith("pick_") and p["level"] >= economy.STRONGBOX_LEVEL:
-        line = weekly.pick(p, oid)
-        s = _vault_scene(p)
-        if line:
-            s.body_lines.insert(0, line + ". The box shuts for the week.")
         return s
     if oid == "deposit_all" and p["gold"] > 0:
         combat._ledger(p, "deposit", gold=-p["gold"])

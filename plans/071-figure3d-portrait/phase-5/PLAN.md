@@ -30,3 +30,11 @@ The full suites executed but are not green: plugin 1327 passed / 5 failed
 passed / 1 failed (`test_leaderboard_marks_only_you`, outside 071). Vendor
 sync and the clean plugin/worldd commits are complete and pushed. Deployment
 is deferred by explicit user instruction.
+
+2026-08-24 — Fixed a player-blocking Figure3D browser regression: the
+MutationObserver recursively remounted the replacement canvas before models
+finished loading, which froze the event loop at the loading placeholder. The
+canvas is now marked as mounting until the async build completes and `/play`
+uses `figure3d.js?v=3`. The formerly hanging isolated harness now loads;
+`node --check` and `worldd/tests/test_071_figure3d.py` (3 passed) are green.
+Rollback: revert the Figure3D JavaScript and restore the prior module URL.

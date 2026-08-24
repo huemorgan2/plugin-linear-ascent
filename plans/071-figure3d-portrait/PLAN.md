@@ -155,3 +155,10 @@ Plan written 2026-08-24.
 - Deployment is intentionally deferred: the user explicitly requested no
   deploy. The plugin and the vendored/static worldd bundle are committed and
   pushed; only the authenticated browser acceptance remains pending.
+- 2026-08-24 — follow-up browser regression: the isolated Figure3D harness
+  froze before `DOMContentLoaded`. Its mutation observer recursively remounted
+  the replacement WebGL canvas while models were loading, starving rendering.
+  The mount is now guarded through the asynchronous build and the `/play`
+  module URL is cache-bumped to `v=3`. The harness now loads all three race
+  headings; `node --check` and the three worldd 071 tests pass. Deployment
+  remains deferred.

@@ -10,18 +10,42 @@ and what it is worth.
 The law from 023 stands — a notice is a finished claim, never mere
 availability. A badge that is always on is a badge nobody reads.
 
-Entries: {door, opt, n, kind, text}
+Entries: {door, opt, n, kind, text, choices?}
   door  the town door it belongs to ("vault") — the badge projection sums these
   opt   the option id that takes you there (the notice row is a shortcut)
   n     the count on the chip; 0 means "one thing, no number worth showing"
   kind  "collect" — gold/goods with your name on them
         "plan"    — a slot that expires if you ignore it (the Lodge)
+        "weekpick"— last week's reward; `choices` are the ANSI rows.
+                    No `door`: this is not a Vault badge.
 """
 
 from __future__ import annotations
 
 from .. import economy
 from . import contracts, state, weekly
+
+# Simple English on the blue count chip — not the notice-board sentence.
+_BADGE_TIP = {
+    "lodge": "You have not chosen where to sleep tonight. Open the "
+             "Lodge and pick a bed.",
+    "hall": "Your faction has not joined this week's challenge yet. "
+            "Open the hall to join.",
+    "vault": "There is gold waiting for you at the Vault. Open it "
+             "to collect.",
+    "board": "A finished job is waiting to be paid. Open the contract "
+             "board to collect.",
+    "forge": "Something of yours needs fixing at the Forge.",
+    "guildhall": "You can buy your next level. Open the Guildhall "
+                 "to train.",
+    "relay": "You have mail waiting. Open the Relay Office to read it.",
+}
+
+
+def badge_tip(door: str) -> str:
+    """Hover on a door's count chip — one plain sentence."""
+    return _BADGE_TIP.get(door, "Something is waiting here. Open this "
+                          "to see what.")
 
 
 def _forge_notices(p: dict) -> list[dict]:
@@ -103,13 +127,15 @@ def pending(p: dict, w: dict | None = None) -> list[dict]:
                      f"{'s' if len(stubs) != 1 else ''} — ◈ {total:,} to the "
                      "bank the moment you collect"),
         })
-    if p["level"] >= economy.STRONGBOX_LEVEL \
-            and weekly.sync(p).get("pending"):
-        out.append({
-            "door": "vault", "opt": "vault", "n": 1, "kind": "collect",
-            "text": "The Vault — last week's strongbox is unopened; pick "
-                    "one reward before this week rolls",
-        })
+    if p["level"] >= economy.STRONGBOX_LEVEL:
+        pending = weekly.sync(p).get("pending")
+        if pending:
+            n = int(pending.get("slots") or 0)
+            out.append({
+                "kind": "weekpick", "n": 0,
+                "text": weekly.HEADER,
+                "choices": weekly.choices(p, n),
+            })
     if p["level"] >= economy.BOARD_LEVEL:
         done = [j for j in contracts.board_for(p) if contracts.claimable(p, j)]
         if done:
@@ -156,5 +182,8 @@ def doors(p: dict, w: dict | None = None) -> dict[str, int]:
     never disagree."""
     n: dict[str, int] = {}
     for item in pending(p, w):
-        n[item["door"]] = n.get(item["door"], 0) + max(1, int(item["n"]))
+        door = item.get("door")
+        if not door:
+            continue
+        n[door] = n.get(door, 0) + max(1, int(item.get("n") or 0))
     return n

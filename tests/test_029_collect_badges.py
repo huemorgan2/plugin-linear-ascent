@@ -1,6 +1,7 @@
 """0.29.2 — collect badges: a count on a town door means something inside
-is WAITING (a finished claim, a held letter, an open strongbox, a night
-still unplanned) — never mere availability.
+is WAITING (a finished claim, a held letter, a night still unplanned)
+— never mere availability. Last week's reward (070) is a notice-board
+box, not a Vault door chip.
 
 027: the count is `Option.badge` now (a blue chip, not prose glued into the
 label) and every count also gets a sentence on the notice board. The rules
@@ -8,8 +9,8 @@ about WHEN a door badges are unchanged, and the plain-text surface still
 writes "(n)" after the label.
 """
 
-from plugin_linear_ascent import economy
-from plugin_linear_ascent.engine import contracts, core, state, weekly
+from plugin_linear_ascent import economy, render
+from plugin_linear_ascent.engine import contracts, core, notices, state, weekly
 
 
 def playing(name="Badgy", world=None):
@@ -77,6 +78,22 @@ def test_lodge_badges_the_unplanned_night():
     assert badge(s, "lodge") == 0                      # planned — gone
 
 
+def test_lodge_badge_explains_the_sleep_choice():
+    p = playing("night-tip")
+    p["level"] = economy.NIGHT_SLOT_LEVEL
+    html = render.render_scene_fragment(core.current_scene(p))
+    assert 'class="badge"' in html
+    assert "chosen where to sleep" in html
+
+
+def test_badge_tips_are_plain_english():
+    lodge = notices.badge_tip("lodge")
+    hall = notices.badge_tip("hall")
+    assert "sleep" in lodge.lower()
+    assert "challenge" in hall.lower()
+    assert "aether" not in lodge.lower()
+
+
 def test_below_night_level_lodge_never_badges():
     p = playing("night-low")
     p["level"] = economy.NIGHT_SLOT_LEVEL - 1
@@ -84,7 +101,8 @@ def test_below_night_level_lodge_never_badges():
     assert badge(s, "lodge") == 0
 
 
-def test_vault_badges_a_pending_strongbox():
+def test_vault_does_not_badge_a_pending_week_reward():
+    """070: last week's reward lives on the notice board, not the Vault door."""
     p = playing("boxer")
     p["level"] = economy.STRONGBOX_LEVEL
     s = core.current_scene(p)
@@ -93,7 +111,8 @@ def test_vault_badges_a_pending_strongbox():
                       "floor0": 1,
                       "pending": {"week": weekly.week_no() - 1, "slots": 2}}
     s = core.current_scene(p)
-    assert badge(s, "vault") == 1
+    assert badge(s, "vault") == 0
+    assert any(n.get("kind") == "weekpick" for n in s.notices)
 
 
 def test_relay_badges_held_letters():
