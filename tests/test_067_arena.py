@@ -1,23 +1,22 @@
-"""067 phase 2: the arena recorder — same numbers, ordered script,
-floors 6–7 with labs.arena on; nothing anywhere else."""
+"""067 phase 2: the arena recorder — same numbers, ordered script.
+Promoted out of Labs (plans/100floors-attack3dscene): on for EVERYONE on
+arena.READY_FLOORS; nothing above the rollout front."""
 import json
 
 from plugin_linear_ascent import render
 from plugin_linear_ascent.content import schema
-from plugin_linear_ascent.engine import arena, combat, core, labs, state
+from plugin_linear_ascent.engine import arena, combat, core, state
 from plugin_linear_ascent.engine.scene import Scene
 
 from tests.conftest import make_character
 
 
-def _climber(name="u-arena", clazz="warrior", floor=6, arena_on=True):
+def _climber(name="u-arena", clazz="warrior", floor=6):
     p = state.new_player(name)
     make_character(p, clazz=clazz)
     p["level"] = 8
     p["hp"] = 400
     p["unlocked_floor"] = floor
-    if arena_on:
-        labs.set_flag(p, "arena", True)
     return p
 
 
@@ -31,20 +30,24 @@ def _hunt(p, floor=6):
     return s, fl
 
 
-def test_off_everywhere_else():
-    p = _climber(arena_on=False)
-    s, fl = _hunt(p, 6)
+def test_off_above_the_rollout_front():
+    p = _climber(floor=11)
+    s, fl = _hunt(p, 11)
     assert s.arena is None
     p["encounter"]["range"] = "close"
     s = combat.resolve_fight_action(p, fl, "attack")
     assert s.arena is None
     assert "data-arena" not in render.render_scene_fragment(s)
-    p = _climber(arena_on=True, floor=5)
-    s, fl = _hunt(p, 5)
-    assert s.arena is None
-    p["encounter"]["range"] = "close"
-    s = combat.resolve_fight_action(p, fl, "attack")
-    assert s.arena is None
+
+
+def test_on_for_everyone_on_ready_floors():
+    # phase 1 of the rollout: floors 1-10. No player flag involved.
+    assert arena.READY_FLOORS == frozenset(range(1, 11))
+    for floor in (1, 10):
+        p = _climber(name=f"u-arena-f{floor}", floor=floor)
+        assert not p["labs"]                       # nothing switched on
+        s, fl = _hunt(p, floor)
+        assert s.arena and s.arena["phase"] == "opener"
 
 
 def test_opener_keeps_the_close_up_and_regular_menu():

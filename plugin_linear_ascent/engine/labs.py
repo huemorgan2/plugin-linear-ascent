@@ -25,13 +25,9 @@ class Feature:
 
 
 FEATURES: dict[str, Feature] = {
-    "arena": Feature(
-        "arena", "Arena — turn-based 3D fights",
-        "Floors 6 and 7 only. After the first strike the fight becomes a "
-        "3D scene: your turn, then the creature's, blow by blow, with the "
-        "numbers floating over the heads. Same rules, same dice — only "
-        "the way you see them.",
-        frozenset({6, 7})),
+    # "arena" graduated 2026-08-24 (plans/100floors-attack3dscene): the
+    # turn-based 3D fight is on for everyone, gated only by
+    # arena.READY_FLOORS while the floor assets roll out.
     "figure3d": Feature(
         "figure3d", "Figure — 3D climber in the profile",
         "Your portrait becomes the 3D climber, breathing still, wearing "

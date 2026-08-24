@@ -1,22 +1,26 @@
 """067 phase 2: the Arena — a RECORDER, not a second combat engine.
 
 Combat resolves exactly as it always has (same rolls, same numbers,
-same text). When the arena is on for this player and floor
-(`labs.enabled(p, "arena", floor)`), the choke points of combat.py call
-`record()` and this module turns the round into an ORDERED SCRIPT the
-website's arena3d layer plays beat by beat: the player's turn, then the
-creature's, each with the number that landed. `payload()` is what rides
-`Scene.arena` (a top-level Scene key — old clients drop it).
+same text). On a READY floor (promoted out of Labs by
+plans/100floors-attack3dscene — on for EVERY player, no flag), the
+choke points of combat.py call `record()` and this module turns the
+round into an ORDERED SCRIPT the website's arena3d layer plays beat by
+beat: the player's turn, then the creature's, each with the number that
+landed. `payload()` is what rides `Scene.arena` (a top-level Scene key
+— old clients drop it).
 
-Everything here is a no-op when the flag is off: `record` returns
-before touching the encounter, `payload` returns None.
+Everything here is a no-op on a floor that is not ready: `record`
+returns before touching the encounter, `payload` returns None.
 """
 from __future__ import annotations
 
 from .. import economy
-from . import labs, state
+from . import state
 
-FEATURE = "arena"
+# 100floors-attack3dscene rollout gate: the floors whose 3D assets
+# (monster GLBs + backgrounds300 backdrops) have shipped. Grows by 10
+# per phase; delete the gate after phase 10 (arena always on).
+READY_FLOORS = frozenset(range(1, 11))
 FRAME_W, FRAME_H = 320, 300      # the arena's frame (the kill scene is 320×112)
 
 # the tile glyph per option id (icons.py keys); attack_<slug> resolves
@@ -67,7 +71,7 @@ _TILE_LABEL = {
 
 
 def enabled(p: dict, floor=None) -> bool:
-    """On for this player, on THIS floor. `floor` may be a Floor, an int
+    """On on THIS floor (for everyone). `floor` may be a Floor, an int
     or None (→ read the encounter's floor)."""
     if floor is None:
         e = p.get("encounter") or {}
@@ -79,7 +83,7 @@ def enabled(p: dict, floor=None) -> bool:
         fl = int(fl)
     except (TypeError, ValueError):
         return False
-    return labs.enabled(p, FEATURE, fl)
+    return fl in READY_FLOORS
 
 
 def begin(p: dict, option_id: str) -> None:
@@ -259,10 +263,14 @@ def _foe(p: dict) -> dict:
     e = p["encounter"]
     prof = _profile(p)
     t = prof.get("type", "plain")
+    # .get() throughout — a fight doc written by an older build (or a
+    # synthetic one in tests) may lack keys; the recorder must never
+    # crash the fight it is dressing
     return {
-        "id": _foe_id(e), "name": e["name"],
-        "hp": max(0, int(e["hp"])), "hp_max": int(e["hp_max"]),
-        "atk": int(e["atk"]), "def": int(e["def"]),
+        "id": _foe_id(e), "name": e.get("name", ""),
+        "hp": max(0, int(e.get("hp", 0))),
+        "hp_max": int(e.get("hp_max", 0) or 0),
+        "atk": int(e.get("atk", 0) or 0), "def": int(e.get("def", 0) or 0),
         "spd": int(prof.get("speed", economy.SPEED_NORMAL)),
         "type": t, "flying": bool(prof.get("flying")),
         "armoured": _armoured(e, prof),

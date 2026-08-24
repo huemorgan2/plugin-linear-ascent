@@ -192,9 +192,16 @@ def test_the_kill_clears_the_treeline_memory():
     join_keep(p)
     core.apply_choice(p, "treeline_shot")
     assert p["treeline_wardens"] == [1]
-    p["encounter"]["hp"] = 1
-    p["hp"] = 999
-    core.apply_choice(p, "attack")
+    # the roll is day-seeded, so a single swing can whiff (and a whiffed
+    # keep round is a drive-back) — rejoin and swing until the blow lands
+    for _ in range(10):
+        if p["encounter"] is None:
+            join_keep(p)
+        p["encounter"]["hp"] = 1
+        p["hp"] = 999
+        core.apply_choice(p, "attack")
+        if 1 not in p.get("treeline_wardens", []):
+            break
     assert 1 not in p.get("treeline_wardens", [])
 
 

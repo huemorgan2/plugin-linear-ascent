@@ -99,7 +99,9 @@ def test_creature_art_stays_up_for_every_round():
     later = combat.fight_scene(p, floor, note="you swing again")
     assert opener.banner == p["encounter"]["id"]
     assert later.banner == opener.banner
-    assert 'class="banner"' in render.render_scene_fragment(later)
+    # floor 1 is an arena READY floor, so the banner div carries the
+    # arena dress (class="banner arena") — the art is still up
+    assert 'class="banner' in render.render_scene_fragment(later)
 
 
 def test_fight_scene_carries_specimen_variant():

@@ -24,15 +24,29 @@ def test_new_doc_has_labs_and_old_doc_heals():
     assert q["labs"] == {}
 
 
-def test_enabled_respects_floor_gate():
+def test_enabled_respects_floor_gate(monkeypatch):
+    # the arena graduated (100floors); the gate semantics live on via a
+    # synthetic floor-gated feature
+    monkeypatch.setitem(labs.FEATURES, "trial",
+                        labs.Feature("trial", "Trial", "x", frozenset({6, 7})))
     p = state.new_player("u3")
-    assert not labs.enabled(p, "arena")
-    labs.set_flag(p, "arena", True)
-    assert labs.enabled(p, "arena")
-    assert labs.enabled(p, "arena", 6) and labs.enabled(p, "arena", 7)
-    assert not labs.enabled(p, "arena", 5)
-    assert not labs.enabled(p, "arena", 8)
+    assert not labs.enabled(p, "trial")
+    labs.set_flag(p, "trial", True)
+    assert labs.enabled(p, "trial")
+    assert labs.enabled(p, "trial", 6) and labs.enabled(p, "trial", 7)
+    assert not labs.enabled(p, "trial", 5)
+    assert not labs.enabled(p, "trial", 8)
     assert not labs.enabled(p, "nope")
+
+
+def test_arena_graduated_out_of_labs():
+    assert "arena" not in labs.FEATURES
+    p = state.new_player("u3b")
+    p["labs"]["arena"] = True          # stale key on an old player doc
+    assert not labs.enabled(p, "arena")
+    assert labs.enabled_keys(p) == []
+    labs.set_flag(p, "arena", False)   # guard: unknown key is a no-op
+    assert p["labs"]["arena"] is True
 
 
 def test_labs_card_toggles_and_returns():
@@ -40,20 +54,21 @@ def test_labs_card_toggles_and_returns():
     s = core.apply_choice(p, "labs")
     assert s.headline == "The Labs"
     ids = [o.id for o in s.options]
-    assert "labs_toggle_arena" in ids and "labs_toggle_figure3d" in ids
+    assert "labs_toggle_figure3d" in ids
+    assert "labs_toggle_arena" not in ids            # graduated (100floors)
     assert "labs_back" in ids
-    row = next(o for o in s.options if o.id == "labs_toggle_arena")
+    row = next(o for o in s.options if o.id == "labs_toggle_figure3d")
     assert row.label.endswith("off")
     assert s.labs == []
-    s = core.apply_choice(p, "labs_toggle_arena")
-    assert p["labs"]["arena"] is True
-    row = next(o for o in s.options if o.id == "labs_toggle_arena")
+    s = core.apply_choice(p, "labs_toggle_figure3d")
+    assert p["labs"]["figure3d"] is True
+    row = next(o for o in s.options if o.id == "labs_toggle_figure3d")
     assert row.label.endswith("ON")
-    assert s.labs == ["arena"]
+    assert s.labs == ["figure3d"]
     html = render.render_scene_fragment(s)
-    assert 'data-labs="arena"' in html
-    s = core.apply_choice(p, "labs_toggle_arena")
-    assert p["labs"]["arena"] is False
+    assert 'data-labs="figure3d"' in html
+    s = core.apply_choice(p, "labs_toggle_figure3d")
+    assert p["labs"]["figure3d"] is False
     s = core.apply_choice(p, "labs_back")
     assert s.headline != "The Labs"
     assert not s.refusal

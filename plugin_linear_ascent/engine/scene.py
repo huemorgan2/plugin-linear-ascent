@@ -203,9 +203,9 @@ class Scene:
                                     # for this player (keys). The bar's
                                     # flask reads it; a feature card
                                     # carries its own payload (arena).
-    arena: dict | None = None       # 067: the arena's turn script —
-                                    # floors 6–7 with labs.arena on;
-                                    # None everywhere else.
+    arena: dict | None = None       # 067: the arena's turn script — on
+                                    # for everyone on arena.READY_FLOORS
+                                    # (100floors rollout); None elsewhere.
     slots: list[dict] = field(default_factory=list)
                                     # 069: the gear map — the seven slots
                                     # around the portrait, always all
