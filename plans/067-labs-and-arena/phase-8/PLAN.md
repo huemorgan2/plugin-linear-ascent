@@ -113,3 +113,31 @@ deploy.sh, republish 0.95.0 zip.
   Victory-lean covered by supplementary captures at 1440/420 (the
   walkthrough's fight died, content-random). Plugin suite: 6
   pre-existing fails, 1296 passed. Released as 0.96.1.
+
+## Execution status — 0.96.2 follow-up (2026-08-24, roy's dossier report on 0.96.1)
+
+Roy: put the [i] next to the creature name; remove the word "dossier";
+the monster explanation opens as a tooltip over that [i]; keep the
+dossier panel's look exactly; and remove the fold from the bottom of
+the card under the scene.
+
+- **The [i] rides the headline.** The creature-name headline ends in
+  the standard `.info` badge; its `data-tiph` ships the WHOLE dossier
+  panel as trusted server HTML (the existing tipbox innerHTML path),
+  `data-tip` keeps the flat-text fallback. One [i], one place — the
+  eplate's old flat-tip [i] is gone too.
+- **The fold is gone.** `_dossier_html` returns the bare
+  `<div class="dossier">` panel; the `<details class="dx">` wrapper,
+  the "] dossier" summary text and all `.dx` CSS are deleted; the
+  card no longer appends the panel under the scene.
+- **The panel look is unchanged.** Same .dossier/.dhead/.drw/.ticon
+  markup + CSS; inside #tipbox the box itself is the aether frame, so
+  the panel sheds its own border/slab (`#tipbox .dossier{border:0;...}`).
+  TIP_JS widens a dossier tip to 560px (other tips stay 380).
+- Verification: dojo run 0043 — **38/38** (2 new S13 checks: [i] on the
+  name + fold gone; hover opens the panel as the tip, unframed, ≥1
+  rows), fight ended in VICTORY so the 0.96.1 lean-tally checks ran
+  live. Supplementary shots9 captures at 1440/420 incl. tip-open.
+  Targeted pytest 107 passed / 1 skipped; full suite 3 failed 1299
+  passed — the same 3 fail at the pristine base (pre-existing).
+  Released as 0.96.2. plugin-only release — no worldd changes.

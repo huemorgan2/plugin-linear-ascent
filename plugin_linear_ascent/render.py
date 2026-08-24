@@ -1158,8 +1158,9 @@ def _faction_block(m: Meters) -> str:
 # The counter system is invisible noise unless the enemy's sheet is
 # readable at a glance (the Kingdom Rush lesson). scene.enemy carries the
 # payload; the header shows the always-on HP bar, the range chip and the
-# active damage modifier; the [i] badge opens the dossier — a native
-# <details>, all data inlined, no server round-trip, no model in the path.
+# active damage modifier; the [i] rides the headline NAME itself and
+# opens the dossier panel as its tip (data-tiph, trusted server HTML) —
+# all data inlined, no server round-trip, no model in the path.
 
 # 025 §4: a style is a palette on the same 1-bit silhouette — keen reads
 # ember, warded reads frost, and plain steel keeps the worn/packed ink.
@@ -1238,22 +1239,20 @@ def _estat_html(en: dict) -> str:
             + "   ".join(segs) + "</div>")
 
 
-def _enemy_head_html(en: dict, tip: str = "") -> str:
+def _enemy_head_html(en: dict) -> str:
     """009: the headline owns the name; the plate keeps only the range
-    word and the [i] dossier, then the live modifiers, dim. 041: no
-    `later` class — the sheet must read the moment the scene lands,
-    not after the typewriter finishes."""
+    word, then the live modifiers, dim. 041: no `later` class — the
+    sheet must read the moment the scene lands, not after the
+    typewriter finishes. 0.96.2 (roy): the [i] moved onto the headline
+    name itself — the plate no longer carries it."""
     rng = en.get("range", "")
     rword = {"at_range": "◇ at range",
              "close": "◇ close quarters"}.get(rng, "")
-    rhtml = f'<span class="erng">{rword}</span>' if rword else ""
-    info = (f'<span class="info" tabindex="0" role="note" '
-            f'data-tip="{_e(tip)}">i</span>' if tip else "")
-    plate = (f'<div class="eplate">{rhtml}{info}</div>'
-             if rhtml or info else "")
+    plate = (f'<div class="eplate"><span class="erng">{rword}</span></div>'
+             if rword else "")
     mods = "".join(f'<div class="emod">◇ {_e(m)}</div>'
                    for m in _active_mods(en))
-    return f'<div class="ehead">{plate}{mods}</div>' 
+    return f'<div class="ehead">{plate}{mods}</div>'
 
 
 def _dossier_html(en: dict) -> str:
@@ -1324,10 +1323,12 @@ def _dossier_html(en: dict) -> str:
         amt = f"{lo}" if lo == hi else f"{lo}–{hi}"
         rows.append(f'<div class="drw"><span class="dmark">·</span>'
                     f"<span>{_ep(f'XP ✦ {amt}')}</span></div>")
-    return (f'<details class="dx"><summary role="note" aria-label="enemy '
-            f'dossier">i</summary><div class="dossier">'
+    # 0.96.2 (roy): the bare panel — no <details> fold, no "[i] dossier"
+    # line under the scene. The headline's [i] ships this HTML as its
+    # data-tiph tip; the panel's own look is unchanged.
+    return (f'<div class="dossier">'
             f'<div class="dhead">{_e(en.get("name", ""))} — the shard\'s '
-            f"dossier</div>{''.join(rows)}</div></details>")
+            f"dossier</div>{''.join(rows)}</div>")
 
 
 def _opt_gear_icon(oid: str, art_slug: str = "") -> str:
@@ -1626,7 +1627,9 @@ TIP_JS = """(function () {
     if (!box.textContent) return hide();
     box.style.display = 'block';
     var r = el.getBoundingClientRect();
-    box.style.maxWidth = Math.min(380, innerWidth - 16) + 'px';
+    /* the dossier tip is a whole panel — give it panel room */
+    var wide = box.querySelector('.dossier');
+    box.style.maxWidth = Math.min(wide ? 560 : 380, innerWidth - 16) + 'px';
     var x = Math.max(8, Math.min(r.left, innerWidth - box.offsetWidth - 8));
     var y = r.top - box.offsetHeight - 6;
     if (y < 4) y = Math.min(r.bottom + 6, innerHeight - box.offsetHeight - 4);
@@ -2254,16 +2257,20 @@ def render_scene_fragment(scene: Scene) -> str:
     parts.append(f'<div class="eyebrow type">{_e(scene.eyebrow)}</div>')
     hl_col = _HEADLINE.get(scene.event_kind, BRIGHT)
     # 030: an amount wears its colour even in a headline (law 1)
-    parts.append(f'<div class="headline type" style="color:{hl_col}">'
-                 f"{_ep(scene.headline)}</div>")
+    # 0.96.2 (roy): the [i] sits right after the creature's name and its
+    # tip IS the dossier panel (data-tiph, trusted server HTML). No
+    # "[i] dossier" fold under the scene anymore.
+    hl_info = ""
     if scene.enemy:
-        # 009: the plate rides under the name — the foe's meter in the
-        # player's grammar; the [i] carries the dossier as a tip, the
-        # <details> fold stays below as the full sheet.
         dossier = _dossier_html(scene.enemy)
-        if not arena_live:
-            parts.append(_enemy_head_html(scene.enemy, _dossier_tip(dossier)))
-        parts.append(dossier)
+        hl_info = (f'<span class="info" tabindex="0" role="note" '
+                   f'aria-label="enemy dossier" '
+                   f'data-tip="{_e(_dossier_tip(dossier))}" '
+                   f'data-tiph="{_e(dossier)}">i</span>')
+    parts.append(f'<div class="headline type" style="color:{hl_col}">'
+                 f"{_ep(scene.headline)}{hl_info}</div>")
+    if scene.enemy and not arena_live:
+        parts.append(_enemy_head_html(scene.enemy))
     if scene.support:
         parts.append(f'<div class="support type">{_ep(scene.support)}</div>')
     # 030 Phase 4: the art band with one big number (the vault shelf).
@@ -2653,17 +2660,15 @@ SCENE_CSS = f"""
 .banner+.headline{{margin-top:10px;}}
 .eplate{{display:flex;align-items:baseline;gap:1ch;}}
 .eplate .erng{{color:{DIM};white-space:nowrap;}}
-.eplate .info{{margin-left:auto;}}
 .emod{{color:{DIM};}}
-.dx{{margin:4px 0 0;}}
-.dx summary{{list-style:none;display:inline-flex;color:{DIM};
- cursor:pointer;user-select:none;padding:0;background:none;border:0;}}
-.dx summary::-webkit-details-marker{{display:none;}}
-.dx summary::before{{content:"[";}}
-.dx summary::after{{content:"] dossier";}}
-.dx summary:hover,.dx[open] summary{{color:{AETHER};}}
+/* 0.96.2 (roy): the [i] rides the headline name, dim until hovered;
+   its tip IS the dossier panel. Inside #tipbox the box itself is the
+   aether frame, so the panel sheds its own border/slab — the LOOK of
+   the sheet (dhead, rows, icons) is byte-identical. */
+.headline .info{{display:inline-flex;margin-left:1ch;color:{DIM};}}
 .dossier{{border:1px solid {AETHER};background:{INK};
  padding:10px 1.5ch;margin:8px 0 2px;}}
+#tipbox .dossier{{border:0;background:none;padding:0;margin:0;}}
 .dhead{{color:{AETHER};text-transform:uppercase;letter-spacing:.08em;
  margin-bottom:6px;}}
 .drw{{display:flex;gap:1ch;align-items:flex-start;padding:3px 0;

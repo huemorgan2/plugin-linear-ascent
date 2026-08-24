@@ -123,7 +123,8 @@ def test_dossier_renders_every_profile_combination():
             (False, True), (3, 5, 7)):
         html = render._dossier_html(_payload(
             mtype=mtype, bulwark=bulwark, speed=speed))
-        assert "<details" in html and "dossier" in html
+        # 0.96.2: the bare panel — the <details> fold is retired
+        assert "<details" not in html and 'class="dossier"' in html
         assert ("armoured" in html) == (mtype == "armoured")
         assert ("magic-resistant" in html) == (mtype == "magic_resist")
         assert ("it flies" in html) == (mtype == "fly")
@@ -188,7 +189,11 @@ def test_fragment_wires_header_and_dossier_into_the_card():
     _, _, s = _fight("archer", 6, "lane_boar")
     html = render.render_scene_fragment(s)
     assert "ehead" in html
-    assert "<details" in html and "dossier" in html
+    # 0.96.2 (roy): the [i] rides the headline name; the whole dossier
+    # panel ships as its data-tiph tip. No <details> fold on the card.
+    assert "<details" not in html
+    assert "data-tiph" in html and "dossier" in html
+    assert '<div class="headline type"' in html and ">i</span></div>" in html
     assert html.count("ticon") >= 2       # bulwark + speed rows at least
     # the old bare-◈ profile body line is retired
     assert "◈ bulwark" not in html
