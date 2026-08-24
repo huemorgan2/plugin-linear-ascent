@@ -1308,22 +1308,28 @@ def _town_scene(p: dict) -> Scene:
     def _b(door: str) -> int:
         return int(waiting.get(door, 0))
 
-    # 007 town readability: the gate leads — leaving town is THE verb —
-    # and every not-yet area reads its unlock level from the square
-    # (the Arcanum set the pattern in 004).
+    # 073: the square in districts. The gate still leads (007); related
+    # doors nest under the one you'd look for first. Headers and
+    # indent ride the option — the list stays one numbered tap.
     opts = [
-        Option("gate", "The Tower Gate", "leave town and climb"),
-        Option("forge", "The Forge", "gear", badge=_b("forge")),
-        Option("arcanum", "The Arcanum",
-               "magic gear" if _door_open(p, economy.ARCANUM_LEVEL)
-               else f"🔒 level {economy.ARCANUM_LEVEL}",
-               locked=not _door_open(p, economy.ARCANUM_LEVEL)),
-        Option("medlab", "Apothecary & Medlab", "potions"),
+        Option("gate", "The Tower Gate", "leave town and climb",
+               section="THE CLIMB"),
         Option("board", "The contract board",
                "three jobs a day" if p["level"] >= economy.BOARD_LEVEL
                else f"🔒 level {economy.BOARD_LEVEL}",
                locked=p["level"] < economy.BOARD_LEVEL,
-               badge=_b("board")),
+               badge=_b("board"), nest=True),
+        Option("forge", "The Forge", "gear", badge=_b("forge"),
+               section="THE MARKET"),
+        Option("arcanum", "The Arcanum",
+               "magic" if _door_open(p, economy.ARCANUM_LEVEL)
+               else f"🔒 level {economy.ARCANUM_LEVEL}",
+               locked=not _door_open(p, economy.ARCANUM_LEVEL)),
+        Option("medlab", "Apothecary & Medlab", "potions"),
+        Option("pawn", "Pawn shop", "sell"),
+        Option("vault", "The Vault",
+               f"deposited ◈ {p['bank']:,}" if p["bank"] > 0 else "bank",
+               badge=_b("vault"), section="THE KEEP"),
         Option("lodge", "The Lodge",
                f"pay ◈ {economy.LODGE_PRICE_PER_LEVEL * p['level']}/night",
                badge=_b("lodge")),
@@ -1332,29 +1338,23 @@ def _town_scene(p: dict) -> Scene:
         # when the bar is dry.
         Option("sleep_menu", "Sleep",
                "mend ⚡ and HP faster — the Lodge or the fields"),
-        Option("vault", "The Vault",
-               f"deposited ◈ {p['bank']:,}" if p["bank"] > 0 else "bank",
-               badge=_b("vault")),
-        Option("pawn", "Pawn shop", "sell"),
         # 012: the Guildhall is core — training (buying levels) lives
         # there, so it must exist even without a connected world.
         Option("guildhall", "The Guildhall",
-               p.get("guild") or "training", badge=_b("guildhall")),
-        # 048 retro: the School lives on the square — one school, your
-        # ranks ride with you; the floor camps stopped teaching.
-        Option("school", "The School",
-               "train any weapon — blade, bow, staff"),
-        Option("stone", "Stone of the Climb", "news"),
+               p.get("guild") or "training", badge=_b("guildhall"),
+               section="THE BANNER"),
     ]
     # 032: members get their own door — the banner's name on the hint.
     # No hall key from the world (older worldd) → no door, old behavior.
     fac = w.get("faction") if isinstance(w.get("faction"), dict) else None
     if fac and isinstance(fac.get("hall"), dict):
-        gi = next((i for i, o in enumerate(opts) if o.id == "guildhall"),
-                  len(opts) - 1)
-        opts.insert(gi + 1, Option("hall", "YOUR FACTION'S HALL",
-                                   str(fac.get("name", "")),
-                                   badge=_b("hall")))
+        opts.append(Option("hall", "YOUR FACTION'S HALL",
+                           str(fac.get("name", "")),
+                           badge=_b("hall"), nest=True))
+    # 048 retro: the School lives on the square — one school, your
+    # ranks ride with you; the floor camps stopped teaching.
+    opts.append(Option("school", "The School",
+                       "train any weapon — blade, bow, staff"))
     if w:
         inbox = int(w.get("inbox_count") or 0)
         # 040: post with your name on it opens the clerk's window at ANY
@@ -1367,12 +1367,17 @@ def _town_scene(p: dict) -> Scene:
              else "post") if relay_open
             else f"🔒 level {economy.RELAY_LEVEL}",
             locked=not relay_open,
-            badge=_b("relay")))
+            badge=_b("relay"), section="THE WIRE"))
+        opts.append(Option("stone", "Stone of the Climb", "news",
+                           nest=True))
         opts.append(Option(
             "fields", "The fields",
             "pvp" if p["level"] >= economy.FIELDS_LEVEL
             else f"🔒 level {economy.FIELDS_LEVEL}",
             locked=p["level"] < economy.FIELDS_LEVEL))
+    else:
+        opts.append(Option("stone", "Stone of the Climb", "news",
+                           section="THE WIRE"))
     return Scene(
         eyebrow="ROOTHOLLOW · THE SQUARE",
         headline=f"Roothollow — floor {max(1, p['unlocked_floor'])} is the "

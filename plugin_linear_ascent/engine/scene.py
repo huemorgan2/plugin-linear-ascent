@@ -39,6 +39,8 @@ class Option:
                             # faction) — drawn in red so it never reads
                             # as navigation. Older clients drop it via
                             # _known.
+    nest: bool = False      # 073: indented under the door above.
+    section: str = ""       # 073: district header drawn BEFORE this row.
 
 
 @dataclass
@@ -300,9 +302,12 @@ class Scene:
         if self.options:
             lines.append("─" * 40)
             for i, o in enumerate(self.options, 1):
+                if getattr(o, "section", ""):
+                    lines.append(f"— {o.section} —")
                 hint = f"   ({o.hint})" if o.hint else ""
                 badge = f" ({o.badge})" if getattr(o, "badge", 0) else ""
-                lines.append(f" {i}) {o.label}{badge}{hint}")
+                pad = "   " if getattr(o, "nest", False) else " "
+                lines.append(f"{pad}{i}) {o.label}{badge}{hint}")
         # 031 §11: the evening state reads as words on every surface
         if self.activity:
             lines.append(self.activity)
@@ -351,6 +356,12 @@ class Scene:
             # are dropped by every version ever shipped.
             "option_badges": {o.id: o.badge for o in self.options if o.badge},
             "option_danger": [o.id for o in self.options if o.danger],
+            # 073: nest/section ride BESIDE the options — same law as
+            # badge. An older client that splats the option dict must
+            # never see these keys.
+            "option_nest": [o.id for o in self.options if o.nest],
+            "option_section": {o.id: o.section for o in self.options
+                               if o.section},
             "meters": vars(self.meters) if self.meters else None,
             "event_kind": self.event_kind,
             "banner": self.banner,
@@ -396,6 +407,8 @@ class Scene:
         meters = Meters(**_known(Meters, md)) if md else None
         badges = dict(d.get("option_badges") or {})
         danger = set(d.get("option_danger") or [])
+        nest = set(d.get("option_nest") or [])
+        sections = dict(d.get("option_section") or {})
         options = []
         for raw in d.get("options", []):
             opt = Option(**_known(Option, raw))
@@ -403,6 +416,10 @@ class Scene:
                 opt.badge = int(badges.get(opt.id, 0) or 0)
             if opt.id in danger:
                 opt.danger = True
+            if opt.id in nest:
+                opt.nest = True
+            if not opt.section:
+                opt.section = str(sections.get(opt.id) or "")
             options.append(opt)
         return Scene(
             eyebrow=d.get("eyebrow", ""),

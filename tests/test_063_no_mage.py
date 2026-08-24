@@ -1,7 +1,7 @@
 """063 — the game says "magic", never "mage".
 
 The caster line is "caster", the shop is "the Arcanum", the gear is
-"magic gear". Guard: no whole-word "mage" in any town scene a fresh
+"magic". Guard: no whole-word "mage" in any town scene a fresh
 character can render, nor in the shipped content, tips or renderer."""
 
 import os
@@ -36,13 +36,13 @@ def test_no_shipped_text_says_mage():
     assert not hits, hits
 
 
-def test_the_arcanum_door_hint_is_magic_gear():
+def test_the_arcanum_door_hint_is_magic():
     p = create_character(fresh("Doorman"))
     p["level"] = economy.ARCANUM_LEVEL
     p["location"] = "town"
     s = core.current_scene(p)
     door = next(o for o in s.options if o.id == "arcanum")
-    assert door.hint == "magic gear"
+    assert door.hint == "magic"
 
 
 def test_tips_never_say_mage():

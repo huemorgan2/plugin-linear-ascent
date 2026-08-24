@@ -2538,6 +2538,9 @@ def render_scene_fragment(scene: Scene) -> str:
         for i, o in enumerate(scene.options, 1):
             if o.id in gal_opts:
                 continue
+            sect = getattr(o, "section", "") or ""
+            if sect:
+                rows.append(f'<div class="osect">{_e(sect)}</div>')
             key_cls = " aether" if o.aether else ""
             # 019: a locked row is dimmed but stays a button — clicking
             # it is how the player asks why the gate is shut.
@@ -2610,7 +2613,8 @@ def render_scene_fragment(scene: Scene) -> str:
                    f'<span class="key{key_cls}">{i}</span>{tile}{gicon}'
                    f'{swatch}<span class="lbl">{_ep(o.label)}</span>{badge}'
                    f"{hint}</button>")
-            rows.append(f'<div class="orow">{btn}{info}</div>')
+            nest = " nest" if getattr(o, "nest", False) else ""
+            rows.append(f'<div class="orow{nest}">{btn}{info}</div>')
         wall = (f'<div class="ggrid">{"".join(cards)}</div>'
                 if cards else "")
         parts.append(f'<div class="options later">{wall}{"".join(rows)}'
@@ -3201,6 +3205,12 @@ SCENE_CSS = f"""
 .opt.locked .gicon,.opt.locked:hover .gicon{{background-color:{INK};}}
 .orow{{display:flex;align-items:stretch;gap:5px;}}
 .orow .opt{{flex:1;min-width:0;}}
+/* 073: districts on the square — a header is not a door; a nested
+   row sits under the door you'd look for first. */
+.osect{{color:{FAINT};letter-spacing:.14em;text-transform:uppercase;
+ margin:8px 0 2px;padding-top:6px;border-top:1px dashed {BORDER};}}
+.osect:first-child{{margin-top:0;padding-top:2px;border-top:0;}}
+.orow.nest{{padding-left:3ch;}}
 /* ── 031 §14: the card wall — a shop shelf you look at, not read ── */
 .ggrid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));
  gap:6px;margin-bottom:6px;}}
