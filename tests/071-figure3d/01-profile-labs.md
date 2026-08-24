@@ -21,6 +21,9 @@
    the right hand.
 7. Open Labs, turn Figure 3D off, return to the profile, and capture a final
    screenshot and DOM snapshot.
+8. Turn Figure 3D on again. Open Labs and return to the same profile 20 times,
+   recording click-to-card-swap duration for the first five and last five
+   swaps.
 
 ## Expected behavior
 - Off uses the unchanged PNG portrait and has no `canvas.figure3d`.
@@ -29,6 +32,9 @@
 - Filled-slot hover applies the slot's one allowed saturated colour only to
   the matching worn mesh. Leaving the slot restores the 1-bit render.
 - Turning the feature off removes the canvas and restores the original PNG.
+- Repeated scene swaps stay responsive. The final five swaps are not
+  progressively slower than the first five, and only the connected portrait
+  continues rendering.
 
 ## Fail conditions
 - Raw payload JSON, a WebGL error, missing body or item mesh, blank canvas, or
@@ -37,9 +43,14 @@
   feet, or gear hover colouring the wrong object.
 - Any game-state mutation caused by viewing, hovering, or toggling the
   portrait; any changed meter, inventory, gold, or scene progression fails.
+- Increasing selection latency, a lost/old WebGL context warning, or an
+  animation loop continuing after its canvas leaves the document.
 
 ## Verify
 - Browser console has no module, GLTF, or WebGL errors.
 - `/play` includes `/static/site/figure3d/figure3d.js` once.
 - Toggle the feature twice and inspect the scene payload: only
   `labs.figure3d` and the optional `figure3d` scene key change.
+- During the 20-swap run, inspect browser console and runtime diagnostics:
+  there is one connected `canvas.figure3d`, no detached canvas retains a live
+  RAF, and no additional model GLBs transfer after the initial cached load.

@@ -10,15 +10,25 @@ live on ascent-worldd. Default still off.
 - Bump `version.py` + `luna-plugin.toml` to 0.98.0.
 - Dojo: flask → Figure 3D on → profile canvas breathes → hover a
   slot → colour → off → PNG is back.
+- On every game-card mutation, drop disconnected Figure3D canvases:
+  cancel their RAF, dispose render targets/materials/renderer, and remove
+  them from the live registry before mounting the replacement.
+- Run 20 Labs/back swaps with Figure3D on and confirm interaction latency
+  remains flat with no WebGL context-loss warnings.
 - `worldd/tools/deploy.sh`.
 
 ## Verification
 - Plugin 071 tests green; 067 labs still green.
 - `/health` game version 0.98.0 after deploy.
 - A live climber with the flag off is unchanged.
+- After repeated card swaps there is one connected portrait renderer, no
+  detached canvas keeps rendering, and the twentieth swap is not materially
+  slower than the first.
 
 ## Rollback
 Revert the deploy (previous Render build). Flag stays inert on old JS.
+For the local performance fix, revert the cleanup helper/observer call and
+restore the previous `figure3d.js` cache version.
 
 ## Execution status
 2026-08-24 — In progress. Targeted plugin tests passed (12 across 071 and
@@ -38,3 +48,8 @@ canvas is now marked as mounting until the async build completes and `/play`
 uses `figure3d.js?v=3`. The formerly hanging isolated harness now loads;
 `node --check` and `worldd/tests/test_071_figure3d.py` (3 passed) are green.
 Rollback: revert the Figure3D JavaScript and restore the prior module URL.
+
+2026-08-24 — In progress: browser acceptance found that every card swap
+leaks the detached portrait's WebGL renderer, two render targets, and RAF
+loop. The cleanup regression scenario is written; implementation and the
+20-swap browser verification follow.

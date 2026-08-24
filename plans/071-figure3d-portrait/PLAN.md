@@ -33,6 +33,16 @@ always puts the lead weapon in the right hand — the opposite of the
 hold grammar wanted here. Coupling this to `fight3d.js` would make
 the Labs "delete the folder" contract a lie.
 
+### Browser performance regression found during acceptance
+Every card selection replaces `#game.innerHTML`, detaching the current
+Figure3D canvas. The module keeps each mounted canvas in a strong `lives`
+`Map` and starts a perpetual `requestAnimationFrame` loop, but its mutation
+observer only scans for new canvases. Nothing drops disconnected canvases.
+Selections therefore accumulate WebGL renderers, two render targets, and an
+active render loop each until Chromium loses contexts and the page becomes
+progressively slower. This is not a repeated 68 MB payload: GLBs are static,
+lazy-loaded by race/equipped slug, and browser-cached.
+
 ## Design — isolation contract (067 law)
 
 - **`p["labs"]["figure3d"]`** — bool, default off. Named only in
@@ -129,6 +139,9 @@ Player bodies are **not** regenerated — the fight3d Tripo rigs
   updated for the second row.
 - `/play` loads `figure3d.js` once next to arena3d. WebGL-dead:
   the PNG portrait is shown.
+- With Figure3D on, make 20 Labs/back scene swaps. Only the connected
+  portrait owns a live renderer/RAF; latency must not grow across the run,
+  and Chromium must not report lost/excess WebGL contexts.
 
 ## Rollback
 One commit per phase. Revert in reverse. The flag is inert without
@@ -162,3 +175,7 @@ Plan written 2026-08-24.
   module URL is cache-bumped to `v=3`. The harness now loads all three race
   headings; `node --check` and the three worldd 071 tests pass. Deployment
   remains deferred.
+- 2026-08-24 — browser acceptance exposed progressive selection latency.
+  Root cause is an unbounded renderer/RAF leak: detached portrait canvases
+  remain in `lives`, and their animation loops never stop. The performance
+  regression scenario and cleanup implementation are now in progress.
