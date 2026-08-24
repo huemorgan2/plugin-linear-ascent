@@ -339,6 +339,44 @@ All prose reads as a chase catching up, never "range broke"; a
 non-designer understands every tooltip and line; no numbers leak into the
 fiction.
 
+## Companion problem — the triangle must have teeth (measured)
+
+roy's design law: at-level, the **right weapon must win and the wrong
+weapon must lose (switch or flee)**; a **+2 level cushion** may brute-
+force the "half" matchups; a glance should stay wrong, not just slow.
+
+Measured today (300 fights each, floor-6 monsters, win% [avg rounds]):
+
+```
+matchup                       L4(-2)      L6(at)      L8(+2)
+sword vs armoured   (x0.5 )  100% [ 2.2]  100% [ 3.2]  100% [ 4.8]
+bow   vs armoured   (x0.15)   92% [18.4]   93% [17.3]   90% [19.1]
+magic vs armoured   (x1   )  100% [16.9]  100% [15.1]  100% [12.9]
+sword vs fly        (x0   )  100% [ 4.9]  100% [ 7.7]  100% [13.6]
+bow   vs fly        (x1   )  100% [ 5.7]  100% [ 6.3]  100% [ 3.7]
+magic vs fly        (x0.6 )  100% [ 5.5]  100% [ 5.0]  100% [ 3.5]
+```
+
+**Finding: the triangle changes fight LENGTH, not the outcome.** Every
+weapon wins ≥90% vs every type at-level and even 2 levels under. Two
+causes: (1) the `max(1, …)` damage floor (`economy.py:885`) turns every
+"zero"/"glance" cell into ≥1 per hit — a sword grinds a flyer to death
+despite the ×0; (2) early floors are tuned soft, so 18 slow rounds do not
+kill you. So "right weapon or flee" is not enforced anywhere today.
+
+**This is a separate mechanic from the speed hack** and should be its own
+plan — **076 "the triangle decides"** — covering:
+- Relax the `max(1)` floor for glance/zero cells (a ×0 is truly 0; a
+  ×0.15 rounds to 0 on small hits) so a wrong-weapon fight *stalls*.
+- Tie win/lose to the triangle: at-level a wrong-weapon fight runs long
+  enough that monster damage kills first → switch or flee. `+2` levels
+  (×1.69 damage) pulls the "half" cells back to a win; the ×0.15 glance
+  needs ~7 levels (i.e. effectively never — a glance is the wrong tool).
+
+Gate carried into this plan's dojo: a wrong-weapon fight vs an at-level
+armoured/flyer must be a visible loss/flee, not a slow win — even though
+the *code* change lands in 076.
+
 ## Rollback
 One commit per phase; `git revert` in reverse. The model is gated behind
 the new `economy` functions and one new `combat` pursuit helper —
