@@ -2136,10 +2136,11 @@ _TIP_KIND = {
     "fly": "Flying — a sword cannot reach it; use a bow or magic. "
            "You also cannot back away from it, because it follows "
            "you through the air.",
-    "armoured": "Armoured — the DEF is plate; blades glance, "
-                "arrows bite less, magic passes.",
-    "magic_resist": "Magic resistance — spells lose this share of their "
-                    "bite; steel and arrows are unhurt.",
+    "armoured": "Armoured — heavy plate. A blade cuts at half "
+                "strength, arrows all but bounce off, magic goes "
+                "through in full.",
+    "magic_resist": "Magic resistance — spells barely scratch it. "
+                    "A blade cuts in full, arrows at half strength.",
     "bulwark": "Bulwark — holds its ground; you cannot push it back.",
 }
 _PATH_GLYPH = {"blade": "sword", "bow": "bow", "staff": "staff"}

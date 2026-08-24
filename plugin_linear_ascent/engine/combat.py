@@ -1095,6 +1095,30 @@ def _armor_wear(p: dict, blocked: int) -> int:
                               state.dfs(p))
 
 
+def _steer_wrong_weapon(p: dict, pierce: bool = False) -> str:
+    """077: two wasted attack rounds in a row and the card says it
+    plainly — switch weapons or run. Fires only on glance/zero
+    matchups; a piercing arrow is a real answer, so it resets the
+    count. The counter lives on the transient encounter dict."""
+    e = p["encounter"]
+    mtype = _profile(p).get("type", "plain")
+    path = _train_path(p)
+    mult = economy.TYPE_MULT.get(mtype, {}).get(path, 1.0)
+    if pierce or mult > economy.GLANCE_MULT:
+        e.pop("_stall", None)
+        return ""
+    n = e["_stall"] = e.get("_stall", 0) + 1
+    if n < 2:
+        return ""
+    if path == "bow":
+        return ("Your arrows barely mark its plate. Use a blade or "
+                "magic — or run.")
+    if path == "staff":
+        return ("Your spells slide off it. Use a blade or a bow — "
+                "or run.")
+    return "Your blade cannot reach it. Use a bow or magic — or run."
+
+
 def _counter_text(p: dict, hit: dict, lead: str = "") -> str:
     """One line that explains the enemy's blow: what landed, what the
     armor ate. The player asked for this by name — never a bare number."""
@@ -2686,6 +2710,7 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
     fxn = _apply_shot_effect(p, effect) if effect else ""
     if pierce and dmg > 0:
         fxn = "The shaft goes through plate like paper."
+    steer = _steer_wrong_weapon(p, pierce=pierce)
     if unreachable:
         # 031 §7 revised by 075: nothing flies back the instant you
         # loose — but the chase runs, and it may reach you this round.
@@ -2697,6 +2722,7 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
             + " It is still coming for you."
             + (f" {fxn}" if fxn else "")
             + (f" {chase}" if chase else "")
+            + (f" {steer}" if steer else "")
             + (f" {snap}" if snap else "")))
     back = _monster_hit(p)
     if p["hp"] <= 0:
@@ -2707,4 +2733,5 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
         + (f" {fxn}" if fxn else "")
         + f" {_counter_text(p, back)}"
         + (f" {chase}" if chase else "")
+        + (f" {steer}" if steer else "")
         + (f" {snap}" if snap else "")))

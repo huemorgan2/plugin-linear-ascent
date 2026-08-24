@@ -1,0 +1,22 @@
+077 grid — floor 6, 300 fights/cell, GLANCE_MULT=0.015
+   matchup                                     L-2           at-level                L+2
+    blade vs fly          (x0)   0%w 100%d [ 0.0r]   0%w 100%d [ 0.0r]   0%w 100%d [ 0.0r]
+    blade vs armoured     (x0.5)  69%w  31%d [10.1r]  82%w  18%d [10.3r]  92%w   8%d [10.0r]
+    blade vs magic_resist (x1) 100%w   0%d [ 5.2r] 100%w   0%d [ 5.2r] 100%w   0%d [ 5.0r]
+    blade vs plain        (x1) 100%w   0%d [ 3.1r] 100%w   0%d [ 3.0r] 100%w   0%d [ 3.0r]
+      bow vs fly          (x1) 100%w   0%d [ 2.0r] 100%w   0%d [ 2.0r] 100%w   0%d [ 2.0r]
+      bow vs armoured     (x0.015)   0%w   0%d [ 0.0r]   0%w   0%d [ 0.0r]   0%w   0%d [ 0.0r]
+      bow vs magic_resist (x0.5) 100%w   0%d [10.8r] 100%w   0%d [10.1r] 100%w   0%d [10.2r]
+      bow vs plain        (x1) 100%w   0%d [ 2.0r] 100%w   0%d [ 2.0r] 100%w   0%d [ 2.0r]
+    staff vs fly          (x0.6) 100%w   0%d [ 2.2r] 100%w   0%d [ 2.2r] 100%w   0%d [ 2.1r]
+    staff vs armoured     (x1) 100%w   0%d [ 8.0r] 100%w   0%d [ 7.7r] 100%w   0%d [ 7.5r]
+    staff vs magic_resist (x0.015)   0%w   0%d [ 0.0r]   0%w   0%d [ 0.0r]   0%w   0%d [ 0.0r]
+    staff vs plain        (x1) 100%w   0%d [ 2.1r] 100%w   0%d [ 2.0r] 100%w   0%d [ 2.0r]
+
+  OK   right weapon at-level wins >=90% (bow-fly, staff-armoured, blade-magic_resist, all-plain)
+  OK   glance cells win <=5% at-level
+  OK   glance cells win <=5% even at +2 (no brute force)
+  OK   zero cell (blade-vs-fly) win == 0 at every level
+  OK   half cells at +2 win >=90% (brute force allowed)
+  OK   right weapon at-level death <=5%
+077 ACCEPTANCE: PASS

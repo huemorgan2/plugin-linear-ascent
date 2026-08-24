@@ -28,8 +28,10 @@ def test_type_tables_exact():
 def test_triangle_cells_exact():
     M = economy.TYPE_MULT
     assert M["fly"] == {"blade": 0.0, "bow": 1.0, "staff": 0.6}
-    assert M["armoured"] == {"blade": 0.5, "bow": 0.15, "staff": 1.0}
-    assert M["magic_resist"] == {"blade": 1.0, "bow": 0.5, "staff": 0.15}
+    # 077: the glance is 0.015 — a stall, not a slow win
+    assert M["armoured"] == {"blade": 0.5, "bow": 0.015, "staff": 1.0}
+    assert M["magic_resist"] == {"blade": 1.0, "bow": 0.5,
+                                 "staff": 0.015}
     assert M["plain"] == {"blade": 1.0, "bow": 1.0, "staff": 1.0}
 
 
@@ -38,11 +40,11 @@ def test_triangle_cells_exact():
 def test_typed_damage_blade_and_bow_eat_def_staff_ignores_it():
     # raw 42 vs DEF 20: blade/bow base 32, staff base 42
     assert economy.typed_damage_048("blade", 42, 20, "armoured") == 16
-    assert economy.typed_damage_048("bow", 42, 20, "armoured") == 5
+    assert economy.typed_damage_048("bow", 42, 20, "armoured") == 0
     assert economy.typed_damage_048("staff", 42, 20, "armoured") == 42
     assert economy.typed_damage_048("blade", 42, 20, "magic_resist") == 32
     assert economy.typed_damage_048("bow", 42, 20, "magic_resist") == 16
-    assert economy.typed_damage_048("staff", 42, 20, "magic_resist") == 6
+    assert economy.typed_damage_048("staff", 42, 20, "magic_resist") == 1
     assert economy.typed_damage_048("bow", 42, 20, "fly") == 32
     assert economy.typed_damage_048("staff", 42, 20, "fly") == 25
     for path in ("blade", "bow", "staff"):
@@ -51,12 +53,13 @@ def test_typed_damage_blade_and_bow_eat_def_staff_ignores_it():
     assert economy.typed_damage_048("staff", 42, 20, "plain") == 42
 
 
-def test_blade_cannot_reach_fly_everything_else_chips():
-    # the single legal zero (013 chip law survives everywhere else)
+def test_blade_cannot_reach_fly_and_glances_have_no_floor():
+    # the single legal zero (013 chip law survives on half/full cells)
     assert economy.typed_damage_048("blade", 999, 0, "fly") == 0
-    # glancing answers still chip ≥1 even at hopeless raw
-    assert economy.typed_damage_048("bow", 3, 40, "armoured") == 1
-    assert economy.typed_damage_048("staff", 3, 40, "magic_resist") == 1
+    # 077: a GLANCE may do nothing at all — no ≥1 floor
+    assert economy.typed_damage_048("bow", 3, 40, "armoured") == 0
+    assert economy.typed_damage_048("staff", 3, 40, "magic_resist") == 0
+    # half answers still chip ≥1 even at hopeless raw
     assert economy.typed_damage_048("blade", 3, 40, "armoured") == 1
 
 
@@ -593,13 +596,13 @@ def test_long_draw_needs_the_study_and_the_top_roll(monkeypatch):
 
 
 def test_focus_lifts_the_staff_answers():
-    # fly: staff ×0.6 → ×0.75 under focus; the glance (×0.15) stays a
+    # fly: staff ×0.6 → ×0.75 under focus; the glance (×0.015) stays a
     # mistake; full answers don't move.
     assert economy.typed_damage_048("staff", 100, 0, "fly") == 60
     assert economy.typed_damage_048("staff", 100, 0, "fly",
                                     focus=True) == 75
     assert economy.typed_damage_048("staff", 100, 0, "magic_resist",
-                                    focus=True) == 15
+                                    focus=True) == 2
     assert economy.typed_damage_048("staff", 100, 0, "plain",
                                     focus=True) == 100
 

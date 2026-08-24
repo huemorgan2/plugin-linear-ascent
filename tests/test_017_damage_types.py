@@ -52,11 +52,11 @@ def prof(*traits):
     ("staff", "plain", 20, 10, 20),
     # the triangle, one type at a time
     ("blade", "armoured", 20, 10, 8),          # 15 × 0.5
-    ("bow", "armoured", 20, 10, 2),            # 15 × 0.15 — a glance
+    ("bow", "armoured", 20, 10, 0),            # a glance may do nothing (077)
     ("staff", "armoured", 20, 10, 20),         # plate means nothing
     ("blade", "magic_resist", 20, 10, 15),     # spellguard ignores steel
     ("bow", "magic_resist", 20, 10, 8),        # 15 × 0.5
-    ("staff", "magic_resist", 20, 10, 3),      # 20 × 0.15 — a glance
+    ("staff", "magic_resist", 20, 10, 0),      # a glance may do nothing (077)
     ("blade", "fly", 20, 10, 0),               # the one legal zero
     ("bow", "fly", 20, 10, 15),                # full
     ("staff", "fly", 20, 10, 12),              # 20 × 0.6
@@ -71,11 +71,13 @@ def test_flying_is_the_single_legal_zero():
     assert economy.typed_damage_048("staff", 50, 0, "fly") == 30
 
 
-def test_everything_that_can_hit_chips_at_least_one():
-    # massive DEF + the worst multiplier still chips 1 (the 013 lesson)
+def test_half_and_full_answers_chip_at_least_one():
+    # massive DEF + a HALF/FULL answer still chips 1 (the 013 lesson).
+    # 077: glances are exempt — the wrong tool may do nothing at all.
     assert economy.typed_damage_048("blade", 4, 1000, "armoured") == 1
-    assert economy.typed_damage_048("bow", 4, 1000, "armoured") == 1
-    assert economy.typed_damage_048("staff", 1, 0, "magic_resist") == 1
+    assert economy.typed_damage_048("bow", 4, 1000, "magic_resist") == 1
+    assert economy.typed_damage_048("bow", 4, 1000, "armoured") == 0
+    assert economy.typed_damage_048("staff", 1, 0, "magic_resist") == 0
 
 
 def test_bulwark_is_orthogonal_to_the_triangle():

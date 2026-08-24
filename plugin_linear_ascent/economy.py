@@ -702,10 +702,18 @@ TYPE_ATK = {"fly": 0.6, "armoured": 1.4, "magic_resist": 1.4, "plain": 1.0}
 TYPE_HP = {"fly": 0.9, "armoured": 1.2, "magic_resist": 1.0, "plain": 1.0}
 TYPE_GOLD = {"fly": 1.2, "armoured": 1.3, "magic_resist": 1.3, "plain": 1.0}
 
+# 077: the glance is a GLANCE — 0.15 of a kitted player's damage still
+# killed an at-level monster in ~17 quiet rounds, so the wrong weapon
+# was slow, never wrong. At 0.015 a glance fight stalls at every level
+# band including +2 (sim-fitted — 0.04 let the staff, which ignores
+# DEF, still grind out 20-47% of wins; 0.02 left 7% at +2) while 075's
+# pursuit bleeds the player — switch or flee.
+GLANCE_MULT = 0.015
+
 TYPE_MULT = {
     "fly":          {"blade": 0.0, "bow": 1.0, "staff": 0.6},
-    "armoured":     {"blade": 0.5, "bow": 0.15, "staff": 1.0},
-    "magic_resist": {"blade": 1.0, "bow": 0.5, "staff": 0.15},
+    "armoured":     {"blade": 0.5, "bow": GLANCE_MULT, "staff": 1.0},
+    "magic_resist": {"blade": 1.0, "bow": 0.5, "staff": GLANCE_MULT},
     "plain":        {"blade": 1.0, "bow": 1.0, "staff": 1.0},
 }
 
@@ -898,17 +906,21 @@ def type_from_traits(traits) -> str:
 def typed_damage_048(path: str, raw: int, monster_def: int,
                      mtype: str, focus: bool = False) -> int:
     """Damage of weapon path P against monster type T. Staff ignores flat
-    DEF; blade and bow eat raw−DEF/2. Anything that CAN hit chips ≥1 —
-    the single legal zero stays blade-vs-fly. `focus` is the staff
-    mastery study: its ×0.5/×0.6 answers cast at ×0.75 (the glance
-    stays a mistake)."""
+    DEF; blade and bow eat raw−DEF/2. Half and full answers chip ≥1;
+    the single legal zero stays blade-vs-fly. 077: a GLANCE has no
+    floor — the wrong tool may do nothing at all, and never enough to
+    grind a kill. `focus` is the staff mastery study: its ×0.5/×0.6
+    answers cast at ×0.75 (the glance stays a mistake)."""
     if path == "blade" and mtype == "fly":
         return 0
     mult = TYPE_MULT[mtype][path]
     if focus and path == "staff" and 0.5 <= mult < 0.75:
         mult = FOCUS_MULT
     base = raw if path == "staff" else raw - monster_def // 2
-    return max(1, round(max(1, base) * mult))
+    dmg = round(max(1, base) * mult)
+    if mult <= GLANCE_MULT:
+        return max(0, dmg)
+    return max(1, dmg)
 
 
 def warden_profile(floor: int) -> dict:
