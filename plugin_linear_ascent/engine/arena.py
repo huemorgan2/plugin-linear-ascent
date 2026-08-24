@@ -20,7 +20,7 @@ from . import state
 # 100floors-attack3dscene rollout gate: the floors whose 3D assets
 # (monster GLBs + backgrounds300 backdrops) have shipped. Grows by 10
 # per phase; delete the gate after phase 10 (arena always on).
-READY_FLOORS = frozenset(range(1, 11))
+READY_FLOORS = frozenset(range(1, 21))
 FRAME_W, FRAME_H = 320, 300      # the arena's frame (the kill scene is 320×112)
 
 # the tile glyph per option id (icons.py keys); attack_<slug> resolves

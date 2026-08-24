@@ -31,8 +31,8 @@ def _hunt(p, floor=6):
 
 
 def test_off_above_the_rollout_front():
-    p = _climber(floor=11)
-    s, fl = _hunt(p, 11)
+    p = _climber(floor=21)
+    s, fl = _hunt(p, 21)
     assert s.arena is None
     p["encounter"]["range"] = "close"
     s = combat.resolve_fight_action(p, fl, "attack")
@@ -41,9 +41,9 @@ def test_off_above_the_rollout_front():
 
 
 def test_on_for_everyone_on_ready_floors():
-    # phase 1 of the rollout: floors 1-10. No player flag involved.
-    assert arena.READY_FLOORS == frozenset(range(1, 11))
-    for floor in (1, 10):
+    # phase 2 of the rollout: floors 1-20. No player flag involved.
+    assert arena.READY_FLOORS == frozenset(range(1, 21))
+    for floor in (1, 11, 20):
         p = _climber(name=f"u-arena-f{floor}", floor=floor)
         assert not p["labs"]                       # nothing switched on
         s, fl = _hunt(p, floor)
