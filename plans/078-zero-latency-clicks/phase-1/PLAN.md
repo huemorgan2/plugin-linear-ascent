@@ -102,3 +102,14 @@ harmless to leave (additive, read-only); if removal is ever wanted:
 `DROP INDEX …; ALTER TABLE ascent_players DROP COLUMN …` — the `doc`
 column is untouched throughout, so no data can be lost. Old code reads
 `doc` directly and keeps working against the migrated table.
+
+## Execution status — 2026-08-24
+
+DONE. Migration `worldd/migrations/022_player_projections.sql` applied
+locally: 13 generated columns + 4 partial indexes on `ascent_players`,
+`(tenant, player)` indexes on faction ledger / armory / warden damage.
+Every hot query in social.py, factions.py, era.py, adminpage.py rewritten
+onto the columns. Tests: `worldd/tests/test_078_projections.py` (8 tests)
+green; full worldd suite 215 passed. EXPLAIN at 10.5k players: roster
+0.24 ms / census 2.2 ms / presence 2.0 ms / name 0.02 ms — no Seq Scan on
+any per-click query.

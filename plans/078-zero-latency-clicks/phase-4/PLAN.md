@@ -36,3 +36,9 @@ semantics.
 
 `git revert` the phase commit — the loop and text binding return. No
 schema involvement.
+
+## Execution status — 2026-08-24
+
+DONE. `_save_doc` batches ledger inserts with executemany (one round trip
+for N entries); `tests/test_078_save_path.py` green. Measured save path:
+p50 0.9 ms, p95 3.9 ms.

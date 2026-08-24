@@ -47,3 +47,18 @@ file's execution status.
 - Deploy: redeploy the previous version via `deploy.sh`; migration 022 is
   additive and stays (harmless under old code, which reads `doc`
   directly) — no schema down-migration needed or wanted.
+
+## Execution status — 2026-08-24
+
+DONE (steps 1–3; step 4 deploy awaits explicit request). Seeded 10,000
+players (10,517 playing total). bench_act.py, 100 mixed acts, full ASGI
+path: p50 6.3 ms / p95 8.2 ms / payload 6.9 KB at 10.5k — vs p50 7.8 ms /
+p95 9.4 ms at 891: flat across 11× the players. Dojo run
+`dojo/results/0050-078-zero-latency-clicks-2026-08-24/` PASS: 16 browser
+acts 19–133 ms (p50 ≈ 36 ms), wire 5–17.4 KB, zero inline raster art,
+zero failed requests, repeat art 100% from cache. Seed cleaned after the
+run (DELETE 10000). Suites: worldd 215 passed; plugin 1367 passed with 4
+pre-existing failures (kill3d ×3, 048 clazz guard — present on HEAD
+before this plan, other workstreams). Observation logged: decoded act
+bodies can hit ~684 KB from repeated inline SVG masks (17 KB on the
+wire); candidate follow-up, not a budget breach.

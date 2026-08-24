@@ -109,6 +109,18 @@ def _step_the_reel(request, monkeypatch):
     yield
 
 
+@pytest.fixture(autouse=True)
+def _inline_art_by_default():
+    """078: register_routes points render at static /art URLs — a process-
+    global switch. Tests assume the inline-art default unless they opt in
+    (test_078_static_art), so restore whatever was set after each test."""
+    from plugin_linear_ascent import render
+    before = render.ART_BASE
+    yield
+    if render.ART_BASE != before:
+        render.set_art_base(before)
+
+
 # ── 048: the canonical creation helper ─────────────────────────────────
 # ~30 test files carry a local copy of this walk; new tests use this one
 # and the local copies fold into it during the phase-4 sweep.

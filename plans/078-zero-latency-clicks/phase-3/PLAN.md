@@ -65,3 +65,15 @@ problem and keep chat cards self-contained.
 inline art wholesale — a one-line emergency mitigation
 (`set_art_base("")`) exists even without a revert. Static mounts are
 additive and harmless to leave.
+
+## Execution status — 2026-08-24
+
+DONE. render.py emits versioned static URLs (`?v=0.102.0`) via
+`set_art_base()`; worldd mounts the vendored art tree at `/static/laart`
+with `Cache-Control: public, max-age=31536000, immutable`
+(ImmutableStaticFiles); the plugin serves `/art/{path}` the same way and
+registers its base on route registration. Zero base64 raster art in any
+fragment (dojo-verified: 0 of 16 acts). Repeat shop visits: 3/3 art
+requests from browser cache, 0 re-downloads. Fallback to inline art when
+no base is set is pinned by `tests/test_078_static_art.py` (6 tests); an
+autouse conftest guard restores the inline default between tests.

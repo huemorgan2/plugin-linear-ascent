@@ -61,3 +61,17 @@ age ≤ TTL).
 `git revert` the phase commit — `inject_world` returns to live computation
 (slow but correct). The cache module is self-contained; no schema or data
 involvement.
+
+## Execution status — 2026-08-24
+
+DONE. `worldd/app/worldcache.py` landed: TTL 10 s, single-flight,
+stale-while-revalidate, `invalidate()` on frontier raises (warden fall,
+boss resolve, post-commit in run_act). inject_world rides the snapshot;
+fight rounds (gated on an ACTIVE encounter — "attack_<Name>" outside one
+is a PvP initiation and keeps the full read) skip letters/names/
+pvp_targets/grant_targets/profiles. TTL is env-tunable
+(`ASCENT_WORLD_TTL_S`); the test suite runs with 0 (build-per-read, no
+staleness) while `test_078_worldcache.py` pins the production TTL and its
+laws (6 tests). Warm inject_world: 2–4 ms, 13 queries; rebuild at 10k:
+270–500 ms in background, once per 10 s at most. Leaderboard keeps you
+visible below the top-200 cut (own row rides along).

@@ -21,6 +21,7 @@ from functools import lru_cache
 from . import colors as _colors, economy, icons
 from .engine import notices, tips
 from .engine.scene import Meters, Scene
+from .version import VERSION
 
 # ── tokens (009: the terminal law — worldd/static/site/mock/mock.css) ────
 INK = "#000000"
@@ -94,6 +95,35 @@ _FX_TINT = {"ascent_open": VIOLET, "ascent_title": VIOLET_SOFT,
             "intro_muster": DIM}
 
 
+# ── 078: the art-base seam ────────────────────────────────────────────────
+# ART_BASE unset (the default) inlines every image as base64 — the legacy
+# self-contained card, no host wiring needed. A host that mounts
+# content/art statically calls set_art_base("/static/laart") and every
+# banner/GIF/portrait/gear icon becomes a small, versioned, immutable-
+# cacheable URL instead of ~50–650 KB of base64 riding EVERY response.
+# The tiny generated SVG glyphs (icons.py) and the VGA font stay inline.
+ART_BASE = ""
+
+
+def set_art_base(base: str) -> None:
+    global ART_BASE
+    ART_BASE = (base or "").rstrip("/")
+    for fn in (_banner_data_url, _sigil_half_data_url, _gear_art_url,
+               _fx_data_url, _fx_split, _paper_tex_url, _strip_art_url,
+               _portrait_art, _portrait_data_url):
+        fn.cache_clear()
+
+
+def _art_url(path: str, mime: str) -> str:
+    """The one door art ships through: a versioned static URL when the
+    host mounted the tree, the inline data URL otherwise."""
+    if ART_BASE:
+        rel = os.path.relpath(path, _ART_ROOT).replace(os.sep, "/")
+        return f"{ART_BASE}/{rel}?v={VERSION}"
+    b64 = base64.b64encode(open(path, "rb").read()).decode()
+    return f"data:image/{mime};base64,{b64}"
+
+
 @lru_cache(maxsize=None)
 def sigil_slugs() -> frozenset:
     """027: the faction sigils on disk — a banner's colors read as its own
@@ -135,9 +165,8 @@ def _banner_data_url(slug: str) -> tuple[str, int, int] | None:
         for size in sizes:
             path = os.path.join(art_dir, f"{slug}_{size}.png")
             if os.path.exists(path):
-                b64 = base64.b64encode(open(path, "rb").read()).decode()
                 w, h = (int(n) for n in size.split("x"))
-                return f"data:image/png;base64,{b64}", w, h
+                return _art_url(path, "png"), w, h
     return None
 
 
@@ -151,9 +180,8 @@ def _sigil_half_data_url(slug: str) -> tuple[str, int, int] | None:
     for size in ("160x56", "320x112"):
         path = os.path.join(_SIGILS, f"{slug}_{size}.png")
         if os.path.exists(path):
-            b64 = base64.b64encode(open(path, "rb").read()).decode()
             w, h = (int(n) for n in size.split("x"))
-            return f"data:image/png;base64,{b64}", w, h
+            return _art_url(path, "png"), w, h
     return None
 
 
@@ -166,8 +194,7 @@ def _gear_art_url(slug: str, kind: str) -> str | None:
     for art_dir in (_WEAPONS_ART, _GEAR_ART):
         path = os.path.join(art_dir, kind, f"{slug}_{size}.png")
         if os.path.exists(path):
-            b64 = base64.b64encode(open(path, "rb").read()).decode()
-            return f"data:image/png;base64,{b64}"
+            return _art_url(path, "png")
     return None
 
 
@@ -194,9 +221,8 @@ def _fx_data_url(slug: str) -> tuple[str, int, int] | None:
     for size in ("320x112", "320x200"):
         path = os.path.join(_EVENTS, f"{slug}_{size}.gif")
         if os.path.exists(path):
-            b64 = base64.b64encode(open(path, "rb").read()).decode()
             w, h = (int(n) for n in size.split("x"))
-            return f"data:image/gif;base64,{b64}", w, h
+            return _art_url(path, "gif"), w, h
     return None
 
 
@@ -366,8 +392,7 @@ def _paper_tex_url() -> str | None:
     size stays out of `_banner_data_url` so no room ever resolves it."""
     path = os.path.join(_ART, "paper_320x150.png")
     if os.path.exists(path):
-        b64 = base64.b64encode(open(path, "rb").read()).decode()
-        return f"data:image/png;base64,{b64}"
+        return _art_url(path, "png")
     return None
 
 
@@ -407,8 +432,7 @@ def _strip_art_url(slug: str) -> str | None:
     """030 Phase 4: thin band art — {slug}_320x50.png in banners/."""
     path = os.path.join(_ART, f"{slug}_320x50.png")
     if os.path.exists(path):
-        b64 = base64.b64encode(open(path, "rb").read()).decode()
-        return f"data:image/png;base64,{b64}"
+        return _art_url(path, "png")
     return None
 
 
@@ -924,11 +948,11 @@ def _portrait_art(slug: str) -> tuple[str, int, int] | None:
     for w, h in _PORTRAIT_SIZES:
         path = os.path.join(_PORTRAITS, f"portrait_{slug}_{w}x{h}.png")
         if os.path.exists(path):
-            b64 = base64.b64encode(open(path, "rb").read()).decode()
-            return f"data:image/png;base64,{b64}", w, h
+            return _art_url(path, "png"), w, h
     return None
 
 
+@lru_cache(maxsize=None)
 def _portrait_data_url(slug: str) -> str | None:
     art = _portrait_art(slug)
     return art[0] if art else None
@@ -3350,7 +3374,8 @@ SCENE_CSS = f"""
  border-color:{GOLD};}}
 .gearmap .item.act:hover .picon,.gearmap .item.act:focus-visible .picon{{
  background-color:{GOLD} !important;}}
-.profile .rail{{margin-top:0;padding-top:0;border-top:0;}}
+.profile .rail{{margin-top:0;padding-top:0;border-top:0;
+ flex-direction:column;align-items:flex-start;gap:4px;}}
 .profile .inv{{border-top:0;padding-top:0;margin-top:8px;}}
 /* ── 059/062: the faction strip at the foot of the card — no box, the
    card's own dotted rule above it; banner + name are the door ── */
@@ -3390,6 +3415,7 @@ SCENE_CSS = f"""
  line-height:1.35;}}
 .facblk .facsub .dim{{color:{DIM};}}
 .piprows{{margin-top:8px;color:{DIM};}}
+.profile .piprows{{margin-top:0;}}
 .piprow{{display:flex;align-items:center;gap:1ch;margin-top:4px;
  cursor:help;}}
 .piprow .plab{{flex:none;min-width:8ch;font-variant-numeric:tabular-nums;}}

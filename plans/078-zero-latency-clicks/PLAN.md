@@ -120,3 +120,13 @@ Each phase carries its own gate (see phase files). Plan-level:
   by design — acceptable: one-shots play on kills/rides, not menu clicks.
 - The working tree carries unrelated in-flight edits (adminpage, feedback,
   figure3d, 077 triangle work). Commit each phase scoped to its own files.
+
+## Execution status — 2026-08-24
+
+Phases 1–4 executed and verified; phase 5 scale proof + dojo complete
+(deploy pending explicit request). Act p95 at 10,517 players: 8.2 ms
+server-side, ≤ 133 ms browser click-to-paint (budget 300 ms). Payloads
+5–17.4 KB on the wire (budget 30 KB), zero inline raster art. Dojo
+0050 PASS. Full worldd suite green (215); plugin suite green but for 4
+pre-existing failures from other workstreams. Details per phase below
+their own PLAN.md files.

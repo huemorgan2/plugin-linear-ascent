@@ -188,6 +188,11 @@ def register_routes(app, ctx: PluginContext) -> None:
     _ctx = ctx
     router = APIRouter(prefix="/api/p/plugin-linear-ascent", tags=["ascent"])
 
+    # 078: cards and the pane fetch art from the plugin's own origin —
+    # small versioned URLs instead of base64 in every fragment.
+    from . import render as _render
+    _render.set_art_base("/api/p/plugin-linear-ascent/art")
+
     @router.get("/status")
     async def status(user=Depends(get_current_user)) -> dict:
         s = runtime.state
@@ -470,6 +475,29 @@ def register_routes(app, ctx: PluginContext) -> None:
         return Response(content=_b64.b64decode(d.get("data", "")),
                         media_type=d.get("mime", "image/png"),
                         headers={"Cache-Control": "private, max-age=3600"})
+
+    @router.get("/art/{path:path}")
+    async def art_file(path: str):
+        """078: the whole 1-bit art tree (banners, creatures, events,
+        portraits, gear, weapons) as versioned immutable URLs — render.py
+        stops inlining base64 once set_art_base() points here. Public like
+        the pane shell; the ?v= version stamp makes a year-long
+        immutable cache correct."""
+        import os as _os
+        import re as _re
+
+        from fastapi.responses import FileResponse
+        if ".." in path or not _re.fullmatch(
+                r"[a-z0-9_\-/]+\.(png|gif)", path):
+            raise HTTPException(404, "no such art")
+        root = _os.path.join(
+            _os.path.dirname(_os.path.abspath(__file__)), "content", "art")
+        full = _os.path.normpath(_os.path.join(root, path))
+        if not full.startswith(root + _os.sep) or not _os.path.exists(full):
+            raise HTTPException(404, "no such art")
+        mime = "image/gif" if full.endswith(".gif") else "image/png"
+        return FileResponse(path=full, media_type=mime, headers={
+            "Cache-Control": "public, max-age=31536000, immutable"})
 
     @router.get("/art/factions/{slug}.png")
     async def faction_banner(slug: str):
