@@ -223,6 +223,24 @@ EVENTS: dict[str, dict] = {
         "tint": VIOLET, "seconds": 8, "loop": False, "hold_ms": 2000,
         "trim": (0.0, 5.5),
     },
+    "lift_ascent": {
+        "prompt": (
+            "a massive industrial cage lift at the base of the colossal "
+            "tower, its heavy riveted iron doors standing open, thick "
+            "white steam pouring out around them and pooling on the "
+            "ground. A lone dark human silhouette walks calmly through "
+            "the steam and steps inside the lift. Huge exposed gears, "
+            "cogs and chains along the doorframe begin to turn and the "
+            "iron doors grind shut with bursts of steam. One beat of "
+            "stillness — then the whole lift cage ROCKETS straight up "
+            "the tower rail with tremendous speed, fast as a bullet "
+            "train, a vertical motion-blurred streak of steam and "
+            "sparks, gone into the sky in an instant, leaving only "
+            "drifting steam at the empty platform. The FINAL SECOND is "
+            "a perfectly still tableau: the empty platform, doors gone "
+            "up, thin steam hanging, absolutely nothing moving."),
+        "tint": DIM, "seconds": 8, "loop": False, "hold_ms": 1500,
+    },
     "ascent_open": {
         "prompt": (
             "the colossal tower of stacked stolen realms stands PERFECTLY "
