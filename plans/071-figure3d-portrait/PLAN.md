@@ -153,4 +153,5 @@ Plan written 2026-08-24.
   cannot create a new account. The authenticated Labs/profile flow is blocked
   pending test credentials or a narrowly scoped local test-auth path.
 - Deployment is intentionally deferred: the user explicitly requested no
-  deploy. Vendor sync and commits remain pending the browser verification.
+  deploy. The plugin and the vendored/static worldd bundle are committed and
+  pushed; only the authenticated browser acceptance remains pending.

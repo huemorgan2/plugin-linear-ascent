@@ -28,5 +28,5 @@ authenticated Labs/profile walkthrough is blocked by local Gmail-only signup.
 The full suites executed but are not green: plugin 1327 passed / 5 failed
 (pre-existing 033, 048, 063, and kill3d failures outside 071); worldd 195
 passed / 1 failed (`test_leaderboard_marks_only_you`, outside 071). Vendor
-sync and clean commits remain outstanding. Deployment is deferred by explicit
-user instruction.
+sync and the clean plugin/worldd commits are complete and pushed. Deployment
+is deferred by explicit user instruction.
