@@ -207,6 +207,11 @@ _TIPS: dict[str, str] = {
                           "creature's, with the numbers over the heads. "
                           "Same rules, same dice. Off = the fight card "
                           "you know."),
+    "labs_toggle_figure3d": ("Figure: the profile portrait becomes the "
+                             "3D climber — calm still, wearing the slots. "
+                             "Sword on the hip, bow on the back, staff in "
+                             "the hand. Hover a slot to light that piece. "
+                             "Off = the drawn portrait you know."),
     "labs_back": "Back to where you stood.",
 
     # ── the fight card ──

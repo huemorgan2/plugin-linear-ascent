@@ -11,7 +11,7 @@ import datetime as dt
 
 from .. import economy, icons, unlocks
 from ..content import schema
-from . import combat, contracts, labs, names, notices, state, weekly
+from . import combat, contracts, figure3d, labs, names, notices, state, weekly
 from .scene import Meters, Option, Scene
 
 
@@ -35,6 +35,7 @@ def _stamp(p: dict, scene: Scene) -> Scene:
     scene.scene_id = f"s{p.get('act_seq', 0)}"
     scene.location = str(p.get("location") or "")   # 042: the music key
     scene.labs = labs.enabled_keys(p)                # 067: the flask
+    scene.figure3d = figure3d.payload(p)             # 071: 3D portrait
     scene.inventory = _pack_strip(p)
     scene.slots = _slot_map(p)                      # 069: the gear map
     scene.pack_slots = pack_cap(p)

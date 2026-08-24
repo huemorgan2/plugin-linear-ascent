@@ -40,7 +40,8 @@ def test_labs_card_toggles_and_returns():
     s = core.apply_choice(p, "labs")
     assert s.headline == "The Labs"
     ids = [o.id for o in s.options]
-    assert "labs_toggle_arena" in ids and "labs_back" in ids
+    assert "labs_toggle_arena" in ids and "labs_toggle_figure3d" in ids
+    assert "labs_back" in ids
     row = next(o for o in s.options if o.id == "labs_toggle_arena")
     assert row.label.endswith("off")
     assert s.labs == []

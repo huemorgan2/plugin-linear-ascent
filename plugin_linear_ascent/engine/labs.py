@@ -32,6 +32,13 @@ FEATURES: dict[str, Feature] = {
         "numbers floating over the heads. Same rules, same dice — only "
         "the way you see them.",
         frozenset({6, 7})),
+    "figure3d": Feature(
+        "figure3d", "Figure — 3D climber in the profile",
+        "Your portrait becomes the 3D climber, breathing still, wearing "
+        "what sits in the slots: sword on the hip, bow on the back, "
+        "staff in the hand, charm on the neck, boots on the feet. "
+        "Hover a slot to light that piece. Off = the drawn portrait.",
+        frozenset()),
 }
 
 OPEN = "labs"

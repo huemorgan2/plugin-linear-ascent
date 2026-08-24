@@ -1,0 +1,32 @@
+# Phase 5 — tests, vendor, release, deploy
+
+## Goal
+The feature is isolated, tested, vendored, versioned 0.98.0, and
+live on ascent-worldd. Default still off.
+
+## Steps
+- `tests/test_071_figure3d.py` (plugin) + `worldd/tests/test_071_figure3d.py`.
+- Vendor copy of the plugin files that changed.
+- Bump `version.py` + `luna-plugin.toml` to 0.98.0.
+- Dojo: flask → Figure 3D on → profile canvas breathes → hover a
+  slot → colour → off → PNG is back.
+- `worldd/tools/deploy.sh`.
+
+## Verification
+- Plugin 071 tests green; 067 labs still green.
+- `/health` game version 0.98.0 after deploy.
+- A live climber with the flag off is unchanged.
+
+## Rollback
+Revert the deploy (previous Render build). Flag stays inert on old JS.
+
+## Execution status
+2026-08-24 — In progress. Targeted plugin tests passed (12 across 071 and
+067), worldd tests passed (3), and JavaScript syntax checks passed. A formal
+dojo scenario now lives at `tests/071-figure3d/01-profile-labs.md`, but its
+authenticated Labs/profile walkthrough is blocked by local Gmail-only signup.
+The full suites executed but are not green: plugin 1327 passed / 5 failed
+(pre-existing 033, 048, 063, and kill3d failures outside 071); worldd 195
+passed / 1 failed (`test_leaderboard_marks_only_you`, outside 071). Vendor
+sync and clean commits remain outstanding. Deployment is deferred by explicit
+user instruction.
