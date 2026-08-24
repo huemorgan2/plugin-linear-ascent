@@ -371,3 +371,20 @@ def test_0963_lean_tally_wears_a_plus():
     # the + glyph's middle line is ▀█▀ — no other tally char draws it
     assert "▀█▀" in lean
     assert "▀█▀" not in full
+
+
+def test_0972_icon_shadow_rides_a_wrapper_not_the_mask():
+    """0.97.2 (roy): mask paints AFTER filter — a drop-shadow on the
+    masked .eg itself is clipped by its own mask and never shows. The
+    shadow must sit on an .egsh wrapper around the icon."""
+    lean = render._tally_html([{"kind": "gold", "n": 7}], lean=True)
+    assert '<span class="egsh"><span class="eg"' in lean
+    css = render.SCENE_CSS
+    # the filter targets the wrapper...
+    assert ".awin .thead>.egsh{filter:drop-shadow(" in css
+    # ...and never the masked element itself
+    import re
+    for rule in re.findall(r"[^{}]*\{[^{}]*\}", css):
+        if "drop-shadow" in rule:
+            sel = rule.split("{", 1)[0]
+            assert not sel.rstrip().endswith(".eg"), rule

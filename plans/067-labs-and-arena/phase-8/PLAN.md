@@ -149,3 +149,12 @@ Roy: the 0.96.2 card said the creature's name twice in a live fight — the HUD 
 - Tests: 104 targeted; full suite 5 failed / 1305 passed — same 5 at pristine c1bc08b (pre-existing; test_031/test_048 arrived with 0.97.0). 3 new tests in test_067_arena.py.
 - Dojo run 0044: **39/39 PASS**, victory in-run; S13 `{infoOnName:true,tiph:true,headline:0}`, S14 `{shadow:"rgb(0,0,0) 4.5px 4.5px 0px",plus:true,egw:"24px"}`. Captures at 1440+420, rounds and victories.
 - Renumbered 0.96.3→0.97.1 mid-release: the other session shipped 0.97.0 (c1bc08b); rebased onto it so the marketplace never goes backwards.
+
+## Execution status — 0.97.2 follow-up (2026-08-24, roy's report on 0.97.1)
+
+Roy, with zoomed crops of both win-tally icons: "this has no shade.. add shade to both icons." Correct — 0.97.1 put the `drop-shadow` filter on the masked `.eg` itself, and CSS paints mask AFTER filter, so the icon's own mask clipped the shadow away. Computed style reported the filter; zero shadow pixels rendered. Run 0044's S14 checked computed style only and passed on that lie.
+
+- **Fix:** the tally-head icon sits in an `.egsh` wrapper; the filter moved to the wrapper (its shadow is generated from the child's already-masked render). Sizing selectors retargeted: base `.thead .eg` 30px + `.thead>.egsh{display:flex;flex:none}`, `.awin .thead .eg` 45/24px, `.awin .thead>.egsh{filter:drop-shadow(2.8125px/1.5px …)}`.
+- **Tests:** new `test_0972_icon_shadow_rides_a_wrapper_not_the_mask` (wrapper in the lean head; no drop-shadow rule ends on `.eg`). Targeted 77 passed; full suite 1306 passed, 5 pre-existing failures (same set as 0.97.1, present at pristine c1bc08b).
+- **Dojo:** run 0045, 39/39, victory in-run. S14 upgraded to pixel-truth: screenshot the icon, force `filter:none`, screenshot again, require the buffers to differ — `pixeldiff:true`. Supplementary probe: both icons × 1440/420 all `PIXELDIFF true`; 4× zoom sheet shows the black offset silhouette plainly.
+- **Version:** 0.97.2.

@@ -599,8 +599,11 @@ def _tally_html(tally: list[dict], lean: bool = False) -> str:
         # wears a + on its right ("29+ XP").
         big = (f"{n:,}+ {_TALLY_WORD[kind]}" if lean
                else f"{n:,} {_TALLY_WORD[kind]}")
+        # 0.97.2 (roy): the icon's shadow lives on a wrapper — CSS paints
+        # mask AFTER filter, so a drop-shadow on the masked .eg itself is
+        # clipped away by its own mask and never reaches the screen.
         head = (f'<div class="thead" style="color:{tint}">'
-                f"{_eglyph(key)}"
+                f'<span class="egsh">{_eglyph(key)}</span>'
                 f"{_big_html(big, tint)}</div>")
         heap = ""
         if not lean and n < TALLY_CAP:
@@ -2722,8 +2725,11 @@ SCENE_CSS = f"""
    the font; the icons are 16×16 grids, so their pixel is display/16.
    Icons at 150% (30→45px), same 16×16 resolution. */
 .awin .bigtx div{{text-shadow:1ch .5em 0 {INK};}}
-.awin .thead>.eg{{width:45px;height:45px;
- filter:drop-shadow(2.8125px 2.8125px 0 {INK});}}
+/* 0.97.2 (roy): the filter sits on the .egsh wrapper, NOT on the masked
+   .eg — mask paints after filter, so a shadow on the .eg itself is
+   clipped by its own mask and never shows. */
+.awin .thead .eg{{width:45px;height:45px;}}
+.awin .thead>.egsh{{filter:drop-shadow(2.8125px 2.8125px 0 {INK});}}
 /* a narrow stage (phone): the slabs drop to 12px so both still share
    the top line with the 20-cell bars */
 @container (max-width: 600px){{.astat{{font-size:12px;line-height:1.4;}}
@@ -2732,8 +2738,8 @@ SCENE_CSS = f"""
     swallow the scene on a phone */
  .awin .tallies{{font-size:9px;gap:0 14px;}}
  /* 150% of the 16px trim icon; drawing pixel 24/16 = 1.5px */
- .awin .thead>.eg{{width:24px;height:24px;
-  filter:drop-shadow(1.5px 1.5px 0 {INK});}}}}
+ .awin .thead .eg{{width:24px;height:24px;}}
+ .awin .thead>.egsh{{filter:drop-shadow(1.5px 1.5px 0 {INK});}}}}
 /* phase 8: a phone-narrow stage — the HP line is 31ch of pre (20 blocks
    + the numbers); at 12px two slabs with a 3-digit foe HP outgrow the
    row and the foe slab wraps under. 10px keeps both on the top line. */
@@ -2858,7 +2864,10 @@ SCENE_CSS = f"""
  align-items:flex-start;gap:8px 4ch;margin:10px 0 2px;line-height:1;}}
 .thaul{{display:flex;flex-direction:column;align-items:center;gap:5px;}}
 .thead{{display:flex;align-items:center;gap:10px;}}
-.thead>.eg{{width:30px;height:30px;vertical-align:0;flex:none;}}
+/* 0.97.2 (roy): the icon sits in an .egsh wrapper (the shadow carrier —
+   mask paints after filter, so the drop-shadow must sit on a parent). */
+.thead>.egsh{{display:flex;flex:none;}}
+.thead .eg{{width:30px;height:30px;vertical-align:0;flex:none;}}
 .thead .bigtx{{padding:0;}}
 .thaul .tmarks{{display:inline-grid;grid-template-columns:repeat(10,14px);
  gap:1px;}}
