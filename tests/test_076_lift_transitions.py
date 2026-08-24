@@ -115,6 +115,19 @@ def test_pane_ships_the_overlay_and_both_gif_urls():
     assert "/static/fxart/lift_ascent_320x112.gif" in html
     assert "/static/fxart/lift_descent_320x112.gif" in html
     assert "playLift" in html
+    assert "#liftlay .car{width:min(92vw,640px);aspect-ratio:320/112;" in html
+    assert "background:#000;position:relative;overflow:hidden;" in html
+    assert "#liftlay .car .ink{position:absolute;inset:0;" in html
+    assert "ink.className = 'ink';" in html
+    assert "car.appendChild(ink);" in html
+    assert "ink.style.webkitMaskImage = u; ink.style.maskImage = u;" in html
+
+
+def test_destination_is_mounted_before_the_lift_overlay_starts():
+    html = pane.render_pane(api_base="/play/api", web=True)
+    destination = html.index("game.innerHTML = d.fragment;")
+    overlay = html.index("if (!quiet) playLift();")
+    assert destination < overlay
 
 
 # ── the art ──────────────────────────────────────────────────────────────
