@@ -185,6 +185,81 @@ particle dissolve, and the small animal all read after re-dithering.
 The Bayer grid is re-applied per frame, so dither "boils" between
 frames — at 10fps it reads as texture, not noise.
 
+## Live 3D → 1-bit (figure3d, the profile climber)
+
+Everything above is about still images from a generative model. The
+071 Labs portrait renders a live three.js scene to 1-bit every frame
+(`worldd/static/site/figure3d/figure3d.js`); iterating it against the
+drawn `portrait_*.png` files taught a parallel set of lessons:
+
+- **Pure white ink, always.** The drawn portraits are exactly
+  (255,255,255) on transparent. A "tasteful" grey-white ink
+  (`0xdfe4ee`) reads as haze next to them; switching to `0xffffff`
+  fixed half of the perceived quality gap on its own.
+- **Render at the art's native grid, not the display grid.** The
+  buffer is exactly the portrait spec (100×200, giant 140×260) and
+  CSS upscales with `image-rendering: pixelated`. Rendering finer
+  than the art's grid gives grey haze; a 0.5× buffer gives chunky
+  retro pixels. Both are one knob (`RES`) — native matched the drawn
+  portraits best.
+- **The tone curve is the art style.** Quantizing luminance into 4–6
+  bands reads as flat checkerboard, not "bold tonal steps" — the
+  Bayer matrix already draws the gradient, so feed it a CONTINUOUS
+  ramp with a steep S-curve and crushed blacks:
+  `shade = smoothstep(0.28, 0.75, gamma(lum))`. Lit surfaces saturate
+  to solid white, true shadow bottoms out at solid black, and the
+  crushed low end pops everything above it. (Same lesson as the
+  closeups: describe/build a lit 3D form, then let dither carry it.)
+- **One strong raking key, whisper of fill.** Key 6.0 from upper
+  front-left, fill 0.7 opposite, ambient 0.15. The key models the
+  volume; the fill only decides whether the shadow side dies to
+  black or keeps sparse dots. (With the crushed-black curve, most of
+  the shadow side goes solid black and the rim-light contour keeps
+  the silhouette.)
+- **Greyscale every texture at load.** The shader keeps saturated
+  fragments coloured as the ONE colour exception (gear hover tint).
+  Tripo skin/wood textures are saturated enough to leak through it.
+  Forcing all materials to greyscale (canvas `grayscale(1)` redraw of
+  each map, luminance-collapse of material colours) makes the scene
+  1-bit by construction — the only saturation left is the hover ink.
+- **Framing is part of the language.** Face the camera dead-on like
+  the drawn portraits (these rigs' animated idle faces +x — yaw
+  −90°), feet planted on the bottom edge, one shared px-per-unit
+  across all frames so the giant's bigger canvas means a bigger
+  climber (human/elf 1.65 world units, giant 2.15 — two human heads).
+  Centre and width-fit the BODY, not the dressed bbox: fitting gear
+  shrank the giant below the human. A rig wider than its frame's
+  aspect can squash up to 25% in screen-x before uniform-shrinking —
+  bulk survives a slim better than height survives a crop.
+
+### Item placement — sockets, not offsets (079)
+
+- **Placement is a socket system, not per-scene constants.** The engine
+  pattern (Unreal skeletal sockets): named anchors on the skeleton +
+  items whose pivot sits at the grip. Tripo GLBs have neither, so
+  `worldd/static/site/lib/sockets.js` fakes both — `SOCKETS` (anchor →
+  bone aliases, one table for all three rigs, they share a skeleton) and
+  `normalizeProp` (grip pivot at origin, centred on ALL THREE axes — an
+  off-centre GLB otherwise lands beside the bone).
+- **Tune in the character's frame, never the bone's, never the world.**
+  Bone-local axes twist joint to joint; world axes break the moment the
+  stage yaws (portrait faces camera, finisher faces the monster). Grip
+  space = +x facing, +y up, +z out the right hand; lengths and offsets
+  are fractions of character height so the giant's staff towers with
+  the giant.
+- **Discs mount by their THIN axis.** A shield's "long axis" is a random
+  diameter — long-axis normalization mounts it like a cylinder. Flat
+  mode: thinnest bbox axis = the facing, then ~π/2 yaw to face the
+  viewer, backed off ~0.45 rad so it reads as a shield, not a circle.
+- **Props need a brighter emissive floor than the body** (0.24 vs 0.07):
+  the crushed-black tone curve that makes the figure pop will swallow a
+  rusted blade whole — we pixel-hunted an "invisible" sword twice before
+  finding it rendered solid black on black.
+- **No finger bones → the grip is an alignment illusion.** These rigs'
+  hands are baked open palms. Lay the shaft through the fist volume
+  along the palm line; at 100×200 1-bit it reads as held. Verify by
+  hover-tinting the item and reading the silhouette at 4× zoom.
+
 ## Recommended production pipeline (049)
 
 1. Two-reference scene assembly (demoimages4): scene + player renders
