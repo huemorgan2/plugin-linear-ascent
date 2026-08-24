@@ -588,11 +588,37 @@ def bow_gap_mult(gap: int) -> float:
     return BOW_GAP_MULT.get(min(int(gap), GAP_MAX), 1.0)
 
 
-def p_gap_hit(pspd: int, mspd: int) -> float:
-    """Chance the monster lands its parting blow while you make ground.
-    Every point of speed advantage is a cleaner break; a faster monster
-    almost always collects."""
-    return _clamp(0.65 - 0.12 * (pspd - mspd), 0.05, 0.95)
+# ── 075: speed is not a shield — the chase never fully stops ─────────────
+# After a ranged or magic action the monster takes a PURSUIT PHASE: one
+# turn always, extra turns by the player's weapon (a runner invites a
+# harder chase than a stander). Each turn lands on p_pursue — a curve
+# that decays with the player's speed lead but never reaches zero, so a
+# speed lead reduces the RATE of getting caught, never removes it.
+# This retires 036's p_gap_hit: one curve governs all monster catch-up.
+PURSUE_CAP = 0.90       # as fast as you or faster: it simply keeps up
+PURSUE_BASE = 0.55      # one point behind: it still mostly keeps coming
+PURSUE_FLOOR = 0.10     # never zero — enough turns eventually connect
+PURSUE_DECAY = 0.70     # each point of lead multiplies the excess
+
+# Extra chase turns by the player's damage type. Rolled in order; each
+# later roll happens only if the one before it landed (bow: 90% for a
+# 2nd turn, then 10% for a 3rd; magic: 50% for a 2nd; melee: none —
+# melee rounds keep the classic single close-attempt).
+PURSUIT_EXTRA = {"ranged": (0.90, 0.10), "magic": (0.50,), "melee": ()}
+
+
+def p_pursue(pspd: int, mspd: int) -> float:
+    """Chance ONE pursuit turn gains ground (or lands, if already in
+    reach). Multiplicative decay is the point: twice as fast is much
+    safer, infinitely fast is still not immune."""
+    adv = pspd - mspd
+    if adv <= 0:
+        return PURSUE_CAP
+    return PURSUE_FLOOR + (PURSUE_BASE - PURSUE_FLOOR) * PURSUE_DECAY ** adv
+
+
+def pursuit_extra_chances(damage_type: str) -> tuple:
+    return PURSUIT_EXTRA.get(damage_type, ())
 
 # Shoes ship in 004 (the Forge ladder). The speed hook lands with the
 # chase model so 004 only adds catalog rows here.

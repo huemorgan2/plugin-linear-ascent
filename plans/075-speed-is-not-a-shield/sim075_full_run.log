@@ -1,0 +1,27 @@
+constants: CAP=0.9 BASE=0.55 FLOOR=0.1 DECAY=0.7 extras={'ranged': (0.9, 0.1), 'magic': (0.5,), 'melee': ()}
+
+1. KITE GRID — floor 6, slow (3) tanks {'archer': 'wrapped_husk', 'sorcerer': 'vault_weaver'}, 4000-HP grind, 400 fights/cell, player max HP 193
+    lead  archer HP lost  sorcerer HP lost   (HP pool pinned huge; lost = chip taken over the kill)
+      +2           253.7             349.8   (kill% a:87 s:100)
+      +3           155.8             123.9   (kill% a:100 s:100)
+      +4            94.5              80.4   (kill% a:100 s:100)
+      +5            56.6              58.6   (kill% a:100 s:100)
+      +7            33.2              41.6   (kill% a:100 s:100)
+
+2. NEVER ZERO — adv +10, 4000-HP grind, 400 runs: monster landed >=1 hit in 80% of runs
+
+3. SURVIVAL GRID — at-level, every wilds encounter, 300 fights/class/floor, no healing, no fleeing
+   floor     class   win%  death%  timeout%  HP lost/win  maxHP
+       2   warrior   100%    0.0%      0.0%          3.9     68
+       2    archer   100%    0.0%      0.0%          0.5     68
+       2  sorcerer   100%    0.0%      0.0%          0.2     68
+       6   warrior    80%   19.7%      0.0%         90.3    193
+       6    archer    97%    0.0%      2.7%         19.9    193
+       6  sorcerer   100%    0.0%      0.0%         11.1    193
+      10   warrior    41%   58.7%      0.0%        317.0    551
+      10    archer    81%    7.0%     12.3%        121.4    551
+      10  sorcerer    92%    6.3%      1.3%        149.6    551
+
+4. FLYER — floor 6 grave_moth, 400 fights each
+   archer    win 100%  death  0.0%  rounds spent far away: 50% (it closes fast)
+   sorcerer  win 100%  death  0.0%  rounds spent far away: 47% (it closes fast)

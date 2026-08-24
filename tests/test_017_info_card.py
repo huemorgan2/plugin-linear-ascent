@@ -148,10 +148,11 @@ def test_dossier_names_the_active_modifiers():
 
 
 def test_dossier_reads_the_chase_for_both_sides():
+    # 075 plain-English copy: the chase lines say what actually happens
     fast = render._dossier_html(_payload(speed=7))
-    assert "outrunning" in fast
+    assert "faster than you" in fast
     slow = render._dossier_html(_payload(speed=3))
-    assert "kite" in slow
+    assert "catch you now and then" in slow
 
 
 def test_dossier_carries_the_lore():

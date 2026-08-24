@@ -91,9 +91,11 @@ def one_fight(p, fl, deep: bool):
     # touch this profile (steel vs wings etc.) runs at the card, not
     # at 25% HP. The sim player is sane, not suicidal.
     e = p["encounter"]
-    dmg = economy.typed_damage(combat._damage_type(p),
-                               round(0.75 * state.atk(p)),
-                               e["def"], e["profile"])
+    # 048 renamed typed_damage -> typed_damage_048 (path + type string)
+    dmg = economy.typed_damage_048(combat._train_path(p),
+                                   round(0.75 * state.atk(p)),
+                                   e["def"],
+                                   e["profile"].get("type", "plain"))
     hopeless = dmg <= 0
     for _ in range(200):
         if not p.get("encounter"):
@@ -183,9 +185,14 @@ def run(n_per_class=400, accept=False):
                    "(1.0 floors 1-3, monotone, <=1.25)",
                    all(abs(v - 1.0) <= 0.05 for v in spec[:3])
                    and spec == sorted(spec) and spec[-1] <= 1.25))
-    checks.append(("cap*gold_per_kill < warden_gold floors 1-20",
-                   all(economy.reward_mult_cap(f) * economy.gold_per_kill(f)
-                       < economy.warden_gold(f) for f in range(1, 21))))
+    if hasattr(economy, "reward_mult_cap"):
+        checks.append(("cap*gold_per_kill < warden_gold floors 1-20",
+                       all(economy.reward_mult_cap(f)
+                           * economy.gold_per_kill(f)
+                           < economy.warden_gold(f) for f in range(1, 21))))
+    else:
+        print("  SKIP cap*gold_per_kill check — reward_mult_cap retired "
+              "after 039")
 
     print()
     print("deep/normal EV ratio: "

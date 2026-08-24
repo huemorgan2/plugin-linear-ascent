@@ -24,7 +24,7 @@ close, Open distance succeeds most tries (80%); the fight is long
 ## C — run down by the fast
 
 As archer on floor 5, hunt the Downs courser (fast). PASS when: the
-courser closes by round ~2 ("closes the gap — it is on you now"),
+courser closes by round ~2 ("reaches you — you are in its range now"),
 Open distance mostly FAILS ("No gap opens", free half hit), and close
 attacks read weaker (bow ×0.6). This fight should feel like the
 archer's predator.

@@ -96,17 +96,19 @@ p_pursue(adv) =
     CAP                                    if adv <= 0   # as fast / faster: it keeps up
     FLOOR + (BASE − FLOOR) · DECAY**adv    if adv  > 0   # decays, never to 0
 ```
-Starting constants (sim-fitted in phase 3):
-`CAP = 0.90, BASE = 0.55, FLOOR = 0.05, DECAY = 0.60`.
+Starting constants `CAP = 0.90, BASE = 0.55, FLOOR = 0.05, DECAY = 0.60`;
+**final sim-fitted (phase 3): `FLOOR = 0.10, DECAY = 0.70`** (the 0.05/0.60
+start left a +5 lead at ~12 HP per long kill and the +10 never-zero check
+at 28% — both under the gates; see execution_summary.md).
 
-| adv | p_pursue | feel |
+| adv | p_pursue (tuned) | feel |
 |---|---|---|
 | ≤0 | 0.90 | equal/faster monster keeps up — ranged is a hard counter (intended, 002) |
-| +1 | 0.35 | a small lead helps, does not save you |
-| +2 | 0.23 | |
-| +3 | 0.16 | |
-| +5 | 0.09 | big lead — mostly clean |
-| +10 | 0.053 | **never zero** — a 10× lead still trickles |
+| +1 | 0.415 | a small lead helps, does not save you |
+| +2 | 0.32 | |
+| +3 | 0.25 | |
+| +5 | 0.18 | big lead — mostly clean |
+| +10 | 0.11 | **never zero** — a 10× lead still trickles |
 
 Multiplicative decay (not linear) is the point: it approaches the FLOOR
 asymptotically, so "twice as fast" is much safer but "infinitely fast"

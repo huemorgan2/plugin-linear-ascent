@@ -398,12 +398,85 @@ def _advance_chase(p: dict) -> str:
         if gap <= 0:
             e["range"] = "close"
             arena.record(p, who="foe", kind="move", what="close", gap=0)
-            return f"{_the(e['name'])} closes the gap — it is on you now."
+            return (f"{_the(e['name'])} reaches you — you are in its "
+                    "range now.")
         arena.record(p, who="foe", kind="move", what="advance", gap=gap)
-        return (f"{_the(e['name'])} eats a length of the open ground — "
-                f"{gap} between you now.")
+        return (f"{_the(e['name'])} rushes in — {gap} "
+                f"pace{'s' if gap > 1 else ''} away now.")
     arena.record(p, who="foe", kind="move", what="hold", gap=_gap(p))
     return f"{_the(e['name'])} comes on across open ground."
+
+
+def _pursuit_phase(p: dict) -> str:
+    """075: after a ranged or magic action the monster gives chase. One
+    turn always; extra turns by the player's weapon (economy.PURSUIT_EXTRA
+    — a runner invites a harder chase than a stander). Each turn lands on
+    p_pursue: a turn eats a pace of open ground, and a turn with no
+    ground left is a strike (halved — it is striking mid-chase, not set
+    and braced; second and later strikes in one round are quartered so a
+    triple pursuit cannot chain-kill). Speed lowers the odds, never to
+    zero. Flyers get their one normal turn only — their threat is being
+    unshakeable, not striking twice. Melee rounds keep the classic
+    single close-attempt."""
+    e = p.get("encounter")
+    if not e or e.get("hp", 1) <= 0:
+        return ""
+    kind = _damage_type(p)
+    if kind == "melee":
+        return _advance_chase(p)
+    if e.get("range") != "at_range":
+        return ""            # already in reach — the normal counter spoke
+    if e.get("netted"):
+        # 006: it cannot chase through the net — its last service.
+        e.pop("netted", None)
+        return f"{_the(e['name'])} tears at the net instead of the ground."
+    turns = 1
+    if not _profile(p).get("flying"):
+        for chance in economy.pursuit_extra_chances(kind):
+            if not state.roll_ok(p, chance):
+                break
+            turns += 1
+    pp = economy.p_pursue(economy.player_speed(p), _mspd(p))
+    lines: list[str] = []
+    strikes = 0
+    for _ in range(turns):
+        if p["hp"] <= 0 or e["hp"] <= 0:
+            break
+        if not state.roll_ok(p, pp):
+            arena.record(p, who="foe", kind="move", what="hold",
+                         gap=_gap(p))
+            continue
+        gap = _gap(p)
+        if gap > 0:
+            gap -= 1
+            e["gap"] = gap
+            if gap <= 0:
+                e["range"] = "close"
+                arena.record(p, who="foe", kind="move", what="close",
+                             gap=0)
+                lines.append(f"{_the(e['name'])} reaches you — you are "
+                             "in its range now.")
+            else:
+                arena.record(p, who="foe", kind="move", what="advance",
+                             gap=gap)
+                lines.append(f"{_the(e['name'])} rushes in — {gap} "
+                             f"pace{'s' if gap > 1 else ''} away now.")
+            continue
+        strikes += 1
+        hit = _monster_hit(p, halved=True, quartered=(strikes > 1))
+        if hit.get("dodged"):
+            lines.append("You dodge the hit — you were too fast for it.")
+        elif hit.get("veiled"):
+            lines.append("It strikes where you were — the veil holds.")
+        elif hit["dmg"] > 0:
+            lines.append("It catches up and hits you as you move: "
+                         f"−{hit['dmg']} HP.")
+        else:
+            lines.append("It catches you moving, but your guard turns "
+                         "the blow.")
+    if not lines:
+        return "You stay ahead of it — nothing lands."
+    return " ".join(lines)
 
 
 def _profile_tiers(prof: dict) -> list[str]:
@@ -754,14 +827,18 @@ def fight_scene(p: dict, floor, opener: bool = False, note: str = "") -> Scene:
     # 048 N7: giving ground ON PURPOSE is rank-6 bowwork; the draw
     # bonus on the row appears once rank 8 makes it real.
     bow_rank = _rank_of(p, "bow")
-    if _damage_type(p) == "ranged" and _gap(p) < economy.GAP_MAX:
+    # 075: you cannot put ground between you and a flyer — it follows
+    # you through the air. Neither distance row shows.
+    flying = _profile(p).get("flying")
+    if _damage_type(p) == "ranged" and _gap(p) < economy.GAP_MAX \
+            and not flying:
         nxt = _gap(p) + 1
         if bow_rank >= economy.GAP_OPEN_RANK:
             hint = (f"shot ×{economy.bow_gap_mult(nxt):g} "
-                    f"at {nxt} length{'s' if nxt > 1 else ''}"
+                    f"at {nxt} pace{'s' if nxt > 1 else ''}"
                     if bow_rank >= economy.GAP_DRAW_RANK
-                    else f"give ground on purpose — "
-                         f"{nxt} length{'s' if nxt > 1 else ''}")
+                    else f"step back — {nxt} "
+                         f"pace{'s' if nxt > 1 else ''} out")
             opts.append(Option("create_distance", "Open distance", hint))
         else:
             opts.append(Option(
@@ -769,8 +846,9 @@ def fight_scene(p: dict, floor, opener: bool = False, note: str = "") -> Scene:
                 f"needs Bow rank {economy.GAP_OPEN_RANK} "
                 f"(you: {bow_rank})", locked=True))
     # 031 §7: you cannot open ground from something as fast as you —
-    # the row only shows when your legs actually beat its legs.
-    elif not at_range and economy.player_speed(p) > _mspd(p):
+    # the row only shows when you are actually faster than it.
+    elif not at_range and economy.player_speed(p) > _mspd(p) \
+            and not flying:
         opts.append(Option("open_distance", "Open distance"))
     opts += [
         Option("stand", "Stand your ground"),
@@ -921,7 +999,7 @@ def _wear(p: dict, slot: str, n: int = 1) -> str:
 
 
 def _monster_hit(p: dict, halved: bool = False, least: int = 0,
-                 no_dodge: bool = False) -> dict:
+                 no_dodge: bool = False, quartered: bool = False) -> dict:
     """013: armor blunts, it never nullifies — every landed hit chips at
     least ⌈raw/4⌉ (min 1) through any DEF. Returns the breakdown so the
     card can SAY what the armor did instead of silently eating hits.
@@ -955,6 +1033,10 @@ def _monster_hit(p: dict, halved: bool = False, least: int = 0,
     chip = max(1, -(-raw // economy.CHIP_DIVISOR))
     dmg = max(chip, raw - state.dfs(p) // 2)
     if halved:
+        dmg //= 2
+    if quartered:
+        # 075: a 2nd+ pursuit strike in the same round lands lighter
+        # still — a triple pursuit must never chain-kill.
         dmg //= 2
     # 026: some blows are not the damage table's business — a Warden that
     # catches you turning your back lands its grip, not a chip.
@@ -1032,7 +1114,7 @@ def _counter_text(p: dict, hit: dict, lead: str = "") -> str:
         return (f"{_the(e['name'])} strikes where you were — the veil "
                 "holds; nothing finds you.")
     if hit.get("dodged"):
-        return f"{lead} — you slip the blow entirely. Speed tells."
+        return f"{lead} — you dodge the hit; you were too fast for it."
     if hit.get("apple"):
         return (f"{lead} — the golden shell takes {hit['apple']} of it"
                 + (f"; −{hit['dmg']} HP seeps through." if hit["dmg"]
@@ -1209,6 +1291,12 @@ def _player_hit(p: dict, mult: float = 1.0, pierce: bool = False) -> int:
         m = economy.bow_gap_mult(_gap(p))
         if m > 1 and _train_rank(p) < economy.GAP_DRAW_RANK:
             m = 1.0        # 048: the long draw pays only rank-8 hands
+        if m < 1 and _profile(p).get("flying"):
+            # 075: an airborne target is above you, not in your face —
+            # the bow keeps full power vs a flyer at any distance. This
+            # preserves the triangle (bow 1.0 / magic 0.6 / sword 0);
+            # a cramped-draw penalty would hand the flyer to magic.
+            m = 1.0
         mult *= m
     # 006: ten oiled strikes hit harder — physical weapons only.
     if state.oil_left(p) > 0 and _damage_type(p) != "magic":
@@ -2265,12 +2353,19 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
             + (f" {snap}" if snap else "")))
 
     if option_id == "open_distance" and _range_state(p) == "close":
+        # 075: no ground opens against a flyer — it is in the air and
+        # simply follows. Refused before the turn is spent.
+        if _profile(p).get("flying"):
+            e["_no_round"] = True
+            return fight_scene(p, floor, note=(
+                "It is in the air — there is no way to put ground "
+                "between you. You will have to fight it here."))
         # 031 §7: no gap opens from something your speed or better —
         # refused flat, before the turn is spent.
         if _mspd(p) >= economy.player_speed(p):
             return fight_scene(p, floor, note=(
                 f"{_the(e['name'])} matches you stride for stride — "
-                "no gap will open against those legs."))
+                "you cannot pull away from something this fast."))
         # §2.4: speed decides; on failure the monster gets a free
         # halved hit while you turn.
         snap = _wear(p, "shoes")       # 005: the turn spends shoe tread
@@ -2278,7 +2373,9 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
                                            _mspd(p))):
             e["range"] = "at_range"
             e["gap"] = 1
-            chase = _advance_chase(p)
+            chase = _pursuit_phase(p)   # 075: it keeps chasing
+            if p["hp"] <= 0:
+                return _death(p, floor)
             return fight_scene(p, floor, note=(
                 "You break contact and put ground between you. "
                 + chase + (f" {snap}" if snap else "")))
@@ -2292,46 +2389,46 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
             + (f" {snap}" if snap else "")))
 
     if option_id == "create_distance" and _damage_type(p) == "ranged":
-        # 048 N7: giving ground on purpose is rank-6 bowwork.
+        # 075: you cannot step back from a flyer — it follows you
+        # through the air. Refused before the turn is spent.
+        if _profile(p).get("flying"):
+            e["_no_round"] = True
+            return fight_scene(p, floor, note=(
+                "It is in the air — there is no way to put ground "
+                "between you. You will have to fight it here."))
+        # 048 N7: stepping back for a better shot is rank-6 bow skill.
         if _train_rank(p) < economy.GAP_OPEN_RANK:
             e["_no_round"] = True
             return fight_scene(p, floor, note=(
-                f"Giving ground on purpose is rank-"
-                f"{economy.GAP_OPEN_RANK} bowwork — you're at "
+                f"Stepping back for a better shot takes Bow rank "
+                f"{economy.GAP_OPEN_RANK} — you're at "
                 f"{_train_rank(p)}. The School trains it."))
-        # 036: the marksman's third axis — give ground ON PURPOSE. It
-        # always works (this is the trade, not a gamble): the question
-        # is only whether the monster collects a parting blow on the
-        # way out, and THAT is what your legs are for. Every length of
-        # gap is draw-time, and draw-time is power on the next shot.
+        # 036: the marksman's third axis — step back ON PURPOSE. It
+        # always works (this is the trade, not a gamble). Every pace of
+        # room is draw-time, and draw-time is power on the next shot.
+        # 075: the price is the pursuit — the monster chases as you
+        # move, and it may catch you (p_pursue, never zero).
         gap = _gap(p)
         if gap >= economy.GAP_MAX:
             return fight_scene(p, floor, note=(
-                f"Any more ground and you'd be out of the fight — "
-                f"{economy.GAP_MAX} lengths is the long edge of a kill."))
+                f"Any farther and you'd be out of the fight — "
+                f"{economy.GAP_MAX} paces is as far as you can go and "
+                "still shoot."))
         snap = _wear(p, "shoes")       # 005: made ground spends tread
         e["range"] = "at_range"
         e["gap"] = gap + 1
-        shot = (f"The gap is {e['gap']} length"
-                f"{'s' if e['gap'] > 1 else ''} now"
+        shot = (f"You are {e['gap']} pace"
+                f"{'s' if e['gap'] > 1 else ''} out now"
                 + (f" — your bow hits "
                    f"×{economy.bow_gap_mult(e['gap']):g} from here."
                    if _train_rank(p) >= economy.GAP_DRAW_RANK else "."))
-        if state.roll_ok(p, economy.p_gap_hit(economy.player_speed(p),
-                                              _mspd(p))):
-            # speed already had its say in p_gap_hit — no second dodge
-            hit = _monster_hit(p, no_dodge=True)   # at range → halved
-            if p["hp"] <= 0:
-                return _death(p, floor)
-            return fight_scene(p, floor, note=(
-                "You give ground and it collects the toll — "
-                + _counter_text(p, hit,
-                                lead=f"{_the(e['name'], False)} rakes you as "
-                                     "you pull away")
-                + f" {shot}" + (f" {snap}" if snap else "")))
+        chase = _pursuit_phase(p)
+        if p["hp"] <= 0:
+            return _death(p, floor)
         return fight_scene(p, floor, note=(
-            "You break clean — your legs beat its lunge and nothing "
-            f"touches you. {shot}" + (f" {snap}" if snap else "")))
+            f"You step back for a better shot. {shot}"
+            + (f" {chase}" if chase else "")
+            + (f" {snap}" if snap else "")))
 
     if option_id == "run":
         # §2.4: the flat 60% is gone — speed decides the getaway.
@@ -2559,10 +2656,13 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
                      rank=rank, miss_pct=economy.TRAIN_MISS_PCT(rank),
                      foe_hp=max(0, e["hp"]))
         if unreachable:
-            arena.record(p, who="foe", kind="strike", outcome="none")
-            chase = _advance_chase(p)
+            # 075: the fumble doesn't draw an instant answer, but the
+            # chase runs all the same — it may reach you this round.
+            chase = _pursuit_phase(p)
+            if p["hp"] <= 0:
+                return _death(p, floor)
             return fight_scene(p, floor, note=(
-                wide + " It cannot reach you to make you pay."
+                wide
                 + (f" {chase}" if chase else "")
                 + (f" {snap}" if snap else "")))
         back = _monster_hit(p)
@@ -2587,13 +2687,15 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
     if pierce and dmg > 0:
         fxn = "The shaft goes through plate like paper."
     if unreachable:
-        # 031 §7: the shot flies, nothing flies back — the gap is armor.
-        arena.record(p, who="foe", kind="strike", outcome="none")
-        chase = _advance_chase(p)
+        # 031 §7 revised by 075: nothing flies back the instant you
+        # loose — but the chase runs, and it may reach you this round.
+        chase = _pursuit_phase(p)
+        if p["hp"] <= 0:
+            return _death(p, floor)
         return fight_scene(p, floor, note=(
             f"{_strike_text(p, dmg)}"
+            + " It is still coming for you."
             + (f" {fxn}" if fxn else "")
-            + " It has no answer at this range."
             + (f" {chase}" if chase else "")
             + (f" {snap}" if snap else "")))
     back = _monster_hit(p)

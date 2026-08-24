@@ -59,16 +59,19 @@ def test_gap_mult_ladder_and_close_penalty():
     assert economy.bow_gap_mult(9) == 1.5          # capped at GAP_MAX
 
 
-def test_parting_blow_chance_falls_with_speed_advantage():
-    even = economy.p_gap_hit(5, 5)
-    faster = economy.p_gap_hit(7, 5)
-    slower = economy.p_gap_hit(5, 7)
-    assert even == pytest.approx(0.65)
-    assert faster == pytest.approx(0.41)
-    assert slower == pytest.approx(0.89)
-    assert faster < even < slower
-    assert economy.p_gap_hit(15, 1) == pytest.approx(0.05)   # floor
-    assert economy.p_gap_hit(1, 15) == pytest.approx(0.95)   # cap
+def test_pursuit_chance_falls_with_speed_advantage_but_never_to_zero():
+    # 075: p_gap_hit is retired — one curve (p_pursue) governs all
+    # monster catch-up. Decays with the lead, floors above zero.
+    even = economy.p_pursue(5, 5)
+    faster = economy.p_pursue(7, 5)
+    slower = economy.p_pursue(5, 7)
+    assert even == pytest.approx(economy.PURSUE_CAP)
+    assert slower == pytest.approx(economy.PURSUE_CAP)
+    assert faster < even
+    assert economy.p_pursue(15, 1) > 0                       # never zero
+    assert economy.p_pursue(15, 1) == pytest.approx(
+        economy.PURSUE_FLOOR, abs=0.01)
+    assert not hasattr(economy, "p_gap_hit")
 
 
 # ── the menu ─────────────────────────────────────────────────────────────
@@ -107,12 +110,12 @@ def test_create_distance_row_disappears_at_the_cap(monkeypatch):
     s2 = combat.resolve_fight_action(p, fl, "create_distance")
     assert p["encounter"]["gap"] == economy.GAP_MAX
     assert p["hp"] == hp0
-    assert any("long edge" in ln for ln in s2.body_lines)
+    assert any("as far as you can go" in ln for ln in s2.body_lines)
 
 
 # ── the ladder in play ───────────────────────────────────────────────────
 
-def test_clean_break_when_the_roll_says_so(monkeypatch):
+def test_clean_break_when_every_pursuit_roll_fails(monkeypatch):
     p = _player("archer", 1, "cd-clean")
     fl, enc = _enc(1, "grey_wolf")
     combat.start_encounter(p, fl, enc)
@@ -122,22 +125,24 @@ def test_clean_break_when_the_roll_says_so(monkeypatch):
     assert p["encounter"]["gap"] == 2
     assert p["encounter"]["range"] == "at_range"
     assert p["hp"] == hp0
-    assert any("break clean" in ln for ln in s.body_lines)
+    assert any("stay ahead" in ln for ln in s.body_lines)
 
 
-def test_parting_blow_collects_when_the_roll_lands(monkeypatch):
+def test_pursuit_catches_the_step_back_when_the_rolls_land(monkeypatch):
+    # 075: the step-back's price is the chase itself — every roll
+    # landing means the monster crosses the new ground AND strikes.
     p = _player("archer", 1, "cd-toll")
     fl, enc = _enc(1, "grey_wolf")
     combat.start_encounter(p, fl, enc)
     hp0 = p["hp"]
-    # the p_gap_hit roll succeeds; damage pinned high so the halved
-    # blow still chips
-    monkeypatch.setattr(state, "roll_ok", lambda pl, prob: True)
+    monkeypatch.setattr(state, "roll_ok", lambda pl, prob: prob < 1)
     monkeypatch.setattr(state, "rng_int", lambda pl, lo, hi: hi)
     s = combat.resolve_fight_action(p, fl, "create_distance")
-    assert p["encounter"]["gap"] == 2          # the ground IS made
-    assert p["hp"] < hp0                       # but the toll was paid
-    assert any("collects the toll" in ln for ln in s.body_lines)
+    # 3 pursuit turns, all land: gap 2→1→0, then a halved strike
+    assert p["encounter"]["gap"] == 0
+    assert p["encounter"]["range"] == "close"
+    assert p["hp"] < hp0
+    assert any("catches up and hits you" in ln for ln in s.body_lines)
 
 
 def test_bow_damage_climbs_the_ladder(monkeypatch):
@@ -167,12 +172,12 @@ def test_chase_eats_the_ladder_one_length_at_a_time(monkeypatch):
     note = combat._advance_chase(p)
     assert p["encounter"]["gap"] == 2
     assert p["encounter"]["range"] == "at_range"
-    assert "eats a length" in note
+    assert "rushes in" in note
     combat._advance_chase(p)
     note = combat._advance_chase(p)
     assert p["encounter"]["gap"] == 0
     assert p["encounter"]["range"] == "close"
-    assert "on you now" in note
+    assert "in its range now" in note
 
 
 def test_closing_in_resets_the_gap():

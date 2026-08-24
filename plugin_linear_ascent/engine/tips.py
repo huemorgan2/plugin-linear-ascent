@@ -220,32 +220,35 @@ _TIPS: dict[str, str] = {
               "HALVED, and a braced guard can hold a weak blow at "
               "zero. Buys a breath when HP runs low — the fight goes "
               "on until you attack or run."),
-    "run": ("Leave the fight. No gold, no XP — but you keep your HP, "
-            "your gear and your carried coin. Your speed against its "
-            "speed decides the getaway: walk away from the slow, don't "
-            "count on outrunning the fast. If it cuts off your line you "
-            "take the blow and the fight goes on — and a Warden never "
-            "lets you go on better than 3-in-4, however fast you are."),
-    "close_in": ("Cross the open ground to swing steel. Always works, "
-                 "costs the round — the monster strikes at HALF power "
-                 "while you close. Bows and spellwork don't need this; "
-                 "a blade does."),
-    "open_distance": ("Break contact and put ground between you — only "
-                      "possible against something SLOWER than you; equal "
-                      "legs never part. Costs the round; if no gap opens "
-                      "it gets a free half-power hit. At range a bow "
-                      "shoots full and nothing reaches you back — until "
-                      "it closes the gap."),
-    # 040: the archer's gap ladder wears the same "Open distance" label
+    "run": ("Try to leave the fight. The faster you are than the "
+            "monster, the better your chance to get away. If it catches "
+            "you, you take a hit and the fight goes on. Leaving earns no "
+            "gold and no XP, but you keep your HP, your gear and your "
+            "carried coin. A Warden never lets you go on better than "
+            "3-in-4, however fast you are."),
+    "close_in": ("Run in to reach it with your weapon. This always "
+                 "works and uses your turn. As you close, the monster "
+                 "gets one hit on you at half strength. Only melee "
+                 "weapons need this — bows and magic already hit from "
+                 "far away."),
+    "open_distance": ("Back away to put space between you and the "
+                      "monster. It keeps chasing, so this buys room, "
+                      "not safety — the faster you are than it, the "
+                      "more often you get away clean. Uses your turn; "
+                      "if you fail to break away it gets a half-strength "
+                      "hit on you. You cannot back away from a flying "
+                      "monster; it follows you."),
+    # 040: the archer's step-back wears the same "Open distance" label
     # on the card — one verb for making ground; this tip is the [i].
-    "create_distance": ("Give ground on purpose — rank-6 bowwork. It "
-                        "ALWAYS works: you step back one length. From "
-                        "rank 8 the open gap starts PAYING — ×1.25 at 2 "
-                        "lengths, ×1.5 at 3 (the cap); below rank 8 the "
-                        "long draw shoots plain ×1.0. The price is "
-                        "the monster may rake you once as you pull "
-                        "away; faster legs shrink that chance. Costs "
-                        "the round."),
+    "create_distance": ("Step back one pace to give your bow more room. "
+                        "A bow hits harder from farther away — a little "
+                        "more at 2 paces, more at 3 (needs Bow rank 8; "
+                        "below that the long shot hits plain). As you "
+                        "move, the monster may catch you and land a "
+                        "hit; being faster than it makes that less "
+                        "likely, but never impossible. Uses your turn. "
+                        "You cannot step back from a flying monster; "
+                        "it follows you."),
     "drink_tonic": ("Trollblood tonic — from the charm pouch: full HP, "
                     "the round keeps going. Worn for exactly the "
                     "moment a Warden has you at the edge."),

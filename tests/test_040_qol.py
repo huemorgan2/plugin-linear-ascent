@@ -87,8 +87,10 @@ def test_archer_sees_exactly_one_open_distance_row():
 
 
 def test_the_gap_ladder_carries_its_own_tip():
-    assert tips.option_tip("create_distance")
-    assert "1.5" in tips.option_tip("create_distance")
+    # 075 plain-English copy: the ladder explained without multipliers
+    tip = tips.option_tip("create_distance")
+    assert tip
+    assert "2 paces" in tip and "harder from farther away" in tip
 
 
 def test_non_archers_keep_the_footwork_row():

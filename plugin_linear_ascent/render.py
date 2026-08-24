@@ -898,8 +898,9 @@ _TIP_ATK = ("ATK — your total attack: class base plus weapon and honing. "
             "Every 3 points fills half a sword.")
 _TIP_DEF = ("DEF — your total defense: shield, armor and honing. "
             "Every 3 points fills half an icon.")
-_TIP_SPD = ("SPD — your speed: class base plus footwear. Decides dodges, "
-            "chases and getaways. Every point fills a bolt.")
+_TIP_SPD = ("SPD — how fast you move (your build plus your boots). "
+            "Higher speed helps you dodge, get away, and stay ahead "
+            "when something chases you. Every point fills a bolt.")
 
 
 def _portrait_slug(scene: Scene) -> str:
@@ -1410,11 +1411,15 @@ def _dossier_html(en: dict) -> str:
     mspd = int(en.get("mspd", 5))
     pspd = int(en.get("pspd", 5))
     if mspd > pspd:
-        chase = "It closes ground you cannot hold — don't count on outrunning it."
+        chase = ("It is faster than you. It will close the distance, "
+                 "and you cannot count on getting away.")
     elif mspd < pspd:
-        chase = "You hold the range and you choose the exit — kite it."
+        chase = ("You are faster than it, so you will usually stay "
+                 "ahead — but it keeps trying to close, so it will "
+                 "catch you now and then.")
     else:
-        chase = "An even footrace — no one gets away clean."
+        chase = ("You are about the same speed — neither of you gets "
+                 "away clean.")
     row("t_speed", f"speed — {_speed_word(mspd)} ({mspd}) against "
         f"your {pspd}.", chase,
         RED if mspd > pspd else (OK if mspd < pspd else DIM))
@@ -2128,8 +2133,9 @@ def _aicon(key: str, ink: str = "", cls: str = "", tip: str = "") -> str:
 
 # 067 phase 6: the foe's kind, spelt out for the [i]-less reader
 _TIP_KIND = {
-    "fly": "Flying — out of reach of a blade until it dives; "
-           "arrows and spells find it.",
+    "fly": "Flying — a sword cannot reach it; use a bow or magic. "
+           "You also cannot back away from it, because it follows "
+           "you through the air.",
     "armoured": "Armoured — the DEF is plate; blades glance, "
                 "arrows bite less, magic passes.",
     "magic_resist": "Magic resistance — spells lose this share of their "
