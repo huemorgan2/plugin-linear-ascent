@@ -28,6 +28,14 @@ Not a defect — a missing feature. No transition layer exists in the pane, and
 the direction of a floor change is not on the wire (scenes carry `location`
 but no up/down signal).
 
+### Follow-up defect found in browser acceptance
+
+The GIF is currently the CSS mask on `.car` itself. Its transparent pixels
+therefore reveal the destination card, making the elevator frame look
+transparent instead of like a solid display. The destination ordering is
+already correct: `showScene` inserts `d.fragment` before `playLift()` mounts
+the overlay, so the arriving card initializes beneath the animation.
+
 ## Fix — two phases
 
 ### Phase 1 — plugin: direction on the wire + pane overlay
@@ -173,3 +181,29 @@ rollback. The GIF files themselves are additive and harmless to leave.
   hold is wanted later, tune the constant only — no regeneration needed.
 - The 038 mercy-reel precedent shows Chromium shares animation clocks for
   identical image URLs — the `?t=` nonce is load-bearing; keep it.
+
+## Follow-up — opaque animation stage
+
+**Goal.** Both ascent and descent rides display inside an opaque black
+320:112 stage. The destination remains mounted first beneath the overlay, so
+its art, Figure3D portrait, wiring, and reveal effects can load while the lift
+animation acts as the transition loader.
+
+**Steps.**
+1. Change `#liftlay .car` into an opaque black positioned container.
+2. Add `.car .ink` as the full-size DIM-coloured layer that receives the GIF
+   mask. Transparent GIF pixels now show the black stage, not the destination.
+3. Keep `game.innerHTML = d.fragment` before `playLift()` and add a regression
+   assertion for that ordering.
+4. Verify ascent and descent in a real browser: black stage behind the GIF,
+   destination card present underneath during the ride, and final destination
+   immediately usable after the fade.
+
+**Verification.**
+- Targeted 076 tests assert the `.ink` layer, opaque `.car`, and destination-
+  before-overlay ordering.
+- Browser screenshots cover both directions mid-animation and after fade.
+- No overlay on boot, peek, reload, or refusal.
+
+**Rollback.** Revert the `.car`/`.ink` CSS and DOM change. The lift direction
+wire field and destination scene remain unaffected.
