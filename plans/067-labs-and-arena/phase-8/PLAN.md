@@ -141,3 +141,11 @@ the card under the scene.
   Targeted pytest 107 passed / 1 skipped; full suite 3 failed 1299
   passed — the same 3 fail at the pristine base (pre-existing).
   Released as 0.96.2. plugin-only release — no worldd changes.
+
+## Execution status — 0.97.1 follow-up (2026-08-24, roy's report on 0.96.2)
+
+Roy: the 0.96.2 card said the creature's name twice in a live fight — the HUD nameplate on the scene AND the name+[i] headline under it. Fix: the `[i]` (dossier tip) rides the foe's `.aname` slab; the headline is dropped when `arena_live and scene.enemy` (opener and end cards keep theirs). Plus the lean win amounts: crisp black duplicate-shadow one DRAWING pixel right+down at 45° — text `text-shadow:1ch .5em 0 #000` (the big font's pixel = 1 char × half a line), icons `drop-shadow(display/16)` (2.8125px @45px, 1.5px @24px) — icons at 150% same 16×16 resolution (30→45px, trim 16→24px), and a `+` after the number ("17+ XP"); `+` added to `_BIG` and its gold set.
+
+- Tests: 104 targeted; full suite 5 failed / 1305 passed — same 5 at pristine c1bc08b (pre-existing; test_031/test_048 arrived with 0.97.0). 3 new tests in test_067_arena.py.
+- Dojo run 0044: **39/39 PASS**, victory in-run; S13 `{infoOnName:true,tiph:true,headline:0}`, S14 `{shadow:"rgb(0,0,0) 4.5px 4.5px 0px",plus:true,egw:"24px"}`. Captures at 1440+420, rounds and victories.
+- Renumbered 0.96.3→0.97.1 mid-release: the other session shipped 0.97.0 (c1bc08b); rebased onto it so the marketplace never goes backwards.

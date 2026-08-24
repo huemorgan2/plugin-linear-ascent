@@ -454,6 +454,7 @@ _BIG = {
     "Z": ("111", "001", "010", "100", "111"),
     ":": ("0", "1", "0", "1", "0"),
     "-": ("000", "000", "111", "000", "000"),
+    "+": ("000", "010", "111", "010", "000"),
     ".": ("0", "0", "0", "0", "1"),
     ",": ("00", "00", "00", "01", "10"),
     "!": ("1", "1", "1", "0", "1"),
@@ -473,7 +474,7 @@ def _big_html(text: str, tint: str = "") -> str:
         g = _BIG.get(ch)
         if g is None:
             continue
-        gold = ch.isdigit() or ch in "◎◈,."
+        gold = ch.isdigit() or ch in "◎◈,.+"
         cls = "binh" if tint else ("bgold" if gold else "bwhite")
         w = max(len(r) for r in g)
         grid = [r.ljust(w, "0") for r in g] + ["0" * w]
@@ -594,9 +595,13 @@ def _tally_html(tally: list[dict], lean: bool = False) -> str:
             continue
         key, tint = _TALLY_MARK[kind]
         label = f"+{n:,} {_TALLY_WORD[kind]}"
+        # 0.97.1 (roy): the lean win amounts read as gains — the number
+        # wears a + on its right ("29+ XP").
+        big = (f"{n:,}+ {_TALLY_WORD[kind]}" if lean
+               else f"{n:,} {_TALLY_WORD[kind]}")
         head = (f'<div class="thead" style="color:{tint}">'
                 f"{_eglyph(key)}"
-                f"{_big_html(f'{n:,} {_TALLY_WORD[kind]}', tint)}</div>")
+                f"{_big_html(big, tint)}</div>")
         heap = ""
         if not lean and n < TALLY_CAP:
             heap = (f'<span class="tmarks" style="color:{tint}" '
@@ -2187,7 +2192,7 @@ def _astat_html(side: dict, cls: str, speed_key: str, name: str = "",
             f'<div>{" ".join(segs)}</div>{pouch}{tail}</div>')
 
 
-def _arena_hud_html(a: dict) -> str:
+def _arena_hud_html(a: dict, info: str = "") -> str:
     """067 phase 6 (roy): one row along the top of the stage — the
     climber's slab left, the foe's right, both named, both top-aligned
     a half line down. The climber's slab ends in a gear line (every
@@ -2226,13 +2231,16 @@ def _arena_hud_html(a: dict) -> str:
         kinds += _aicon("t_bulwark", GOLD, "", _TIP_KIND["bulwark"])
     dext = (_aicon("t_armor", ORANGE, "", _TIP_KIND["armoured"])
             if foe.get("armoured") else "")
+    # 0.97.1 (roy): the [i] rides the foe's nameplate — the one name the
+    # scene already shows — and opens the dossier tip right there.
     return ('<div class="ahuds">'
             + _astat_html(me, "me", "spd", tail=tail)
-            + _astat_html(foe, "foe", "spd", name_extra=kinds, def_extra=dext)
+            + _astat_html(foe, "foe", "spd", name_extra=kinds + info,
+                          def_extra=dext)
             + "</div>")
 
 
-def _arena_banner_html(scene) -> str:
+def _arena_banner_html(scene, info: str = "") -> str:
     a = scene.arena or {}
     w = int(a.get("w", 320))
     # 067 phase 8 (roy): the stage the card shows is a 320×160 band —
@@ -2249,7 +2257,8 @@ def _arena_banner_html(scene) -> str:
             tally = f'<div class="awin later">{inner}</div>'
     return (f'<div class="banner arena" style="background-color:#000;'
             f'aspect-ratio:{w}/160;" data-a3d-slot="1">'
-            f'{_arena_hud_html(a)}<div class="afloats"></div>{tally}</div>')
+            f'{_arena_hud_html(a, info)}<div class="afloats"></div>'
+            f"{tally}</div>")
 
 
 def _arena_log_html(a: dict) -> str:
@@ -2357,8 +2366,19 @@ def render_scene_fragment(scene: Scene) -> str:
     # 067 phase 8 (roy): the icon tiles exist ONLY in the fight itself.
     # Opener and end cards (victory/death/fled) use the regular menu.
     arena_round = bool(ar) and ar.get("phase") == "round"
+    # 0.96.2/0.97.1 (roy): the [i] sits right after the creature's name
+    # and its tip IS the dossier panel (data-tiph, trusted server HTML).
+    # The name lives in exactly ONE place per card: the headline on
+    # regular cards, the foe's HUD nameplate in the live arena.
+    hl_info = ""
+    if scene.enemy:
+        dossier = _dossier_html(scene.enemy)
+        hl_info = (f'<span class="info" tabindex="0" role="note" '
+                   f'aria-label="enemy dossier" '
+                   f'data-tip="{_e(_dossier_tip(dossier))}" '
+                   f'data-tiph="{_e(dossier)}">i</span>')
     if arena_live:
-        parts.append(_arena_banner_html(scene))
+        parts.append(_arena_banner_html(scene, info=hl_info))
         if arena_round and scene.options:
             # the toolbar: one row of tiles DIRECTLY under the stage
             parts.append(_arena_tiles_html(scene, later=False))
@@ -2393,18 +2413,12 @@ def render_scene_fragment(scene: Scene) -> str:
     parts.append(f'<div class="eyebrow type">{_e(scene.eyebrow)}</div>')
     hl_col = _HEADLINE.get(scene.event_kind, BRIGHT)
     # 030: an amount wears its colour even in a headline (law 1)
-    # 0.96.2 (roy): the [i] sits right after the creature's name and its
-    # tip IS the dossier panel (data-tiph, trusted server HTML). No
-    # "[i] dossier" fold under the scene anymore.
-    hl_info = ""
-    if scene.enemy:
-        dossier = _dossier_html(scene.enemy)
-        hl_info = (f'<span class="info" tabindex="0" role="note" '
-                   f'aria-label="enemy dossier" '
-                   f'data-tip="{_e(_dossier_tip(dossier))}" '
-                   f'data-tiph="{_e(dossier)}">i</span>')
-    parts.append(f'<div class="headline type" style="color:{hl_col}">'
-                 f"{_ep(scene.headline)}{hl_info}</div>")
+    # 0.97.1 (roy): in the live arena the foe's nameplate already says
+    # the name (with the [i]) — the headline under the scene would say
+    # it a second time, so that line is dropped entirely.
+    if not (arena_live and scene.enemy):
+        parts.append(f'<div class="headline type" style="color:{hl_col}">'
+                     f"{_ep(scene.headline)}{hl_info}</div>")
     if scene.enemy and not arena_live:
         parts.append(_enemy_head_html(scene.enemy))
     if scene.support:
@@ -2700,6 +2714,16 @@ SCENE_CSS = f"""
 .astat .off{{color:{DIM};}}
 .astat.foe{{margin-left:auto;text-align:right;}}
 .astat.foe>div{{margin-left:auto;}}
+/* 0.97.1 (roy): the [i] rides the foe's nameplate in the live arena */
+.aname .info{{display:inline-flex;margin-left:1ch;color:{DIM};}}
+/* 0.97.1 (roy): the win amounts cast a crisp black shadow — the same
+   shape shifted one DRAWING pixel right+down (45°). The big font's
+   pixel is one char wide and half a line tall → 1ch/.5em scales with
+   the font; the icons are 16×16 grids, so their pixel is display/16.
+   Icons at 150% (30→45px), same 16×16 resolution. */
+.awin .bigtx div{{text-shadow:1ch .5em 0 {INK};}}
+.awin .thead>.eg{{width:45px;height:45px;
+ filter:drop-shadow(2.8125px 2.8125px 0 {INK});}}
 /* a narrow stage (phone): the slabs drop to 12px so both still share
    the top line with the 20-cell bars */
 @container (max-width: 600px){{.astat{{font-size:12px;line-height:1.4;}}
@@ -2707,7 +2731,9 @@ SCENE_CSS = f"""
  /* phase 8: the win amounts shrink with the 160 band so they never
     swallow the scene on a phone */
  .awin .tallies{{font-size:9px;gap:0 14px;}}
- .awin .thead>.eg{{width:16px;height:16px;}}}}
+ /* 150% of the 16px trim icon; drawing pixel 24/16 = 1.5px */
+ .awin .thead>.eg{{width:24px;height:24px;
+  filter:drop-shadow(1.5px 1.5px 0 {INK});}}}}
 /* phase 8: a phone-narrow stage — the HP line is 31ch of pre (20 blocks
    + the numbers); at 12px two slabs with a 3-digit foe HP outgrow the
    row and the foe slab wraps under. 10px keeps both on the top line. */

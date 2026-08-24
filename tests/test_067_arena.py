@@ -323,3 +323,51 @@ def test_phase8_victory_card_regular_menu_and_tally_over_scene():
         assert "tmarks" not in banner and "tnote" not in banner
     # the profile is back on the end card
     assert 'class="profile"' in html or 'class="inv later"' in html
+
+
+# ── 0.97.1 (roy): one name per card — the [i] rides the foe's nameplate
+# in a live fight; the lean win amounts wear a + and a pixel shadow ──
+def test_0963_live_round_info_on_nameplate_not_headline():
+    p = _climber(clazz="archer")
+    s, fl = _hunt(p, 6)
+    p["encounter"]["range"] = "close"
+    p["encounter"]["profile"] = {"type": "plain", "flying": False,
+                                 "bulwark": False, "speed": 5}
+    s = combat.resolve_fight_action(p, fl, "attack")
+    assert s.arena and s.arena["phase"] == "round"
+    html = render.render_scene_fragment(s)
+    # the name is said ONCE — no headline line under the scene
+    assert 'class="headline type"' not in html
+    # the [i] rides the foe's nameplate and carries the dossier tip
+    nm = (html.split('class="astat foe"', 1)[1]
+              .split('class="aname"', 1)[1].split("</div>", 1)[0])
+    assert 'class="info"' in nm and "data-tiph" in nm and "dossier" in nm
+
+
+def test_0963_opener_and_victory_keep_their_headline():
+    p = _climber(clazz="archer")
+    s, fl = _hunt(p, 6)
+    assert s.arena and s.arena["phase"] == "opener"
+    html = render.render_scene_fragment(s)
+    assert 'class="headline type"' in html and ">i</span></div>" in html
+    # victory: the encounter is gone — the "evicted/falls" line stays
+    p2 = _climber()
+    s2, fl2 = _hunt(p2, 6)
+    e = p2["encounter"]
+    e["range"] = "close"
+    e["hp"] = 1
+    e["profile"] = {"type": "plain", "flying": False, "bulwark": False,
+                    "speed": 5}
+    p2["training"]["blade"] = 10
+    s2 = combat.resolve_fight_action(p2, fl2, "attack")
+    assert s2.arena and s2.arena["phase"] == "victory"
+    html2 = render.render_scene_fragment(s2)
+    assert 'class="headline type"' in html2
+
+
+def test_0963_lean_tally_wears_a_plus():
+    lean = render._tally_html([{"kind": "gold", "n": 7}], lean=True)
+    full = render._tally_html([{"kind": "gold", "n": 7}])
+    # the + glyph's middle line is ▀█▀ — no other tally char draws it
+    assert "▀█▀" in lean
+    assert "▀█▀" not in full
