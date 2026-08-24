@@ -1,6 +1,6 @@
 """071: Labs figure3d — flag, payload, render hook, isolation."""
 from plugin_linear_ascent import render
-from plugin_linear_ascent.engine import core, figure3d, labs, state
+from plugin_linear_ascent.engine import core, figure3d, labs, profile, state
 from plugin_linear_ascent.engine.scene import Scene
 
 from tests.conftest import make_character
@@ -89,3 +89,28 @@ def test_labs_card_has_the_row():
     assert p["labs"]["figure3d"] is True
     row = next(o for o in s.options if o.id == "labs_toggle_figure3d")
     assert row.label.endswith("ON")
+
+
+def test_other_player_profile_respects_the_viewers_labs_flag():
+    target = _playing("giant")
+    target["name"] = "BrowserDebug"
+    public = profile.public_sheet(target)
+    assert public["figure3d"]["race"] == "giant"
+
+    viewer = _playing("elf")
+    viewer["_world"] = {
+        "social": True,
+        "rooms": {},
+        "profiles": {"BrowserDebug": public},
+    }
+    off = core.apply_choice(viewer, "pv:BrowserDebug")
+    assert "figure3d" not in (off.avatar or {})
+    assert "data-figure3d" not in render.render_scene_fragment(off)
+
+    labs.set_flag(viewer, "figure3d", True)
+    on = core.current_scene(viewer)
+    assert on.avatar["figure3d"]["race"] == "giant"
+    html = render.render_scene_fragment(on)
+    assert 'canvas class="portrait later figure3d"' in html
+    assert "data-figure3d" in html
+    assert "figure3d-fallback" in html

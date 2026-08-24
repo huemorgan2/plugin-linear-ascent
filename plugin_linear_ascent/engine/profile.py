@@ -15,7 +15,7 @@ from __future__ import annotations
 import datetime as dt
 
 from .. import economy
-from . import state
+from . import labs, state
 from .combat import _ledger, meters
 from .scene import Option, Scene
 from .social import _effect, world
@@ -26,7 +26,7 @@ LOOT_COST = economy.COST_PVP_ATTACK
 _AVATAR_KEYS = (
     "name", "level", "race", "clazz", "faction",
     "gold", "energy", "energy_max", "xp", "xp_need",
-    "hp", "hp_max", "atk", "dfs", "spd", "slots", "sleeping",
+    "hp", "hp_max", "atk", "dfs", "spd", "slots", "sleeping", "figure3d",
 )
 
 
@@ -80,9 +80,15 @@ def public_sheet(d: dict, *, energy: int | None = None) -> dict:
     }
 
 
-def avatar_from_payload(pr: dict) -> dict:
-    """Pick the public sheet off worldd's profile payload."""
+def avatar_from_payload(pr: dict, *, allow_figure3d: bool = False) -> dict:
+    """Pick the public sheet off worldd's profile payload.
+
+    The target's 3D kit is public, but the viewer's Labs flag decides whether
+    the experimental renderer receives it.
+    """
     out = {k: pr[k] for k in _AVATAR_KEYS if k in pr}
+    if not allow_figure3d:
+        out.pop("figure3d", None)
     if "faction" not in out and pr.get("guild"):
         out["faction"] = pr["guild"]
     if out.get("slots"):
@@ -222,7 +228,8 @@ def profile_scene(p: dict, note: str = "") -> Scene:
         body_lines=lines,
         options=opts,
         meters=meters(p),
-        avatar=avatar_from_payload(pr),
+        avatar=avatar_from_payload(
+            pr, allow_figure3d=labs.enabled(p, "figure3d")),
     )
 
 

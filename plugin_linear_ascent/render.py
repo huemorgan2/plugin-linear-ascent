@@ -933,6 +933,26 @@ def _portrait_data_url(slug: str) -> str | None:
     return art[0] if art else None
 
 
+def _portrait_html(url: str | None, fig: dict | None = None) -> str:
+    """The shared PNG/experimental-canvas portrait.
+
+    Both the viewer rail and another climber's 072 public sheet use this
+    path, so Labs cannot silently fall back to a PNG on player pages.
+    """
+    if not url:
+        return ""
+    if fig and fig.get("race"):
+        w, h = (int((fig.get("px") or [100, 200])[0]),
+                int((fig.get("px") or [100, 200])[1]))
+        spec = _e(_json.dumps(fig, separators=(",", ":")))
+        return (
+            f'<img class="portrait later figure3d-fallback" src="{url}" '
+            f'alt="" hidden>'
+            f'<canvas class="portrait later figure3d" width="{w}" '
+            f'height="{h}" data-figure3d="{spec}"></canvas>')
+    return f'<img class="portrait later" src="{url}" alt="">'
+
+
 # ── 010: the Gmail glyph + the profile's "connect Gmail" box ────────────
 # The 4-ink 16×16 Google "G", drawn in the game's own inks — no true blue
 # in the warmed-CGA 16, so cyan-teal energy stands in for Google blue.
@@ -979,20 +999,6 @@ def google_g() -> str:
             + "".join(rects) + "</svg>")
 
 
-def _connect_box_html() -> str:
-    """010: an account not yet linked to Gmail has no face — the portrait's
-    place holds an invitation instead. Only the website's unlinked (legacy)
-    accounts ever see this; new climbers are Gmail from step one."""
-    return ('<div class="vbox" role="group" aria-label="Connect Gmail">'
-            '<div class="vtitle">Connect Gmail</div>'
-            '<div class="vsub">Your climber\'s look appears once your '
-            'account is linked to Gmail.</div>'
-            '<div class="vrule"></div>'
-            '<a class="vgoogle" href="/auth/google/start">'
-            + google_g()
-            + ' <span>connect <u>Gmail</u></span></a></div>')
-
-
 def _pip_row(key: str, label: str, stat: int, tint: str, tip: str,
              per_half: float = 3) -> str:
     halves = max(0, min(20, round(stat / per_half)))
@@ -1032,33 +1038,17 @@ def _profile_html(scene: Scene) -> str:
     # map (slots either side of the portrait) takes the left, the meters
     # and pip rows the right.
     pack = _inventory_html(scene)
-    # 010: the face is a Gmail privilege — a not-yet-linked (legacy) web
-    # account holds the connect box where its portrait would stand. The
-    # flag is set only by worldd's web pane; Luna surfaces never gate it.
-    if getattr(scene, "portrait_locked", False):
-        figure = _connect_box_html()
-    else:
-        url = _portrait_data_url(_portrait_slug(scene))
-        if not url:
-            return ident + right + pack
-        # a real <img>, not a masked div: with the height set to the slot
-        # column's, width:auto keeps the 1:2 ratio from the PNG itself —
-        # the one sizing rule every webview agrees on. The ink is baked
-        # white.
-        # 071: Labs figure3d replaces the PNG with a same-size canvas;
-        # the <img> stays as a hidden fallback if WebGL is dead.
-        fig = getattr(scene, "figure3d", None)
-        if fig and fig.get("race"):
-            w, h = (int((fig.get("px") or [100, 200])[0]),
-                    int((fig.get("px") or [100, 200])[1]))
-            spec = _e(_json.dumps(fig, separators=(",", ":")))
-            figure = (
-                f'<img class="portrait later figure3d-fallback" src="{url}" '
-                f'alt="" hidden>'
-                f'<canvas class="portrait later figure3d" width="{w}" '
-                f'height="{h}" data-figure3d="{spec}"></canvas>')
-        else:
-            figure = f'<img class="portrait later" src="{url}" alt="">'
+    url = _portrait_data_url(_portrait_slug(scene))
+    if not url:
+        return ident + right + pack
+    # a real <img>, not a masked div: with the height set to the slot
+    # column's, width:auto keeps the 1:2 ratio from the PNG itself —
+    # the one sizing rule every webview agrees on. The ink is baked
+    # white.
+    # 071: Labs figure3d replaces the PNG with a same-size canvas;
+    # the <img> stays as a hidden fallback if WebGL is dead.
+    fig = getattr(scene, "figure3d", None)
+    figure = _portrait_html(url, fig)
     return (ident
             + '<div class="profile">'
             + _gearmap_html(scene, figure)
@@ -1173,8 +1163,7 @@ def player_avatar_html(sheet: dict) -> str:
              f'<span class="idr">{right}</span></div>')
     slug = race if race and _portrait_art(race) else "human"
     url = _portrait_data_url(slug)
-    figure = (f'<img class="portrait later" src="{url}" alt="">'
-              if url else "")
+    figure = _portrait_html(url, sheet.get("figure3d"))
     slots = [sl for sl in (sheet.get("slots") or [])
              if isinstance(sl, dict)]
     gear = _gearmap_from_slots(slots, figure, readonly=True)
@@ -3337,7 +3326,6 @@ SCENE_CSS = f"""
 .gearmap .pwrap .portrait{{height:258px;}}
 .gearmap .pwrap canvas.figure3d{{display:block;image-rendering:pixelated;
  width:auto;}}
-.gearmap .pwrap .vbox{{width:120px;}}
 .slot.gm.locked{{background:#222;border:2px solid #555;opacity:1;
  cursor:help;}}
 .slot.gm.locked .picon{{width:26px;height:26px;}}
@@ -3352,21 +3340,6 @@ SCENE_CSS = f"""
  background-color:{GOLD} !important;}}
 .profile .rail{{margin-top:0;padding-top:0;border-top:0;}}
 .profile .inv{{border-top:0;padding-top:0;margin-top:8px;}}
-/* 010: the "connect Gmail" box stands where the portrait would — same
-   footprint (100:200), so the profile keeps its shape for legacy accounts */
-.profile .vbox{{flex:none;width:140px;aspect-ratio:100/200;
- border:1px solid {BORDER};background:{SLATE};display:flex;
- flex-direction:column;gap:6px;align-items:center;justify-content:center;
- text-align:center;padding:8px;}}
-.vbox .vtitle{{color:{BRIGHT};text-transform:uppercase;}}
-.vbox .vsub{{color:{DIM};line-height:1.4;font-size:.85em;}}
-.vbox .vrule{{width:100%;border-top:1px solid {BORDER};margin:2px 0;}}
-.vbox .vgoogle{{display:inline-flex;align-items:center;gap:.75ch;
- color:{BRIGHT};text-decoration:none;}}
-.vbox .vgoogle u{{color:{AETHER};text-decoration:none;}}
-.vbox .vgoogle:hover u{{color:{GOLD};}}
-.vbox .gicon-svg{{width:16px;height:16px;image-rendering:pixelated;
- vertical-align:-3px;}}
 /* ── 059/062: the faction strip at the foot of the card — no box, the
    card's own dotted rule above it; banner + name are the door ── */
 .facblk{{display:flex;align-items:center;gap:1.5ch;margin-top:10px;

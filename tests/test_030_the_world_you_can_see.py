@@ -142,19 +142,15 @@ def test_armor_tier_wardrobe_is_gone():
         assert render._portrait_data_url(tier) is None, tier
 
 
-def test_gmail_gate_swaps_portrait_for_the_connect_box():
-    """010: a portrait_locked scene (an unlinked web account) shows the
-    'Connect Gmail' box in the portrait's place, never the face; the meters
-    and pack still ride the right column. Unset, the face returns."""
+def test_legacy_gmail_flag_cannot_hide_the_portrait():
+    """074: account recovery belongs outside the shared card renderer."""
     s = _scene_with_race("human")
     assert 'class="portrait' in render._profile_html(s)   # face by default
 
     s.portrait_locked = True
     html = render._profile_html(s)
-    assert 'class="vbox"' in html and "Connect Gmail" in html
-    assert 'class="portrait' not in html                  # no face when locked
-    assert 'href="/auth/google/start"' in html
-    assert "<svg" in html                                 # the 4-ink G glyph
+    assert 'class="portrait' in html
+    assert "Connect Gmail" not in html
     assert 'class="pcol"' in html                         # meters still ride
 
 

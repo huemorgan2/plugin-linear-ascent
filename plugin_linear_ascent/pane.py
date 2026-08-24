@@ -29,7 +29,7 @@ from . import icons
 from .colors import FACTION_COLORS
 from .render import (AETHER, ART, BORDER, BRIGHT, DIM, FAINT, FONT_STACK,
                      GOLD, INK, INTERACT_JS, PANEL, PANEL2, RED, SCENE_CSS,
-                     SWAP_JS, TEXT, TIP_JS, VIOLET, VIOLET_SOFT)
+                     SWAP_JS, TEXT, TIP_JS, VIOLET, VIOLET_SOFT, google_g)
 from .sfx import SFX_JS
 
 _API = "/api/p/plugin-linear-ascent"
@@ -42,6 +42,17 @@ body{{color:{TEXT};
  -webkit-font-smoothing:none;font-smooth:never;text-rendering:optimizeSpeed;
  font-variant-numeric:tabular-nums;}}
 .wrap{{max-width:760px;margin:0 auto;padding:14px 12px 64px;}}
+.gmail-recovery{{display:flex;align-items:center;justify-content:center;
+ min-height:1.5em;margin-top:12px;padding:5px 1ch;box-sizing:border-box;
+ border:1px solid {BORDER};background:{PANEL};white-space:nowrap;
+ overflow:hidden;}}
+.gmail-recovery[hidden]{{display:none;}}
+.gmail-recovery a{{display:inline-flex;align-items:center;gap:.75ch;
+ max-width:100%;overflow:hidden;text-overflow:ellipsis;color:{BRIGHT};
+ text-decoration:none;text-transform:uppercase;letter-spacing:.08em;}}
+.gmail-recovery a:hover,.gmail-recovery a:focus-visible{{color:{GOLD};}}
+.gmail-recovery .gicon-svg{{width:16px;height:16px;flex:none;
+ image-rendering:pixelated;}}
 .tabs{{display:flex;gap:2px;margin-bottom:12px;border:1px solid {BORDER};
  background:{PANEL};}}
 .tab{{flex:1;background:none;border:0;border-right:1px solid {BORDER};
@@ -184,6 +195,14 @@ select.ti{{background:{INK};color:{TEXT};border:1px solid {BORDER};
 .sndico{{width:16px;height:16px;background:currentColor;flex:none;
  mask-size:100% 100%;-webkit-mask-size:100% 100%;mask-repeat:no-repeat;
  -webkit-mask-repeat:no-repeat;image-rendering:pixelated;}}
+/* Five controls do not fit at the desktop spacing on a phone. Keep every
+   control — especially Labs — visible in one equal-width row. */
+@media (max-width:520px){{
+ .sndbar{{justify-content:stretch;gap:2px;padding:4px 2px;}}
+ .sndbtn{{flex:1 1 0;min-width:0;justify-content:center;gap:2px;
+  padding:5px 2px;font-size:clamp(8px,2.4vw,11px);letter-spacing:.04em;
+  overflow:hidden;}}
+}}
 /* ── 051: the postbox — feedback, replies, the admin desk ── */
 .sndbtn{{position:relative;}}
 .fbbadge{{position:absolute;top:-7px;right:-7px;background:{AETHER};
@@ -1627,11 +1646,14 @@ if (token || WEB) loadScene();
 """
 
 
-def render_pane(api_base: str = _API, web: bool = False) -> str:
+def render_pane(api_base: str = _API, web: bool = False,
+                gmail_recovery: bool = False) -> str:
     """The pane. Defaults are the Luna iframe (bearer token, postMessage
     auth); web=True is linearascent.net/play — same HTML, cookie auth,
     401 walks back to the site's door. 005: one pane, two doors."""
     title = "<title>LINEAR ASCENT</title>" if web else ""
+    recovery_hidden = "" if gmail_recovery else " hidden"
+    gicon = google_g()
     spk = icons.icon_data_url("speaker")
     note = icons.icon_data_url("note")
     post = icons.icon_data_url("postbox")
@@ -1651,6 +1673,9 @@ def render_pane(api_base: str = _API, web: bool = False) -> str:
     <div class="eyebrow">muster roll</div>calling the roll…</div></div>
   <div id="community" class="pane"><div class="placeholder">
     <div class="eyebrow">the guildhall</div>unrolling the charters…</div></div>
+  <div id="gmail-recovery" class="gmail-recovery"{recovery_hidden}>
+    <a href="/auth/google/start">{gicon}<span>Connect Gmail to recover this player.</span></a>
+  </div>
 </div>
 <div class="sndbar">
   <button id="sndfx" class="sndbtn" aria-pressed="true"><span class="sndico"

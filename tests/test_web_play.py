@@ -81,3 +81,10 @@ def test_both_panes_share_the_same_tabs_and_grammar():
     for chunk in ('data-tab="game"', 'data-tab="score"',
                   'data-tab="community"', "waking the lift"):
         assert chunk in luna and chunk in web
+
+
+def test_labs_control_stays_reachable_on_a_phone():
+    html = pane.render_pane(web=True)
+    assert 'id="labsbtn"' in html
+    assert "@media (max-width:520px)" in html
+    assert ".sndbtn{flex:1 1 0;min-width:0" in html
