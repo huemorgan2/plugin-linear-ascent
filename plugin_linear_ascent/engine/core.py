@@ -1033,7 +1033,9 @@ def _build_scene(p: dict) -> Scene:
         return _floor_movie_scene(p)
     if p.get("encounter"):
         fl = schema.get_floor(p["encounter"]["floor"])
-        return combat.fight_scene(p, fl)
+        # 081: while the sizing-up lasts, a rebuild IS the opener —
+        # a reload must not cost the player the sheet and the prose.
+        return combat.fight_scene(p, fl, opener=combat.swap_window(p))
     from . import hall, social
     loc = p["location"]
     if loc == "muster":

@@ -127,6 +127,20 @@ def test_the_sheet_survives_the_dict_round_trip():
     assert Scene.from_dict(r.to_dict()).foe_sheet is None
 
 
+def test_a_reload_during_the_sizing_up_keeps_the_opener():
+    # R-0053-1 (second cause): the idempotent rebuild answered with a
+    # bare round card while the player was still sizing up.
+    p = _arm(_classless("081-fs-rebuild"), "rusted_sword",
+             {"blade": 6, "bow": 0, "staff": 0})
+    _start(p, ("fly",))
+    s = core.current_scene(p)
+    assert s.foe_sheet is not None
+    # once the fight has begun, the rebuild is a round card again
+    core.apply_choice(p, "attack")
+    if p.get("encounter"):
+        assert core.current_scene(p).foe_sheet is None
+
+
 # ── the dismissable swap hint ──────────────────────────────────────────
 
 def test_foehint_close_is_a_doc_flag():
