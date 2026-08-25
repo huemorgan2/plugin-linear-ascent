@@ -260,6 +260,38 @@ drawn `portrait_*.png` files taught a parallel set of lessons:
   along the palm line; at 100×200 1-bit it reads as held. Verify by
   hover-tinting the item and reading the silhouette at 4× zoom.
 
+### One rig pipeline, two stages (080)
+
+The finisher/arena scene (`fight3d`) and the portrait now share ONE
+player pipeline — `worldd/static/site/lib/character.js` (load, settle,
+normalize, bone-map, dress through the sockets grip table) over the one
+set of GLBs in `lib/models/`. Porting the fight scene onto it taught:
+
+- **The portrait tone curve survives a tinted scene.** fight3d inks in
+  the card's banner tint, not white, and quantized 6-step shading there
+  banded exactly like the portrait's early attempts. The same continuous
+  `smoothstep(0.28, 0.75)` crushed-black ramp dropped in unchanged —
+  tint is applied after the ramp, so the curve is colour-blind. One
+  curve is now the house style for every live 3D surface.
+- **Emissive lift and tone curve are one coupled system.** The lifts in
+  the `GRIPS` table (sword 0.24, etc.) were tuned AGAINST the crushed
+  curve; the fight scene's old per-weapon `lift` constants were tuned
+  against its old 6-step curve. Adopting the curve without adopting the
+  lifts re-created the invisible-sword bug in the finisher. Lift lives
+  with the grip spec in `sockets.js`; scenes inherit it (`gripFor(fam)
+  .lift`) instead of keeping local constants.
+- **A shared gltf.scene is never cloned, and gear must be torn down.**
+  Cloning a skinned rig severs meshes from skeletons, so both stages
+  share the loaded scene — which means gear from the last fight is still
+  bolted to the bones on the next mount. `unequipAll` strips
+  `rigGear`-tagged children before every dress; every attach tags.
+- **The wire carries the wardrobe.** The finisher shows the climber's
+  REAL gear only because the server ships it: `data-rig3d` grew a third
+  field (`human:blade:gate_jerkin+gate_buckler+rusted_sword`) that the
+  client pre-warms GLBs from, and the kill3d/arena payloads carry
+  `worn`/`paths`/`lead`. Generic family GLBs remain only as fallbacks
+  for items with no model yet.
+
 ## Recommended production pipeline (049)
 
 1. Two-reference scene assembly (demoimages4): scene + player renders

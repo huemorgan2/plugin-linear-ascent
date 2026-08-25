@@ -195,3 +195,13 @@ the player's real ATK/DEF/HP and the creature's real profile.
   opposed to re-statting existing ones) means new PNGs through the 1-bit
   pipeline — that is why 025 re-statted the existing 40 rather than
   authoring new ones.
+- Three `test_kill3d.py` tests are stale since the arena took over floor-1
+  fights (067) and fail on `main` (verified pre-080 at dc0742e, filed during
+  dojo run 0051): `test_kill3d_card_ships_no_ending_gif` and
+  `test_fragment_emits_data_kill3d_with_banner_tint` assert the PLAN4-era
+  bare banner slot and `data-kill3d` attr on a floor-1 victory card, but
+  such cards now ride `data-arena` and the arena3d layer owns the slot;
+  `test_first_sighting_line_fires_once_per_creature` loops 40 hunts and can
+  exhaust its budget without re-meeting the first creature. Rewrite the
+  first two against a non-arena victory (or assert the arena path), make
+  the third deterministic.
