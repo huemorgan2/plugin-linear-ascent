@@ -109,6 +109,24 @@ def test_the_fragment_draws_the_sheet_big():
     assert 'data-opt="foehint_close"' in html
 
 
+def test_the_sheet_survives_the_dict_round_trip():
+    # R-0053-1: worldd's pane rebuilds every scene from to_dict() —
+    # a field the pair forgets never reaches a real player.
+    from plugin_linear_ascent.engine.scene import Scene
+    p = _arm(_classless("081-fs-trip"), "rusted_sword",
+             {"blade": 6, "bow": 0, "staff": 0})
+    s = _start(p, ("fly",))
+    back = Scene.from_dict(s.to_dict())
+    assert back.foe_sheet == s.foe_sheet
+    html = render.render_scene_fragment(back)
+    assert 'class="foesheet"' in html
+    assert 'class="foehint"' in html
+    # a round card keeps None through the trip
+    fl = schema.get_floor(1)
+    r = combat.fight_scene(p, fl)
+    assert Scene.from_dict(r.to_dict()).foe_sheet is None
+
+
 # ── the dismissable swap hint ──────────────────────────────────────────
 
 def test_foehint_close_is_a_doc_flag():

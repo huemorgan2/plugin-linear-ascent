@@ -430,6 +430,7 @@ class Scene:
             "kill3d": self.kill3d,
             "labs": list(self.labs),
             "arena": self.arena,
+            "foe_sheet": self.foe_sheet,
             "slots": self.slots,
             "figure3d": self.figure3d,
             "avatar": (dict(self.avatar) if self.avatar else None),
@@ -497,6 +498,8 @@ class Scene:
             kill3d=(dict(d["kill3d"]) if d.get("kill3d") else None),
             labs=list(d.get("labs") or []),
             arena=(dict(d["arena"]) if d.get("arena") else None),
+            foe_sheet=(dict(d["foe_sheet"])
+                       if d.get("foe_sheet") else None),
             slots=list(d.get("slots") or []),
             figure3d=(dict(d["figure3d"]) if d.get("figure3d") else None),
             avatar=(dict(d["avatar"]) if d.get("avatar") else None),
