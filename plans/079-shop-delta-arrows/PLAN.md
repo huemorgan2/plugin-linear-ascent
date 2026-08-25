@@ -82,4 +82,8 @@ vendored deploy. No secrets touched.
 - Dojo scenario committed at luna/dojo/tests/shop-delta-arrows/
   (luna 51c2d30); walkthrough NOT yet run — needs a live BASE +
   DATABASE_URL. Run it before deploy.
-- No deploy performed.
+- Deployed 2026-08-25: deploy dep-da6kesm1egvs7392u720 (trigger=api,
+  commit 8dee30c1, shipped alongside 078 and 080), status live at
+  07:46:56Z; /health reports 0.103.0 ("✓ live: 0.103.0"). Dojo
+  walkthrough for shop-delta-arrows still not run (scenario committed,
+  runner not written).
