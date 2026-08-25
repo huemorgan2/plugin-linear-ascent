@@ -135,7 +135,8 @@ def test_dossier_renders_every_profile_combination():
 def test_dossier_names_the_active_modifiers():
     # 002 retro: the bow collapse must be READ, not felt.
     close_bow = render._dossier_html(_payload(rng="close", dtype="ranged"))
-    assert "×0.6" in close_bow
+    # 081: the copy prints the constant now, not folklore
+    assert f"×{economy.BOW_CLOSE_MULT:g}" in close_bow
     at_range = render._dossier_html(_payload(rng="at_range", dtype="melee"))
     # 031 §7: at range it isn't halved — it can't answer at all
     assert "CANNOT reach you" in at_range
@@ -183,7 +184,7 @@ def test_range_and_modifiers_moved_into_the_dossier():
     assert "at range" in at_range
     close = render._dossier_html(_payload(rng="close", dtype="ranged"))
     assert "close quarters" in close
-    assert "×0.6" in close
+    assert f"×{economy.BOW_CLOSE_MULT:g}" in close
 
 
 def test_fragment_wires_header_and_dossier_into_the_card():

@@ -640,8 +640,18 @@ def _enemy_payload(p: dict, floor) -> dict:
 
 
 def _shard_advice(p: dict, floor) -> str:
-    """Insight-scaled whisper — sometimes wrong, on purpose."""
+    """Insight-scaled whisper — sometimes wrong, on purpose. 081: rolled
+    ONCE per encounter and cached — the opener re-renders now (weapon
+    swap, hint ✕) and a re-roll would both flip the whisper mid-card
+    and burn an RNG draw (replay determinism)."""
     e = p["encounter"]
+    if e.get("_advice") is not None:
+        return e["_advice"]
+    e["_advice"] = _shard_advice_roll(p, e)
+    return e["_advice"]
+
+
+def _shard_advice_roll(p: dict, e: dict) -> str:
     insight = p["sidekick"]["insight"]
     correct = state.roll_ok(p, 0.5 + 0.05 * insight)
     if e.get("specimen") == "alpha":
@@ -783,6 +793,44 @@ def _verdict(p: dict) -> list[str]:
     return lines
 
 
+def _foe_sheet(p: dict) -> dict:
+    """081: the encounter card's at-a-glance block — the monster's signs
+    as numbers with the weapon that answers each, replacing the verdict
+    prose. Truth comes from TYPE_MULT (magic ignores flat DEF, bows own
+    the sky, steel cuts the spellguarded); `held` marks the cell the
+    lead weapon already answers so the renderer can grey its hint."""
+    e = p["encounter"]
+    prof = _profile(p)
+    mtype = prof.get("type", "plain")
+    lead = economy.FORGE.get(p["gear"].get("weapon") or "")
+    path = (economy.PATH_OF_LINE.get(lead.line, "blade")
+            if lead else "blade")
+    return {
+        "type": mtype,
+        "def": {"n": e["def"], "best": "magic", "held": path == "staff"},
+        "fly": {"yes": bool(prof.get("flying")), "best": "bows and magic",
+                "held": path in ("bow", "staff")},
+        # magic resistance as the share of a staff blow the sign eats —
+        # same derivation as the arena HUD (arena.payload).
+        "resist": {"pct": (round((1 - economy.TYPE_MULT[mtype]["staff"])
+                                 * 100) if mtype == "magic_resist" else 0),
+                   "best": "swords", "held": path == "blade"},
+        "speed": {"n": _mspd(p),
+                  "closes": _mspd(p) >= economy.player_speed(p)},
+        "hint": not p.get("foehint_done"),
+    }
+
+
+def swap_window(p: dict) -> bool:
+    """081: the sizing-up — the fight has not begun (no attack taken,
+    treeline cover unbroken, still at range). The one window where
+    re-rigging the hands from the pack is allowed; the same predicate
+    that gates the treeline shot."""
+    e = p.get("encounter")
+    return bool(e and _range_state(p) == "at_range"
+                and not e.get("attacked") and not e.get("shot_used"))
+
+
 def fight_scene(p: dict, floor, opener: bool = False, note: str = "") -> Scene:
     e = p["encounter"]
     at_range = _range_state(p) == "at_range"
@@ -908,6 +956,11 @@ def fight_scene(p: dict, floor, opener: bool = False, note: str = "") -> Scene:
             f"{economy.FLARE_AETHER} XP · every hot blade sees it",
             aether=True))
     opts += _relic_options(p)
+    # 081: while the sizing-up lasts, the pack is reachable from the
+    # card — swap to the weapon the sheet names before the steel meets.
+    if opener and swap_window(p):
+        opts.append(Option("pack", "Open your pack",
+                           "swap weapons while you still can"))
 
     body = [e["prose"]] if opener else []
     if opener:
@@ -920,9 +973,8 @@ def fight_scene(p: dict, floor, opener: bool = False, note: str = "") -> Scene:
             f"You — ATK {state.atk(p)} with your {weapon_name(p)}, "
             f"DEF {state.dfs(p)} "
             + (f"behind your {guard}." if guard else "on reflex alone."))
-        # 048 T2: the sign's whole triangle, then the verdict.
-        body.append(economy.type_line(_profile(p).get("type", "plain")))
-        body += _verdict(p)
+        # 081: the sign's triangle and the verdict prose moved off the
+        # body and into scene.foe_sheet — big icon cells, one glance.
     if note:
         body.append(note)
     fx_note = e.pop("_fx_note", "")
@@ -970,6 +1022,7 @@ def fight_scene(p: dict, floor, opener: bool = False, note: str = "") -> Scene:
                         and e.get("specimen") != "common" else ""),
         event_kind="boss" if e["kind"] == "warden" else "",
         enemy=_enemy_payload(p, floor),
+        foe_sheet=_foe_sheet(p) if opener else None,
     )
 
 
@@ -2124,6 +2177,12 @@ def resolve_fight_action(p: dict, floor, option_id: str) -> Scene:
     the damage budget stops the over-levelled one, whose blows are worth
     three at-level fights, ending a 3-fight gate in a single charge.
     Everything else about the fight is untouched."""
+    # 081: the opener's pack row — a pointer at the strip, not a round.
+    if option_id == "pack" and swap_window(p):
+        s = fight_scene(p, floor, opener=True)
+        s.shard_note = ("Your pack rides under the card — tap a weapon "
+                        "and choose Hold to swap while you still can.")
+        return s
     # 048: "attack_<slug>" is the attack row of a held side-arm —
     # promote it to the lead hand and resolve a plain attack.
     if option_id.startswith("attack_"):

@@ -220,6 +220,10 @@ _TIPS: dict[str, str] = {
               "HALVED, and a braced guard can hold a weak blow at "
               "zero. Buys a breath when HP runs low — the fight goes "
               "on until you attack or run."),
+    "pack": ("081: the sizing-up only — your pack rides under the "
+             "card. Tap a weapon there and choose Hold to bring it to "
+             "hand before the fight begins; once steel meets, the swap "
+             "waits for the road."),
     "run": ("Try to leave the fight. The faster you are than the "
             "monster, the better your chance to get away. If it catches "
             "you, you take a hit and the fight goes on. Leaving earns no "

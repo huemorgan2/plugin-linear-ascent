@@ -232,6 +232,15 @@ class Scene:
                                     # plays the lift transition over the
                                     # card. "" everywhere else. A new
                                     # TOP-LEVEL key: old clients drop it.
+    foe_sheet: dict | None = None   # 081: the opener's at-a-glance type
+                                    # block — {type, def:{n,best,held},
+                                    # fly:{yes,best,held},
+                                    # resist:{pct,best,held},
+                                    # speed:{n,closes}, hint:bool}. The
+                                    # renderer draws big icon cells from
+                                    # it; only on the ENCOUNTER card
+                                    # (opener), never round cards. A new
+                                    # TOP-LEVEL key: old clients drop it.
 
     def to_text(self) -> str:
         """Plain-text fallback — always works, cards are enhancement."""
@@ -301,6 +310,25 @@ class Scene:
                 lines.append("◇ at range — it hasn't reached you yet")
             elif en.get("range") == "close":
                 lines.append("◇ close quarters — it is on top of you")
+        # 081: the type block reads as words on every surface too —
+        # the card draws icons, the agent says the same facts.
+        if self.foe_sheet:
+            fs = self.foe_sheet
+            if fs.get("def"):
+                lines.append(f"◇ DEF {fs['def']['n']} — best weapon: "
+                             f"{fs['def']['best']}")
+            if (fs.get("fly") or {}).get("yes"):
+                lines.append(f"◇ FLY — YES — best: {fs['fly']['best']}")
+            if (fs.get("resist") or {}).get("pct"):
+                lines.append(f"◇ MAGIC RES {fs['resist']['pct']}% — "
+                             f"best: {fs['resist']['best']}")
+            if fs.get("speed"):
+                sp = fs["speed"]
+                lines.append(f"◇ SPEED {sp['n']}"
+                             + (" — closes distance fast"
+                                if sp.get("closes") else ""))
+            if fs.get("type") == "plain":
+                lines.append("◇ no sign — every weapon bites full")
         if self.shard_note:
             lines.append(f"◆ {self.shard_note}")
         if self.strip and self.strip.get("text"):

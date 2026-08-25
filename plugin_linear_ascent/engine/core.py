@@ -150,7 +150,15 @@ def _slot_map(p: dict) -> list[dict]:
             else:
                 d["count"] = 1
                 if slug in economy.APOTHECARY:
-                    d["name"] = economy.APOTHECARY[slug].name
+                    item = economy.APOTHECARY[slug]
+                    d["name"] = item.name
+                    # 081: a potion's number rides the click popup —
+                    # "heal_25" → HEALS 25 (prose effects stay in the tip)
+                    parts = (item.effect or "").rsplit("_", 1)
+                    if len(parts) == 2 and parts[1].isdigit():
+                        d["stat_name"] = ("HEALS" if parts[0] == "heal"
+                                          else parts[0].upper())
+                        d["stat_val"] = int(parts[1])
                 elif slug in economy.RELICS:
                     d["name"] = economy.RELICS[slug].name
                 else:
@@ -193,7 +201,14 @@ def _pack_strip(p: dict) -> list[dict]:
         cell = {"slug": slug, "kind": "item", "count": int(count),
                 "name": slug.replace("_", " ")}
         if slug in economy.APOTHECARY:
-            cell["name"] = economy.APOTHECARY[slug].name
+            item = economy.APOTHECARY[slug]
+            cell["name"] = item.name
+            # 081: the click popup quotes the potion's number too
+            parts = (item.effect or "").rsplit("_", 1)
+            if len(parts) == 2 and parts[1].isdigit():
+                cell["stat_name"] = ("HEALS" if parts[0] == "heal"
+                                     else parts[0].upper())
+                cell["stat_val"] = int(parts[1])
         elif slug in economy.RELICS:
             cell["name"], cell["kind"] = economy.RELICS[slug].name, "relic"
         elif slug in economy.PACKS:
@@ -373,6 +388,18 @@ def pack_actions(p: dict, slug: str) -> tuple[list[Option], str]:
     item = economy.APOTHECARY.get(slug)
 
     if fighting:
+        # 081: the sizing-up window — the fight has not begun and the
+        # foe sheet just named the weapon that answers. Weapons only;
+        # the level gate still reads on the row.
+        if combat.swap_window(p) and slug in economy.FORGE \
+                and economy.FORGE[slug].slot == "weapon" and have:
+            req = _wear_level_req(slug)
+            if p["level"] < req:
+                return [], (f"🔒 level {req} — {economy.FORGE[slug].name} "
+                            f"answers to level {req} hands; you are "
+                            f"level {p['level']}.")
+            return [Option(f"wear_{slug}", "Hold",
+                           "swap before the steel meets")], ""
         # 069: in a fight the pack offers NOTHING — the pouch and the
         # bow's quiver are the only things that act, and they are set
         # before the fight.
@@ -476,8 +503,12 @@ def pack_actions(p: dict, slug: str) -> tuple[list[Option], str]:
             else:
                 label = "Wear"
             worn = p["gear"].get(g.slot)
+            # 081: "from your pack" said where it was, not what happens —
+            # held slots now say the move plainly.
+            bare = ("move to hand" if g.slot in ("weapon", "shield")
+                    else "from your pack")
             hint = (f"swap out the {economy.FORGE[worn].name}"
-                    if worn and worn in economy.FORGE else "from your pack")
+                    if worn and worn in economy.FORGE else bare)
             # 048 phase 3: an untrained path warns BEFORE the swap —
             # no silent numbers, even on a tooltip.
             if g.slot == "weapon":
@@ -507,6 +538,18 @@ def _pack_use(p: dict, oid: str) -> Scene | None:
     if unequipping:
         return _unequip(p, oid.removeprefix("unequip_"))
     if p.get("encounter"):
+        if wearing:
+            # 081: at the sizing-up a pack WEAPON may still come to
+            # hand — the same swap as on the road, the card rebuilt
+            # around the new lead. Once the fight has begun, the old
+            # refusal stands.
+            slug = oid.removeprefix("wear_")
+            acts, why = pack_actions(p, slug)
+            if any(o.id == oid for o in acts):
+                fl = schema.get_floor(p["encounter"]["floor"])
+                return _wear_from_pack(
+                    p, slug,
+                    lambda q: combat.fight_scene(q, fl, opener=True))
         if wearing or fixing:
             # 048 phase 3: the promote is refused mid-fight WITH a
             # reason — not the generic "not one of the paths".
@@ -642,6 +685,44 @@ def apply_choice(p: dict, option_id: str, text: str = "") -> Scene:
     # dawn. Valid wherever the paper shows, hence outside the row list.
     if option_id == "news_close":
         p["news_day"] = state.world_day()
+        return _stamp(p, _build_scene(p))
+
+    # 081: the foe sheet's swap hint ✕ — dismissed for good, a doc flag
+    # like the Crier's (survives reloads and other devices). Lives
+    # outside the row list, same as news_close.
+    if option_id == "foehint_close" and p.get("stage") == "playing":
+        p["foehint_done"] = True
+        if p.get("encounter"):
+            fl = schema.get_floor(p["encounter"]["floor"])
+            return _stamp(p, combat.fight_scene(p, fl, opener=True))
+        return _stamp(p, _build_scene(p))
+
+    # 081: the sticky mail toast is a door — a clicked wire/letter
+    # notification walks the player straight to the Relay Office. Valid
+    # from any quiet room (the toast lives outside the row list); a
+    # fight is never left mid-swing.
+    if option_id == "goto_relay" and p.get("stage") == "playing":
+        if p.get("encounter") or p.get("movie_floor"):
+            scene = _build_scene(p)
+            scene.refusal = ("The Relay keeps — finish this fight "
+                             "first.")
+            return _stamp(p, scene)
+        if not _door_open(p, economy.RELAY_LEVEL) \
+                and not int((p.get("_world") or {})
+                            .get("inbox_count") or 0):
+            scene = _build_scene(p)
+            scene.refusal = (f"Entering the Relay requires level "
+                             f"{economy.RELAY_LEVEL} — you are level "
+                             f"{p['level']}")
+            return _stamp(p, scene)
+        for k in ("hall_area", "hall_ask", "hall_putting", "hall_kicking",
+                  "hall_promoting", "hall_leaving", "guild_leaving",
+                  "banner_page", "guild_dir",
+                  "door_rules", "profile_view", "profile_back",
+                  "profile_pay", "profile_gift", "profile_loot"):
+            p.pop(k, None)
+        p["floor"] = 0
+        p["location"] = "relay"
         return _stamp(p, _build_scene(p))
 
     # 067: the Labs card — reached from the bottom bar's flask, valid
@@ -2994,12 +3075,33 @@ def _pawn_sundry(p: dict, slug: str) -> tuple[str, int]:
     return (it.name, max(1, int(it.price * rate)))
 
 
+def _pawn_refused(p: dict) -> list[str]:
+    """081: the pack pieces the broker won't buy — rusted basics and
+    price-0 gate kit. Named out loud instead of silently skipped."""
+    return [k for k in p["inventory"] if k in economy.FORGE
+            and (k in economy.BASIC_WEAPONS
+                 or economy.FORGE[k].price <= 0)]
+
+
+def _pawn_waves_off(p: dict) -> str:
+    names = [economy.FORGE[k].name for k in _pawn_refused(p)]
+    if not names:
+        return ""
+    joined = (" and ".join(names) if len(names) <= 2
+              else ", ".join(names[:-1]) + f" and {names[-1]}")
+    return (f"The broker waves off the {joined} — gate steel and rusted "
+            "basics are worth nothing to him, and never lost to you.")
+
+
 def _pawn_scene(p: dict) -> Scene:
     rate = economy.pawn_rate(state.world_day())
     # 049: the broker won't take gate steel — the basics are worth
     # nothing to him and are never lost to the player.
+    # 081: price-0 gate kit is off the offer list too (a ◈ 0 row read
+    # as a glitch) — both walk into the waves-off line instead.
     gear_in_pack = [k for k in p["inventory"] if k in economy.FORGE
-                    and k not in economy.BASIC_WEAPONS]
+                    and k not in economy.BASIC_WEAPONS
+                    and economy.FORGE[k].price > 0]
     relics_in_pack = [k for k in p["inventory"] if k in economy.RELICS]
     # 006 §3.8: the pawn always buys ANYTHING — so potions and tokens
     # get a row too (0.29.4: they used to be invisible here, which read
@@ -3010,6 +3112,9 @@ def _pawn_scene(p: dict) -> Scene:
     opts = []
     lines = [f"The broker pays {round(rate * 100)}% today. Tomorrow is "
              "another mood."]
+    waved = _pawn_waves_off(p)
+    if waved:
+        lines.append(waved)
     for slug in gear_in_pack:
         g = economy.FORGE[slug]
         offer = _pawn_offer(p, g)
@@ -3072,7 +3177,8 @@ def _pawn_action(p: dict, oid: str) -> Scene:
         return _pawn_donate(p, oid.removeprefix("donate_"))
     slug = oid.removeprefix("sell_")
     if slug in p["inventory"] and slug in economy.FORGE \
-            and slug not in economy.BASIC_WEAPONS:
+            and slug not in economy.BASIC_WEAPONS \
+            and economy.FORGE[slug].price > 0:
         g = economy.FORGE[slug]
         offer = _pawn_offer(p, g)
         p["inventory"][slug] -= 1
@@ -3107,6 +3213,12 @@ def _pawn_action(p: dict, oid: str) -> Scene:
         combat._ledger(p, "pawn", gold=offer, note=slug)
         s = _pawn_scene(p)
         s.body_lines.insert(0, f"+ ◈ {offer:,} for the {name}")
+        return s
+    # 081: a sell click for a piece the broker refuses no longer falls
+    # through silently — the waves-off line says why nothing happened.
+    if slug in _pawn_refused(p):
+        s = _pawn_scene(p)
+        s.shard_note = _pawn_waves_off(p)
         return s
     return _pawn_scene(p)
 

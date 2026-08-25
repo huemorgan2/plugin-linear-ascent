@@ -85,20 +85,26 @@ def test_fight_card_shows_every_number_and_sign():
 
 
 def test_fight_card_carries_the_triangle_line():
+    # 081: the triangle prose moved off the body into the [i] dossier;
+    # the card itself carries the foe sheet instead.
+    from plugin_linear_ascent import render
     p = _arm(_classless("048-v-tri"), "rusted_sword",
              {"blade": 6, "bow": 0, "staff": 0})
     s = _start(p, ("armoured",))
-    text = _scene_text(s)
-    assert "steel: half" in text
-    assert "arrows: glance" in text
-    assert "magic: full" in text
+    dossier = render._dossier_html(s.enemy)
+    assert "steel: half" in dossier
+    assert "arrows: glance" in dossier
+    assert "magic: full" in dossier
+    assert s.foe_sheet and s.foe_sheet["def"]["best"] == "magic"
 
 
 def test_plain_monster_says_no_sign():
     p = _arm(_classless("048-v-plain"), "rusted_sword",
              {"blade": 6, "bow": 0, "staff": 0})
     s = _start(p, ())
-    assert "no sign — every weapon bites full" in _scene_text(s)
+    # 081: the sign block reads from the foe sheet on every surface
+    assert "no sign — every weapon bites full" in s.to_text()
+    assert s.foe_sheet["type"] == "plain"
 
 
 def test_speed_word_rides_the_spd_number():
@@ -127,25 +133,28 @@ def test_hunt_menu_carries_no_stat_roster():
 
 # ── the verdict, before every fight ────────────────────────────────────
 
-def test_verdict_names_the_held_answer_and_rank():
+def test_verdict_names_the_best_answer_on_the_sheet():
+    # 081: the verdict prose became the foe sheet — the lever the
+    # player does NOT hold is still named, as the cell's best weapon,
+    # and the held-cell flag says the blade is NOT the answer here.
     p = _arm(_classless("048-v-verd1"), "rusted_sword",
              {"blade": 4, "bow": 0, "staff": 0})
     s = _start(p, ("armoured",))
-    text = _scene_text(s)
-    # the held blade's answer, with the player's actual rank…
-    assert "rank 4" in text
-    # …and the full answer it does NOT hold, named as the lever
-    assert "staff" in text
-    assert "rank 0" in text
+    fs = s.foe_sheet
+    assert fs["def"]["best"] == "magic"
+    assert fs["def"]["held"] is False        # blade in hand ≠ the answer
+    assert "best weapon: magic" in s.to_text()
 
 
-def test_verdict_on_a_flyer_with_steel_only_says_cant_reach():
+def test_verdict_on_a_flyer_with_steel_only_names_the_bow():
     p = _arm(_classless("048-v-verd2"), "rusted_sword",
              {"blade": 6, "bow": 0, "staff": 0})
     s = _start(p, ("fly",))
-    text = _scene_text(s).lower()
-    assert "cannot reach" in text or "can't reach" in text
-    assert "bow" in text
+    fs = s.foe_sheet
+    assert fs["fly"]["yes"] is True
+    assert fs["fly"]["best"] == "bows and magic"
+    assert fs["fly"]["held"] is False
+    assert "FLY — YES" in s.to_text()
 
 
 # ── locked rows explain their gates ────────────────────────────────────

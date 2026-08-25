@@ -227,6 +227,9 @@ select.ti{{background:{INK};color:{TEXT};border:1px solid {BORDER};
 /* 062: a fall reads red, a bought level reads aether */
 .plyrow.kill .pline{{color:{RED};}}
 .plyrow.levelup .pline{{color:{AETHER};}}
+/* 081: directed mail — a wire reads gold, a letter reads aether */
+.plyrow.grant .pline{{color:{GOLD};}}
+.plyrow.letter .pline{{color:{AETHER};}}
 .plyrow .plywho{{background:none;border:0;padding:0;margin:0;font:inherit;
  color:inherit;cursor:pointer;text-decoration:underline dotted;
  text-underline-offset:2px;}}
@@ -253,6 +256,11 @@ select.ti{{background:{INK};color:{TEXT};border:1px solid {BORDER};
 .plytoast .sub{{color:{FAINT};margin-left:1ch;}}
 .plytoast.war .pline{{color:{GOLD};}}
 .plytoast.boss .pline{{color:{AETHER};}}
+/* 081: sticky mail — stays until ✕ or click-through, body is a door */
+.plytoast.grant .pline{{color:{GOLD};}}
+.plytoast.letter .pline{{color:{AETHER};}}
+.plytoast.go{{cursor:pointer;}}
+.plytoast.go:hover{{border-color:{GOLD};}}
 .plytoast .x{{position:absolute;top:2px;right:6px;background:none;
  border:0;color:{DIM};font:inherit;cursor:pointer;padding:0 .5ch;
  line-height:1.4;}}
@@ -467,6 +475,7 @@ function showScene(d, quiet) {
       art.scrollIntoView({behavior: 'smooth', block: 'start'}));
   }
   wireOptions();
+  hintSweep();            // 081: a dismissed explainer stays dismissed
   runFX(game);
   swapFX();               // 016: split banner art settles into its loop
   // 042: the stings and the weapon hit — before __laWire so a loot
@@ -477,6 +486,25 @@ function showScene(d, quiet) {
   if (WEB) armHistory();    // browser back = the card's own back door
   // 051: the first working scene proves auth — light the postbox badge
   if (!fbPolled) { fbPolled = true; fbPoll(); }
+}
+/* ── 081: dismissable explainer boxes ([data-hint]) — the card is
+   server-rendered on every act, so the dismissal is client-enforced: a
+   ✕ writes la_tip_<name>, and every scene swap sweeps boxes whose key
+   is set. Direct localStorage — the IIFEs don't share plyStore. */
+const hintKey = (n) => 'la_tip_' + n;
+function hintSweep() {
+  game.querySelectorAll('[data-hint]').forEach((el) => {
+    let seen = false;
+    try { seen = localStorage.getItem(hintKey(el.dataset.hint)) === '1'; }
+    catch (e) {}
+    if (seen) { el.remove(); return; }
+    const x = el.querySelector('.x');
+    if (x) x.addEventListener('click', () => {
+      try { localStorage.setItem(hintKey(el.dataset.hint), '1'); }
+      catch (e) {}
+      el.remove();
+    });
+  });
 }
 /* ── 076: the lift ride — darken, play the car once, reveal ─────────
    The new place card is already in the DOM behind the overlay; the GIF
@@ -1211,6 +1239,22 @@ const PLY_SW = {world: 'la_ply_world', faction: 'la_ply_faction'};
 const plyOn = (k) => plyStore.get(PLY_SW[k]);
 const PLY_TOAST_MS = 3000;
 const PLY_TOAST_MAX = 4;
+/* 081: directed mail (wires, letters) is sticky — no timeout, no cap,
+   gone only on ✕ or click-through. Dismissals persist in a capped
+   localStorage list so a reload can't resurrect them (third copy of
+   the plyStore pattern — the IIFEs don't share). */
+const PLY_STICKY = {grant: 1, letter: 1};
+const PLY_NTF_KEY = 'la_ntf_seen';
+const ntfSeen = () => {
+  try { return JSON.parse(localStorage.getItem(PLY_NTF_KEY) || '[]'); }
+  catch (e) { return []; }
+};
+const ntfMark = (id) => {
+  try {
+    const s = ntfSeen().filter(x => x !== id); s.push(id);
+    localStorage.setItem(PLY_NTF_KEY, JSON.stringify(s.slice(-50)));
+  } catch (e) {}
+};
 
 function plyUpdate(d) {
   if (d.online !== undefined) plyCount.textContent = num(d.online);
@@ -1219,22 +1263,31 @@ function plyUpdate(d) {
   /* 060: the first head we ever see is the baseline — no burst of
      history on load; after that, every move of the head is news and
      the closed panel asks once for what landed. */
-  if (ply.seen < 0) { ply.seen = ply.head; return; }
+  /* 081: the first peek still fetches once — directed mail (server
+     sends it regardless of the cursor) must surface after a reload. */
+  if (ply.seen < 0) { ply.seen = ply.head; plyToastLoad(); return; }
   if (ply.head > ply.seen && !ply.open) plyToastLoad();
 }
 
 async function plyToastLoad() {
   if (ply.tbusy) return;
-  if (!plyOn('world') && !plyOn('faction')) { ply.seen = ply.head; return; }
   ply.tbusy = true;
   try {
     const d = await call('/pane/playing/feed?scope=both&since=' + ply.seen);
     ply.head = Math.max(ply.head, Number(d.head) || 0);
     ply.seen = ply.head;
-    const rows = (d.rows || []).filter(r => plyOn(r.scope === 'faction'
-      ? 'faction' : 'world'));
+    /* 081: directed rows answer to la_ntf_seen, not the switches — mail
+       addressed to YOU is never muted by the world/faction toggles. */
+    const dismissed = ntfSeen();
+    const rows = (d.rows || []).filter(r => r.scope === 'player'
+      ? dismissed.indexOf(r.id) < 0
+      : plyOn(r.scope === 'faction' ? 'faction' : 'world'));
+    const sticky = rows.filter(r => PLY_STICKY[r.kind]);
+    const rest = rows.filter(r => !PLY_STICKY[r.kind]);
     // newest-first from the server; show oldest first, cap the burst
-    rows.slice(0, PLY_TOAST_MAX).reverse().forEach(plyToast);
+    // (sticky mail is uncapped — a kill spree can't push a wire away)
+    sticky.reverse().forEach(plyToast);
+    rest.slice(0, PLY_TOAST_MAX).reverse().forEach(plyToast);
   } catch (e) {}
   finally { ply.tbusy = false; }
 }
@@ -1246,18 +1299,38 @@ function plyToast(r) {
     document.body.appendChild(box);
   }
   const t = document.createElement('div');
-  t.className = 'plytoast in ' + esc(r.kind || '');
+  const sticky = !!PLY_STICKY[r.kind];
+  t.className = 'plytoast in ' + esc(r.kind || '')
+    + (sticky ? ' sticky' : '');
   t.setAttribute('role', 'status');
   t.innerHTML = '<span class="eyebrow">\u25b6 playing</span>'
     + '<span class="pline">' + esc(r.line) + '</span>'
     + (r.floor ? '<span class="sub">F' + esc(r.floor) + '</span>' : '')
     + '<button type="button" class="x" aria-label="close">\u2715</button>';
   const gone = () => { if (t.parentNode) t.remove(); };
-  t.querySelector('.x').addEventListener('click', gone);
+  t.querySelector('.x').addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (sticky) ntfMark(r.id);        // 081: \u2715 survives the reload
+    gone();
+  });
+  /* 081: the toast body is a door \u2014 a wire or letter walks you to the
+     Relay Office (an engine deep-link act). */
+  if (sticky && r.meta && r.meta.go === 'relay') {
+    t.classList.add('go');
+    t.addEventListener('click', () => {
+      ntfMark(r.id); gone();
+      switchTab('game');
+      window.__laAct('goto_relay');
+    });
+  }
   box.appendChild(t);
   requestAnimationFrame(() => t.classList.remove('in'));
-  while (box.children.length > PLY_TOAST_MAX) box.firstChild.remove();
-  setTimeout(gone, PLY_TOAST_MS);
+  /* the burst cap evicts plain news only \u2014 sticky mail holds its spot */
+  const plain = () => [...box.children].filter(
+    c => !c.classList.contains('sticky'));
+  let over = plain();
+  while (over.length > PLY_TOAST_MAX) { over[0].remove(); over = plain(); }
+  if (!sticky) setTimeout(gone, PLY_TOAST_MS);
 }
 
 const PLY_WHEN = iso => {

@@ -1048,6 +1048,18 @@ def _pip_row(key: str, label: str, stat: int, tint: str, tip: str,
 def _profile_html(scene: Scene) -> str:
     m = scene.meters
     right = _meters_html(m)
+    # 081: the level-1 explainer — what a level costs and where it's
+    # bought, LIVE numbers (never folklore copy). The client hides it
+    # for good once ✕'d (la_tip_levelup); the server stops emitting it
+    # at level 2.
+    if getattr(m, "level", 0) == 1:
+        fee = economy.levelup_gold(m.level)
+        right += (f'<div class="lvlhint" data-hint="levelup">'
+                  f'<span style="color:{GOLD}">LEVEL UP</span>'
+                  f' — XP {m.xp}/{m.xp_need} + ◈ {fee:,}'
+                  f' — the Guildhall levels you up'
+                  f'<button type="button" class="x" aria-label="close">'
+                  f'✕</button></div>')
     if getattr(m, "atk", 0):
         spd_row = (_pip_row("bolt", "SPD", m.spd, AETHER, _TIP_SPD,
                             per_half=0.5)
@@ -1347,8 +1359,10 @@ def _active_mods(en: dict) -> list[str]:
             mods.append("your steel can't swing until you close")
     elif rng == "close":
         if dt == "ranged":
-            mods.append("your bow works at ×0.6 in this press — open "
-                        "distance to shoot full")
+            # 081: print the constant, not folklore (was ×0.6 while
+            # economy said 0.5)
+            mods.append(f"your bow works at ×{economy.BOW_CLOSE_MULT:g} "
+                        "in this press — open distance to shoot full")
     if prof.get("flying") and dt == "melee":
         mods.append("AIRBORNE — your steel cannot touch it")
     if en.get("dodge"):
@@ -1400,6 +1414,54 @@ def _enemy_head_html(en: dict) -> str:
     mods = "".join(f'<div class="emod">◇ {_e(m)}</div>'
                    for m in _active_mods(en))
     return f'<div class="ehead">{plate}{mods}</div>'
+
+
+def _foesheet_html(fs: dict) -> str:
+    """081: the encounter card's at-a-glance block — big 32px icon
+    cells saying what the monster IS and which weapon answers it,
+    replacing the verdict prose. The cell the held weapon already
+    answers greys its hint (nothing to change). Under it, a dismissable
+    line says the swap is legal right now — ✕ posts foehint_close, a
+    doc flag like the Crier's. Ink, never bold (the VGA face has none)."""
+    cells = []
+
+    def cell(icon: str, ink: str, big: str, hint: str,
+             held: bool = False) -> None:
+        hcls = " fsheld" if held else ""
+        cells.append(
+            f'<span class="fscell">{_aicon(icon, ink, cls="fsico")}'
+            f'<span class="fsbig" style="color:{ink}">{_e(big)}</span>'
+            f'<span class="fshint{hcls}">{_e(hint)}</span></span>')
+
+    d = fs.get("def") or {}
+    if d:
+        cell("t_armor", ORANGE, f"DEF {d.get('n', 0)}",
+             f"best weapon: {d.get('best', 'magic')}",
+             held=bool(d.get("held")))
+    fly = fs.get("fly") or {}
+    if fly.get("yes"):
+        cell("t_wing", AETHER, "FLY — YES",
+             f"best: {fly.get('best', 'bows and magic')}",
+             held=bool(fly.get("held")))
+    res = fs.get("resist") or {}
+    if res.get("pct"):
+        cell("t_resist", VIOLET, f"MAGIC RES {res['pct']}%",
+             f"best: {res.get('best', 'swords')}",
+             held=bool(res.get("held")))
+    sp = fs.get("speed") or {}
+    if sp:
+        cell("t_speed", GOLD, f"SPEED {sp.get('n', 0)}",
+             "closes distance fast" if sp.get("closes")
+             else "you can outpace it")
+    if fs.get("type") == "plain":
+        cell("", TEXT, "NO SIGN", "every weapon bites full")
+    hint = ""
+    if fs.get("hint"):
+        hint = ('<div class="foehint">You can switch to the proper '
+                'weapon from your pack'
+                '<button type="button" class="x" data-opt="foehint_close" '
+                'aria-label="close">✕</button></div>')
+    return f'<div class="foesheet">{"".join(cells)}</div>{hint}'
 
 
 def _dossier_html(en: dict) -> str:
@@ -1717,12 +1779,15 @@ def _slot_cell(it: dict, *, readonly: bool = False) -> str:
     if sval is not None:
         params.append(f'<span style="color:{GOLD}">'
                       f'{it.get("stat_name", "ATK")} {sval}</span>')
+        # 081: only steel talks durability — a potion's HEALS number
+        # rides alone (∞ on a salve would be noise, not a fact)
         left_n, total_n = it.get("dur_left"), it.get("dur_max")
-        dtxt = (f"{left_n:,}/{total_n:,}"
-                if left_n is not None and total_n else "∞")
-        dcol = RED if (dur is not None and dur <= 0) else OK
-        params.append(f'<span style="color:{dcol}">'
-                      f'DURABILITY {dtxt}</span>')
+        if left_n is not None and total_n:
+            dcol = RED if (dur is not None and dur <= 0) else OK
+            params.append(f'<span style="color:{dcol}">'
+                          f'DURABILITY {left_n:,}/{total_n:,}</span>')
+        elif slug in economy.FORGE:
+            params.append(f'<span style="color:{OK}">DURABILITY ∞</span>')
     if count > 1:
         params.append(f'<span style="color:{VIOLET}">AMOUNT {count}</span>')
     # 058b: the hover tip carries the item's 100x160 portrait on its
@@ -1750,6 +1815,11 @@ def _slot_cell(it: dict, *, readonly: bool = False) -> str:
         else:
             tiph = text
         tiph_attr = f' data-tiph="{_e(tiph)}"'
+    # 081: the same numbers ride the CLICK path too — openMenu prints
+    # data-params at the top of the popup, so a phone that never hovers
+    # still reads ATK/DEF and durability.
+    params_attr = (f' data-params="{_e(" · ".join(params))}"'
+                   if params else "")
     # 027: the cell is a button — the popup lists what this thing can
     # do HERE, or says where it can be done. `acts` come from the
     # engine (core.pack_actions), never guessed client-side.
@@ -1763,7 +1833,8 @@ def _slot_cell(it: dict, *, readonly: bool = False) -> str:
         return (
             f'<span class="slot item'
             f'{" eq" if equipped else ""}" '
-            f'data-tip="{_e(tip)}"{tiph_attr} data-slug="{_e(slug)}" '
+            f'data-tip="{_e(tip)}"{tiph_attr}{params_attr} '
+            f'data-slug="{_e(slug)}" '
             f'data-name="{_e(name)}">'
             f'<span class="picon{picon_cls}" style="background-color:{tint};'
             f"-webkit-mask-image:url('{url}');mask-image:url('{url}');\">"
@@ -1771,7 +1842,8 @@ def _slot_cell(it: dict, *, readonly: bool = False) -> str:
     return (
         f'<button type="button" class="slot item act'
         f'{" eq" if equipped else ""}" '
-        f'data-tip="{_e(tip)}"{tiph_attr} data-slug="{_e(slug)}" '
+        f'data-tip="{_e(tip)}"{tiph_attr}{params_attr} '
+        f'data-slug="{_e(slug)}" '
         f'data-name="{_e(name)}"'
         f"{act_attr}{why_attr}>"
         f'<span class="picon{picon_cls}" style="background-color:{tint};'
@@ -1949,9 +2021,13 @@ INTERACT_JS = """(function () {
     box.className = 'pmenu';
     var name = item.dataset.name || 'this';
     var h = '<div class="phead">' + name + '</div>';
+    /* 081: the numbers ride the popup too — a phone never hovers.
+       data-params is server-built HTML (same spans as the tip). */
+    if (item.dataset.params)
+      h += '<div class="pstat">' + item.dataset.params + '</div>';
     acts.forEach(function (a, i) {
       h += '<button type="button" class="pact" data-opt="' + a.opt + '">'
-        + '<span>' + a.label + '</span>'
+        + '<span class="key">' + a.label + '</span>'
         + (a.hint ? '<span class="phint">' + a.hint + '</span>' : '')
         + '</button>';
     });
@@ -2508,6 +2584,11 @@ def render_scene_fragment(scene: Scene) -> str:
                      f"{_ep(scene.headline)}{hl_info}</div>")
     if scene.enemy and not arena_live:
         parts.append(_enemy_head_html(scene.enemy))
+    # 081: the at-a-glance type block — opener cards only (the engine
+    # ships foe_sheet on the encounter card and never on round cards).
+    fs = getattr(scene, "foe_sheet", None)
+    if fs and not arena_live:
+        parts.append(_foesheet_html(fs))
     if scene.support:
         parts.append(f'<div class="support type">{_ep(scene.support)}</div>')
     # 072: another climber's public sheet — on top, before the words.
@@ -2943,6 +3024,21 @@ SCENE_CSS = f"""
 .eplate{{display:flex;align-items:baseline;gap:1ch;}}
 .eplate .erng{{color:{DIM};white-space:nowrap;}}
 .emod{{color:{DIM};}}
+/* ── 081: the encounter's at-a-glance type block — 2×2 icon cells ── */
+.foesheet{{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;
+ margin:8px 0 2px;}}
+.foesheet .fscell{{display:flex;flex-direction:column;
+ align-items:flex-start;gap:2px;border:1px solid {DIM};padding:8px;
+ min-width:0;}}
+.foesheet .aico.fsico{{width:32px;height:32px;flex:none;}}
+.foesheet .fsbig{{letter-spacing:.06em;white-space:nowrap;}}
+.foesheet .fshint{{color:{TEXT};line-height:1.3;}}
+.foesheet .fshint.fsheld{{color:{DIM};}}
+.foehint{{position:relative;margin:0 0 4px;padding:6px 3ch 6px 1ch;
+ border:1px solid {GOLD};color:{GOLD};line-height:1.4;}}
+.foehint .x{{position:absolute;top:2px;right:6px;background:none;
+ border:0;color:{DIM};font:inherit;cursor:pointer;padding:0 .5ch;}}
+.foehint .x:hover{{color:{GOLD};}}
 /* 0.96.2 (roy): the [i] rides the headline name, dim until hovered;
    its tip IS the dossier panel. Inside #tipbox the box itself is the
    aether frame, so the panel sheds its own border/slab — the LOOK of
@@ -3158,6 +3254,16 @@ SCENE_CSS = f"""
 .pmenu .pact:hover:not(:disabled){{background:{GOLD};color:{INK};}}
 .pmenu .pact:hover:not(:disabled) .phint{{color:{INK};}}
 .pmenu .pact .phint{{margin-left:auto;color:{FAINT};}}
+/* 081: popup actions read as options — [HOLD], [WEAR], gold-inked */
+.pmenu .pact .key{{color:{GOLD};text-transform:uppercase;
+ letter-spacing:.06em;}}
+.pmenu .pact .key::before{{content:"[";color:{DIM};}}
+.pmenu .pact .key::after{{content:"]";color:{DIM};}}
+.pmenu .pact:hover:not(:disabled) .key,
+.pmenu .pact:hover:not(:disabled) .key::before,
+.pmenu .pact:hover:not(:disabled) .key::after{{color:{INK};}}
+/* 081: the numbers at the top of the popup — same spans as the tip */
+.pmenu .pstat{{margin:-2px 0 6px;color:{DIM};}}
 .pmenu .pwhy{{color:{DIM};}}
 .inv .item{{font:inherit;border-radius:0;padding:0;}}
 .inv .item.act{{cursor:pointer;}}
@@ -3498,6 +3604,13 @@ SCENE_CSS = f"""
 .facblk .facsub .dim{{color:{DIM};}}
 .piprows{{margin-top:8px;color:{DIM};}}
 .profile .piprows{{margin-top:0;}}
+/* 081: the level-1 explainer under the XP rail — aether ink, one ✕ */
+.lvlhint{{position:relative;margin-top:8px;padding:6px 3ch 6px 1ch;
+ border:1px solid {AETHER};color:{AETHER};line-height:1.4;}}
+.lvlhint span{{letter-spacing:.08em;}}
+.lvlhint .x{{position:absolute;top:2px;right:6px;background:none;
+ border:0;color:{DIM};font:inherit;cursor:pointer;padding:0 .5ch;}}
+.lvlhint .x:hover{{color:{AETHER};}}
 .piprow{{display:flex;align-items:center;gap:1ch;margin-top:4px;
  cursor:help;}}
 .piprow .plab{{flex:none;min-width:8ch;font-variant-numeric:tabular-nums;}}
