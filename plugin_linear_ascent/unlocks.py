@@ -90,6 +90,11 @@ def registry() -> tuple[Unlock, ...]:
                economy.BEGINNER_MERCY_MAX_LEVEL + 1, "closes",
                "beginner's mercy ends", "the tower",
                "a death starts costing gear and a bite of carried gold"),
+        # 081: beginner pity expires with the mercy band
+        Unlock("steady_hands_end", "level",
+               economy.PITY_MISS_MAX_LEVEL + 1, "closes",
+               "steady hands end", "the tower",
+               "your swings answer to the dice alone — misses can chain"),
         Unlock("pvp_immunity_ends", "level",
                economy.BEGINNER_PROTECTION_MAX_LEVEL + 1, "closes",
                "ambush immunity ends", "the fields",
@@ -256,6 +261,8 @@ _PLAIN = {
                   "the pouch at the School)",
     "mercy_ends": "WARNING — from now on, dying can cost you your "
                   "equipment and part of the gold you carry",
+    "steady_hands_end": "WARNING — from now on, missed attacks can happen "
+                        "several times in a row; nothing forces a hit",
     "pvp_immunity_ends": "WARNING — from now on, other players can attack "
                          "you in the fields; sleeping at the Lodge keeps "
                          "you safe",
@@ -363,4 +370,8 @@ def protections_active(p: dict) -> list[str]:
     if p["level"] <= economy.BEGINNER_PROTECTION_MAX_LEVEL:
         out.append(f"ambush immunity — no PvP against you (ends at level "
                    f"{economy.BEGINNER_PROTECTION_MAX_LEVEL + 1})")
+    if p["level"] <= economy.PITY_MISS_MAX_LEVEL:
+        out.append(f"steady hands — while you're green, your swings "
+                   f"never go wide more than {p['level']} in a row "
+                   f"(ends at level {economy.PITY_MISS_MAX_LEVEL + 1})")
     return out

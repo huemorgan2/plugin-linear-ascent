@@ -2684,7 +2684,13 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
     # eats the round and the monster answers, exactly like any fumble.
     rank = _train_rank(p)
     miss = economy.TRAIN_MISS_PCT(rank) / 100
-    if miss > 0 and state.roll_ok(p, miss):
+    # 081: beginner pity — after L straight misses at level L <= 3 the
+    # next swing must land. Short-circuits BEFORE roll_ok, so the
+    # forced hit consumes no RNG draw.
+    pity = (p["level"] <= economy.PITY_MISS_MAX_LEVEL
+            and e.get("miss_run", 0) >= economy.pity_miss_run(p["level"]))
+    if miss > 0 and not pity and state.roll_ok(p, miss):
+        e["miss_run"] = e.get("miss_run", 0) + 1
         # 053: the fumble names itself loud — the renderer paints the
         # whole line ember so a missed swing is never read as a hit.
         wide = (f"ATTACK MISSED — your {weapon_name(p)} swings wide "
@@ -2714,6 +2720,7 @@ def _resolve_round(p: dict, floor, option_id: str) -> Scene:
                                  "for the fumble")
             + (f" {chase}" if chase else "")
             + (f" {snap}" if snap else "")))
+    e["miss_run"] = 0              # 081: any landed swing clears the run
     # 006: the special arrow shapes the shot; the veil breaks on your
     # first strike — the answer to it lands.
     mult, pierce, effect = _quiver_shot(p)

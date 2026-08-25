@@ -157,6 +157,7 @@ def test_sheet_carries_next_unlocks_and_protections():
     assert d["next_unlocks"], "the ladder must ride the sheet"
     first = d["next_unlocks"][0]
     assert {"at", "effect", "title", "why"} <= set(first)
-    assert len(d["protections_active"]) == 2
+    # 081: mercy + ambush immunity + steady hands while green
+    assert len(d["protections_active"]) == 3
     p["level"] = 8
     assert sheet.character_sheet(p)["protections_active"] == []

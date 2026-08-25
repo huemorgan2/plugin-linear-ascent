@@ -784,6 +784,17 @@ def TRAIN_MISS_PCT(rank: int) -> int:
     return max(0, round(25 - 2.5 * rank))
 
 
+# 081: beginner pity — at level L <= PITY_MISS_MAX_LEVEL a player never
+# suffers more than L sequential misses; the next swing lands. Mirrors
+# BEGINNER_MERCY_MAX_LEVEL: the tower is soft on green hands.
+PITY_MISS_MAX_LEVEL = 3
+
+
+def pity_miss_run(level: int) -> int:
+    """Sequential misses allowed before the next swing must land."""
+    return level    # only consulted for level <= PITY_MISS_MAX_LEVEL
+
+
 def TRAIN_ROLL_FLOOR(rank: int) -> float:
     """The worst swing as a share of full power: 30% → 70% at rank 10.
     Rank 5 reproduces today's [ATK/2, ATK] band."""

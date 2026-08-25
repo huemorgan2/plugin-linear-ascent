@@ -35,6 +35,7 @@ def test_every_level_gate_constant_has_a_registry_entry():
         "BEGINNER_PROTECTION_MAX_LEVEL":
             economy.BEGINNER_PROTECTION_MAX_LEVEL + 1,
         "DEATH_NO_PARDON_LEVEL": economy.DEATH_NO_PARDON_LEVEL,
+        "PITY_MISS_MAX_LEVEL": economy.PITY_MISS_MAX_LEVEL + 1,
     }
     missing = {n: v for n, v in gates.items() if v not in level_ats}
     assert not missing, f"gates with no registry entry: {missing}"
@@ -47,7 +48,8 @@ def test_no_gate_constant_was_forgotten_by_this_test():
     known = {"ARCANUM_LEVEL", "RELAY_LEVEL", "FIELDS_LEVEL", "BOARD_LEVEL",
              "NIGHT_SLOT_LEVEL", "STRONGBOX_LEVEL", "CARRY3_LEVEL",
              "CHARM_SLOT_LEVEL", "BEGINNER_MERCY_MAX_LEVEL",
-             "BEGINNER_PROTECTION_MAX_LEVEL", "DEATH_NO_PARDON_LEVEL"}
+             "BEGINNER_PROTECTION_MAX_LEVEL", "DEATH_NO_PARDON_LEVEL",
+             "PITY_MISS_MAX_LEVEL"}
     # DEATH_FREE_MAX_LEVEL is not a gate — it's the 043.2 free-death
     # window inside the mercy band, invisible in the unlock registry.
     exempt = {"LODGE_PRICE_PER_LEVEL", "GRANT_DAILY_CAP_PER_LEVEL",
@@ -111,10 +113,11 @@ def test_level_3_to_4_is_exactly_founding_plus_mercy_ends():
     p = player(level=4, floor=1)
     got = unlocks.just_reached(p, old_level=3, old_floor=1)
     # 025 §4: and a rung of steel — every level in band 1 sells something
+    # 081: steady hands (miss pity) expires on the same rung as mercy
     assert {u.id for u in got} == {"found_guild", "mercy_ends",
-                                   "band1_rung_4"}
+                                   "steady_hands_end", "band1_rung_4"}
     # opens sort before closes — the gifts are read before the bill
-    assert got[-1].id == "mercy_ends"
+    assert {u.id for u in got[-2:]} == {"mercy_ends", "steady_hands_end"}
 
 
 def test_floor_open_announces_the_band():
@@ -134,6 +137,8 @@ def test_next_line_carries_the_threshold_and_the_closing_half():
 
 
 def test_protections_active_names_both_shields_then_none():
-    both = unlocks.protections_active(player(level=2))
-    assert len(both) == 2
+    # 081: three shields while green — mercy, ambush immunity, steady hands
+    shields = unlocks.protections_active(player(level=2))
+    assert len(shields) == 3
+    assert any("steady hands" in s for s in shields)
     assert unlocks.protections_active(player(level=7)) == []
