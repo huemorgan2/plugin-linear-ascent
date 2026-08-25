@@ -2753,10 +2753,16 @@ def render_scene_fragment(scene: Scene) -> str:
         foe = str(scene.enemy.get("id", "") or "")
         if foe:
             dt += f' data-foe3d="{_e(foe)}"'
-    # the climber's rig — race:line — so fight3d warms one rig, not fifteen
+    # the climber's rig — race:line[:slug+slug…] — so fight3d warms one
+    # rig, not fifteen. 080: the third field names the worn item GLBs so
+    # the finisher's gear is warm before the kill card lands.
     m = scene.meters
     if m and getattr(m, "race", "") and getattr(m, "line", ""):
-        dt += f' data-rig3d="{_e(m.race)}:{_e(m.line)}"'
+        rig = f"{m.race}:{m.line}"
+        gear = [g for g in (getattr(m, "gear", None) or []) if g]
+        if gear:
+            rig += ":" + "+".join(gear)
+        dt += f' data-rig3d="{_e(rig)}"'
     # PLAN3: the live 3D finisher's spec — the creature, the killing
     # blow's race/line, and the SAME tint the creature's banner wears,
     # so the canvas inks itself like the card. Only the website's

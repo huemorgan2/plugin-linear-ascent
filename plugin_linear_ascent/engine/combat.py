@@ -11,7 +11,7 @@ import datetime as dt
 import os
 
 from .. import economy
-from . import arena, contracts, state, weekly
+from . import arena, contracts, figure3d, state, weekly
 from .scene import Meters, Option, Scene
 
 _CREATURES = os.path.join(os.path.dirname(os.path.abspath(__file__)),
@@ -156,7 +156,11 @@ def meters(p: dict) -> Meters:
         factions_total=(int((p.get("_world") or {}).get("factions_total"))
                         if (p.get("_world") or {}).get("factions_total")
                         is not None else -1),
-        line=_LINE_OF_DTYPE.get(_damage_type(p), "blade"))
+        line=_LINE_OF_DTYPE.get(_damage_type(p), "blade"),
+        # 080: worn slugs — fight3d warms these item GLBs mid-fight so the
+        # finisher dresses the climber without a fetch wait
+        gear=[s for s in ((figure3d.sheet(p) or {}).get("worn")
+                          or {}).values() if s])
 
 
 def _wfac(p: dict) -> dict:
@@ -1776,6 +1780,16 @@ def _victory(p: dict, floor) -> Scene:
               and (e["kind"] == "wilds"
                    or int(e.get("floor", 0)) in KILL3D_WARDEN_FLOORS)
               else None)
+    if kill3d:
+        # 080: the climber's actual gear rides the spec — the finisher
+        # dresses the SAME models the profile portrait wears (worn slugs +
+        # their hold grammar, lead = the weapon in hand). Older clients
+        # ignore the extra keys.
+        fs = figure3d.sheet(p) or {}
+        kill3d["worn"] = {k: v for k, v in (fs.get("worn") or {}).items()
+                          if v}
+        kill3d["paths"] = dict(fs.get("paths") or {})
+        kill3d["lead"] = fs.get("lead") or ""
     if _arena and kill3d:
         # the arena owns the slot and plays the finisher itself; the
         # kill3d spec still rides (tint, degrade reel) but is not

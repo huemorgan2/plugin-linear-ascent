@@ -241,6 +241,10 @@ def _me(p: dict) -> dict:
                           cslug.replace("_", " ")),
                  "dur": int(p.get("charm_dur") or 0)
                  if cslug == "luck_charm" else None}
+    # 080: worn slugs + hold grammar — the arena stage dresses its climber
+    # in the same real models the profile portrait wears
+    from . import figure3d
+    fs = figure3d.sheet(p) or {}
     return {
         "hp": max(0, int(p["hp"])), "hp_max": state.max_hp(p),
         "charm": charm,
@@ -250,6 +254,9 @@ def _me(p: dict) -> dict:
         "race": p.get("race") or "", "line": _line_of(p),
         "name": p.get("name") or "You",
         "weapons": weapons, "guard": guard,
+        "worn": {k: v for k, v in (fs.get("worn") or {}).items() if v},
+        "paths": dict(fs.get("paths") or {}),
+        "lead": fs.get("lead") or "",
     }
 
 

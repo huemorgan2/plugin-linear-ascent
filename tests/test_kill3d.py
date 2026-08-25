@@ -147,13 +147,17 @@ def test_first_sighting_line_fires_once_per_creature():
 # ── warm hints: the card names what fight3d should fetch, nothing more ──
 
 def test_playing_card_names_the_climbers_rig():
-    # every playing card: data-rig3d="race:line" — one rig, not fifteen
+    # every playing card: data-rig3d="race:line[:slug+…]" — one rig, not
+    # fifteen; 080 adds the worn slugs so the finisher's gear warms early
     p = _character("Wren", clazz="archer")
     _to_floor(p)
     s = core.current_scene(p)
     assert s.meters.line == "bow"
+    assert "basic_bow" in s.meters.gear
     html = render_scene_fragment(s)
-    assert 'data-rig3d="human:bow"' in html
+    rig = html.split('data-rig3d="', 1)[1].split('"', 1)[0]
+    assert rig.startswith("human:bow:")
+    assert "basic_bow" in rig.split(":", 2)[2].split("+")
     assert "data-foe3d" not in html              # no fight, no foe
 
 
@@ -165,7 +169,40 @@ def test_fight_card_names_the_foe():
     assert s.enemy["id"] == foe
     html = render_scene_fragment(s)
     assert f'data-foe3d="{foe}"' in html
-    assert 'data-rig3d="human:blade"' in html
+    rig = html.split('data-rig3d="', 1)[1].split('"', 1)[0]
+    assert rig.startswith("human:blade:")
+    assert "rusted_sword" in rig.split(":", 2)[2].split("+")
+
+
+def test_kill3d_carries_the_worn_gear():
+    # 080: the finisher dresses the climber in their REAL models — the
+    # spec ships the worn slugs, their hold grammar, and the lead weapon,
+    # exactly what the profile portrait wears. Old clients drop the keys.
+    p = _character("Ashe")
+    p["gear"]["shield"] = "gate_buckler"
+    p["gear"]["armor"] = "boarhide_jack"
+    s, _ = _hunt_victory(p)
+    k3 = s.kill3d
+    assert k3["lead"] == "rusted_sword"
+    assert k3["worn"]["weapon"] == "rusted_sword"
+    assert k3["worn"]["shield"] == "gate_buckler"
+    assert k3["worn"]["armor"] == "boarhide_jack"
+    assert "charm" not in k3["worn"]             # empty slots are dropped
+    assert k3["paths"]["rusted_sword"] == "blade"
+    assert k3["paths"]["gate_buckler"] == "shield"
+    assert k3["paths"]["boarhide_jack"] == "armor"
+
+
+def test_arena_me_carries_the_worn_gear():
+    # 080: the arena stage dresses through the same payload
+    from plugin_linear_ascent.engine import arena
+    p = _character("Reed")
+    p["gear"]["shield"] = "gate_buckler"
+    me = arena._me(p)
+    assert me["lead"] == "rusted_sword"
+    assert me["worn"]["weapon"] == "rusted_sword"
+    assert me["worn"]["shield"] == "gate_buckler"
+    assert me["paths"]["gate_buckler"] == "shield"
 
 
 def test_old_wire_without_line_emits_no_rig():

@@ -77,6 +77,11 @@ class Meters:
     # the weapon line in hand (blade/bow/staff; "" = not sent) — the
     # website's fight3d layer warms exactly this rig instead of all of them
     line: str = ""
+    # 080: the worn item slugs — the fight3d layer warms these item GLBs
+    # during the fight so the kill finisher dresses without a fetch wait.
+    # Empty = not sent (older engine): the finisher falls back to family
+    # models.
+    gear: list[str] = field(default_factory=list)
 
 
 @dataclass
