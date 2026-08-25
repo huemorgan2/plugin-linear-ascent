@@ -700,6 +700,13 @@ def apply_choice(p: dict, option_id: str, text: str = "") -> Scene:
             # range, for steel, that means crossing the ground.
             option_id = "close_in"
         else:
+            # 081: a Collect clicked on a card drawn before the gold
+            # moved — the first click already paid out. Swap the card
+            # calmly; a refusal would keep the stale button on screen.
+            if option_id == "collect":
+                scene.shard_note = ("The clerk checks the ledger — that "
+                                    "gold is already in your purse.")
+                return _stamp(p, scene)
             # 048: no raw id dump — a human reads this. The numbered
             # fallback above means "say the row's number" always works.
             scene.shard_note = (

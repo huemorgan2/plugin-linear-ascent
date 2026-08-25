@@ -44,7 +44,9 @@ def relay_scene(p: dict, note: str = "") -> Scene:
     else:
         lines.append("No letters. The clerk shrugs like it's your fault.")
     opts = []
-    if any(l.get("gold") for l in letters):
+    # 081: the visible window is LIMIT 8 — gold_held is the unbounded
+    # count, so a 9th letter's gold still gets its Collect row.
+    if w.get("gold_held", 0) or any(l.get("gold") for l in letters):
         opts.append(Option("collect", "Collect the enclosed gold"))
     price_note = (f"◈ {economy.LETTER_PRICE}" if economy.LETTER_PRICE
                   else "free")
