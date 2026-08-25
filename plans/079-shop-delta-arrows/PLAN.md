@@ -66,3 +66,20 @@ migration; vendor re-sync with `vendor_game.sh` restores worldd.
 
 No deploy in this change; worldd picks the change up on its next
 vendored deploy. No secrets touched.
+
+## Execution status (2026-08-25)
+
+- Implemented in one phase: `arrow_up`/`arrow_down` grids (icons.py),
+  `_owned_best` / `_opt_delta` / `_delta_arrow` + card-wall wiring and
+  `.gcell .delta` CSS (render.py), version 0.103.0. Commit 29ede35.
+- Plugin suite: 1366 passed, 9 failed — all 9 fail identically on the
+  pre-change tree (test_022/048/058/067/kill3d, pre-existing), 4 new
+  tests pass.
+- Rendered forge wall for a fresh archer: 20 cards, 13 up arrows,
+  0 down, equal gate-kit rungs bare — as designed.
+- Vendored into worldd (vendor_game.sh, version gate 0.103.0 matched);
+  worldd suite 215/215.
+- Dojo scenario committed at luna/dojo/tests/shop-delta-arrows/
+  (luna 51c2d30); walkthrough NOT yet run — needs a live BASE +
+  DATABASE_URL. Run it before deploy.
+- No deploy performed.
