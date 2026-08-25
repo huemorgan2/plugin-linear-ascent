@@ -1482,6 +1482,70 @@ def _dossier_html(en: dict) -> str:
             f"dossier</div>{''.join(rows)}</div>")
 
 
+# ── 079: the shop's verdict arrow — better or worse than what you own ───
+
+_DELTA_SLOTS = ("weapon", "shield", "armor", "shoes")
+
+
+def _gear_stat(g, cell: dict | None = None) -> int:
+    """The one number a slot competes on: +speed for shoes, +ATK / +DEF
+    for the rest. A worn cell carries its honed stat_val — the honed
+    number is what a new piece actually has to beat."""
+    if g.slot == "shoes":
+        return int(g.speed)
+    if cell is not None and cell.get("stat_val") is not None:
+        return int(cell["stat_val"])
+    return int(g.bonus)
+
+
+def _owned_best(scene: Scene) -> dict[str, int]:
+    """Best stat the player already owns per gear slot — the worn
+    pieces on the slot map plus every spare riding in the pack."""
+    best: dict[str, int] = {}
+    worn = [sl for sl in (getattr(scene, "slots", None) or [])
+            if sl.get("state") == "filled"]
+    for cell in [*worn, *(getattr(scene, "inventory", None) or [])]:
+        g = economy.FORGE.get(cell.get("slug") or "")
+        if g is None or g.slot not in _DELTA_SLOTS:
+            continue
+        val = _gear_stat(g, cell)
+        if val > best.get(g.slot, -1):
+            best[g.slot] = val
+    return best
+
+
+def _opt_delta(oid: str, best: dict[str, int]) -> str:
+    """'up' | 'down' | '' for a shop card — the card's gear against the
+    best owned in its slot. A slot with nothing in it makes anything an
+    upgrade; equal steel (a spare of the worn rung) draws no arrow.
+    Cards without a slot to compete on (relics, salves, packs) stay
+    bare."""
+    if not oid.startswith(("buy_", "wear_")):
+        return ""
+    g = economy.FORGE.get(oid.split("_", 1)[1])
+    if g is None or g.slot not in _DELTA_SLOTS:
+        return ""
+    have = best.get(g.slot)
+    if have is None:
+        return "up"
+    val = _gear_stat(g)
+    return "up" if val > have else ("down" if val < have else "")
+
+
+def _delta_arrow(delta: str) -> str:
+    """The 16×16 house-style arrow, tinted by verdict — rides the top
+    right of the card cell, over the [i]."""
+    if not delta:
+        return ""
+    url = icons.icon_data_url(f"arrow_{delta}")
+    tint = OK if delta == "up" else RED
+    word = "an upgrade" if delta == "up" else "weaker than yours"
+    return (f'<span class="delta" role="img" aria-label="{word}" '
+            f'style="background-color:{tint};'
+            f"-webkit-mask-image:url('{url}');"
+            f"mask-image:url('{url}')\"></span>")
+
+
 def _opt_gear_icon(oid: str, art_slug: str = "") -> str:
     """004: shop rows carry their 1-bit gear icon (32×32 display of the
     16×16 grids) — buy_/wear_ options only, everything else stays text.
@@ -2554,6 +2618,8 @@ def render_scene_fragment(scene: Scene) -> str:
         # stays on scene.options order so typed numbers keep working.
         gal_opts = {str(g.get("opt", "")) for g in
                     (getattr(scene, "gallery", None) or [])}
+        # 079: what the shop cards have to beat — computed once per scene
+        owned_best = _owned_best(scene) if grid_mode else {}
         rows, cards = [], []
         for i, o in enumerate(scene.options, 1):
             if o.id in gal_opts:
@@ -2631,7 +2697,11 @@ def render_scene_fragment(scene: Scene) -> str:
                         f'<span class="key{key_cls}">{i}</span>{gicon}'
                         f'<span class="lbl">{_ep(o.label)}</span>{badge}'
                         f"{stack}</button>")
-                cards.append(f'<div class="gcell">{card}{info}{prev}</div>')
+                # 079: the verdict arrow rides the cell's top right; the
+                # CSS drops the [i] to sit just under it.
+                darr = _delta_arrow(_opt_delta(o.id, owned_best))
+                cards.append(
+                    f'<div class="gcell">{card}{darr}{info}{prev}</div>')
                 continue
             btn = (f'<button type="button" class="opt{opt_cls}" '
                    f'data-opt="{_e(o.id)}">'
@@ -3276,6 +3346,12 @@ SCENE_CSS = f"""
 .opt.locked .amt,.gcard.locked .amt{{color:{FAINT}!important;}}
 .gcell .info{{position:absolute;top:5px;right:5px;border:0;
  background:none;padding:0;}}
+/* 079: the verdict arrow owns the corner; the [i] sits just under it */
+.gcell .delta{{position:absolute;top:5px;right:6px;width:16px;
+ height:16px;mask-size:100% 100%;-webkit-mask-size:100% 100%;
+ mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;
+ image-rendering:pixelated;pointer-events:none;z-index:1;}}
+.gcell .delta~.info{{top:24px;}}
 /* ── 057b: the weapon preview — the card, 20% bigger, portrait at
    full scale, the buy button at the foot. Desktop: lives on :hover.
    Touch: a tap opens it (.wopen, wired in TIP_JS), ✕ closes. ── */

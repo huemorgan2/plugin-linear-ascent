@@ -131,3 +131,54 @@ def test_title_card_still_closes_the_movie():
     assert "aspect-ratio:320/200" in html               # title art, not 320x112
     # 011: the title screen animates — GIF mask instead of the static PNG
     assert "data:image/gif;base64" in html
+
+
+# ── 079: the shop's verdict arrows ──────────────────────────────────────
+
+def test_shop_delta_verdicts():
+    # the comparison: best owned per slot (worn honed stat counts, pack
+    # spares count) vs the card's steel; equal draws no arrow
+    from plugin_linear_ascent import economy
+    from plugin_linear_ascent.engine.scene import Scene
+    from plugin_linear_ascent.render import _opt_delta, _owned_best
+    s = Scene(eyebrow="", headline="")
+    s.slots = [{"state": "filled", "slug": "scrap_dagger",
+                "kind": "weapon", "stat_val": economy.FORGE["scrap_dagger"].bonus}]
+    s.inventory = [{"slug": "wolfbite", "kind": "weapon"}]
+    best = _owned_best(s)
+    assert best["weapon"] == economy.FORGE["wolfbite"].bonus  # spare outranks worn
+    assert _opt_delta("buy_emberfang", best) == "up"
+    assert _opt_delta("buy_scrap_dagger", best) == "down"
+    assert _opt_delta("wear_wolfbite", best) == ""            # equal — no arrow
+    assert _opt_delta("buy_scrapwood_buckler", best) == "up"  # empty slot
+    assert _opt_delta("buy_medgel", best) == ""               # no slot to compete on
+    assert _opt_delta("hone_weapon", best) == ""              # not a purchase
+
+
+def test_shop_delta_honed_stat_is_the_bar():
+    # a worn piece honed past a shop rung turns that rung's arrow down
+    from plugin_linear_ascent import economy
+    from plugin_linear_ascent.engine.scene import Scene
+    from plugin_linear_ascent.render import _opt_delta, _owned_best
+    s = Scene(eyebrow="", headline="")
+    s.slots = [{"state": "filled", "slug": "scrap_dagger", "kind": "weapon",
+                "stat_val": economy.FORGE["wolfbite"].bonus + 1}]
+    assert _opt_delta("buy_wolfbite", _owned_best(s)) == "down"
+
+
+def test_forge_cards_wear_delta_arrows():
+    # the wall itself: arrows render top-right, the [i] drops under them
+    from plugin_linear_ascent import icons
+    p = make_player()
+    core.apply_choice(p, "forge")
+    html = render_scene(core.current_scene(p))
+    assert 'class="delta"' in html
+    assert icons.icon_data_url("arrow_up") in html   # fresh archer: upgrades exist
+    assert ".gcell .delta~.info" in html             # the [i] sits under the arrow
+
+
+def test_arrow_icons_exist():
+    from plugin_linear_ascent import icons
+    assert "arrow_up" in icons.ICON_KEYS
+    assert "arrow_down" in icons.ICON_KEYS
+    assert icons.icon_data_url("arrow_up") != icons.icon_data_url("arrow_down")
