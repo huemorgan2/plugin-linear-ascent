@@ -29,7 +29,7 @@ KEY = "floormap"
 # kind) or None; kind names the ink ("en" = energy teal).
 LAYOUTS: dict[int, dict[str, tuple]] = {
     1: {
-        "gate": (56, 40, "GATE",
+        "gate": (56, 50, "GATE",
                  "The tower — the elevator between floors.", None),
         # phase-1b (roy): Roothollow is NOT on this floor — it is the
         # base town at the elevator bottom. The chip stands on the

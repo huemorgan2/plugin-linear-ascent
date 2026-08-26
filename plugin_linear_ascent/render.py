@@ -217,7 +217,8 @@ def _map_html(scene: Scene, mp: dict, art: tuple[str, int, int]) -> str:
         chips.append(
             f'<button type="button" class="mk" data-opt="{_e(oid)}" '
             f'style="left:{x:g}%;top:{y:g}%">'
-            f'[{i}] {_e(str(m.get("label") or ""))}{cost}{tip}</button>')
+            f'<span class="mknum">[{i}]</span> '
+            f'{_e(str(m.get("label") or ""))}{cost}{tip}</button>')
     return (f'<div class="mapwrap later"><img src="{url}" '
             f'alt="the floor, mapped" width="{w}" height="{h}">'
             f'{"".join(chips)}</div>')
@@ -3442,9 +3443,11 @@ SCENE_CSS = f"""
 .mapwrap img{{display:block;width:100%;height:auto;
  image-rendering:pixelated;}}
 .mk{{position:absolute;transform:translate(-50%,-100%);
- background:{INK};color:{TEXT};border:0;border-radius:0;
+ background:{INK};color:{BRIGHT};border:0;border-radius:0;
  padding:0 .5ch;font:inherit;line-height:1.3;cursor:pointer;
  white-space:nowrap;}}
+.mk .mknum{{color:{GOLD};}}
+.mk:hover .mknum,.mk:focus-visible .mknum{{color:{INK};}}
 .mk:hover,.mk:focus-visible{{background:{GOLD};color:{INK};
  outline:none;z-index:10;}}
 .mk:hover .mkcost,.mk:focus-visible .mkcost{{color:{INK}!important;}}
