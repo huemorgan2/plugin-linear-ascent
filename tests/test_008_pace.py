@@ -115,13 +115,18 @@ def test_alpha_specimen_visible_and_buffed(monkeypatch):
     assert e["atk"] == round(base_atk * 1.2)
     assert e["hp"] == round(base_hp * 2.0)
     # the tag is on the opener — fighting an alpha is an informed choice
-    assert any("alpha" in line for line in s.body_lines)
+    # (084: the eyebrow carries it now; the opener body is empty)
+    from plugin_linear_ascent import render
+    html = render.render_scene_fragment(s)
+    eyebrow = html.split('class="eyebrow type">')[1].split("</div>")[0]
+    assert "alpha" in eyebrow
 
 
 def test_alpha_kill_drops_extra_loot(monkeypatch):
     force_specimen(monkeypatch, "alpha")
     p = at_gate_town(create_character(fresh()))
     choose(p, "hunt")
+    p["training"]["blade"] = 10               # 084: no miss-roll flake
     p["encounter"]["range"] = "close"         # 002: skip the crossing
     p["encounter"]["hp"] = 1                  # next hit kills
     s = choose(p, "attack")
@@ -135,6 +140,7 @@ def test_runt_pays_less_gold(monkeypatch):
     monkeypatch.setattr(state, "rng_jitter", lambda p, base, pct: base)
     p = at_gate_town(create_character(fresh()))
     choose(p, "hunt")
+    p["training"]["blade"] = 10               # 084: no miss-roll flake
     p["encounter"]["range"] = "close"         # 002: skip the crossing
     p["encounter"]["hp"] = 1
     gold_before = p["gold"]

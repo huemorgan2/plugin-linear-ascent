@@ -107,22 +107,16 @@ def test_bare_player_takes_full_hits():
 
 # ── Texts explain why ────────────────────────────────────────────────────
 
-def test_opener_shows_your_own_numbers_and_gear():
+def test_opener_body_is_bare_since_084():
+    # 084 retired the You-line and the description prose from openers —
+    # the foe sheet and the stat slab are the card now
+    # (test_084_opener_declutter owns the full shape).
     p = at_gate_town(create_character(fresh()))
     geared(p)
     s = choose(p, "hunt")
     body = " ".join(s.body_lines)
-    assert f"ATK {state.atk(p)}" in body
-    assert f"DEF {state.dfs(p)}" in body
-    assert "Padded Jerkin" in body and "Scrapwood Buckler" in body
-
-
-def test_opener_names_the_bare_guard_too():
-    p = at_gate_town(create_character(fresh()))
-    p["gear"]["armor"] = None
-    p["gear"]["shield"] = None
-    s = choose(p, "hunt")
-    assert any("on reflex alone" in ln for ln in s.body_lines)
+    assert "You — ATK" not in body
+    assert "on reflex alone" not in body
 
 
 def test_attack_note_names_the_weapon_and_the_block():

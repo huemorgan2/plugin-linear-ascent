@@ -85,14 +85,14 @@ def test_round_cards_carry_no_sheet():
     assert s.foe_sheet is None
 
 
-def test_opener_body_keeps_prose_and_you_line_drops_verdict():
+def test_opener_body_drops_the_verdict_prose():
+    # 084 updated this contract: the opener body is empty — prose and
+    # the You-line left with the declutter (test_084_opener_declutter
+    # owns the full card shape).
     p = _arm(_classless("081-fs-body"), "rusted_sword",
              {"blade": 4, "bow": 0, "staff": 0})
     s = _start(p, ("armoured",))
     text = " ".join(s.body_lines)
-    assert "It waits." in text
-    assert "You — ATK" in text
-    # the old prose is gone from the body
     assert "Your Rusted Sword:" not in text
     assert "steel: half" not in text
 

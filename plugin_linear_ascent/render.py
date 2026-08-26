@@ -1428,12 +1428,13 @@ def _dossier_tip(dossier_html: str) -> str:
     return re.sub(r"\s+", " ", html.unescape(s)).strip()
 
 
-def _estat_html(en: dict) -> str:
+def _estat_html(en: dict, info: str = "") -> str:
     """009: the monster's sheet is ONE line printed over the creature
     art, bottom-left, on a black ANSI slab — a bar where a bar reads
     (HP), plain numbers where numbers read (ATK/DEF/SPEED). The bar
     wears green while whole, gold while bleeding, red when a third
-    remains."""
+    remains. 084: on opener cards the [i] dossier span rides the slab
+    after SPEED (the headline that used to anchor it is gone)."""
     hp, cap = int(en.get("hp", 0)), max(1, int(en.get("hp_max", 1)))
     col = OK if hp >= cap else (GOLD if hp * 3 > cap else RED)
     # each power wears its profile ink — HP green, ATK gold, SPD aether
@@ -1446,6 +1447,8 @@ def _estat_html(en: dict) -> str:
     if "mspd" in en:
         segs.append(f'<span style="color:{AETHER}">SPEED '
                     f"{int(en['mspd'])}</span>")
+    if info:
+        segs.append(info)
     return ('<div class="estat" aria-label="enemy stats">'
             + "   ".join(segs) + "</div>")
 
@@ -1478,9 +1481,11 @@ def _foesheet_html(fs: dict) -> str:
     def cell(icon: str, ink: str, big: str, hint: str,
              held: bool = False) -> None:
         hcls = " fsheld" if held else ""
+        # 084: labels and hints read white on the solid cell; the type
+        # colour survives on the icon alone.
         cells.append(
             f'<span class="fscell">{_aicon(icon, ink, cls="fsico")}'
-            f'<span class="fsbig" style="color:{ink}">{_e(big)}</span>'
+            f'<span class="fsbig">{_e(big)}</span>'
             f'<span class="fshint{hcls}">{_e(hint)}</span></span>')
 
     d = fs.get("def") or {}
@@ -2579,6 +2584,11 @@ def render_scene_fragment(scene: Scene) -> str:
     # 067 phase 8 (roy): the icon tiles exist ONLY in the fight itself.
     # Opener and end cards (victory/death/fled) use the regular menu.
     arena_round = bool(ar) and ar.get("phase") == "round"
+    # 084: an opener card (the foe sheet rides it) sheds the headline
+    # and the ◇ plate — the [i] moves onto the stat slab over the art,
+    # the name onto the eyebrow bar. The sheet IS the card.
+    opener_card = (bool(getattr(scene, "foe_sheet", None))
+                   and not arena_live)
     # 0.96.2/0.97.1 (roy): the [i] sits right after the creature's name
     # and its tip IS the dossier panel (data-tiph, trusted server HTML).
     # The name lives in exactly ONE place per card: the headline on
@@ -2603,8 +2613,10 @@ def render_scene_fragment(scene: Scene) -> str:
             f"-webkit-mask-image:url('{url}');"
             f"mask-image:url('{url}');\"{swap_attr}></div>")
         if scene.enemy:
-            banner_html = (f'<div class="bwrap">{banner_html}'
-                           f"{_estat_html(scene.enemy)}</div>")
+            banner_html = (
+                f'<div class="bwrap">{banner_html}'
+                f"{_estat_html(scene.enemy, info=hl_info if opener_card else '')}"
+                f"</div>")
         parts.append(banner_html)
     elif k3 and k3.get("id"):
         # PLAN4: a floor-1 kill card ships its banner BARE — no ending
@@ -2623,16 +2635,26 @@ def render_scene_fragment(scene: Scene) -> str:
     if getattr(scene, "paper", None):
         parts.append(_paper_html(scene.paper))
 
-    parts.append(f'<div class="eyebrow type">{_e(scene.eyebrow)}</div>')
+    eyebrow_txt = scene.eyebrow
+    if opener_card and scene.enemy and scene.enemy.get("name"):
+        # 084: the eyebrow is the one place an opener says the name.
+        # 008: the specimen tag stays visible — fighting an alpha is
+        # an informed choice (it used to ride the body prose).
+        nm = scene.enemy["name"]
+        spec = scene.enemy.get("specimen") or ""
+        if spec and spec != "common":
+            nm = f"{nm} — {spec}"
+        eyebrow_txt = f"{eyebrow_txt} · {nm}"
+    parts.append(f'<div class="eyebrow type">{_e(eyebrow_txt)}</div>')
     hl_col = _HEADLINE.get(scene.event_kind, BRIGHT)
     # 030: an amount wears its colour even in a headline (law 1)
     # 0.97.1 (roy): in the live arena the foe's nameplate already says
     # the name (with the [i]) — the headline under the scene would say
     # it a second time, so that line is dropped entirely.
-    if not (arena_live and scene.enemy):
+    if not (arena_live and scene.enemy) and not opener_card:
         parts.append(f'<div class="headline type" style="color:{hl_col}">'
                      f"{_ep(scene.headline)}{hl_info}</div>")
-    if scene.enemy and not arena_live:
+    if scene.enemy and not arena_live and not opener_card:
         parts.append(_enemy_head_html(scene.enemy))
     # 081: the at-a-glance type block — opener cards only (the engine
     # ships foe_sheet on the encounter card and never on round cards).
@@ -3086,15 +3108,16 @@ SCENE_CSS = f"""
 .eplate{{display:flex;align-items:baseline;gap:1ch;}}
 .eplate .erng{{color:{DIM};white-space:nowrap;}}
 .emod{{color:{DIM};}}
-/* ── 081: the encounter's at-a-glance type block — 2×2 icon cells ── */
-.foesheet{{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;
- margin:8px 0 2px;}}
+/* ── 081/084: the encounter's at-a-glance type block — one row of
+   solid dark-grey cells, white text, the type colour on the icon ── */
+.foesheet{{display:flex;gap:8px;margin:8px 0 2px;}}
 .foesheet .fscell{{display:flex;flex-direction:column;
- align-items:flex-start;gap:2px;border:1px solid {DIM};padding:8px;
- min-width:0;}}
+ align-items:flex-start;gap:2px;flex:1 1 0;background:#26241f;
+ padding:8px;min-width:0;}}
 .foesheet .aico.fsico{{width:32px;height:32px;flex:none;}}
-.foesheet .fsbig{{letter-spacing:.06em;white-space:nowrap;}}
-.foesheet .fshint{{color:{TEXT};line-height:1.3;}}
+.foesheet .fsbig{{letter-spacing:.06em;white-space:nowrap;
+ color:{BRIGHT};}}
+.foesheet .fshint{{color:{BRIGHT};line-height:1.3;}}
 .foesheet .fshint.fsheld{{color:{DIM};}}
 .foehint{{position:relative;margin:0 0 4px;padding:6px 3ch 6px 1ch;
  border:1px solid {GOLD};color:{GOLD};line-height:1.4;}}
@@ -3106,6 +3129,12 @@ SCENE_CSS = f"""
    aether frame, so the panel sheds its own border/slab — the LOOK of
    the sheet (dhead, rows, icons) is byte-identical. */
 .headline .info{{display:inline-flex;margin-left:1ch;color:{DIM};}}
+/* 084: on opener cards the [i] rides the stat slab over the art, on
+   the same line after SPEED (the base .info is display:flex — a block
+   — so the slab's copy must say inline). Narrow screens let the slab
+   fold at the spaces instead of clipping the tail off the art edge. */
+.estat .info{{display:inline-flex;color:{DIM};cursor:pointer;}}
+@media (max-width:480px){{.estat{{white-space:pre-wrap;right:12px;}}}}
 .dossier{{border:1px solid {AETHER};background:{INK};
  padding:10px 1.5ch;margin:8px 0 2px;}}
 #tipbox .dossier{{border:0;background:none;padding:0;margin:0;}}

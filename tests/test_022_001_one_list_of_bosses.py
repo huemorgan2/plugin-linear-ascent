@@ -137,6 +137,7 @@ def test_finishing_the_pool_pays_nothing_locally():
     """The server splits the pool by damage — the engine pays no coins
     of its own (033: worldd lands the settled numbers on the card)."""
     p = playing(world=warden_world(1, hp=1))
+    p["training"]["blade"] = 10           # 084: no miss-roll flake
     join_fight(p)
     p["encounter"]["range"] = "close"
     xp0, gold0 = p["xp"], p["gold"]
@@ -183,6 +184,7 @@ def test_below_frontier_the_keep_pays_nothing_because_nothing_lives_there():
 
 def test_local_dev_play_is_a_world_of_one():
     p = playing()                       # no world attached
+    p["training"]["blade"] = 10         # 084: no miss-roll flake
     core.apply_choice(p, "gate")
     core.apply_choice(p, "floor_1")
     core.apply_choice(p, "keep")

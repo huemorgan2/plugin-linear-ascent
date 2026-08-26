@@ -962,19 +962,10 @@ def fight_scene(p: dict, floor, opener: bool = False, note: str = "") -> Scene:
         opts.append(Option("pack", "Open your pack",
                            "swap weapons while you still can"))
 
-    body = [e["prose"]] if opener else []
-    if opener:
-        # 013: your own numbers, spelled out — armor was invisible and
-        # players couldn't tell WHY hits landed for 0.
-        # (003: the enemy's profile moved off the body and into the
-        # fight header + [i] dossier — scene.enemy carries it.)
-        guard = guard_name(p)
-        body.append(
-            f"You — ATK {state.atk(p)} with your {weapon_name(p)}, "
-            f"DEF {state.dfs(p)} "
-            + (f"behind your {guard}." if guard else "on reflex alone."))
-        # 081: the sign's triangle and the verdict prose moved off the
-        # body and into scene.foe_sheet — big icon cells, one glance.
+    # 084: the opener is the sheet — no description prose, no You-line.
+    # The player's numbers stay one hover away (profile meters, option
+    # rows name the weapon); the foe's live in the sheet and the slab.
+    body = []
     if note:
         body.append(note)
     fx_note = e.pop("_fx_note", "")
@@ -1008,8 +999,10 @@ def fight_scene(p: dict, floor, opener: bool = False, note: str = "") -> Scene:
         # 009: the headline is the name alone — HP/ATK/DEF/SPEED live on
         # the stat line printed over the creature art (scene.enemy).
         headline=f"{e['name']}{' ' + _sign if _sign else ''}",
-        support="It is between you and the way forward.",
-        shard_note=_shard_advice(p, floor) if opener else "",
+        # 084: openers carry no support line and no whisper — the sheet
+        # says it all; rounds keep both surfaces as before.
+        support="" if opener else "It is between you and the way forward.",
+        shard_note="",
         body_lines=body,
         options=opts,
         meters=meters(p),

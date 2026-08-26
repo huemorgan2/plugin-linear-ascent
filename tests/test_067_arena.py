@@ -352,7 +352,10 @@ def test_0963_opener_and_victory_keep_their_headline():
     s, fl = _hunt(p, 6)
     assert s.arena and s.arena["phase"] == "opener"
     html = render.render_scene_fragment(s)
-    assert 'class="headline type"' in html and ">i</span></div>" in html
+    # 084: the opener's [i] rides the stat slab, not a headline
+    assert 'class="headline type"' not in html
+    slab = html.split('class="estat"')[1].split("</div>")[0]
+    assert 'class="info"' in slab and ">i</span>" in slab
     # victory: the encounter is gone — the "evicted/falls" line stays
     p2 = _climber()
     s2, fl2 = _hunt(p2, 6)

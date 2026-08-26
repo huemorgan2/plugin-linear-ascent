@@ -190,12 +190,13 @@ def test_range_and_modifiers_moved_into_the_dossier():
 def test_fragment_wires_header_and_dossier_into_the_card():
     _, _, s = _fight("archer", 6, "lane_boar")
     html = render.render_scene_fragment(s)
-    assert "ehead" in html
-    # 0.96.2 (roy): the [i] rides the headline name; the whole dossier
-    # panel ships as its data-tiph tip. No <details> fold on the card.
+    # 084: the opener sheds headline + ehead; the [i] rides the stat
+    # slab over the art, its tip still the whole dossier panel.
+    assert "ehead" not in html
     assert "<details" not in html
     assert "data-tiph" in html and "dossier" in html
-    assert '<div class="headline type"' in html and ">i</span></div>" in html
+    slab = html.split('class="estat"')[1].split("</div>")[0]
+    assert 'class="info"' in slab and ">i</span>" in slab
     assert html.count("ticon") >= 2       # bulwark + speed rows at least
     # the old bare-◈ profile body line is retired
     assert "◈ bulwark" not in html
