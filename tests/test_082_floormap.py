@@ -57,6 +57,19 @@ def test_cost_on_chip_rule():
     assert mk["town"]["label"] == "ROOTHOLLOW"
 
 
+def test_chip_cost_wears_pixel_bolt_not_emoji():
+    # phase-1c: the chip cost paints the 1-bit bolt glyph like every
+    # other energy amount — the raw emoji never reaches the screen.
+    p, s = _at_camp("u-bolt")
+    labs.set_flag(p, "floormap", True)
+    s = core.current_scene(p)
+    html = render.render_scene_fragment(s)
+    i = html.index('class="mkcost')
+    frag = html[i:html.index("</span>", i)]
+    assert "⚡" not in frag
+    assert 'class="eg"' in frag
+
+
 def test_npc_scene_keeps_rows_no_map():
     # phase-1b bug fix: the Hobb card must NOT re-render the map — its
     # rows are the same _gate_town_options and all got mapped away,

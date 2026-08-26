@@ -29,17 +29,18 @@ KEY = "floormap"
 # kind) or None; kind names the ink ("en" = energy teal).
 LAYOUTS: dict[int, dict[str, tuple]] = {
     1: {
-        "gate": (54, 40, "GATE",
+        "gate": (56, 40, "GATE",
                  "The tower — the elevator between floors.", None),
         # phase-1b (roy): Roothollow is NOT on this floor — it is the
-        # base town at the elevator bottom. The chip stands at the
-        # tower's massive door and says the town's NAME, not "town".
-        "town": (58, 64, "ROOTHOLLOW",
+        # base town at the elevator bottom. The chip stands on the
+        # village at the tower's foot and says the town's NAME, not
+        # "town". (phase-1c: coords re-placed on the small-door art.)
+        "town": (63, 69, "ROOTHOLLOW",
                  "Down the tower to Roothollow — shops, forge, bank.",
                  None),
-        "talk": (44, 63, "CAMP",
+        "talk": (43, 60, "CAMP",
                  "The fire — Hobb Fennick's talk.", None),
-        "keep": (90, 31, "@warden",
+        "keep": (91, 26, "@warden",
                  "The Warden's keep — beat him to open the floor above.",
                  None),
         "hunt": (72, 84, "HUNT",

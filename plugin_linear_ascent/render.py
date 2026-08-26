@@ -211,7 +211,7 @@ def _map_html(scene: Scene, mp: dict, art: tuple[str, int, int]) -> str:
         if m.get("cost"):
             ink = _MAP_COST_INK.get(str(m.get("ck") or ""), DIM)
             cost = (f'<span class="mkcost" style="color:{ink}">'
-                    f'{_e(str(m["cost"]))}</span>')
+                    f'{_et(str(m["cost"]))}</span>')
         tip = (f'<span class="mtip{tipcls}">{_e(str(m.get("tip") or ""))}'
                "</span>" if m.get("tip") else "")
         chips.append(
@@ -3449,6 +3449,7 @@ SCENE_CSS = f"""
  outline:none;z-index:10;}}
 .mk:hover .mkcost,.mk:focus-visible .mkcost{{color:{INK}!important;}}
 .mk .mkcost{{margin-left:1ch;}}
+.mk .eg{{width:12px;height:12px;vertical-align:-2px;}}
 .mk .mtip{{display:none;position:absolute;bottom:calc(100% + 5px);
  left:50%;transform:translateX(-50%);background:{INK};color:{TEXT};
  padding:.5rem 1.5ch;width:max-content;max-width:40ch;
