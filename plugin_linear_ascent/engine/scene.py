@@ -232,6 +232,15 @@ class Scene:
                                     # plays the lift transition over the
                                     # card. "" everywhere else. A new
                                     # TOP-LEVEL key: old clients drop it.
+    map: dict | None = None         # 082: Labs floormap — the camp menu
+                                    # drawn as the floor's map: {art,
+                                    # markers:[{opt,x,y,label,tip,
+                                    # cost?,ck?}]}. Marker opts are the
+                                    # SAME option ids as the rows; the
+                                    # renderer draws chips on the art and
+                                    # skips those rows. None = plain
+                                    # list. A new TOP-LEVEL key: old
+                                    # clients drop it and render rows.
     foe_sheet: dict | None = None   # 081: the opener's at-a-glance type
                                     # block — {type, def:{n,best,held},
                                     # fly:{yes,best,held},
@@ -430,6 +439,7 @@ class Scene:
             "kill3d": self.kill3d,
             "labs": list(self.labs),
             "arena": self.arena,
+            "map": self.map,
             "foe_sheet": self.foe_sheet,
             "slots": self.slots,
             "figure3d": self.figure3d,
@@ -498,6 +508,7 @@ class Scene:
             kill3d=(dict(d["kill3d"]) if d.get("kill3d") else None),
             labs=list(d.get("labs") or []),
             arena=(dict(d["arena"]) if d.get("arena") else None),
+            map=(dict(d["map"]) if d.get("map") else None),
             foe_sheet=(dict(d["foe_sheet"])
                        if d.get("foe_sheet") else None),
             slots=list(d.get("slots") or []),

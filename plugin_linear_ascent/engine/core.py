@@ -11,7 +11,8 @@ import datetime as dt
 
 from .. import economy, icons, unlocks
 from ..content import schema
-from . import combat, contracts, figure3d, labs, names, notices, state, weekly
+from . import (combat, contracts, figure3d, floormap, labs, names, notices,
+               state, weekly)
 from .scene import Meters, Option, Scene
 
 
@@ -3520,7 +3521,7 @@ def _floor_arrival_scene(p: dict, n: int) -> Scene:
                      f"No solo kill — a war party of {_quorum(p, n + 1)} "
                      f"pledges {economy.COST_BOSS_COMMIT} ⚡ each at the "
                      "Guildhall.")
-    return Scene(
+    s = Scene(
         eyebrow=f"FLOOR {n} · {fl.biome.upper()} · {fl.gate_town.upper()}",
         headline=f"{fl.gate_town} — the floor's last safe fire",
         support="A healer, a rumor bench, and the wilds beyond the wire.",
@@ -3530,6 +3531,8 @@ def _floor_arrival_scene(p: dict, n: int) -> Scene:
         meters=combat.meters(p),
         banner=fl.banner,
     )
+    s.map = floormap.payload(p, fl, s.options)   # 082: Labs floormap
+    return s
 
 
 def _live_flare(p: dict) -> dict | None:
@@ -3626,7 +3629,7 @@ def _npc_scene(p: dict, fl) -> Scene:
         body.append(f"{fl.warden_name} — ATK {fl.warden_atk} · "
                     f"DEF {fl.warden_def} · {fl.warden_hp:,} HP. "
                     "That's the shape of it. Walk in knowing.")
-    return Scene(
+    s = Scene(
         eyebrow=f"FLOOR {fl.floor} · {fl.gate_town.upper()}",
         headline=f"{npc.name} — {npc.role}",
         support="Talking is free. Listening is what saves you.",
@@ -3636,6 +3639,8 @@ def _npc_scene(p: dict, fl) -> Scene:
         meters=combat.meters(p),
         banner=fl.banner,
     )
+    s.map = floormap.payload(p, fl, s.options)   # 082: Labs floormap
+    return s
 
 
 # ── The School (048: train, mastery, carry — on Roothollow's square) ─
@@ -3927,7 +3932,7 @@ def _gate_town_scene(p: dict) -> Scene:
         body.insert(0, f"▪ a RED FLARE hangs over the wilds — "
                        f"{fw.get('name', 'a climber')} is dying out "
                        f"there, {fw.get('monster', 'something')} on them.")
-    return Scene(
+    s = Scene(
         eyebrow=f"FLOOR {fl.floor} · {fl.biome.upper()} · {fl.gate_town.upper()}",
         headline=f"{fl.gate_town}",
         support="The fire is small but honest. Beyond the wire, the wilds.",
@@ -3936,6 +3941,8 @@ def _gate_town_scene(p: dict) -> Scene:
         option_art=_gate_town_art(fl),
         meters=combat.meters(p),
     )
+    s.map = floormap.payload(p, fl, s.options)   # 082: Labs floormap
+    return s
 
 
 def _gate_town_action(p: dict, oid: str) -> Scene:

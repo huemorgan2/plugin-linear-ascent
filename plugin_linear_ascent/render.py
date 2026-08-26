@@ -75,6 +75,9 @@ _WEAPONS_ART = os.path.join(_ART_ROOT, "weapons")
 # armor, boots and the relics, same two sizes, shipped under art/gear.
 # Weapons keep their 057 home; the lookup tries both.
 _GEAR_ART = os.path.join(_ART_ROOT, "gear")
+# 082: floor maps — 640×480 1-bit territory maps, drawn 1:1 (pixelated)
+# with the option markers as an HTML overlay, never in the pixels.
+_MAPS = os.path.join(_ART_ROOT, "maps")
 # 009: ONE font everywhere — the homepage's bitmap IBM VGA 8×16, shipped
 # inside the card CSS as a data: url so both hosts (web pane and legacy
 # chat card) render it without a network fetch.
@@ -110,7 +113,7 @@ def set_art_base(base: str) -> None:
     ART_BASE = (base or "").rstrip("/")
     for fn in (_banner_data_url, _sigil_half_data_url, _gear_art_url,
                _fx_data_url, _fx_split, _paper_tex_url, _strip_art_url,
-               _portrait_art, _portrait_data_url):
+               _portrait_art, _portrait_data_url, _map_data_url):
         fn.cache_clear()
 
 
@@ -168,6 +171,53 @@ def _banner_data_url(slug: str) -> tuple[str, int, int] | None:
                 w, h = (int(n) for n in size.split("x"))
                 return _art_url(path, "png"), w, h
     return None
+
+
+@lru_cache(maxsize=None)
+def _map_data_url(slug: str) -> tuple[str, int, int] | None:
+    """082: (url, w, h) for a floor map — maps/<slug>_640x480.png."""
+    path = os.path.join(_MAPS, f"{slug}_640x480.png")
+    if os.path.exists(path):
+        return _art_url(path, "png"), 640, 480
+    return None
+
+
+_MAP_COST_INK = {"en": AETHER, "gold": GOLD, "hp": OK}
+
+
+def _map_html(scene: Scene, mp: dict, art: tuple[str, int, int]) -> str:
+    """082: the floor map — the art 1:1 under an overlay of marker chips.
+
+    Each chip is a data-opt button carrying the SAME option id as the row
+    it replaces, numbered by the option's position in scene.options so the
+    typed-number fallback never notices the layout. A chip whose click has
+    a real cost wears it on the chip in the cost's ink; the tooltip above
+    says what the place holds and paints over its neighbours."""
+    url, w, h = art
+    idx = {o.id: i for i, o in enumerate(scene.options, 1)}
+    chips = []
+    for m in mp.get("markers") or []:
+        oid = str(m.get("opt") or "")
+        i = idx.get(oid)
+        if not i:
+            continue
+        x = float(m.get("x") or 0)
+        y = float(m.get("y") or 0)
+        tipcls = " tl" if x < 25 else (" tr" if x > 75 else "")
+        cost = ""
+        if m.get("cost"):
+            ink = _MAP_COST_INK.get(str(m.get("ck") or ""), DIM)
+            cost = (f'<span class="mkcost" style="color:{ink}">'
+                    f'{_e(str(m["cost"]))}</span>')
+        tip = (f'<span class="mtip{tipcls}">{_e(str(m.get("tip") or ""))}'
+               "</span>" if m.get("tip") else "")
+        chips.append(
+            f'<button type="button" class="mk" data-opt="{_e(oid)}" '
+            f'style="left:{x:g}%;top:{y:g}%">'
+            f'[{i}] {_e(str(m.get("label") or ""))}{cost}{tip}</button>')
+    return (f'<div class="mapwrap later"><img src="{url}" '
+            f'alt="the floor, mapped" width="{w}" height="{h}">'
+            f'{"".join(chips)}</div>')
 
 
 @lru_cache(maxsize=None)
@@ -2231,7 +2281,7 @@ let d=0;for(const el of later){setTimeout(()=>el.classList.add('shown'),d);d+=fa
 (function () {
   var btns = Array.prototype.slice.call(document.querySelectorAll(
     'button.opt, button.nrow, button.wrow, button.gtile, button.ptile, '
-    + 'button.pclose'));
+    + 'button.pclose, button.mk'));
   var acted = false;
   var hint = document.querySelector('.reply');
   function setHint(t) { if (hint) hint.textContent = t; }
@@ -2701,9 +2751,19 @@ def render_scene_fragment(scene: Scene) -> str:
                     (getattr(scene, "gallery", None) or [])}
         # 079: what the shop cards have to beat — computed once per scene
         owned_best = _owned_best(scene) if grid_mode else {}
+        # 082: the floor map — mapped option ids become marker chips ON
+        # the art; only the leftovers (heals, flares) stay rows below.
+        mapped: set[str] = set()
+        mp = getattr(scene, "map", None)
+        if mp:
+            map_art = _map_data_url(str(mp.get("art") or ""))
+            if map_art:
+                parts.append(_map_html(scene, mp, map_art))
+                mapped = {str(m.get("opt") or "")
+                          for m in mp.get("markers") or []}
         rows, cards = [], []
         for i, o in enumerate(scene.options, 1):
-            if o.id in gal_opts:
+            if o.id in gal_opts or o.id in mapped:
                 continue
             sect = getattr(o, "section", "") or ""
             if sect:
@@ -2793,8 +2853,10 @@ def render_scene_fragment(scene: Scene) -> str:
             rows.append(f'<div class="orow{nest}">{btn}{info}</div>')
         wall = (f'<div class="ggrid">{"".join(cards)}</div>'
                 if cards else "")
-        parts.append(f'<div class="options later">{wall}{"".join(rows)}'
-                     "</div>")
+        # 082: a fully-mapped scene has no leftover rows — no empty box.
+        if wall or rows:
+            parts.append(f'<div class="options later">{wall}'
+                         f'{"".join(rows)}</div>')
 
     # 031 §11: the activity band — what tonight is already set to do,
     # a filled box with no outline at the foot of the options.
@@ -3332,6 +3394,26 @@ SCENE_CSS = f"""
 .callout.solid .callouth{{background:{GOLD};color:{INK};padding:6px 12px;
  margin:0 0 8px;letter-spacing:.12em;text-transform:uppercase;}}
 .callout.solid .body{{padding:0 12px;}}
+/* 082: the floor map — art 1:1, marker chips as the menu */
+.mapwrap{{position:relative;clear:both;margin:10px auto 0;
+ max-width:640px;border:1px solid {BORDER};}}
+.mapwrap img{{display:block;width:100%;height:auto;
+ image-rendering:pixelated;}}
+.mk{{position:absolute;transform:translate(-50%,-100%);
+ background:{INK};color:{TEXT};border:0;border-radius:0;
+ padding:0 .5ch;font:inherit;line-height:1.3;cursor:pointer;
+ white-space:nowrap;}}
+.mk:hover,.mk:focus-visible{{background:{GOLD};color:{INK};
+ outline:none;z-index:10;}}
+.mk:hover .mkcost,.mk:focus-visible .mkcost{{color:{INK}!important;}}
+.mk .mkcost{{margin-left:1ch;}}
+.mk .mtip{{display:none;position:absolute;bottom:calc(100% + 5px);
+ left:50%;transform:translateX(-50%);background:{INK};color:{TEXT};
+ padding:.5rem 1.5ch;width:max-content;max-width:40ch;
+ white-space:normal;text-align:left;line-height:1.35;z-index:5;}}
+.mk:hover .mtip,.mk:focus-visible .mtip{{display:block;}}
+.mk .mtip.tl{{left:0;transform:none;}}
+.mk .mtip.tr{{left:auto;right:0;transform:none;}}
 .options{{clear:both;margin:10px 0 0;
  display:flex;flex-direction:column;
  border-top:1px dashed {BORDER};border-bottom:1px dashed {BORDER};

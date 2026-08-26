@@ -35,6 +35,17 @@ FEATURES: dict[str, Feature] = {
         "staff in the hand, charm on the neck, boots on the feet. "
         "Hover a slot to light that piece. Off = the drawn portrait.",
         frozenset()),
+    # 082 phase-1: the camp menu becomes the floor's map — every choice
+    # a marker chip standing on the terrain. Floor 1 only while the art
+    # rolls out; quests come in a later phase.
+    "floormap": Feature(
+        "floormap", "Floor maps",
+        "The camp menu becomes a map of the floor. Every place is a "
+        "marker on the land — the gate pylon, the town, the fire, the "
+        "Warden's keep, the hunting fields. Hover a marker for what it "
+        "holds; a click that costs energy says so on the marker. "
+        "Off = the plain list.",
+        frozenset({1})),
 }
 
 OPEN = "labs"

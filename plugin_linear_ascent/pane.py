@@ -625,7 +625,7 @@ function wireOptions() {
      notice-board shortcuts, sigil tiles and the pack popup's actions. */
   const btns = [...game.querySelectorAll('button.opt, button.nrow, '
     + 'button.wrow, button.gtile, button.ptile, button.pclose, '
-    + 'button.facdoor[data-opt]')];
+    + 'button.facdoor[data-opt], button.mk')];
   const hint = game.querySelector('.reply');
   btns.forEach(b => {
     if (b.__wired) return;

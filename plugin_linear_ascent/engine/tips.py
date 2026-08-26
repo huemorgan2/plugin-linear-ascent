@@ -210,6 +210,12 @@ _TIPS: dict[str, str] = {
                              "Sword on the hip, bow on the back, staff in "
                              "the hand. Hover a slot to light that piece. "
                              "Off = the drawn portrait you know."),
+    "labs_toggle_floormap": ("Floor maps: the camp menu becomes a map of "
+                             "the floor — every place a marker on the "
+                             "land. Hover a marker for what it holds; a "
+                             "click that costs energy says so on the "
+                             "marker. Floor 1 first. Off = the plain "
+                             "list you know."),
     "labs_back": "Back to where you stood.",
 
     # ── the fight card ──
