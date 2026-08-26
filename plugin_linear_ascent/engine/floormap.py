@@ -38,7 +38,7 @@ LAYOUTS: dict[int, dict[str, tuple]] = {
         "town": (63, 69, "ROOTHOLLOW",
                  "Down the tower to Roothollow — shops, forge, bank.",
                  None),
-        "talk": (43, 60, "CAMP",
+        "talk": (45, 59, "CAMP",
                  "The fire — Hobb Fennick's talk.", None),
         "keep": (91, 26, "@warden",
                  "The Warden's keep — beat him to open the floor above.",
