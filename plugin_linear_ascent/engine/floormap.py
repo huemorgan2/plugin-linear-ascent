@@ -29,19 +29,23 @@ KEY = "floormap"
 # kind) or None; kind names the ink ("en" = energy teal).
 LAYOUTS: dict[int, dict[str, tuple]] = {
     1: {
-        "gate": (55, 44, "GATE",
-                 "The elevator between floors — ride up or down.", None),
-        "town": (67, 66, "TOWN",
-                 "Down to Roothollow — shops, forge, bank.", None),
-        "talk": (46, 58, "CAMP",
+        "gate": (54, 40, "GATE",
+                 "The tower — the elevator between floors.", None),
+        # phase-1b (roy): Roothollow is NOT on this floor — it is the
+        # base town at the elevator bottom. The chip stands at the
+        # tower's massive door and says the town's NAME, not "town".
+        "town": (58, 64, "ROOTHOLLOW",
+                 "Down the tower to Roothollow — shops, forge, bank.",
+                 None),
+        "talk": (44, 63, "CAMP",
                  "The fire — Hobb Fennick's talk.", None),
-        "keep": (88, 28, "@warden",
+        "keep": (90, 31, "@warden",
                  "The Warden's keep — beat him to open the floor above.",
                  None),
-        "hunt": (66, 86, "HUNT",
+        "hunt": (72, 84, "HUNT",
                  "The near fields — hunt for coin and XP.",
                  (f"{economy.COST_WILDS_FIGHT} ⚡", "en")),
-        "hunt_deep": (20, 20, "DEEP-HUNT",
+        "hunt_deep": (18, 20, "DEEP-HUNT",
                       "Off the lit paths — stronger monsters, richer pay.",
                       (f"{economy.COST_WILDS_DEEP} ⚡", "en")),
     },

@@ -175,10 +175,13 @@ def _banner_data_url(slug: str) -> tuple[str, int, int] | None:
 
 @lru_cache(maxsize=None)
 def _map_data_url(slug: str) -> tuple[str, int, int] | None:
-    """082: (url, w, h) for a floor map — maps/<slug>_640x480.png."""
-    path = os.path.join(_MAPS, f"{slug}_640x480.png")
+    """082: (url, w, h) for a floor map — maps/<slug>_492x369.png.
+
+    phase-1b (roy): the native grid dropped to 77% of 640x480; the img
+    stretches to the full card width, pixelated."""
+    path = os.path.join(_MAPS, f"{slug}_492x369.png")
     if os.path.exists(path):
-        return _art_url(path, "png"), 640, 480
+        return _art_url(path, "png"), 492, 369
     return None
 
 
@@ -2600,13 +2603,29 @@ def render_scene_fragment(scene: Scene) -> str:
                    f'aria-label="enemy dossier" '
                    f'data-tip="{_e(_dossier_tip(dossier))}" '
                    f'data-tiph="{_e(dossier)}">i</span>')
+    # 082 phase-1b (roy): a mapped card IS the map. Computed up here so
+    # the floor art (banner) and the prose (headline, support, body) can
+    # step aside — the map takes the card's full width and the eyebrow
+    # bar rides directly under it. Rows for unmapped options, meters and
+    # everything below stay.
+    map_frag = ""
+    mapped: set[str] = set()
+    _mp = getattr(scene, "map", None)
+    if _mp and scene.options and not arena_live:
+        _map_art = _map_data_url(str(_mp.get("art") or ""))
+        if _map_art:
+            map_frag = _map_html(scene, _mp, _map_art)
+            mapped = {str(m.get("opt") or "")
+                      for m in _mp.get("markers") or []}
+    if map_frag:
+        parts.append(map_frag)
     if arena_live:
         parts.append(_arena_banner_html(scene, info=hl_info))
         if arena_round and scene.options:
             # the toolbar: one row of tiles DIRECTLY under the stage
             parts.append(_arena_tiles_html(scene, later=False))
         parts.append(_arena_log_html(ar))
-    elif fx or split or banner:
+    elif (fx or split or banner) and not map_frag:
         banner_html = (
             f'<div class="banner" style="background-color:{tint};'
             f"aspect-ratio:{w}/{h};"
@@ -2651,7 +2670,7 @@ def render_scene_fragment(scene: Scene) -> str:
     # 0.97.1 (roy): in the live arena the foe's nameplate already says
     # the name (with the [i]) — the headline under the scene would say
     # it a second time, so that line is dropped entirely.
-    if not (arena_live and scene.enemy) and not opener_card:
+    if not (arena_live and scene.enemy) and not opener_card and not map_frag:
         parts.append(f'<div class="headline type" style="color:{hl_col}">'
                      f"{_ep(scene.headline)}{hl_info}</div>")
     if scene.enemy and not arena_live and not opener_card:
@@ -2661,7 +2680,7 @@ def render_scene_fragment(scene: Scene) -> str:
     fs = getattr(scene, "foe_sheet", None)
     if fs and not arena_live:
         parts.append(_foesheet_html(fs))
-    if scene.support:
+    if scene.support and not map_frag:
         parts.append(f'<div class="support type">{_ep(scene.support)}</div>')
     # 072: another climber's public sheet — on top, before the words.
     av = getattr(scene, "avatar", None)
@@ -2691,7 +2710,7 @@ def render_scene_fragment(scene: Scene) -> str:
     in_callout = False
     has_tally = bool(getattr(scene, "tally", None))
     arena_note = (ar or {}).get("note") if arena_live else ""
-    for line in scene.body_lines:
+    for line in ([] if map_frag else scene.body_lines):
         if has_tally and _TALLY_SAID.match(line):
             continue
         if arena_note and line == arena_note:
@@ -2773,16 +2792,9 @@ def render_scene_fragment(scene: Scene) -> str:
                     (getattr(scene, "gallery", None) or [])}
         # 079: what the shop cards have to beat — computed once per scene
         owned_best = _owned_best(scene) if grid_mode else {}
-        # 082: the floor map — mapped option ids become marker chips ON
-        # the art; only the leftovers (heals, flares) stay rows below.
-        mapped: set[str] = set()
-        mp = getattr(scene, "map", None)
-        if mp:
-            map_art = _map_data_url(str(mp.get("art") or ""))
-            if map_art:
-                parts.append(_map_html(scene, mp, map_art))
-                mapped = {str(m.get("opt") or "")
-                          for m in mp.get("markers") or []}
+        # 082: mapped option ids became marker chips ON the art (hoisted
+        # above the banner, phase-1b); only the leftovers (heals, flares)
+        # stay rows below.
         rows, cards = [], []
         for i, o in enumerate(scene.options, 1):
             if o.id in gal_opts or o.id in mapped:
@@ -3423,9 +3435,10 @@ SCENE_CSS = f"""
 .callout.solid .callouth{{background:{GOLD};color:{INK};padding:6px 12px;
  margin:0 0 8px;letter-spacing:.12em;text-transform:uppercase;}}
 .callout.solid .body{{padding:0 12px;}}
-/* 082: the floor map — art 1:1, marker chips as the menu */
-.mapwrap{{position:relative;clear:both;margin:10px auto 0;
- max-width:640px;border:1px solid {BORDER};}}
+/* 082: the floor map — marker chips as the menu. phase-1b: full bleed —
+   the map takes the whole card width, no border, flush to the top;
+   the eyebrow bar rides directly under it. */
+.mapwrap{{position:relative;clear:both;margin:-12px -2ch 0;}}
 .mapwrap img{{display:block;width:100%;height:auto;
  image-rendering:pixelated;}}
 .mk{{position:absolute;transform:translate(-50%,-100%);

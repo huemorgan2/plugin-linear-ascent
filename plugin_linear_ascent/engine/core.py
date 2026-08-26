@@ -3312,7 +3312,8 @@ def _gate_scene(p: dict) -> Scene:
         hint += _presence_gate_hint(p, n)
         opts.append(Option(f"floor_{n}", f"Floor {n} — {fl.zone}",
                            hint, locked=p["level"] < req))
-    opts.append(Option("back", "Back to the square"))
+    # phase-1b (roy): the town by its name, not "the square"
+    opts.append(Option("back", "Back to Roothollow"))
     # 022/006: an open wound is news at the gate itself — "the war is
     # on floor 47" before anyone picks a floor.
     lines = []
@@ -3639,7 +3640,8 @@ def _npc_scene(p: dict, fl) -> Scene:
         meters=combat.meters(p),
         banner=fl.banner,
     )
-    s.map = floormap.payload(p, fl, s.options)   # 082: Labs floormap
+    # phase-1b: no map here — talk is a choice ON the map; this card
+    # keeps its plain rows (the map swallowed them, locking the player).
     return s
 
 

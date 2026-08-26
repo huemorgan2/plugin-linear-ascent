@@ -53,6 +53,37 @@ def test_cost_on_chip_rule():
     # the Warden's keep prices the swing on its own screen — no cost chip
     assert "cost" not in mk["keep"]
     assert mk["keep"]["label"] == "BRACKJAW"
+    # phase-1b: the base town by its NAME, standing at the tower's foot
+    assert mk["town"]["label"] == "ROOTHOLLOW"
+
+
+def test_npc_scene_keeps_rows_no_map():
+    # phase-1b bug fix: the Hobb card must NOT re-render the map — its
+    # rows are the same _gate_town_options and all got mapped away,
+    # locking the player on a card with no menu.
+    p, s = _at_camp("u-npc")
+    labs.set_flag(p, "floormap", True)
+    s = core.apply_choice(p, "talk")
+    assert s.map is None
+    html = render.render_scene_fragment(s)
+    assert 'class="mapwrap' not in html
+    assert html.count('class="opt') >= 3   # the plain rows are back
+
+
+def test_mapped_card_sheds_art_and_prose():
+    # phase-1b: the mapped card IS the map — no banner, no headline,
+    # no support/body prose; the eyebrow bar stays, under the map.
+    p, s = _at_camp("u-shed")
+    labs.set_flag(p, "floormap", True)
+    s = core.current_scene(p)
+    html = render.render_scene_fragment(s)
+    assert 'class="mapwrap' in html
+    assert 'class="banner"' not in html
+    assert 'class="headline' not in html
+    assert 'class="support' not in html
+    assert 'class="body' not in html
+    assert 'class="eyebrow' in html
+    assert html.index('class="mapwrap') < html.index('class="eyebrow')
 
 
 def test_floor_gate_and_toggle_off():
