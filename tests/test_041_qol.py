@@ -101,6 +101,8 @@ def test_enemy_head_is_not_deferred_by_the_typewriter():
 def test_pane_script_has_digit_keys_fast_pen_and_scroll():
     js = pane._JS
     assert "keydown" in js and "'1'" in js and "'9'" in js
+    # 082 phase-1h: the keys reach map chips too, by displayed number
+    assert "button.opt, button.mk" in js and ".key, .mknum" in js
     assert "fast ? 2 : 7" in js                  # click → 4× typewriter
     assert "scrollIntoView" in js                # mobile walks up to the art
     assert "max-width: 520px" in js

@@ -697,15 +697,24 @@ function wireMore() {
   });
 }
 /* 041: the number row presses the menu — 1 clicks the first option row,
-   2 the second, and so on. Quiet while any input owns the keyboard. */
+   2 the second, and so on. Quiet while any input owns the keyboard.
+   082 phase-1h: the map card renders some options as chips on the art
+   (button.mk) — both kinds print their scene.options number (.key /
+   .mknum), so the key matches the DISPLAYED number; buttons printing
+   none keep the old DOM-order pick. */
 document.addEventListener('keydown', (e) => {
   if (e.ctrlKey || e.metaKey || e.altKey) return;
   const tag = (document.activeElement || {}).tagName;
   if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
   if (e.key.length !== 1 || e.key < '1' || e.key > '9') return;
-  const btns = [...game.querySelectorAll('button.opt')]
+  const btns = [...game.querySelectorAll('button.opt, button.mk')]
     .filter(b => !b.disabled && b.offsetParent !== null);
-  const b = btns[e.key - 1];
+  const num = (b) => {
+    const k = b.querySelector('.key, .mknum');
+    return k ? parseInt(k.textContent.replace(/\D/g, ''), 10) : NaN;
+  };
+  let b = btns.find((x) => num(x) === +e.key);
+  if (!b) b = btns.filter((x) => isNaN(num(x)))[e.key - 1];
   if (b) { e.preventDefault(); b.click(); }
 });
 async function loadScene(force) {
