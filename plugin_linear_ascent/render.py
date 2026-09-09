@@ -212,10 +212,18 @@ def _map_html(scene: Scene, mp: dict, art: tuple[str, int, int]) -> str:
             ink = _MAP_COST_INK.get(str(m.get("ck") or ""), DIM)
             cost = (f'<span class="mkcost" style="color:{ink}">'
                     f'{_et(str(m["cost"]))}</span>')
-        tip = (f'<span class="mtip{tipcls}">{_e(str(m.get("tip") or ""))}'
+        tip_id = f'map-tip-{oid}'
+        tip = (f'<span id="{_e(tip_id)}" role="tooltip" class="mtip{tipcls}">'
+               f'{_e(str(m.get("tip") or ""))}'
                "</span>" if m.get("tip") else "")
+        anchor = 'left' if x < 25 else ('right' if x > 75 else 'center')
+        description = f' aria-describedby="{_e(tip_id)}"' if tip else ''
+        name = f'{m.get("label") or ""}, option {i}'
+        if m.get("cost"):
+            name += f', {m["cost"]}'
         chips.append(
             f'<button type="button" class="mk" data-opt="{_e(oid)}" '
+            f'data-anchor="{anchor}" aria-label="{_e(name)}"{description} '
             f'style="left:{x:g}%;top:{y:g}%">'
             f'<span class="mknum">[{i}]</span> '
             f'{_e(str(m.get("label") or ""))}{cost}{tip}</button>')
@@ -3447,6 +3455,8 @@ SCENE_CSS = f"""
  padding:0 .5ch;font:inherit;line-height:1.3;cursor:pointer;
  white-space:nowrap;}}
 .mk .mknum{{color:{GOLD};}}
+.mk[data-anchor="left"]{{transform:translate(0,-100%);}}
+.mk[data-anchor="right"]{{transform:translate(-100%,-100%);}}
 .mk:hover .mknum,.mk:focus-visible .mknum{{color:{INK};}}
 .mk:hover,.mk:focus-visible{{background:{GOLD};color:{INK};
  outline:none;z-index:10;}}
@@ -3454,12 +3464,14 @@ SCENE_CSS = f"""
 .mk .mkcost{{margin-left:1ch;}}
 .mk .eg{{width:12px;height:12px;vertical-align:-2px;}}
 .mk .mtip{{display:none;position:absolute;bottom:calc(100% + 5px);
- left:50%;transform:translateX(-50%);background:{INK};color:{TEXT};
- padding:.5rem 1.5ch;width:max-content;max-width:40ch;
+ left:50%;transform:translateX(calc(-50% + var(--tip-dx,0px)));
+ background:{INK};color:{TEXT};box-sizing:border-box;
+ padding:.5rem 1.5ch;width:max-content;max-width:min(34ch,calc(100vw - 32px));
  white-space:normal;text-align:left;line-height:1.35;z-index:5;}}
-.mk:hover .mtip,.mk:focus-visible .mtip{{display:block;}}
-.mk .mtip.tl{{left:0;transform:none;}}
-.mk .mtip.tr{{left:auto;right:0;transform:none;}}
+.mk:hover .mtip,.mk:focus .mtip{{display:block;}}
+.mk .mtip.tl{{left:0;transform:translateX(var(--tip-dx,0px));}}
+.mk .mtip.tr{{left:auto;right:0;transform:translateX(var(--tip-dx,0px));}}
+.mk .mtip.below{{bottom:auto;top:calc(100% + 5px);}}
 .options{{clear:both;margin:10px 0 0;
  display:flex;flex-direction:column;
  border-top:1px dashed {BORDER};border-bottom:1px dashed {BORDER};

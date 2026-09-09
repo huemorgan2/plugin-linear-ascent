@@ -304,10 +304,10 @@ textarea.ti{{background:{INK};color:{TEXT};border:1px solid {BORDER};
  padding:20px;cursor:pointer;}}
 #fblight.open{{display:flex;}}
 #fblight img{{max-width:100%;max-height:100%;border:1px solid {BORDER};}}
-#liftlay{{position:fixed;inset:0;z-index:140;background:#000000cc;
+#liftlay{{position:fixed;inset:0;z-index:2147483647;background:#000;
  display:flex;align-items:center;justify-content:center;
- opacity:0;transition:opacity .35s;pointer-events:none;}}
-#liftlay.on{{opacity:1;}}
+ opacity:1;pointer-events:auto;}}
+#liftlay.leaving{{opacity:0;transition:opacity .35s;}}
 #liftlay .car{{width:min(92vw,640px);aspect-ratio:320/112;
  background:#000;position:relative;overflow:hidden;}}
 #liftlay .car .ink{{position:absolute;inset:0;background-color:#8b93a7;
@@ -514,14 +514,26 @@ function hintSweep() {
 const LIFT_MS = 5200;   // ~5.1s of ride; the fade starts as the baked-in
                         // final-frame hold begins.
 let liftTimer = 0;
+let liftRevealTimer = 0;
+let liftActive = false;
+function endLift() {
+  clearTimeout(liftTimer);
+  clearTimeout(liftRevealTimer);
+  document.getElementById('liftlay')?.remove();
+  liftActive = false;
+  game.inert = false;
+}
 function playLift() {
   const card = game.querySelector('[data-lift]');
   const dir = card ? card.dataset.lift : '';
   if (dir !== 'up' && dir !== 'down') return;
-  const old = document.getElementById('liftlay');
-  if (old) { clearTimeout(liftTimer); old.remove(); }
+  endLift();
+  liftActive = true;
+  game.inert = true;
   const lay = document.createElement('div');
   lay.id = 'liftlay';
+  lay.setAttribute('role', 'status');
+  lay.setAttribute('aria-label', dir === 'up' ? 'Ascending' : 'Descending');
   const car = document.createElement('div');
   car.className = 'car';
   const ink = document.createElement('div');
@@ -534,10 +546,9 @@ function playLift() {
   car.appendChild(ink);
   lay.appendChild(car);
   document.body.appendChild(lay);
-  requestAnimationFrame(() => lay.classList.add('on'));
   liftTimer = setTimeout(() => {
-    lay.classList.remove('on');            // 0.35s fade reveals the place
-    setTimeout(() => lay.remove(), 400);
+    lay.classList.add('leaving');   // reveal only after the complete ride
+    liftRevealTimer = setTimeout(endLift, 400);
   }, LIFT_MS);
 }
 /* ── browser back walks the game home (WEB only) ────────────────────
@@ -577,7 +588,7 @@ if (WEB) {
 /* 027: one door for everything that isn't a menu row — the pack popup's
    actions and the card's own text/number box. */
 window.__laAct = async function (option, text) {
-  if (loading) return;
+  if (loading || liftActive) return;
   loading = true;
   try {
     const d = await call('/act', {option: option || '', text: text || '',
@@ -621,6 +632,7 @@ function showToast(msg) {
   }, 3000);
 }
 function wireOptions() {
+  wireMapTips();
   /* 027: everything that carries a data-opt acts the same way — menu rows,
      notice-board shortcuts, sigil tiles and the pack popup's actions. */
   const btns = [...game.querySelectorAll('button.opt, button.nrow, '
@@ -633,7 +645,7 @@ function wireOptions() {
     if (b.__wired) return;
     b.__wired = true;
     b.addEventListener('click', async () => {
-    if (loading) return;
+    if (loading || liftActive) return;
     if (window.__laSfx) window.__laSfx('click');   // 042
     loading = true;
     btns.forEach(x => { x.disabled = true;
@@ -667,6 +679,34 @@ function wireOptions() {
   });
   wireMore();
 }
+/* 085: CSS reveals descriptions instantly; measure in the same event
+   to keep the complete explanation inside a phone or iframe viewport. */
+function fitMapTip(button) {
+  const tip = button.querySelector('.mtip');
+  if (!tip) return;
+  tip.style.setProperty('--tip-dx', '0px');
+  tip.classList.remove('below');
+  const r = tip.getBoundingClientRect();
+  if (!r.width) return;
+  const edge = 8;
+  const dx = r.left < edge ? edge - r.left
+    : Math.min(0, document.documentElement.clientWidth - edge - r.right);
+  tip.style.setProperty('--tip-dx', dx + 'px');
+  if (r.top < edge) tip.classList.add('below');
+}
+function wireMapTips() {
+  game.querySelectorAll('button.mk').forEach(b => {
+    if (b.__tipWired) return;
+    b.__tipWired = true;
+    b.addEventListener('pointerenter', () => fitMapTip(b));
+    b.addEventListener('focus', () => fitMapTip(b));
+  });
+}
+function fitActiveMapTips() {
+  game.querySelectorAll('button.mk:hover, button.mk:focus').forEach(fitMapTip);
+}
+window.addEventListener('resize', fitActiveMapTips);
+window.addEventListener('scroll', fitActiveMapTips, {passive: true});
 /* the presence grid's MORE N PLAYERS — fetches the rest of the room
    (server caps at 200) and unfolds it into the same grid */
 function wireMore() {
@@ -703,6 +743,7 @@ function wireMore() {
    .mknum), so the key matches the DISPLAYED number; buttons printing
    none keep the old DOM-order pick. */
 document.addEventListener('keydown', (e) => {
+  if (liftActive) return;
   if (e.ctrlKey || e.metaKey || e.altKey) return;
   const tag = (document.activeElement || {}).tagName;
   if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
@@ -727,7 +768,7 @@ async function loadScene(force) {
 
 /* ── freshness: chat-driven acts and world events reach the pane ────── */
 async function peek() {
-  if ((!WEB && !token) || document.hidden || loading) return;
+  if ((!WEB && !token) || document.hidden || loading || liftActive) return;
   try {
     const d = await call('/pane/peek');
     if (d.scene_id && sceneId && d.scene_id !== sceneId) loadScene(true);

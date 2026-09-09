@@ -1,5 +1,8 @@
-"""082 phase-1: Labs floormap — the camp menu drawn as the floor's map."""
+"""085: standard floormap — the camp menu drawn as the floor's map."""
+import pytest
+
 from plugin_linear_ascent import render
+from plugin_linear_ascent.content import schema
 from plugin_linear_ascent.engine import core, floormap, labs, state
 from plugin_linear_ascent.engine.scene import Scene
 
@@ -16,19 +19,16 @@ def _at_camp(uid="u-map"):
     return p, s
 
 
-def test_flag_off_scene_unchanged():
+def test_map_is_standard_without_a_flag():
     p, s = _at_camp("u-off")
-    assert s.map is None
-    assert s.to_dict()["map"] is None
+    assert s.map["art"] == "map_001"
+    assert s.to_dict()["map"]["art"] == "map_001"
     ids = [o.id for o in s.options]
     assert "hunt" in ids and "gate" in ids and "town" in ids
 
 
-def test_flag_on_floor1_maps_the_menu():
+def test_floor1_maps_only_live_actions():
     p, s = _at_camp("u-on")
-    core.apply_choice(p, "labs")
-    core.apply_choice(p, "labs_toggle_floormap")
-    s = core.apply_choice(p, "labs_back")
     assert s.map is not None
     assert s.map["art"] == "map_001"
     ids = {o.id for o in s.options}
@@ -45,7 +45,6 @@ def test_flag_on_floor1_maps_the_menu():
 
 def test_cost_on_chip_rule():
     p, s = _at_camp("u-cost")
-    labs.set_flag(p, "floormap", True)
     s = core.current_scene(p)
     mk = {m["opt"]: m for m in s.map["markers"]}
     assert mk["hunt"]["cost"] == "1 ⚡"
@@ -61,7 +60,6 @@ def test_chip_cost_wears_pixel_bolt_not_emoji():
     # phase-1c: the chip cost paints the 1-bit bolt glyph like every
     # other energy amount — the raw emoji never reaches the screen.
     p, s = _at_camp("u-bolt")
-    labs.set_flag(p, "floormap", True)
     s = core.current_scene(p)
     html = render.render_scene_fragment(s)
     i = html.index('class="mkcost')
@@ -75,7 +73,6 @@ def test_npc_scene_keeps_rows_no_map():
     # rows are the same _gate_town_options and all got mapped away,
     # locking the player on a card with no menu.
     p, s = _at_camp("u-npc")
-    labs.set_flag(p, "floormap", True)
     s = core.apply_choice(p, "talk")
     assert s.map is None
     html = render.render_scene_fragment(s)
@@ -87,7 +84,6 @@ def test_mapped_card_sheds_art_and_prose():
     # phase-1b: the mapped card IS the map — no banner, no headline,
     # no support/body prose; the eyebrow bar stays, under the map.
     p, s = _at_camp("u-shed")
-    labs.set_flag(p, "floormap", True)
     s = core.current_scene(p)
     html = render.render_scene_fragment(s)
     assert 'class="mapwrap' in html
@@ -99,21 +95,42 @@ def test_mapped_card_sheds_art_and_prose():
     assert html.index('class="mapwrap') < html.index('class="eyebrow')
 
 
-def test_floor_gate_and_toggle_off():
-    p, s = _at_camp("u-gate")
-    labs.set_flag(p, "floormap", True)
-    assert core.current_scene(p).map is not None
-    # feature is gated to floor 1
-    assert not labs.enabled(p, "floormap", 2)
-    fl2 = type("F", (), {"floor": 2, "warden_name": "X"})()
-    assert floormap.payload(p, fl2, core.current_scene(p).options) is None
-    labs.set_flag(p, "floormap", False)
-    assert core.current_scene(p).map is None
+@pytest.mark.parametrize("floor", range(1, 11))
+@pytest.mark.parametrize("legacy_flag", [None, False, True])
+def test_all_ten_floors_ignore_legacy_flag(floor, legacy_flag):
+    p, _ = _at_camp(f"u-{floor}-{legacy_flag}")
+    if legacy_flag is not None:
+        p["labs"] = {"floormap": legacy_flag}
+    p.update(floor=floor, location="gate_town", level=99, unlocked_floor=11)
+    s = core.current_scene(p)
+    assert s.map["art"] == f"map_{floor:03d}"
+    markers = {m["opt"]: m for m in s.map["markers"]}
+    assert set(markers) <= {o.id for o in s.options}
+    assert ("hunt_deep" in markers) == (floor >= 4)
+    assert markers["keep"]["label"] == schema.load_floors()[floor].warden_name.removeprefix("Warden ").split(",")[0].upper()
+    if floor > 1:
+        assert schema.load_floors()[floor].gate_town in markers["talk"]["tip"]
+    html = render.render_scene_fragment(s)
+    assert 'class="mapwrap' in html
+    assert 'width="492" height="369"' in html
+    for i, o in enumerate(s.options, 1):
+        assert html.count(f'data-opt="{o.id}"') == 1
+        if o.id in markers:
+            assert f'aria-describedby="map-tip-{o.id}"' in html
+            assert f'option {i}' in html
+
+
+def test_floor11_keeps_the_menu():
+    p, _ = _at_camp("u-eleven")
+    p.update(floor=11, location="gate_town", level=99, unlocked_floor=11)
+    s = core.current_scene(p)
+    assert s.map is None
+    assert {"gate", "hunt", "town"} <= {o.id for o in s.options}
+    assert 'class="mapwrap' not in render.render_scene_fragment(s)
 
 
 def test_hurt_player_heals_stay_rows():
     p, s = _at_camp("u-hurt")
-    labs.set_flag(p, "floormap", True)
     p["hp"] = 1
     s = core.current_scene(p)
     ids = {o.id for o in s.options}
@@ -124,7 +141,6 @@ def test_hurt_player_heals_stay_rows():
 
 def test_map_rides_the_wire_round_trip():
     p, s = _at_camp("u-wire")
-    labs.set_flag(p, "floormap", True)
     s = core.current_scene(p)
     d = s.to_dict()
     assert d["map"]["art"] == "map_001"
@@ -138,7 +154,6 @@ def test_map_rides_the_wire_round_trip():
 
 def test_render_chip_or_row_never_both():
     p, s = _at_camp("u-render")
-    labs.set_flag(p, "floormap", True)
     p["hp"] = 1                      # force leftover rows too
     s = core.current_scene(p)
     html = render.render_scene_fragment(s)
@@ -149,16 +164,15 @@ def test_render_chip_or_row_never_both():
     assert 'class="mk"' in html
     mk = {m["opt"]: m for m in s.map["markers"]}
     assert "1 ⚡" in mk["hunt"]["cost"]
-    labs.set_flag(p, "floormap", False)
-    html_off = render.render_scene_fragment(core.current_scene(p))
-    assert 'class="mapwrap' not in html_off and 'class="mk"' not in html_off
 
 
-def test_labs_card_lists_floor_maps():
-    p, s = _at_camp("u-card")
+def test_floor_maps_have_graduated_from_labs():
+    p, _ = _at_camp("u-card")
+    p["labs"] = {"floormap": True}
     s = core.apply_choice(p, "labs")
-    ids = [o.id for o in s.options]
-    assert "labs_toggle_floormap" in ids
-    row = next(o for o in s.options if o.id == "labs_toggle_floormap")
-    assert "Floor maps" in row.label
-    assert "floors 1" in row.hint
+    assert "labs_toggle_floormap" not in {o.id for o in s.options}
+    assert "floormap" not in labs.FEATURES
+    assert "floormap" not in labs.enabled_keys(p)
+    core.apply_choice(p, "labs_toggle_floormap")  # old links are harmless
+    assert p["labs"]["floormap"] is True
+    assert core.apply_choice(p, "labs_back").map is not None

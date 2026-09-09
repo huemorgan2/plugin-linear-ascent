@@ -137,3 +137,15 @@ def test_both_lift_gifs_ship_in_the_package():
         f = ART / f"{slug}_320x112.gif"
         assert f.is_file(), f
         assert f.stat().st_size > 10_000, f
+
+
+def test_lift_starts_opaque_and_locks_hidden_actions():
+    html = pane.render_pane(api_base="/play/api", web=True)
+    css = html.split("#liftlay{", 1)[1].split("}", 1)[0]
+    assert "background:#000;" in css
+    assert "opacity:1;" in css and "pointer-events:auto;" in css
+    assert "transition" not in css  # only the final reveal animates
+    assert "game.inert = true" in html and "game.inert = false" in html
+    assert "if (loading || liftActive) return;" in html
+    assert "if (liftActive) return;" in html
+    assert "setTimeout(endLift, 400)" in html

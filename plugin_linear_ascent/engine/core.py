@@ -3532,7 +3532,7 @@ def _floor_arrival_scene(p: dict, n: int) -> Scene:
         meters=combat.meters(p),
         banner=fl.banner,
     )
-    s.map = floormap.payload(p, fl, s.options)   # 082: Labs floormap
+    s.map = floormap.payload(p, fl, s.options)   # 085: standard floormap
     return s
 
 
@@ -3943,7 +3943,7 @@ def _gate_town_scene(p: dict) -> Scene:
         option_art=_gate_town_art(fl),
         meters=combat.meters(p),
     )
-    s.map = floormap.payload(p, fl, s.options)   # 082: Labs floormap
+    s.map = floormap.payload(p, fl, s.options)   # 085: standard floormap
     return s
 
 
