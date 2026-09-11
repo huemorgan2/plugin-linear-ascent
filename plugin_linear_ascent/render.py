@@ -220,11 +220,11 @@ def _map_html(scene: Scene, mp: dict, art: tuple[str, int, int]) -> str:
         description = f' aria-describedby="{_e(tip_id)}"' if tip else ''
         name = f'{m.get("label") or ""}, option {i}'
         if m.get("cost"):
-            name += f', {m["cost"]}'
+            name += ', ' + str(m['cost']).replace('⚡', 'energy')
         chips.append(
             f'<button type="button" class="mk" data-opt="{_e(oid)}" '
             f'data-anchor="{anchor}" aria-label="{_e(name)}"{description} '
-            f'style="left:{x:g}%;top:{y:g}%">'
+            f'style="left:{x:g}%;top:var(--map-y,{y:g}%)">'
             f'<span class="mknum">[{i}]</span> '
             f'{_e(str(m.get("label") or ""))}{cost}{tip}</button>')
     return (f'<div class="mapwrap later"><img src="{url}" '
@@ -3472,6 +3472,13 @@ SCENE_CSS = f"""
 .mk .mtip.tl{{left:0;transform:translateX(var(--tip-dx,0px));}}
 .mk .mtip.tr{{left:auto;right:0;transform:translateX(var(--tip-dx,0px));}}
 .mk .mtip.below{{bottom:auto;top:calc(100% + 5px);}}
+@media(max-width:520px){{
+ .mapwrap .mk[data-opt="hunt_deep"]{{--map-y:38%;}}
+ .mapwrap .mk[data-opt="gate"]{{--map-y:54%;}}
+ .mapwrap .mk[data-opt="talk"]{{--map-y:66%;}}
+ .mapwrap .mk[data-opt="town"]{{--map-y:78%;}}
+ .mapwrap .mk[data-opt="hunt"]{{--map-y:92%;}}
+}}
 .options{{clear:both;margin:10px 0 0;
  display:flex;flex-direction:column;
  border-top:1px dashed {BORDER};border-bottom:1px dashed {BORDER};

@@ -168,7 +168,11 @@ def test_option_art_rides_the_gate_town_not_the_floor_list():
     assert s.option_art.get("hunt")
     assert s.option_art.get("keep", "").startswith("warden_")
     frag = render.render_scene_fragment(s)
-    assert 'class="farts"' in frag
+    assert 'class="mapwrap' in frag  # 085: standard maps replace the art strip
+    assert 'class="farts"' not in frag
+    p.update(floor=11, location="gate_town", level=99, unlocked_floor=11)
+    frag = render.render_scene_fragment(core.current_scene(p))
+    assert 'class="farts"' in frag  # unmapped floors retain the art strip
 
 
 # ── the wire law ─────────────────────────────────────────────────────────

@@ -339,6 +339,9 @@ window.addEventListener('message', (e) => {
 });
 if (!WEB) {
   try { parent.postMessage({type: 'luna-ui-ready'}, '*'); } catch (e) {}
+  // A cached iframe can finish before the shell attaches its load listener.
+  // Ask explicitly, using the same handshake as session recovery.
+  try { parent.postMessage({type: 'luna-request-auth'}, '*'); } catch (e) {}
 }
 
 function hdrs() {
@@ -768,7 +771,11 @@ async function loadScene(force) {
 
 /* ── freshness: chat-driven acts and world events reach the pane ────── */
 async function peek() {
-  if ((!WEB && !token) || document.hidden || loading || liftActive) return;
+  if (document.hidden || loading || liftActive) return;
+  if (!WEB && !token) {
+    try { parent.postMessage({type: 'luna-request-auth'}, '*'); } catch (e) {}
+    return;
+  }
   try {
     const d = await call('/pane/peek');
     if (d.scene_id && sceneId && d.scene_id !== sceneId) loadScene(true);

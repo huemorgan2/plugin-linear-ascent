@@ -149,3 +149,11 @@ def test_lift_starts_opaque_and_locks_hidden_actions():
     assert "if (loading || liftActive) return;" in html
     assert "if (liftActive) return;" in html
     assert "setTimeout(endLift, 400)" in html
+
+
+def test_luna_pane_requests_auth_even_if_shell_missed_iframe_load():
+    html = pane.render_pane(api_base="/api/plugins/linear-ascent", web=False)
+    ready = html.index("type: 'luna-ui-ready'")
+    request = html.index("type: 'luna-request-auth'", ready)
+    assert ready < request
+    assert "if (!WEB && !token)" in html
