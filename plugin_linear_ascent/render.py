@@ -225,8 +225,8 @@ def _map_html(scene: Scene, mp: dict, art: tuple[str, int, int]) -> str:
             f'<button type="button" class="mk" data-opt="{_e(oid)}" '
             f'data-anchor="{anchor}" aria-label="{_e(name)}"{description} '
             f'style="left:{x:g}%;top:var(--map-y,{y:g}%)">'
-            f'<span class="mkdot" aria-hidden="true"></span>'
             f'<span class="mknum">[{i}]</span> '
+            f'<span class="mkdot" aria-hidden="true"></span>'
             f'{_e(str(m.get("label") or ""))}{cost}{tip}</button>')
     return (f'<div class="mapwrap later"><img src="{url}" '
             f'alt="the floor, mapped" width="{w}" height="{h}">'
