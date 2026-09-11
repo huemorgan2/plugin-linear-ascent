@@ -1,5 +1,6 @@
 """085: standard floormap — the camp menu drawn as the floor's map."""
 import pytest
+from PIL import Image
 
 from plugin_linear_ascent import render
 from plugin_linear_ascent.content import schema
@@ -118,6 +119,29 @@ def test_all_ten_floors_ignore_legacy_flag(floor, legacy_flag):
         if o.id in markers:
             assert f'aria-describedby="map-tip-{o.id}"' in html
             assert f'option {i}' in html
+
+
+@pytest.mark.parametrize("floor", range(1, 11))
+def test_every_map_destination_has_one_exact_location_dot(floor):
+    p, _ = _at_camp(f"u-dot-{floor}")
+    p.update(floor=floor, location="gate_town", level=99, unlocked_floor=11)
+    s = core.current_scene(p)
+    html = render.render_scene_fragment(s)
+    assert html.count('class="mkdot" aria-hidden="true"') == len(s.map["markers"])
+    assert '.mk[data-anchor="left"] .mkdot{left:0;}' in render.SCENE_CSS
+    assert '.mk[data-anchor="right"] .mkdot{left:100%;}' in render.SCENE_CSS
+    assert f"background:{render.GOLD}" in render.SCENE_CSS
+
+
+@pytest.mark.parametrize("floor", range(1, 11))
+def test_all_map_assets_keep_the_native_two_colour_contract(floor):
+    path = render._MAPS + f"/map_{floor:03d}_492x369.png"
+    with Image.open(path) as image:
+        assert image.size == (492, 369)
+        assert image.mode == "RGBA"
+        assert {colour for _, colour in image.getcolors()} == {
+            (0, 0, 0, 255), (217, 217, 211, 255),
+        }
 
 
 def test_floor11_keeps_the_menu():
