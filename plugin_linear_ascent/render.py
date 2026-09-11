@@ -3787,8 +3787,9 @@ SCENE_CSS = f"""
  mask-position:center;-webkit-mask-position:center;}}
 .slot .ct{{position:absolute;right:2px;bottom:0;color:{TEXT};
  line-height:1.2;}}
-.slot .dur{{position:absolute;left:3px;right:3px;bottom:2px;height:3px;
- background:{BORDER};}}
+/* The wear strip meets the outer frame, covering its 1px bottom border. */
+.slot .dur{{position:absolute;left:-1px;right:-1px;bottom:-1px;height:3px;
+ border:0;background:{BORDER};}}
 .slot .durf{{display:block;height:100%;}}
 /* the VGA bitmap has no bold face — synthesized bold smears into mud,
    so bold is banned wherever this font renders; color carries emphasis */
