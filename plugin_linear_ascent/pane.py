@@ -638,11 +638,7 @@ function wireOptions() {
   wireMapTips();
   /* 027: everything that carries a data-opt acts the same way — menu rows,
      notice-board shortcuts, sigil tiles and the pack popup's actions. */
-  const btns = [...game.querySelectorAll('button.opt, button.nrow, '
-    + 'button.wrow, button.gtile, button.ptile, button.pclose, '
-    /* R-0055-1: the foehint ✕ posts foehint_close server-side — it
-       must ride the same wiring as every other data-opt button. */
-    + 'button.facdoor[data-opt], button.x[data-opt], button.mk')];
+  const btns = [...game.querySelectorAll('button[data-opt]')];
   const hint = game.querySelector('.reply');
   btns.forEach(b => {
     if (b.__wired) return;

@@ -95,7 +95,7 @@ def test_foehint_x_is_wired_in_the_pane():
     # R-0055-1: the ✕ posts foehint_close — it must sit in the pane's
     # delegated data-opt wiring or it is a dead button in the browser.
     from plugin_linear_ascent import pane
-    assert "button.x[data-opt]" in pane._JS
+    assert "button[data-opt]" in pane._JS  # includes close, collection and future action buttons
 
 
 def test_round_cards_keep_their_surfaces():
