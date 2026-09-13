@@ -271,7 +271,7 @@ def register_routes(app, ctx: PluginContext) -> None:
 
         key = runtime.player_key()
         scene = await runtime.act_for(key, body.option.strip(),
-                                      body.text.strip())
+                                      body.text.strip(), expected_scene=body.scene_id)
         _notify_agent(scene, body.conversation_id, player=key)
         return {
             "ok": True,

@@ -197,6 +197,11 @@ def met(p: dict, u: Unlock) -> bool:
     return p["unlocked_floor"] >= u.at
 
 
+def for_player(p: dict) -> tuple[Unlock, ...]:
+    return tuple(u for u in registry()
+                 if not (p.get("ruleset") == "collection-v1" and u.id == "carry3"))
+
+
 def _distance(p: dict, u: Unlock) -> int:
     now = p["level"] if u.gate == "level" else p["unlocked_floor"]
     return u.at - now
@@ -207,7 +212,7 @@ def ahead(p: dict, limit: int = 0) -> list[Unlock]:
     stably grouped by (gate, at) for rendering. A threshold that CLOSES
     something reads first inside its group: the racks arriving are the
     pleasant news, and the fold is capped."""
-    todo = [u for u in registry() if not met(p, u)]
+    todo = [u for u in for_player(p) if not met(p, u)]
     todo.sort(key=lambda u: (_distance(p, u),
                              0 if u.gate == "level" else 1,
                              u.at,
@@ -218,7 +223,7 @@ def ahead(p: dict, limit: int = 0) -> list[Unlock]:
 def just_reached(p: dict, old_level: int, old_floor: int) -> list[Unlock]:
     """What this level-up / floor-open changed — for announcements."""
     out = []
-    for u in registry():
+    for u in for_player(p):
         old = old_level if u.gate == "level" else old_floor
         now = p["level"] if u.gate == "level" else p["unlocked_floor"]
         if old < u.at <= now:

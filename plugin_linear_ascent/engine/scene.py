@@ -7,6 +7,7 @@ from the same object. Content never contains markup.
 
 from __future__ import annotations
 
+from copy import deepcopy
 from dataclasses import dataclass, field, fields
 
 
@@ -82,6 +83,7 @@ class Meters:
     # Empty = not sent (older engine): the finisher falls back to family
     # models.
     gear: list[str] = field(default_factory=list)
+    xp_reserve: int = 0
 
 
 @dataclass
@@ -381,11 +383,18 @@ class Scene:
                 f"HP {m.hp}/{m.hp_max}   ⚡ {m.energy}/{m.energy_max}   "
                 f"XP {m.xp}/{m.xp_need}   LV {m.level}   gold {m.gold}"
                 f"{stats}")
+            if m.xp_reserve:
+                lines.append(f"Saved XP beyond this level's bar: {m.xp_reserve}")
         # 010.1: ⚡/🔒 are one-character markers for the HTML renderer's
         # 1-bit glyphs; the text surface (the agent reads this) speaks in
         # words so no emoji ever leaks into a chat reply.
         return ("\n".join(lines)
                 .replace("⚡", "energy").replace("🔒", "locked"))
+
+    collection: dict | None = None
+    group: dict | None = None
+    expedition: dict | None = None
+    combat_events: list[dict] = field(default_factory=list)
 
     def to_dict(self) -> dict:
         return {
@@ -393,6 +402,10 @@ class Scene:
             "headline": self.headline,
             "support": self.support,
             "shard_note": self.shard_note,
+            "collection": self.collection,
+            "group": self.group,
+            "expedition": self.expedition,
+            "combat_events": self.combat_events,
             "body_lines": self.body_lines,
             "options": [
                 {"id": o.id, "label": o.label, "hint": o.hint,
@@ -496,6 +509,10 @@ class Scene:
             paper=(dict(d["paper"]) if d.get("paper") else None),
             strip=(dict(d["strip"]) if d.get("strip") else None),
             enemy=(dict(d["enemy"]) if d.get("enemy") else None),
+            collection=deepcopy(d.get("collection")),
+            group=deepcopy(d.get("group")),
+            expedition=deepcopy(d.get("expedition")),
+            combat_events=deepcopy(d.get("combat_events") or []),
             option_art=dict(d.get("option_art") or {}),
             grid=bool(d.get("grid", False)),
             npc=(dict(d["npc"]) if d.get("npc") else None),

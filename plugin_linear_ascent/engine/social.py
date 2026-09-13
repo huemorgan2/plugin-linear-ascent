@@ -941,9 +941,14 @@ def guild_train(p: dict) -> Scene:
     # surplus into the next level's bar — and worldd's big payouts (a
     # milestone boss pays 1,500 into a bar that holds 758) could put real
     # surplus there. A bar is a bar: full, then empty, never 110%.
-    p["xp"] = 0
+    if p.get("ruleset") == "collection-v1":
+        state.spend_xp(p, need)
+    else:
+        p["xp"] = 0
     old_level = p["level"]
     p["level"] += 1
+    if p.get("ruleset") == "collection-v1":
+        state._distribute_xp(p, state.xp_total(p))
     p["hp"] = state.max_hp(p)
     _ledger(p, "levelup", gold=-fee, note=f"level {p['level']}")
     if p.get("_world") is not None:

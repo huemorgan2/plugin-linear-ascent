@@ -128,6 +128,8 @@ def player_key() -> str:
 
 async def _local_run(user: str, fn):
     local = state["local"]
+    if hasattr(local, "run"):
+        return await local.run(user, fn)
     doc = await local.load(user)
     scene = fn(doc)
     ledger = doc.pop("_ledger", [])
@@ -174,7 +176,7 @@ async def scene_for(user: str):
     return scene
 
 
-async def act_for(user: str, option: str, text: str = ""):
+async def act_for(user: str, option: str, text: str = "", *, expected_scene: str = ""):
     """Apply a choice via the world. The single game-action entry point
     shared by the ascent_choose tool, the card /act route, and the pane."""
     from .engine import core
@@ -184,13 +186,15 @@ async def act_for(user: str, option: str, text: str = ""):
         return await scene_for(user)
     if state["remote"] is None and dev_local():
         scene = await _local_run(
-            user, lambda d: core.apply_choice(d, option, text))
+            user, lambda d: core.apply_choice(d, option, text,
+                **({"expected_scene": expected_scene} if expected_scene else {})))
     elif state["remote"] is None and not await ensure_world(user):
         scene = _offline_scene()
     else:
         try:
             scene = Scene.from_dict(
-                await state["remote"].act(user, option, text))
+                await state["remote"].act(user, option, text,
+                    **({"expected_scene": expected_scene} if expected_scene else {})))
         except Exception:
             scene = _offline_scene()
     remember_scene(user, scene)

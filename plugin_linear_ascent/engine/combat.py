@@ -132,6 +132,7 @@ def meters(p: dict) -> Meters:
         energy=state.energy_now(p),
         energy_max=state.energy_cap_of(p),
         xp=p["xp"],
+        xp_reserve=int(p.get("xp_reserve", 0)),
         xp_need=economy.xp_need(p["level"]),
         gold=p["gold"],
         level=p["level"],

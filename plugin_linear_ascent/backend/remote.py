@@ -58,11 +58,20 @@ class WorldClient:
         out = await self._post("/v1/scene", {"player": luna_user})
         return out["scene"]
 
-    async def act(self, luna_user: str, option: str, text: str) -> dict:
-        out = await self._post("/v1/act", {
+    async def act(self, luna_user: str, option: str, text: str,
+                  *, expected_scene: str = "") -> dict:
+        payload = {
             "player": luna_user, "option": option, "text": text,
             "idem": str(uuid.uuid4()),
-        })
+        }
+        if expected_scene:
+            payload["scene_id"] = expected_scene
+        try:
+            out = await self._post("/v1/act", payload)
+        except (httpx.TimeoutException, httpx.NetworkError):
+            # A timeout can follow a committed turn. Reuse the operation
+            # identity so recovery returns that result, never another turn.
+            out = await self._post("/v1/act", payload)
         return out["scene"]
 
     async def character(self, luna_user: str) -> dict:

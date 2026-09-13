@@ -178,6 +178,9 @@ def apply_sleep_healing(p: dict, at: dt.datetime | None = None) -> int:
     whatever the bar's size. The timestamp is only re-stamped once at
     least one whole point has accrued, so fractions are never lost.
     Returns the HP actually mended."""
+    if p.get("ruleset") == "collection-v1" and (
+            (p.get("group") or {}).get("committed") or p.get("expedition")):
+        return 0
     s = p.get("sleeping")
     if not s:
         return 0
@@ -218,6 +221,9 @@ def gain_xp(p: dict, amount: int) -> int:
     amount = max(0, int(amount))
     if amount <= 0:
         return 0
+    if p.get("ruleset") == "collection-v1":
+        _distribute_xp(p, xp_total(p) + amount)
+        return amount
     room = xp_room(p)
     if room is not None:
         amount = min(amount, room)
@@ -228,10 +234,25 @@ def gain_xp(p: dict, amount: int) -> int:
 def spend_xp(p: dict, amount: int) -> bool:
     """Burn aether — XP from the current level's pool (006). Never goes
     below 0 and never touches level; the caller shows the refusal."""
-    if p["xp"] < amount:
+    if amount < 0 or xp_total(p) < amount:
         return False
-    p["xp"] -= amount
+    if p.get("ruleset") == "collection-v1":
+        _distribute_xp(p, xp_total(p) - amount)
+    else:
+        p["xp"] -= amount
     return True
+
+
+def xp_total(p: dict) -> int:
+    return int(p.get("xp", 0)) + (int(p.get("xp_reserve", 0))
+                                  if p.get("ruleset") == "collection-v1" else 0)
+
+
+def _distribute_xp(p: dict, total: int) -> None:
+    total = max(0, int(total))
+    cap = total if p.get("level", 1) >= economy.LEVEL_CAP else economy.xp_need(p["level"])
+    p["xp"] = min(cap, total)
+    p["xp_reserve"] = total - p["xp"]
 
 
 # ── Doc upgrades (lazy migration on load — 004 §A.1) ─────────────────────
@@ -522,7 +543,9 @@ def ensure_current(p: dict) -> None:
     # 048 phase 3: carry slots + held list, self-healing on every load —
     # held[0] mirrors the hand, length never exceeds slots, and paid
     # overflow returns to the pack instead of vanishing.
-    if "slots" not in p:
+    if p.get("ruleset") == "collection-v1":
+        p["slots"] = 3
+    elif "slots" not in p:
         p["slots"] = 1
     # 012: the pack's capacity — six for everyone who never bought more.
     if "pack_slots" not in p:
@@ -566,9 +589,13 @@ def ensure_current(p: dict) -> None:
     if wg and economy.wears(wg) \
             and "weapon" not in p.setdefault("durability", {}):
         p["durability"]["weapon"] = economy.item_pool(wg)
+    from . import collection
+    collection.sync(p)
     # Soft clamp: XP used to bank past a full bar. Anyone already over
     # is brought back to the bar — surplus never bought a level anyway.
-    if xp_room(p) is not None:
+    if p.get("ruleset") == "collection-v1":
+        _distribute_xp(p, xp_total(p))
+    elif xp_room(p) is not None:
         need = economy.xp_need(int(p["level"]))
         if int(p.get("xp", 0)) > need:
             p["xp"] = need
@@ -717,7 +744,9 @@ def touch_daily(p: dict) -> None:
         # lives). Replaces the Lodge's +20 special case; the Lodge
         # sells a SAFE night now, never health.
         healed = False
-        if p.get("stage") == "playing" and p.get("hp", 0) < max_hp(p):
+        on_journey = p.get("ruleset") == "collection-v1" and (
+            (p.get("group") or {}).get("committed") or p.get("expedition"))
+        if p.get("stage") == "playing" and p.get("hp", 0) < max_hp(p) and not on_journey:
             p["hp"] = max_hp(p)
             healed = True
         # 022/005 night slot: ONE action per night, resolved at dawn.

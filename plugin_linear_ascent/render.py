@@ -2692,6 +2692,14 @@ def render_scene_fragment(scene: Scene) -> str:
         parts.append(_foesheet_html(fs))
     if scene.support and not map_frag:
         parts.append(f'<div class="support type">{_ep(scene.support)}</div>')
+    if scene.collection:
+        from . import collection_view
+        def collection_art(relative):
+            path = os.path.realpath(os.path.join(_ART_ROOT, relative))
+            if not path.startswith(os.path.realpath(_ART_ROOT) + os.sep) or not os.path.isfile(path):
+                return None
+            return _art_url(path, "png")
+        parts.append(collection_view.render(scene.collection, collection_art, _ticon))
     # 072: another climber's public sheet — on top, before the words.
     av = getattr(scene, "avatar", None)
     if av:
@@ -3838,6 +3846,10 @@ b,strong{{font-weight:normal;}}
  .later.waiting{{opacity:1;transition:none;}}
  .cursor{{display:none;}}}}
 """
+
+
+from .collection_view import CSS as _COLLECTION_CSS
+SCENE_CSS += _COLLECTION_CSS
 
 
 def render_scene(scene: Scene) -> str:
