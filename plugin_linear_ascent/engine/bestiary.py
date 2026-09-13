@@ -78,19 +78,36 @@ def profile(floor: int, creature_id: str) -> dict:
         lore=enc.lore or enc.prose, weight=enc.weight)
 
 
+def specimen_profile(base, specimen='common', *, deep=False):
+    from copy import deepcopy
+    m=deepcopy(base)
+    spec=economy.SPECIMENS[specimen]
+    m.update(specimen=specimen,hp=max(1,round(m['hp']*spec['hp'])),
+        atk=max(1,round(m['atk']*spec['atk']*(1.2 if deep else 1))),
+        speed=m['speed']+int(specimen=='alpha')+int(deep))
+    m['hp_max']=m['hp']
+    m['rates']=drop_rates(m['floor'],m['traits'],specimen=specimen,deep=deep)
+    m['bundles']=material_bundles(m['floor'],m)
+    return m
+
+
+def family_weights(member):
+    favored='bow' if member['air'] else 'blade' if member['affinity']=='Magic' else 'staff' if member['affinity']=='Power' else ''
+    return {w['id']:3 if w['path'].lower()==favored else 1 for w in collection.families().values()}
+
+
 def rolled_member(p: dict, floor: int, creature_id: str, *, deep=False, opening=False) -> dict:
     from copy import deepcopy
     m = deepcopy(profile(floor, creature_id))
     table = economy.DEEP_SPECIMENS if deep else economy.specimen_table(floor)
     specimen = 'common' if opening else state.rng_pick(p, [(v['weight'], k) for k, v in table.items()])
-    spec = economy.SPECIMENS[specimen]
-    m.update(specimen=specimen, hp=max(1, round(m['hp'] * spec['hp'])),
-             atk=max(1, round(m['atk'] * spec['atk'] * (1.2 if deep else 1))),
-             speed=m['speed'] + (1 if specimen == 'alpha' else 0) + int(deep))
-    m['hp_max'] = m['hp']
-    m['rates'] = drop_rates(floor, m['traits'], specimen=specimen, deep=deep)
-    m.update(started=False, paid=False, exhausted=False, killed=False, gap=3 if opening else state.rng_int(p, 1, 3),
+    m = specimen_profile(m,specimen,deep=deep)
+    m.update(started=False, paid=False, exhausted=False, killed=False, gap=3,
              effects=[], stun_recovery=0)
+    if not opening:
+        weights = [(4,0),(4,1),(2,2),(1,3)] if m['air'] else [(1,0),(2,1),(3,2),(3,3)]
+        m['gap'] = state.rng_pick(p,weights)
+    m['arrival_gap'] = m['gap']
     m['rewards'] = roll_rewards(p, floor, m, deep=deep)
     return m
 
@@ -119,9 +136,7 @@ def roll_rewards(p, floor, m, *, deep=False):
     for grade in collection.GRADES:
         threshold += round(rates['weapon'][grade] * 1000000)
         if roll <= threshold:
-            favored = 'bow' if m['air'] else 'blade' if m['affinity'] == 'Magic' else 'staff' if m['affinity'] == 'Power' else ''
-            family = state.rng_pick(p, [(3 if w['path'].lower() == favored else 1, w['id'])
-                                       for w in collection.families().values()])
+            family = state.rng_pick(p,[(weight,family) for family,weight in family_weights(m).items()])
             drop = dict(family=family, grade=grade)
             break
     return dict(gold=max(1, round(economy.gold_per_kill(floor) * reward_mult)),

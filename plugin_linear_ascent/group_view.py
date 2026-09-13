@@ -34,13 +34,21 @@ def render(group, owned, options, art_url, icon):
         if item:
             src=art_url(item['image'])
             cells.append(f'<div class="gb-weapon"><img src="{e(src)}" alt="">'
-                f'<span>{e(item["name"])} +{item["level"]}<br>{e(item["path"].title())} · {item["attack"]:,} ATK<br>'
+                f'<span>{e(item["name"])} +{item["level"]}<br>{e(item["path"].title())} · {item.get("current_attack",item["attack"]):,} ATK<br>'
                 f'{item["durability"]}/{item["maximum"]}</span></div>')
         else:
             cells.append('<div class="gb-weapon">Empty slot</div>')
     actions = ''.join(f'<button class="opt gb-action {"locked" if o.locked else ""}" data-opt="{e(o.id)}" '
         f'aria-disabled="{str(o.locked).lower()}"><span class="key">{n}</span> '
-        f'{e(o.label)}<span class="gb-hint">{e(o.hint)}</span></button>' for n,o in enumerate(options,1))
+        f'{e(o.label)}<span class="gb-hint">{e(o.hint)}</span></button>' for n,o in enumerate(options,1) if not o.id.startswith('load_arrow:'))
+    numbers={o.id:n for n,o in enumerate(options,1)}
+    arrows=''.join('<fieldset class="gb-arrow-box"><legend>'+e(row['grade']+' '+row['name'])+'</legend>'
+        '<p>Choose arrows · selection is free</p><div class="gb-arrow-grid">'+''.join(
+        f'<button class="opt gb-arrow {"chosen" if a["id"]==row["selected"] else ""}" data-opt="{e(a["action"])}" '
+        f'aria-pressed="{str(a["id"]==row["selected"]).lower()}" aria-disabled="{str(not a["count"]).lower()}">'
+        f'<span class="key">{numbers[a["action"]]}</span>{icon("staff" if a["channel"]=="Magic" else "quiver")} '
+        f'{e(a["name"])}<span class="gb-hint">{a["count"]} left · {e(a["channel"])}</span></button>' for a in row['arrows'])
+        +'</div></fieldset>' for row in group.get('arrows',[]))
     rates=active.get('rates',{})
     bundles=active.get('bundles',{})
     bundle_text=''.join(f'<span>{e(grade)} bundle: '+', '.join(f'{n} {e(name)}' for name,n in amounts.items())+'</span>' for grade,amounts in bundles.items())
@@ -50,6 +58,7 @@ def render(group, owned, options, art_url, icon):
     return (f'<section class="gb"><div class="gb-roster">{roster}</div>'
         f'<div class="gb-foe">{picture(active)}{popups(active["instance"])}</div>'
         f'<div class="gb-badges">{badges}<span>{icon("t_speed")} {active["speed"]} speed</span></div>'
+        f'<p>Traits: {e(", ".join(active["traits"]) or "none")}</p>'
         f'<p>{active["atk"]:,} ATK · {active["defense"]:,} DEF · Power ×{active["power"]} · Magic ×{active["magic"]}</p>'
         f'<details class="gb-drops"><summary>Drop chances for this enemy</summary>{drops}{bundle_text}<p>Materials roll independently by grade. At most one weapon. Secure drops by clearing the group.</p></details>'
         f'<div class="gb-health">{icon("heart")} {active["hp"]:,} / {active["hp_max"]:,} HP'
@@ -57,7 +66,7 @@ def render(group, owned, options, art_url, icon):
         f'<div class="gb-gap">{gap}</div><p class="gb-energy">{energy}</p>'
         f'<div class="gb-haul">{group["xp"]} XP kept · {haul["gold"]:,} gold pending'
         f'{" · " + materials if materials else ""}</div><div class="gb-weapons">{"".join(cells)}</div>'
-        f'<div class="gb-actions">{actions}</div><div class="gb-log" role="log">{log}</div></section>')
+        f'<div class="gb-actions">{actions}</div>{arrows}<div class="gb-log" role="log">{log}</div></section>')
 
 
 CSS = '''
@@ -80,6 +89,10 @@ CSS = '''
 .gb-weapon{background:#17262b;border:1px solid #40565f;padding:8px;display:flex;gap:8px;overflow-wrap:anywhere}
 .gb-weapon img{width:28px;height:54px;object-fit:contain;image-rendering:pixelated}
 .gb-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.gb-arrow-box{border:1px solid #40565f;margin:12px 0;padding:8px}.gb-arrow-box legend{color:#e6bf68}
+.gb-arrow-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.gb-arrow.opt{display:block;white-space:normal!important;border:1px solid #40565f;background:#17262b;padding:8px!important;overflow-wrap:anywhere}
+.gb-arrow.opt::after{display:none}.gb-arrow.chosen{border-color:#64d4be}.gb-arrow[aria-disabled=true]{opacity:.5}
 .gb-action.opt{display:block;align-content:start;white-space:normal!important;padding:10px!important;text-align:left;border:1px solid #496069;background:#203139;color:#e5e4cf;cursor:pointer;border-radius:0}
 .gb-action.opt::after{display:none;content:none}.gb-action.opt:hover .key,.gb-action.opt:hover .key::before,.gb-action.opt:hover .key::after,.gb-action.opt:focus-visible .key{color:#e6bf68!important}
 .gb-action.opt:hover,.gb-action.opt:focus-visible{border-color:#e6bf68;background:#30464f}.gb-action.locked{opacity:.55}

@@ -133,7 +133,9 @@
           "slug": "starfall",
           "description": "Split comet blade with a blazing outline and forked guard."
         }
-      }
+      },
+      "technique": "",
+      "modifiers": {}
     },
     {
       "id": "viper",
@@ -205,7 +207,9 @@
           "slug": "tempest_edge",
           "description": "Hooked blade encircled by a winding stream of energy."
         }
-      }
+      },
+      "technique": "poison",
+      "modifiers": {}
     },
     {
       "id": "ramguard",
@@ -277,7 +281,9 @@
           "slug": "dawnbreaker",
           "description": "Radiant blade crowned by long rays and an ornate guard."
         }
-      }
+      },
+      "technique": "push",
+      "modifiers": {}
     },
     {
       "id": "thunder",
@@ -349,7 +355,9 @@
           "file": "weapons/collection/thunder-legendary.png",
           "description": "Two floating shard blocks around a star core; thread-bound haft."
         }
-      }
+      },
+      "technique": "stun",
+      "modifiers": {}
     },
     {
       "id": "briar",
@@ -421,7 +429,9 @@
           "slug": "duskrender",
           "description": "Crescent blade floating in a bright halo above a long grip."
         }
-      }
+      },
+      "technique": "bleed",
+      "modifiers": {}
     },
     {
       "id": "sundering",
@@ -493,7 +503,9 @@
           "slug": "night_iron_glaive",
           "description": "Huge hooked cutting edge around an open crescent of light."
         }
-      }
+      },
+      "technique": "expose",
+      "modifiers": {}
     },
     {
       "id": "hawkeye",
@@ -565,6 +577,12 @@
           "slug": "starshot",
           "description": "Angular split limbs with floating star-shaped reinforcements."
         }
+      },
+      "technique": "cover",
+      "modifiers": {
+        "contact": 0.65,
+        "skillImpact": 1.2,
+        "skillMinGap": 2
       }
     },
     {
@@ -637,6 +655,10 @@
           "slug": "duskwhisper",
           "description": "Tightly recurved frame surrounding a bright suspended ring."
         }
+      },
+      "technique": "",
+      "modifiers": {
+        "contact": 0.9
       }
     },
     {
@@ -709,6 +731,10 @@
           "slug": "hellbarb_bow",
           "description": "Barbed outer limbs and a flame-shaped open central frame."
         }
+      },
+      "technique": "push",
+      "modifiers": {
+        "contact": 0.65
       }
     },
     {
@@ -781,6 +807,10 @@
           "slug": "stormnock",
           "description": "Forked lightning limbs around an open skeletal riser."
         }
+      },
+      "technique": "slow",
+      "modifiers": {
+        "contact": 0.65
       }
     },
     {
@@ -853,6 +883,11 @@
           "slug": "gloamreach",
           "description": "Multiple sweeping crescent limbs around a dark open center."
         }
+      },
+      "technique": "",
+      "modifiers": {
+        "contact": 0.65,
+        "arcaneImpact": 1.25
       }
     },
     {
@@ -925,7 +960,9 @@
           "slug": "wyrmtongue_staff",
           "description": "Huge dragon-head crown breathing a bright curling flame."
         }
-      }
+      },
+      "technique": "burn",
+      "modifiers": {}
     },
     {
       "id": "frostbind",
@@ -997,7 +1034,9 @@
           "slug": "nightwell_staff",
           "description": "Open asymmetric orb cradle above a segmented haft."
         }
-      }
+      },
+      "technique": "slow",
+      "modifiers": {}
     },
     {
       "id": "stormbell",
@@ -1069,7 +1108,9 @@
           "slug": "starcaller_staff",
           "description": "Large bright star core held inside an orbital lattice."
         }
-      }
+      },
+      "technique": "stun",
+      "modifiers": {}
     },
     {
       "id": "repulsor",
@@ -1141,7 +1182,9 @@
           "slug": "kingscourge_staff",
           "description": "Stacked geometric cores inside a massive angular frame."
         }
-      }
+      },
+      "technique": "push",
+      "modifiers": {}
     },
     {
       "id": "hexglass",
@@ -1213,7 +1256,9 @@
           "slug": "duskbinder_staff",
           "description": "Large hooked crown, hovering dark core and spiral bindings."
         }
-      }
+      },
+      "technique": "expose",
+      "modifiers": {}
     }
   ],
   "arrows": [
@@ -1223,7 +1268,8 @@
       "channel": "Power",
       "impact": 1,
       "effect": "No added effect",
-      "units": 1
+      "units": 1,
+      "status": ""
     },
     {
       "id": "arcane",
@@ -1231,7 +1277,8 @@
       "channel": "Magic",
       "impact": 1,
       "effect": "Converts the direct hit to Magic",
-      "units": 2
+      "units": 2,
+      "status": ""
     },
     {
       "id": "poison",
@@ -1239,7 +1286,8 @@
       "channel": "Power",
       "impact": 0.9,
       "effect": "Poison: 8% × 3 phases",
-      "units": 2
+      "units": 2,
+      "status": "poison"
     },
     {
       "id": "fire",
@@ -1247,7 +1295,8 @@
       "channel": "Power",
       "impact": 0.9,
       "effect": "Magic burn: 12% × 2 phases",
-      "units": 3
+      "units": 3,
+      "status": "burn"
     },
     {
       "id": "pinning",
@@ -1255,7 +1304,8 @@
       "channel": "Power",
       "impact": 0.85,
       "effect": "Slow: −3 speed, 2 phases",
-      "units": 2
+      "units": 2,
+      "status": "slow"
     },
     {
       "id": "concussive",
@@ -1263,7 +1313,8 @@
       "channel": "Power",
       "impact": 0.8,
       "effect": "Push: 2 steps",
-      "units": 3
+      "units": 3,
+      "status": "push"
     }
   ],
   "grades": [
@@ -1597,5 +1648,302 @@
       ]
     },
     "materialNote": "Independent grade rolls, each awarding a material bundle. Weapon drops are one categorical roll: at most one weapon per kill. All chances are conditional on defeating this exact specimen."
+  },
+  "effectRules": {
+    "poison": {
+      "rate": 0.08,
+      "phases": 3,
+      "channel": "Power",
+      "immunity": "venomproof",
+      "stack": "source"
+    },
+    "burn": {
+      "rate": 0.12,
+      "phases": 2,
+      "channel": "Magic",
+      "immunity": "fireproof",
+      "stack": "source"
+    },
+    "bleed": {
+      "rate": 0.1,
+      "phases": 2,
+      "channel": "Power",
+      "immunity": "bloodless",
+      "stack": "strongest"
+    },
+    "push": {
+      "steps": 2,
+      "immunity": "steadfast"
+    },
+    "stun": {
+      "phases": 1,
+      "recovery": 2
+    },
+    "slow": {
+      "speed": 3,
+      "phases": 2
+    },
+    "expose": {
+      "defense": 0.8,
+      "hits": 2
+    }
+  },
+  "quiver": {
+    "capacity": 400,
+    "bundle": 20,
+    "starter": 100,
+    "baseGold": 5
+  },
+  "sites": {
+    "drowned-copse": {
+      "name": "Drowned Copse",
+      "floor": 3,
+      "material": "Wood",
+      "tool": "wood-axe",
+      "tool_name": "Wood axe",
+      "price": 35,
+      "yield_pct": 58,
+      "yield_amount": 2,
+      "ambush_pct": 5,
+      "condition": 100,
+      "preferred": "bow",
+      "description": "Cut driftwood beneath the drowned canopy. Wings stir overhead."
+    },
+    "bog-iron-field": {
+      "name": "Bog-Iron Field",
+      "floor": 3,
+      "material": "Raw Metal",
+      "tool": "pickaxe",
+      "tool_name": "Iron pickaxe",
+      "price": 45,
+      "yield_pct": 47,
+      "yield_amount": 2,
+      "ambush_pct": 4,
+      "condition": 120,
+      "preferred": "blade",
+      "description": "Break iron from the wet earth. Arcane creatures guard the exposed seams."
+    },
+    "tempered-scrap-seam": {
+      "name": "Tempered Scrap Seam",
+      "floor": 18,
+      "material": "Steel",
+      "tool": "hardened-pickaxe",
+      "tool_name": "Hardened pickaxe",
+      "price": 1422,
+      "yield_pct": 52,
+      "yield_amount": 3,
+      "ambush_pct": 5,
+      "condition": 140,
+      "preferred": "blade",
+      "description": "Prise tempered steel from buried machinery. Magic-bound remnants guard the seam.",
+      "ambush_size": 2,
+      "roster": [
+        {
+          "floor": 17,
+          "id": "heat_haunt",
+          "weight": 7
+        },
+        {
+          "floor": 18,
+          "id": "blind_digger",
+          "weight": 2
+        },
+        {
+          "floor": 18,
+          "id": "winch_crawler",
+          "weight": 2
+        },
+        {
+          "floor": 19,
+          "id": "breach_crow",
+          "weight": 1
+        }
+      ]
+    },
+    "buried-heartwood-grove": {
+      "name": "Buried Heartwood Grove",
+      "floor": 25,
+      "material": "Hardwood",
+      "tool": "steel-wood-axe",
+      "tool_name": "Steel wood axe",
+      "price": 5930,
+      "yield_pct": 61,
+      "yield_amount": 3,
+      "ambush_pct": 6,
+      "condition": 160,
+      "preferred": "bow",
+      "description": "Cut dense roots beside the processional forest. Moths and wisps circle the old canopy.",
+      "ambush_size": 2,
+      "roster": [
+        {
+          "floor": 23,
+          "id": "lamp_moth",
+          "weight": 5
+        },
+        {
+          "floor": 25,
+          "id": "bell_wisp",
+          "weight": 5
+        },
+        {
+          "floor": 25,
+          "id": "procession_wight",
+          "weight": 1
+        },
+        {
+          "floor": 25,
+          "id": "coffin_bearer",
+          "weight": 1
+        }
+      ]
+    },
+    "starforge-slag-beds": {
+      "name": "Starforge Slag Beds",
+      "floor": 45,
+      "material": "Starforged Steel",
+      "tool": "heat-kit",
+      "tool_name": "Heat-resistant kit",
+      "price": 697950,
+      "yield_pct": 49,
+      "yield_amount": 4,
+      "ambush_pct": 5,
+      "condition": 180,
+      "preferred": "blade",
+      "description": "Sift hot steel from cooled slag. Rune-marked salamanders stalk the beds.",
+      "ambush_size": 3,
+      "roster": [
+        {
+          "floor": 43,
+          "id": "slag_salamander",
+          "weight": 6
+        },
+        {
+          "floor": 47,
+          "id": "scar_salamander",
+          "weight": 6
+        },
+        {
+          "floor": 43,
+          "id": "clinker_hound",
+          "weight": 2
+        },
+        {
+          "floor": 43,
+          "id": "cinder_bat",
+          "weight": 1
+        }
+      ]
+    },
+    "fallen-star-crater": {
+      "name": "Fallen-Star Crater",
+      "floor": 55,
+      "material": "Meteorite",
+      "tool": "impact-pick",
+      "tool_name": "Impact pick",
+      "price": 5131709,
+      "yield_pct": 57,
+      "yield_amount": 4,
+      "ambush_pct": 7,
+      "condition": 200,
+      "preferred": "bow",
+      "description": "Split starstone on the crater rim. Ravens and quarry hunters shelter in the broken rock.",
+      "ambush_size": 3,
+      "roster": [
+        {
+          "floor": 54,
+          "id": "gorge_raven",
+          "weight": 6
+        },
+        {
+          "floor": 56,
+          "id": "quarry_crow",
+          "weight": 6
+        },
+        {
+          "floor": 56,
+          "id": "quarry_troll",
+          "weight": 2
+        },
+        {
+          "floor": 54,
+          "id": "crevasse_wight",
+          "weight": 1
+        }
+      ]
+    },
+    "shard-fissure": {
+      "name": "Shard Fissure",
+      "floor": 70,
+      "material": "Shard Matter",
+      "tool": "shard-extractor",
+      "tool_name": "Shard extractor",
+      "price": 204192689,
+      "yield_pct": 43,
+      "yield_amount": 5,
+      "ambush_pct": 6,
+      "condition": 220,
+      "preferred": "blade",
+      "description": "Lift shards from a singing fracture. Bound gales and pressure ghosts gather at its mouth.",
+      "ambush_size": 3,
+      "roster": [
+        {
+          "floor": 69,
+          "id": "pressure_ghast",
+          "weight": 6
+        },
+        {
+          "floor": 70,
+          "id": "bottled_gale",
+          "weight": 6
+        },
+        {
+          "floor": 70,
+          "id": "livery_harpy",
+          "weight": 2
+        },
+        {
+          "floor": 70,
+          "id": "court_champion",
+          "weight": 1
+        }
+      ]
+    },
+    "mythic-loom-hollow": {
+      "name": "Mythic Loom Hollow",
+      "floor": 80,
+      "material": "Mythic Threads",
+      "tool": "harvesting-shears",
+      "tool_name": "Harvesting shears",
+      "price": 1630022235,
+      "yield_pct": 54,
+      "yield_amount": 5,
+      "ambush_pct": 8,
+      "condition": 240,
+      "preferred": "bow",
+      "description": "Take threads from abandoned sky-nests. Pale scavengers keep watch above the hollow.",
+      "ambush_size": 3,
+      "roster": [
+        {
+          "floor": 79,
+          "id": "stand_crow",
+          "weight": 6
+        },
+        {
+          "floor": 81,
+          "id": "outwork_crow",
+          "weight": 6
+        },
+        {
+          "floor": 80,
+          "id": "first_whip",
+          "weight": 2
+        },
+        {
+          "floor": 81,
+          "id": "gate_knight",
+          "weight": 1
+        }
+      ]
+    }
   }
 }

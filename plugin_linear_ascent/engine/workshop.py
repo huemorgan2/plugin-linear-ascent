@@ -62,7 +62,7 @@ def upgrade(p, iid):
     old_max=item['maximum']
     item['level']=quote['level']
     item['maximum']=collection.stats(item)['maximum']
-    item['durability']=min(item['maximum'], item['durability'] + max(0,item['maximum']-old_max))
+    item['durability']=min(item['maximum'], item['durability'] + max(0,item['maximum']-old_max)) if item['durability'] else 0
     collection.project_legacy(p)
     combat._ledger(p,'upgrade',gold=-quote['gold'],note=f"{iid}:+{item['level']}")
     return collection.scene(p)
@@ -125,6 +125,7 @@ def handle(p, oid):
         result=_build_scene(p)
         result.refusal='Finish the fight or expedition before visiting the Forge'
         return result
+    p.pop('quiver_view',None)
     if oid=='forge_collection':
         p.pop('workshop_view',None)
         p.update(location='forge',floor=0,collection_view=True)

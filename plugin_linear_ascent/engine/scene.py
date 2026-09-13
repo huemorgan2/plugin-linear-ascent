@@ -293,7 +293,9 @@ class Scene:
                     f"{'Air' if member['air'] else 'Ground'} · {status} · "
                     f"HP {member['hp']}/{member['hp_max']} · ATK {member['atk']} · "
                     f"DEF {member['defense']} · speed {member['speed']} · "
-                    f"Power ×{member['power']} / Magic ×{member['magic']}")
+                    f"Power ×{member['power']} / Magic ×{member['magic']} · "
+                    f"Traits: {', '.join(member['traits']) or 'none'} · "
+                    f"Arrival: {('Contact','Near','Far','Cover')[member.get('arrival_gap',member['gap'])]}")
             active = group['members'][group['index']]
             gap = ('Contact', 'Near', 'Far', 'Cover')[active['gap']]
             lines.append(f'Current distance: {gap} ({active["gap"]}). Distance map: Contact=0, Near=1, Far=2, Cover=3. Blades require Ground and Contact; bows and staves reach Air and Ground from every distance. Affinity changes damage, never reach.')

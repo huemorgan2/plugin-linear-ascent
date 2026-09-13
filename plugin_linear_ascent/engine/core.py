@@ -714,6 +714,10 @@ def apply_choice(p: dict, option_id: str, text: str = "", *, expected_scene: str
         return _stamp(p, handled)
 
     if collection.enabled(p):
+        from . import quiver
+        handled = quiver.handle(p, option_id)
+        if handled is not None:
+            return _stamp(p, handled)
         from . import groups
         handled = groups.handle(p, option_id)
         if handled is not None:
@@ -1101,6 +1105,9 @@ def _maybe_present(p: dict) -> Scene | None:
 # ── Scene builder (by stage/location) ────────────────────────────────────
 
 def _build_scene(p: dict) -> Scene:
+    if p.get("quiver_view") and p.get("ruleset") == "collection-v1":
+        from . import quiver
+        return quiver.scene(p)
     if p.get("collection_view") and p.get("ruleset") == "collection-v1":
         from . import collection
         return collection.scene(p)
@@ -1906,7 +1913,8 @@ def _forge_scene(p: dict) -> Scene:
     if candidate:
         nod = "Choose weapons here, upgrade owned weapons in your collection, or mend your armor."
         opts.extend([Option("weapon_shop", "Weapon catalog", "16 families · four grades"),
-                     Option("forge_collection", "Upgrade or repair owned weapons")])
+                     Option("forge_collection", "Upgrade or repair owned weapons"),
+                     Option("quiver_shop", "Arrow supplies", "Six payloads · one arrow per shot")])
     else:
         _rack(p, economy.weapon_line("warrior"), opts, lines)
         _rack(p, economy.weapon_line("archer"), opts, lines)
@@ -3846,11 +3854,15 @@ def _school_scene(p: dict) -> Scene:
         lines.append(f"{g} {path.upper()} — trained rank {r} "
                      f"{_school_bar(r)} · next: rank {nxt} — "
                      f"{xp} XP + ◈ {gold}")
-        m0, m1 = economy.TRAIN_MISS_PCT(r), economy.TRAIN_MISS_PCT(nxt)
-        f0 = round(economy.TRAIN_ROLL_FLOOR(r) * 100)
-        f1 = round(economy.TRAIN_ROLL_FLOOR(nxt) * 100)
-        lines.append(f"   rank {nxt}: miss {m0}%→{m1}%, worst swing "
-                     f"{f0}%→{f1}% of full power")
+        if p.get('ruleset')=='collection-v1':
+            m0,m1=max(0,18-2*r),max(0,18-2*nxt)
+            lines.append(f"   rank {nxt}: miss {m0}%→{m1}%, attack {80+4*r}%→{80+4*nxt}% before its ±8% roll")
+        else:
+            m0, m1 = economy.TRAIN_MISS_PCT(r), economy.TRAIN_MISS_PCT(nxt)
+            f0 = round(economy.TRAIN_ROLL_FLOOR(r) * 100)
+            f1 = round(economy.TRAIN_ROLL_FLOOR(nxt) * 100)
+            lines.append(f"   rank {nxt}: miss {m0}%→{m1}%, worst swing "
+                         f"{f0}%→{f1}% of full power")
         opts.append(Option(f"train_{path}",
                            f"Train {path} to rank {nxt}",
                            f"{xp} XP + ◈ {gold}"))
@@ -3888,6 +3900,9 @@ def _school_scene(p: dict) -> Scene:
                                "Unlock the 3rd weapon slot",
                                f"{economy.CARRY3_XP} XP + ◈ {gold3}"))
     lines.append(carry)
+    if p.get('ruleset')=='collection-v1':
+        lines += ['Techniques come from your weapon family. Training improves that path; it does not add deck slots.',
+                  'Blade mastery: Riposte at ground contact after meaningful protection. Bow mastery: 10% chance of a 1.5× Cover shot. Staff mastery: improves the partial Ground Magic answer; flying resistances remain.']
     # 069: the charm pouch — the seventh slot. Always on the menu:
     # owned → named in the line; under level 9 → LOCKED with the level.
     level = int(p.get("level", 1))

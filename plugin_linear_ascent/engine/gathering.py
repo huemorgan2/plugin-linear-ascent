@@ -6,14 +6,7 @@ from . import bestiary, collection, combat, groups, state
 from .scene import Scene, Option
 from ..content import schema
 
-SITES = {
-    'drowned-copse': dict(name='Drowned Copse',floor=3,material='Wood',tool='wood-axe',
-        tool_name='Wood axe',price=35,yield_pct=58,yield_amount=2,ambush_pct=5,condition=100,
-        preferred='bow',description='Cut driftwood beneath the drowned canopy. Wings stir overhead.'),
-    'bog-iron-field': dict(name='Bog-Iron Field',floor=3,material='Raw Metal',tool='pickaxe',
-        tool_name='Iron pickaxe',price=45,yield_pct=47,yield_amount=2,ambush_pct=4,condition=120,
-        preferred='blade',description='Break iron from the wet earth. Arcane creatures guard the exposed seams.'),
-}
+SITES = collection.catalog()['sites']
 
 
 def directory(p):
@@ -81,19 +74,22 @@ def ambush_members(p,site):
     # Use neighboring floor art with its true identity/type. Numbers scale to
     # this site's floor, so an image choice cannot secretly multiply danger.
     candidates=[]
-    for source_floor in range(max(1,floor-2),floor+3):
+    for source_floor in (() if site.get("roster") else range(max(1,floor-2),floor+3)):
         for enc in schema.get_floor(source_floor).encounters:
             profile=bestiary.profile(source_floor,enc.id)
             fit=profile['air'] if site['preferred']=='bow' else not profile['air'] and profile['affinity']=='Magic'
             candidates.append((5 if fit else 1,(source_floor,enc.id)))
+    if site.get("roster"):
+        candidates=[(r["weight"],(r["floor"],r["id"])) for r in site["roster"]]
     members=[]
     from .. import economy
-    for _ in range(2):
+    for _ in range(site.get("ambush_size",2)):
         origin,slug=state.rng_pick(p,candidates)
         member=bestiary.rolled_member(p,origin,slug)
         ratio=economy.pillar(floor)/economy.pillar(origin)
         for stat in ('hp','hp_max','atk','defense'):
             member[stat]=max(1,round(member[stat]*ratio))
+        member['origin_floor']=origin
         member['floor']=floor
         # Site rewards use site-floor odds, never the art's original floor.
         member['rates']=bestiary.drop_rates(floor,member['traits'],specimen=member['specimen'])

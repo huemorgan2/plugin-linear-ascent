@@ -921,6 +921,35 @@ _GRIDS: dict[str, list[str]] = {
 ICON_KEYS = tuple(_GRIDS)
 
 
+# Collection materials use the same 16px mask renderer as all other game icons.
+# Geometry distinguishes the resource even when rarity colors cannot be seen.
+_MATERIAL_PIXELS = {
+    'mat_wood': [(2,3,12,3),(2,8,12,3),(3,2,2,5),(10,7,2,5)],
+    'mat_raw_metal': [(3,6,10,7),(5,3,5,3),(1,9,3,4),(11,5,3,5)],
+    'mat_hardwood': [(3,3,10,9),(2,12,12,2),(5,1,2,4),(10,1,2,4)],
+    'mat_steel': [(4,2,9,3),(2,6,9,3),(4,10,9,3)],
+    'mat_starsteel': [(2,8,11,5),(5,6,8,2),(3,1,1,5),(1,3,5,1),(11,1,1,3),(10,2,3,1)],
+    'mat_meteorite': [(5,6,8,7),(3,9,2,4),(6,3,5,3),(2,1,2,4),(1,2,4,2),(12,2,2,3)],
+    'mat_shard': [(7,1,2,3),(5,4,6,3),(3,7,10,4),(5,11,6,2),(7,13,2,2)],
+    'mat_threads': [(3,2,10,2),(5,4,6,8),(3,12,10,2),(1,9,3,2),(1,10,1,5),(1,14,6,1)],
+}
+for _name,_rects in _MATERIAL_PIXELS.items():
+    _grid=[['.']*16 for _ in range(16)]
+    for _x,_y,_w,_h in _rects:
+        for _row in range(_y,_y+_h):
+            for _col in range(_x,_x+_w):_grid[_row][_col]='#'
+    # Cut a small identifying grain/facet through each solid silhouette.
+    _cuts={'mat_wood':[(5,4),(6,4),(7,4),(8,9),(9,9)],
+           'mat_raw_metal':[(7,6),(8,7),(5,10)],
+           'mat_hardwood':[(5,6),(6,5),(7,5),(8,6),(8,9),(7,10),(6,10),(5,9)],
+           'mat_steel':[(6,3),(7,3),(8,3),(4,7),(5,7),(6,7),(7,11),(8,11),(9,11)],
+           'mat_starsteel':[(5,10),(6,10),(7,10),(8,10)],
+           'mat_meteorite':[(8,7),(9,7),(8,8),(6,10),(10,11)],
+           'mat_shard':[(7,5),(7,6),(7,7),(6,8),(6,9),(5,10),(9,8)],
+           'mat_threads':[(5,6),(6,6),(7,7),(8,7),(9,8),(10,8)]}
+    for _x,_y in _cuts[_name]:_grid[_y][_x]='.'
+    _GRIDS[_name]=[''.join(_row) for _row in _grid]
+
 # 006: the four quivers share the quiver glyph — the tint and the
 # tooltip carry the difference; every other relic draws its own.
 _RELIC_ICON = {"poison_arrows": "quiver", "slowing_arrows": "quiver",

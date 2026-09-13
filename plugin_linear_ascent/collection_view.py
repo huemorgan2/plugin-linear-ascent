@@ -14,6 +14,12 @@ def render(data: dict, art_url, icon) -> str:
         action = f"inspect:{iid}" if iid else "collection"
         slots.append(f'<button class="wc-slot" data-opt="{e(action)}"><span>{n}</span>{e(label)}</button>')
     head = f'<p>Pack {data.get("pack_used", 0)} / {data.get("pack_cap", 6)} · town storage stays in Roothollow</p>' + '<div class="wc-deck" aria-label="Three battle weapons">' + ''.join(slots) + '</div>'
+    materials=''.join(f'<div class="wc-item wc-material wc-{grade.lower()}" style="--grade:{COLORS[grade]}">'
+        f'{icon(data.get("material_icons",{}).get(name,"shard"))}<span>{e(name)}</span>'
+        f'<span>{data.get("materials",{}).get(name,0):,}</span></div>'
+        for name,grade in data.get('material_grades',{}).items())
+    if materials:
+        head+='<details class="wc-materials"><summary>Upgrade materials</summary><div class="wc-grid">'+materials+'</div></details>'
     if not data.get("screen"):
         return '<section class="wc"><button class="wc-link" data-opt="collection">WEAPON COLLECTION</button>' + head + '</section>'
     cards = []
@@ -35,7 +41,7 @@ def render(data: dict, art_url, icon) -> str:
             f'aria-pressed="{str(selected).lower()}" title="{e(title)}">'
             f'<span class="wc-art">{picture}</span><span class="wc-name">{e(item["name"])}</span>'
             f'<span>{e(grade)} +{item["level"]} · {e(item["path"].title())}</span>'
-            f'<span>{icon("weapon")} {item["attack"]:,} ATK</span>'
+            f'<span>{icon("weapon")} {item.get("current_attack",item["attack"]):,} ATK now / {item["attack"]:,} full</span>'
             f'<span>{item["durability"]:,} / {item["maximum"]:,} condition</span>'
             f'<meter min="0" max="{item["maximum"]}" value="{item["durability"]}" aria-label="Condition"></meter>'
             f'<span class="wc-effect">{e(item["effect"])}</span>'
@@ -80,3 +86,5 @@ CSS = """
 .wc-detail p{margin:0 0 8px;}
 @media(max-width:440px){.wc{padding:12px}.wc-deck{gap:4px}.wc-slot{padding:5px}.wc-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.wc-item{padding:8px}}
 """
+
+CSS += "\n.wc-materials{margin:12px 0}.wc-materials summary{cursor:pointer;color:#e3c375}.wc-materials .wc-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:12px 0}.wc-material{padding:8px;overflow-wrap:anywhere}.wc-material .ico{width:32px;height:32px}@media(max-width:600px){.wc-materials .wc-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}\n"

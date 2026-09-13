@@ -671,7 +671,8 @@ def gear_bonus(p: dict, slot: str) -> int:
         from . import collection
         item = collection.active(p)
         if item and not item.get("legacy"):
-            return collection.stats(item)["attack"] if item["durability"] > 0 else 0
+            from . import battle_rules
+            return battle_rules.contribution(item)
         if not item:
             return 0
     slug = p["gear"].get(slot)

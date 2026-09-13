@@ -1,4 +1,7 @@
-"""Sequential group battles. Every mutation is inside the shared game engine."""
+"""Pinned 0.114 resolver for groups/offers accepted before combat revision2.
+
+Do not use for new groups; retain until persisted-group migration is verified.
+"""
 from __future__ import annotations
 
 from copy import deepcopy
@@ -7,7 +10,7 @@ import hashlib
 
 from .. import economy
 from ..content import schema
-from . import bestiary, collection, combat, state, battle_rules, quiver
+from . import bestiary, collection, combat, state
 from .scene import Option, Scene
 
 DISTANCE = ('Contact', 'Near', 'Far', 'Cover')
@@ -60,8 +63,7 @@ def open_group(p, *, deep=False, members=None, site=''):
         offers[key] = dict(id=gid, offer=key, floor=floor, deep=deep, site=site,
             members=members, index=0, committed=bool(site), deck=list(p['deck']) if site else [],
             cooldowns={}, haul=dict(gold=0, materials={}, weapons=[]), xp=0, energy=0,
-            events=[], event_sequence=0, life_used=False, revision=collection.RULESET,
-            combat_revision=2, turn=0)
+            events=[], event_sequence=0, life_used=False, revision=collection.RULESET)
     p['group'] = deepcopy(offers[key])
     p['location'] = 'group'
     p.pop('group_result', None)
@@ -71,7 +73,7 @@ def open_group(p, *, deep=False, members=None, site=''):
 def public(p):
     g = p['group']
     keys = ('id','instance','name','image','type','affinity','air','speed','hp','hp_max','atk','defense',
-            'power','magic','traits','note','specimen','gap','started','paid','exhausted','killed','effects','rates','bundles','reward_revision','origin_floor','arrival_gap')
+            'power','magic','traits','note','specimen','gap','started','paid','exhausted','killed','effects','rates','bundles','reward_revision')
     return {k: deepcopy(g[k]) for k in ('id','floor','deep','site','index','committed','deck','cooldowns','haul','xp','energy')} | {
         'members': [{k: deepcopy(m[k]) for k in keys if k in m} for m in g['members']],
         'events': deepcopy(g['events'])}
@@ -79,11 +81,7 @@ def public(p):
 
 def scene(p):
     g, m = p['group'], current(p)
-    if g.get('combat_revision',1) < 2:
-        from . import groups_v1
-        return groups_v1.scene(p)
     opts = []
-    arrow_rows = []
     for iid in p['deck']:
         if not iid:
             continue
@@ -92,17 +90,7 @@ def scene(p):
         reason = 'Broken — repair at the Forge' if item['durability'] <= 0 else (
             'Cannot reach a flying enemy' if info['path'] == 'blade' and m['air'] else
             'Move to contact first' if info['path'] == 'blade' and m['gap'] else '')
-        strike_hint = f"{info['path'].title()} strike"
-        if info['path'] == 'bow':
-            selected = quiver.chosen(p,item)
-            ammo = quiver.definitions()[selected]
-            stock = quiver.count(p,item['grade'],selected)
-            reason = reason or ('Selected arrows empty — choose another payload' if not stock else '')
-            strike_hint = f"{ammo['name']} · {ammo['channel']} · {stock} left"
-            arrow_rows.append(dict(weapon=iid,name=info['name'],grade=item['grade'],selected=selected,
-                arrows=[dict(**a,count=quiver.count(p,item['grade'],a['id']),
-                    action=f"load_arrow:{iid}:{a['id']}") for a in quiver.definitions().values()]))
-        opts.append(Option('strike:' + iid, info['name'], reason or strike_hint, locked=bool(reason)))
+        opts.append(Option('strike:' + iid, info['name'], reason or f"{info['path'].title()} strike", locked=bool(reason)))
         if family['cooldown']:
             cooldown = g['cooldowns'].get(iid, 0)
             description = family['description']
@@ -118,12 +106,6 @@ def scene(p):
                  Option('guard', 'Guard', 'Stronger shield absorption; some damage gets through'),
                  Option('flee', 'Leave and lose the pending haul' if not m['started'] else 'Try to escape',
                         'Keep earned XP', danger=True)])
-    # These legal read-like actions change only the chosen payload. They do not
-    # start an enemy or advance any combat clock; all six are visible on cards.
-    for row in arrow_rows:
-        for a in row['arrows']:
-            opts.append(Option(a['action'],f"Load {a['name']} · {row['name']}",
-                f"{row['grade']} · {a['count']} left · free selection",locked=not a['count']))
     paid = ('Exhausted: half attack, −2 speed' if m['exhausted'] else 'Energy paid for this enemy') if m['started'] else 'Waiting:1 energy when your first action begins'
     return Scene(eyebrow=f"FLOOR {g['floor']} · {'DEEP HUNT' if g['deep'] else 'HUNT'}",
         headline=f"{m['name']} · enemy {g['index'] + 1} of {len(g['members'])}",
@@ -132,7 +114,7 @@ def scene(p):
                     m['note']] + [e['text'] for e in g['events']], options=opts, meters=combat.meters(p),
         enemy=dict(name=m['name'], hp=m['hp'], hp_max=m['hp_max'], atk=m['atk'],
                    **{'def': m['defense']}, mspd=m['speed']),
-        group={**public(p), 'arrows':arrow_rows, 'weapon_reach': [
+        group={**public(p), 'weapon_reach': [
             dict(name=o.label, available=not o.locked, reason=o.hint)
             for o in opts if o.id.startswith('strike:')]}, combat_events=deepcopy(g['events']))
 
@@ -164,15 +146,13 @@ def player_speed(p):
     return max(1, economy.player_speed(p) - (2 if m and m['exhausted'] else 0))
 
 
-def _hurt_monster(p, amount, channel, *, dot=False, source=None):
+def _hurt_monster(p, amount, channel, *, dot=False):
     m = current(p)
-    mult = battle_rules.affinity(m,channel,focus=bool((source or {}).get('focus')))
+    mult = m[channel.lower()]
     defense = m['defense'] * (.8 if m.get('expose', 0) and not dot else 1)
-    damage = battle_rules.hp_damage(amount,defense,mult,dot=dot)
+    damage = max(1, round(amount * mult - (0 if dot else defense * .35)))
     damage = min(m['hp'], damage)
     m['hp'] -= damage
-    if damage and source:
-        m['last_damage_source'] = deepcopy(source)
     if not dot and m.get('expose', 0):
         m['expose'] -= 1
     text = f'{channel} resisted — {damage} damage' if mult < 1 else f'{damage} {channel} damage'
@@ -182,13 +162,12 @@ def _hurt_monster(p, amount, channel, *, dot=False, source=None):
 
 def _add_effect(p, kind, source, amount):
     m = current(p)
-    rule = collection.catalog()['effectRules'][kind]
-    immunity = rule.get('immunity')
+    immunity = {'poison':'venomproof', 'burn':'fireproof', 'bleed':'bloodless', 'push':'steadfast'}.get(kind)
     if immunity and immunity in m['traits']:
         event(p, 'immune', f"{m['name']}: {immunity} — {kind} has no effect", defender=m['instance'])
         return
     if kind == 'push':
-        m['gap'] = min(3, m['gap'] + rule['steps'])
+        m['gap'] = min(3, m['gap'] + 2)
         m['pushed'] = True
     elif kind == 'stun':
         if m.get('stun_recovery', 0):
@@ -196,17 +175,14 @@ def _add_effect(p, kind, source, amount):
             return
         m['stunned'] = True
     elif kind == 'slow':
-        m['slow'] = rule['phases']
+        m['slow'] = 2
     elif kind == 'expose':
-        m['expose'] = rule['hits']
+        m['expose'] = 2
     elif kind in ('poison','burn','bleed'):
-        damage = max(1, round(amount * rule['rate'] * (1.5 if kind == 'burn' and 'flammable' in m['traits'] else 1)))
-        existing = next((e for e in m['effects'] if e['kind'] == kind and
-            (e['source']['id'] == source['id'] or rule['stack']=='strongest')), None)
-        entry = dict(kind=kind, source=deepcopy(source), amount=damage, remaining=rule['phases'],
-            channel=rule['channel'], applied_turn=p['group']['turn'])
-        if existing and rule['stack']=='strongest' and existing['amount'] > damage:
-            entry.update(amount=existing['amount'],source=deepcopy(existing['source']))
+        rate, phases, channel = {'poison':(.08,3,'Power'), 'burn':(.12,2,'Magic'), 'bleed':(.10,2,'Power')}[kind]
+        damage = max(1, round(amount * rate * (1.5 if kind == 'burn' and 'flammable' in m['traits'] else 1)))
+        existing = next((e for e in m['effects'] if e['kind'] == kind and e['source'] == source), None)
+        entry = dict(kind=kind, source=source, amount=damage, remaining=phases, channel=channel)
         if existing:
             existing.update(entry)
         else:
@@ -221,17 +197,14 @@ def _strike(p, iid, skill):
     p['active_weapon'] = iid
     collection.project_legacy(p)
     rank = int((p.get('training') or {}).get(info['path'], 0))
-    attack = battle_rules.attack(p,item)
-    source = dict(id=iid,path=info['path'],focus=info['path']=='staff' and bool((p.get('mastery') or {}).get('staff')))
+    attack = economy.player_atk(p['level'], info['attack']) * (.8 + .04 * min(10, rank))
     if m['exhausted']:
         attack *= .5
-    arrow = quiver.consume(p,item) if info['path']=='bow' else None
-    channel,impact = battle_rules.impact(family,m['gap'],arrow,skill=skill)
-    attack *= impact
-    if info['path']=='bow' and (p.get('mastery') or {}).get('bow') and m['gap']==3:
-        if state.rng_int(p,1,100) <= round(economy.LONG_DRAW_TOP*100):
-            attack *= economy.LONG_DRAW_CRIT_MULT
-            event(p,'mastery','Long Draw critical',defender=m['instance'])
+    channel = 'Magic' if info['path'] == 'staff' else 'Power'
+    if info['path'] == 'bow' and m['gap'] == 0:
+        attack *= .9 if item['family'] == 'skirmisher' else .65
+    if skill and item['family'] == 'hawkeye' and m['gap'] >= 2:
+        attack *= 1.2
     item['durability'] = max(0, item['durability'] - 1)
     # Compatibility gear pointers must not restore condition on the next read.
     collection.project_legacy(p)
@@ -242,13 +215,13 @@ def _strike(p, iid, skill):
         event(p, 'miss', info['name'] + ' missed', defender=m['instance'])
         return
     amount = max(1, state.rng_jitter(p, round(attack), .08))
-    _hurt_monster(p, amount, channel, source=source)
-    if arrow and arrow['status'] and m['hp'] > 0:
-        _add_effect(p,arrow['status'],source,amount)
+    _hurt_monster(p, amount, channel)
     if skill and m['hp'] > 0:
-        effect = family['technique']
-        if effect in collection.catalog()['effectRules']:
-            _add_effect(p, effect, source, amount)
+        effect = {'viper':'poison', 'ramguard':'push', 'thunder':'stun', 'briar':'bleed',
+                  'sundering':'expose', 'recoil':'push', 'pinning':'slow', 'ember':'burn',
+                  'frostbind':'slow', 'stormbell':'stun', 'repulsor':'push', 'hexglass':'expose'}.get(item['family'])
+        if effect:
+            _add_effect(p, effect, iid, amount)
 
 
 def _kill(p):
@@ -266,7 +239,7 @@ def _kill(p):
     if landed < rested:
         p['rested'] = int(p.get('rested', 0)) + rested - landed
     xp = got + landed
-    m['kill_path'] = (m.get('last_damage_source') or {}).get('path','blade')
+    m['kill_path'] = collection.stats(p['collection'][p['active_weapon']])['path'] if p.get('active_weapon') else 'blade'
     g['xp'] += xp
     g['haul']['gold'] += reward['gold']
     for name, count in reward['materials'].items():
@@ -277,15 +250,12 @@ def _kill(p):
     event(p, 'kill', f"{m['name']} defeated. +{xp} XP kept; haul pending.", defender=m['instance'])
 
 
-def _enemy_phase(p, *, guard=False, prior_effects=()):
+def _enemy_phase(p, *, guard=False):
     g, m = p['group'], current(p)
-    for effect in prior_effects:
+    for effect in list(m['effects']):
         if m['hp'] > 0:
-            _hurt_monster(p,effect['amount'],effect['channel'],dot=True,source=effect['source'])
-        current_effect = next((e for e in m['effects'] if e['kind']==effect['kind'] and
-            e['source']['id']==effect['source']['id']),None)
-        if current_effect and current_effect['applied_turn'] < g['turn']:
-            current_effect['remaining'] -= 1
+            _hurt_monster(p, effect['amount'], effect['channel'], dot=True)
+        effect['remaining'] -= 1
     m['effects'] = [e for e in m['effects'] if e['remaining'] > 0]
     g['cooldowns'] = {iid:max(0, n-1) for iid, n in g['cooldowns'].items()}
     if m['hp'] <= 0:
@@ -294,7 +264,7 @@ def _enemy_phase(p, *, guard=False, prior_effects=()):
     if slowed:
         m['slow'] -= 1
     if m.pop('stunned', False):
-        m['stun_recovery'] = collection.catalog()['effectRules']['stun']['recovery']
+        m['stun_recovery'] = 2
         event(p, 'control', 'Stunned — enemy attack skipped', defender=m['instance'])
         return
     if m.get('stun_recovery', 0):
@@ -302,33 +272,24 @@ def _enemy_phase(p, *, guard=False, prior_effects=()):
     if m.pop('pushed', False):
         event(p, 'control', 'Pushed back — room for your next action', defender=m['instance'])
         return
-    speed = max(1, m['speed'] - (collection.catalog()['effectRules']['slow']['speed'] if slowed else 0))
+    speed = max(1, m['speed'] - (3 if slowed else 0))
     if m['gap'] > 0:
         m['gap'] = max(0, m['gap'] - (2 if speed >= player_speed(p) + 3 else 1))
         if m['gap'] > 0:
             event(p, 'move', f"{m['name']} closes to {DISTANCE[m['gap']].lower()}")
             return
     raw = max(1, state.rng_jitter(p, m['atk'], .08))
+    minimum = max(1, math.ceil(raw * .25))
     armor = state.gear_bonus(p, 'armor')
-    if p.get('race')=='giant':
-        armor *= 1.05
-    shield = 0 if state.is_broken(p,'shield') else state.gear_bonus(p, 'shield')
-    hit = battle_rules.incoming(raw,armor,shield,guard=guard)
-    damage, absorbed = hit['hp'],hit['shield']
+    shield = state.gear_bonus(p, 'shield')
+    after_armor = max(minimum, round(raw - armor * .4))
+    absorbed = min(max(0, after_armor - minimum), round(shield * (1.5 if guard else 1)))
+    damage = after_armor - absorbed
     if absorbed and 'shield' in p.get('durability', {}):
-        p['durability']['shield'] = max(0, p['durability']['shield'] - hit['wear'])
+        wear = max(1, math.ceil(absorbed / max(1, shield)))
+        p['durability']['shield'] = max(0, p['durability']['shield'] - wear)
     p['hp'] = max(0, p['hp'] - damage)
     event(p, 'incoming', f'{damage} HP lost; shield absorbed {absorbed}', defender='player', damage=damage)
-    if (p.get('mastery') or {}).get('blade') and not m['air'] and m['gap']==0 and absorbed+hit['armor'] >= damage:
-        blades = [p['collection'][iid] for iid in g['deck'] if iid and
-            collection.stats(p['collection'][iid])['path']=='blade' and p['collection'][iid]['durability']>0]
-        if blades:
-            blade = max(blades,key=battle_rules.contribution)
-            amount = battle_rules.attack(p,blade) * economy.RIPOSTE_RETURN * (.5 if m['exhausted'] else 1)
-            _hurt_monster(p,amount,'Power',source=dict(id=blade['id'],path='blade',focus=False))
-            blade['durability'] = max(0,blade['durability']-1)
-            collection.project_legacy(p)
-            event(p,'mastery','Blade mastery: Riposte',defender=m['instance'])
 
 
 def _finish(p, won=False, escaped=False):
@@ -342,8 +303,8 @@ def _finish(p, won=False, escaped=False):
             for name, n in g['haul']['materials'].items():
                 expedition['haul'][name] = expedition['haul'].get(name, 0) + n
             expedition['weapons'].extend(g['haul']['weapons'])
-            from .gathering import _site
-            target = _site(p)['material']
+            from .gathering import SITES
+            target = SITES[g['site']]['material']
             expedition['haul'][target] = expedition['haul'].get(target, 0) + len(g['members'])
             expedition['message'] = f"Ambush cleared. +{len(g['members'])} {target}; extract to secure your haul."
         else:
@@ -396,18 +357,6 @@ def handle(p, oid):
             return _build_scene(p)
         return None
     g, m = p['group'], current(p)
-    if g.get('combat_revision',1) < 2:
-        from . import groups_v1
-        return groups_v1.handle(p,oid)
-    if oid.startswith('load_arrow:'):
-        try:
-            parts = oid.split(':')
-            if len(parts)!=3:
-                raise ValueError('Choose a current arrow payload')
-            quiver.select(p,parts[1],parts[2])
-            return scene(p)
-        except ValueError as exc:
-            return refuse(p,str(exc))
     if oid == 'flee' and not m['started']:
         if not g['committed']:
             p['group'] = None
@@ -427,8 +376,6 @@ def handle(p, oid):
             return refuse(p, 'This weapon is broken. Escape and repair it at the Forge.')
         if info['path'] == 'blade' and (m['air'] or m['gap']):
             return refuse(p, 'A blade cannot reach a flyer' if m['air'] else 'Close to contact first')
-        if info['path']=='bow' and not quiver.count(p,item['grade'],quiver.chosen(p,item)):
-            return refuse(p,'No arrows of the selected type remain. Select another payload or weapon.')
         if skill and (not collection.families()[item['family']]['cooldown'] or g['cooldowns'].get(iid, 0)):
             return refuse(p, 'That technique is not ready')
     elif oid == 'drink_tonic' and combat.pouch(p) != 'trollblood_tonic':
@@ -441,8 +388,6 @@ def handle(p, oid):
         return refuse(p, 'Select a usable weapon in your collection before beginning')
     p.pop('collection_view', None)
     g['events'] = []
-    prior_effects = deepcopy(m['effects'])
-    g['turn'] += 1
     _commit(p)
     if oid == 'flee':
         chance = max(.1, min(.95, .2 + .15*m['gap'] + .03*(player_speed(p) - m['speed'])))
@@ -459,18 +404,14 @@ def handle(p, oid):
         m['gap'] = max(0, m['gap'] - 1)
     elif oid == 'withdraw':
         m['gap'] = min(3, m['gap'] + (2 if player_speed(p) > m['speed'] else 1))
-    _enemy_phase(p,guard=oid=='guard',prior_effects=prior_effects)
-    if m['hp'] <= 0:
-        _kill(p)
+    _enemy_phase(p, guard=oid == 'guard')
     if p['hp'] <= 0:
         if p.get('daily', {}).get('death_save') and combat.pouch(p) == 'stone_of_undying' and not g['life_used']:
             combat.spend_pouch(p)
             g['life_used'] = True
             p['hp'] = max(1, round(state.max_hp(p) * economy.STONE_REVIVE_PCT))
             event(p, 'revive', 'The Stone of Undying burns. Same fight, same committed weapons.')
-            if m['hp'] > 0:
-                return scene(p)
-    if p['hp'] <= 0:
+            return scene(p)
         daily_save = not p.setdefault('daily', {}).get('death_save')
         p['daily']['death_save'] = True
         loss = _death_cost(p, daily_save)
@@ -486,9 +427,11 @@ def handle(p, oid):
             p.update(location='town',floor=0,hp=state.max_hp(p))
         return result_scene(p)
     if m['hp'] <= 0:
+        _kill(p)
         if g['index'] == len(g['members']) - 1:
             return _finish(p, won=True)
         g['index'] += 1
+        current(p)['gap'] = 3
     return scene(p)
 
 

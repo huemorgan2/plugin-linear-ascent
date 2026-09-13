@@ -19,6 +19,8 @@ RULESET = "collection-v1"
 GRADES = ("Common", "Rare", "Epic", "Legendary")
 MATERIALS = (("Wood", "Raw Metal"), ("Hardwood", "Steel"),
              ("Meteorite", "Starforged Steel"), ("Mythic Threads", "Shard Matter"))
+MATERIAL_ICONS = dict(zip((m for pair in MATERIALS for m in pair),
+    ("mat_wood","mat_raw_metal","mat_hardwood","mat_steel","mat_meteorite","mat_starsteel","mat_threads","mat_shard")))
 _SKIP = ({12, 13, 22, 23}, {32, 33, 42, 43},
          {52, 53, 62, 63}, {82, 83, 92, 93})
 
@@ -326,12 +328,17 @@ def import_legacy_stock(p: dict) -> None:
 
 def sync(p: dict) -> None:
     if enabled(p):
+        from . import quiver
+        quiver.ensure(p)
         p["slots"] = 3
         import_legacy_stock(p)
         project_legacy(p)
         return
     if enrollment_open() or p.get("born_ruleset") == RULESET:
         migrate(p)
+        if enabled(p):
+            from . import quiver
+            quiver.ensure(p)
 
 
 def active(p: dict) -> dict | None:
@@ -415,8 +422,9 @@ def card(p: dict, item: dict) -> dict:
     else:
         image = f"weapons/large/{art['slug']}_100x160.png"
     quote = upgrade_quote(item)
+    from . import battle_rules
     return {**{k: item[k] for k in ("id", "family", "grade", "level", "durability", "maximum", "source")},
-            **info, "location": item.get("location", "carried"), "image": image, "effect": "Original honing retained" if item.get("legacy") else family["effect"],
+            **info, "current_attack": battle_rules.contribution(item), "location": item.get("location", "carried"), "image": image, "effect": "Original honing retained" if item.get("legacy") else family["effect"],
             "description": family["description"], "quote": quote,
             "can_afford": bool(quote and p["gold"] >= quote["gold"] and all(
                 p.get("materials", {}).get(k, 0) >= n for k, n in quote["materials"].items())),
@@ -425,13 +433,13 @@ def card(p: dict, item: dict) -> dict:
 
 
 def payload(p: dict) -> dict:
-    from . import gathering
+    from . import gathering, quiver
     from .core import pack_used, pack_cap
     positions = {iid:n for n,iid in enumerate(p['deck']) if iid}
     ordered = sorted(p['collection'].values(), key=lambda item:(
         positions.get(item['id'], 3), -GRADES.index(item['grade']),
         families()[item['family']]['name'], -item['level'], item['id']))
-    return dict(resource_sites=gathering.directory(p), pack_used=pack_used(p), pack_cap=pack_cap(p), claims=claims(p), deck=list(p["deck"]), items=[card(p, i) for i in ordered],
+    return dict(material_icons=MATERIAL_ICONS, material_grades={m:GRADES[gi] for gi,pair in enumerate(MATERIALS) for m in pair}, quiver=quiver.payload(p), resource_sites=gathering.directory(p), pack_used=pack_used(p), pack_cap=pack_cap(p), claims=claims(p), deck=list(p["deck"]), items=[card(p, i) for i in ordered],
                 locked=locked(p), materials=dict(p.get("materials", {})),
                 gold=p["gold"], xp_reserve=p.get("xp_reserve", 0),
                 selected=p.get("collection_selected"), screen=bool(p.get("collection_view")))
@@ -481,6 +489,7 @@ def handle(p: dict, oid: str):
     if not enabled(p):
         return None
     if oid == "collection":
+        p.pop('quiver_view',None)
         p["collection_view"] = True
         return scene(p)
     if oid == "collection_back" and p.get("collection_view"):
@@ -491,6 +500,7 @@ def handle(p: dict, oid: str):
     if oid.startswith("inspect:"):
         iid = oid.partition(":")[2]
         if iid in p["collection"]:
+            p.pop('quiver_view',None)
             p["collection_view"] = True
             p["collection_selected"] = iid
             return scene(p)

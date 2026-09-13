@@ -25,10 +25,19 @@ Use the parent phase plans for exact commands and evidence locations. Run target
 
 ## Execution status
 
-Phase1 in progress. Planning committed before source alignment. Phases2–8 not started.
+Phases1–3 reached their recorded essential gates in the parent plan. Phase4 is in progress. Phases5–8 are not complete. All work remains a QA candidate.
 
 ## Implementation checkpoint —13 September2026
 
 Parent plan015 phases1–2 reached the essential state/collection browser gate; phase3 is in progress. Candidate0.114.0 adds the actual group resolver, native starter deck, material/source-aware Forge, two named floor3 gathering sites, shared Scene/pane visuals, and persistent weapon recovery. The parent phase3 contract records exact semantics and rollback. Candidate enrollment remains disabled in production.
 
 Before this checkpoint:39 focused collection/group/Forge/gathering/style tests passed;8 worldd action tests and4 local PostgreSQL backend tests passed; the simulator suite passed60 tests. The first plugin-wide run had1478 passes and10 failures:8 known legacy failures and2 newly exposed CSS stripe failures. The stripe was removed and both checks now pass. Full-suite follow-up and real browser/Luna play remain required. This checkpoint is not a phase-complete or release claim.
+
+
+## Phase4 engine checkpoint —0.115.0
+
+The pre-execution parent contract is phase-4/IMPLEMENTATION.md (rootc181fba). The candidate now has finite six-payload grade-matched arrows, eight named weighted gathering sites, canonical effect records, source-persistent next-phase damage, earned mastery, condition-aware current attack, varied arrivals, and eight game-native material icons. Old active groups/offers retain the0.114 resolver; saved rewards and expedition snapshots are preserved. Source helpers now generate the wiki's numeric previews instead of separate browser combat math. The simulator's replenishment policy adapts through ordinary legal Forge actions.
+
+Verification:97 focused engine/content checks passed; full plugin1534passed,8 unchanged known legacy failures,4skipped,1xfail in34.00s. Thirteen focused simulator checks passed including candidate CPU/replay, and the wiki's seven JS selection/distribution checks passed. The final generated version/HTTP checks, browser/Luna gate, full simulator follow-up and measured family/site coverage remain required. No full phase4 or release claim.
+
+Rollback before new0.115 QA writes: revert this checkpoint's recorded implementation commit, re-vendor and regenerate wiki. After writes: retain quiver/effect readers and pinned old-group resolver, stop new entries and settle current groups/expeditions by receipt. Preserve purchased arrows and native weapons. Do not reset progressed players, erase receipts or re-run enrollment grants. Production is unchanged.
