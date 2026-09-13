@@ -140,22 +140,24 @@ def set_slot(p: dict, cell: int, iid: str | None) -> None:
     project_legacy(p)
 
 
-def _legacy_item(p: dict, slug: str, where: str, index: int) -> dict:
+def _legacy_item(p: dict, slug: str, where: str, index: int, *, fresh: bool = False, receipt: str = "") -> dict:
     from . import state
     g = economy.FORGE[slug]
     family = {"blade": "breach", "bow": "hawkeye", "staff": "ember"}.get(
         economy.PATH_OF_LINE.get(g.line, "blade"), "breach")
-    item = mint(p, family, receipt=f"migration:{where}:{slug}:{index}")
+    item = mint(p, family, receipt=receipt or f"migration:{where}:{slug}:{index}")
     # A compatibility item keeps its old power and ownership, not an
     # approximate grade conversion which could erase an earned advantage.
-    hone = state.hone_level(p, "weapon", slug)
+    hone = 0 if fresh else state.hone_level(p, "weapon", slug)
     pool = max(1, economy.item_pool(g))
     lead = where == "held" and slug == p["gear"].get("weapon")
     condition = (p.get("durability", {}).get("weapon", pool) if lead
                  else p.get("durability_pack", {}).get(slug, pool))
+    if fresh:
+        condition = pool
     item.update(source="legacy", level=min(20, max(0, hone)),
                 durability=max(0, min(pool, int(condition))), maximum=pool,
-                legacy=dict(slug=slug, hone=hone, oil=state.oil_left(p, slug),
+                legacy=dict(slug=slug, hone=hone, oil=0 if fresh else state.oil_left(p, slug),
                             floor=max(1, int((g.tier - 1) * 10 + 1)), location=where))
     return item
 
@@ -220,14 +222,43 @@ def migrate(p: dict, slot_receipts: list[dict] | None = None) -> dict:
 
 def preview(p: dict, slot_receipts: list[dict] | None = None) -> dict:
     copy = deepcopy(p)
+    if not enabled(copy):
+        # Export previews also accept pre-v11 scalar honing/oil without
+        # enrolling or otherwise mutating the caller's document.
+        lead = (copy.get("gear") or {}).get("weapon")
+        hone = copy.setdefault("hone", {})
+        if lead and "weapon" in hone:
+            hone.setdefault("weapon:" + lead, int(hone.pop("weapon") or 0))
+        if not isinstance(copy.get("oil"), dict):
+            copy["oil"] = {lead: int(copy.get("oil") or 0)} if lead else {}
     result = migrate(copy, slot_receipts)
     return dict(result=result, reconciliation=reconcile(copy) if enabled(copy) else None,
                 document=copy)
 
 
+def receive_legacy(p: dict, slug: str, *, fresh: bool = False) -> dict:
+    """Bridge a newly received old-catalog weapon into instance ownership."""
+    seq = int(p.get("item_sequence", 0)) + 1
+    return _legacy_item(p, slug, "received", seq, fresh=fresh,
+                        receipt=f"legacy-receipt:{seq}")
+
+
+def import_legacy_stock(p: dict) -> None:
+    # Old mail, armory and reward handlers still deliver slug stacks. Consume
+    # that delivery once; held/gear are projections and must never be imported.
+    for slug, count in list(p.get("inventory", {}).items()):
+        gear = economy.FORGE.get(slug)
+        if gear and gear.slot == "weapon":
+            for _ in range(max(0, int(count))):
+                receive_legacy(p, slug)
+            del p["inventory"][slug]
+
+
 def sync(p: dict) -> None:
     if enabled(p):
         p["slots"] = 3
+        import_legacy_stock(p)
+        project_legacy(p)
         return
     if enrollment_open():
         migrate(p)
@@ -243,7 +274,11 @@ def project_legacy(p: dict) -> None:
     p["held"] = [i["legacy"]["slug"] for i in items if i.get("legacy")]
     lead = active(p)
     if lead and lead.get("legacy"):
-        p["gear"]["weapon"] = lead["legacy"]["slug"]
+        from . import state
+        slug = lead["legacy"]["slug"]
+        p["gear"]["weapon"] = slug
+        state.set_hone(p, "weapon", lead["legacy"]["hone"], slug)
+        p.setdefault("oil", {})[slug] = lead["legacy"]["oil"]
         p.setdefault("durability", {})["weapon"] = lead["durability"]
     for item in items:
         if item.get("legacy") and item is not lead:
@@ -251,11 +286,16 @@ def project_legacy(p: dict) -> None:
 
 
 def capture_legacy_wear(p: dict) -> None:
+    from . import state
+    import_legacy_stock(p)
     item = active(p)
     if not item or not item.get("legacy") or p.get("group"):
         return
     if p["gear"].get("weapon") == item["legacy"]["slug"]:
         item["durability"] = min(item["maximum"], max(0, int(p.get("durability", {}).get("weapon", item["durability"]))))
+        item["legacy"]["hone"] = state.hone_level(p, "weapon")
+        item["legacy"]["oil"] = state.oil_left(p)
+        item["level"] = min(20, item["legacy"]["hone"])
 
 
 def public_deck(p: dict) -> list[dict | None]:
@@ -323,6 +363,11 @@ def scene(p: dict):
         if selected in p["deck"]:
             opts.append(Option(f"unslot:{p['deck'].index(selected)}", "Return to collection"))
     opts.append(Option("collection_back", "Back"))
+    for item in p["collection"].values():
+        info = stats(item)
+        opts.append(Option("inspect:" + item["id"],
+            f"{info['name']} · {item['grade']} +{item['level']}",
+            f"{item['durability']}/{item['maximum']} condition · view weapon"))
     return Scene(eyebrow="YOUR WEAPON COLLECTION", headline="Three weapons. Your choice.",
         support="Choose any three weapons before a hunt. Each weapon keeps its own level and condition.",
         body_lines=(["Your weapons stay committed until this fight or expedition ends."] if locked(p) else []),

@@ -284,6 +284,25 @@ class Scene:
                     and (sl.get("name") or sl.get("slug"))]
             if worn:
                 lines.append("wears: " + ", ".join(worn[:7]))
+        if self.collection:
+            c = self.collection
+            owned = {i["id"]: i for i in c.get("items", [])}
+            lines.append("Three battle weapons (fixed for a fight or expedition):")
+            for n, iid in enumerate(c.get("deck", []), 1):
+                item = owned.get(iid)
+                lines.append(f"  {n}: " + (f"{item['name']} {item['grade']} +{item['level']} · "
+                    f"ATK {item['attack']} · condition {item['durability']}/{item['maximum']}"
+                    if item else "Empty"))
+            if c.get("screen"):
+                for item in c.get("items", []):
+                    lines.append(f"{item['name']} · {item['grade']} +{item['level']} · "
+                        f"ATK {item['attack']} · {item['durability']}/{item['maximum']} condition · "
+                        f"{item['effect']} · inspect:{item['id']}")
+                    q = item.get("quote")
+                    if q:
+                        materials = ", ".join(f"{c.get('materials', {}).get(k, 0)}/{n} {k}"
+                                               for k, n in q["materials"].items())
+                        lines.append(f"Forge +{q['level']}: {q['gold']} gold; {materials}")
         # 027: the notice board reads as words on every surface — the card
         # draws it, the agent says it.
         for nt in self.notices:

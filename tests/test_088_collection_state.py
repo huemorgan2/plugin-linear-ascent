@@ -188,3 +188,63 @@ def test_candidate_has_no_slot_unlock_advertisement_and_no_free_journey_heal(mon
     monkeypatch.setattr(state, "now", lambda: tomorrow)
     state.touch_daily(p)
     assert state.apply_sleep_healing(p) == 0 and p["hp"] == 7
+
+
+def test_old_shop_pack_and_unequip_actions_cannot_duplicate_or_erase_instances():
+    p = candidate()
+    p.update(location="forge", gold=100000, level=30, unlocked_floor=100)
+    original = collection.active(p)["id"]
+    p["collection"][original]["durability"] = 13
+    collection.project_legacy(p)
+    before = len(p["collection"])
+    core._gear_purchase(p, economy.FORGE["rusted_sword"], core._forge_scene)
+    assert len(p["collection"]) == before + 1
+    assert p["collection"][original]["durability"] == 13
+    spare = p["collection"][p["collection_selected"]]
+    assert spare["durability"] == spare["maximum"] and spare["id"] != original
+    collection.set_slot(p, 1, spare["id"])
+    core._unequip(p, economy.WEAPON_SLOT_KEYS[1])
+    state.ensure_current(p)
+    assert len(p["collection"]) == before + 1 and p["deck"][1] is None
+    assert "rusted_sword" not in p["inventory"]
+    assert collection.reconcile(p)["ok"]
+    p["inventory"]["rusted_sword"] = 2  # delivery from the existing mail/armory host
+    state.ensure_current(p)
+    assert len(p["collection"]) == before + 3
+    state.ensure_current(p)
+    assert len(p["collection"]) == before + 3
+    core._wear_from_pack(p, "rusted_sword", core._forge_scene)
+    assert p["active_weapon"] == original and p["deck"][1] is None
+
+
+def test_duplicate_legacy_instances_keep_separate_honing_oil_and_condition():
+    p = candidate()
+    original = collection.active(p)
+    other = collection.receive_legacy(p, "rusted_sword", fresh=True)
+    collection.set_slot(p, 1, other["id"])
+    state.set_hone(p, "weapon", 7)
+    p["oil"]["rusted_sword"] = 2
+    p["durability"]["weapon"] = 19
+    collection.capture_legacy_wear(p)
+    assert original["legacy"]["hone"] == 7
+    p["active_weapon"] = other["id"]
+    collection.project_legacy(p)
+    assert state.hone_level(p, "weapon") == 0 and state.oil_left(p) == 0
+    assert p["durability"]["weapon"] == other["maximum"]
+    state.ensure_current(p)
+    assert original["durability"] == 19 and original["legacy"]["oil"] == 2
+    s = core.apply_choice(p, "collection")
+    assert "inspect:" + original["id"] in s.to_text()
+    assert any(o.id == "inspect:" + original["id"] for o in s.options)
+
+
+def test_old_export_preview_preserves_scalar_hone_and_oil_without_writing():
+    p = legacy()
+    p["version"] = 10
+    p["hone"] = {"weapon": 6}
+    p["oil"] = 3
+    before = deepcopy(p)
+    out = collection.preview(p)["document"]
+    item = collection.active(out)
+    assert item["legacy"]["hone"] == 6 and item["legacy"]["oil"] == 3
+    assert p == before

@@ -51,6 +51,19 @@ def _is_transient_db(exc: BaseException) -> bool:
     return any(sig in text for sig in _TRANSIENT_DB)
 
 
+def _widen_local_ledger(conn):
+    """Widen existing local ledgers without rewriting their history."""
+    from sqlalchemy import text
+    if conn.dialect.name != "postgresql":
+        return
+    for column in ("gold", "xp"):
+        kind = conn.execute(text("SELECT udt_name FROM information_schema.columns "
+            "WHERE table_schema=current_schema() AND table_name='ascent_ledger' "
+            "AND column_name=:column"), {"column": column}).scalar()
+        if kind == "int4":
+            conn.execute(text(f"ALTER TABLE ascent_ledger ALTER COLUMN {column} TYPE BIGINT"))
+
+
 async def _ensure_local_tables(ctx: PluginContext) -> bool:
     """Create the plugin's own tables, riding out a restarting database.
 
@@ -67,6 +80,7 @@ async def _ensure_local_tables(ctx: PluginContext) -> bool:
             async with ctx.engine.begin() as conn:
                 for table in Base.metadata.sorted_tables:
                     await conn.run_sync(table.create, checkfirst=True)
+                await conn.run_sync(_widen_local_ledger)
             return True
         except Exception as e:  # noqa: BLE001 — load must survive any of them
             last = e
@@ -89,8 +103,9 @@ _SHARED_RULES = (
     "ascent_choose and you only relay what its result says. METERS: "
     "there is NO mana in this world — never say the word. The XP bar is "
     "experience inside the current level. It fills by fighting up to the "
-    "bar for the next level — surplus goes nowhere; it is burned by "
-    "honing, spells, and mending. "
+    "bar for the next level. If a reserve is shown, it is earned XP "
+    "available for spending after the bar fills. Use the current scene "
+    "for costs, rewards and the three-weapon collection. "
     "LEVELS ARE BOUGHT, never automatic: a full XP bar plus a gold fee "
     "at the Guildhall's Train option (first level ◈ 200, rising with "
     "level). Nothing refills XP but fighting. "

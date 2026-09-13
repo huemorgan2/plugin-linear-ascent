@@ -329,6 +329,15 @@ def _unequip(p: dict, key: str) -> Scene:
     (the lead pointer moves to the first blade left), a bow's quiver
     returns to the pack with it, oil on that blade is lost, worn steel
     carries its wear along; the shield's and armour's honing resets."""
+    from . import collection
+    if collection.enabled(p) and key in economy.WEAPON_SLOT_KEYS:
+        try:
+            collection.set_slot(p, economy.WEAPON_SLOT_KEYS.index(key), None)
+        except ValueError as exc:
+            result = _build_scene(p)
+            result.refusal = str(exc)
+            return result
+        return _build_scene(p)
     s_lock = economy.slot_lock(p, key)
     slug = economy.slot_item(p, key)
     if s_lock or not slug:
@@ -2085,6 +2094,17 @@ def _gear_purchase(p: dict, g, scene_fn) -> Scene:
                        "The Vault pays interest for a reason."
         s.refusal = f"Can't buy this — not enough gold (◈ {price:,} needed)"
         return s
+    from . import collection
+    if collection.enabled(p) and g.slot == "weapon":
+        if collection.locked(p):
+            result = scene_fn(p)
+            result.refusal = "Finish the fight or expedition before buying weapons"
+            return result
+        item = collection.receive_legacy(p, g.slug, fresh=True)
+        p["gold"] -= price
+        combat._ledger(p, "buy", gold=-price, note=g.slug)
+        p.update(collection_view=True, collection_selected=item["id"])
+        return collection.scene(p)
     old = p["gear"].get(g.slot)
     if old == g.slug:
         # 019: a spare of the piece you wear — straight to the pack,
@@ -2217,6 +2237,13 @@ def _wear_from_pack(p: dict, slug: str, scene_fn) -> Scene:
     if slug in economy.CHARM_KINDS and slug not in economy.FORGE:
         return _wear_charm(p, slug, scene_fn)
     g = economy.FORGE.get(slug)
+    from . import collection
+    if collection.enabled(p) and g and g.slot == "weapon":
+        collection.import_legacy_stock(p)
+        p["collection_view"] = True
+        result = collection.scene(p)
+        result.shard_note = "Choose the individual weapon and its slot in your collection."
+        return result
     if not g or (p.get("inventory") or {}).get(slug, 0) <= 0:
         return scene_fn(p)
     req = _wear_level_req(slug)
@@ -2295,6 +2322,18 @@ def _basic_buy(p: dict, slug: str, scene_fn) -> Scene:
     goes into a free carry slot if one is open, else into the pack
     (promote it on the road)."""
     g = economy.FORGE[slug]
+    from . import collection
+    if collection.enabled(p):
+        price = economy.BASIC_WEAPON_PRICE
+        if collection.locked(p) or p["gold"] < price:
+            result = scene_fn(p)
+            result.refusal = "Finish the fight first" if collection.locked(p) else f"You need {price} gold"
+            return result
+        item = collection.receive_legacy(p, slug, fresh=True)
+        p["gold"] -= price
+        combat._ledger(p, "buy", gold=-price, note=slug)
+        p.update(collection_view=True, collection_selected=item["id"])
+        return collection.scene(p)
     owned = set(combat._held_slugs(p)) | set(p.get("inventory") or {})
     if slug in owned:
         s = scene_fn(p)
