@@ -259,3 +259,22 @@ def test_character_tool_receives_the_collection_route_and_exact_copies():
     assert sheet["weapon_collection"]["open_action"] == "collection"
     assert item["id"] in {i["id"] for i in sheet["weapon_collection"]["items"]}
     assert p == before
+
+
+def test_collection_art_keeps_host_asset_route_when_plugin_is_symlinked(tmp_path, monkeypatch):
+    from plugin_linear_ascent import render
+    from pathlib import Path
+    p = candidate()
+    scene = core.apply_choice(p, "collection")
+    root = Path(render._ART_ROOT).resolve()
+    link = tmp_path / "installed-plugin-art"
+    link.symlink_to(root, target_is_directory=True)
+    monkeypatch.setattr(render, "_ART_ROOT", str(link))
+    old_base = render.ART_BASE
+    try:
+        render.set_art_base("/api/p/plugin-linear-ascent/art")
+        html = render.render_scene_fragment(scene)
+        assert '/api/p/plugin-linear-ascent/art/weapons/large/rusted_sword_100x160.png?v=' in html
+        assert '/art/../' not in html
+    finally:
+        render.set_art_base(old_base)

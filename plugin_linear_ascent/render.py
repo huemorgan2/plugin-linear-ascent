@@ -121,7 +121,7 @@ def _art_url(path: str, mime: str) -> str:
     """The one door art ships through: a versioned static URL when the
     host mounted the tree, the inline data URL otherwise."""
     if ART_BASE:
-        rel = os.path.relpath(path, _ART_ROOT).replace(os.sep, "/")
+        rel = os.path.relpath(os.path.realpath(path), os.path.realpath(_ART_ROOT)).replace(os.sep, "/")
         return f"{ART_BASE}/{rel}?v={VERSION}"
     b64 = base64.b64encode(open(path, "rb").read()).decode()
     return f"data:image/{mime};base64,{b64}"
