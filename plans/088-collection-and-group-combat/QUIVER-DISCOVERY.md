@@ -13,4 +13,4 @@
 
 Record implementation SHA and targeted/full suite results. Revert only the presentation/coaching/payload additions if needed, retaining0.115 arrows/group readers and owned stock. No database reset, time jump, natural-player grant or conversation deletion. Browser evidence lives outside the repo until allowlisted/sanitized. Phase4 is not complete until its real combat/site walkthrough and measurements pass.
 
-Execution: reproduced; implementation pending.
+Execution: payload, drawer and current-tool coaching implemented in0.115.1.54 focused tests passed; full suite1535passed,8previously recorded legacy failures,4skipped,1xfail (32.23seconds). No new failing test. The eight failures remain assigned to phase7 and prevent a whole-release completion claim. Real Luna recheck and phase4 combat browser gate remain pending until the preserved QA restart.

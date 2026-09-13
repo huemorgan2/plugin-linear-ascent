@@ -20,6 +20,20 @@ def render(data: dict, art_url, icon) -> str:
         for name,grade in data.get('material_grades',{}).items())
     if materials:
         head+='<details class="wc-materials"><summary>Upgrade materials</summary><div class="wc-grid">'+materials+'</div></details>'
+    quiver=data.get('quiver',{})
+    if quiver.get('types'):
+        arrows=[]
+        for arrow in quiver['types']:
+            owned=''.join(f'<span style="color:{COLORS[offer["grade"]]}">{e(offer["grade"])}: {offer["owned"]:,}</span>'
+                for offer in arrow['offers'])
+            arrows.append(f'<div class="wc-item" style="--grade:#aab8b4">{icon("quiver")}'
+                f'<span>{e(arrow["name"])}</span><span>{e(arrow["channel"])}</span>'
+                f'<span>{e(arrow["effect"])}</span>{owned}</div>')
+        equipped=''.join(f'<p>{e(bow["name"])}: {e(bow["grade"])} {e(bow["selected_name"])} · {bow["remaining"]:,} left</p>'
+            for bow in quiver.get('bows',[]))
+        head+=f'<details class="wc-quiver"><summary>Arrows · {quiver["used"]:,} / {quiver["capacity"]:,}</summary>'
+        head+='<p>One arrow per shot, including a miss. Match the arrow grade to your bow.</p>'+equipped
+        head+='<div class="wc-grid">'+''.join(arrows)+'</div><p>Buy bundles of 20 at the Forge arrow supplies rack. Choose a stocked payload on your bow during a group; selecting it is free.</p></details>'
     if not data.get("screen"):
         return '<section class="wc"><button class="wc-link" data-opt="collection">WEAPON COLLECTION</button>' + head + '</section>'
     cards = []
@@ -84,6 +98,7 @@ CSS = """
 .wc meter{width:100%;height:8px;accent-color:var(--grade);}
 .wc-detail{margin-top:16px;padding:12px;border:1px solid #526369;background:#0c1416;}
 .wc-detail p{margin:0 0 8px;}
+.wc-quiver{margin:12px 0}.wc-quiver summary{cursor:pointer;color:#e3c375}.wc-quiver .wc-grid{margin:12px 0}.wc-quiver .wc-item{overflow-wrap:anywhere}
 @media(max-width:440px){.wc{padding:12px}.wc-deck{gap:4px}.wc-slot{padding:5px}.wc-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.wc-item{padding:8px}}
 """
 

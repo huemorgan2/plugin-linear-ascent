@@ -160,6 +160,26 @@ def test_quiver_purchase_grade_cap_practice_and_enrollment_once(monkeypatch):
     assert core.apply_choice(p,'arrow_buy:Common:arcane').refusal
 
 
+def test_quiver_sheet_and_drawer_explain_real_owned_arrows_without_mutation(monkeypatch):
+    from plugin_linear_ascent import collection_view
+    p,item,m=setup(monkeypatch,'hawkeye',1)
+    before=deepcopy(p)
+    data=collection.payload(p);q=data['quiver']
+    assert q['finite'] and q['miss_consumes_arrow'] and q['arrows_per_accepted_shot']==1
+    assert len(q['types'])==6 and all(len(t['offers'])==4 for t in q['types'])
+    assert q['bows'][0]['selected']=='ordinary' and q['bows'][0]['remaining']==100
+    assert q['choices']=={}
+    fire=next(t for t in q['types'] if t['id']=='fire')
+    assert fire['offers'][0]==dict(grade='Common',arrow='fire',floor=1,count=20,gold=15,owned=0,unlocked=True)
+    html=collection_view.render(data,lambda _:None,lambda _: '<i></i>')
+    assert 'Arrows · 100 / 400' in html and 'including a miss' in html
+    for arrow in q['types']:assert arrow['name'] in html
+    assert p==before
+    p['quiver']['Common']['fire']=2;quiver.select(p,item['id'],'fire')
+    assert quiver.payload(p)['bows'][0]['selected']=='fire'
+    assert quiver.payload(p)['bows'][0]['remaining']==2
+
+
 def test_broken_upgrade_stays_broken_and_full_attack_is_inspectable(monkeypatch):
     p,item,m=setup(monkeypatch);act(p,'flee');act(p,'forge_collection')
     item['durability']=0;q=collection.upgrade_quote(item);p['materials'].update(q['materials'])

@@ -66,8 +66,26 @@ def consume(p, item):
 
 
 def payload(p):
+    types = []
+    for arrow, definition in definitions().items():
+        offers = [dict(**quote(grade, arrow), owned=count(p,grade,arrow),
+            unlocked=p['unlocked_floor'] >= collection.floor_for(grade,0))
+            for grade in collection.GRADES]
+        types.append(dict(**definition, offers=offers))
+    bows = []
+    for iid in p.get('deck', []):
+        item = p['collection'].get(iid)
+        if not item or collection.stats(item)['path'] != 'bow':
+            continue
+        arrow = chosen(p, item)
+        bows.append(dict(id=iid, name=collection.stats(item)['name'], grade=item['grade'],
+            selected=arrow, selected_name=definitions()[arrow]['name'],
+            remaining=count(p,item['grade'],arrow)))
     return dict(stock=deepcopy(p.get('quiver', {})), used=used(p),
-        capacity=collection.catalog()['quiver']['capacity'], choices=deepcopy(p.get('arrow_choice', {})))
+        capacity=collection.catalog()['quiver']['capacity'], choices=deepcopy(p.get('arrow_choice', {})),
+        types=types, bows=bows, finite=True, arrows_per_accepted_shot=1, miss_consumes_arrow=True,
+        replenishment='Buy bundles of20 at the Forge arrow supplies rack. Match the bow grade.',
+        selection='During a group, choose a stocked payload on the bow card for free before shooting.')
 
 
 def scene(p):
