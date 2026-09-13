@@ -123,7 +123,12 @@ _SHARED_RULES = (
     "or after about six actions. The player can ALSO click options "
     "directly on the card — the game advances without you seeing it, so "
     "if their words reference something not in your last scene, call "
-    "ascent_scene to re-sync before choosing."
+    "ascent_scene to re-sync before choosing. The game may have changed "
+    "since earlier chat messages: trust its current scene and sheet. "
+    "When weapon_collection is present, its screen DOES exist: open it "
+    "with ascent_choose(option='collection'); inspect and assign exact "
+    "weapon instances using the returned options. Never deny a feature "
+    "from memory without checking the current scene."
 )
 
 _GUIDE_RULES = (
@@ -343,7 +348,8 @@ class LinearAscentPlugin(LunaPlugin):
                 description=(
                     "Linear Ascent: submit the player's choice for the "
                     "current scene. Pass `option` as the option id OR the "
-                    "number the player typed (e.g. '2'). Some scenes wait "
+                    "number the player typed (e.g. '2'). To open the weapon "
+                    "collection use option collection when its action is present. Some scenes wait "
                     "for a TYPED chat reply instead (marked '⌨ waiting for "
                     "a typed chat reply' — usernames, banner names, "
                     "fees, dues, donation amounts, letters): for those "
@@ -379,7 +385,9 @@ class LinearAscentPlugin(LunaPlugin):
                 name="ascent_character",
                 description=(
                     "Linear Ascent: the player's character sheet — stats, "
-                    "gear, gold, meters, frontier floor. Read-only."),
+                    "gear, weapon collection, gold, meters, frontier floor. Read-only. "
+                    "To OPEN or manage the weapon collection screen, use "
+                    "ascent_choose with option collection; this sheet alone does not open it."),
                 parameters={"type": "object", "properties": {},
                             "required": []},
                 policy="auto_approve", risk_level="low"),

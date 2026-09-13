@@ -248,3 +248,14 @@ def test_old_export_preview_preserves_scalar_hone_and_oil_without_writing():
     item = collection.active(out)
     assert item["legacy"]["hone"] == 6 and item["legacy"]["oil"] == 3
     assert p == before
+
+
+def test_character_tool_receives_the_collection_route_and_exact_copies():
+    from plugin_linear_ascent.sheet import character_sheet
+    p = candidate()
+    item = collection.mint(p, "viper")
+    before = deepcopy(p)
+    sheet = character_sheet(p)
+    assert sheet["weapon_collection"]["open_action"] == "collection"
+    assert item["id"] in {i["id"] for i in sheet["weapon_collection"]["items"]}
+    assert p == before

@@ -30,7 +30,7 @@ def character_sheet(p: dict) -> dict:
     # (capped at three), the only mark prestige leaves on the sheet.
     pts = pstate.prestige(p)
     name = (p["name"] or "") + (" " + "✦" * min(pts, 3) if pts else "")
-    return {
+    result = {
         "name": name, "race": p["race"],
         "level": p["level"], "xp": p["xp"],
         "xp_to_next": (0 if at_cap
@@ -59,3 +59,13 @@ def character_sheet(p: dict) -> dict:
             for u in unlocks.ahead(p, limit=6)],
         "protections_active": unlocks.protections_active(p),
     }
+
+    from .engine import collection
+    if collection.enabled(p):
+        result["weapon_collection"] = collection.payload(p)
+        result["weapon_collection"]["open_action"] = "collection"
+        result["xp_reserve"] = int(p.get("xp_reserve", 0))
+        result["available_xp"] = pstate.xp_total(p)
+        result["holding"] = [collection.stats(p["collection"][iid])["name"]
+                             for iid in p["deck"] if iid]
+    return result
