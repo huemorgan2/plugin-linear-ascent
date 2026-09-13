@@ -56,3 +56,26 @@ def test_local_two_clients_cannot_spend_the_same_scene_twice():
         finally:
             await engine.dispose()
     asyncio.run(run())
+
+
+@pytest.mark.skipif(not os.environ.get("ASCENT_LOCAL_TEST_DATABASE_URL"), reason="Requires isolated local PostgreSQL test database")
+def test_existing_integer_ledger_widens_without_losing_history():
+    from sqlalchemy import text
+    from sqlalchemy.ext.asyncio import create_async_engine
+    from plugin_linear_ascent.plugin import _widen_local_ledger
+    async def run():
+        engine = create_async_engine(os.environ["ASCENT_LOCAL_TEST_DATABASE_URL"])
+        try:
+            async with engine.begin() as conn:
+                schema = "collection_ledger_" + uuid.uuid4().hex
+                await conn.execute(text(f"CREATE SCHEMA {schema}"))
+                await conn.execute(text(f"SET LOCAL search_path TO {schema}"))
+                await conn.execute(text("CREATE TABLE ascent_ledger (gold INTEGER, xp INTEGER)"))
+                await conn.execute(text("INSERT INTO ascent_ledger VALUES (27, 13)"))
+                await conn.run_sync(_widen_local_ledger)
+                await conn.run_sync(_widen_local_ledger)
+                await conn.execute(text("INSERT INTO ascent_ledger VALUES (:n, :n)"), {"n": 2**40})
+                assert (await conn.execute(text("SELECT gold,xp FROM ascent_ledger ORDER BY gold"))).all() == [(27,13),(2**40,2**40)]
+        finally:
+            await engine.dispose()
+    asyncio.run(run())
