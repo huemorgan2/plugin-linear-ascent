@@ -13,7 +13,7 @@ def render(data: dict, art_url, icon) -> str:
         label = f"{item['name']} +{item['level']}" if item else "Choose a weapon"
         action = f"inspect:{iid}" if iid else "collection"
         slots.append(f'<button class="wc-slot" data-opt="{e(action)}"><span>{n}</span>{e(label)}</button>')
-    head = '<div class="wc-deck" aria-label="Three battle weapons">' + ''.join(slots) + '</div>'
+    head = f'<p>Pack {data.get("pack_used", 0)} / {data.get("pack_cap", 6)} · town storage stays in Roothollow</p>' + '<div class="wc-deck" aria-label="Three battle weapons">' + ''.join(slots) + '</div>'
     if not data.get("screen"):
         return '<section class="wc"><button class="wc-link" data-opt="collection">WEAPON COLLECTION</button>' + head + '</section>'
     cards = []
@@ -44,7 +44,7 @@ def render(data: dict, art_url, icon) -> str:
     selected = items.get(data.get("selected"))
     if selected:
         q = selected.get("quote")
-        lines = [selected["description"], f'Received: {selected["source"]}']
+        lines = [selected["description"], f'Received: {selected["source"]}', f'Location: {selected.get("location", "carried")}']
         if q:
             lines += [f'Next: +{q["level"]} · floor {q["floor"]}', f'Gold: {data["gold"]:,} / {q["gold"]:,}']
             lines += [f'{k}: {data["materials"].get(k, 0):,} / {v:,}' for k, v in q["materials"].items()]

@@ -284,6 +284,11 @@ class Scene:
                     and (sl.get("name") or sl.get("slug"))]
             if worn:
                 lines.append("wears: " + ", ".join(worn[:7]))
+        if self.workshop:
+            for item in self.workshop.get("items", []):
+                lines.append(f"{item['name']} {item['grade']} +{item['level']} · "
+                    f"ATK {item['attack']} · condition {item['maximum']} · {item['effect']}")
+                lines.append(item["description"])
         if self.collection:
             c = self.collection
             owned = {i["id"]: i for i in c.get("items", [])}
@@ -410,6 +415,7 @@ class Scene:
         return ("\n".join(lines)
                 .replace("⚡", "energy").replace("🔒", "locked"))
 
+    workshop: dict | None = None
     collection: dict | None = None
     group: dict | None = None
     expedition: dict | None = None
@@ -421,6 +427,7 @@ class Scene:
             "headline": self.headline,
             "support": self.support,
             "shard_note": self.shard_note,
+            "workshop": self.workshop,
             "collection": self.collection,
             "group": self.group,
             "expedition": self.expedition,
@@ -528,6 +535,7 @@ class Scene:
             paper=(dict(d["paper"]) if d.get("paper") else None),
             strip=(dict(d["strip"]) if d.get("strip") else None),
             enemy=(dict(d["enemy"]) if d.get("enemy") else None),
+            workshop=deepcopy(d.get("workshop")),
             collection=deepcopy(d.get("collection")),
             group=deepcopy(d.get("group")),
             expedition=deepcopy(d.get("expedition")),

@@ -80,7 +80,8 @@ def pack_cap(p: dict) -> int:
 
 
 def pack_used(p: dict) -> int:
-    return sum(1 for n in (p.get("inventory") or {}).values() if n > 0)
+    from . import collection
+    return sum(1 for n in (p.get("inventory") or {}).values() if n > 0) + (collection.carried_count(p) if collection.enabled(p) else 0)
 
 
 def pack_can_take(p: dict, slug: str) -> bool:
@@ -257,6 +258,15 @@ def _pack_strip(p: dict) -> list[dict]:
                 cell["dur_left"] = economy.endurance(g, left)
                 cell["dur_max"] = economy.endurance(g)
         strip.append(cell)
+    if p.get("ruleset") == "collection-v1":
+        from . import collection
+        for iid, item in p["collection"].items():
+            if iid in p["deck"] or item.get("location", "carried") != "carried":
+                continue
+            info = collection.stats(item)
+            strip.append(dict(slug="instance:" + iid, instance_id=iid, kind="weapon", count=1,
+                name=info["name"] + f" +{item['level']}", stat_name="ATK", stat_val=info["attack"],
+                dur=item["durability"]/item["maximum"], dur_left=item["durability"], dur_max=item["maximum"]))
     return strip
 
 
@@ -419,6 +429,11 @@ def pack_actions(p: dict, slug: str) -> tuple[list[Option], str]:
     it did not already validate."""
     if p.get("stage") != "playing":
         return [], ""
+    if slug.startswith("instance:") and p.get("ruleset") == "collection-v1":
+        iid = slug.partition(":")[2]
+        if iid in p["collection"]:
+            return [Option("inspect:" + iid, "View weapon", "collection, condition and upgrades")], ""
+        return [], "That weapon is no longer in your pack"
     inv = p.get("inventory") or {}
     have = int(inv.get(slug, 0))
     fighting = bool(p.get("encounter"))
@@ -667,6 +682,8 @@ def _pack_use(p: dict, oid: str) -> Scene | None:
 def current_scene(p: dict) -> Scene:
     state.ensure_current(p)
     state.touch_daily(p)
+    if p.get("group"):
+        return _stamp(p, _build_scene(p))
     ev = _pop_pending_event(p)
     if ev is not None:
         return _stamp(p, ev)
@@ -695,6 +712,20 @@ def apply_choice(p: dict, option_id: str, text: str = "", *, expected_scene: str
     handled = collection.handle(p, option_id)
     if handled is not None:
         return _stamp(p, handled)
+
+    if collection.enabled(p):
+        from . import groups
+        handled = groups.handle(p, option_id)
+        if handled is not None:
+            return _stamp(p, handled)
+        from . import gathering
+        handled = gathering.handle(p, option_id)
+        if handled is not None:
+            return _stamp(p, handled)
+        from . import workshop
+        handled = workshop.handle(p, option_id)
+        if handled is not None:
+            return _stamp(p, handled)
 
     if p["stage"] == "creation_name" and text and not option_id:
         return _stamp(p, _creation_set_name(p, text))
@@ -1073,6 +1104,18 @@ def _build_scene(p: dict) -> Scene:
     if p.get("collection_view") and p.get("ruleset") == "collection-v1":
         from . import collection
         return collection.scene(p)
+    if p.get("group"):
+        from . import groups
+        return groups.scene(p)
+    if p.get("group_result"):
+        from . import groups
+        return groups.result_scene(p)
+    if p.get("location") == "gathering" and p.get("ruleset") == "collection-v1":
+        from . import gathering
+        return gathering.scene(p)
+    if p.get("workshop_view") and p.get("ruleset") == "collection-v1":
+        from . import workshop
+        return workshop.scene(p)
     if p["stage"] == "intro":
         return _intro_scene(p)
     if p["stage"] == "creation_race":
@@ -1427,6 +1470,8 @@ def _creation_set_name(p: dict, text: str) -> Scene:
 def _creation_welcome(p: dict) -> Scene:
     p["stage"] = "playing"
     p["location"] = "town"
+    from . import collection
+    collection.sync(p)
     s = _town_scene(p)
     s.headline = f"Welcome to Roothollow, {p['name']}"
     s.support = ("Tarps over titanium, a plasma forge next to a horse "
@@ -1434,6 +1479,10 @@ def _creation_welcome(p: dict) -> Scene:
     s.shard_note = ("We carry ◈ 50 and a rusted shiv — the Forge's cheapest "
                     "real blade wants ◈ 250. The tower gate first: hunt "
                     "floor 1 until steel is affordable.")
+    if collection.enabled(p):
+        s.shard_note = ("Three weapons for the climb: a blade, a bow and a staff. "
+                        "Choose your collection before hunting. Every enemy costs one energy; "
+                        "defeat the whole group to bring its haul home.")
     return s
 
 
@@ -1853,8 +1902,14 @@ def _forge_scene(p: dict) -> Scene:
     # Staves and focuses still live at the Arcanum.
     nod = ("Buy whatever you need for archery and swordsmanship — "
            "magic weapons are sold at the Arcanum, across the square.")
-    _rack(p, economy.weapon_line("warrior"), opts, lines)
-    _rack(p, economy.weapon_line("archer"), opts, lines)
+    candidate = p.get("ruleset") == "collection-v1"
+    if candidate:
+        nod = "Choose weapons here, upgrade owned weapons in your collection, or mend your armor."
+        opts.extend([Option("weapon_shop", "Weapon catalog", "16 families · four grades"),
+                     Option("forge_collection", "Upgrade or repair owned weapons")])
+    else:
+        _rack(p, economy.weapon_line("warrior"), opts, lines)
+        _rack(p, economy.weapon_line("archer"), opts, lines)
     _rack(p, economy.gear_rungs("shield"), opts, lines)
     _rack(p, economy.gear_rungs("armor"), opts, lines)
     _rack(p, economy.gear_rungs("shoes"), opts, lines)
@@ -1862,7 +1917,7 @@ def _forge_scene(p: dict) -> Scene:
     # a flat coin buys a second path's first weapon. 049: they wear
     # like any steel now, but are never lost and mend for a coin.
     owned = set(combat._held_slugs(p)) | set(p.get("inventory") or {})
-    for slug in ("basic_bow", "worn_staff"):
+    for slug in (() if candidate else ("basic_bow", "worn_staff")):
         if slug in owned:
             continue
         g = economy.FORGE[slug]
@@ -1883,6 +1938,8 @@ def _forge_scene(p: dict) -> Scene:
     # resolves gear slugs to the same glyph the shop rows use)
     mend_art: dict[str, str] = {}
     for slot in economy.HONE_SLOTS:
+        if candidate and slot == "weapon" and not (p.get("collection", {}).get(p.get("active_weapon"), {}).get("legacy")):
+            continue
         slug = p["gear"].get(slot)
         lvl = state.hone_level(p, slot)
         if slug and lvl < cap:
@@ -1896,6 +1953,8 @@ def _forge_scene(p: dict) -> Scene:
     # token finally spends where its name promised.
     tokens = p["inventory"].get("repair_token", 0)
     for slot in economy.DURABILITY_SLOTS:
+        if candidate and slot == "weapon" and not (p.get("collection", {}).get(p.get("active_weapon"), {}).get("legacy")):
+            continue
         g = economy.FORGE.get(p["gear"].get(slot) or "")
         left = (p.get("durability") or {}).get(slot)
         if not g or not economy.wears(g) or left is None:
@@ -1964,7 +2023,7 @@ def _forge_scene(p: dict) -> Scene:
     ]
     return Scene(
         eyebrow="ROOTHOLLOW · THE FORGE",
-        headline=f"Tier {tier} steel, scrap to plasma",
+        headline="Weapons, armor and repairs" if candidate else f"Tier {tier} steel, scrap to plasma",
         shard_note=nod,
         body_lines=legend,
         options=opts,
@@ -2100,6 +2159,8 @@ def _gear_purchase(p: dict, g, scene_fn) -> Scene:
             result = scene_fn(p)
             result.refusal = "Finish the fight or expedition before buying weapons"
             return result
+        if pack_used(p) >= pack_cap(p):
+            return _pack_full(p, scene_fn, "new weapon")
         item = collection.receive_legacy(p, g.slug, fresh=True)
         p["gold"] -= price
         combat._ledger(p, "buy", gold=-price, note=g.slug)
@@ -2329,6 +2390,8 @@ def _basic_buy(p: dict, slug: str, scene_fn) -> Scene:
             result = scene_fn(p)
             result.refusal = "Finish the fight first" if collection.locked(p) else f"You need {price} gold"
             return result
+        if pack_used(p) >= pack_cap(p):
+            return _pack_full(p, scene_fn, "new weapon")
         item = collection.receive_legacy(p, slug, fresh=True)
         p["gold"] -= price
         combat._ledger(p, "buy", gold=-price, note=slug)
@@ -2458,7 +2521,10 @@ def _arcanum_scene(p: dict) -> Scene:
     opts, lines = [], []
     # 048: star-charts for every hand — the full staff line and the
     # focuses at list price; the trained rank is the only gate.
-    _rack(p, economy.weapon_line("sorcerer"), opts, lines)
+    if p.get("ruleset") == "collection-v1":
+        opts.append(Option("weapon_shop", "Weapon collection at the Forge", "Staves, bows and blades · four grades"))
+    else:
+        _rack(p, economy.weapon_line("sorcerer"), opts, lines)
     _rack(p, economy.gear_rungs("shield", "sorcerer"), opts, lines)
     _relic_rows(p, "arcanum", opts, lines)    # 006: the magic relics
     opts.append(Option("back", "Back to the square"))
@@ -3643,12 +3709,18 @@ def _gate_town_options(p: dict, fl) -> list[Option]:
     # 065: the wound bill — priced for THIS wound, on the row
     heal_price = economy.healer_tent_price(fl.floor, p["hp"],
                                            state.max_hp(p))
-    opts = [Option("hunt", "Hunt the wilds", "1 ⚡")]
+    candidate = p.get("ruleset") == "collection-v1"
+    opts = [Option("hunt", "Hunt a monster group" if candidate else "Hunt the wilds",
+                   "1 energy per enemy when it begins" if candidate else "1 ⚡")]
     # 039 §2: from floor 4 the wilds have a dangerous end — an informed
     # opt-in, priced on the row before the click.
     if fl.floor >= economy.DEEP_HUNT_MIN_FLOOR:
         opts.append(Option("hunt_deep", "Hunt deep — off the lit paths",
-                           f"{economy.COST_WILDS_DEEP} ⚡ · harder, richer"))
+                           ("1 energy per enemy · better material and weapon drops" if candidate else f"{economy.COST_WILDS_DEEP} ⚡ · harder, richer")))
+    if candidate:
+        from . import gathering
+        for key, site in gathering.sites_at(fl.floor).items():
+            opts.append(Option("gather_site:" + key, site["name"], "Collect " + site["material"] + " · " + site["tool_name"] + " required"))
     if _live_flare(p):
         opts.insert(0, Option("answer_flare", "Answer the flare",
                               "1 ⚡ · run toward the light"))
@@ -4077,6 +4149,13 @@ def _gate_town_action(p: dict, oid: str) -> Scene:
                      f"from {fw.get('name', 'a climber')} to you — "
                      "the rescuer's round.")
         return s
+    if p.get("ruleset") == "collection-v1" and oid in ("hunt", "hunt_deep"):
+        from . import groups
+        if oid == "hunt_deep" and fl.floor < economy.DEEP_HUNT_MIN_FLOOR:
+            result = _gate_town_scene(p)
+            result.refusal = "Deep hunting opens on floor4"
+            return result
+        return groups.open_group(p, deep=oid == "hunt_deep")
     if oid == "hunt":
         if not state.spend_energy(p, economy.COST_WILDS_FIGHT):
             s = _gate_town_scene(p)

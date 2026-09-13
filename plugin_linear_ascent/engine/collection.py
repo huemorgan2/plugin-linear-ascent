@@ -89,7 +89,7 @@ def mint(p: dict, family: str, grade: str = "Common", source: str = "craft",
         raise ValueError("Weapon sequence would overwrite ownership")
     item = dict(id=iid, family=family, grade=grade,
                 level=settings[key + "Level"], source=source,
-                provenance={"receipt": receipt, "owner": p["luna_user"]})
+                provenance={"receipt": receipt, "owner": p["luna_user"]}, location="carried")
     maximum = stats(item)["maximum"]
     item.update(durability=math.ceil(maximum * settings[key + "DurabilityPct"] / 100),
                 maximum=maximum)
@@ -116,9 +116,48 @@ def reconcile(p: dict) -> dict:
     for iid, item in owned.items():
         if iid != item.get("id") or not 0 <= item.get("level", -1) <= 20:
             errors.append("Invalid weapon identity or level")
+        if item.get("location", "carried") not in ("carried", "storage", "claim"):
+            errors.append("Invalid weapon storage location")
+        if iid in ids and item.get("location", "carried") != "carried":
+            errors.append("Selected weapon is not carried")
         if not 0 <= item.get("durability", -1) <= item.get("maximum", -1):
             errors.append("Invalid weapon condition")
     return dict(ok=not errors, errors=errors, owned=len(owned), selected=len(ids))
+
+
+def carried_count(p: dict) -> int:
+    return sum(iid not in p.get("deck", []) and item.get("location", "carried") == "carried"
+               for iid, item in p.get("collection", {}).items())
+
+
+def claims(p: dict) -> list[str]:
+    return [iid for iid, item in p.get("collection", {}).items() if item.get("location") == "claim"]
+
+
+def at_storage(p: dict) -> bool:
+    return p.get("location") in ("town", "forge", "arcanum", "pawn") and not locked(p)
+
+
+def move_item(p: dict, iid: str, destination: str) -> None:
+    from .core import pack_used, pack_cap
+    if locked(p) or iid not in p["collection"]:
+        raise ValueError("Finish the fight before moving owned weapons")
+    item = p["collection"][iid]
+    if destination == "storage":
+        if not at_storage(p):
+            raise ValueError("Town storage is in Roothollow; return there first")
+        p["deck"] = [None if x == iid else x for x in p["deck"]]
+        if p.get("active_weapon") == iid:
+            p["active_weapon"] = next((x for x in p["deck"] if x), None)
+    elif destination == "carried":
+        if item.get("location") == "storage" and not at_storage(p):
+            raise ValueError("Return to Roothollow to retrieve this weapon")
+        if item.get("location", "carried") != "carried" and pack_used(p) >= pack_cap(p):
+            raise ValueError("Your pack is full. Equip a weapon or make room first")
+    else:
+        raise ValueError("Unknown weapon destination")
+    item["location"] = destination
+    project_legacy(p)
 
 
 def set_slot(p: dict, cell: int, iid: str | None) -> None:
@@ -134,6 +173,18 @@ def set_slot(p: dict, cell: int, iid: str | None) -> None:
         item = p["collection"][iid]
         if not item.get("legacy") and p.get("unlocked_floor", 1) < floor_for(item["grade"], 0):
             raise ValueError(f"{item['grade']} weapons open on floor {floor_for(item['grade'], 0)}")
+    if p["deck"][cell] == iid:
+        return
+    from .core import pack_used, pack_cap
+    old = p["deck"][cell]
+    incoming = p["collection"].get(iid) if iid else None
+    if incoming and incoming.get("location") == "storage" and not at_storage(p):
+        raise ValueError("Retrieve this weapon from Roothollow storage first")
+    additional = int(bool(old)) - int(bool(incoming and incoming.get("location", "carried") == "carried"))
+    if additional > 0 and pack_used(p) + additional > pack_cap(p):
+        raise ValueError("Your pack has no room for the weapon leaving this slot")
+    if incoming:
+        incoming["location"] = "carried"
     p["deck"][cell] = iid
     if p.get("active_weapon") not in p["deck"]:
         p["active_weapon"] = next((x for x in p["deck"] if x), None)
@@ -215,9 +266,28 @@ def migrate(p: dict, slot_receipts: list[dict] | None = None) -> dict:
     p["collection_migration"] = receipt
     p.setdefault("_ledger", []).append(dict(kind="slot_refund", gold=refund["gold"],
                                             xp=refund["xp"], note=RULESET))
+    if p.get("born_ruleset") == RULESET:
+        starter_deck(p)
     if not reconcile(p)["ok"]:
         raise ValueError("Collection migration failed ownership reconciliation")
     return receipt
+
+
+def starter_deck(p: dict) -> None:
+    """New-character kit; never rewrites an established player's equipment."""
+    if p.get("starter_deck_received"):
+        return
+    lead = active(p)
+    if lead and lead.get("legacy"):
+        lead.pop("legacy")
+        lead.update(family="breach", grade="Common", level=0, source="starter")
+        lead["maximum"] = lead["durability"] = stats(lead)["maximum"]
+    else:
+        lead = mint(p, "breach", source="starter", receipt="starter:blade")
+    bow = mint(p, "hawkeye", source="starter", receipt="starter:bow")
+    staff = mint(p, "ember", source="starter", receipt="starter:staff")
+    p.update(deck=[lead["id"], bow["id"], staff["id"]], active_weapon=lead["id"], starter_deck_received=True)
+    project_legacy(p)
 
 
 def preview(p: dict, slot_receipts: list[dict] | None = None) -> dict:
@@ -260,7 +330,7 @@ def sync(p: dict) -> None:
         import_legacy_stock(p)
         project_legacy(p)
         return
-    if enrollment_open():
+    if enrollment_open() or p.get("born_ruleset") == RULESET:
         migrate(p)
 
 
@@ -271,7 +341,12 @@ def active(p: dict) -> dict | None:
 def project_legacy(p: dict) -> None:
     """Compatibility pointers, never a second ownership container."""
     items = [p["collection"][i] for i in p["deck"] if i]
-    p["held"] = [i["legacy"]["slug"] for i in items if i.get("legacy")]
+    def art_slug(item):
+        if item.get("legacy"):
+            return item["legacy"]["slug"]
+        art = families()[item["family"]]["artByGrade"][item["grade"]]
+        return art.get("slug") or {"blade":"rusted_sword", "bow":"basic_bow", "staff":"worn_staff"}[stats(item)["path"]]
+    p["held"] = [art_slug(i) for i in items]
     lead = active(p)
     if lead and lead.get("legacy"):
         from . import state
@@ -280,6 +355,11 @@ def project_legacy(p: dict) -> None:
         state.set_hone(p, "weapon", lead["legacy"]["hone"], slug)
         p.setdefault("oil", {})[slug] = lead["legacy"]["oil"]
         p.setdefault("durability", {})["weapon"] = lead["durability"]
+    if lead and not lead.get("legacy"):
+        p["gear"]["weapon"] = art_slug(lead)
+        p.setdefault("durability", {})["weapon"] = lead["durability"]
+    if not lead:
+        p["gear"]["weapon"] = None
     for item in items:
         if item.get("legacy") and item is not lead:
             p.setdefault("durability_pack", {})[item["legacy"]["slug"]] = item["durability"]
@@ -336,7 +416,7 @@ def card(p: dict, item: dict) -> dict:
         image = f"weapons/large/{art['slug']}_100x160.png"
     quote = upgrade_quote(item)
     return {**{k: item[k] for k in ("id", "family", "grade", "level", "durability", "maximum", "source")},
-            **info, "image": image, "effect": "Original honing retained" if item.get("legacy") else family["effect"],
+            **info, "location": item.get("location", "carried"), "image": image, "effect": "Original honing retained" if item.get("legacy") else family["effect"],
             "description": family["description"], "quote": quote,
             "can_afford": bool(quote and p["gold"] >= quote["gold"] and all(
                 p.get("materials", {}).get(k, 0) >= n for k, n in quote["materials"].items())),
@@ -345,7 +425,8 @@ def card(p: dict, item: dict) -> dict:
 
 
 def payload(p: dict) -> dict:
-    return dict(deck=list(p["deck"]), items=[card(p, i) for i in p["collection"].values()],
+    from .core import pack_used, pack_cap
+    return dict(pack_used=pack_used(p), pack_cap=pack_cap(p), claims=claims(p), deck=list(p["deck"]), items=[card(p, i) for i in p["collection"].values()],
                 locked=locked(p), materials=dict(p.get("materials", {})),
                 gold=p["gold"], xp_reserve=p.get("xp_reserve", 0),
                 selected=p.get("collection_selected"), screen=bool(p.get("collection_view")))
@@ -362,6 +443,22 @@ def scene(p: dict):
             opts.append(Option(f"deck:{cell}:{selected}", f"Set in weapon slot {cell + 1}"))
         if selected in p["deck"]:
             opts.append(Option(f"unslot:{p['deck'].index(selected)}", "Return to collection"))
+        if item.get("location", "carried") != "carried":
+            opts.append(Option("take:" + selected, "Take into your pack"))
+        if at_storage(p):
+            opts.append(Option("store:" + selected, "Leave in town storage"))
+        from . import workshop
+        if p.get("location") == "forge":
+            q = upgrade_quote(item)
+            if q:
+                opts.append(Option("upgrade:" + selected, f"Upgrade to +{q['level']}", f"{q['gold']:,} gold and materials"))
+            cost = workshop.repair_quote(item)
+            if cost:
+                opts.append(Option("mend:" + selected, "Repair weapon", f"{cost:,} gold"))
+                if item["source"] == "starter" and item["grade"] == "Common":
+                    opts.append(Option("practice:" + selected, "Repair at the practice bench", "1 energy · no gold"))
+        else:
+            opts.append(Option("forge_collection", "Upgrade in the Forge", "Travel to Roothollow"))
     opts.append(Option("collection_back", "Back"))
     for item in p["collection"].values():
         info = stats(item)
@@ -395,6 +492,14 @@ def handle(p: dict, oid: str):
         return None
     if not p.get("collection_view"):
         return None
+    if oid.startswith(("store:", "take:")):
+        try:
+            move_item(p, oid.partition(":")[2], "storage" if oid.startswith("store:") else "carried")
+        except ValueError as exc:
+            result = scene(p)
+            result.refusal = str(exc)
+            return result
+        return scene(p)
     if oid.startswith(("deck:", "unslot:")):
         try:
             parts = oid.split(":")

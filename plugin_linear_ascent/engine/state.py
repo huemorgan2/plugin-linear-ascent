@@ -36,7 +36,7 @@ def world_day_f(at: dt.datetime | None = None) -> float:
 
 def new_player(luna_user: str) -> dict:
     ts = now().isoformat()
-    return {
+    player = {
         "version": 11,
         "luna_user": luna_user,
         "stage": "intro",              # intro → creation_race → creation_name → playing
@@ -90,6 +90,11 @@ def new_player(luna_user: str) -> dict:
         # 067: Labs — experimental features, off until switched on
         "labs": {},
     }
+    from . import collection
+    if collection.enrollment_open():
+        player["born_ruleset"] = collection.RULESET
+    return player
+
 
 
 # ── Meters (lazy regen) ──────────────────────────────────────────────────
@@ -662,6 +667,13 @@ def oil_left(p: dict, slug: str | None = None) -> int:
 
 
 def gear_bonus(p: dict, slot: str) -> int:
+    if slot == "weapon" and p.get("ruleset") == "collection-v1":
+        from . import collection
+        item = collection.active(p)
+        if item and not item.get("legacy"):
+            return collection.stats(item)["attack"] if item["durability"] > 0 else 0
+        if not item:
+            return 0
     slug = p["gear"].get(slot)
     if not slug:
         # a doc can never be bare-handed again: an empty weapon slot

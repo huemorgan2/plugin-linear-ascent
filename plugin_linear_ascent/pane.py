@@ -466,6 +466,15 @@ function showScene(d, quiet) {
   sceneId = d.scene_id || '';
   fast = false;             // 041: every fresh card starts at ink speed
   game.innerHTML = d.fragment;
+  // Resolved event IDs survive retries/reconnects without replaying old hits.
+  let seenHits = [];
+  try { seenHits = JSON.parse(sessionStorage.getItem('ascent-combat-events') || '[]'); } catch (_) {}
+  game.querySelectorAll('[data-combat-event]').forEach(el => {
+    const id = el.dataset.combatEvent;
+    if (!seenHits.includes(id)) { el.classList.add('play'); seenHits.push(id); }
+  });
+  try { sessionStorage.setItem('ascent-combat-events', JSON.stringify(seenHits.slice(-200))); } catch (_) {}
+
   // 076: an arrival card marked data-lift rides the elevator — but only
   // when the card came from an act; boot loads and peek re-syncs pass
   // quiet so a reload never replays the ride.

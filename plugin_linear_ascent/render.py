@@ -2592,6 +2592,7 @@ def render_scene_fragment(scene: Scene) -> str:
     # band with the HUD in it; the website's arena3d layer paints the 3D
     # into it. The opener keeps the creature's close-up (roy: first the
     # image, the 3D after the first strike).
+    group_live = bool(scene.group and scene.group.get("members"))
     ar = getattr(scene, "arena", None)
     arena_live = bool(ar) and ar.get("phase") not in ("opener",)
     # 067 phase 8 (roy): the icon tiles exist ONLY in the fight itself.
@@ -2683,7 +2684,7 @@ def render_scene_fragment(scene: Scene) -> str:
     if not (arena_live and scene.enemy) and not opener_card and not map_frag:
         parts.append(f'<div class="headline type" style="color:{hl_col}">'
                      f"{_ep(scene.headline)}{hl_info}</div>")
-    if scene.enemy and not arena_live and not opener_card:
+    if scene.enemy and not arena_live and not opener_card and not group_live:
         parts.append(_enemy_head_html(scene.enemy))
     # 081: the at-a-glance type block — opener cards only (the engine
     # ships foe_sheet on the encounter card and never on round cards).
@@ -2692,14 +2693,21 @@ def render_scene_fragment(scene: Scene) -> str:
         parts.append(_foesheet_html(fs))
     if scene.support and not map_frag:
         parts.append(f'<div class="support type">{_ep(scene.support)}</div>')
-    if scene.collection:
+    if scene.collection or scene.group or scene.workshop:
         from . import collection_view
         def collection_art(relative):
             path = os.path.realpath(os.path.join(_ART_ROOT, relative))
             if not path.startswith(os.path.realpath(_ART_ROOT) + os.sep) or not os.path.isfile(path):
                 return None
             return _art_url(path, "png")
-        parts.append(collection_view.render(scene.collection, collection_art, _ticon))
+        if scene.workshop:
+            from . import workshop_view
+            parts.append(workshop_view.render(scene.workshop, scene.options, collection_art, _ticon))
+        elif group_live:
+            from . import group_view
+            parts.append(group_view.render(scene.group, scene.collection, scene.options, collection_art, _ticon))
+        elif scene.collection:
+            parts.append(collection_view.render(scene.collection, collection_art, _ticon))
     # 072: another climber's public sheet — on top, before the words.
     av = getattr(scene, "avatar", None)
     if av:
@@ -2728,7 +2736,7 @@ def render_scene_fragment(scene: Scene) -> str:
     in_callout = False
     has_tally = bool(getattr(scene, "tally", None))
     arena_note = (ar or {}).get("note") if arena_live else ""
-    for line in ([] if map_frag else scene.body_lines):
+    for line in ([] if map_frag or group_live else scene.body_lines):
         if has_tally and _TALLY_SAID.match(line):
             continue
         if arena_note and line == arena_note:
@@ -2794,7 +2802,7 @@ def render_scene_fragment(scene: Scene) -> str:
     if getattr(scene, "ask", None):
         parts.append(_ask_html(scene.ask))
 
-    if scene.options and arena_round:
+    if scene.options and (arena_round or group_live or scene.workshop):
         pass    # 067 phase 8: the round's tiles already sit under the stage
     elif scene.options:
         # 031 §14: grid mode — a scene may ask for a card wall instead of
@@ -3860,3 +3868,9 @@ def render_scene(scene: Scene) -> str:
             f"body{{padding:8px;}}{SCENE_CSS}</style></head>"
             f'<body data-scene="{_e(scene.scene_id)}">'
             f"{render_scene_fragment(scene)}{_SCRIPT}</body></html>")
+
+from .group_view import CSS as _GROUP_CSS
+SCENE_CSS += _GROUP_CSS
+
+from .workshop_view import CSS as _WORKSHOP_CSS
+SCENE_CSS += _WORKSHOP_CSS

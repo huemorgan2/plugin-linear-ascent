@@ -26,3 +26,9 @@ Use the parent phase plans for exact commands and evidence locations. Run target
 ## Execution status
 
 Phase1 in progress. Planning committed before source alignment. Phases2–8 not started.
+
+## Implementation checkpoint —13 September2026
+
+Parent plan015 phases1–2 reached the essential state/collection browser gate; phase3 is in progress. Candidate0.114.0 adds the actual group resolver, native starter deck, material/source-aware Forge, two named floor3 gathering sites, shared Scene/pane visuals, and persistent weapon recovery. The parent phase3 contract records exact semantics and rollback. Candidate enrollment remains disabled in production.
+
+Before this checkpoint:39 focused collection/group/Forge/gathering/style tests passed;8 worldd action tests and4 local PostgreSQL backend tests passed; the simulator suite passed60 tests. The first plugin-wide run had1478 passes and10 failures:8 known legacy failures and2 newly exposed CSS stripe failures. The stripe was removed and both checks now pass. Full-suite follow-up and real browser/Luna play remain required. This checkpoint is not a phase-complete or release claim.
