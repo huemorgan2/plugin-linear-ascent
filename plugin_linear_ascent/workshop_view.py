@@ -8,7 +8,7 @@ def render(data, options, art_url, icon):
     indexed={o.id:(n,o) for n,o in enumerate(options,1)}
     def button(oid,label=None,cls=''):
         n,o=indexed[oid]
-        return (f'<button class="ws-action {cls}" data-opt="{e(oid)}" aria-disabled="{str(o.locked).lower()}">'
+        return (f'<button class="ws-action {cls}" data-opt="{e(oid)}" data-choice="{n}" aria-disabled="{str(o.locked).lower()}">'
             f'[{n}] {e(label or o.label)}<span>{e(o.hint)}</span></button>')
     grades=[]
     for grade,color in COLORS.items():

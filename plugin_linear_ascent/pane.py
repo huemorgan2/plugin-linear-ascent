@@ -756,9 +756,10 @@ document.addEventListener('keydown', (e) => {
   const tag = (document.activeElement || {}).tagName;
   if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
   if (e.key.length !== 1 || e.key < '1' || e.key > '9') return;
-  const btns = [...game.querySelectorAll('button.opt, button.mk')]
+  const btns = [...game.querySelectorAll('button.opt, button.mk, button[data-choice]')]
     .filter(b => !b.disabled && b.offsetParent !== null);
   const num = (b) => {
+    if (b.dataset.choice) return Number(b.dataset.choice);
     const k = b.querySelector('.key, .mknum');
     return k ? parseInt(k.textContent.replace(/\D/g, ''), 10) : NaN;
   };

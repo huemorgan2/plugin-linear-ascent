@@ -924,10 +924,18 @@ _TIP_FACTION = ("Your faction. Go to the Guildhall on Roothollow main "
                 "armory and your kin.")
 
 
-def _meters_html(m: Meters) -> str:
+def _meters_html(m: Meters, *, candidate=False) -> str:
     """The rail. 027: every number carries data-m/data-v/data-max so the
     pane can COUNT it to its new value instead of blinking — a 25-point
     heal should be felt as twenty-five, not as an arithmetic result."""
+    hp_tip = ('HP — health. Defeat can cost carried gold and equipment condition. '
+              'The daily rescue leaves one HP. Bank, stored weapons and secured materials stay safe.') if candidate else _TIP_HP
+    en_tip = ('Energy — one per enemy when its first action begins, and one per gathering attempt. '
+              'Previewing a group is free. Warden costs are shown on their actions. '
+              'One energy regenerates every45 minutes while awake.') if candidate else _TIP_EN
+    xp_tip = ('XP — earned immediately for each kill, even if the group later defeats you. '
+              'XP beyond the level bar is saved. Spend available XP at the School or buy a level at the Guildhall. '
+              f'Saved beyond the bar: {m.xp_reserve}. Native weapon upgrades use gold and materials at the Forge.') if candidate else _TIP_XP
     low = " low" if m.hp * 10 <= m.hp_max * 3 else ""
 
     def val(key: str, cur: int, cap: int | None = None) -> str:
@@ -937,26 +945,28 @@ def _meters_html(m: Meters) -> str:
 
     return (
         f'<div class="rail later">'
-        f'<span class="meter hp{low}" data-tip="{_e(_TIP_HP)}">'
+        f'<span class="meter hp{low}" data-tip="{_e(hp_tip)}">'
         f"<span>HP {val('hp', m.hp, m.hp_max)}/{m.hp_max}</span>"
         f'<span class="blocks" data-bar="hp" aria-hidden="true">'
         f"{_blocks(m.hp, m.hp_max)}</span></span>"
-        f'<span class="meter en" data-tip="{_e(_TIP_EN)}">'
+        f'<span class="meter en" data-tip="{_e(en_tip)}">'
         f"<span>{_eglyph('bolt')} {val('en', m.energy, m.energy_max)}/"
         f"{m.energy_max}</span>"
         f'<span class="blocks" data-bar="en" aria-hidden="true">'
         f"{_blocks(m.energy, m.energy_max)}</span></span>"
-        f'<span class="meter ae" data-tip="{_e(_TIP_XP)}">'
+        f'<span class="meter ae" data-tip="{_e(xp_tip)}">'
         f"<span>XP {val('xp', m.xp, m.xp_need)}/{m.xp_need:,}</span>"
         f'<span class="blocks" data-bar="xp" aria-hidden="true">'
         f"{_blocks(m.xp, m.xp_need)}</span></span>"
         f"</div>")
 
 
-def _ident_html(m: Meters) -> str:
+def _ident_html(m: Meters, *, candidate=False) -> str:
     """031 §4: who is climbing, said once and plainly — name and calling
     top-left, LEVEL and COINS in bold top-right. Gold's live counter
     (data-m) moved here from the rail; there is exactly one on the card."""
+    gold_tip = ('Carried gold — available for purchases, at risk on defeat. '
+                'Vault savings are protected and earn5% per day; collect interest to compound it.') if candidate else _TIP_GOLD
     who = " ".join(x for x in (m.race, m.clazz) if x)
     left = (f'<span class="idname">{_e(m.name)}</span>'
             + (f'<span class="idwho">{_e(who)}</span>' if who else ""))
@@ -968,7 +978,7 @@ def _ident_html(m: Meters) -> str:
             f"{m.gold:,}</span>")
     right = (f'<span class="idlv" data-tip="{_e(_TIP_LV)}">'
              f"LEVEL {m.level}</span>"
-             f'<span class="idgold" data-tip="{_e(_TIP_GOLD)}">'
+             f'<span class="idgold" data-tip="{_e(gold_tip)}">'
              f'COINS {_eglyph("coin")} {gold}</span>')
     return (f'<div class="ident later"><span class="idl">{left}</span>'
             f'<span class="idr">{right}</span></div>')
@@ -1110,7 +1120,7 @@ def _pip_row(key: str, label: str, stat: int, tint: str, tip: str,
 
 def _profile_html(scene: Scene) -> str:
     m = scene.meters
-    right = _meters_html(m)
+    right = _meters_html(m, candidate=bool(scene.collection))
     # 081: the level-1 explainer — what a level costs and where it's
     # bought, LIVE numbers (never folklore copy). The client hides it
     # for good once ✕'d (la_tip_levelup); the server stops emitting it
@@ -1133,7 +1143,7 @@ def _profile_html(scene: Scene) -> str:
                              _TIP_DEF)
                   + spd_row
                   + "</div>")
-    ident = _ident_html(m)
+    ident = _ident_html(m, candidate=bool(scene.collection))
     # 069: the pack rides UNDER the profile block, full width — the gear
     # map (slots either side of the portrait) takes the left, the meters
     # and pip rows the right.
@@ -1276,15 +1286,15 @@ def player_avatar_html(sheet: dict) -> str:
     low = " low" if hp * 10 <= hp_max * 3 else ""
     meters = (
         f'<div class="rail later">'
-        f'<span class="meter hp{low}" data-tip="{_e(_TIP_HP)}">'
+        f'<span class="meter hp{low}" data-tip="{_e(hp_tip)}">'
         f"<span>HP {hp:,}/{hp_max}</span>"
         f'<span class="blocks" aria-hidden="true">'
         f"{_blocks(hp, hp_max)}</span></span>"
-        f'<span class="meter en" data-tip="{_e(_TIP_EN)}">'
+        f'<span class="meter en" data-tip="{_e(en_tip)}">'
         f"<span>{_eglyph('bolt')} {energy:,}/{energy_max}</span>"
         f'<span class="blocks" aria-hidden="true">'
         f"{_blocks(energy, energy_max)}</span></span>"
-        f'<span class="meter ae" data-tip="{_e(_TIP_XP)}">'
+        f'<span class="meter ae" data-tip="{_e(xp_tip)}">'
         f"<span>XP {xp:,}/{xp_need:,}</span>"
         f'<span class="blocks" aria-hidden="true">'
         f"{_blocks(xp, xp_need)}</span></span>"

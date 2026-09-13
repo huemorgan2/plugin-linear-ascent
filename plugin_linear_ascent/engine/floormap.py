@@ -189,6 +189,11 @@ def payload(p: dict, fl, options) -> dict | None:
         if m is None:
             continue
         x, y, label, tip, cost = m
+        if p.get('ruleset') == 'collection-v1' and o.id in ('hunt','hunt_deep'):
+            cost = ('1 ⚡/enemy', 'en')
+            tip = ('Preview the group for free. Each enemy costs one energy when its first action begins. '
+                   'XP stays after each kill; secure the haul by clearing the whole group.'
+                   + (' Deep groups are harder and have better drops.' if o.id == 'hunt_deep' else ''))
         mk = {"opt": o.id, "x": x, "y": y,
               "label": warden.upper() if label == "@warden" else label,
               "tip": tip.format(**places)}

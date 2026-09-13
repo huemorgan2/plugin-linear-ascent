@@ -39,7 +39,7 @@ def render(group, owned, options, art_url, icon):
         else:
             cells.append('<div class="gb-weapon">Empty slot</div>')
     actions = ''.join(f'<button class="opt gb-action {"locked" if o.locked else ""}" data-opt="{e(o.id)}" '
-        f'aria-disabled="{str(o.locked).lower()}"><span class="key">[{n}]</span> '
+        f'aria-disabled="{str(o.locked).lower()}"><span class="key">{n}</span> '
         f'{e(o.label)}<span class="gb-hint">{e(o.hint)}</span></button>' for n,o in enumerate(options,1))
     rates=active.get('rates',{})
     drops=''.join(f'<span>{grade}: {rates.get("material",{}).get(grade,0):.4g}% material · '
@@ -78,7 +78,8 @@ CSS = '''
 .gb-weapon{background:#17262b;border:1px solid #40565f;padding:8px;display:flex;gap:8px;overflow-wrap:anywhere}
 .gb-weapon img{width:28px;height:54px;object-fit:contain;image-rendering:pixelated}
 .gb-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-.gb-action.opt{white-space:normal!important;padding:10px!important;text-align:left;border:1px solid #496069;background:#203139;color:#e5e4cf;cursor:pointer;border-radius:0}
+.gb-action.opt{display:block;white-space:normal!important;padding:10px!important;text-align:left;border:1px solid #496069;background:#203139;color:#e5e4cf;cursor:pointer;border-radius:0}
+.gb-action.opt::after{display:none;content:none}.gb-action.opt:hover .key,.gb-action.opt:hover .key::before,.gb-action.opt:hover .key::after,.gb-action.opt:focus-visible .key{color:#e6bf68!important}
 .gb-action.opt:hover,.gb-action.opt:focus-visible{border-color:#e6bf68;background:#30464f}.gb-action.locked{opacity:.55}
 .gb-hint{display:block;color:#afc3c1}.gb-log p{margin:8px 0;border-bottom:1px solid #25383d;padding-bottom:6px}
 .gb-event{display:none;position:absolute;z-index:2;left:10%;bottom:35%;padding:6px!important;background:#090f13;color:#e4bf7a;box-shadow:3px 3px #000;pointer-events:none;white-space:normal}

@@ -54,7 +54,7 @@ def scene(p):
     image=schema.get_floor(site['floor']).encounters[0].id
     return Scene(eyebrow=f"FLOOR {site['floor']} · GATHERING",headline=site['name'],body_lines=lines,
         support='Bring the right tool and weapons. Your haul is secured only when you extract.',
-        options=opts,meters=combat.meters(p),
+        options=opts,meters=combat.meters(p),banner=schema.get_floor(site['floor']).banner,
         expedition=dict(site=key,**site,active=bool(expedition),tool_state=deepcopy(tool),
             haul=deepcopy(expedition['haul']) if expedition else {},image=f'creatures/{image}_320x112.png'))
 

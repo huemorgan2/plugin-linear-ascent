@@ -426,7 +426,11 @@ def card(p: dict, item: dict) -> dict:
 
 def payload(p: dict) -> dict:
     from .core import pack_used, pack_cap
-    return dict(pack_used=pack_used(p), pack_cap=pack_cap(p), claims=claims(p), deck=list(p["deck"]), items=[card(p, i) for i in p["collection"].values()],
+    positions = {iid:n for n,iid in enumerate(p['deck']) if iid}
+    ordered = sorted(p['collection'].values(), key=lambda item:(
+        positions.get(item['id'], 3), -GRADES.index(item['grade']),
+        families()[item['family']]['name'], -item['level'], item['id']))
+    return dict(pack_used=pack_used(p), pack_cap=pack_cap(p), claims=claims(p), deck=list(p["deck"]), items=[card(p, i) for i in ordered],
                 locked=locked(p), materials=dict(p.get("materials", {})),
                 gold=p["gold"], xp_reserve=p.get("xp_reserve", 0),
                 selected=p.get("collection_selected"), screen=bool(p.get("collection_view")))

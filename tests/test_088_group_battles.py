@@ -225,3 +225,24 @@ def test_contract_and_weekly_credits_require_full_group(monkeypatch):
     core.apply_choice(p,'group_return');bow=fixture_group(p,n=2)
     core.apply_choice(p,'strike:'+bow);core.apply_choice(p,'strike:'+bow)
     assert len(calls)==4 and calls[0][2]=='ranged'
+
+
+def test_group_roster_and_xp_rules_reach_the_text_and_map_surfaces(monkeypatch):
+    from plugin_linear_ascent import render
+    p=climber(monkeypatch)
+    camp=core.current_scene(p)
+    hunt=next(marker for marker in camp.map['markers'] if marker['opt']=='hunt')
+    assert 'enemy' in hunt['cost'] and 'free' in hunt['tip']
+    html=render.render_scene(camp)
+    assert 'surplus goes nowhere' not in html
+    assert 'beyond the level bar is saved' in html
+    scene=core.apply_choice(p,'hunt')
+    text=scene.to_text()
+    assert 'Group roster' in text and 'gold pending until full clear' in text
+    for m in p['group']['members']:
+        assert m['name'] in text and m['affinity'] in text
+    before=deepcopy(p)
+    # Simulate PostgreSQL returning object keys in a different order.
+    p['collection']=dict(reversed(list(p['collection'].items())))
+    assert [i['id'] for i in collection.payload(p)['items']][:3]==p['deck']
+    assert p==before

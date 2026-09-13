@@ -284,6 +284,20 @@ class Scene:
                     and (sl.get("name") or sl.get("slug"))]
             if worn:
                 lines.append("wears: " + ", ".join(worn[:7]))
+        if self.group and self.group.get('members'):
+            group = self.group
+            lines.append('Group roster — ' + ('weapons committed' if group['committed'] else 'free preview; choose your three weapons before starting'))
+            for index, member in enumerate(group['members'], 1):
+                status = 'defeated' if member['killed'] else 'current' if index == group['index'] + 1 else 'waiting'
+                lines.append(f"{index}. {member['name']} · {member['affinity']} · "
+                    f"{'Air' if member['air'] else 'Ground'} · {status} · "
+                    f"HP {member['hp']}/{member['hp_max']} · ATK {member['atk']} · "
+                    f"DEF {member['defense']} · speed {member['speed']} · "
+                    f"Power ×{member['power']} / Magic ×{member['magic']}")
+            haul = group['haul']
+            lines.append(f"{group['xp']} XP already kept; {haul['gold']} gold pending until full clear.")
+            if haul['materials']:
+                lines.append('Pending materials: ' + ', '.join(f'{k} ×{v}' for k,v in haul['materials'].items()))
         if self.workshop:
             for item in self.workshop.get("items", []):
                 lines.append(f"{item['name']} {item['grade']} +{item['level']} · "
