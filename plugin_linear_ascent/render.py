@@ -226,6 +226,7 @@ def _map_html(scene: Scene, mp: dict, art: tuple[str, int, int]) -> str:
             f'data-anchor="{anchor}" aria-label="{_e(name)}"{description} '
             f'style="left:{x:g}%;top:var(--map-y,{y:g}%)">'
             f'<span class="mknum">[{i}]</span> '
+            f'<span class="mkdot" aria-hidden="true"></span>'
             f'{_e(str(m.get("label") or ""))}{cost}{tip}</button>')
     return (f'<div class="mapwrap later"><img src="{url}" '
             f'alt="the floor, mapped" width="{w}" height="{h}">'
@@ -3457,6 +3458,12 @@ SCENE_CSS = f"""
 .mk .mknum{{color:{GOLD};}}
 .mk[data-anchor="left"]{{transform:translate(0,-100%);}}
 .mk[data-anchor="right"]{{transform:translate(-100%,-100%);}}
+.mkdot{{position:absolute;left:50%;bottom:-2.5px;width:5px;height:5px;
+ transform:translateX(-50%);background:{GOLD};pointer-events:none;
+ box-shadow:-2px 0 0 {INK},2px 0 0 {INK},0 -2px 0 {INK},0 2px 0 {INK},
+ -1px -1px 0 {INK},1px -1px 0 {INK},-1px 1px 0 {INK},1px 1px 0 {INK};}}
+.mk[data-anchor="left"] .mkdot{{left:0;}}
+.mk[data-anchor="right"] .mkdot{{left:100%;}}
 .mk:hover .mknum,.mk:focus-visible .mknum{{color:{INK};}}
 .mk:hover,.mk:focus-visible{{background:{GOLD};color:{INK};
  outline:none;z-index:10;}}
