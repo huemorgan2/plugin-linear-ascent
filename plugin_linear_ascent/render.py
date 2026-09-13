@@ -1283,6 +1283,9 @@ def player_avatar_html(sheet: dict) -> str:
     energy_max = int(sheet.get("energy_max", 0) or 0) or max(energy, 1)
     xp = int(sheet.get("xp", 0) or 0)
     xp_need = int(sheet.get("xp_need", 0) or 0) or max(xp, 1)
+    hp_tip = "HP — this climber's current health."
+    en_tip = "Energy — this climber's available energy."
+    xp_tip = "XP — this climber's experience toward the next level. Levels are trained at the Guildhall."
     low = " low" if hp * 10 <= hp_max * 3 else ""
     meters = (
         f'<div class="rail later">'
