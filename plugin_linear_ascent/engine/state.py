@@ -273,7 +273,9 @@ def ensure_current(p: dict) -> None:
     p.setdefault("durability_pack", {})    # 005: wear stashed with the pack
     if not isinstance(p.get("labs"), dict):
         p["labs"] = {}                     # 067: Labs flags
-    if p["gear"].get("weapon") is None:
+    if p["gear"].get("weapon") is None and p.get("ruleset") != "collection-v1":
+        # A candidate can deliberately have an empty deck. It was not
+        # shorted its starter and cannot claim legacy compensation.
         # pre-c4ab270 doc: never received the free starter weapon.
         p["gear"]["weapon"] = economy.STARTER_WEAPON.slug
         if p.get("stage") == "playing":

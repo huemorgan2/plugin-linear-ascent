@@ -278,3 +278,15 @@ def test_collection_art_keeps_host_asset_route_when_plugin_is_symlinked(tmp_path
         assert '/art/../' not in html
     finally:
         render.set_art_base(old_base)
+
+
+def test_candidate_empty_deck_does_not_trigger_old_missing_starter_compensation():
+    p = candidate()
+    p.update(deck=[None,None,None], active_weapon=None, held=[])
+    p["gear"]["weapon"] = None
+    gold = p["gold"]
+    count = len(p["collection"])
+    core.current_scene(p)
+    core.current_scene(p)
+    assert p["gold"] == gold and len(p["collection"]) == count
+    assert p["gear"]["weapon"] is None and p["deck"] == [None,None,None]
