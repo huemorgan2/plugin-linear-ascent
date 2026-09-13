@@ -246,3 +246,20 @@ def test_group_roster_and_xp_rules_reach_the_text_and_map_surfaces(monkeypatch):
     p['collection']=dict(reversed(list(p['collection'].items())))
     assert [i['id'] for i in collection.payload(p)['items']][:3]==p['deck']
     assert p==before
+
+
+def test_luna_advice_receives_actual_reach_and_technique_bonus(monkeypatch):
+    import json
+    from plugin_linear_ascent import plugin
+    p=climber(monkeypatch)
+    core.apply_choice(p,'hunt')
+    scene=core.current_scene(p)
+    text=json.loads(plugin.build_payload(scene))
+    rendered=str(text)
+    assert 'Current distance: Cover' in rendered
+    assert 'Blades require Ground and Contact' in rendered
+    cover=next(o for o in scene.options if o.label.startswith('Cover shot'))
+    assert '20%' in cover.hint and 'distance 2–3' in cover.hint
+    assert next(o for o in scene.options if o.id=='strike:'+p['deck'][0]).locked
+    assert 'cover-shot double' not in plugin._GUIDE_RULES
+    assert 'first level ◈ 200' not in plugin._SHARED_RULES

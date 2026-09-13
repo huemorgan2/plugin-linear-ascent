@@ -90,7 +90,7 @@ def scene(p):
         opts.append(Option('strike:' + iid, info['name'], reason or f"{info['path'].title()} strike", locked=bool(reason)))
         if family['cooldown']:
             cooldown = g['cooldowns'].get(iid, 0)
-            why = reason or (f'Ready in {cooldown} enemy phases' if cooldown else family['effect'])
+            why = reason or (f'Ready in {cooldown} enemy phases' if cooldown else family['description'])
             opts.append(Option('skill:' + iid, family['effect'] + ' · ' + info['name'], why,
                                locked=bool(reason or cooldown)))
     if combat.pouch(p) == 'trollblood_tonic':

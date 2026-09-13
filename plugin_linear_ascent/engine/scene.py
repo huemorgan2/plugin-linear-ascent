@@ -294,6 +294,9 @@ class Scene:
                     f"HP {member['hp']}/{member['hp_max']} · ATK {member['atk']} · "
                     f"DEF {member['defense']} · speed {member['speed']} · "
                     f"Power ×{member['power']} / Magic ×{member['magic']}")
+            active = group['members'][group['index']]
+            gap = ('Contact', 'Near', 'Far', 'Cover')[active['gap']]
+            lines.append(f'Current distance: {gap}. Blades require Ground and Contact; bows and staves reach Air and Ground from every distance. Affinity changes damage, never reach.')
             haul = group['haul']
             lines.append(f"{group['xp']} XP already kept; {haul['gold']} gold pending until full clear.")
             if haul['materials']:
