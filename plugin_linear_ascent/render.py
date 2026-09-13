@@ -2999,6 +2999,8 @@ def render_scene_fragment(scene: Scene) -> str:
     lb = getattr(scene, "labs", None)
     if lb:
         dt += f' data-labs="{_e(",".join(lb))}"'
+    if scene.collection:
+        dt += ' data-collection="1"'
     return (f'<div class="card" data-scene="{_e(scene.scene_id)}"{dt}>'
             + "".join(parts) + "</div>")
 
@@ -3532,6 +3534,13 @@ SCENE_CSS = f"""
 .opt .hint{{order:2;margin-left:0;color:{DIM};text-align:right;
  white-space:nowrap;}}
 .opt .lbl{{color:{BRIGHT};}}
+@media(max-width:520px){{
+ .card[data-collection] .options .orow>.opt{{flex-wrap:wrap;align-items:flex-start;gap:2px 1ch;padding:.5rem 0;}}
+ .card[data-collection] .options .orow>.opt::after{{display:none;}}
+ .card[data-collection] .options .orow>.opt .lbl{{flex:1;min-width:0;}}
+ .card[data-collection] .options .orow>.opt .hint{{flex-basis:calc(100% - 3ch);margin-left:3ch;white-space:normal;text-align:left;overflow-wrap:anywhere;}}
+}}
+
 .opt .key{{flex:none;color:{GOLD};min-width:2ch;text-align:right;
  white-space:pre;}}
 .opt .key::before{{content:"[";color:{DIM};}}

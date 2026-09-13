@@ -70,7 +70,7 @@ def open_group(p, *, deep=False, members=None, site=''):
 def public(p):
     g = p['group']
     keys = ('id','instance','name','image','type','affinity','air','speed','hp','hp_max','atk','defense',
-            'power','magic','traits','note','specimen','gap','started','paid','exhausted','killed','effects','rates')
+            'power','magic','traits','note','specimen','gap','started','paid','exhausted','killed','effects','rates','bundles','reward_revision')
     return {k: deepcopy(g[k]) for k in ('id','floor','deep','site','index','committed','deck','cooldowns','haul','xp','energy')} | {
         'members': [{k: deepcopy(m[k]) for k in keys if k in m} for m in g['members']],
         'events': deepcopy(g['events'])}

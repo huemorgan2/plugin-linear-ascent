@@ -99,11 +99,11 @@ def test_gather_gate_tools_energy_and_no_duplicate_extract(monkeypatch):
     energy=state.energy_now(p);before=p['materials'].get('Wood',0)
     action(p,'gather_step')
     assert state.energy_now(p)==energy-1 and p['materials'].get('Wood',0)==before
-    assert p['expedition']['haul']['Wood']==1
+    assert p['expedition']['haul']['Wood']==2
     assert p['utility_tools']['wood-axe']['condition']==99
-    action(p,'gather_extract');assert p['materials']['Wood']==before+1
+    action(p,'gather_extract');assert p['materials']['Wood']==before+2
     assert core.apply_choice(p,'gather_extract').refusal
-    assert p['materials']['Wood']==before+1
+    assert p['materials']['Wood']==before+2
 
 
 def test_ambush_retreat_loses_entire_expedition_not_owned_resources(monkeypatch):

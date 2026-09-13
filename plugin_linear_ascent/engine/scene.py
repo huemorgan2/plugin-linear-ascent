@@ -297,6 +297,8 @@ class Scene:
             active = group['members'][group['index']]
             gap = ('Contact', 'Near', 'Far', 'Cover')[active['gap']]
             lines.append(f'Current distance: {gap}. Blades require Ground and Contact; bows and staves reach Air and Ground from every distance. Affinity changes damage, never reach.')
+            if active.get('bundles'):
+                lines.append('On a successful material roll: ' + '; '.join(grade + ': ' + ', '.join(f'{n} {name}' for name,n in amounts.items()) for grade,amounts in active['bundles'].items()))
             haul = group['haul']
             lines.append(f"{group['xp']} XP already kept; {haul['gold']} gold pending until full clear.")
             if haul['materials']:

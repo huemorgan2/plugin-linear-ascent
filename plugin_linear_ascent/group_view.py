@@ -42,6 +42,8 @@ def render(group, owned, options, art_url, icon):
         f'aria-disabled="{str(o.locked).lower()}"><span class="key">{n}</span> '
         f'{e(o.label)}<span class="gb-hint">{e(o.hint)}</span></button>' for n,o in enumerate(options,1))
     rates=active.get('rates',{})
+    bundles=active.get('bundles',{})
+    bundle_text=''.join(f'<span>{e(grade)} bundle: '+', '.join(f'{n} {e(name)}' for name,n in amounts.items())+'</span>' for grade,amounts in bundles.items())
     drops=''.join(f'<span>{grade}: {rates.get("material",{}).get(grade,0):.4g}% material · '
         f'{rates.get("weapon",{}).get(grade,0):.4g}% weapon</span>' for grade in ('Common','Rare','Epic','Legendary'))
     log=''.join(f'<p>{e(v["text"])}</p>' for v in events)
@@ -49,7 +51,7 @@ def render(group, owned, options, art_url, icon):
         f'<div class="gb-foe">{picture(active)}{popups(active["instance"])}</div>'
         f'<div class="gb-badges">{badges}<span>{icon("t_speed")} {active["speed"]} speed</span></div>'
         f'<p>{active["atk"]:,} ATK · {active["defense"]:,} DEF · Power ×{active["power"]} · Magic ×{active["magic"]}</p>'
-        f'<details class="gb-drops"><summary>Drop chances for this enemy</summary>{drops}<p>Materials roll independently by grade. At most one weapon. Secure drops by clearing the group.</p></details>'
+        f'<details class="gb-drops"><summary>Drop chances for this enemy</summary>{drops}{bundle_text}<p>Materials roll independently by grade. At most one weapon. Secure drops by clearing the group.</p></details>'
         f'<div class="gb-health">{icon("heart")} {active["hp"]:,} / {active["hp_max"]:,} HP'
         f'<meter min="0" max="{active["hp_max"]}" value="{active["hp"]}"></meter></div>'
         f'<div class="gb-gap">{gap}</div><p class="gb-energy">{energy}</p>'
@@ -78,7 +80,7 @@ CSS = '''
 .gb-weapon{background:#17262b;border:1px solid #40565f;padding:8px;display:flex;gap:8px;overflow-wrap:anywhere}
 .gb-weapon img{width:28px;height:54px;object-fit:contain;image-rendering:pixelated}
 .gb-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-.gb-action.opt{display:block;white-space:normal!important;padding:10px!important;text-align:left;border:1px solid #496069;background:#203139;color:#e5e4cf;cursor:pointer;border-radius:0}
+.gb-action.opt{display:block;align-content:start;white-space:normal!important;padding:10px!important;text-align:left;border:1px solid #496069;background:#203139;color:#e5e4cf;cursor:pointer;border-radius:0}
 .gb-action.opt::after{display:none;content:none}.gb-action.opt:hover .key,.gb-action.opt:hover .key::before,.gb-action.opt:hover .key::after,.gb-action.opt:focus-visible .key{color:#e6bf68!important}
 .gb-action.opt:hover,.gb-action.opt:focus-visible{border-color:#e6bf68;background:#30464f}.gb-action.locked{opacity:.55}
 .gb-hint{display:block;color:#afc3c1}.gb-log p{margin:8px 0;border-bottom:1px solid #25383d;padding-bottom:6px}

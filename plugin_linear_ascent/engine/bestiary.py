@@ -95,18 +95,25 @@ def rolled_member(p: dict, floor: int, creature_id: str, *, deep=False, opening=
     return m
 
 
+def material_bundles(floor, member):
+    """The two-material package shown before a fight; never a second roll."""
+    carrier = 'A' if member['air'] else 'B' if member['affinity'] == 'Magic' else 'mixed'
+    ratios = collection.catalog()['loot']['carrierRatios'][carrier]
+    return {grade: {name: ratio * min(5, 1 + max(0, floor - (1 + gi * 25)) // 6)
+                    for name, ratio in zip(collection.MATERIALS[gi], ratios)}
+            for gi, grade in enumerate(collection.GRADES)}
+
+
 def roll_rewards(p, floor, m, *, deep=False):
     rates = m['rates']
     specimen = m['specimen']
     reward_mult = (1.4 if deep else 1) * {'runt': .7, 'common': 1, 'tough': 1.2, 'alpha': 1.6}[specimen]
     materials = {}
-    carrier = 'A' if m['air'] else 'B' if m['affinity'] == 'Magic' else 'mixed'
-    ratios = collection.catalog()['loot']['carrierRatios'][carrier]
-    for gi, grade in enumerate(collection.GRADES):
+    m['bundles'] = material_bundles(floor, m)
+    m['reward_revision'] = 'bundles-1'
+    for grade in collection.GRADES:
         if state.rng_int(p, 1, 100000000) <= round(rates['material'][grade] * 1000000):
-            index = 0 if state.rng_int(p, 1, sum(ratios)) <= ratios[0] else 1
-            name = collection.MATERIALS[gi][index]
-            materials[name] = max(1, 1 + (floor - 1 - gi * 25) // 5)
+            materials.update(m['bundles'][grade])
     drop = None
     roll, threshold = state.rng_int(p, 1, 100000000), 0
     for grade in collection.GRADES:

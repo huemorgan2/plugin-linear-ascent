@@ -8,10 +8,10 @@ from ..content import schema
 
 SITES = {
     'drowned-copse': dict(name='Drowned Copse',floor=3,material='Wood',tool='wood-axe',
-        tool_name='Wood axe',price=35,yield_pct=58,ambush_pct=5,condition=100,
+        tool_name='Wood axe',price=35,yield_pct=58,yield_amount=2,ambush_pct=5,condition=100,
         preferred='bow',description='Cut driftwood beneath the drowned canopy. Wings stir overhead.'),
     'bog-iron-field': dict(name='Bog-Iron Field',floor=3,material='Raw Metal',tool='pickaxe',
-        tool_name='Iron pickaxe',price=45,yield_pct=47,ambush_pct=4,condition=120,
+        tool_name='Iron pickaxe',price=45,yield_pct=47,yield_amount=2,ambush_pct=4,condition=120,
         preferred='blade',description='Break iron from the wet earth. Arcane creatures guard the exposed seams.'),
 }
 
@@ -21,7 +21,11 @@ def sites_at(floor):
 
 
 def _site(p):
-    return SITES[(p.get('expedition') or {}).get('site') or p['gathering_site']]
+    exp=p.get('expedition')
+    if exp:
+        # Pre-bundle expeditions retain their accepted one-unit collection rule.
+        return exp.get('site_rules') or {**SITES[exp['site']], 'yield_amount':1}
+    return SITES[p['gathering_site']]
 
 
 def scene(p):
@@ -44,7 +48,7 @@ def scene(p):
     if not expedition:
         opts.append(Option('gather_back','Return to camp'))
     lines=[site['description'],f"Target: {site['material']} · strong choice: {site['preferred'].title()}",
-        f"Each attempt: {site['yield_pct']}% for 1 {site['material']}; {site['ambush_pct']}% for an ambush.",
+        f"Each attempt: {site['yield_pct']}% for {site['yield_amount']} {site['material']}; {site['ambush_pct']}% for an ambush.",
         'An ambush costs one additional energy per enemy when it begins. Defeat or retreat loses this expedition’s entire haul.']
     if tool:
         lines.append(f"{site['tool_name']}: {tool['condition']}/{site['condition']} condition")
@@ -144,8 +148,8 @@ def handle(p,oid):
             exp['attempts']+=1
             found=state.rng_int(p,1,100)<=site['yield_pct']
             if found:
-                exp['haul'][site['material']]=exp['haul'].get(site['material'],0)+1
-            exp['message']=('Found 1 '+site['material']) if found else 'Nothing recovered this attempt.'
+                exp['haul'][site['material']]=exp['haul'].get(site['material'],0)+site['yield_amount']
+            exp['message']=(f"Found {site['yield_amount']} "+site['material']) if found else 'Nothing recovered this attempt.'
             combat._ledger(p,'gather',note=exp['id']+':'+str(exp['attempts'])+(':yield' if found else ':empty'))
             if state.rng_int(p,1,100)<=site['ambush_pct']:
                 return groups.open_group(p,members=ambush_members(p,site),site=exp['site'])
@@ -169,7 +173,7 @@ def handle(p,oid):
             seq=p.get('expedition_sequence',0)+1
             p['expedition_sequence']=seq
             p['expedition']=dict(id=f'expedition:{seq}',site=p['gathering_site'],deck=list(p['deck']),
-                haul={},gold=0,weapons=[],attempts=0)
+                haul={},gold=0,weapons=[],attempts=0,site_rules=deepcopy(site))
             return scene(p)
         raise ValueError('Choose a current gathering action')
     except ValueError as exc:
