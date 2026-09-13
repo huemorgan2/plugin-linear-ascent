@@ -49,6 +49,9 @@ def render(data: dict, art_url, icon) -> str:
             lines += [f'Next: +{q["level"]} · floor {q["floor"]}', f'Gold: {data["gold"]:,} / {q["gold"]:,}']
             lines += [f'{k}: {data["materials"].get(k, 0):,} / {v:,}' for k, v in q["materials"].items()]
             lines.append("Upgrade in the Forge")
+            for site in data.get("resource_sites", []):
+                if site["material"] in q["materials"]:
+                    lines.append(f'{site["material"]}: {site["name"]} · floor {site["floor"]} · {site["tool_name"]} sold there for {site["price"]} gold')
         details = '<div class="wc-detail">' + ''.join(f'<p>{e(line)}</p>' for line in lines) + '</div>'
     return '<section class="wc">' + head + '<div class="wc-grid">' + ''.join(cards) + '</div>' + details + '</section>'
 

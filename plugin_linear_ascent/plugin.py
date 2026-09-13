@@ -127,7 +127,17 @@ _SHARED_RULES = (
     "When weapon_collection is present, its screen DOES exist: open it "
     "with ascent_choose(option='collection'); inspect and assign exact "
     "weapon instances using the returned options. Never deny a feature "
-    "from memory without checking the current scene."
+    "from memory without checking the current scene. For questions about "
+    "the current monsters, reach, weapons or options, FIRST call ascent_scene "
+    "even if a prior chat answer seems to cover it. Earlier advice can be "
+    "stale or wrong. Report current weapon_reach and UNAVAILABLE markers; "
+    "do not infer reach from affinity. For a named resource place or material "
+    "route, call ascent_character and read resource_sites, floor and location "
+    "before saying it is unavailable. A site on another floor requires travel "
+    "through the Tower gate and that floor camp using current legal options. "
+    "Enter a resource site to buy its tool there: the tool is required to "
+    "gather, not to visit or inspect the site. Do not search unrelated shops "
+    "when resource_sites already identifies its own tool seller. "
 )
 
 _GUIDE_RULES = (
@@ -325,8 +335,9 @@ class LinearAscentPlugin(LunaPlugin):
                     "Safe to call anytime — it never changes game state. "
                     "Call this when the player wants to play, asks where "
                     "they are, or after any confusion. After the scene "
-                    "shows, reply with at most one short in-character "
-                    "line — or nothing at all; never restate the card. "
+                    "shows, keep routine action replies to one short line. "
+                    "If asked to explain or compare, answer the request "
+                    "accurately from the refreshed scene. "
                     + _SHARED_RULES + " " + _GUIDE_RULES),
                 parameters={"type": "object", "properties": {},
                             "required": []},

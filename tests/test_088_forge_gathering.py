@@ -153,3 +153,16 @@ def test_expedition_blocks_healing_regear_and_can_extract_when_broken_and_empty(
     assert core.apply_choice(p,'gather_step').refusal
     action(p,'gather_extract')
     assert p['expedition'] is None
+
+
+def test_material_routes_discoverable_from_town_sheet_and_owned_card(monkeypatch):
+    from plugin_linear_ascent.sheet import character_sheet
+    p=player(monkeypatch);p.update(location='town',floor=0)
+    sheet=character_sheet(p)
+    site=next(s for s in sheet['resource_sites'] if s['material']=='Wood')
+    assert site['available'] and site['floor']==3 and site['entry_action']=='gather_site:drowned-copse'
+    assert 'Tower gate' in site['route'] and 'Wood axe'==site['tool_name']
+    action(p,'collection');s=action(p,'inspect:'+p['deck'][0])
+    assert 'Drowned Copse on floor 3' in s.to_text()
+    assert 'Drowned Copse' in render_scene(s)
+    assert core.apply_choice(p,site['entry_action']).refusal  # discovery never bypasses travel

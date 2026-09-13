@@ -296,7 +296,9 @@ class Scene:
                     f"Power ×{member['power']} / Magic ×{member['magic']}")
             active = group['members'][group['index']]
             gap = ('Contact', 'Near', 'Far', 'Cover')[active['gap']]
-            lines.append(f'Current distance: {gap}. Blades require Ground and Contact; bows and staves reach Air and Ground from every distance. Affinity changes damage, never reach.')
+            lines.append(f'Current distance: {gap} ({active["gap"]}). Distance map: Contact=0, Near=1, Far=2, Cover=3. Blades require Ground and Contact; bows and staves reach Air and Ground from every distance. Affinity changes damage, never reach.')
+            for weapon in group.get('weapon_reach', []):
+                lines.append(weapon['name'] + ': ' + ('CAN attack from here.' if weapon['available'] else 'CANNOT attack from here: ' + weapon['reason']))
             if active.get('bundles'):
                 lines.append('On a successful material roll: ' + '; '.join(grade + ': ' + ', '.join(f'{n} {name}' for name,n in amounts.items()) for grade,amounts in active['bundles'].items()))
             haul = group['haul']
@@ -327,6 +329,9 @@ class Scene:
                         materials = ", ".join(f"{c.get('materials', {}).get(k, 0)}/{n} {k}"
                                                for k, n in q["materials"].items())
                         lines.append(f"Forge +{q['level']}: {q['gold']} gold; {materials}")
+                        for source in c.get("resource_sites", []):
+                            if source["material"] in q["materials"]:
+                                lines.append(f"{source['material']}: {source['name']} on floor {source['floor']} · {source['tool_name']} required · {source['route']}")
         # 027: the notice board reads as words on every surface — the card
         # draws it, the agent says it.
         for nt in self.notices:
@@ -400,7 +405,8 @@ class Scene:
                 hint = f"   ({o.hint})" if o.hint else ""
                 badge = f" ({o.badge})" if getattr(o, "badge", 0) else ""
                 pad = "   " if getattr(o, "nest", False) else " "
-                lines.append(f"{pad}{i}) {o.label}{badge}{hint}")
+                locked = " [UNAVAILABLE]" if o.locked else ""
+                lines.append(f"{pad}{i}) {o.label}{badge}{hint}{locked}")
         # 031 §11: the evening state reads as words on every surface
         if self.activity:
             lines.append(self.activity)

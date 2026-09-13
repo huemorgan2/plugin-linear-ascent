@@ -258,8 +258,10 @@ def test_luna_advice_receives_actual_reach_and_technique_bonus(monkeypatch):
     rendered=str(text)
     assert 'Current distance: Cover' in rendered
     assert 'Blades require Ground and Contact' in rendered
+    assert 'Breach Cleaver: CANNOT attack from here' in rendered
+    assert 'Cover=3' in rendered and '[UNAVAILABLE]' in rendered
     cover=next(o for o in scene.options if o.label.startswith('Cover shot'))
-    assert '20%' in cover.hint and 'distance 2–3' in cover.hint
+    assert '20%' in cover.hint and 'Far (2) or Cover (3)' in cover.hint
     assert next(o for o in scene.options if o.id=='strike:'+p['deck'][0]).locked
     assert 'cover-shot double' not in plugin._GUIDE_RULES
     assert 'first level ◈ 200' not in plugin._SHARED_RULES

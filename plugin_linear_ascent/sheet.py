@@ -64,6 +64,9 @@ def character_sheet(p: dict) -> dict:
     if collection.enabled(p):
         result["weapon_collection"] = collection.payload(p)
         result["weapon_collection"]["open_action"] = "collection"
+        result["resource_sites"] = result["weapon_collection"]["resource_sites"]
+        result["location"] = p["location"]
+        result["floor"] = p["floor"]
         result["xp_reserve"] = int(p.get("xp_reserve", 0))
         result["available_xp"] = pstate.xp_total(p)
         result["holding"] = [collection.stats(p["collection"][iid])["name"]

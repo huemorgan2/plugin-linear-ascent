@@ -16,6 +16,14 @@ SITES = {
 }
 
 
+def directory(p):
+    """Discoverable travel facts, including unopened sites; no route mutation."""
+    return [dict(key=key, **site, available=site['floor'] <= p.get('unlocked_floor',1),
+                 entry_action='gather_site:'+key,tool_sold_here=True,entry_requires_tool=False,gather_requires_tool=True,
+                 route=f"Tower gate → floor {site['floor']} camp → {site['name']}")
+            for key,site in SITES.items()]
+
+
 def sites_at(floor):
     return {key:site for key,site in SITES.items() if site['floor']==floor}
 

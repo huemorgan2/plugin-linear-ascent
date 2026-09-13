@@ -3720,7 +3720,7 @@ def _gate_town_options(p: dict, fl) -> list[Option]:
     if candidate:
         from . import gathering
         for key, site in gathering.sites_at(fl.floor).items():
-            opts.append(Option("gather_site:" + key, site["name"], "Collect " + site["material"] + " · " + site["tool_name"] + " required"))
+            opts.append(Option("gather_site:" + key, site["name"], "Collect " + site["material"] + " · " + site["tool_name"] + f" sold here · {site['price']} gold"))
     if _live_flare(p):
         opts.insert(0, Option("answer_flare", "Answer the flare",
                               "1 ⚡ · run toward the light"))

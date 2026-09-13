@@ -90,7 +90,10 @@ def scene(p):
         opts.append(Option('strike:' + iid, info['name'], reason or f"{info['path'].title()} strike", locked=bool(reason)))
         if family['cooldown']:
             cooldown = g['cooldowns'].get(iid, 0)
-            why = reason or (f'Ready in {cooldown} enemy phases' if cooldown else family['description'])
+            description = family['description']
+            if item['family'] == 'hawkeye':
+                description = 'Adds 20% at Far (2) or Cover (3). ' + ('Bonus applies here.' if m['gap'] >= 2 else 'No bonus at this distance.')
+            why = reason or (f'Ready in {cooldown} enemy phases' if cooldown else description)
             opts.append(Option('skill:' + iid, family['effect'] + ' · ' + info['name'], why,
                                locked=bool(reason or cooldown)))
     if combat.pouch(p) == 'trollblood_tonic':
@@ -108,7 +111,9 @@ def scene(p):
                     m['note']] + [e['text'] for e in g['events']], options=opts, meters=combat.meters(p),
         enemy=dict(name=m['name'], hp=m['hp'], hp_max=m['hp_max'], atk=m['atk'],
                    **{'def': m['defense']}, mspd=m['speed']),
-        group=public(p), combat_events=deepcopy(g['events']))
+        group={**public(p), 'weapon_reach': [
+            dict(name=o.label, available=not o.locked, reason=o.hint)
+            for o in opts if o.id.startswith('strike:')]}, combat_events=deepcopy(g['events']))
 
 
 def refuse(p, text):
