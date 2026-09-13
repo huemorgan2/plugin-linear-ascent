@@ -3469,6 +3469,10 @@ def _gate_scene(p: dict) -> Scene:
             hint += f" · war party of {_quorum(p, n)}"
         # 022/003: who is up there right now — "Floor 12 · 3 hot · 2 camps"
         hint += _presence_gate_hint(p, n)
+        if p.get('ruleset') == 'collection-v1':
+            from . import gathering
+            for site in gathering.sites_at(n).values():
+                hint += f" · {site['name']}: {site['material']}"
         opts.append(Option(f"floor_{n}", f"Floor {n} — {fl.zone}",
                            hint, locked=p["level"] < req))
     # phase-1b (roy): the town by its name, not "the square"
@@ -3728,7 +3732,7 @@ def _gate_town_options(p: dict, fl) -> list[Option]:
     if candidate:
         from . import gathering
         for key, site in gathering.sites_at(fl.floor).items():
-            opts.append(Option("gather_site:" + key, site["name"], "Collect " + site["material"] + " · " + site["tool_name"] + f" sold here · {site['price']} gold"))
+            opts.append(Option("gather_site:" + key, site["name"], "Collect " + site["material"] + " · " + site["tool_name"] + f" sold here · {site['price']:,} gold"))
     if _live_flare(p):
         opts.insert(0, Option("answer_flare", "Answer the flare",
                               "1 ⚡ · run toward the light"))

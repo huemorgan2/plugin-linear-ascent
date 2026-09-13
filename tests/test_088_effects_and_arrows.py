@@ -255,3 +255,73 @@ def test_only_one_strongest_bleed_wound_can_be_refreshed(monkeypatch):
     assert m['effects'][0]['source']['id']==item['id']
     assert m['effects'][0]['remaining']==2
     assert m['hp']==840 #100 +50 +old10; no extra fresh10
+
+
+def test_arrow_question_opens_current_drawer_without_spending_or_ticking(monkeypatch):
+    from plugin_linear_ascent.render import render_scene_fragment
+    p,item,m=setup(monkeypatch,'hawkeye',1)
+    m['slow']=2
+    before=deepcopy(p)
+    s=act(p,'arrows')
+    assert s.collection['arrows_open']
+    assert 'class="wc-quiver" open' in render_scene_fragment(s)
+    text=s.to_text()
+    assert 'CURRENT ARROWS: 100/400' in text
+    for arrow in quiver.payload(p)['types']: assert arrow['name'] in text
+    assert '0 owned' in text and 'Ordinary selected, 100 left' in text
+    for key in ('group','collection','deck','quiver','gold','energy_val','rng_counter'):
+        assert p[key]==before[key]
+    act(p,'collection_back')
+    assert not p.get('collection_arrows') and p['group']==before['group']
+
+
+def test_slow_applies_to_two_pursuits_then_expires_and_reads_do_not_tick(monkeypatch):
+    p,item,m=setup(monkeypatch,'frostbind',2)
+    monkeypatch.setattr(groups,'player_speed',lambda p:5)
+    m.update(speed=8,slow=2,gap=3)
+    for remaining in (2,1):
+        before=deepcopy(p)
+        s=core.current_scene(p)
+        assert s.enemy['mspd']==5
+        assert s.group['members'][0]['base_speed']==8
+        assert s.group['members'][0]['slow_phases']==remaining
+        assert p==before
+        m['gap']=3
+        act(p,'guard')
+        assert m['gap']==2 and m['slow']==remaining-1
+    assert core.current_scene(p).enemy['mspd']==8
+    m['gap']=3
+    act(p,'guard')
+    assert m['gap']==1
+
+
+def test_slow_makes_withdrawal_and_escape_easier_without_extra_energy(monkeypatch):
+    p,item,m=setup(monkeypatch)
+    monkeypatch.setattr(groups,'player_speed',lambda p:6)
+    m.update(speed=8,slow=2,gap=0)
+    energy=state.energy_now(p)
+    act(p,'withdraw')
+    assert m['gap']==1 and m['slow']==1 # withdraw two, pursuit one
+    assert state.energy_now(p)==energy-1
+    m['gap']=0
+    # Normal speed permits14%; slowed speed permits23%. The same20% roll
+    # fails the former and succeeds the latter through the real action gate.
+    normal=deepcopy(p);groups.current(normal)['slow']=0
+    monkeypatch.setattr(state,'rng_int',lambda p,lo,hi:2000)
+    act(normal,'flee')
+    assert normal['group'] and not normal.get('group_result')
+    act(p,'flee')
+    assert p['group'] is None and p['group_result']['escaped']
+    assert state.energy_now(p)==energy-1
+
+
+def test_gate_advertises_every_unlocked_resource_place(monkeypatch):
+    from plugin_linear_ascent.engine import gathering
+    p,item,m=setup(monkeypatch)
+    act(p,'flee')
+    p.update(location='gate',level=30,unlocked_floor=80)
+    s=core._gate_scene(p)
+    hints={o.id:o.hint for o in s.options}
+    for site in gathering.SITES.values():
+        assert site['name'] in hints['floor_'+str(site['floor'])]
+        assert site['material'] in hints['floor_'+str(site['floor'])]

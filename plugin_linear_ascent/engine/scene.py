@@ -314,6 +314,18 @@ class Scene:
                 lines.append(item["description"])
         if self.collection:
             c = self.collection
+            if c.get('arrows_open') and c.get('quiver'):
+                quiver=c['quiver']
+                lines.append(f"CURRENT ARROWS: {quiver['used']}/{quiver['capacity']}. All six payloads exist; zero stock means not owned, not unavailable as a type.")
+                lines.append('One grade-matched arrow per accepted shot, including a miss. Selecting a stocked payload during a group is free.')
+                for bow in quiver.get('bows',[]):
+                    lines.append(f"{bow['name']}: {bow['grade']} {bow['selected_name']} selected, {bow['remaining']} left.")
+                grades={b['grade'] for b in quiver.get('bows',[])} or {'Common'}
+                for arrow in quiver['types']:
+                    lines.append(f"{arrow['name']} — {arrow['channel']}; {arrow['effect']}")
+                    for offer in arrow['offers']:
+                        if offer['grade'] in grades:
+                            lines.append(f"  {offer['grade']}: {offer['owned']} owned; {offer['count']} cost {offer['gold']:,} gold at the Forge. Floor {offer['floor']}.")
             owned = {i["id"]: i for i in c.get("items", [])}
             lines.append("Three battle weapons (fixed for a fight or expedition):")
             for n, iid in enumerate(c.get("deck", []), 1):

@@ -442,7 +442,7 @@ def payload(p: dict) -> dict:
     return dict(material_icons=MATERIAL_ICONS, material_grades={m:GRADES[gi] for gi,pair in enumerate(MATERIALS) for m in pair}, quiver=quiver.payload(p), resource_sites=gathering.directory(p), pack_used=pack_used(p), pack_cap=pack_cap(p), claims=claims(p), deck=list(p["deck"]), items=[card(p, i) for i in ordered],
                 locked=locked(p), materials=dict(p.get("materials", {})),
                 gold=p["gold"], xp_reserve=p.get("xp_reserve", 0),
-                selected=p.get("collection_selected"), screen=bool(p.get("collection_view")))
+                selected=p.get("collection_selected"), screen=bool(p.get("collection_view")), arrows_open=bool(p.get('collection_arrows')))
 
 
 def scene(p: dict):
@@ -473,6 +473,7 @@ def scene(p: dict):
         else:
             opts.append(Option("forge_collection", "Upgrade in the Forge", "Travel to Roothollow"))
     opts.append(Option("collection_back", "Back"))
+    opts.append(Option('arrows','Arrows','Six payloads · current stock and Forge prices'))
     for item in p["collection"].values():
         info = stats(item)
         opts.append(Option("inspect:" + item["id"],
@@ -488,14 +489,16 @@ def handle(p: dict, oid: str):
     """Small public action surface; None means another engine subsystem."""
     if not enabled(p):
         return None
-    if oid == "collection":
+    if oid in ("collection", "arrows"):
         p.pop('quiver_view',None)
         p["collection_view"] = True
+        p['collection_arrows'] = oid == 'arrows'
         return scene(p)
     if oid == "collection_back" and p.get("collection_view"):
         from .core import _build_scene
         p.pop("collection_view", None)
         p.pop("collection_selected", None)
+        p.pop('collection_arrows',None)
         return _build_scene(p)
     if oid.startswith("inspect:"):
         iid = oid.partition(":")[2]

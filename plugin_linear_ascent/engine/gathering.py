@@ -36,10 +36,10 @@ def scene(p):
     expedition=p.get('expedition')
     opts=[]
     if not tool:
-        opts.append(Option('gather_tool','Buy '+site['tool_name'],f"{site['price']} gold · utility tool, outside your three weapons"))
+        opts.append(Option('gather_tool','Buy '+site['tool_name'],f"{site['price']:,} gold · utility tool, outside your three weapons"))
     elif not expedition:
         if tool['condition']<site['condition']:
-            opts.append(Option('gather_mend','Repair '+site['tool_name'],f"{tool_repair_price(site,tool)} gold"))
+            opts.append(Option('gather_mend','Repair '+site['tool_name'],f"{tool_repair_price(site,tool):,} gold"))
         opts.append(Option('gather_begin','Begin expedition','Your three weapons stay fixed until you extract',locked=not tool['condition']))
     else:
         opts.append(Option('gather_step','Collect '+site['material'],

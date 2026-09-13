@@ -133,9 +133,10 @@ _SHARED_RULES = (
     "from memory without checking the current scene. For questions about "
     "the current monsters, reach, weapons or options, FIRST call ascent_scene "
     "even if a prior chat answer seems to cover it. Earlier advice can be "
-    "stale or wrong. For arrows/ammunition, FIRST call ascent_character "
-    "and read weapon_collection.quiver, then the current scene if opening "
-    "its controls. When that quiver says finite, Ordinary arrows also run "
+    "stale or wrong. For arrows/ammunition, FIRST call ascent_arrows now. "
+    "It opens the actual drawer and returns all six current payloads. A "
+    "read of a historical tool result is NOT a refresh of live supplies. "
+    "When the current quiver says finite, Ordinary arrows also run "
     "out: six payloads, one grade-matched arrow per accepted shot including "
     "misses. Its types list actual effects, stock and Forge offers; bows "
     "lists the resolved selected payload even when choices is empty. "
@@ -339,6 +340,22 @@ class LinearAscentPlugin(LunaPlugin):
             sheet["instructions"] = _SHARED_RULES
             return json.dumps(sheet)
 
+        async def ascent_arrows() -> str:
+            scene = await runtime.act_for(_user(), 'arrows', '')
+            runtime.pace_mark(_user())
+            return build_payload(scene)
+
+        ctx.tool_registry.register(
+            self.manifest.name,
+            ToolDef(name='ascent_arrows',
+                description=('Linear Ascent: show the CURRENT arrows this player can use with their bow. '
+                    'Call now for arrow/ammunition/payload questions; historical read results may describe an older game. '
+                    'Opens the real Arrows drawer and returns all six types, exact effects, owned stock, selected payload '
+                    'and Forge bundle prices. Zero stock means not owned, not that the arrow type does not exist. '
+                    'Does not buy, shoot, spend energy, change the deck or advance a fight.'),
+                parameters={'type':'object','properties':{},'required':[]},policy='auto_approve',risk_level='low'),
+            ascent_arrows)
+
         ctx.tool_registry.register(
             self.manifest.name,
             ToolDef(
@@ -402,7 +419,7 @@ class LinearAscentPlugin(LunaPlugin):
                 description=(
                     "Linear Ascent: the player's character sheet — stats, "
                     "gear, weapon collection, finite arrow quiver, gold, meters, frontier floor. Read-only. "
-                    "For arrow/ammunition questions call this first: weapon_collection.quiver "
+                    "For arrow/ammunition questions prefer ascent_arrows to open the current drawer. weapon_collection.quiver "
                     "has six payloads, grade-matched owned stock, Forge offers and each bow's selected arrows. "
                     "To OPEN or manage the weapon collection screen, use "
                     "ascent_choose with option collection; this sheet alone does not open it."),

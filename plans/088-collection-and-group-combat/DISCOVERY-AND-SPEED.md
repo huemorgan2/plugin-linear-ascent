@@ -25,4 +25,6 @@ P3-008/P4-004: Luna made five choices under a four-action cap twice. This is not
 
 Record implementation SHAs and verification before advancing. Revert these discovery/display additions and retain all0.115 arrow/effect readers; old saved groups keep their pinned resolver. For a speed regression, retain current saved slow counters and fix forward or drain affected QA groups; do not replay spent actions or overwrite characters. Snapshot before restarting only recorded processes. No production change.
 
-Execution: reproduced and planned; not implemented.
+Execution status,13 September2026: implemented in0.115.2.67 focused tests pass, including exact two-phase speed expiry, a matched20% escape roll, immutable drawer reads and all8 Gate sites. Full suite:1539passed,8previously tracked failures,4skipped,1xfail in19.81seconds. No new failure. Dedicated tool registration and first-query discovery still require restarted real Luna. Earlier browser002 evidence remains unchanged; phase not complete.
+
+Rollback: revert the implementation commit following0924336, retain owned quiver/effect documents and pinned groups_v1 reader. Regenerate matching vendor/wiki. Restart only owned local QA services after durable database snapshots. No production operation.

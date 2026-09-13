@@ -18,6 +18,10 @@ def current(p):
     return g['members'][g['index']] if g else None
 
 
+def monster_speed(member):
+    return max(1, member['speed'] - (collection.catalog()['effectRules']['slow']['speed'] if member.get('slow',0) else 0))
+
+
 def event(p, kind, text, *, defender='', channel='', damage=0):
     g = p['group']
     g['event_sequence'] += 1
@@ -73,7 +77,7 @@ def public(p):
     keys = ('id','instance','name','image','type','affinity','air','speed','hp','hp_max','atk','defense',
             'power','magic','traits','note','specimen','gap','started','paid','exhausted','killed','effects','rates','bundles','reward_revision','origin_floor','arrival_gap')
     return {k: deepcopy(g[k]) for k in ('id','floor','deep','site','index','committed','deck','cooldowns','haul','xp','energy')} | {
-        'members': [{k: deepcopy(m[k]) for k in keys if k in m} for m in g['members']],
+        'members': [{**{k: deepcopy(m[k]) for k in keys if k in m},'base_speed':m['speed'],'speed':monster_speed(m),'slow_phases':m.get('slow',0)} for m in g['members']],
         'events': deepcopy(g['events'])}
 
 
@@ -131,7 +135,7 @@ def scene(p):
         body_lines=[f"{m['affinity']} · {'Air' if m['air'] else 'Ground'} · {DISTANCE[m['gap']]} · {paid}",
                     m['note']] + [e['text'] for e in g['events']], options=opts, meters=combat.meters(p),
         enemy=dict(name=m['name'], hp=m['hp'], hp_max=m['hp_max'], atk=m['atk'],
-                   **{'def': m['defense']}, mspd=m['speed']),
+                   **{'def': m['defense']}, mspd=monster_speed(m)),
         group={**public(p), 'arrows':arrow_rows, 'weapon_reach': [
             dict(name=o.label, available=not o.locked, reason=o.hint)
             for o in opts if o.id.startswith('strike:')]}, combat_events=deepcopy(g['events']))
@@ -290,8 +294,8 @@ def _enemy_phase(p, *, guard=False, prior_effects=()):
     g['cooldowns'] = {iid:max(0, n-1) for iid, n in g['cooldowns'].items()}
     if m['hp'] <= 0:
         return
-    slowed = bool(m.get('slow', 0))
-    if slowed:
+    speed = monster_speed(m)
+    if m.get('slow', 0):
         m['slow'] -= 1
     if m.pop('stunned', False):
         m['stun_recovery'] = collection.catalog()['effectRules']['stun']['recovery']
@@ -302,7 +306,6 @@ def _enemy_phase(p, *, guard=False, prior_effects=()):
     if m.pop('pushed', False):
         event(p, 'control', 'Pushed back — room for your next action', defender=m['instance'])
         return
-    speed = max(1, m['speed'] - (collection.catalog()['effectRules']['slow']['speed'] if slowed else 0))
     if m['gap'] > 0:
         m['gap'] = max(0, m['gap'] - (2 if speed >= player_speed(p) + 3 else 1))
         if m['gap'] > 0:
@@ -445,7 +448,7 @@ def handle(p, oid):
     g['turn'] += 1
     _commit(p)
     if oid == 'flee':
-        chance = max(.1, min(.95, .2 + .15*m['gap'] + .03*(player_speed(p) - m['speed'])))
+        chance = max(.1, min(.95, .2 + .15*m['gap'] + .03*(player_speed(p) - monster_speed(m))))
         if state.rng_int(p, 1, 10000) <= round(chance * 10000):
             return _finish(p, escaped=True)
         event(p, 'escape', 'Escape blocked — the enemy catches you')
@@ -458,7 +461,7 @@ def handle(p, oid):
     elif oid == 'approach':
         m['gap'] = max(0, m['gap'] - 1)
     elif oid == 'withdraw':
-        m['gap'] = min(3, m['gap'] + (2 if player_speed(p) > m['speed'] else 1))
+        m['gap'] = min(3, m['gap'] + (2 if player_speed(p) > monster_speed(m) else 1))
     _enemy_phase(p,guard=oid=='guard',prior_effects=prior_effects)
     if m['hp'] <= 0:
         _kill(p)

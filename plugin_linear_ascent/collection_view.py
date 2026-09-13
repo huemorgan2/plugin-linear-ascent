@@ -31,7 +31,7 @@ def render(data: dict, art_url, icon) -> str:
                 f'<span>{e(arrow["effect"])}</span>{owned}</div>')
         equipped=''.join(f'<p>{e(bow["name"])}: {e(bow["grade"])} {e(bow["selected_name"])} · {bow["remaining"]:,} left</p>'
             for bow in quiver.get('bows',[]))
-        head+=f'<details class="wc-quiver"><summary>Arrows · {quiver["used"]:,} / {quiver["capacity"]:,}</summary>'
+        head+=f'<details class="wc-quiver"{" open" if data.get("arrows_open") else ""}><summary>Arrows · {quiver["used"]:,} / {quiver["capacity"]:,}</summary>'
         head+='<p>One arrow per shot, including a miss. Match the arrow grade to your bow.</p>'+equipped
         head+='<div class="wc-grid">'+''.join(arrows)+'</div><p>Buy bundles of 20 at the Forge arrow supplies rack. Choose a stocked payload on your bow during a group; selecting it is free.</p></details>'
     if not data.get("screen"):
